@@ -1,8 +1,8 @@
 {
   "id": "t12",
   "name": "Security gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "sec",
+  "domainLabel": "Security",
   "topics": [
     "Security gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "JWT tekshirishda eng xavfli xato qaysi?",
       "options": [
@@ -32,7 +32,7 @@
       "level": "S",
       "type": "code",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "Bu kod nega noto'g'ri?",
       "snippet": "if userToken == storedToken {\n    allow()\n}",
@@ -51,7 +51,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "Foydalanuvchi bergan URL'ga so'rov yuboradigan feature (webhook, avatar import). Asosiy xavf?",
       "options": [
@@ -70,7 +70,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "ORM ishlatyapsiz — SQL injection mumkinmi?",
       "options": [
@@ -88,7 +88,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "Parol taqqoslash `if hmac == expected` (string ==) bilan yozilgan. Muammo?",
       "options": [
@@ -106,7 +106,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "Servis foydalanuvchi bergan URL'ga so'rov qiladi (webhook test, rasm yuklash). Qanday zaiflik va himoya?",
       "options": [
@@ -124,7 +124,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "Xato xabarida `err.Error()` to'g'ridan-to'g'ri foydalanuvchiga qaytarilmoqda. Xavf?",
       "options": [
@@ -142,7 +142,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "Fayl yo'lini foydalanuvchi kiritmasi bilan qurish: `filepath.Join(dir, userInput)`. Yetarlimi?",
       "options": [
@@ -160,7 +160,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Security gotcha",
-      "domain": "tricky",
+      "domain": "sec",
       "section": "t12",
       "question": "`math/rand` bilan parol tiklash tokeni generatsiya qilingan. Nima xato?",
       "options": [

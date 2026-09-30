@@ -1,8 +1,8 @@
 {
   "id": "t7",
   "name": "Distributed gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "dist",
+  "domainLabel": "Distributed systems",
   "topics": [
     "Distributed gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Redis'dagi distributed lock TTL tugadi, lekin ish hali tugamagan. Nima yuz beradi?",
       "options": [
@@ -32,7 +32,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Kafka consumer at-least-once ishlayapti. Xabar ikki marta yetib keldi. Kim aybdor?",
       "options": [
@@ -50,7 +50,7 @@
       "level": "P",
       "type": "open",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Service A dan B ga so'rov timeout bo'ldi. A retry qildi. B esa ikkala so'rovni ham bajardi. Bunday holatni tizim darajasida qanday oldini olasan?",
       "modelAnswer": "Qatlamlar: 1) B tomonda idempotency — Idempotency-Key yoki business key bo'yicha unique constraint; natija saqlanadi va takrorda qaytariladi. 2) A tomonda: timeout < B'ning ishlash vaqti bo'lmasin; deadline propagation orqali B qolgan vaqtni bilib, kech bo'lsa ishni boshlamasin. 3) Retry budjeti + exponential backoff + jitter; circuit breaker. 4) Yon ta'siri pul/tashqi API bo'lsa — ishni ikki bosqichga bo'lish (reserve/confirm) yoki outbox orqali asinxron qilish. 5) Kuzatuv: trace ID bilan dublikatni topish, duplicate_requests metrikasi.",
@@ -62,7 +62,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Read replica'dan o'qiganda foydalanuvchi o'zi yaratgan yozuvni ko'rmayapti. Eng to'g'ri yechim?",
       "options": [
@@ -80,7 +80,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Cache invalidatsiyasida 'thundering herd' nima va qanday yopiladi?",
       "options": [
@@ -98,7 +98,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Two-phase commit (2PC) mikroservislarda nega kamdan-kam ishlatiladi?",
       "options": [
@@ -116,7 +116,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Servis A, B, C zanjirida retry'lar bor. Nega 'retry amplification' xavfli?",
       "options": [
@@ -134,7 +134,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Kesh va DB o'rtasida izchillik: `DB'ni yangilash → keshni yangilash` ketma-ketligi nega xavfli?",
       "options": [
@@ -152,7 +152,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Two-phase commit (2PC) mikroservislarda nega kamdan-kam ishlatiladi?",
       "options": [
@@ -170,7 +170,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Servis A, B, C zanjirida retry'lar bor. Nega 'retry amplification' xavfli?",
       "options": [
@@ -188,7 +188,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Kesh va DB o'rtasida izchillik: `DB'ni yangilash → keshni yangilash` ketma-ketligi nega xavfli?",
       "options": [
@@ -206,7 +206,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "Ikki servis bir-birini sinxron chaqiradi (A→B va B→A). Qanday xatar?",
       "options": [
@@ -224,7 +224,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Distributed gotcha",
-      "domain": "tricky",
+      "domain": "dist",
       "section": "t7",
       "question": "'Fallacies of distributed computing' ro'yxatidan qaysi biri kodda eng ko'p buziladi?",
       "options": [

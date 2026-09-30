@@ -1,8 +1,8 @@
 {
   "id": "t10",
   "name": "Redis & cache gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "nosql",
+  "domainLabel": "Redis, Mongo, Elastic",
   "topics": [
     "Redis gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "Production Redis'da `KEYS user:*` chaqirilsa nima bo'ladi?",
       "options": [
@@ -31,7 +31,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "Redis'ni cache sifatida ishlatyapsiz. maxmemory-policy `noeviction` bo'lsa nima bo'ladi?",
       "options": [
@@ -49,7 +49,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "Cache-aside'da eng keng tarqalgan mos kelmaslik (inconsistency) manbai?",
       "options": [
@@ -67,7 +67,7 @@
       "level": "M",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "`INCR` bilan rate limiter yozdingiz. Qaysi bug tipik?",
       "options": [
@@ -85,7 +85,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "`SETEX lock ...` bilan qo'lda distributed lock yozildi. Qaysi xato eng xavfli?",
       "options": [
@@ -103,7 +103,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "Kesh uchun `KEYS user:*` ishlatilgan. Nima bo'ladi?",
       "options": [
@@ -121,7 +121,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "Kesh TTL bir vaqtda tugab, DB yiqildi. Bu qanday nomlanadi va nima qilinadi?",
       "options": [
@@ -139,7 +139,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "Redis'da `INCR` bilan rate limit yozildi, lekin limit ba'zan oshib ketadi. Nega?",
       "options": [
@@ -157,7 +157,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Redis gotcha",
-      "domain": "tricky",
+      "domain": "nosql",
       "section": "t10",
       "question": "Redis kesh 'thundering herd'dan himoyalandi, lekin deploy'dan keyin DB baribir yiqildi. Ehtimolli sabab?",
       "options": [

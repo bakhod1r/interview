@@ -1,8 +1,8 @@
 {
   "id": "t3",
   "name": "System & infra gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "sys",
+  "domainLabel": "System design",
   "topics": [
     "System gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "S",
       "type": "code",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Redis'da natija: TTL qanday bo'ladi?",
       "snippet": "SET session:1 \"data\" EX 600\n# 5 daqiqa o'tdi\nSET session:1 \"yangi-data\"\nTTL session:1",
@@ -33,7 +33,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Cache invalidatsiyasi: DB'ga yozganda cache'ni qachon o'chirish kerak?",
       "options": [
@@ -51,7 +51,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Client timeout olib, <code>DELETE /orders/42</code> ni qayta yubordi. Server 404 qaytardi. Bu to'g'rimi?",
       "options": [
@@ -69,7 +69,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Kafka consumer og'ir xabarni 10 daqiqa ishlayapti, <code>max.poll.interval.ms</code> 5 daqiqa. Nima bo'ladi?",
       "options": [
@@ -87,7 +87,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Saytda <code>301 Moved Permanently</code> qaytarildi, keyin bu xato ekani aniqlandi. Muammo nimada?",
       "options": [
@@ -105,7 +105,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Kunlik cron 02:30 da ishlaydi. DST o'tishida nima bo'lishi mumkin?",
       "options": [
@@ -123,7 +123,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "PK sifatida UUIDv4 tanlandi va table 100 mln row'ga yetdi. Qanday muammo kutiladi?",
       "options": [
@@ -141,7 +141,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Servis `context.Background()` bilan DB query qiladi (HTTP handler ichida). Nima yo'qoladi?",
       "options": [
@@ -159,7 +159,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Graceful shutdown yozilgan, lekin deploy paytida so'rovlar uziladi. Eng ko'p uchraydigan sabab?",
       "options": [
@@ -177,7 +177,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Servis xotirasi asta o'sadi, pprof heap'da hech narsa ko'rinmaydi. Qaysi variantni tekshirasiz?",
       "options": [
@@ -195,7 +195,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Servis `context.Background()` bilan DB query qiladi (HTTP handler ichida). Nima yo'qoladi?",
       "options": [
@@ -213,7 +213,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Graceful shutdown yozilgan, lekin deploy paytida so'rovlar uziladi. Eng ko'p uchraydigan sabab?",
       "options": [
@@ -231,7 +231,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "System gotcha",
-      "domain": "tricky",
+      "domain": "sys",
       "section": "t3",
       "question": "Servis xotirasi asta o'sadi, pprof heap'da hech narsa ko'rinmaydi. Qaysi variantni tekshirasiz?",
       "options": [

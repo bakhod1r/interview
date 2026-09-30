@@ -1,8 +1,8 @@
 {
   "id": "t8",
   "name": "Memory & GC gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "go",
+  "domainLabel": "Go",
   "topics": [
     "Memory gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "P",
       "type": "code",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Bu funksiya nega xotira ushlab qoladi?",
       "snippet": "func firstLine(data []byte) []byte {\n    i := bytes.IndexByte(data, '\\n')\n    return data[:i]\n}\n// data — 10 MB fayl",
@@ -32,7 +32,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Slice'dan element o'chirganda pointer'lar nima bo'ladi?",
       "options": [
@@ -51,7 +51,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Go'da map'dan ko'p element o'chirilgandan keyin xotira qaytmayapti. Nega?",
       "options": [
@@ -69,7 +69,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Konteynerda Go servis OOMKilled bo'lyapti, lekin heap profili kichik. Birinchi nima tekshirasan?",
       "options": [
@@ -88,7 +88,7 @@
       "level": "S",
       "type": "code",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Qaysi kod escape to'g'ri tushuntiradi?",
       "snippet": "func newUser() *User { u := User{}; return &u }",
@@ -107,7 +107,7 @@
       "level": "S",
       "type": "code",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Bu kod nega xotira ushlab qoladi?",
       "snippet": "func firstLine(data []byte) []byte {\n    i := bytes.IndexByte(data, '\\n')\n    return data[:i]   // data 10MB bo'lsin\n}",
@@ -126,7 +126,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "`sync.Pool` bilan ishlashda klassik xato?",
       "options": [
@@ -144,7 +144,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Go GC bor — unda memory leak qanday ko'rinishda bo'ladi?",
       "options": [
@@ -162,7 +162,7 @@
       "level": "S",
       "type": "code",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Bu kod nega xotira ushlab qoladi?",
       "snippet": "func firstLine(data []byte) []byte {\n    i := bytes.IndexByte(data, '\\n')\n    return data[:i]   // data 10MB bo'lsin\n}",
@@ -181,7 +181,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "`sync.Pool` bilan ishlashda klassik xato?",
       "options": [
@@ -199,7 +199,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Xotirada cheksiz o'sadigan kesh (`map[string]T`) qanday to'g'rilanadi?",
       "options": [
@@ -217,7 +217,7 @@
       "level": "S",
       "type": "code",
       "topic": "Memory gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t8",
       "question": "Bu kodda qanday xotira muammosi bor?",
       "snippet": "func handler(w http.ResponseWriter, r *http.Request) {\n    body, _ := io.ReadAll(r.Body)\n    var req Request\n    json.Unmarshal(body, &req)\n    // ...\n}",

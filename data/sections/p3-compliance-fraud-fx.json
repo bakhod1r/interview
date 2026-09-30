@@ -1,8 +1,8 @@
 {
   "id": "p3",
   "name": "Compliance, fraud, FX",
-  "domain": "fin",
-  "domainLabel": "Fintech & payments",
+  "domain": "sec",
+  "domainLabel": "Security",
   "topics": [
     "Fintech"
   ],
@@ -13,7 +13,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Valyuta konvertatsiyasi va yaxlitlashda to'g'ri yondashuv?",
       "options": [
@@ -31,7 +31,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "KYC/AML bo'yicha texnik talab qaysi?",
       "options": [
@@ -49,7 +49,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "To'lov tizimida statuslarni qanday modellashtirasiz?",
       "options": [
@@ -67,7 +67,7 @@
       "level": "St",
       "type": "open",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Fintech tizimida incident: 200 ta foydalanuvchidan ikki marta pul yechilgan. Qanday harakat qilasiz?",
       "modelAnswer": [
@@ -86,7 +86,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Ledger ma'lumotlarini o'chirish/tuzatish talab qilindi (xato yozuv). To'g'ri yo'l?",
       "options": [
@@ -104,7 +104,7 @@
       "level": "St",
       "type": "open",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Kartadan to'lov qabul qiluvchi tizimda firibgarlikni (fraud) qanday kamaytirasiz?",
       "modelAnswer": [
@@ -123,7 +123,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Valyuta konvertatsiyasida (FX) texnik jihatdan nimani to'g'ri qilish kerak?",
       "options": [
@@ -141,7 +141,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Fraud (firibgarlik) tekshiruvini to'lov oqimiga qanday joylashtirasiz?",
       "options": [
@@ -159,7 +159,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Valyuta konvertatsiyasida (FX) texnik jihatdan nimani to'g'ri qilish kerak?",
       "options": [
@@ -177,7 +177,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Fraud (firibgarlik) tekshiruvini to'lov oqimiga qanday joylashtirasiz?",
       "options": [
@@ -195,7 +195,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Fintechda ma'lumotni o'chirish talabi (GDPR 'right to erasure') va o'zgarmas ledger qanday yarashtiriladi?",
       "options": [
@@ -213,7 +213,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Idempotency key'ning TTL'i va saqlash joyi qanday tanlanadi (to'lovda)?",
       "options": [
@@ -231,7 +231,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "Audit log moliyaviy tizimda qanday talablarga javob berishi kerak?",
       "options": [
@@ -249,7 +249,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Fintech",
-      "domain": "fin",
+      "domain": "sec",
       "section": "p3",
       "question": "PII ma'lumotlarni saqlashda minimal texnik talablar?",
       "options": [

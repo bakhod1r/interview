@@ -1,8 +1,8 @@
 {
   "id": "t6",
   "name": "API & HTTP gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "api",
+  "domainLabel": "API, HTTP, security",
   "topics": [
     "API gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "M",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Client timeout bilan uzildi, lekin server buyurtmani yaratib bo'lgan edi. Client retry qiladi. Nima kerak?",
       "options": [
@@ -31,7 +31,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Retry qilish xavfsiz bo'lgan HTTP holatlar qaysi?",
       "options": [
@@ -50,7 +50,7 @@
       "level": "M",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "gRPC'da deadline berilmasa nima bo'ladi?",
       "options": [
@@ -68,7 +68,7 @@
       "level": "S",
       "type": "code",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Bu handler'da qanday muammo bor?",
       "snippet": "func h(w http.ResponseWriter, r *http.Request) {\n    if err := do(r); err != nil {\n        w.Write([]byte(\"error\"))\n        w.WriteHeader(500)\n        return\n    }\n}",
@@ -87,7 +87,7 @@
       "level": "P",
       "type": "open",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Public API'da yangi majburiy maydon qo'shish kerak. Eski clientlarni buzmasdan qanday chiqarasan?",
       "modelAnswer": "1) Maydonni avval IXTIYORIY qilib qo'shish, server default bilan to'ldiradi. 2) Telemetriya: nechta so'rov maydonsiz kelayapti, qaysi client versiyasi/API kaliti — metrika va log. 3) Deprecation e'loni: changelog, Deprecation/Sunset header'lari (RFC 8594), email. 4) Migratsiya davri (odatda 3-6 oy), integratorlarga yordam. 5) Trafik nolga yaqinlashgach majburiy qilish, yoki yangi versiyada (/v2 yoki media type versioning) majburiy, eskisi default bilan qolaveradi. Hech qachon: jimgina majburiy qilish, yoki bir kechada 400 qaytarishni yoqish.",
@@ -99,7 +99,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "JSON'da `PATCH` bilan maydonni `null` ga o'rnatish va maydonni yubormaslikni qanday ajratasiz (Go)?",
       "options": [
@@ -117,7 +117,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Go'da JSON'ga katta `int64` ID yuborilgan, frontendda qiymat buzildi. Nega?",
       "options": [
@@ -135,7 +135,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Go'da `json.Unmarshal` bilan validatsiya qilinmagan payload qanday xatarga olib keladi?",
       "options": [
@@ -153,7 +153,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "JSON'da `PATCH` bilan maydonni `null` ga o'rnatish va maydonni yubormaslikni qanday ajratasiz (Go)?",
       "options": [
@@ -171,7 +171,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Go'da JSON'ga katta `int64` ID yuborilgan, frontendda qiymat buzildi. Nega?",
       "options": [
@@ -189,7 +189,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Go'da `json.Unmarshal` bilan validatsiya qilinmagan payload qanday xatarga olib keladi?",
       "options": [
@@ -207,7 +207,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "Go'da `http.Get` bilan 404 kelganda `err` nil. Nega va nima qilish kerak?",
       "options": [
@@ -225,7 +225,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",
-      "domain": "tricky",
+      "domain": "api",
       "section": "t6",
       "question": "REST API'da `PUT` bilan qisman yangilash qilinmoqda. Muammo?",
       "options": [

@@ -1,8 +1,8 @@
 {
   "id": "t5",
   "name": "Time, date, encoding gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "go",
+  "domainLabel": "Go",
   "topics": [
     "Time gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "M",
       "type": "code",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Bu taqqoslash nega xato?",
       "snippet": "t1, _ := time.Parse(time.RFC3339, \"2024-01-01T00:00:00Z\")\nt2 := t1.In(time.FixedZone(\"UTC+5\", 5*3600))\nfmt.Println(t1 == t2)",
@@ -33,7 +33,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Vaqt oralig'ini o'lchash uchun nima ishlatiladi?",
       "options": [
@@ -51,7 +51,7 @@
       "level": "M",
       "type": "open",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Kelajakdagi uchrashuvni qanday saqlaysan: UTC timestamp'mi yoki local vaqt + timezone'mi?",
       "modelAnswer": "O'tgan hodisa (log, audit, created_at) — UTC instant (timestamptz). Kelajakdagi inson rejalashtirgan hodisa (uchrashuv, budilnik, cron) — local wall time + IANA timezone nomi ('Asia/Tashkent'), UTC emas. Sabab: davlat DST yoki offset qoidasini o'zgartirsa (bu har yili bir necha marta yuz beradi), saqlangan UTC noto'g'ri mahalliy vaqtga aylanadi; zona nomi bilan saqlansa qayta hisoblash to'g'ri chiqadi. Takrorlanuvchi hodisa uchun RRULE + zona saqlanadi, har instance oldindan UTC'ga materializatsiya qilinmaydi (yoki qilinsa, tzdata yangilanganda qayta hisoblanadi).",
@@ -64,7 +64,7 @@
       "level": "M",
       "type": "code",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "JSON'da nima chiqadi?",
       "snippet": "type U struct {\n    ID   int64  `json:\"id\"`\n    Name string `json:\"name\"`\n    age  int\n}\nb, _ := json.Marshal(U{1, \"ali\", 30})",
@@ -83,7 +83,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Ikki service o'rtasida UUID'ni tartiblash kerak. Qaysi variant to'g'ri?",
       "options": [
@@ -102,7 +102,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Kunlik hisobot `WHERE created_at >= current_date` bilan yozilgan, lekin natijalar 5 soatga surilgan. Sabab?",
       "options": [
@@ -120,7 +120,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Go'da ikki vaqt orasidagi o'tgan muddatni o'lchash uchun nima ishlatiladi?",
       "options": [
@@ -138,7 +138,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "'Har oyning 31-kuni' obunasini hisoblashda qanday edge case bor?",
       "options": [
@@ -156,7 +156,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Kunlik hisobot `WHERE created_at >= current_date` bilan yozilgan, lekin natijalar 5 soatga surilgan. Sabab?",
       "options": [
@@ -174,7 +174,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Go'da ikki vaqt orasidagi o'tgan muddatni o'lchash uchun nima ishlatiladi?",
       "options": [
@@ -192,7 +192,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "'Har oyning 31-kuni' obunasini hisoblashda qanday edge case bor?",
       "options": [
@@ -210,7 +210,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "`time.Time` ni DB'ga yozib o'qiganda vaqt o'zgarib qolyapti. Sabab?",
       "options": [
@@ -228,7 +228,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Time gotcha",
-      "domain": "tricky",
+      "domain": "go",
       "section": "t5",
       "question": "Kunlik cron soat 02:30 da ishlaydi. DST o'tishida nima bo'ladi?",
       "options": [

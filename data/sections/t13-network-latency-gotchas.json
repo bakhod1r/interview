@@ -1,8 +1,8 @@
 {
   "id": "t13",
   "name": "Network & latency gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "infra",
+  "domainLabel": "Infrastructure & DevOps",
   "topics": [
     "Network gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "TCP connection 'tirik' ko'rinadi, lekin qarshi tomon allaqachon o'lgan. Nega va nima qilinadi?",
       "options": [
@@ -31,7 +31,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "Yuk ostida 'connection reset by peer' va TIME_WAIT ko'payyapti. Sabab?",
       "options": [
@@ -49,7 +49,7 @@
       "level": "M",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "Bir service DNS orqali boshqasini chaqiradi. Deploy paytida eski podlarga trafik ketyapti. Nega?",
       "options": [
@@ -67,7 +67,7 @@
       "level": "P",
       "type": "open",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "p99 latency 2 sekund, p50 esa 20 ms. Qayerdan boshlaysan?",
       "modelAnswer": "1) O'rtacha emas, taqsimotga qarash: histogram va heatmap — ikki cho'qqili bo'lsa ikki xil yo'l bor (cache hit/miss, retry, cold start). 2) Tail'ni ajratish: trace'larni p99 bo'yicha filtrlash (tail-based sampling) va sekin span'ni topish. 3) Tipik sabablar: navbat (DB pool, worker pool, CFS throttling), GC pauza emas balki GC assist, lock contention (mutex profil), retry+timeout zanjiri, sovuq kesh, katta javob serializatsiyasi, N+1 query, DNS/TLS handshake. 4) Yuk manbai: bitta 'og'ir' tenant yoki kalit (hot partition). 5) Little's law bilan tekshirish: L = λ·W — konkurentlik chegarasi p99'ni tushuntiradimi. 6) Tuzatgach: SLO va error budget bilan kuzatuvga qo'yish.",
@@ -79,7 +79,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "Go'da HTTP client bilan ko'p so'rov qilinadi, `time.Sleep` yo'q, lekin latency vaqti-vaqti bilan portlaydi. Klassik sabab?",
       "options": [
@@ -97,7 +97,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "`http.Client{}` timeout'siz ishlatilgan. Eng xavfli natija?",
       "options": [
@@ -115,7 +115,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "Go'da DNS natijalari keshlanmaydi. Bu nimaga olib keladi?",
       "options": [
@@ -133,7 +133,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "Load balancer orqasida barcha so'rovlar bitta IP'dan kelayotgandek ko'rinadi. Oqibati?",
       "options": [
@@ -151,7 +151,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Network gotcha",
-      "domain": "tricky",
+      "domain": "infra",
       "section": "t13",
       "question": "Servis o'z-o'ziga (ichki Service DNS orqali) so'rov yuboradi va vaqti-vaqti bilan timeout oladi. Klassik sabab?",
       "options": [

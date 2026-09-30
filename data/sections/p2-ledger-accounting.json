@@ -1,8 +1,8 @@
 {
   "id": "p2",
   "name": "Ledger & accounting",
-  "domain": "fin",
-  "domainLabel": "Fintech & payments",
+  "domain": "db",
+  "domainLabel": "PostgreSQL & SQL",
   "topics": [
     "Ledger"
   ],
@@ -13,7 +13,7 @@
       "level": "M",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Double-entry ledger nima va nega fintech'da shu model tanlanadi?",
       "options": [
@@ -32,7 +32,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Foydalanuvchi balansini qanday saqlaysiz?",
       "options": [
@@ -50,7 +50,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Reconciliation (yarashtirish) nima uchun kerak?",
       "options": [
@@ -68,7 +68,7 @@
       "level": "S",
       "type": "code",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Pul o'tkazishda qaysi yozuv to'g'ri?",
       "snippet": "-- A dan B ga 100.00 (10000 tiyin)\n-- Variant 1\nUPDATE accounts SET balance = balance - 10000 WHERE id='A';\nUPDATE accounts SET balance = balance + 10000 WHERE id='B';\n\n-- Variant 2\nINSERT INTO entries(tx_id, account, amount) VALUES\n  ('t1','A',-10000), ('t1','B',+10000);",
@@ -87,7 +87,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Double-entry ledger'da balansni qanday hisoblaysiz — yuqori yuklamada?",
       "options": [
@@ -105,7 +105,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Ledger yozuvlarida konkurent yozuv va izchillik uchun to'g'ri yondashuv?",
       "options": [
@@ -123,7 +123,7 @@
       "level": "St",
       "type": "open",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Kunlik reconciliation: PSP settlement fayli bilan ichki ledger mos kelmadi. Qanday ishlaysiz?",
       "modelAnswer": [
@@ -142,7 +142,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Ledger'da pul o'tkazish (A→B) yozuvi qanday bo'ladi va nega ikki yozuv?",
       "options": [
@@ -160,7 +160,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Ledger'da yaxlitlash (rounding) qanday boshqariladi?",
       "options": [
@@ -178,7 +178,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Ledger jadvali juda katta bo'lib ketdi (mlrd qator). Qanday boshqariladi?",
       "options": [
@@ -196,7 +196,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Ledger",
-      "domain": "fin",
+      "domain": "db",
       "section": "p2",
       "question": "Hisob balansi manfiyga tushmasligini qanday kafolatlaysiz (yuqori konkurentlikda)?",
       "options": [

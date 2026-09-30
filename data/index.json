@@ -26,9 +26,7 @@
     "sys": "System design",
     "alg": "Algorithms",
     "soft": "Behavioral",
-    "tricky": "Edge cases & gotchas",
-    "sec": "Security",
-    "fin": "Fintech & payments"
+    "sec": "Security"
   },
   "sections": [
     {
@@ -81,6 +79,34 @@
       "file": "sections/g4-production-cases-go.json"
     },
     {
+      "id": "t1",
+      "name": "Go gotchas",
+      "domain": "go",
+      "count": 28,
+      "file": "sections/t1-go-gotchas.json"
+    },
+    {
+      "id": "t4",
+      "name": "Concurrency gotchas",
+      "domain": "go",
+      "count": 13,
+      "file": "sections/t4-concurrency-gotchas.json"
+    },
+    {
+      "id": "t5",
+      "name": "Time, date, encoding gotchas",
+      "domain": "go",
+      "count": 13,
+      "file": "sections/t5-time-date-encoding-gotchas.json"
+    },
+    {
+      "id": "t8",
+      "name": "Memory & GC gotchas",
+      "domain": "go",
+      "count": 12,
+      "file": "sections/t8-memory-gc-gotchas.json"
+    },
+    {
       "id": "d1",
       "name": "SQL basics",
       "domain": "db",
@@ -116,6 +142,20 @@
       "file": "sections/d5-operations-scaling-go-db.json"
     },
     {
+      "id": "t2",
+      "name": "SQL gotchas",
+      "domain": "db",
+      "count": 23,
+      "file": "sections/t2-sql-gotchas.json"
+    },
+    {
+      "id": "p2",
+      "name": "Ledger & accounting",
+      "domain": "db",
+      "count": 11,
+      "file": "sections/p2-ledger-accounting.json"
+    },
+    {
       "id": "n1",
       "name": "Redis & caching",
       "domain": "nosql",
@@ -137,6 +177,13 @@
       "file": "sections/n3-elasticsearch.json"
     },
     {
+      "id": "t10",
+      "name": "Redis & cache gotchas",
+      "domain": "nosql",
+      "count": 9,
+      "file": "sections/t10-redis-cache-gotchas.json"
+    },
+    {
       "id": "m1",
       "name": "Kafka",
       "domain": "msg",
@@ -156,6 +203,13 @@
       "domain": "msg",
       "count": 13,
       "file": "sections/m3-event-driven-integration.json"
+    },
+    {
+      "id": "t9",
+      "name": "Kafka & queue gotchas",
+      "domain": "msg",
+      "count": 13,
+      "file": "sections/t9-kafka-queue-gotchas.json"
     },
     {
       "id": "a1",
@@ -191,6 +245,13 @@
       "domain": "api",
       "count": 14,
       "file": "sections/a5-resilience.json"
+    },
+    {
+      "id": "t6",
+      "name": "API & HTTP gotchas",
+      "domain": "api",
+      "count": 13,
+      "file": "sections/t6-api-http-gotchas.json"
     },
     {
       "id": "i1",
@@ -235,6 +296,20 @@
       "file": "sections/i6-devops-iac-linux-git-gitops.json"
     },
     {
+      "id": "t11",
+      "name": "Docker & Kubernetes gotchas",
+      "domain": "infra",
+      "count": 10,
+      "file": "sections/t11-docker-kubernetes-gotchas.json"
+    },
+    {
+      "id": "t13",
+      "name": "Network & latency gotchas",
+      "domain": "infra",
+      "count": 9,
+      "file": "sections/t13-network-latency-gotchas.json"
+    },
+    {
       "id": "r1",
       "name": "Microservices & boundaries",
       "domain": "arch",
@@ -277,6 +352,13 @@
       "file": "sections/r6-domain-e-commerce-billing.json"
     },
     {
+      "id": "p1",
+      "name": "Payments & PSP",
+      "domain": "arch",
+      "count": 12,
+      "file": "sections/p1-payments-psp.json"
+    },
+    {
       "id": "s1",
       "name": "Theory: consensus & consistency",
       "domain": "dist",
@@ -289,6 +371,13 @@
       "domain": "dist",
       "count": 22,
       "file": "sections/s2-practice-failure-scale.json"
+    },
+    {
+      "id": "t7",
+      "name": "Distributed gotchas",
+      "domain": "dist",
+      "count": 13,
+      "file": "sections/t7-distributed-gotchas.json"
     },
     {
       "id": "y1",
@@ -305,6 +394,13 @@
       "file": "sections/y2-case-studies.json"
     },
     {
+      "id": "t3",
+      "name": "System & infra gotchas",
+      "domain": "sys",
+      "count": 13,
+      "file": "sections/t3-system-infra-gotchas.json"
+    },
+    {
       "id": "z1",
       "name": "Algorithm patterns",
       "domain": "alg",
@@ -319,97 +415,6 @@
       "file": "sections/b1-behavioral-teamwork.json"
     },
     {
-      "id": "t1",
-      "name": "Go gotchas",
-      "domain": "tricky",
-      "count": 28,
-      "file": "sections/t1-go-gotchas.json"
-    },
-    {
-      "id": "t2",
-      "name": "SQL gotchas",
-      "domain": "tricky",
-      "count": 23,
-      "file": "sections/t2-sql-gotchas.json"
-    },
-    {
-      "id": "t3",
-      "name": "System & infra gotchas",
-      "domain": "tricky",
-      "count": 13,
-      "file": "sections/t3-system-infra-gotchas.json"
-    },
-    {
-      "id": "t4",
-      "name": "Concurrency gotchas",
-      "domain": "tricky",
-      "count": 13,
-      "file": "sections/t4-concurrency-gotchas.json"
-    },
-    {
-      "id": "t5",
-      "name": "Time, date, encoding gotchas",
-      "domain": "tricky",
-      "count": 13,
-      "file": "sections/t5-time-date-encoding-gotchas.json"
-    },
-    {
-      "id": "t6",
-      "name": "API & HTTP gotchas",
-      "domain": "tricky",
-      "count": 13,
-      "file": "sections/t6-api-http-gotchas.json"
-    },
-    {
-      "id": "t7",
-      "name": "Distributed gotchas",
-      "domain": "tricky",
-      "count": 13,
-      "file": "sections/t7-distributed-gotchas.json"
-    },
-    {
-      "id": "t8",
-      "name": "Memory & GC gotchas",
-      "domain": "tricky",
-      "count": 12,
-      "file": "sections/t8-memory-gc-gotchas.json"
-    },
-    {
-      "id": "t9",
-      "name": "Kafka & queue gotchas",
-      "domain": "tricky",
-      "count": 13,
-      "file": "sections/t9-kafka-queue-gotchas.json"
-    },
-    {
-      "id": "t10",
-      "name": "Redis & cache gotchas",
-      "domain": "tricky",
-      "count": 9,
-      "file": "sections/t10-redis-cache-gotchas.json"
-    },
-    {
-      "id": "t11",
-      "name": "Docker & Kubernetes gotchas",
-      "domain": "tricky",
-      "count": 10,
-      "file": "sections/t11-docker-kubernetes-gotchas.json"
-    },
-    {
-      "id": "t12",
-      "name": "Security gotchas",
-      "domain": "tricky",
-      "count": 9,
-      "file": "sections/t12-security-gotchas.json"
-    },
-    {
-      "id": "t13",
-      "name": "Network & latency gotchas",
-      "domain": "tricky",
-      "count": 9,
-      "file": "sections/t13-network-latency-gotchas.json"
-    },
-    {
       "id": "x1",
       "name": "Application security",
       "domain": "sec",
@@ -417,23 +422,16 @@
       "file": "sections/x1-application-security.json"
     },
     {
-      "id": "p1",
-      "name": "Payments & PSP",
-      "domain": "fin",
-      "count": 12,
-      "file": "sections/p1-payments-psp.json"
-    },
-    {
-      "id": "p2",
-      "name": "Ledger & accounting",
-      "domain": "fin",
-      "count": 11,
-      "file": "sections/p2-ledger-accounting.json"
+      "id": "t12",
+      "name": "Security gotchas",
+      "domain": "sec",
+      "count": 9,
+      "file": "sections/t12-security-gotchas.json"
     },
     {
       "id": "p3",
       "name": "Compliance, fraud, FX",
-      "domain": "fin",
+      "domain": "sec",
       "count": 14,
       "file": "sections/p3-compliance-fraud-fx.json"
     }

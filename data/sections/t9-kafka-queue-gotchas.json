@@ -1,8 +1,8 @@
 {
   "id": "t9",
   "name": "Kafka & queue gotchas",
-  "domain": "tricky",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "msg",
+  "domainLabel": "Kafka & messaging",
   "topics": [
     "Messaging gotcha"
   ],
@@ -13,7 +13,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Kafka'da partition sonini oshirdingiz. Nima buzildi?",
       "options": [
@@ -31,7 +31,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Consumer'da bitta 'zaharli' (poison) xabar butun partition'ni to'xtatib qo'ydi. Nima qilasan?",
       "options": [
@@ -49,7 +49,7 @@
       "level": "P",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Consumer group doim rebalance bo'lyapti (lag o'syapti). Eng ehtimolli sabab?",
       "options": [
@@ -67,7 +67,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "RabbitMQ'da consumer ack yubormay crash bo'ldi. Xabar nima bo'ladi?",
       "options": [
@@ -85,7 +85,7 @@
       "level": "P",
       "type": "open",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Outbox pattern joriy qildingiz, lekin ba'zi eventlar publish bo'lmayapti. Qayerdan qidirasan?",
       "modelAnswer": "1) Publisher'ning tanlovi: 'FOR UPDATE SKIP LOCKED' bilan bir nechta publisher instansiyasi ishlayaptimi — lock'siz bo'lsa eventlar ikki marta yoki hech qachon olinmasligi mumkin. 2) Status yangilash tranzaksiyasi: publish'dan keyin 'sent' belgilash publish bilan atomik emas — crash bo'lsa qayta yuboriladi (bu at-least-once, normal), lekin publish'dan OLDIN belgilansa event yo'qoladi. 3) Poller intervali va xato holati: broker xatosi retry qilinayaptimi yoki row 'failed' bo'lib qolyaptimi (alert kerak). 4) Tartib: partition key bo'yicha bir entity eventlari ketma-ket yuborilyaptimi. 5) Kuzatuv: outbox'da eng eski 'pending' row yoshi (age) metrikasi va unga alert — bu eng muhim signal. 6) Tozalash job'i yuborilmagan row'ni o'chirib yubormayaptimi.",
@@ -97,7 +97,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Consumer xabarni oldi, DB'ga yozdi, keyin ack yuborishdan oldin yiqildi. Nima bo'ladi?",
       "options": [
@@ -115,7 +115,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "RabbitMQ'da `prefetch` (QoS) sozlanmagan. Natija?",
       "options": [
@@ -133,7 +133,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Retry uchun xabar qayta navbatga qo'yiladi (`requeue=true`). Qanday tuzoq bor?",
       "options": [
@@ -151,7 +151,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Consumer xabarni oldi, DB'ga yozdi, keyin ack yuborishdan oldin yiqildi. Nima bo'ladi?",
       "options": [
@@ -169,7 +169,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "RabbitMQ'da `prefetch` (QoS) sozlanmagan. Natija?",
       "options": [
@@ -187,7 +187,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Retry uchun xabar qayta navbatga qo'yiladi (`requeue=true`). Qanday tuzoq bor?",
       "options": [
@@ -205,7 +205,7 @@
       "level": "S",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "Consumer xabarni ishlashda tashqi API'ni chaqiradi va u sekin. Nima bo'ladi?",
       "options": [
@@ -223,7 +223,7 @@
       "level": "St",
       "type": "mcq",
       "topic": "Messaging gotcha",
-      "domain": "tricky",
+      "domain": "msg",
       "section": "t9",
       "question": "DLQ to'lib ketdi va hech kim sezmadi. Qanday oldini olinadi?",
       "options": [
