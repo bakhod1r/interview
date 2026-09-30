@@ -38,6 +38,21 @@ for (const s of data.sections) {
   }
 }
 
+// atamalar lug'ati: javob matnida uchragan atamalarga izoh
+const GLO = fs.existsSync(path.join(root, "data/glossary.json")) ? JSON.parse(fs.readFileSync(path.join(root, "data/glossary.json"), "utf8")) : [];
+const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const gre = GLO.map(g => g.k.map(k => {
+  const t = k.trim();
+  if (/^[A-Z0-9\-\/]+$/.test(t) && t.length <= 5) return new RegExp("(^|[^A-Za-z0-9])" + esc(t) + "(?![A-Za-z0-9])");
+  return new RegExp("(^|[^A-Za-z0-9'])" + esc(t), "i");
+}));
+for (const o of questions) {
+  const txt = [o.f || o.q, o.b || ""].join(" ");
+  const g = [];
+  gre.forEach((rs, i) => { if (g.length < 8 && rs.some(r => r.test(txt))) g.push(i); });
+  if (g.length) o.g = g;
+}
+
 // bo'limi bo'lmagan savol qolmasin
 const secOf = q => Object.keys(SEC).find(k => SEC[k][2] === q.d && SEC[k][1].includes(q.tp));
 const orphan = questions.filter(q => !secOf(q));
@@ -52,7 +67,8 @@ if (badMcq.length) { console.error("mcq javob indeksi xato:", badMcq.map(q => q.
 const block = [
   "const Q=" + JSON.stringify(questions) + ";",
   "const DOM=" + JSON.stringify(data.domains) + ";",
-  "const SEC=" + JSON.stringify(SEC) + ";"
+  "const SEC=" + JSON.stringify(SEC) + ";",
+  "const GLO=" + JSON.stringify(GLO.map(g => [g.t, g.d])) + ";"
 ].join("\n");
 
 const start = shell.indexOf("const QD=[");

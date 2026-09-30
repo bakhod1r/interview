@@ -44,3 +44,7 @@ Run after any change to data or shell.
 ## Content conventions
 - Questions, options and explanations are in Uzbek; technical terms stay in English.
 - Types: `mcq` / `code` (have `options` + `answer`), `sql` (`modelAnswer` + `keywords`), `open` (`modelAnswer` list).
+
+## Flashcards & glossary
+- `data/cards/*.json` — `{"<id>":{"f":"optional front","a":"Markdown answer"}}`; build.js puts them into `q.f` / `q.b`. Every question should have a card.
+- `data/glossary.json` — `[{"t":title,"k":[match keys],"d":"Uzbek izoh"}]`. build.js matches keys in front+answer (short ALL-CAPS keys case-sensitive), attaches up to 8 as `q.g`; UI shows "📖 Atamalar" under the answer. Add new terms here when answers use unexplained jargon.
