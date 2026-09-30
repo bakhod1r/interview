@@ -1,11 +1,11 @@
 // data/questions.json -> interview.html
-// Shell (UI/CSS/render) build/shell-v7.html dan olinadi, faqat data bloki almashtiriladi.
+// Shell (UI/CSS/render) build/shell-v8.html dan olinadi, faqat data bloki almashtiriladi.
 const fs = require("fs");
 const path = require("path");
 const root = path.join(__dirname, "..");
 
 const data = JSON.parse(fs.readFileSync(path.join(root, "data/questions.json"), "utf8"));
-const shell = fs.readFileSync(path.join(__dirname, "shell-v7.html"), "utf8");
+const shell = fs.readFileSync(path.join(__dirname, "shell-v8.html"), "utf8");
 
 const questions = [];
 const SEC = {};
@@ -49,8 +49,7 @@ let out = shell.slice(0, start) + block + "\n" + shell.slice(end);
 out = out.replace("<h1>Interview Drill <span>DB + Backend</span></h1>",
   `<h1>Interview Drill <span>${questions.length} savol</span></h1>`);
 
-// eski localStorage'dagi yaroqsiz filtrni tozalash
-out = out.replace("render();", `(function(){const f=S.filt||{};if(!DOM[f.dom])f.dom="";if(!SEC[f.sec])f.sec="";f.tp=(f.tp||[]).filter(t=>Q.some(q=>q.tp===t));f.lvl=(f.lvl||[]).filter(l=>LV[l]);f.type=(f.type||[]).filter(t=>TY[t]);if(!["all","todo","wrong"].includes(f.show))f.show="all";S.filt=f;S.cur=0;save();})();\nrender();`);
+// yaroqsiz filtrni tozalash shell ichida (render oldidan)
 
 fs.writeFileSync(path.join(root, "interview.html"), out);
 console.log("interview.html yozildi:", questions.length, "savol,", Object.keys(SEC).length, "bo'lim,", (out.length / 1024).toFixed(0) + " KB");

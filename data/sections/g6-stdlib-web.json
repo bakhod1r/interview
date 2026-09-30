@@ -327,6 +327,224 @@
       ],
       "answer": 1,
       "explanation": "Nozik detal: `rows.Next()` oxirigacha o'qilsa `Rows` avtomatik yopiladi, lekin o'rtada `break` qilinsa — yo'q. Yana: `rows.Err()` tekshirilmasa iteratsiya o'rtasidagi tarmoq xatosi jim yo'qoladi va natija 'to'liq' deb qabul qilinadi. `QueryRow`da esa `Scan` xatosini tekshirish shart (`sql.ErrNoRows`)."
+    },
+    {
+      "id": 30651,
+      "code": "GX51",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`http.Get` bilan so'rov yuborishda asosiy tuzoq nima?",
+      "options": [
+        "DefaultClient'da timeout yo'q — server javob bermasa goroutine abadiy osiladi; resp.Body ni yopish va oxirigacha o'qish kerak, aks holda ulanish qayta ishlatilmaydi",
+        "http.Get faqat HTTPS ishlaydi",
+        "Body avtomatik yopiladi",
+        "Har chaqiruv yangi TCP ulanish ochadi, bu to'g'ri"
+      ],
+      "answer": 0,
+      "explanation": "Productionda: `&http.Client{Timeout: 10*time.Second}` va har so'rovga context bilan deadline (`http.NewRequestWithContext`). `defer resp.Body.Close()` + kerak bo'lsa `io.Copy(io.Discard, resp.Body)`. Client'ni har so'rovda yaratmaslik — Transport ulanish pool'ini saqlaydi."
+    },
+    {
+      "id": 30652,
+      "code": "GX52",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`http.Transport` da qaysi sozlamalar yuqori yuklamada muhim?",
+      "options": [
+        "Faqat Timeout yetarli",
+        "MaxIdleConnsPerHost (default 2!) — bitta backend'ga ko'p so'rovda ulanishlar yopilib-ochilib TIME_WAIT ko'payadi; MaxConnsPerHost, IdleConnTimeout, TLSHandshakeTimeout, ResponseHeaderTimeout",
+        "Transport'ni har so'rovda yangi yaratish kerak",
+        "DisableKeepAlives: true har doim yaxshi"
+      ],
+      "answer": 1,
+      "explanation": "Belgi: `netstat` da minglab TIME_WAIT, ephemeral port tugashi, latency'da TLS handshake. Yechim: DefaultTransport'ni Clone() qilib MaxIdleConnsPerHost ni (masalan 100) ko'tarish, bitta Transport'ni butun ilovada qayta ishlatish."
+    },
+    {
+      "id": 30653,
+      "code": "GX53",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`time.Time` ni `==` bilan solishtirish nega xato bo'lishi mumkin?",
+      "options": [
+        "== har doim to'g'ri ishlaydi",
+        "time.Time pointer, shuning uchun",
+        "time.Time ichida location va monotonik soat o'qishi bor — bir xil lahza turli Location yoki monotonik qism bilan `==` da false bo'ladi; `t1.Equal(t2)` ishlatiladi",
+        "Faqat UTC'da muammo"
+      ],
+      "answer": 2,
+      "explanation": "Map kaliti sifatida time.Time ham xuddi shu sababdan xavfli — `t.UTC().Truncate(...)` yoki Unix vaqt ishlatiladi. Monotonik soat `t.Round(0)` bilan olib tashlanadi. Davomiylikni o'lchash uchun `time.Since` — monotonik soat tufayli tizim soati sakrashiga chidamli."
+    },
+    {
+      "id": 30654,
+      "code": "GX54",
+      "level": "S",
+      "type": "code",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "Bu kodda nima muammo?\n\n```go\nfor {\n    select {\n    case msg := <-ch:\n        handle(msg)\n    case <-time.After(5 * time.Second):\n        log.Println(\"idle\")\n    }\n}\n```",
+      "options": [
+        "Hech qanday muammo yo'q",
+        "time.After panic beradi",
+        "select'da ikki case bo'lmaydi",
+        "Go 1.23 gacha har iteratsiyada yangi timer yaratilib, 5s o'tmaguncha yig'ilib qolardi (xotira o'sishi); 1.23+ da GC ularni yig'adi, lekin baribir har xabar uchun yangi timer — time.NewTimer + Reset toza va arzon"
+      ],
+      "answer": 3,
+      "explanation": "Go 1.23 da timer semantikasi o'zgardi: to'xtatilmagan timerlar ham GC qilinadi va Reset/Stop'dan keyin eski qiymat kanalda qolmaydi (unbuffered-ga o'xshash). Baribir yuqori tezlikdagi loop'da bitta timer'ni qayta ishlatish ajratmalarni kamaytiradi."
+    },
+    {
+      "id": 30655,
+      "code": "GX55",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`log/slog` da performance va tuzilma uchun to'g'ri amaliyot?",
+      "options": [
+        "Handler'ni bir marta sozlash (JSONHandler), `logger.With(\"request_id\", id)` bilan kontekst maydonlari, qimmat qiymatlar uchun LogValuer, darajani LevelVar bilan runtime'da o'zgartirish",
+        "Har log uchun fmt.Sprintf bilan matn yig'ish",
+        "slog faqat matn chiqaradi",
+        "Global log.Printf yetarli"
+      ],
+      "answer": 0,
+      "explanation": "`slog.Info(\"x\", \"k\", v)` darajasi o'chiq bo'lsa ham argumentlar hisoblanadi — qimmat hisob uchun `logger.Enabled(ctx, level)` tekshiruvi yoki LogValuer. Sirli ma'lumotni (token, parol) LogValuer bilan maskalash. Kalitlarni izchil nomlash (snake_case) — log qidirish uchun muhim."
+    },
+    {
+      "id": 30656,
+      "code": "GX56",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`database/sql` connection pool'ini qanday sozlaysiz?",
+      "options": [
+        "Default qiymatlar productionga mos",
+        "SetMaxOpenConns (DB limitidan kam, barcha instance'lar yig'indisini hisoblab), SetMaxIdleConns (odatda MaxOpen ga yaqin), SetConnMaxLifetime (LB/failover uchun, masalan 5–30 daqiqa), SetConnMaxIdleTime",
+        "MaxOpenConns cheksiz bo'lgani yaxshi",
+        "Pool'ni har so'rovda qayta ochish"
+      ],
+      "answer": 1,
+      "explanation": "Default MaxOpenConns=0 (cheksiz) — yuklamada Postgres max_connections tugaydi. 20 pod × 50 ulanish = 1000 — PgBouncer kerak bo'lishi mumkin. `db.Stats()` (WaitCount, WaitDuration) ni metrikaga chiqarish pool yetishmasligini ko'rsatadi."
+    },
+    {
+      "id": 30657,
+      "code": "GX57",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "Tranzaksiyani Go'da to'g'ri yakunlash patterni?",
+      "options": [
+        "Har xato joyida qo'lda Rollback yozish yetarli",
+        "Commit'ni defer ichida qilish",
+        "tx, err := db.BeginTx(ctx, opts); defer tx.Rollback() — Commit'dan keyin Rollback ErrTxDone qaytaradi va zararsiz; barcha so'rovlar tx orqali (db emas), oxirida `return tx.Commit()`",
+        "db.Exec va tx.Exec aralash ishlatish mumkin"
+      ],
+      "answer": 2,
+      "explanation": "Tipik xato: tx ichida `db.QueryContext` chaqirish — bu boshqa ulanishda, tranzaksiyadan tashqarida bajariladi (va pool kichik bo'lsa deadlock). Retry kerak bo'lsa (serialization failure 40001) — butun tranzaksiya funksiyasini qayta chaqirish."
+    },
+    {
+      "id": 30658,
+      "code": "GX58",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`strings.Builder` va `bytes.Buffer` qachon ishlatiladi?",
+      "options": [
+        "`+=` har doim tezroq",
+        "bytes.Buffer thread-safe",
+        "strings.Builder'ni nusxalash xavfsiz",
+        "Satr yig'ish uchun strings.Builder — String() nusxa olmaydi; bytes.Buffer — o'qish ham kerak bo'lsa (io.Reader) yoki []byte bilan ishlashda; ikkalasida Grow bilan oldindan joy ajratish mumkin"
+      ],
+      "answer": 3,
+      "explanation": "Loop ichida `s += x` har safar yangi satr ajratadi — O(n²). strings.Builder'ni qiymat bo'yicha nusxalab ishlatish panic beradi (copy check). Kichik, bir martalik birlashtirishda `+` yoki strings.Join yetarli."
+    },
+    {
+      "id": 30659,
+      "code": "GX59",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`sync.Pool` ni HTTP handler'da buffer uchun ishlatganda nimaga e'tibor berish kerak?",
+      "options": [
+        "Olingan buffer Reset qilinishi, ishlatib bo'lingach Put qilinishi, juda katta bo'lib ketgan buffer'ni Put qilmaslik (xotira ushlanib qoladi); Pool GC'da tozalanishi mumkin — kesh sifatida ishonmaslik",
+        "Pool elementlari hech qachon o'chmaydi",
+        "Put qilingan obyektni keyin ham ishlatish mumkin",
+        "Pool faqat bitta goroutine uchun"
+      ],
+      "answer": 0,
+      "explanation": "Klassik xato — Put'dan keyin buffer'ni (yoki undan olingan slice'ni) javobda ishlatish: boshqa so'rov uni qayta yozadi, ma'lumot aralashadi. Foydasini benchmark bilan isbotlash kerak — kichik obyektlarda escape analysis yetarli bo'lishi mumkin."
+    },
+    {
+      "id": 30660,
+      "code": "GX60",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`os/signal` bilan SIGTERM'ni to'g'ri ushlash?",
+      "options": [
+        "signal.Notify'ga unbuffered kanal berish",
+        "ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM); defer stop(); <-ctx.Done() dan keyin server.Shutdown(timeout ctx)",
+        "SIGKILL'ni ushlash",
+        "os.Exit'ni darhol chaqirish"
+      ],
+      "answer": 1,
+      "explanation": "signal.Notify'ga unbuffered kanal berilsa signal yo'qolishi mumkin — kamida 1 buffer. Kubernetes SIGTERM'dan keyin terminationGracePeriodSeconds kutadi, keyin SIGKILL — shutdown timeout undan kichik bo'lishi kerak. Ikkinchi signal kelsa darhol chiqish ham foydali."
+    },
+    {
+      "id": 30661,
+      "code": "GX61",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "`errgroup` (golang.org/x/sync/errgroup) nima beradi?",
+      "options": [
+        "Barcha xatolarni birlashtiradi",
+        "Panic'larni ushlaydi",
+        "Bir nechta goroutine'ni ishga tushirib, birinchi xatoni qaytaradi; WithContext bo'lsa xatoda umumiy ctx bekor qilinadi, qolganlari to'xtaydi; SetLimit bilan parallellikni cheklash mumkin",
+        "WaitGroup'dan sekinroq muqobil"
+      ],
+      "answer": 2,
+      "explanation": "Tipik pattern: bir so'rovda 3 ta servisga parallel murojaat — biri yiqilsa qolganlari ctx orqali bekor bo'ladi. g.Go ichidagi funksiya ctx'ni hurmat qilishi shart, aks holda bekor qilish ta'sir qilmaydi. Barcha xatolar kerak bo'lsa — errors.Join bilan o'zingiz yig'asiz."
+    },
+    {
+      "id": 30662,
+      "code": "GX62",
+      "level": "St",
+      "type": "open",
+      "topic": "Stdlib",
+      "domain": "go",
+      "section": "g6",
+      "question": "Go'da tashqi HTTP API'ga ishonchli client yozing. Nimalar bo'lishi kerak?",
+      "modelAnswer": [
+        "Bitta qayta ishlatiladigan http.Client + sozlangan Transport (MaxIdleConnsPerHost, timeoutlar)",
+        "Har so'rovga context deadline; umumiy Client.Timeout zaxira sifatida",
+        "Retry: faqat idempotent metodlar yoki Idempotency-Key bilan; exponential backoff + jitter; 429/503 da Retry-After ni hurmat qilish; retry budget",
+        "Circuit breaker va bulkhead (semaphore) — sekin backend butun servisni yiqitmasligi uchun",
+        "Body'ni yopish va io.LimitReader bilan javob hajmini cheklash; status kodni tekshirib, typed xato qaytarish",
+        "Observability: otelhttp transport (trace, latency, status metrikasi), request_id tarqatish",
+        "Testlash: httptest.Server yoki RoundTripper fake bilan; interfeys iste'molchi tomonda e'lon qilinadi"
+      ],
+      "explanation": "Senior signal: timeout qatlamlari, retry faqat idempotent so'rovlarda, observability va resurs boshqaruvi. 'Faqat http.Get' — junior javob."
     }
   ]
 }

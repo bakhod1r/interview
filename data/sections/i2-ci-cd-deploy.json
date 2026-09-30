@@ -6,7 +6,9 @@
   "topics": [
     "CI/CD",
     "Deploy",
-    "Secrets"
+    "Secrets",
+    "Git",
+    "GitOps"
   ],
   "questions": [
     {
@@ -282,6 +284,158 @@
       ],
       "answer": 1,
       "explanation": "Amaliy minimum: image tag sifatida commit SHA (mutable `latest` emas), `go.sum` bilan qotirilgan bog'liqliklar, bazaviy image digest bo'yicha (`@sha256:...`), va artefakt imzosi (cosign) + SBOM. Shunda incident paytida 'qaysi kod, qaysi bog'liqliklar' savoli sekundlarda javob topadi."
+    },
+    {
+      "id": 30546,
+      "code": "DO12",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i2",
+      "question": "`git merge` va `git rebase` farqi?",
+      "options": [
+        "Bir xil",
+        "merge — ikki tarixni merge commit bilan birlashtiradi (tarix saqlanadi); rebase — commitlarni boshqa bazaga qayta yozadi (chiziqli tarix, lekin hash'lar o'zgaradi)",
+        "rebase faylarni o'chiradi",
+        "merge faqat main uchun"
+      ],
+      "answer": 1,
+      "explanation": "Oltin qoida: umumiy (push qilingan, boshqalar ishlatayotgan) branchni rebase qilmang — boshqalar tarixi buziladi. O'z feature branchingizni main ustiga rebase qilish odatiy. Majburiy push kerak bo'lsa `--force-with-lease` (boshqaning commitini ustidan yozib yubormaydi)."
+    },
+    {
+      "id": 30547,
+      "code": "DO13",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i2",
+      "question": "Tasodifan secret (API kalit) commit qilinib, push bo'ldi. To'g'ri harakat?",
+      "options": [
+        "Keyingi commitda o'chirish yetarli",
+        "Avvalo kalitni darhol bekor qilish (rotate) — u allaqachon oshkor; keyin tarixdan tozalash (git filter-repo/BFG) ixtiyoriy",
+        "Repo'ni private qilish",
+        "git revert"
+      ],
+      "answer": 1,
+      "explanation": "Tarix tozalansa ham fork, klon, CI keshi, GitHub cache'da qolishi mumkin — shuning uchun rotatsiya birinchi. Oldini olish: pre-commit gitleaks/trufflehog, GitHub push protection, sirlarni .env + .gitignore emas, secret manager'da saqlash."
+    },
+    {
+      "id": 30548,
+      "code": "DO14",
+      "level": "M",
+      "type": "code",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i2",
+      "question": "Qaysi commit bug keltirganini 500 ta commit ichidan tez topish?",
+      "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.4.0\n# har qadamda test qilib: git bisect good | bad\n# yoki avtomatik:\ngit bisect run ./test.sh",
+      "options": [
+        "Bu ikkilik qidiruv — ~9 qadamda (log2 500) aybdor commit topiladi; `bisect run` skript exit code bo'yicha avtomatlashtiradi",
+        "Bu barcha commitlarni ketma-ket tekshiradi",
+        "Bu faqat merge commitlarni ko'radi",
+        "Bu commitlarni o'chiradi"
+      ],
+      "answer": 0,
+      "explanation": "Skript exit 0 = good, 1–127 = bad, 125 = skip (build bo'lmaydigan commit). Tugagach `git bisect reset`. Kichik, atomar commitlar bisect'ni foydali qiladi."
+    },
+    {
+      "id": 30549,
+      "code": "DO15",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i2",
+      "question": "Trunk-based development va GitFlow — CI/CD uchun qaysi biri va nega?",
+      "options": [
+        "GitFlow har doim yaxshi",
+        "Trunk-based: qisqa umrli branchlar (1–2 kun), tez-tez main'ga merge, tugallanmagan ish feature flag ortida — continuous delivery'ga mos; GitFlow uzoq branchlar bilan relizli (masalan, box mahsulot) loyihalarga",
+        "Farqi yo'q",
+        "Trunk-based faqat bitta dasturchi uchun"
+      ],
+      "answer": 1,
+      "explanation": "DORA tadqiqotlari trunk-based'ni yuqori samarali jamoalar bilan bog'laydi. Talab: kuchli avtotestlar, main har doim deploy qilinadigan holatda, branch protection va majburiy CI."
+    },
+    {
+      "id": 30550,
+      "code": "DO16",
+      "level": "M",
+      "type": "mcq",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i2",
+      "question": "GitOps nima?",
+      "options": [
+        "GitHub'da CI ishlatish",
+        "Kerakli holat (K8s manifestlari) Git'da saqlanadi; klaster ichidagi agent (Argo CD, Flux) uni doimiy ravishda Git bilan solishtirib, farqni o'zi tuzatadi (pull model)",
+        "Git hook'lar bilan deploy",
+        "Faqat Helm ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "Afzalliklar: CI'ga klaster kalitlari berilmaydi (pull), audit — git log, rollback — git revert, drift avtomatik tuzatiladi. CI image build qilib, config repo'dagi image tegini yangilaydi; CD'ni agent bajaradi."
+    },
+    {
+      "id": 30551,
+      "code": "DO17",
+      "level": "M",
+      "type": "mcq",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i2",
+      "question": "Helm chart'da `values.yaml` va muhitlar?",
+      "options": [
+        "Har muhitga alohida chart nusxasi",
+        "Bitta chart, muhitga xos values fayllar (`-f values-prod.yaml`); `helm template` / `helm diff` bilan oldindan ko'rish; chart versiyalanadi",
+        "values faqat dev uchun",
+        "Helm muhitlarni qo'llab-quvvatlamaydi"
+      ],
+      "answer": 1,
+      "explanation": "Alternativa — Kustomize (base + overlays, shablonsiz patch). `helm upgrade --install --atomic` xato bo'lsa o'zi rollback qiladi. Sirlarni values'da ochiq saqlamang: sealed-secrets, external-secrets yoki SOPS."
+    },
+    {
+      "id": 30552,
+      "code": "DO18",
+      "level": "S",
+      "type": "open",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i2",
+      "question": "Noldan servis uchun CI/CD pipeline'ni loyihala: commit'dan production'gacha.",
+      "modelAnswer": "1) PR: lint, unit test, SAST, dependency scan, build. 2) Merge: image build (multi-stage, distroless), tag = git SHA (latest emas), SBOM va imzo (cosign), image scan (trivy), registry'ga push. 3) Integratsiya testlari staging'da, migration'lar oldinga-orqaga mos (expand/contract). 4) Deploy: GitOps — config repo'da tegni yangilash, Argo CD sinxronlaydi. 5) Progressive delivery: canary (Argo Rollouts/Flagger) SLO metrikalari bo'yicha avtomatik analiz va rollback. 6) Prod uchun approval yoki avtomatik (jamoa etukligiga qarab). 7) Kuzatuv: deploy markerlari dashboard'da, DORA metrikalari (deploy chastotasi, lead time, change failure rate, MTTR).",
+      "explanation": "Intervyuda ta'kidlanadigan jihatlar: immutable artefakt (bir image hamma muhitdan o'tadi), tez rollback, xavfsizlik (supply chain), va o'lchanadigan natija."
+    },
+    {
+      "id": 30553,
+      "code": "DO19",
+      "level": "S",
+      "type": "mcq",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i2",
+      "question": "Docker image'ni `latest` tegi bilan deploy qilishning muammosi?",
+      "options": [
+        "Muammo yo'q",
+        "Teg o'zgaruvchan — qaysi versiya ishlayotgani noma'lum, rollback qiyin, node'lar turli image olishi mumkin (imagePullPolicy); SHA yoki semver teg, eng ishonchlisi digest (@sha256:...)",
+        "latest sekinroq yuklanadi",
+        "latest faqat Docker Hub'da ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
+    },
+    {
+      "id": 30554,
+      "code": "DO20",
+      "level": "St",
+      "type": "open",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i2",
+      "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
+      "modelAnswer": "DevOps — vosita emas, madaniyat: dasturchi va operatsiya umumiy mas'uliyati ('you build it, you run it'), kichik tez-tez relizlar, avtomatlashtirish, fikr-mulohaza tsikllari (monitoring, blameless postmortem). Joriy qilish: 1) DORA metrikalarini o'lchashdan boshlash. 2) Eng og'riqli qo'lda jarayonni avtomatlashtirish (deploy). 3) Platform jamoa — golden path (shablon repo, pipeline, observability tayyor), self-service. 4) On-call dasturchilar bilan, runbook'lar. 5) Blameless postmortem. SRE — Google'ning DevOps'ni amalga oshirish usuli: SLO/SLI, error budget (budget tugasa feature o'rniga ishonchlilik), toil'ni 50%dan kam ushlash.",
+      "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
+      "source": "https://sre.google/sre-book/table-of-contents/"
     }
   ]
 }

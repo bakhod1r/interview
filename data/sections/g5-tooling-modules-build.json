@@ -291,6 +291,224 @@
       ],
       "answer": 1,
       "explanation": "`go.sum` modul mazmunini qotirib qo'yadi — tasodifiy o'zgarishni aniqlaydi. `govulncheck` esa faqat haqiqatda chaqirilgan zaif funksiyalarni ko'rsatadi (shovqin kam). Qo'shimcha amaliyot: minimal bog'liqlik siyosati, `replace` direktivalarini productionda qoldirmaslik, va build reproducibility uchun `-trimpath` bilan qurish."
+    },
+    {
+      "id": 30601,
+      "code": "GX1",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "`go vet` va `staticcheck` farqi?",
+      "options": [
+        "go vet — standart, kam va aniq tekshiruvlar (printf formatlar, lock nusxasi, unreachable kod); staticcheck — ancha keng: deprecated API, keraksiz kod, samarasiz konstruksiyalar, xato ehtimoli yuqori patternlar",
+        "Ikkalasi bir xil narsa",
+        "staticcheck kodni formatlaydi",
+        "go vet faqat testlarni tekshiradi"
+      ],
+      "answer": 0,
+      "explanation": "`go test` avtomatik ravishda vet'ning bir qismini ishga tushiradi. CI'da odatda golangci-lint orqali staticcheck, errcheck, gosec, revive kabilar birga yuritiladi. Muhimi — linterlar ro'yxatini jamoada kelishib, `//nolint` ni izohsiz qo'ymaslik."
+    },
+    {
+      "id": 30602,
+      "code": "GX2",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "`go install pkg@version` va `go get` farqi (Go 1.17+)?",
+      "options": [
+        "go get binary o'rnatadi, go install go.mod'ni o'zgartiradi",
+        "go install pkg@v — binary (CLI vosita) o'rnatadi, joriy go.mod'ga tegmaydi; go get — faqat go.mod'dagi bog'liqlikni qo'shadi/yangilaydi",
+        "Farqi yo'q",
+        "go install faqat stdlib uchun"
+      ],
+      "answer": 1,
+      "explanation": "Go 1.18 dan go get endi build/install qilmaydi. Vositalar versiyasini qotirish uchun Go 1.24+ da go.mod'dagi `tool` direktivasi (`go get -tool ...`, `go tool <nom>`) ishlatiladi; eskiroq usul — tools.go fayli build tag bilan."
+    },
+    {
+      "id": 30603,
+      "code": "GX3",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Go 1.24 dagi `tool` direktivasi nima hal qiladi?",
+      "options": [
+        "Go toolchain versiyasini tanlaydi",
+        "Test vositalarini o'chiradi",
+        "Loyiha vositalari (mockgen, sqlc, stringer) versiyasini go.mod'da qotiradi; `go tool mockgen` bilan chaqiriladi — tools.go hack'i kerak emas",
+        "Faqat CI'da ishlaydi"
+      ],
+      "answer": 2,
+      "explanation": "Oldin `//go:build tools` bilan bo'sh import qilingan tools.go ishlatilardi. Endi `go get -tool golang.org/x/tools/cmd/stringer` — go.mod'ga yoziladi, go.sum bilan tekshiriladi, hamma dasturchida bir xil versiya bo'ladi. `go generate` ichida ham `go tool` chaqirish mumkin."
+    },
+    {
+      "id": 30604,
+      "code": "GX4",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "go.mod'dagi `go 1.22` va `toolchain go1.23.4` qatorlari nimani anglatadi?",
+      "options": [
+        "Ikkalasi faqat izoh",
+        "`go` qatori qaysi Go o'rnatilishini majburlaydi, toolchain e'tiborsiz",
+        "toolchain faqat Windows uchun",
+        "`go` — minimal til versiyasi va semantikasi (masalan loop o'zgaruvchi xulqi); `toolchain` — tavsiya qilinadigan kompilyator; GOTOOLCHAIN=auto bo'lsa Go kerakli toolchain'ni o'zi yuklab oladi"
+      ],
+      "answer": 3,
+      "explanation": "Go 1.21 dan `go` qatori qat'iy talab: eski toolchain bu modulni build qilishdan bosh tortadi. Til o'zgarishlari (1.22 loopvar) modul `go` versiyasiga bog'liq — shuning uchun uni ko'tarish xulqni o'zgartirishi mumkin. CI'da GOTOOLCHAIN=local qo'yib, kutilmagan yuklab olishni to'xtatish mumkin."
+    },
+    {
+      "id": 30605,
+      "code": "GX5",
+      "level": "S",
+      "type": "code",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Bu build nima uchun Alpine konteynerida `not found` bilan ishga tushmaydi?\n\n```\nFROM golang:1.23 AS b\nRUN go build -o /app ./cmd/api\nFROM alpine\nCOPY --from=b /app /app\nCMD [\"/app\"]\n```",
+      "options": [
+        "net yoki os/user paketlari tufayli cgo yoqilgan, binary glibc'ga dinamik bog'langan; alpine'da musl bor. Yechim: CGO_ENABLED=0 bilan statik build (yoki distroless/static)",
+        "Alpine Go binary'larini qo'llamaydi",
+        "COPY noto'g'ri",
+        "CMD shell formatida bo'lishi kerak"
+      ],
+      "answer": 0,
+      "explanation": "golang image Debian asosida, CGO_ENABLED default 1. `ldd /app` yoki `file /app` bilan tekshiriladi. To'g'ri pattern: `CGO_ENABLED=0 go build -trimpath -ldflags='-s -w'` va `gcr.io/distroless/static` yoki `scratch`. scratch'da CA sertifikatlari va tzdata yo'q — kerak bo'lsa nusxalash yoki `import _ \"time/tzdata\"`."
+    },
+    {
+      "id": 30606,
+      "code": "GX6",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Go'da cross-compilation qanday qilinadi va qayerda qiyinlashadi?",
+      "options": [
+        "Faqat Docker buildx orqali",
+        "GOOS=linux GOARCH=arm64 go build — sof Go kodida qo'shimcha narsa kerak emas; cgo ishlatilsa maqsad platforma uchun C cross-compiler va kutubxonalar kerak bo'ladi",
+        "Maqsad platformada build qilish shart",
+        "GOARCH faqat amd64 ni qo'llaydi"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun ko'p jamoa CGO_ENABLED=0 ni default qiladi. cgo zarur bo'lsa (sqlite, librdkafka) — zig cc, maxsus build image yoki buildx multi-arch. `go tool dist list` barcha qo'llanadigan juftliklarni ko'rsatadi."
+    },
+    {
+      "id": 30607,
+      "code": "GX7",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "`replace` direktivasi haqida to'g'ri gap?",
+      "options": [
+        "replace barcha iste'molchilarga tarqaladi",
+        "replace go.sum'ni o'chiradi",
+        "replace faqat asosiy (main) modulda ta'sir qiladi — sizning kutubxonangizni import qilganlarga o'tmaydi; lokal yo'lga replace bilan kutubxona relizi qilish xato",
+        "replace faqat vendor bilan ishlaydi"
+      ],
+      "answer": 2,
+      "explanation": "Lokal ishlash uchun go.work yaxshiroq — go.mod'ni ifloslantirmaydi. Fork'ni vaqtincha ulash uchun replace → fork versiyasi mumkin, lekin issue/TODO bilan kuzatilishi kerak. Tarqaladigan cheklov kerak bo'lsa — `exclude` yoki `retract` (kutubxona muallifi tomonida)."
+    },
+    {
+      "id": 30608,
+      "code": "GX8",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Kutubxona muallifi noto'g'ri relizni (v1.4.2) qanday 'qaytarib oladi'?",
+      "options": [
+        "Git tag'ni o'chirish yetarli",
+        "proxy.golang.org dan o'chirish so'raladi",
+        "Imkoni yo'q",
+        "go.mod'ga `retract v1.4.2 // sabab` qo'shib yangi versiya chiqaradi; proxy'dagi versiya o'chmaydi, lekin `go get` uni tanlamaydi va ogohlantiradi"
+      ],
+      "answer": 3,
+      "explanation": "Modul proxy va checksum DB o'zgarmas — tag'ni o'chirish/qayta qo'yish checksum mismatch xatosiga olib keladi. Shuning uchun tag hech qachon qayta yozilmaydi; tuzatish yangi patch versiya + retract bilan."
+    },
+    {
+      "id": 30609,
+      "code": "GX9",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Benchmark natijalarini ishonchli solishtirish uchun nima ishlatiladi?",
+      "options": [
+        "`go test -bench=. -count=10` ni eski va yangi kodda ishlatib, natijani `benchstat` bilan solishtirish — statistik ahamiyat (p-value) va o'zgarish foizi ko'rinadi",
+        "Bitta ishga tushirish yetarli",
+        "Faqat ns/op ni ko'z bilan solishtirish",
+        "time buyrug'i bilan"
+      ],
+      "answer": 0,
+      "explanation": "Shovqinni kamaytirish: noutbuk quvvat rejimi, boshqa jarayonlar, CPU frequency scaling. `-benchmem` allocs/op beradi — ko'pincha eng muhim ko'rsatkich. Go 1.24 da `b.Loop()` kompilyator natijani yo'q qilib yuborishining oldini oladi."
+    },
+    {
+      "id": 30610,
+      "code": "GX10",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Fuzzing (`go test -fuzz`) qanday ishlaydi?",
+      "options": [
+        "Tasodifiy kirishlarni cheksiz yuboradi, natija saqlanmaydi",
+        "func FuzzX(f *testing.F) — seed korpus f.Add bilan, f.Fuzz(func(t *testing.T, in []byte){...}) coverage-guided mutatsiya qiladi; yiqilgan kirish testdata/fuzz/ ga saqlanib, oddiy `go test` da regression sifatida qayta ishlaydi",
+        "Faqat HTTP handler'lar uchun",
+        "Tashqi vosita kerak (go-fuzz)"
+      ],
+      "answer": 1,
+      "explanation": "Parserlar, decoderlar, validatorlar uchun juda samarali — panic, cheksiz loop, invariant buzilishini topadi. Fuzz funksiyasida invariant tekshiring (masalan encode(decode(x)) == x). CI'da vaqt cheklovi bilan: `-fuzztime=30s`."
+    },
+    {
+      "id": 30611,
+      "code": "GX11",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Test coverage'ni integratsion testlar uchun qanday yig'asiz (Go 1.20+)?",
+      "options": [
+        "Faqat unit testlarda mumkin",
+        "-coverprofile binary'ga ham ishlaydi",
+        "Binary'ni `go build -cover` bilan qurib, GOCOVERDIR=dir bilan ishga tushirish; keyin `go tool covdata percent/textfmt` bilan birlashtirish",
+        "pprof bilan"
+      ],
+      "answer": 2,
+      "explanation": "Bu e2e/integratsion testlar qaysi kodni haqiqatan ishlatganini ko'rsatadi. Coverage foizi maqsad emas — muhim yo'llar (xato tarmoqlari) qamralganini tekshirish uchun vosita. `-coverpkg=./...` bir paket testi boshqa paketlarni qamrashini hisoblaydi."
+    },
+    {
+      "id": 30612,
+      "code": "GX12",
+      "level": "St",
+      "type": "open",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "Katta Go monorepo'da CI 25 daqiqa ketyapti. Qanday tezlashtirasiz?",
+      "modelAnswer": [
+        "O'lchash: har bosqich vaqti (download, build, lint, test), eng sekin testlar (`go test -json` + tahlil)",
+        "Kesh: GOMODCACHE va GOCACHE ni CI keshida saqlash — build va test natijalari qayta ishlatiladi",
+        "Faqat o'zgargan paketlar va ularga bog'liqlarni test qilish (`go list -deps` / teskari graf, yoki Bazel/affected-targets)",
+        "golangci-lint keshini saqlash va `--new-from-rev` bilan faqat yangi kodni tekshirish",
+        "Testlarni shard qilish (paketlar bo'yicha parallel job'lar), `t.Parallel()` va sekin integratsion testlarni alohida pipeline'ga ajratish",
+        "Docker build'da mod download qatlamini alohida qilish, BuildKit cache mount (`--mount=type=cache,target=/root/.cache/go-build`)",
+        "Flaky testlarni ro'yxatga olib tuzatish — retry bilan yashirmaslik"
+      ],
+      "explanation": "Senior signal: avval o'lchash (qaysi bosqich sekin), keyin kesh va o'zgargan qismni tanlash. Faqat kuchliroq runner so'rash — zaif javob."
     }
   ]
 }

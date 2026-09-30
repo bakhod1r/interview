@@ -7,7 +7,8 @@
     "AWS",
     "Cloud",
     "OS",
-    "Ops"
+    "Ops",
+    "IaC"
   ],
   "questions": [
     {
@@ -444,6 +445,108 @@
       ],
       "answer": 1,
       "explanation": "Ko'rinishi: deploy paytida podlar 30 sekund kutib SIGKILL bilan o'ladi, ochiq so'rovlar uziladi. Tuzatish: `ENTRYPOINT [\"/app/server\"]` (exec form, shell emas) yoki `CMD exec ...`; Go binarlari signalni o'zi ishlaydi (`signal.NotifyContext`), lekin shell wrapper bo'lsa signal yo'qoladi. Zombi jarayonlar uchun `--init`."
+    },
+    {
+      "id": 30535,
+      "code": "DO1",
+      "level": "J",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Infrastructure as Code (IaC) nima beradi?",
+      "options": [
+        "Serverlarni qo'lda sozlashni tezlashtiradi",
+        "Infratuzilma kod sifatida versiyalanadi, review qilinadi va takrorlanadigan tarzda yaratiladi — 'snowflake' serverlar yo'qoladi",
+        "Faqat bulutda ishlaydi",
+        "Monitoring o'rnini bosadi"
+      ],
+      "answer": 1,
+      "explanation": "IaC: git tarixi (kim, qachon, nima o'zgartirdi), PR review, bir xil muhitlar (dev/stage/prod), tez tiklash (disaster recovery). Deklarativ (Terraform, CloudFormation — 'qanday holat kerak') va imperativ (skriptlar — 'qanday qadamlar') yondashuvlar bor."
+    },
+    {
+      "id": 30536,
+      "code": "DO2",
+      "level": "M",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i5",
+      "question": "`terraform plan` va `terraform apply` farqi?",
+      "options": [
+        "Bir xil",
+        "plan — joriy state va real resurslarni kod bilan solishtirib, qanday o'zgarish bo'lishini ko'rsatadi (hech narsa o'zgartirmaydi); apply — o'sha o'zgarishlarni bajaradi",
+        "plan faqat syntax tekshiradi",
+        "apply state faylni o'chiradi"
+      ],
+      "answer": 1,
+      "explanation": "CI'da odatiy oqim: PR'da plan chiqishi komment sifatida ko'rsatiladi, merge'dan keyin saqlangan plan fayl (`plan -out=tfplan`, `apply tfplan`) qo'llanadi — review qilingan va bajarilgan o'zgarish bir xil bo'lishi kafolatlanadi. `-/+` (destroy va qayta yaratish) belgisiga alohida e'tibor: DB kabi resurs uchun bu ma'lumot yo'qolishi."
+    },
+    {
+      "id": 30537,
+      "code": "DO3",
+      "level": "S",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Ikki muhandis bir vaqtda `terraform apply` qilsa nima bo'ladi va qanday oldini olasiz?",
+      "options": [
+        "Hech narsa, Terraform birlashtiradi",
+        "State buzilishi yoki resurslar ikki marta yaratilishi mumkin; remote backend + state locking (S3+DynamoDB, GCS, Terraform Cloud) va apply faqat CI orqali",
+        "Faqat oxirgisi saqlanadi, muammo yo'q",
+        "terraform fmt yordam beradi"
+      ],
+      "answer": 1,
+      "explanation": "Lock state'ni bir vaqtda faqat bitta jarayon yozishini ta'minlaydi. Qo'shimcha: state'ni muhit/komponent bo'yicha bo'lish (blast radius kichik), state ichida sirlar bo'lishi mumkin — shifrlangan backend va cheklangan kirish. `terraform force-unlock` faqat jarayon aniq o'lgan bo'lsa."
+    },
+    {
+      "id": 30538,
+      "code": "DO4",
+      "level": "S",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Drift nima?",
+      "options": [
+        "Terraform versiyasining eskirishi",
+        "Real infratuzilma koddan farq qilib qolishi — kimdir konsolda qo'lda o'zgartirgan; keyingi plan uni qaytarishga urinadi",
+        "Tarmoq kechikishi",
+        "Modul versiyalari mos kelmasligi"
+      ],
+      "answer": 1,
+      "explanation": "Aniqlash: rejali `terraform plan -detailed-exitcode` (exit 2 = farq bor) CI'da, alert bilan. Oldini olish: prod'da konsolga yozish huquqini cheklash, 'break-glass' kirish audit bilan. Qo'lda o'zgarish kerak bo'lsa — keyin albatta kodga qaytariladi yoki `terraform import` qilinadi."
+    },
+    {
+      "id": 30539,
+      "code": "DO5",
+      "level": "M",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Terraform va Ansible farqi?",
+      "options": [
+        "Bir xil vosita",
+        "Terraform — asosan resurslarni yaratish (provisioning, deklarativ, state bilan); Ansible — mavjud serverlarni sozlash (configuration management, agentsiz SSH, idempotent tasklar)",
+        "Ansible faqat Windows uchun",
+        "Terraform faqat Kubernetes uchun"
+      ],
+      "answer": 1,
+      "explanation": "Ko'p jamoada ular birga ishlatiladi: Terraform VM/tarmoq/DB yaratadi, Ansible ichini sozlaydi. Konteyner va immutable image (Packer) davrida configuration management roli kamaydi — server sozlanmaydi, yangi image bilan almashtiriladi."
+    },
+    {
+      "id": 30540,
+      "code": "DO6",
+      "level": "St",
+      "type": "open",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Katta kompaniyada Terraform kodini qanday tashkil qilasan (modullar, muhitlar, state)?",
+      "modelAnswer": "1) Qayta ishlatiladigan modullar alohida repo/katalogda, semver teglari bilan. 2) Muhitlar (dev/stage/prod) alohida katalog yoki workspace — lekin alohida state va alohida bulut akkauntlari (blast radius). 3) State'ni komponentlarga bo'lish (network, data, app) — kichik plan, tez, xavfsiz. 4) Remote backend + locking + shifrlash. 5) CI: fmt, validate, tflint, checkov/tfsec, plan PR'da, apply faqat merge'dan keyin va prod uchun manual approval. 6) Provider va modul versiyalarini pin qilish (.terraform.lock.hcl commit). 7) Drift tekshiruvi rejada. 8) Sirlar kodda emas — Vault/Secrets Manager.",
+      "explanation": "Asosiy g'oya: kichik, mustaqil state'lar va hamma o'zgarish PR orqali. Monolit state — har apply butun infratuzilmani xavf ostiga qo'yadi."
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1207,
+  "total": 1259,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -54,14 +54,14 @@
       "id": "g5",
       "name": "Tooling, modules, build",
       "domain": "go",
-      "count": 16,
+      "count": 28,
       "file": "sections/g5-tooling-modules-build.json"
     },
     {
       "id": "g6",
       "name": "Stdlib & web",
       "domain": "go",
-      "count": 18,
+      "count": 30,
       "file": "sections/g6-stdlib-web.json"
     },
     {
@@ -264,7 +264,7 @@
       "id": "i2",
       "name": "CI/CD & deploy",
       "domain": "infra",
-      "count": 15,
+      "count": 24,
       "file": "sections/i2-ci-cd-deploy.json"
     },
     {
@@ -285,15 +285,15 @@
       "id": "i5",
       "name": "Cloud, OS, operations",
       "domain": "infra",
-      "count": 24,
+      "count": 30,
       "file": "sections/i5-cloud-os-operations.json"
     },
     {
-      "id": "i6",
-      "name": "DevOps: IaC, Linux, Git, GitOps",
+      "id": "i7",
+      "name": "Linux",
       "domain": "infra",
-      "count": 20,
-      "file": "sections/i6-devops-iac-linux-git-gitops.json"
+      "count": 33,
+      "file": "sections/i7-linux.json"
     },
     {
       "id": "t11",
