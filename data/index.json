@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1220,
+  "total": 1230,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -82,7 +82,7 @@
       "id": "t1",
       "name": "Go gotchas",
       "domain": "go",
-      "count": 23,
+      "count": 33,
       "file": "sections/t1-go-gotchas.json"
     },
     {

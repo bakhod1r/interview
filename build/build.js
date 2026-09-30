@@ -7,6 +7,12 @@ const root = path.join(__dirname, "..");
 const data = JSON.parse(fs.readFileSync(path.join(root, "data/questions.json"), "utf8"));
 const shell = fs.readFileSync(path.join(__dirname, "shell-v9.html"), "utf8");
 
+// data/deep/<sectionId>.json: { "<id>": "markdown" } — batafsil tushuntirishlar
+const deepDir = path.join(root, "data/deep");
+const DEEP = {};
+if (fs.existsSync(deepDir)) for (const f of fs.readdirSync(deepDir)) if (f.endsWith(".json"))
+  Object.assign(DEEP, JSON.parse(fs.readFileSync(path.join(deepDir, f), "utf8")));
+
 const questions = [];
 const SEC = {};
 for (const s of data.sections) {
@@ -19,6 +25,7 @@ for (const s of data.sections) {
     if (q.keywords) o.k = q.keywords;
     o.e = q.explanation;
     if (q.source) o.src = q.source;
+    if (DEEP[q.id]) o.x = DEEP[q.id];
     questions.push(o);
   }
 }

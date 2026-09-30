@@ -27,6 +27,20 @@ Run after any change to data or shell.
 - State lives in `localStorage` key `dbdrill.v1` (`res`, `srs`, `days`, `sess`, `cfg`, `nt`). Keep it backward-compatible; old `res` entries are migrated into `srs` on load.
 - Older shells (`shell-v7.html`, `shell-v8.html`) are backups only.
 
+## Working rules (from past sessions)
+- User writes short Uzbek commands ("qo'sh", "bos", "davom et", "go") — act, don't re-ask. "bos" = do it now.
+- Target: Senior-level coverage. When asked "to'liqmi?" — audit gaps per topic, then add questions to thin sections ("yupqalariga qo'sh").
+- New topic/subtopic (e.g. inode, hardlink/softlink, LVM, kernel, shell, filesystem types) → add enough questions (mix mcq/code/open, J→P levels), place in the right section, sync `index.json` counts.
+- "Edge cases & gotchas" live in `t*` sections, spread by domain (Go, SQL, Kafka, Redis, K8s, security…) — not one big bucket.
+- Catalog structure: directions Backend / DevOps / System Design / Algorithms. DevOps content (infra, Linux, CI/CD, K8s) belongs under DevOps, not Backend. Fintech (`p*`) under Backend.
+- Study UX = AnkiDroid style: flashcards, closed (hidden-answer) questions, FSRS. UI must stay premium: smooth animations, easy navigation.
+- Deploy: GitHub Pages serves `interview.html`. Push only when the user explicitly allows it in that session.
+- Always finish with `node build/build.js && node build/verify.js` green.
+
+## Deep explanations
+- Each question may have `deep` (string, Markdown): step-by-step Uzbek explanation why the answer is right and why others are wrong, with a fenced code block when code helps and an inline `<svg>` diagram when a picture helps (flows, memory layout, timelines). Keep `explanation` as the short version.
+- UI shows `deep` behind a "Batafsil" toggle after answering.
+
 ## Content conventions
 - Questions, options and explanations are in Uzbek; technical terms stay in English.
 - Types: `mcq` / `code` (have `options` + `answer`), `sql` (`modelAnswer` + `keywords`), `open` (`modelAnswer` list).

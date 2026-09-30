@@ -444,6 +444,195 @@
       ],
       "answer": 1,
       "explanation": "`time.After(d)` kanalni qaytaradi, lekin timer runtime heap'ida `d` tugaguncha yashaydi. 1 daqiqali timeout bilan sekundda 10k iteratsiya — 600k tirik timer. Go 1.23'da timer GC xatti-harakati yaxshilangan, lekin idiomatik yechim baribir timer'ni qayta ishlatish yoki `ctx.Done()`."
+    },
+    {
+      "id": 30722,
+      "code": "SN536",
+      "level": "M",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "`len` natijalari?",
+      "snippet": "s := \"salom👋\"\nfmt.Println(len(s), len([]rune(s)))",
+      "options": [
+        "6 6",
+        "9 6 — `len` baytlarni sanaydi, emoji UTF-8 da 4 bayt",
+        "6 9",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 1,
+      "explanation": "String — bayt ketma-ketligi. `len(s)` baytlar soni: `salom` 5 bayt + `👋` 4 bayt = 9. Belgilar soni uchun `utf8.RuneCountInString(s)` yoki `len([]rune(s))`. Validatsiyada (\"ism 50 belgidan oshmasin\") `len` ishlatish ko'p uchraydigan bug."
+    },
+    {
+      "id": 30723,
+      "code": "SN537",
+      "level": "M",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Natija?",
+      "snippet": "e := \"é\"\nfmt.Println(e[0], string(e[0]))",
+      "options": [
+        "`é é`",
+        "`195 Ã` — indeks bayt (`byte`) qaytaradi, `string(byte)` uni rune sifatida o'giradi",
+        "`233 é`",
+        "panic: index out of range"
+      ],
+      "answer": 1,
+      "explanation": "`s[i]` — `byte` (uint8). `é` UTF-8 da ikki bayt: 0xC3 0xA9. `string(e[0])` 195 ni Unicode code point U+00C3 (`Ã`) deb o'giradi. Belgilar bo'yicha yurish uchun `for _, r := range s` ishlatiladi — u rune beradi. `go vet` `string(int)` konversiyasini ogohlantiradi."
+    },
+    {
+      "id": 30724,
+      "code": "SN538",
+      "level": "M",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Natija?",
+      "snippet": "var x int8 = 127\nx++\nfmt.Println(x)",
+      "options": [
+        "128",
+        "-128 — signed overflow jim o'raladi (wrap-around), panic yo'q",
+        "panic: integer overflow",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 1,
+      "explanation": "Go'da runtime integer overflow panic bermaydi — ikkiga to'ldiruvchi kod bo'yicha o'raladi. Lekin konstanta ifodada (`var x int8 = 128`) kompilyator xato beradi: `constant 128 overflows int8`. Pul, counter, ID hisoblarida chegara tekshiruvi (`math.MaxInt64`) qo'lda qilinadi."
+    },
+    {
+      "id": 30725,
+      "code": "SN539",
+      "level": "M",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Nima chiqadi?",
+      "snippet": "n := 1\nswitch {\ncase n > 0:\n    fmt.Print(\"A\")\n    fallthrough\ncase n > 5:\n    fmt.Print(\"B\")\ncase n > 0:\n    fmt.Print(\"C\")\n}",
+      "options": [
+        "`A`",
+        "`AB` — `fallthrough` keyingi case shartini tekshirmasdan bajaradi",
+        "`AC`",
+        "`ABC`"
+      ],
+      "answer": 1,
+      "explanation": "Go'da `switch` har case oxirida avtomatik `break` qiladi (C'dan farqli). `fallthrough` esa keyingi case tanasini shartsiz bajaradi — `n > 5` false bo'lsa ham. U faqat case tanasining oxirgi operatori bo'lishi mumkin va type switch'da taqiqlangan."
+    },
+    {
+      "id": 30726,
+      "code": "SN540",
+      "level": "S",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Bu loop qachon tugaydi?",
+      "snippet": "for {\n    select {\n    case msg, ok := <-ch:\n        if !ok {\n            break\n        }\n        handle(msg)\n    }\n}",
+      "options": [
+        "Kanal yopilganda",
+        "Hech qachon — `break` faqat `select`dan chiqadi; yopilgan kanal darhol zero value qaytarib, loop CPU'ni 100% yeydi",
+        "Birinchi xabardan keyin",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 1,
+      "explanation": "`break` eng ichki `for`/`switch`/`select`ga tegishli. Yopilgan kanaldan o'qish darhol `ok=false` qaytaradi, shuning uchun loop to'xtamay aylanadi (busy loop). Yechim: label (`loop: for { ... break loop }`), `return`, yoki `for msg := range ch`."
+    },
+    {
+      "id": 30727,
+      "code": "SN541",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "`time.Parse(\"YYYY-MM-DD\", \"2026-09-30\")` nima qaytaradi?",
+      "options": [
+        "To'g'ri sana",
+        "Xato — Go layout sifatida aniq referens vaqt `2006-01-02 15:04:05` ni kutadi; `YYYY` belgisi yo'q",
+        "Faqat yil",
+        "Vaqt zonasi bilan sana"
+      ],
+      "answer": 1,
+      "explanation": "Go format satri — referens vaqt `Mon Jan 2 15:04:05 MST 2006` (1 2 3 4 5 6 7). To'g'ri layout: `\"2006-01-02\"` yoki `time.DateOnly` (Go 1.20+). Tipik xato: `\"2006-01-02 15:04\"` o'rniga `\"2006-01-02 03:04\"` yozish — bu 12 soatlik format, 15:00 parse bo'lmaydi. `time.Parse` zona ko'rsatilmasa UTC qaytaradi."
+    },
+    {
+      "id": 30728,
+      "code": "SN542",
+      "level": "S",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Natija?",
+      "snippet": "m := map[string]int{\"a\": 1, \"b\": 2}\ns := []int{1, 2, 3}\nclear(m)\nclear(s)\nfmt.Println(len(m), len(s), s)",
+      "options": [
+        "`0 0 []`",
+        "`0 3 [0 0 0]` — map'da `clear` elementlarni o'chiradi, slice'da esa nollaydi, uzunlik saqlanadi",
+        "`0 3 [1 2 3]`",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 1,
+      "explanation": "Go 1.21 builtin'lari: `clear`, `min`, `max`. `clear(map)` barcha kalitlarni o'chiradi (NaN kalitlarni ham — oldin ularni o'chirib bo'lmas edi). `clear(slice)` elementlarni zero value qiladi, `len` va `cap` o'zgarmaydi. Slice'ni bo'shatish uchun `s = s[:0]`. `min`/`max` har qanday ordered tip va bir nechta argument qabul qiladi; float'da NaN bo'lsa NaN qaytaradi."
+    },
+    {
+      "id": 30729,
+      "code": "SN543",
+      "level": "S",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Natija?",
+      "snippet": "m := map[float64]int{}\nnan := math.NaN()\nm[nan] = 1\nm[nan] = 2\n_, ok := m[nan]\nfmt.Println(len(m), ok)",
+      "options": [
+        "`1 true`",
+        "`2 false` — `NaN != NaN`, har yozuv yangi kalit, o'qib bo'lmaydi",
+        "`1 false`",
+        "panic"
+      ],
+      "answer": 1,
+      "explanation": "Map kalit tengligini `==` bilan tekshiradi, NaN esa o'ziga teng emas. Shu sababli har `m[NaN]=` yangi yozuv qo'shadi va ularni kalit bo'yicha topib yoki `delete` bilan o'chirib bo'lmaydi (faqat `clear` yoki range). Qo'shimcha tuzoq: `0.1+0.2 == 0.3` konstantalarda `true` (aniq arifmetika), lekin `a, b := 0.1, 0.2; a+b == 0.3` — `false`. Float taqqoslashda epsilon ishlatiladi."
+    },
+    {
+      "id": 30730,
+      "code": "SN544",
+      "level": "M",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Natija?",
+      "snippet": "dst := make([]int, 2)\nn := copy(dst, []int{7, 8, 9})\nvar nd []int\nm := copy(nd, []int{1})\nfmt.Println(n, dst, m)",
+      "options": [
+        "`3 [7 8 9] 1`",
+        "`2 [7 8] 0` — `copy` `min(len(dst), len(src))` element ko'chiradi, `dst`ni o'stirmaydi",
+        "`2 [7 8] 1`",
+        "panic: index out of range"
+      ],
+      "answer": 1,
+      "explanation": "`copy` hech qachon slice'ni kengaytirmaydi — faqat mavjud `len` ichiga yozadi va ko'chirilgan son qaytaradi. `nil` yoki `make([]T, 0, n)` ga copy 0 element yozadi — tipik bug: `dst := make([]int, 0, len(src)); copy(dst, src)` bo'sh qoladi. To'g'risi `make([]int, len(src))` yoki `slices.Clone(src)`."
+    },
+    {
+      "id": 30731,
+      "code": "SN545",
+      "level": "S",
+      "type": "code",
+      "topic": "Go gotcha",
+      "domain": "go",
+      "section": "t1",
+      "question": "Natija?",
+      "snippet": "p := make([]int, 3, 3)\nq := append(p, 4)\nq[0] = 99\nfmt.Println(p[0], q[0])",
+      "options": [
+        "`99 99`",
+        "`0 99` — `cap` to'lgan, `append` yangi massiv ajratdi, `p` va `q` endi bog'liq emas",
+        "`0 0`",
+        "panic"
+      ],
+      "answer": 1,
+      "explanation": "`append` sig'im yetsa shu backing array'ga yozadi (ikkala slice o'zgarishni ko'radi), yetmasa yangi array ajratib nusxalaydi (bog'liqlik uziladi). Natija `cap`ga bog'liq — shuning uchun bir xil kod turli ma'lumotda turlicha ishlaydi. Qoida: `append` natijasini doim o'sha o'zgaruvchiga qaytaring; bo'lishilgan slice'ga yozishdan oldin `s[:len:len]` (full slice expression) bilan sig'imni cheklang."
     }
   ]
 }

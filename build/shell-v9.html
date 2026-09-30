@@ -400,6 +400,15 @@ body:before,body:after{opacity:.22}
 .opt:hover:not([disabled]){box-shadow:0 6px 18px -8px color-mix(in srgb,var(--accent) 50%,transparent)}
 .sheet{backdrop-filter:blur(6px)}
 @media (prefers-reduced-motion:reduce){.qcard{transform:none}}
+.deep{margin-top:14px;border:1px solid var(--line,#8884);border-radius:12px;overflow:hidden}
+.deep>summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;user-select:none}
+.deep>summary::before{content:"▸ ";display:inline-block;transition:transform .2s}
+.deep[open]>summary::before{transform:rotate(90deg)}
+.deep-in{padding:0 14px 12px;animation:dfade .25s ease}
+.deep-in h6{font-size:.95em;margin:14px 0 6px}
+.deep-in ul,.deep-in ol{padding-left:20px;margin:6px 0}
+.deep-in .dsvg{margin:10px 0;overflow-x:auto}.deep-in .dsvg svg{max-width:100%;height:auto;display:block;margin:auto}
+@keyframes dfade{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
 </style>
 </head>
 <body>
@@ -471,6 +480,9 @@ function sched(p0,e){const t=now(),g=GR[e],p=toF(p0),lrn=!p||p.n===0;
 }
 // eski natijalarni jadvalga ko'chirish
 Object.entries(S.res).forEach(([id,r])=>{if(!S.srs[id]&&r&&r.g)S.srs[id]=sched(null,{bad:"again",mid:"hard",ok:"good"}[r.g]);});
+// eski SM-2 yozuvlarini darhol FSRS'ga o'tkazib saqlash
+Object.entries(S.srs).forEach(([id,p])=>{if(p&&!p.s&&p.iv)S.srs[id]=toF(p);});
+save();
 const cat=q=>{const s=S.srs[q.id];return !s?"new":s.n===0?"learn":"rev";};
 const isDue=q=>{const s=S.srs[q.id];return !!s&&s.due<=now();};
 const ivLabel=ms=>{if(ms<36e5)return Math.max(1,Math.round(ms/MIN))+" daq";if(ms<DAY)return Math.round(ms/36e5)+" soat";const d=ms/DAY;if(d<30)return Math.round(d)+" kun";if(d<365)return (d/30).toFixed(d<60?1:0)+" oy";return (d/365).toFixed(1)+" yil";};
@@ -479,6 +491,20 @@ const ivLabel=ms=>{if(ms<36e5)return Math.max(1,Math.round(ms/MIN))+" daq";if(ms
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const inline=s=>esc(s).replace(/&lt;(\/?)b&gt;/g,"<$1b>").replace(/`([^`]+)`/g,"<code>$1</code>");
+// deep izoh uchun mini markdown: ### sarlavha, ``` kod, - ro'yxat, **qalin**, `kod`, <svg> (o'zimizniki, ishonchli)
+const mdi=s=>inline(s).replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+function md(src){
+  const L=src.split("\n");let h="",i=0;
+  while(i<L.length){const l=L[i];
+    if(l.startsWith("```")){let c=[];i++;while(i<L.length&&!L[i].startsWith("```"))c.push(L[i++]);i++;h+=`<pre>${esc(c.join("\n"))}</pre>`;continue;}
+    if(/^\s*<svg/.test(l)){let c=[];while(i<L.length){c.push(L[i]);if(/<\/svg>/.test(L[i++]))break;}h+=`<div class="dsvg">${c.join("\n")}</div>`;continue;}
+    if(/^#{1,4} /.test(l)){h+=`<h6>${mdi(l.replace(/^#+ /,""))}</h6>`;i++;continue;}
+    if(/^\s*([-*]|\d+\.) /.test(l)){const ol=/^\s*\d/.test(l);let c=[];while(i<L.length&&/^\s*([-*]|\d+\.) /.test(L[i]))c.push(L[i++].replace(/^\s*([-*]|\d+\.) /,""));h+=`<${ol?"ol":"ul"}>${c.map(x=>`<li>${mdi(x)}</li>`).join("")}</${ol?"ol":"ul"}>`;continue;}
+    if(!l.trim()){i++;continue;}
+    let c=[];while(i<L.length&&L[i].trim()&&!/^(```|#{1,4} |\s*([-*]|\d+\.) |\s*<svg)/.test(L[i]))c.push(L[i++]);h+=`<p>${mdi(c.join(" "))}</p>`;
+  }
+  return h;
+}
 const dayKey=(t=now())=>{const d=new Date(t-4*36e5);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}; // kun 04:00 da almashadi (Anki kabi)
 const lvlOk=q=>!S.lvl.length||S.lvl.includes(q.l);
 const newLeft=()=>{if(S.nt.day!==dayKey())S.nt={day:dayKey(),n:0,extra:0};return Math.max(0,S.cfg.newDay+S.nt.extra-S.nt.n);};
@@ -640,6 +666,7 @@ function answerView(q,rv){
   if(q.t==="sql")h+=`${S.cfg.fc?"":`<h5>Kalit elementlar</h5><div class="keys">${hits(q,rv.v||"").map(x=>`<span class="${x.hit?"hit":"miss"}">${esc(x.k)}</span>`).join("")}</div>`}<h5>Namuna yechim</h5><pre>${esc(q.m)}</pre>`;
   if(q.t==="open")h+=`<h5>Kuchli javobda bo'lishi kerak</h5><ul>${q.m.map(x=>`<li>${inline(x)}</li>`).join("")}</ul>`;
   h+=`<h5>Izoh</h5><p>${inline(q.e)}</p>`;
+  if(q.x)h+=`<details class="deep"><summary>Batafsil tushuntirish</summary><div class="deep-in">${md(q.x)}</div></details>`;
   if(q.src)h+=`<div class="src">Manba: <a href="${esc(q.src)}" target="_blank" rel="noopener noreferrer">${esc(q.src.replace(/^https?:\/\//,"").split("/")[0])}</a></div>`;
   return h+`</div></div>`;
 }
