@@ -1,11 +1,11 @@
 // data/questions.json -> interview.html
-// Shell (UI/CSS/render) build/shell-v8.html dan olinadi, faqat data bloki almashtiriladi.
+// Shell (UI/CSS/render) build/shell-v9.html dan olinadi, faqat data bloki almashtiriladi.
 const fs = require("fs");
 const path = require("path");
 const root = path.join(__dirname, "..");
 
 const data = JSON.parse(fs.readFileSync(path.join(root, "data/questions.json"), "utf8"));
-const shell = fs.readFileSync(path.join(__dirname, "shell-v8.html"), "utf8");
+const shell = fs.readFileSync(path.join(__dirname, "shell-v9.html"), "utf8");
 
 const questions = [];
 const SEC = {};

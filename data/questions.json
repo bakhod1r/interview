@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1259,
+  "total": 1290,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -16071,6 +16071,168 @@
           "explanation": "uniq faqat ketma-ket takrorlarni sanaydi — oldin sort shart. Katta fayllarda `sort -S 50% --parallel` yoki awk'da assotsiativ massiv: `awk '{c[$1]++} END {for (i in c) print c[i], i}' | sort -rn | head`. Real vaqtda: `tail -F`."
         },
         {
+          "id": 30663,
+          "code": "LX29",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Linux kernel nima va user space'dan farqi?",
+          "options": [
+            "Kernel — grafik interfeys",
+            "Kernel — apparat bilan ishlovchi, jarayon/xotira/fayl/tarmoqni boshqaruvchi yadro (kernel space, to'liq huquq); ilovalar user space'da cheklangan huquq bilan ishlaydi va kernelga system call orqali murojaat qiladi",
+            "Kernel — shell'ning boshqa nomi",
+            "User space — kernelning bir qismi"
+          ],
+          "answer": 1,
+          "explanation": "Ajratish CPU darajasida (ring 0 va ring 3). Ilova xatosi faqat o'zini o'ldiradi, kernel xatosi — butun tizimni (kernel panic). 'Linux' so'zi aslida faqat kernel; to'liq OS — kernel + GNU vositalar + distributiv (Ubuntu, RHEL, Alpine)."
+        },
+        {
+          "id": 30664,
+          "code": "LX30",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "System call nima? Misol keltiring.",
+          "options": [
+            "Shell buyrug'i",
+            "User space dasturining kernel xizmatini so'rashi: open, read, write, close, fork, execve, mmap, socket, clone",
+            "Kutubxona funksiyasi",
+            "Kernel modulini yuklash"
+          ],
+          "answer": 1,
+          "explanation": "Odatda to'g'ridan-to'g'ri emas, libc orqali chaqiriladi (printf -> write). Syscall — kontekst almashuvi, arzon emas; shuning uchun bufferlash (bufio), batching, io_uring/epoll kabi mexanizmlar. `strace -c ./app` — syscall statistikasi."
+        },
+        {
+          "id": 30671,
+          "code": "LX37",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "sh, bash, zsh, fish farqi?",
+          "options": [
+            "Hammasi bir xil",
+            "sh — POSIX standart shell (Debian'da dash); bash — sh bilan mos, kengaytmalar (massiv, [[ ]]); zsh — interaktiv qulayliklar (macOS default); fish — POSIX'ga mos emas, qulay interaktiv",
+            "fish — eng tez skript shell",
+            "zsh faqat macOS'da"
+          ],
+          "answer": 1,
+          "explanation": "Skript uchun: portable kerak bo'lsa `#!/bin/sh` va faqat POSIX sintaksis; bash xususiyatlari ishlatilsa `#!/usr/bin/env bash`. Alpine konteynerida bash yo'q (busybox ash) — bash skript ishlamaydi. `echo $0` / `echo $SHELL` — joriy shell."
+        },
+        {
+          "id": 30672,
+          "code": "LX38",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Environment variable va shell variable farqi?",
+          "options": [
+            "Farqi yo'q",
+            "Shell variable faqat joriy shellda; `export` qilingani environment'ga o'tadi va child jarayonlarga meros bo'ladi",
+            "Env variable faqat root uchun",
+            "Shell variable fayllarda saqlanadi"
+          ],
+          "answer": 1,
+          "explanation": "`VAR=x cmd` — faqat shu buyruq uchun env. Child o'zgartirsa ham parent'ga qaytmaydi. Doimiy qilish: ~/.bashrc (interaktiv), ~/.profile (login), /etc/environment. `env`, `printenv` — ko'rish. `/proc/<pid>/environ` — ishlab turgan jarayon env'i."
+        },
+        {
+          "id": 30678,
+          "code": "LX44",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Linux'da fayl turlari qanday va `ls -l` ning birinchi belgisi nimani bildiradi?",
+          "options": [
+            "Faqat fayl va katalog",
+            "`-` oddiy fayl, `d` katalog, `l` symlink, `c` character device, `b` block device, `p` named pipe (FIFO), `s` socket",
+            "Kengaytma bo'yicha (.txt, .sh)",
+            "`x` bajariladigan fayl"
+          ],
+          "answer": 1,
+          "explanation": "'Hamma narsa fayl' — /dev/sda (b), /dev/null va /dev/tty (c), /run/docker.sock (s). Linux kengaytmaga qaramaydi: turni `file` buyrug'i ichki magic bayt bo'yicha aniqlaydi. `stat` — batafsil ma'lumot."
+        },
+        {
+          "id": 30679,
+          "code": "LX45",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "/dev/null, /dev/zero, /dev/urandom nima?",
+          "options": [
+            "Oddiy fayllar",
+            "Maxsus character qurilmalar: /dev/null — yozilgan hamma narsa yo'qoladi, o'qish EOF; /dev/zero — cheksiz nol baytlar; /dev/urandom — kriptografik tasodifiy baytlar",
+            "Disk bo'limlari",
+            "Log fayllar"
+          ],
+          "answer": 1,
+          "explanation": "Misollar: `cmd > /dev/null 2>&1` — chiqishni o'chirish; `dd if=/dev/zero of=file bs=1M count=100` — 100MB fayl; `head -c 32 /dev/urandom | base64` — token. Zamonaviy Linux'da /dev/random ham bloklanmaydi (5.6+)."
+        },
+        {
+          "id": 30682,
+          "code": "LX48",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Linux'dagi asosiy fayl tizimi turlari?",
+          "options": [
+            "Faqat NTFS",
+            "ext4 (umumiy, ishonchli default), XFS (katta fayllar, parallel I/O, RHEL default), Btrfs (snapshot, CoW, checksum), ZFS (enterprise, pool, snapshot); maxsus: tmpfs (RAM), proc, sysfs; boshqa OS: vfat/exFAT, NTFS",
+            "Faqat ext2",
+            "FAT32 standart"
+          ],
+          "answer": 1,
+          "explanation": "Aniqlash: `df -T`, `lsblk -f`, `findmnt`. Tanlov: DB serverlar uchun ko'pincha XFS yoki ext4; snapshot kerak bo'lsa Btrfs/ZFS yoki LVM snapshot. XFS'ni kichraytirib bo'lmaydi (faqat kengaytirish)."
+        },
+        {
+          "id": 30688,
+          "code": "LX54",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Linux katalog tuzilmasi (FHS): /etc, /var, /usr, /opt, /home nima uchun?",
+          "options": [
+            "Farqi yo'q",
+            "/etc — konfiguratsiya; /var — o'zgaruvchan ma'lumot (log, kesh, spool, DB); /usr — o'rnatilgan dasturlar va kutubxonalar (faqat o'qish); /opt — uchinchi tomon paketlari; /home — foydalanuvchi kataloglari; /root — root'ning uyi",
+            "/etc — vaqtinchalik fayllar",
+            "/usr — foydalanuvchilar"
+          ],
+          "answer": 1,
+          "explanation": "FHS — Filesystem Hierarchy Standard. Amaliy natija: /var alohida bo'limda bo'lsa log to'lib ketishi root fayl tizimini to'ldirmaydi. Konteyner image'da /usr immutable, holat /var yoki volume'da."
+        },
+        {
+          "id": 30689,
+          "code": "LX55",
+          "level": "J",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "/bin, /sbin, /lib, /boot, /tmp, /mnt, /media nima saqlaydi?",
+          "options": [
+            "Hammasi bir xil",
+            "/bin — asosiy buyruqlar; /sbin — tizim administratsiyasi buyruqlari; /lib — kutubxonalar va kernel modullari; /boot — kernel, initramfs, GRUB; /tmp — vaqtinchalik (reboot'da tozalanishi mumkin); /mnt — vaqtinchalik mount; /media — olinadigan qurilmalar",
+            "/boot — log fayllar",
+            "/tmp — doimiy saqlash"
+          ],
+          "answer": 1,
+          "explanation": "Zamonaviy distributivlarda 'usrmerge': /bin -> /usr/bin, /lib -> /usr/lib symlink. /boot to'lib qolsa (eski kernellar) yangilanish buziladi — `apt autoremove`."
+        },
+        {
           "id": 30542,
           "code": "DO8",
           "level": "M",
@@ -16361,6 +16523,307 @@
           "explanation": "`set -e` — xatoda to'xtash, `-u` — aniqlanmagan o'zgaruvchi xato, `-o pipefail` — pipe'dagi har qanday xato. Qo'shtirnoqsiz o'zgaruvchi bo'shliq va glob bilan bo'linadi. ShellCheck bu xatolarning ko'pini topadi. Mashhur misol: Steam'ning `rm -rf \"$STEAMROOT/\"*` bug'i."
         },
         {
+          "id": 30665,
+          "code": "LX31",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Monolitik va mikrokernel farqi? Linux qaysi biri?",
+          "options": [
+            "Linux — mikrokernel",
+            "Monolitik: drayverlar, fayl tizimi, tarmoq bitta kernel manzil maydonida (tez, lekin drayver xatosi tizimni yiqitadi); mikrokernel: ular user space servislar (xavfsizroq, IPC narxi). Linux — monolitik, lekin modullarni dinamik yuklay oladi",
+            "Farqi yo'q",
+            "Linux gibrid, Windows monolitik"
+          ],
+          "answer": 1,
+          "explanation": "Mikrokernel misollari: MINIX, QNX, seL4. Linus–Tanenbaum bahsi (1992) mashhur. Linux'da modular dizayn: `lsmod`, `modprobe`, `/lib/modules/$(uname -r)`."
+        },
+        {
+          "id": 30666,
+          "code": "LX32",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Kernel modul nima va qanday boshqariladi?",
+          "options": [
+            "Kernelni qayta kompilyatsiya qilmasdan yuklanadigan kod (drayver, fayl tizimi, netfilter); `lsmod`, `modprobe <mod>`, `modprobe -r`, `modinfo`; avtoyuklash — /etc/modules-load.d/",
+            "Oddiy dastur",
+            "Shell skript",
+            "Faqat boot vaqtida o'rnatiladi"
+          ],
+          "answer": 0,
+          "explanation": "Modul kernel huquqi bilan ishlaydi — imzolanmagan modul (Secure Boot) xavfli. Blacklist: /etc/modprobe.d/*.conf. `uname -r` — joriy kernel versiyasi; modullar aynan shu versiyaga mos bo'lishi kerak (DKMS avtomatik qayta yig'adi)."
+        },
+        {
+          "id": 30667,
+          "code": "LX33",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Linux scheduler (CFS/EEVDF) va `nice` qiymati nima?",
+          "options": [
+            "nice -20..19; kichik qiymat — ko'proq CPU ulushi; CFS har jarayonga vaznli adolatli ulush beradi (vruntime); 6.6+ da EEVDF almashtirgan",
+            "nice — xotira limiti",
+            "nice qancha katta bo'lsa shuncha ustun",
+            "Scheduler faqat real-time uchun"
+          ],
+          "answer": 0,
+          "explanation": "Oddiy foydalanuvchi faqat nice'ni oshira oladi (ustunlikni kamaytirish). Real-time siyosatlar: SCHED_FIFO, SCHED_RR (`chrt`). I/O ustunligi alohida: `ionice`. Konteynerlarda cgroup cpu.weight shu mexanizmga ulanadi."
+        },
+        {
+          "id": 30668,
+          "code": "LX34",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Virtual xotira va page fault nima?",
+          "options": [
+            "Swap bilan bir xil",
+            "Har jarayon o'z virtual manzil maydonini ko'radi, MMU sahifa jadvali orqali fizik xotiraga moslaydi; sahifa xotirada bo'lmasa page fault — minor (xotirada bor, faqat moslash) yoki major (diskdan o'qish, sekin)",
+            "Page fault — xotira xatosi, dastur o'ladi",
+            "Faqat 32-bit tizimlarda"
+          ],
+          "answer": 1,
+          "explanation": "Noto'g'ri manzilga murojaat esa — segfault (SIGSEGV). Sahifa odatda 4KB; Huge Pages (2MB) TLB miss'ni kamaytiradi (DB'lar uchun), THP ba'zan latency spike beradi. `ps -o min_flt,maj_flt`, `/usr/bin/time -v`."
+        },
+        {
+          "id": 30673,
+          "code": "LX39",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": ".bashrc va .bash_profile qachon o'qiladi?",
+          "options": [
+            "Har doim ikkalasi",
+            ".bash_profile (yoki .profile) — login shell (SSH, console login); .bashrc — interaktiv non-login shell (yangi terminal oynasi); odatda .bash_profile ichidan .bashrc source qilinadi",
+            ".bashrc faqat root uchun",
+            "Faqat reboot'da"
+          ],
+          "answer": 1,
+          "explanation": "Cron va skriptlar (non-interactive) ikkalasini ham o'qimaydi — 'terminalda ishlaydi, cron'da ishlamaydi' muammosining sababi (PATH, env). Yechim: skriptda to'liq yo'l va kerakli env'ni aniq berish."
+        },
+        {
+          "id": 30674,
+          "code": "LX40",
+          "level": "M",
+          "type": "code",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Natija nima?",
+          "snippet": "x=5\necho '$x'\necho \"$x\"\necho $(echo hi)\necho `date +%Y`",
+          "options": [
+            "$x, 5, hi, 2026 (joriy yil) — bitta qo'shtirnoq hech narsani kengaytirmaydi, qo'sh qo'shtirnoq o'zgaruvchini kengaytiradi, $() va backtick — command substitution",
+            "5, 5, hi, date",
+            "$x, $x, hi, 2026",
+            "Xato beradi"
+          ],
+          "answer": 0,
+          "explanation": "`$()` backtick'dan afzal: ichma-ich yozish oson va o'qilishi aniq. Qo'shtirnoqsiz `$x` word splitting va glob'ga uchraydi — fayl nomida bo'shliq bo'lsa skript buziladi. Qoida: har doim \"$var\"."
+        },
+        {
+          "id": 30675,
+          "code": "LX41",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Exit code: `$?` nima va 0, 1, 127, 130, 137 nimani bildiradi?",
+          "options": [
+            "$? — oxirgi buyruq exit kodi; 0 — muvaffaqiyat, 1 — umumiy xato, 127 — buyruq topilmadi, 130 — Ctrl+C (128+SIGINT 2), 137 — SIGKILL (128+9, ko'pincha OOM)",
+            "$? — PID",
+            "0 — xato",
+            "137 — segfault"
+          ],
+          "answer": 0,
+          "explanation": "128+N — N-signal bilan o'ldirilgan. 126 — bajarish huquqi yo'q, 139 — SIGSEGV (128+11), 143 — SIGTERM. `&&` / `||` exit code'ga qarab zanjir qiladi. Pipe'da $? — oxirgi buyruqniki; hammasi: ${PIPESTATUS[@]} yoki set -o pipefail."
+        },
+        {
+          "id": 30676,
+          "code": "LX42",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "`source script.sh` va `./script.sh` farqi?",
+          "options": [
+            "Farqi yo'q",
+            "source (yoki `.`) skriptni JORIY shellda bajaradi — o'zgaruvchi va cd natijasi qoladi; ./script.sh yangi child jarayonda (shebang bo'yicha) — o'zgarishlar parent'ga qaytmaydi, bajarish huquqi (+x) kerak",
+            "source tezroq kompilyatsiya qiladi",
+            "./ faqat root uchun"
+          ],
+          "answer": 1,
+          "explanation": "Shuning uchun `.env` fayllar va virtualenv `activate` source qilinadi. `bash script.sh` — +x kerak emas, shebang e'tiborga olinmaydi."
+        },
+        {
+          "id": 30680,
+          "code": "LX46",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Unix domain socket va TCP socket farqi?",
+          "options": [
+            "Bir xil",
+            "Unix socket — bitta host ichida, fayl tizimidagi yo'l orqali (ruxsat fayl huquqi bilan), tarmoq stekisiz — tezroq; TCP — tarmoq orqali, IP:port",
+            "Unix socket faqat UDP",
+            "TCP tezroq"
+          ],
+          "answer": 1,
+          "explanation": "Misollar: /var/run/docker.sock (unga kirish = host'da root!), PostgreSQL /var/run/postgresql/.s.PGSQL.5432. Konteynerlar o'rtasida sidecar bilan ham ishlatiladi. `ss -xl` — ro'yxat."
+        },
+        {
+          "id": 30681,
+          "code": "LX47",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Fayl ruxsatlaridagi sticky bit, setuid, setgid nima?",
+          "options": [
+            "Bir xil narsa",
+            "setuid (4000) — fayl egasi huquqi bilan bajariladi (passwd); setgid (2000) — guruh huquqi, katalogda yangi fayllar katalog guruhini oladi; sticky (1000) — katalogda faqat fayl egasi o'chira oladi (/tmp)",
+            "Faqat root fayllari uchun",
+            "Sticky — fayl xotirada qoladi"
+          ],
+          "answer": 1,
+          "explanation": "`ls -l` da: `-rwsr-xr-x` (setuid), `drwxrwsr-x` (setgid), `drwxrwxrwt` (sticky, /tmp). setgid katalog — jamoaviy papkalar uchun qulay. umask (odatda 022) yangi fayl ruxsatlarini belgilaydi."
+        },
+        {
+          "id": 30683,
+          "code": "LX49",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Journaling fayl tizimi nima beradi?",
+          "options": [
+            "Tezlikni ikki barobar oshiradi",
+            "O'zgarishlar avval jurnalga yoziladi — elektr uzilgandan keyin fayl tizimi tez va izchil tiklanadi (uzoq fsck shart emas); ext4 default rejimi data=ordered — metadata jurnalda",
+            "Fayllarni shifrlaydi",
+            "Barcha ma'lumotni ikki marta saqlaydi va hech qachon yo'qotmaydi"
+          ],
+          "answer": 1,
+          "explanation": "Jurnal fayl tizimi izchilligini kafolatlaydi, ilova ma'lumotini emas — ilova baribir fsync qilishi kerak. Btrfs/ZFS jurnal o'rniga copy-on-write ishlatadi (eski blok ustidan yozilmaydi)."
+        },
+        {
+          "id": 30684,
+          "code": "LX50",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "tmpfs nima va qayerda ishlatiladi?",
+          "options": [
+            "Disk'dagi vaqtinchalik katalog",
+            "RAM (va kerak bo'lsa swap)dagi fayl tizimi — juda tez, reboot'da yo'qoladi; /run, /dev/shm, ko'pincha /tmp; K8s emptyDir medium: Memory",
+            "Tarmoq fayl tizimi",
+            "Faqat o'qish uchun"
+          ],
+          "answer": 1,
+          "explanation": "tmpfs'ga yozilgan ma'lumot xotira hisoblanadi — konteynerda cgroup memory limitiga kiradi (kutilmagan OOM sababi). Hajm cheklovi: `mount -t tmpfs -o size=512M tmpfs /mnt/x`."
+        },
+        {
+          "id": 30685,
+          "code": "LX51",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "LVM nima beradi?",
+          "options": [
+            "Fayl tizimi turi",
+            "Fizik disklar (PV) ustida volume group (VG) va moslashuvchan logical volume (LV) — onlayn kengaytirish, bir necha diskni birlashtirish, snapshot",
+            "RAID bilan bir xil",
+            "Faqat SSD uchun"
+          ],
+          "answer": 1,
+          "explanation": "Disk kengaytirish oqimi: bulutda diskni kattalashtirish -> `growpart` -> `pvresize` -> `lvextend -r -L +10G /dev/vg/lv` (-r fayl tizimini ham kengaytiradi). LVM'siz ham: growpart + resize2fs / xfs_growfs."
+        },
+        {
+          "id": 30686,
+          "code": "LX52",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "`mount` va `/etc/fstab` nima?",
+          "options": [
+            "Disklarni formatlash",
+            "mount — qurilma/fayl tizimini katalog daraxtiga ulaydi; /etc/fstab — boot'da avtomatik mount qilinadigan ro'yxat (UUID, mount nuqta, tur, opsiyalar)",
+            "fstab — firewall qoidalari",
+            "mount faqat USB uchun"
+          ],
+          "answer": 1,
+          "explanation": "fstab'da /dev/sdb o'rniga UUID ishlating — qurilma nomi boot'lar orasida o'zgarishi mumkin. Tarmoq disklari uchun `nofail`, `_netdev` — aks holda disk ulanmasa server boot bo'lmaydi. Tekshirish: `mount -a` (reboot'dan oldin!). Xavfsizlik opsiyalari: noexec, nosuid, nodev."
+        },
+        {
+          "id": 30690,
+          "code": "LX56",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "/var/log, /var/lib, /var/run (/run), /var/cache farqi?",
+          "options": [
+            "Hammasi log",
+            "/var/log — loglar; /var/lib — dasturlarning doimiy holati (postgresql, docker, apt); /run — PID fayllar, socketlar (tmpfs, reboot'da yo'qoladi); /var/cache — qayta yaratish mumkin bo'lgan kesh (o'chirish xavfsiz)",
+            "/var/lib — kutubxonalar",
+            "/run — bajariladigan fayllar"
+          ],
+          "answer": 1,
+          "explanation": "Docker ma'lumoti /var/lib/docker da — disk to'lishining mashhur sababi (`docker system df`, `docker system prune`). Backup rejasi: /etc va /var/lib (servisga xos), /var/cache emas."
+        },
+        {
+          "id": 30691,
+          "code": "LX57",
+          "level": "M",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Dastur qayerdan topiladi: `PATH` va `which`/`type`?",
+          "options": [
+            "Faqat joriy katalogdan",
+            "Shell buyruqni PATH dagi kataloglardan chapdan o'ngga qidiradi; birinchi topilgani ishlaydi; `type cmd` — alias/funksiya/builtin/fayl ekanini ko'rsatadi, `which` — faqat PATH faylini; shell natijani keshlaydi (`hash -r`)",
+            "Butun diskdan qidiradi",
+            "/usr/bin dan boshqa joyga qaramaydi"
+          ],
+          "answer": 1,
+          "explanation": "Xavfsizlik: PATH'ga `.` qo'shmang — joriy katalogdagi zararli `ls` ishga tushishi mumkin. Cron'da PATH qisqa (/usr/bin:/bin) — to'liq yo'l ishlating. Kutubxonalar uchun o'xshash: ldconfig, LD_LIBRARY_PATH, `ldd binary`."
+        },
+        {
+          "id": 30692,
+          "code": "LX58",
+          "level": "M",
+          "type": "open",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "`ls -l /etc/passwd` buyrug'ini bajarganda nima sodir bo'ladi (shell'dan kernelgacha)?",
+          "modelAnswer": "1) Shell qatorni tahlil qiladi: tokenlar, kengaytmalar (o'zgaruvchi, glob), alias/funksiya/builtin tekshiruvi. 2) `ls` PATH'dan topiladi (/usr/bin/ls). 3) Shell fork() qiladi, child execve('/usr/bin/ls', ...) chaqiradi; dinamik linker (ld-linux) libc va boshqa kutubxonalarni yuklaydi. 4) ls lstat()/statx() syscall bilan fayl metadatasini oladi: kernel VFS yo'lni kataloglar bo'yicha hal qiladi (dentry cache), fayl tizimi drayveri (ext4) inode'ni o'qiydi (page cache yoki disk). 5) UID/GID nomlari uchun /etc/passwd va /etc/group o'qiladi (NSS). 6) write() bilan stdout (terminal, tty qurilmasi)ga chiqaradi. 7) exit(); parent shell wait() bilan exit kodini oladi, prompt qaytadi.",
+          "explanation": "Bu savol kernel, shell, fayl tizimi va jarayon tushunchalarini bitta zanjirda tekshiradi. `strace ls -l /etc/passwd` bilan o'zingiz ko'rib chiqing."
+        },
+        {
           "id": 30544,
           "code": "DO10",
           "level": "S",
@@ -16510,6 +16973,90 @@
           "question": "Server boot bo'lish jarayonini BIOS'dan login'gacha tushuntirib ber.",
           "modelAnswer": "1) Firmware (BIOS/UEFI): POST, boot qurilmasini topadi. 2) Bootloader (GRUB): yadro va initramfs'ni xotiraga yuklaydi, kernel parametrlarini uzatadi. 3) Kernel: qurilmalarni ishga tushiradi, initramfs'ni vaqtincha root sifatida mount qiladi (drayverlar, LVM/LUKS). 4) Haqiqiy root fayl tizimi mount qilinadi, PID 1 (systemd) ishga tushadi. 5) systemd target'lar bo'yicha (multi-user.target) unit'larni parallel, bog'liqliklarga ko'ra ishga tushiradi: mount, tarmoq, servislar. 6) getty/sshd — login.",
           "explanation": "Debugging: `systemd-analyze blame`/`critical-chain` — sekin boot; `journalctl -b -1` — oldingi boot loglari; kernel panic uchun serial console. Bulutda: instance console output/screenshot."
+        },
+        {
+          "id": 30669,
+          "code": "LX35",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Kernel panic va kernel oops farqi?",
+          "options": [
+            "Bir xil",
+            "Oops — kernel xatosi, lekin tizim ishlashda davom etishi mumkin (ba'zi jarayon o'ladi, tizim beqaror); panic — kernel davom eta olmaydi, to'xtaydi (yoki kernel.panic=N soniyadan keyin reboot)",
+            "Panic — user space xatosi",
+            "Oops faqat drayverlarda"
+          ],
+          "answer": 1,
+          "explanation": "Tahlil: kdump/kexec bilan crash dump yig'ish, `crash` vositasi. Production'da `kernel.panic_on_oops=1` — beqaror holatda ishlashdan ko'ra reboot yaxshiroq. Bulutda serial console loglari muhim."
+        },
+        {
+          "id": 30670,
+          "code": "LX36",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "eBPF nima va nega DevOps'da mashhur?",
+          "options": [
+            "Firewall turi",
+            "Kernel ichida xavfsiz (verifier tekshirgan) dasturlarni kernelni o'zgartirmasdan ishga tushirish: tracing, tarmoq (Cilium, XDP), xavfsizlik (Falco); overhead juda kichik",
+            "Yangi fayl tizimi",
+            "Shell kengaytmasi"
+          ],
+          "answer": 1,
+          "explanation": "Vositalar: bcc (execsnoop, opensnoop, biolatency, tcpretrans), bpftrace bir qatorli skriptlar. strace'dan farqli — production'da xavfsiz. Kubernetes'da kube-proxy o'rnini (Cilium) iptables'siz bosadi."
+        },
+        {
+          "id": 30677,
+          "code": "LX43",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Pipe (`|`) qanday ishlaydi?",
+          "options": [
+            "Buyruqlar ketma-ket, birinchisi tugagach ikkinchisi",
+            "Barcha buyruqlar parallel alohida jarayonlarda ishga tushadi; kernel pipe buferi (odatda 64KB) orqali stdout -> stdin ulanadi; bufer to'lsa yozuvchi bloklanadi, o'quvchi yopilsa yozuvchi SIGPIPE oladi",
+            "Vaqtinchalik faylga yoziladi",
+            "Faqat matn uchun ishlaydi"
+          ],
+          "answer": 1,
+          "explanation": "`yes | head -1` shu sababli tugaydi (SIGPIPE). Named pipe (FIFO): `mkfifo`. `cmd1 | cmd2` da o'zgaruvchiga yozish subshell'da bo'ladi (bash'da `while read` pipe ichida o'zgaruvchi yo'qolishi) — yechim: `< <(cmd)` process substitution yoki `shopt -s lastpipe`."
+        },
+        {
+          "id": 30687,
+          "code": "LX53",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Overlay fayl tizimi (overlayfs) Docker'da qanday ishlatiladi?",
+          "options": [
+            "Docker o'z fayl tizimini yozgan",
+            "Image qatlamlari faqat o'qish uchun lowerdir, konteyner yozuvlari upperdir'ga (copy-on-write) tushadi; merged ko'rinish — konteyner root'i; o'chirish 'whiteout' fayl bilan",
+            "Har konteyner uchun to'liq nusxa",
+            "Faqat tarmoq uchun"
+          ],
+          "answer": 1,
+          "explanation": "Oqibatlar: katta faylni ozgina o'zgartirish ham butun faylni upper qatlamga nusxalaydi; konteyner qatlamiga ko'p yozish sekin — ma'lumot volume'da bo'lishi kerak. Keyingi qatlamda o'chirilgan fayl image hajmidan ketmaydi — build'da bitta RUN ichida tozalash."
+        },
+        {
+          "id": 30693,
+          "code": "LX59",
+          "level": "S",
+          "type": "open",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Inode nima, unda nima saqlanadi va nima saqlanmaydi?",
+          "modelAnswer": "Inode — fayl metadatasi tuzilmasi: tur, ruxsatlar, egasi (UID/GID), hajm, vaqtlar (atime, mtime, ctime), link count, ma'lumot bloklariga ko'rsatkichlar (ext4'da extent'lar). Fayl NOMI inode'da emas — u katalog yozuvida (nom -> inode raqami). Shuning uchun: hard link — bir inode'ga ko'p nom; bir fayl tizimida `mv` — faqat katalog yozuvini o'zgartiradi (tez, atomik rename), boshqa fayl tizimiga — nusxalash+o'chirish. Inode soni ext4'da format vaqtida belgilanadi — tugasa 'No space left' (df -i). `ls -i`, `stat` bilan ko'rish mumkin.",
+          "explanation": "ctime — 'creation time' EMAS, metadata o'zgargan vaqt (change time). Yaratilish vaqti (birth) ext4'da statx orqali mavjud. `noatime` mount opsiyasi o'qishdagi ortiqcha yozishni kamaytiradi."
         },
         {
           "id": 30582,
