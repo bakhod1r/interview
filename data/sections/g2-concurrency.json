@@ -494,7 +494,8 @@
         "struct{} o'rniga bool bo'lishi kerak",
         "Semafor uchun mutex ishlatiladi"
       ],
-      "explanation": "struct{} nol bayt egallaydi — signal uchun ideal. errgroup.SetLimit(n) shu naqshni va xato tarqatishni birga beradi. Diqqat: sem'ga yozish goroutine ICHIDA bo'lsa cheklash ishlamaydi — barcha goroutine'lar darhol yaratiladi."
+      "explanation": "struct{} nol bayt egallaydi — signal uchun ideal. errgroup.SetLimit(n) shu naqshni va xato tarqatishni birga beradi. Diqqat: sem'ga yozish goroutine ICHIDA bo'lsa cheklash ishlamaydi — barcha goroutine'lar darhol yaratiladi.",
+      "answer": 1
     },
     {
       "id": 15003,

@@ -433,7 +433,8 @@
             "Faqat map[string]any bilan mumkin",
             "omitempty buni hal qiladi"
           ],
-          "explanation": "Bu PATCH endpoint'larida real muammo: 'maydonni o'zgartirma' va 'maydonni tozalab qo'y' farqlanishi kerak. Yechimlar: pointer + alohida 'fields' ro'yxati, JSON Merge Patch semantikasi, yoki har maydon uchun Optional[T] tipi (Set bool bilan)."
+          "explanation": "Bu PATCH endpoint'larida real muammo: 'maydonni o'zgartirma' va 'maydonni tozalab qo'y' farqlanishi kerak. Yechimlar: pointer + alohida 'fields' ro'yxati, JSON Merge Patch semantikasi, yoki har maydon uchun Optional[T] tipi (Set bool bilan).",
+          "answer": 1
         },
         {
           "id": 15005,
@@ -1435,7 +1436,8 @@
             "struct{} o'rniga bool bo'lishi kerak",
             "Semafor uchun mutex ishlatiladi"
           ],
-          "explanation": "struct{} nol bayt egallaydi — signal uchun ideal. errgroup.SetLimit(n) shu naqshni va xato tarqatishni birga beradi. Diqqat: sem'ga yozish goroutine ICHIDA bo'lsa cheklash ishlamaydi — barcha goroutine'lar darhol yaratiladi."
+          "explanation": "struct{} nol bayt egallaydi — signal uchun ideal. errgroup.SetLimit(n) shu naqshni va xato tarqatishni birga beradi. Diqqat: sem'ga yozish goroutine ICHIDA bo'lsa cheklash ishlamaydi — barcha goroutine'lar darhol yaratiladi.",
+          "answer": 1
         },
         {
           "id": 15003,

@@ -187,6 +187,8 @@ textarea.sql{font:13.5px/1.6 var(--mono)}
 .hint{font-size:12px;color:var(--faint)}
 .hint b{font:600 11px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;color:var(--muted)}
 .flip{margin-top:22px}
+.ans{padding:16px 18px;border-radius:14px;background:var(--ok-soft);border-left:4px solid var(--ok);line-height:1.6;font-size:15.5px}
+.ans p{margin:0 0 8px}.ans p:first-child{font-size:16.5px}.ans ul,.ans ol{margin:6px 0 0;padding-left:20px}.ans li{margin:4px 0}.ans pre{margin:8px 0}.ans>:last-child{margin-bottom:0}
 .verdict{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;font-weight:800;font-size:16px}
 .verdict .ic{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;flex:none}
 .verdict.ok{background:var(--ok-soft);color:var(--ok)}.verdict.ok .ic{background:var(--ok)}
@@ -626,10 +628,10 @@ function overview(){
 }
 function searchView(){
   const s=V.search.trim().toLowerCase();
-  const L=Q.filter(q=>(q.q+" "+(q.c||"")+" "+q.n+" "+q.tp).toLowerCase().includes(s));
+  const L=Q.filter(q=>(q.q+" "+(q.f||"")+" "+(q.b||"")+" "+(q.c||"")+" "+q.n+" "+q.tp).toLowerCase().includes(s));
   let h=`<div class="h2">Qidiruv: ${L.length} ta karta<span class="sp"></span>${L.length?`<button class="btn sm primary" ${act(()=>{V.search="";startSession("Qidiruv: "+s,L.map(q=>q.id),"","cram");})}>Hammasini ko'rish</button>`:""}<button class="btn sm ghost" ${act(()=>{V.search="";render();})}>Tozalash</button></div>`;
   if(!L.length)return h+`<div class="card empty">Hech narsa topilmadi.</div>`;
-  h+=`<div class="results">`+L.slice(0,60).map((q,i)=>`<button class="card res" ${act(()=>{V.search="";startSession("Qidiruv: "+s,L.slice(i).map(x=>x.id),"","cram");})}><span class="tag lv">${LV[q.l]}</span><span class="q">${inline(q.q.replace(/<[^>]+>/g,""))}</span><span class="tag">${esc(SEC[secOf(q)][0])}</span></button>`).join("")+`</div>`;
+  h+=`<div class="results">`+L.slice(0,60).map((q,i)=>`<button class="card res" ${act(()=>{V.search="";startSession("Qidiruv: "+s,L.slice(i).map(x=>x.id),"","cram");})}><span class="tag lv">${LV[q.l]}</span><span class="q">${inline((q.f||q.q).replace(/<[^>]+>/g,""))}</span><span class="tag">${esc(SEC[secOf(q)][0])}</span></button>`).join("")+`</div>`;
   if(L.length>60)h+=`<p class="muted" style="text-align:center">…va yana ${L.length-60} ta.</p>`;
   return h;
 }
@@ -645,7 +647,7 @@ function studyView(){
     <span class="cts"><span class="c-new ${cc==="new"?"cur":""}">${rest.new}</span><span class="c-learn ${cc==="learn"?"cur":""}">${rest.learn}</span><span class="c-rev ${cc==="rev"?"cur":""}">${rest.rev}</span></span></div>
     <div class="pbar"><i class="a" style="width:${s.i/s.ids.length*100}%"></i></div></div><div class="stage">`;
   h+=`<div class="card qcard"><div class="tags"><span class="tag lv">${LV[q.l]}</span><span class="tag">${TY[q.t]}</span><span class="tag">${esc(SEC[secOf(q)][0])} · ${esc(q.tp)}</span><span class="n">#${esc(q.n)}</span></div>
-    <p class="qtext">${q.q}</p>${q.c?`<pre>${esc(q.c)}</pre>`:""}`;
+    <p class="qtext">${q.f?inline(q.f):q.q}</p>${q.c?`<pre>${esc(q.c)}</pre>`:""}`;
   if(S.cfg.fc&&!rv){}
   else if(q.o&&S.cfg.fc){}
   else if(q.o){
@@ -659,6 +661,11 @@ function studyView(){
 }
 function answerView(q,rv){
   let h=`<div class="flip">`;
+  if(q.b&&S.cfg.fc){
+    h+=`<h5>Javob</h5><div class="ans">${md(q.b)}</div>`;
+    h+=`<div class="exp"><details class="deep"><summary>Batafsil tushuntirish</summary><div class="deep-in">${q.x?md(q.x):`<p>${inline(q.e)}</p>`}</div></details>`;
+    if(q.src)h+=`<div class="src">Manba: <a href="${esc(q.src)}" target="_blank" rel="noopener noreferrer">${esc(q.src.replace(/^https?:\/\//,"").split("/")[0])}</a></div>`;
+    return h+`</div></div>`;}
   if(q.o&&S.cfg.fc)h+=`<h5>Javob</h5><div class="verdict ok">${inline(q.o[q.a])}</div>`;
   else if(q.o)h+=rv.v===q.a?`<div class="verdict ok"><span class="ic">✓</span>To'g'ri!</div>`:`<div class="verdict bad"><span class="ic">✕</span>${rv.v==null?"Javob tanlanmadi":"Noto'g'ri"} — to'g'ri javob ${"ABCD"[q.a]}</div>`;
   h+=`<div class="exp">`;

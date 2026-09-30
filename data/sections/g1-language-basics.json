@@ -402,7 +402,8 @@
         "Faqat map[string]any bilan mumkin",
         "omitempty buni hal qiladi"
       ],
-      "explanation": "Bu PATCH endpoint'larida real muammo: 'maydonni o'zgartirma' va 'maydonni tozalab qo'y' farqlanishi kerak. Yechimlar: pointer + alohida 'fields' ro'yxati, JSON Merge Patch semantikasi, yoki har maydon uchun Optional[T] tipi (Set bool bilan)."
+      "explanation": "Bu PATCH endpoint'larida real muammo: 'maydonni o'zgartirma' va 'maydonni tozalab qo'y' farqlanishi kerak. Yechimlar: pointer + alohida 'fields' ro'yxati, JSON Merge Patch semantikasi, yoki har maydon uchun Optional[T] tipi (Set bool bilan).",
+      "answer": 1
     },
     {
       "id": 15005,

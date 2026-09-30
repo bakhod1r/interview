@@ -13,6 +13,12 @@ const DEEP = {};
 if (fs.existsSync(deepDir)) for (const f of fs.readdirSync(deepDir)) if (f.endsWith(".json"))
   Object.assign(DEEP, JSON.parse(fs.readFileSync(path.join(deepDir, f), "utf8")));
 
+// data/cards/<sectionId>.json: { "<id>": { "f": "flashcard savoli (ixtiyoriy)", "a": "tushunarli javob (markdown)" } }
+const cardDir = path.join(root, "data/cards");
+const CARD = {};
+if (fs.existsSync(cardDir)) for (const f of fs.readdirSync(cardDir)) if (f.endsWith(".json"))
+  Object.assign(CARD, JSON.parse(fs.readFileSync(path.join(cardDir, f), "utf8")));
+
 const questions = [];
 const SEC = {};
 for (const s of data.sections) {
@@ -26,6 +32,8 @@ for (const s of data.sections) {
     o.e = q.explanation;
     if (q.source) o.src = q.source;
     if (DEEP[q.id]) o.x = DEEP[q.id];
+    const c = CARD[q.id];
+    if (c) { if (c.f) o.f = c.f; if (c.a) o.b = c.a; }
     questions.push(o);
   }
 }
