@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1206,
+  "total": 1220,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -292,7 +292,7 @@
       "id": "i7",
       "name": "Linux",
       "domain": "infra",
-      "count": 65,
+      "count": 79,
       "file": "sections/i7-linux.json"
     },
     {

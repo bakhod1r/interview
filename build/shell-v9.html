@@ -154,7 +154,7 @@ button{font:inherit;color:inherit}
 .dtop .cnt{font:600 13px var(--mono);color:var(--muted)}
 .dtop .pbar{max-width:780px;margin:10px auto 0;height:5px}
 .stage{max-width:780px;margin:0 auto}
-.qcard{padding:30px 32px;box-shadow:var(--shadow-lg);animation:enter .28s ease-out}
+.qcard{padding:30px 32px;box-shadow:var(--shadow-lg)}
 @media (max-width:560px){.qcard{padding:20px 18px;border-radius:18px}}
 @keyframes enter{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.qcard,.flip{animation:none!important}.dir{transition:none}}
@@ -186,7 +186,7 @@ textarea.sql{font:13.5px/1.6 var(--mono)}
 .bar-act .sp{flex:1}
 .hint{font-size:12px;color:var(--faint)}
 .hint b{font:600 11px var(--mono);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;color:var(--muted)}
-.flip{margin-top:22px;animation:enter .3s ease-out}
+.flip{margin-top:22px}
 .verdict{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;font-weight:800;font-size:16px}
 .verdict .ic{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;flex:none}
 .verdict.ok{background:var(--ok-soft);color:var(--ok)}.verdict.ok .ic{background:var(--ok)}
@@ -297,6 +297,109 @@ textarea.sql{font:13.5px/1.6 var(--mono)}
 .sheet button.it small{color:var(--muted);font-weight:600}
 .set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px}
 .set-row input{width:80px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--bg);color:var(--ink);font:600 14px var(--mono)}
+
+/* ===== animatsiyalar ===== */
+body:before,body:after{content:"";position:fixed;z-index:-1;width:46vmax;height:46vmax;border-radius:50%;filter:blur(80px);opacity:.16;pointer-events:none}
+body:before{background:var(--accent);left:-14vmax;top:-16vmax;animation:blob 22s ease-in-out infinite alternate}
+body:after{background:var(--accent-2);right:-16vmax;bottom:-18vmax;animation:blob 26s ease-in-out infinite alternate-reverse}
+@keyframes blob{50%{transform:translate(8vmax,6vmax) scale(1.15)}to{transform:translate(-4vmax,10vmax) scale(.9)}}
+.logo{background-size:200% 200%;animation:shine 6s ease-in-out infinite}
+@keyframes shine{50%{background-position:100% 100%;transform:rotate(-6deg)}}
+.logo:hover{animation:spin .6s cubic-bezier(.3,1.5,.5,1)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn,.opt,.chip,.ease button,.icon-btn,.show-btn{position:relative;overflow:hidden}
+.btn,.icon-btn,.chip{transition:transform .15s cubic-bezier(.3,1.6,.5,1),border-color .15s,box-shadow .2s,background .15s,filter .15s}
+.btn:active:not([disabled]),.icon-btn:active,.chip:active{transform:scale(.95)}
+.btn.primary:hover:not([disabled]){transform:translateY(-1px);box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 45%,transparent)}
+.icon-btn:hover{transform:rotate(60deg)}
+.rip{position:absolute;border-radius:50%;background:currentColor;opacity:.25;transform:scale(0);animation:rip .55s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(2.6);opacity:0}}
+.today .card{transition:transform .2s cubic-bezier(.3,1.5,.5,1),box-shadow .2s}
+.today .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.today .ic{transition:transform .3s cubic-bezier(.3,1.8,.5,1)}
+.today .card:hover .ic{transform:scale(1.18) rotate(-8deg)}
+.dk{transition:background .15s,box-shadow .15s}
+.dk:hover{box-shadow:inset 3px 0 0 var(--accent)}
+.dk .tw{transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.dk.fresh{animation:drop .32s cubic-bezier(.2,.9,.3,1.2) both;animation-delay:calc(var(--i,0)*35ms)}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}}
+.pbar i{transition:width .5s cubic-bezier(.3,1.2,.5,1)}
+.pbar i.a{background-size:200% 100%;background-image:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent));animation:flow 2.5s linear infinite}
+@keyframes flow{to{background-position:-200% 0}}
+.opt{transition:border-color .15s,background .15s,transform .2s cubic-bezier(.3,1.6,.5,1),opacity .3s}
+.opt.sel .k{animation:pop .3s cubic-bezier(.3,1.8,.5,1)}
+.show-btn:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-100%);animation:sweep 3s ease-in-out 1s infinite}
+@keyframes sweep{40%,to{transform:translateX(100%)}}
+.sheet{animation:fade .2s}
+.sheet .card{animation:up .32s cubic-bezier(.2,1,.3,1)}
+@keyframes up{from{transform:translateY(40px) scale(.97);opacity:0}}
+#toast{animation:up .3s cubic-bezier(.2,1.4,.4,1)}
+/* faqat navigatsiyada */
+.anim .today .card,.anim .dk-head,.anim .dk,.anim .ov,.anim .crumbs,.anim .results .res,.anim .h2{animation:rise .5s cubic-bezier(.2,.9,.3,1.1) both;animation-delay:calc(var(--i,0)*45ms)}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+.anim .top{animation:fadeDown .45s ease-out both}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}}
+.anim .ov-counts div{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(150ms + var(--i,0)*70ms)}
+@keyframes pop{from{opacity:0;transform:scale(.6)}}
+.anim .qcard{animation:cardIn .45s cubic-bezier(.2,1,.3,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateX(40px) rotate(1.5deg) scale(.97)}}
+.anim .qcard .opt{animation:rise .4s cubic-bezier(.2,.9,.3,1.1) both;animation-delay:calc(120ms + var(--i,0)*55ms)}
+.qcard.out{animation:cardOut .2s ease-in forwards!important}
+@keyframes cardOut{to{opacity:0;transform:translateX(-60px) rotate(-2deg) scale(.96)}}
+.anim .flip,.anim-rev .flip{animation:rise .4s ease-out both}
+.anim-rev .verdict{animation:pop .45s cubic-bezier(.3,1.7,.5,1) both}
+.anim-rev .verdict .ic{animation:spin .6s cubic-bezier(.3,1.5,.5,1)}
+.anim-rev .opt.right{animation:glow 1s ease-out}
+@keyframes glow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}to{box-shadow:0 0 0 14px transparent}}
+.anim-rev .opt.wrong{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.anim-rev .opt.dim{transition:opacity .5s}
+.anim-rev .exp h5,.anim-rev .exp p,.anim-rev .exp ul,.anim-rev .exp pre,.anim-rev .keys{animation:rise .45s ease-out both;animation-delay:calc(200ms + var(--i,0)*60ms)}
+.anim-rev .ease button,.anim .ease button{animation:bounceIn .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(250ms + var(--i,0)*60ms)}
+@keyframes bounceIn{from{opacity:0;transform:translateY(24px) scale(.8)}}
+.ease button.sug{animation-name:bounceIn,throb!important;animation-duration:.5s,1.6s!important;animation-delay:calc(250ms + var(--i,0)*60ms),1s!important;animation-iteration-count:1,infinite!important}
+@keyframes throb{50%{transform:scale(1.05)}}
+.anim .done .em{animation:party 1s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes party{0%{transform:scale(0) rotate(-40deg)}60%{transform:scale(1.4) rotate(10deg)}}
+.anim .tri div{animation:pop .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(300ms + var(--i,0)*90ms)}
+.confetti{position:fixed;top:-12px;width:9px;height:14px;z-index:60;pointer-events:none;border-radius:2px;animation:fall var(--d) cubic-bezier(.3,.6,.6,1) forwards}
+@keyframes fall{to{transform:translate(var(--x),110vh) rotate(var(--r));opacity:.3}}
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}.confetti{display:none}}
+
+/* ===== premium ===== */
+@property --ang{syntax:"<angle>";initial-value:0deg;inherits:false}
+:root{--glass:color-mix(in srgb,var(--card) 72%,transparent);--hl:rgba(255,255,255,.7)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--glass:color-mix(in srgb,var(--card) 62%,transparent);--hl:rgba(255,255,255,.06)}}
+:root[data-theme="dark"]{--glass:color-mix(in srgb,var(--card) 62%,transparent);--hl:rgba(255,255,255,.06)}
+body{background-image:radial-gradient(color-mix(in srgb,var(--ink) 7%,transparent) 1px,transparent 1px);background-size:22px 22px;background-attachment:fixed}
+body:before,body:after{opacity:.22}
+.card{background:var(--glass);backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);box-shadow:inset 0 1px 0 var(--hl),var(--shadow);position:relative}
+.card:before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--accent) 12%,transparent),transparent 60%)}
+.card:hover:before{opacity:1}
+.today .card:after,.ov:after,.done:after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;background:conic-gradient(from var(--ang),transparent 0 60%,var(--accent) 75%,var(--accent-2) 85%,transparent 95%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s;animation:orbit 4s linear infinite}
+.today .card:hover:after,.ov:after,.done:after{opacity:1}
+@keyframes orbit{to{--ang:360deg}}
+.qcard{transform:var(--tilt,none);transition:transform .25s ease-out}
+.qcard:not(:hover){--tilt:none}
+.dtop{background:color-mix(in srgb,var(--bg) 65%,transparent);backdrop-filter:blur(18px) saturate(1.6);border-bottom:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+.ov h1,.done h2,.brand{background:linear-gradient(120deg,var(--ink) 30%,var(--accent) 70%,var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand small{-webkit-text-fill-color:var(--muted)}
+.ov-counts b,.today .v{font-variant-numeric:tabular-nums}
+.ov-counts div,.tri div{background:color-mix(in srgb,var(--bg-2) 70%,transparent);border:1px solid color-mix(in srgb,var(--line) 50%,transparent)}
+.ease{background:linear-gradient(to top,var(--bg) 55%,transparent)}
+.ease button{background-image:linear-gradient(180deg,rgba(255,255,255,.22),transparent 60%);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 8px 20px -6px currentColor}
+.ease .e-again{color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 10px 24px -8px var(--again)}
+.ease .e-hard{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 10px 24px -8px var(--hard)}
+.ease .e-good{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 10px 24px -8px var(--good)}
+.ease .e-easy{box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 10px 24px -8px var(--easy)}
+.btn.primary{background-size:200% 100%;background-image:linear-gradient(110deg,var(--accent),var(--accent-2),var(--accent));transition:background-position .6s,transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .2s}
+.btn.primary:hover:not([disabled]){background-position:100% 0}
+.dk.l0 .ico{box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 40%,transparent)}
+.opt{background:var(--glass)}
+.opt:hover:not([disabled]){box-shadow:0 6px 18px -8px color-mix(in srgb,var(--accent) 50%,transparent)}
+.sheet{backdrop-filter:blur(6px)}
+@media (prefers-reduced-motion:reduce){.qcard{transform:none}}
 </style>
 </head>
 <body>
@@ -325,27 +428,46 @@ if(S.theme)document.documentElement.dataset.theme=S.theme;
 
 // ---------- sozlamalar ----------
 if(!S.cfg||typeof S.cfg!=="object")S.cfg={};
-S.cfg={newDay:20,...S.cfg};
+S.cfg={newDay:20,fc:true,ret:.9,...S.cfg};
 if(!Array.isArray(S.open))S.open=[];
 if(S.sess&&(!S.sess.rev||!S.sess.done))S.sess=null;
 if(!S.nt||typeof S.nt!=="object")S.nt={day:"",n:0,extra:0};
 
-// ---------- scheduler (Anki / SM-2 uslubi, 4 tugma) ----------
+// ---------- scheduler (FSRS-5, 4 tugma) ----------
 const DAY=864e5,MIN=6e4,now=()=>Date.now();
 const EASE=[["again","Qayta","again"],["hard","Qiyin","hard"],["good","Yaxshi","good"],["easy","Oson","easy"]];
 const G2R={again:"bad",hard:"mid",good:"ok",easy:"ok"};
-function sched(p,e){let{ef,iv,n}=p||{ef:2.5,iv:0,n:0};ef=ef||2.5;iv=iv||0;n=n||0;
-  if(n===0){ // yangi / o'rganilayotgan
-    if(e==="again")return{ef,iv:0,n:0,due:now()+MIN};
-    if(e==="hard")return{ef,iv:0,n:0,due:now()+6*MIN};
-    if(e==="good")return{ef,iv:1,n:1,due:now()+DAY};
-    return{ef:Math.min(3,ef+.15),iv:4,n:1,due:now()+4*DAY};
-  }
-  if(e==="again")return{ef:Math.max(1.3,ef-.2),iv:0,n:0,due:now()+10*MIN};
-  if(e==="hard"){ef=Math.max(1.3,ef-.15);iv=Math.max(iv+1,Math.round(iv*1.2));}
-  else if(e==="good")iv=Math.max(iv+1,Math.round(iv*ef));
-  else{ef=Math.min(3.2,ef+.15);iv=Math.max(iv+2,Math.round(iv*ef*1.3));}
-  return{ef,iv,n:n+1,due:now()+iv*DAY};
+const GR={again:1,hard:2,good:3,easy:4};
+// FSRS-5 default parametrlari
+const W=[0.40255,1.18385,3.173,15.69105,7.1949,0.5345,1.4604,0.0046,1.54575,0.1192,1.01925,1.9395,0.11,0.29605,2.2698,0.2315,2.9898,0.51655,0.6621];
+const DECAY=-0.5,FACTOR=19/81;
+const clampD=d=>Math.min(10,Math.max(1,d));
+const d0=g=>clampD(W[4]-Math.exp(W[5]*(g-1))+1);
+const retr=(t,st)=>Math.pow(1+FACTOR*t/st,DECAY);
+const ivDays=st=>{const r=S.cfg.ret||.9;return Math.min(36500,Math.max(1,Math.round(st/FACTOR*(Math.pow(r,1/DECAY)-1))));};
+// eski SM-2 yozuvini FSRS holatiga aylantirish
+function toF(p){if(!p)return null;if(p.s)return p;
+  if(!p.iv)return null; // o'rganilayotgan edi — yangi kabi boshlanadi
+  const d=clampD(11-((p.ef||2.5)-1.3)*5);return{s:p.iv,d,lr:p.due-p.iv*DAY,iv:p.iv,n:p.n||1,due:p.due};}
+function fsrsCore(p,g,t){
+  if(!p)return{s:W[g-1],d:d0(g)};
+  const el=Math.max(0,(t-p.lr)/DAY);let st;
+  if(el<1)st=p.s*Math.exp(W[17]*(g-3+W[18]));
+  else{const R=retr(el,p.s);
+    st=g===1?Math.min(p.s,W[11]*Math.pow(p.d,-W[12])*(Math.pow(p.s+1,W[13])-1)*Math.exp(W[14]*(1-R)))
+      :p.s*(1+Math.exp(W[8])*(11-p.d)*Math.pow(p.s,-W[9])*(Math.exp(W[10]*(1-R))-1)*(g===2?W[15]:1)*(g===4?W[16]:1));}
+  const dp=p.d-W[6]*(g-3)*(10-p.d)/9;
+  return{s:Math.max(.01,st),d:clampD(W[7]*d0(4)+(1-W[7])*dp)};
+}
+function sched(p0,e){const t=now(),g=GR[e],p=toF(p0),lrn=!p||p.n===0;
+  const c=fsrsCore(p,g,t),base={s:c.s,d:c.d,lr:t};
+  if(g===1)return{...base,iv:0,n:0,due:t+(p&&p.n>0?10:1)*MIN};
+  if(lrn&&g===2)return{...base,iv:0,n:0,due:t+6*MIN};
+  // intervallar tartibi: qiyin <= yaxshi < oson
+  const iv={};[2,3,4].forEach(x=>iv[x]=ivDays(fsrsCore(p,x,t).s));
+  if(!lrn){iv[2]=Math.min(iv[2],iv[3]);iv[3]=Math.max(iv[3],iv[2]+1);}
+  iv[4]=Math.max(iv[4],iv[3]+1);
+  return{...base,iv:iv[g],n:(p?p.n:0)+1,due:t+iv[g]*DAY};
 }
 // eski natijalarni jadvalga ko'chirish
 Object.entries(S.res).forEach(([id,r])=>{if(!S.srs[id]&&r&&r.g)S.srs[id]=sched(null,{bad:"again",mid:"hard",ok:"good"}[r.g]);});
@@ -419,9 +541,12 @@ function deckMenu(id){const d=DECK[id],c=counts(d.qs);
 function settings(){
   sheet(`<h3>Sozlamalar</h3>
     <div class="set-row"><span>Kunlik yangi kartalar</span><input id="nd" type="number" min="0" max="500" value="${S.cfg.newDay}"></div>
+    <div class="set-row"><span>Maqsadli eslab qolish (FSRS)</span><input id="rt" type="number" min="70" max="99" value="${Math.round((S.cfg.ret||.9)*100)}"></div>
     <div class="set-row" style="display:block"><div style="margin-bottom:8px">Daraja filtri</div><div class="chips">${Object.entries(LV).map(([k,n])=>`<button class="chip" aria-pressed="${S.lvl.includes(k)}" ${act(el=>{const i=S.lvl.indexOf(k);i<0?S.lvl.push(k):S.lvl.splice(i,1);el.setAttribute("aria-pressed",S.lvl.includes(k));save();render();})}>${n}</button>`).join("")}</div></div>
-    <button class="it" ${act(()=>{const dark=S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;S.theme=dark?"light":"dark";document.documentElement.dataset.theme=S.theme;save();})}>◐ Yorug' / qorong'i mavzu</button>
+    <button class="it" ${act(()=>{S.cfg.fc=!S.cfg.fc;save();closeSheet();render();toast(S.cfg.fc?"Flashcard rejimi: variantlarsiz":"Test rejimi: variantlar bilan");})}>🃏 Flashcard rejimi <small>${S.cfg.fc?"yoqilgan":"o'chirilgan"}</small></button>
+    <button class="it" ${act((el,e)=>{const dark=S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;S.theme=dark?"light":"dark";themeSwap(e);save();})}>◐ Yorug' / qorong'i mavzu</button>
     <button class="it" style="color:var(--bad)" ${act(()=>{if(confirm("Barcha natijalar va takrorlash jadvali o'chirilsinmi?")){S.res={};S.srs={};S.days=[];S.sess=null;S.nt={day:"",n:0,extra:0};save();go("decks");}})}>Natijani tozalash</button>`);
+  $("#rt").onchange=e=>{S.cfg.ret=Math.max(70,Math.min(99,+e.target.value||90))/100;save();};
   $("#nd").onchange=e=>{S.cfg.newDay=Math.max(0,Math.min(500,+e.target.value||0));save();render();};
 }
 
@@ -444,12 +569,12 @@ function decksView(){
     <div class="card"><span class="ic">★</span><div><div class="v">${mature}</div><div class="l">yetilgan (21+ kun)</div></div></div>
   </div>`;
   h+=`<div class="card decks"><div class="dk-head"><span>To'plamlar</span><span class="c-new">Yangi</span><span class="c-learn">O'rg.</span><span class="c-rev">Takr.</span><span></span></div>`;
-  const row=id=>{const d=DECK[id],c=counts(d.qs),open=S.open.includes(id),kids=d.kids.length;
-    let r=`<div class="dk l${d.lvl}" ${act(()=>go("overview",{deck:id}))} role="button" tabindex="0">
-      <div class="nm"><button class="tw ${kids?"":"leaf"} ${open?"open":""}" ${kids?act(()=>{const i=S.open.indexOf(id);i<0?S.open.push(id):S.open.splice(i,1);save();render();}):""} aria-label="Ochish">▸</button>${d.lvl===0?`<span class="ico">${d.ic}</span>`:""}<b>${esc(d.name)}</b><small>${d.qs.length}</small></div>
+  const row=(id,fresh)=>{const d=DECK[id],c=counts(d.qs),open=S.open.includes(id),kids=d.kids.length;
+    let r=`<div class="dk l${d.lvl}${fresh?" fresh":""}" ${act(()=>go("overview",{deck:id}))} role="button" tabindex="0">
+      <div class="nm"><button class="tw ${kids?"":"leaf"} ${open?"open":""}" ${kids?act(()=>{const i=S.open.indexOf(id);i<0?(S.open.push(id),V.fresh=id):S.open.splice(i,1);save();render();}):""} aria-label="Ochish">▸</button>${d.lvl===0?`<span class="ico">${d.ic}</span>`:""}<b>${esc(d.name)}</b><small>${d.qs.length}</small></div>
       <span class="n c-new ${c.nw?"":"z"}">${c.nw}</span><span class="n c-learn ${c.ln?"":"z"}">${c.ln}</span><span class="n c-rev ${c.rv?"":"z"}">${c.rv}</span>
       <button class="more" ${act(()=>deckMenu(id))} aria-label="Menyu">⋮</button></div>`;
-    if(open)d.kids.forEach(k=>r+=row(k));return r;};
+    if(open)d.kids.forEach(k=>r+=row(k,fresh||V.fresh===id));return r;};
   Object.keys(DECK).filter(k=>DECK[k].lvl===0).forEach(k=>h+=row(k));
   h+=`</div><div class="foot-line">Bugun yangi kartalar: ${S.nt.day===tk?S.nt.n:0} / ${S.cfg.newDay+(S.nt.day===tk?S.nt.extra:0)} · <b>/</b> qidirish · to'plamni bosing — o'rganish</div>`;
   return h;
@@ -496,7 +621,9 @@ function studyView(){
     <div class="pbar"><i class="a" style="width:${s.i/s.ids.length*100}%"></i></div></div><div class="stage">`;
   h+=`<div class="card qcard"><div class="tags"><span class="tag lv">${LV[q.l]}</span><span class="tag">${TY[q.t]}</span><span class="tag">${esc(SEC[secOf(q)][0])} · ${esc(q.tp)}</span><span class="n">#${esc(q.n)}</span></div>
     <p class="qtext">${q.q}</p>${q.c?`<pre>${esc(q.c)}</pre>`:""}`;
-  if(q.o){
+  if(S.cfg.fc&&!rv){}
+  else if(q.o&&S.cfg.fc){}
+  else if(q.o){
     h+=`<div class="opts" role="radiogroup">`+q.o.map((o,i)=>{let c="opt";
       if(rv){if(i===q.a)c+=" right";else if(i===rv.v)c+=" wrong";else c+=" dim";}else if(sel===i)c+=" sel";
       return `<button class="${c}" ${rv?"disabled":act(()=>{draft[q.id]=i;render();})} role="radio" aria-checked="${sel===i}"><span class="k">${"ABCD"[i]}</span><span>${inline(o)}</span></button>`;}).join("")+`</div>`;
@@ -507,9 +634,10 @@ function studyView(){
 }
 function answerView(q,rv){
   let h=`<div class="flip">`;
-  if(q.o)h+=rv.v===q.a?`<div class="verdict ok"><span class="ic">✓</span>To'g'ri!</div>`:`<div class="verdict bad"><span class="ic">✕</span>${rv.v==null?"Javob tanlanmadi":"Noto'g'ri"} — to'g'ri javob ${"ABCD"[q.a]}</div>`;
+  if(q.o&&S.cfg.fc)h+=`<div class="verdict ok"><span class="ic">✓</span>${inline(q.o[q.a])}</div>`;
+  else if(q.o)h+=rv.v===q.a?`<div class="verdict ok"><span class="ic">✓</span>To'g'ri!</div>`:`<div class="verdict bad"><span class="ic">✕</span>${rv.v==null?"Javob tanlanmadi":"Noto'g'ri"} — to'g'ri javob ${"ABCD"[q.a]}</div>`;
   h+=`<div class="exp">`;
-  if(q.t==="sql")h+=`<h5>Kalit elementlar</h5><div class="keys">${hits(q,rv.v||"").map(x=>`<span class="${x.hit?"hit":"miss"}">${esc(x.k)}</span>`).join("")}</div><h5>Namuna yechim</h5><pre>${esc(q.m)}</pre>`;
+  if(q.t==="sql")h+=`${S.cfg.fc?"":`<h5>Kalit elementlar</h5><div class="keys">${hits(q,rv.v||"").map(x=>`<span class="${x.hit?"hit":"miss"}">${esc(x.k)}</span>`).join("")}</div>`}<h5>Namuna yechim</h5><pre>${esc(q.m)}</pre>`;
   if(q.t==="open")h+=`<h5>Kuchli javobda bo'lishi kerak</h5><ul>${q.m.map(x=>`<li>${inline(x)}</li>`).join("")}</ul>`;
   h+=`<h5>Izoh</h5><p>${inline(q.e)}</p>`;
   if(q.src)h+=`<div class="src">Manba: <a href="${esc(q.src)}" target="_blank" rel="noopener noreferrer">${esc(q.src.replace(/^https?:\/\//,"").split("/")[0])}</a></div>`;
@@ -521,12 +649,15 @@ function easeBar(q,rv){
 }
 function reveal(q){
   const s=S.sess;let v,sug="";
-  if(q.o){v=draft[q.id]??null;sug=v===q.a?"good":"again";}
+  if(S.cfg.fc)v=null;
+  else if(q.o){v=draft[q.id]??null;sug=v===q.a?"good":"again";}
   else{v=(draft[q.id]||"").trim();
     if(q.t==="sql"&&v){const hs=hits(q,v),n=hs.filter(x=>x.hit).length;sug=n===hs.length?"good":n>=hs.length/2?"hard":"again";}}
   s.rev[s.i]={v,sug};delete draft[q.id];save();render();
 }
+let busy=false;
 function answer(q,e){
+  if(busy)return;
   const s=S.sess,rv=s.rev[s.i]||{v:null};
   S.undo={i:s.i,id:q.id,srs:S.srs[q.id]||null,res:S.res[q.id]||null,ids:[...s.ids],nt:{...S.nt},rev:rv};
   if(!S.srs[q.id]){newLeft();S.nt.n++;}
@@ -536,7 +667,11 @@ function answer(q,e){
   // o'rganish bosqichidagi karta sessiya ichida qaytadi
   if(s.mode==="std"&&S.srs[q.id].due-now()<=20*MIN)s.ids.splice(Math.min(s.ids.length,s.i+4),0,q.id);
   const tk=dayKey();if(!S.days.includes(tk)){S.days.push(tk);S.days=S.days.slice(-400);}
-  s.i++;save();render();window.scrollTo({top:0});
+  s.i++;save();
+  const card=$(".qcard");
+  if(card&&!RM()){busy=true;card.classList.add("out");$(".ease")&&($(".ease").style.cssText="transition:opacity .2s;opacity:0");
+    setTimeout(()=>{busy=false;render();window.scrollTo({top:0});},190);}
+  else{render();window.scrollTo({top:0});}
 }
 function undo(){const u=S.undo,s=S.sess;if(!u||!s)return;
   if(u.srs)S.srs[u.id]=u.srs;else delete S.srs[u.id];
@@ -550,10 +685,56 @@ function finishView(){
     <div class="acts"><button class="btn primary" ${act(back)}>Davom etish</button></div></div></div>`;
 }
 
+// ---------- animatsiya ----------
+const RM=()=>!!(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+let lastNav="",lastRev="",lastPct=0;
+function themeSwap(e){
+  const set=()=>document.documentElement.dataset.theme=S.theme;
+  if(!document.startViewTransition||RM())return set();
+  const x=e?e.clientX:innerWidth/2,y=e?e.clientY:innerHeight/2,R=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+  document.startViewTransition(set).ready.then(()=>document.documentElement.animate({clipPath:[`circle(0 at ${x}px ${y}px)`,`circle(${R}px at ${x}px ${y}px)`]},{duration:550,easing:"cubic-bezier(.4,0,.2,1)",pseudoElement:"::view-transition-new(root)"}));
+}
+function countUp(el){
+  const t=el.textContent.trim();if(!/^\d+%?$/.test(t))return;
+  const n=parseInt(t),suf=t.endsWith("%")?"%":"";if(n<2)return;
+  const t0=performance.now(),D=700+Math.min(n,400);
+  const f=ts=>{const k=Math.min(1,(ts-t0)/D),v=Math.round(n*(1-Math.pow(1-k,3)));el.textContent=v+suf;if(k<1)requestAnimationFrame(f);};
+  el.textContent="0"+suf;requestAnimationFrame(f);
+}
+function confetti(){
+  const C=["#5b4ee0","#8b5cf6","#22c55e","#f59e0b","#ef4444","#3b82f6","#ec4899"];
+  for(let i=0;i<90;i++){const c=document.createElement("i");c.className="confetti";
+    c.style.cssText=`left:${Math.random()*100}vw;background:${C[i%C.length]};--x:${(Math.random()-.5)*300}px;--r:${Math.random()*1080-540}deg;--d:${1.8+Math.random()*1.8}s;animation-delay:${Math.random()*.5}s;${Math.random()<.4?"border-radius:50%;width:8px;height:8px":""}`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),4200);}
+}
+document.addEventListener("pointerdown",e=>{
+  const b=e.target.closest(".btn,.opt,.chip,.ease button,.icon-btn");if(!b||b.disabled||RM())return;
+  const r=b.getBoundingClientRect(),d=Math.max(r.width,r.height),s=document.createElement("span");
+  s.className="rip";s.style.cssText=`width:${d}px;height:${d}px;left:${e.clientX-r.left-d/2}px;top:${e.clientY-r.top-d/2}px`;
+  b.appendChild(s);setTimeout(()=>s.remove(),600);
+});
+// kursor spotlight + qcard tilt
+document.addEventListener("pointermove",e=>{
+  const c=e.target.closest&&e.target.closest(".card");if(!c||RM())return;
+  const r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px");
+  if(c.classList.contains("qcard")&&matchMedia("(hover:hover)").matches){const rx=((e.clientY-r.top)/r.height-.5)*-3,ry=((e.clientX-r.left)/r.width-.5)*3;c.style.setProperty("--tilt",`perspective(1400px) rotateX(${rx}deg) rotateY(${ry}deg)`);}
+},{passive:true});
+
 function render(){
   ACT=[];
-  const app=$("#app");
+  const app=$("#app"),ss=S.sess;
+  const nav=[V.view,V.deck,!!V.search.trim(),V.view==="study"&&ss?ss.i+"/"+ss.title:""].join("|");
+  const rev=V.view==="study"&&ss&&ss.rev[ss.i]?nav:"";
+  const navAnim=nav!==lastNav,revAnim=!navAnim&&rev&&rev!==lastRev;
+  lastNav=nav;lastRev=rev;
   app.innerHTML=V.view==="study"?studyView():V.view==="overview"?overview():decksView();
+  app.classList.remove("anim","anim-rev");
+  if(navAnim||revAnim){void app.offsetWidth;app.classList.add(navAnim?"anim":"anim-rev");}
+  V.fresh="";
+  [".today .card",".dk",".ov-counts div",".opt",".ease button",".tri div",".results .res",".exp>*"].forEach(sel=>app.querySelectorAll(sel).forEach((el,i)=>el.style.setProperty("--i",Math.min(i,14))));
+  const bar=app.querySelector(".dtop .pbar i");
+  if(bar&&window.requestAnimationFrame){const w=bar.style.width;if(!RM()){bar.style.width=lastPct+"%";requestAnimationFrame(()=>requestAnimationFrame(()=>bar.style.width=w));}lastPct=parseFloat(w)||0;}
+  if(navAnim&&!RM()){app.querySelectorAll(".today .v,.ov-counts b,.tri b").forEach(countUp);if(app.querySelector(".done"))confetti();}
   const sq=$("#sq");if(sq)sq.oninput=e=>{V.search=e.target.value;const pos=e.target.selectionStart;render();const n=$("#sq");n.focus();n.setSelectionRange(pos,pos);};
   const ta=$("#ta");if(ta&&!ta.readOnly)ta.oninput=()=>draft[S.sess.ids[S.sess.i]]=ta.value;
 }

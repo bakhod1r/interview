@@ -23,7 +23,7 @@ Run after any change to data or shell.
 
 ## UI (shell-v9)
 - Decks: direction (`GRP`: Backend / DevOps / System Design / Algorithms) › domain › section. A domain belongs to exactly one direction in `GRP`.
-- Spaced repetition: SM-2 style, 4 buttons (Qayta / Qiyin / Yaxshi / Oson), learning steps 1m/6m, daily new-card limit (`S.cfg.newDay`, default 20), day rolls over at 04:00.
+- Spaced repetition: FSRS-5 (default weights, `S.cfg.ret` target retention 0.9; old SM-2 `srs` entries converted lazily), 4 buttons (Qayta / Qiyin / Yaxshi / Oson), learning steps 1m/6m, daily new-card limit (`S.cfg.newDay`, default 20), day rolls over at 04:00.
 - State lives in `localStorage` key `dbdrill.v1` (`res`, `srs`, `days`, `sess`, `cfg`, `nt`). Keep it backward-compatible; old `res` entries are migrated into `srs` on load.
 - Older shells (`shell-v7.html`, `shell-v8.html`) are backups only.
 
