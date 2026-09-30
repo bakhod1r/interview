@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1230,
+  "total": 1254,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -40,14 +40,14 @@
       "id": "g2",
       "name": "Concurrency",
       "domain": "go",
-      "count": 47,
+      "count": 52,
       "file": "sections/g2-concurrency.json"
     },
     {
       "id": "g7",
       "name": "Runtime internals",
       "domain": "go",
-      "count": 29,
+      "count": 44,
       "file": "sections/g7-runtime-internals.json"
     },
     {
@@ -103,7 +103,7 @@
       "id": "t8",
       "name": "Memory & GC gotchas",
       "domain": "go",
-      "count": 10,
+      "count": 14,
       "file": "sections/t8-memory-gc-gotchas.json"
     },
     {

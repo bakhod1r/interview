@@ -192,6 +192,79 @@
       ],
       "answer": 1,
       "explanation": "Ikki alohida muammo: (1) hajm limiti yo'q — bitta so'rov bilan OOM qilish mumkin; (2) xato e'tiborsiz qoldirilgan — noto'g'ri JSON bilan `req` nol qiymatlar bilan qolib, biznes mantiqi jim noto'g'ri ishlaydi. Server tomonida `MaxBytesReader` + `ReadHeaderTimeout` standart himoya."
+    },
+    {
+      "id": 30752,
+      "code": "SN566",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Memory gotcha",
+      "domain": "go",
+      "section": "t8",
+      "question": "Go 1.24 `runtime.AddCleanup` `runtime.SetFinalizer`dan nimasi bilan yaxshi?",
+      "options": [
+        "Tezroq ishlaydi, boshqa farq yo'q",
+        "Obyektni qayta tiriltirmaydi (cleanup obyektning o'zini olmaydi), bir obyektga bir nechta cleanup qo'yish mumkin, siklik referensli obyektlarni ham yig'adi, ichki pointerga ham qo'yiladi",
+        "Deterministik — obyekt ketishi bilan darhol chaqiriladi",
+        "Faqat cgo uchun"
+      ],
+      "answer": 1,
+      "explanation": "`SetFinalizer(obj, f)` — `f` obyektning o'zini oladi va uni tiriltiradi: xotira bir GC siklga kechikadi, sikl ichidagi finalizerli obyektlar hech qachon yig'ilmaydi (leak). `AddCleanup(ptr, fn, arg)` — `fn(arg)`; `arg` `ptr`ga ishora qilsa cleanup hech qachon ishlamaydi (tuzoq!). Ikkalasi ham kafolatlanmagan va kechikkan — fayl/connection yopishning asosiy mexanizmi emas, faqat zaxira (`Close()` baribir kerak)."
+    },
+    {
+      "id": 30753,
+      "code": "SN567",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Memory gotcha",
+      "domain": "go",
+      "section": "t8",
+      "question": "`weak.Pointer[T]` (Go 1.24) bilan kanonikalash (dedup) keshi yozildi. Qaysi gap to'g'ri?",
+      "options": [
+        "Weak pointer obyektni tirik ushlaydi",
+        "`wp.Value()` obyekt yig'ilgan bo'lsa `nil` qaytaradi; map'dagi yozuvni o'zingiz tozalashingiz kerak (odatda `runtime.AddCleanup` bilan) — aks holda map bo'sh weak pointer'lar bilan o'sadi",
+        "Weak pointer'lar faqat string uchun",
+        "`weak.Make` nusxa yaratadi"
+      ],
+      "answer": 1,
+      "explanation": "Weak pointer — GC uchun ko'rinmas referens: obyekt faqat weak'lar bilan qolsa yig'iladi. Bir xil obyekt uchun `weak.Make` teng pointer'lar qaytaradi — map kaliti sifatida ishlatish mumkin. Standart misol — `unique.Make` (Go 1.23) aynan shu asosda qurilgan interning. Klassik xato: kalit/qiymatni kesh tozalanishiga bog'lamaslik — obyektlar ketadi, lekin map yozuvlari qoladi (asta leak)."
+    },
+    {
+      "id": 30754,
+      "code": "SN568",
+      "level": "St",
+      "type": "code",
+      "topic": "Memory gotcha",
+      "domain": "go",
+      "section": "t8",
+      "question": "Bu kodda qanday muammo bor?",
+      "snippet": "func key(b []byte) string {\n    return unsafe.String(&b[0], len(b)) // nusxasiz\n}\n\nbuf := make([]byte, 0, 64)\nbuf = append(buf, \"user:42\"...)\nm[key(buf)] = v\nbuf = buf[:0]\nbuf = append(buf, \"user:77\"...)",
+      "options": [
+        "Muammo yo'q, tezroq",
+        "Map kaliti `buf` xotirasiga ishora qiladi; `buf` qayta yozilganda map ichidagi kalit jim o'zgaradi — immutability buzildi, map korrupt (noto'g'ri bucket'da noto'g'ri kalit)",
+        "Kompilyatsiya xatosi",
+        "Faqat GC muammo"
+      ],
+      "answer": 1,
+      "explanation": "`unsafe.String`/`unsafe.StringData`/`unsafe.Slice` (Go 1.20) nusxasiz konversiya beradi, lekin shart: string mavjud bo'lgan butun muddat davomida bayt'lar o'zgarmasligi kerak. Map kaliti, kesh, boshqa goroutine'ga berilgan string — hammasi uzoq yashaydi. Kompilyator o'zi xavfsiz holatlarda nusxani olib tashlaydi: `m[string(b)]` lookup'da va `string(b) == \"x\"` taqqoslashda allocation yo'q — `unsafe` kerak emas. Qo'shimcha: `len(b)==0` bo'lsa `&b[0]` panic."
+    },
+    {
+      "id": 30755,
+      "code": "SN569",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory gotcha",
+      "domain": "go",
+      "section": "t8",
+      "question": "Nega `reflect` yoki `fmt.Println(x)` ga uzatilgan lokal o'zgaruvchi ko'pincha heap'ga ko'chadi?",
+      "options": [
+        "reflect har doim nusxa oladi",
+        "Qiymat `any` (interfeys) sifatida uzatiladi va kompilyator chaqirilgan funksiya uni qayerda saqlashini isbotlay olmaydi — escape analysis konservativ ravishda heap'ga chiqaradi",
+        "fmt global buffer ishlatadi",
+        "Stack'da interfeys bo'lmaydi"
+      ],
+      "answer": 1,
+      "explanation": "`go build -gcflags=-m` natijasi: `x escapes to heap` — `fmt.Println(x)`, `log.Printf(\"%v\", x)`, `json.Marshal(x)` sabab. Hot path'da debug log shu sabab allocation manbai bo'ladi: log darajasi o'chiq bo'lsa ham argumentlar interfeysga o'raladi. Yechim: `slog` bilan `slog.Int(\"k\", v)` kabi tipli atributlar, `if logger.Enabled(...)`, yoki `strconv.AppendInt` bilan qo'lda formatlash."
     }
   ]
 }

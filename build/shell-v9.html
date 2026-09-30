@@ -437,7 +437,7 @@ if(S.theme)document.documentElement.dataset.theme=S.theme;
 
 // ---------- sozlamalar ----------
 if(!S.cfg||typeof S.cfg!=="object")S.cfg={};
-S.cfg={newDay:20,fc:true,ret:.9,...S.cfg};
+S.cfg={newDay:20,ret:.9,...S.cfg};S.cfg.fc=true; // doim flashcard: variantlar ko'rsatilmaydi, bitta javob
 if(!Array.isArray(S.open))S.open=[];
 if(S.sess&&(!S.sess.rev||!S.sess.done))S.sess=null;
 if(!S.nt||typeof S.nt!=="object")S.nt={day:"",n:0,extra:0};
@@ -569,7 +569,6 @@ function settings(){
     <div class="set-row"><span>Kunlik yangi kartalar</span><input id="nd" type="number" min="0" max="500" value="${S.cfg.newDay}"></div>
     <div class="set-row"><span>Maqsadli eslab qolish (FSRS)</span><input id="rt" type="number" min="70" max="99" value="${Math.round((S.cfg.ret||.9)*100)}"></div>
     <div class="set-row" style="display:block"><div style="margin-bottom:8px">Daraja filtri</div><div class="chips">${Object.entries(LV).map(([k,n])=>`<button class="chip" aria-pressed="${S.lvl.includes(k)}" ${act(el=>{const i=S.lvl.indexOf(k);i<0?S.lvl.push(k):S.lvl.splice(i,1);el.setAttribute("aria-pressed",S.lvl.includes(k));save();render();})}>${n}</button>`).join("")}</div></div>
-    <button class="it" ${act(()=>{S.cfg.fc=!S.cfg.fc;save();closeSheet();render();toast(S.cfg.fc?"Flashcard rejimi: variantlarsiz":"Test rejimi: variantlar bilan");})}>🃏 Flashcard rejimi <small>${S.cfg.fc?"yoqilgan":"o'chirilgan"}</small></button>
     <button class="it" ${act((el,e)=>{const dark=S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;S.theme=dark?"light":"dark";themeSwap(e);save();})}>◐ Yorug' / qorong'i mavzu</button>
     <button class="it" style="color:var(--bad)" ${act(()=>{if(confirm("Barcha natijalar va takrorlash jadvali o'chirilsinmi?")){S.res={};S.srs={};S.days=[];S.sess=null;S.nt={day:"",n:0,extra:0};save();go("decks");}})}>Natijani tozalash</button>`);
   $("#rt").onchange=e=>{S.cfg.ret=Math.max(70,Math.min(99,+e.target.value||90))/100;save();};
@@ -660,7 +659,7 @@ function studyView(){
 }
 function answerView(q,rv){
   let h=`<div class="flip">`;
-  if(q.o&&S.cfg.fc)h+=`<div class="verdict ok"><span class="ic">✓</span>${inline(q.o[q.a])}</div>`;
+  if(q.o&&S.cfg.fc)h+=`<h5>Javob</h5><div class="verdict ok">${inline(q.o[q.a])}</div>`;
   else if(q.o)h+=rv.v===q.a?`<div class="verdict ok"><span class="ic">✓</span>To'g'ri!</div>`:`<div class="verdict bad"><span class="ic">✕</span>${rv.v==null?"Javob tanlanmadi":"Noto'g'ri"} — to'g'ri javob ${"ABCD"[q.a]}</div>`;
   h+=`<div class="exp">`;
   if(q.t==="sql")h+=`${S.cfg.fc?"":`<h5>Kalit elementlar</h5><div class="keys">${hits(q,rv.v||"").map(x=>`<span class="${x.hit?"hit":"miss"}">${esc(x.k)}</span>`).join("")}</div>`}<h5>Namuna yechim</h5><pre>${esc(q.m)}</pre>`;

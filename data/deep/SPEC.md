@@ -12,7 +12,7 @@ Structure of each markdown value (adapt; skip parts that don't fit):
 ### Nega shunday
 Step-by-step mechanism: what happens under the hood, why.
 
-### Nega boshqa variantlar xato        (mcq/code only; one bullet per wrong option, "**A)** ...")
+### Keng tarqalgan xatolar            (common misconceptions; UI is flashcard-only, options are NOT shown — never refer to A/B/C/D or "variant")
 
 ### Misol                               (code when it helps: ```go / ```sql / ```bash / ```yaml ...)
 

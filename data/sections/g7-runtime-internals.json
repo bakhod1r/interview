@@ -540,6 +540,276 @@
         "Go 1.25 eksperimental Green Tea GC — kichik obyektlarda mark samaradorligi"
       ],
       "explanation": "Senior signal: GC pacer va GOGC/GOMEMLIMIT munosabatini tushunish, 'GC'ni o'chiramiz' emas, allocation'ni kamaytirishdan boshlash."
+    },
+    {
+      "id": 30732,
+      "code": "SN546",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Goroutine stack'i to'lib qolsa runtime nima qiladi?",
+      "options": [
+        "Stack overflow panic beradi",
+        "Ikki barobar kattaroq yangi uzluksiz (contiguous) stack ajratadi, eskisini ko'chiradi va stack'dagi pointerlarni to'g'irlaydi",
+        "Yangi segment qo'shib zanjir qiladi (segmented stack)",
+        "OS thread stack'iga o'tadi"
+      ],
+      "answer": 1,
+      "explanation": "Goroutine ~2 KB (minimal) stack bilan boshlanadi. Funksiya prologida `morestack` tekshiruvi bor; joy yetmasa runtime 2x stack ajratib, butun stack'ni ko'chiradi va unga ishora qiluvchi pointerlarni yangilaydi (Go 1.3 gacha segmented stack edi — \"hot split\" muammosi sabab voz kechildi). GC paytida kam ishlatilgan stack qisqartiriladi. Oqibat: stack'dagi o'zgaruvchi manzili o'zgarishi mumkin — shuning uchun cgo'ga Go stack pointerini berib bo'lmaydi. Maksimal hajm 64-bit'da 1 GB, undan oshsa `goroutine stack exceeds` fatal error."
+    },
+    {
+      "id": 30733,
+      "code": "SN547",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "GMP scheduler'da P ning local run queue'si bo'sh qolsa M nima qiladi?",
+      "options": [
+        "Darhol uxlaydi",
+        "Tartib bilan: `runnext`/local queue, vaqti-vaqti bilan global queue, netpoller, keyin boshqa P'lardan yarim queue'ni o'g'irlaydi (work stealing), topmasa park bo'ladi",
+        "Faqat global queue'ni kutadi",
+        "Yangi goroutine yaratadi"
+      ],
+      "answer": 1,
+      "explanation": "Har P'da 256 slotli lock-free local queue va bitta `runnext` sloti bor (yangi yaratilgan goroutine keyingi bo'lib ishlaydi — producer/consumer juftligi uchun cache locality). Adolat uchun har 61-schedule'da global queue tekshiriladi. `findRunnable`: local → global → netpoll → random P'dan steal. Spinning M'lar soni GOMAXPROCS/2 bilan cheklangan — CPU bekorga yonmasin. Syscall'da bloklangan M'dan P ni `sysmon` ~20µs dan keyin tortib olib boshqa M'ga beradi (handoff)."
+    },
+    {
+      "id": 30734,
+      "code": "SN548",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go 1.14 dan beri `for { i++ }` kabi funksiya chaqirmaydigan tight loop boshqa goroutine'larni nega bloklamaydi?",
+      "options": [
+        "Kompilyator loop'ni optimallashtirib o'chiradi",
+        "Async preemption: `sysmon` 10ms dan ortiq ishlagan goroutine thread'iga signal (Unix'da SIGURG) yuboradi, handler uni safe point'da to'xtatadi",
+        "GOMAXPROCS avtomatik oshadi",
+        "Loop har iteratsiyada `runtime.Gosched()` chaqiradi"
+      ],
+      "answer": 1,
+      "explanation": "1.14 gacha preemption faqat kooperativ edi — funksiya prologidagi stack tekshiruvida. Chaqiruvsiz loop P ni cheksiz egallab, STW GC'ni ham to'xtatib qo'yardi (butun dastur osilib qolardi). Endi signal asosida preempt qilinadi. Nojo'ya ta'sir: syscall'lar `EINTR` qaytarishi mumkin — shuning uchun ba'zi C kutubxonalari bilan muammo bo'lsa `GODEBUG=asyncpreemptoff=1`."
+    },
+    {
+      "id": 30735,
+      "code": "SN549",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "10 000 goroutine har biri TCP socket'dan o'qiyapti. Nega 10 000 OS thread kerak bo'lmaydi?",
+      "options": [
+        "Go socket'larni avtomatik birlashtiradi",
+        "Netpoller: socket non-blocking rejimda, `EAGAIN` bo'lsa goroutine park qilinadi va fd epoll/kqueue'ga yoziladi; tayyor bo'lganda scheduler uni qayta ishga tushiradi",
+        "Har 100 goroutine uchun bitta thread",
+        "TCP stack userspace'da ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Netpoller — tarmoq I/O bloklanishini goroutine darajasida qiladi, thread band bo'lmaydi. Farqi: disk fayl I/O (`os.File` oddiy fayl) epoll bilan ishlamaydi — u haqiqiy blocking syscall, M bloklanadi, P boshqa M'ga beriladi. Ko'p parallel disk I/O yoki blocking cgo thread sonini oshiradi (`debug.SetMaxThreads`, default 10 000 — oshsa crash)."
+    },
+    {
+      "id": 30736,
+      "code": "SN550",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Unbuffered channel'ga `ch <- v` yozilayotganda qabul qiluvchi goroutine allaqachon `<-ch` da kutyapti. Ichkarida nima bo'ladi?",
+      "options": [
+        "Qiymat bufferga yoziladi, receiver keyin o'qiydi",
+        "Sender `hchan.recvq` dan kutayotgan `sudog`ni oladi, qiymatni to'g'ridan-to'g'ri receiver stack'iga ko'chiradi va uni runnable qiladi (`goready`)",
+        "Ikkalasi ham scheduler'ga qaytadi",
+        "Mutex'siz atomic swap qilinadi"
+      ],
+      "answer": 1,
+      "explanation": "`hchan`: `buf` (ring buffer), `sendx/recvx`, `recvq/sendq` (kutayotgan `sudog` ro'yxatlari), `lock mutex`. Kutayotgan receiver bo'lsa bufferni chetlab, boshqa goroutine stack'iga to'g'ridan-to'g'ri yoziladi — bu runtime'da stack'dan stack'ga yozishning kam uchraydigan holati. Bo'lmasa bufferga yoziladi yoki sender `sudog` bilan `sendq`ga qo'yilib park bo'ladi. Channel ichida lock bor — shuning uchun juda issiq yo'lda mutex yoki atomic channel'dan tezroq bo'lishi mumkin."
+    },
+    {
+      "id": 30737,
+      "code": "SN551",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "`select` bir nechta tayyor case orasidan qanday tanlaydi va deadlock'dan qanday qochadi?",
+      "options": [
+        "Birinchi yozilgan case'ni tanlaydi",
+        "`selectgo` case'larni tasodifiy `pollorder` bo'yicha tekshiradi (starvation bo'lmasin) va channel'larni manzil bo'yicha tartiblangan `lockorder`da lock qiladi",
+        "Har case uchun alohida goroutine ochadi",
+        "Round-robin"
+      ],
+      "answer": 1,
+      "explanation": "Tasodifiy poll tartibi — bitta case doim ustun bo'lib qolmasligi uchun; shuning uchun `select`da prioritet kerak bo'lsa ichma-ich select yoziladi. Hamma channel'ni manzil tartibida lock qilish ikki goroutine qarama-qarshi tartibda select qilganda lock-order deadlock'ni oldini oladi. Hech biri tayyor bo'lmasa goroutine har channel'ning navbatiga `sudog` qo'yib park bo'ladi, uyg'onganda qolganlaridan olib tashlaydi."
+    },
+    {
+      "id": 30738,
+      "code": "SN552",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go 1.24 da built-in `map` implementatsiyasi nimaga o'zgardi?",
+      "options": [
+        "Red-black tree",
+        "Swiss Tables: 8 slotli group'lar + control word (hash'ning 7 biti), SIMD/bit-trick bilan bir vaqtda 8 slot tekshiriladi; overflow bucket'lar yo'q",
+        "Skip list",
+        "Lock-free concurrent map"
+      ],
+      "answer": 1,
+      "explanation": "Eski map: 8 elementli bucket + overflow zanjir, incremental evacuation (o'sish bir necha yozuvga bo'lib bajariladi). Swiss table: yuqori load factor (7/8), kamroq xotira, tezroq lookup; katta map'lar mustaqil table'larga bo'linadi (extendible hashing) — o'sish latency sakrashini cheklash uchun. O'zgarmagan narsalar: iteratsiya tartibi tasodifiy, element manzilini olib bo'lmaydi (`&m[k]` — ko'chishi mumkin), concurrent yozish `fatal error`. `GOEXPERIMENT=noswissmap` bilan eskisiga qaytish mumkin edi (1.24–1.25)."
+    },
+    {
+      "id": 30739,
+      "code": "SN553",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Interfeys qiymati xotirada qanday tuzilgan va `var p *T = nil; var i I = p; i != nil` nega true?",
+      "options": [
+        "Interfeys pointer, nil pointer = nil interfeys",
+        "Interfeys ikki so'z: (itab/type, data). `i` da type = `*T` to'ldirilgan, data = nil — interfeys faqat ikkalasi ham nil bo'lsa nil",
+        "Kompilyator bug'i",
+        "`!=` interfeysda reflect ishlatadi"
+      ],
+      "answer": 1,
+      "explanation": "Bo'sh interfeys (`any`) — `eface{_type, data}`, metodli interfeys — `iface{tab *itab, data}`. `itab` (interfeys tipi + konkret tip + metod jadvali) global hash'da keshlanadi. Metod chaqiruvi — itab orqali indirect call, inline qilinmaydi (PGO devirtualize qilishi mumkin). Pointer bo'lmagan qiymatni interfeysga qo'yish ko'pincha heap allocation (kichik butun sonlar va 0 qiymat bundan mustasno). Amaliy qoida: xato qaytaruvchi funksiya `var err *MyErr` emas, to'g'ridan-to'g'ri `nil` qaytarsin."
+    },
+    {
+      "id": 30740,
+      "code": "SN554",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go GC'da write barrier nima uchun kerak?",
+      "options": [
+        "Yozuvlarni diskka flush qilish uchun",
+        "Concurrent mark paytida mutator pointer o'zgartirganda qora obyekt oq obyektga ishora qilib qolmasligi (tri-color invariant) uchun — aks holda tirik obyekt o'chiriladi",
+        "Race detector uchun",
+        "Faqat STW paytida ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Go — concurrent, non-moving, non-generational tri-color mark-sweep. Mark bosqichi dastur bilan parallel ishlaydi, shuning uchun pointer yozuvlari hybrid write barrier (Dijkstra insertion + Yuasa deletion, Go 1.8) orqali o'tadi — natijada stack'larni qayta skanerlash shart emas va STW odatda <100µs. STW faqat mark boshida (barrier yoqish) va mark termination'da. Write barrier faqat mark paytida yoqiladi, lekin kompilyator har pointer yozuvida tekshiruv qo'yadi — pointer'ga boy struct'lar sekinroq."
+    },
+    {
+      "id": 30741,
+      "code": "SN555",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Profilda `runtime.gcAssistAlloc` yuqori. Bu nimani anglatadi?",
+      "options": [
+        "GC o'chirilgan",
+        "Goroutine'lar GC'dan tezroq allocate qilyapti, shuning uchun pacer ularni allocation paytida o'zi mark ishini bajarishga majburlayapti — latency to'g'ridan-to'g'ri oshadi",
+        "Memory leak aniq bor",
+        "sync.Pool noto'g'ri"
+      ],
+      "answer": 1,
+      "explanation": "Pacer heap maqsadiga (`GOGC`) yetmay mark tugashini xohlaydi. Background mark worker'lar CPU'ning ~25% ini oladi; yetmasa allocate qilayotgan goroutine \"qarz\" to'laydi — mark assist. Bu request goroutine'ida sodir bo'ladi, shuning uchun p99 oshadi. Yechim: allocation'ni kamaytirish (pprof `-sample_index=alloc_space`), `GOMEMLIMIT` bilan heap'ga ko'proq joy berib `GOGC`ni oshirish."
+    },
+    {
+      "id": 30742,
+      "code": "SN556",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "`GOMEMLIMIT=1GiB`, `GOGC=off`, tirik heap 950 MB ga yetdi. Nima bo'ladi?",
+      "options": [
+        "OOM darhol",
+        "GC death spiral xavfi: limitga yaqin GC to'xtovsiz ishlaydi, CPU asosan GC'ga ketadi; runtime buni ~50% GC CPU limiti bilan cheklaydi, keyin heap limitdan oshib OOM bo'lishi mumkin",
+        "GC to'xtaydi",
+        "Runtime heap'ni diskka yozadi"
+      ],
+      "answer": 1,
+      "explanation": "`GOMEMLIMIT` — soft limit: unga yaqinlashganda GC chastotasi keskin oshadi. Tirik ma'lumot limitga yaqin bo'lsa har GC oz joy bo'shatadi va darhol yana boshlanadi (thrashing). Runtime GC CPU'ni ~50% bilan cheklaydi — dastur ishlashda davom etadi, lekin limitdan oshadi. To'g'ri sozlash: limit konteyner limitidan ~10–20% past, `GOGC=off` faqat tirik heap limitdan ancha kichikligi aniq bo'lsa. Monitoring: `/gc/cpu-limiter`, `runtime/metrics`."
+    },
+    {
+      "id": 30743,
+      "code": "SN557",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go allocator kichik obyekt (masalan 48 bayt) uchun joyni qayerdan oladi?",
+      "options": [
+        "Har safar `mmap`",
+        "P'ga bog'langan `mcache`dagi mos size class `mspan`idan, lock'siz; tugasa `mcentral`, u ham tugasa `mheap`dan",
+        "Global lock bilan malloc",
+        "Stack'dan"
+      ],
+      "answer": 1,
+      "explanation": "~68 ta size class (8 B … 32 KB). Har P'da `mcache` — har class uchun bitta span, shuning uchun tez yo'l lock'siz. `mcentral` — class bo'yicha umumiy span'lar (lock bilan), `mheap` — sahifalar, OS'dan arena (64 MB) oladi. 32 KB dan katta obyekt to'g'ridan-to'g'ri `mheap`dan. 16 B dan kichik pointer'siz obyektlar tiny allocator'da bitta blokka jamlanadi — bitta tirik tiny obyekt butun 16 B blokni ushlab turadi. Pointer'siz span'lar (noscan) GC'da skanerlanmaydi — `[]byte` arzonroq."
+    },
+    {
+      "id": 30744,
+      "code": "SN558",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go 1.14 dan `defer` nega deyarli bepul bo'ldi?",
+      "options": [
+        "defer olib tashlandi",
+        "Open-coded defer: loop'da bo'lmagan, funksiyada ≤8 ta defer bo'lsa kompilyator chaqiruvni funksiya chiqishlariga to'g'ridan-to'g'ri joylaydi, bitmask bilan qaysi biri faol ekanini kuzatadi",
+        "defer goroutine'da bajariladi",
+        "Faqat inline funksiyalarda"
+      ],
+      "answer": 1,
+      "explanation": "Oldin har defer `_defer` yozuvi (heap, keyin stack'da) va runtime chaqiruvi edi (~35 ns). Open-coded defer ~1–2 ns. Shartlar buzilsa (loop ichida defer, ko'p return × ko'p defer) eski mexanizm ishlaydi. Panic bo'lsa runtime funksiya metadata'sidan open-coded defer'larni topib bajaradi — shuning uchun panic yo'li sekin, normal yo'l tez. Oqibat: hot path'da `defer mu.Unlock()` endi zarar emas."
+    },
+    {
+      "id": 30745,
+      "code": "SN559",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go 1.23 da timer'lar (`time.NewTimer`, `time.After`) qanday o'zgardi?",
+      "options": [
+        "O'zgarmadi",
+        "Timer kanali unbuffered (sinxron) bo'ldi va to'xtatilmagan timer ham reference qolmasa GC qilinadi; `Reset`/`Stop`dan keyin eski qiymat kanalda qolmaydi",
+        "Timer'lar goroutine'da ishlaydi",
+        "time.After olib tashlandi"
+      ],
+      "answer": 1,
+      "explanation": "Oldin: `Stop()` dan keyin kanalda eskirgan qiymat qolishi mumkin edi — `if !t.Stop() { <-t.C }` idiomasi shundan; `time.After` timer'i muddat tugaguncha GC qilinmasdi. 1.23+ (go.mod `go 1.23` bo'lsa) ikkalasi hal qilingan. Timer'lar har P'dagi heap'da saqlanadi va scheduler ularni `findRunnable`da tekshiradi. Eski xatti-harakat: `GODEBUG=asynctimerchan=1`."
+    },
+    {
+      "id": 30746,
+      "code": "SN560",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Kubernetes'da `limits.cpu: 2` bo'lgan pod 64 yadroli node'da. Go 1.25 gacha va 1.25+ da `GOMAXPROCS` qancha?",
+      "options": [
+        "Doim 2",
+        "1.25 gacha 64 (node yadrolari) — CFS throttling va latency sakrashlari; 1.25+ cgroup CPU limitini hisobga olib 2 qiladi va limit o'zgarsa yangilaydi",
+        "Doim 64",
+        "Doim 1"
+      ],
+      "answer": 1,
+      "explanation": "GOMAXPROCS=64 bo'lsa 64 thread parallel ishlaydi, 100ms CFS davridagi 200ms kvota tez tugaydi va jarayon qolgan vaqt throttle qilinadi — p99 keskin oshadi, GC worker'lar ham ko'payadi. 1.25 gacha yechim `go.uber.org/automaxprocs`. 1.25+ runtime cgroup limitini o'qiydi (butun songa yaxlitlab yuqoriga, min 2), `GOMAXPROCS` env yoki `runtime.GOMAXPROCS()` qo'lda berilsa avtomatik yangilanish o'chadi. Eslatma: `requests` emas, `limits` hisobga olinadi."
     }
   ]
 }
