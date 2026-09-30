@@ -1,0 +1,543 @@
+{
+  "slug": "ruby",
+  "title": "Ruby",
+  "description": "Step by step guide to becoming a Ruby developer in @currentYear@",
+  "url": "https://roadmap.sh/ruby",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-02-26T08:24:17.062Z",
+  "relatedRoadmaps": [
+    "backend",
+    "full-stack",
+    "devops",
+    "ruby-on-rails"
+  ],
+  "topicCount": 19,
+  "subtopicCount": 83,
+  "topics": [
+    {
+      "id": "FfM3pPbyP1VsvWousb3YK",
+      "title": "Constants & Variables",
+      "subtopics": []
+    },
+    {
+      "id": "tRGKIfQG9IiPJGuO8DUX4",
+      "title": "Naming conventions",
+      "subtopics": []
+    },
+    {
+      "id": "DKA6AJR1kz6Ox90MmN5Tl",
+      "title": "puts, print, p",
+      "subtopics": []
+    },
+    {
+      "id": "PqSnJOOQm3lRoBUs9Fan6",
+      "title": "Comments",
+      "subtopics": []
+    },
+    {
+      "id": "uvPvcmhaO6WbkE9Xs5hsJ",
+      "title": "Interactive Ruby (irb)",
+      "subtopics": [
+        {
+          "id": "CkYLHSGH8dmfS5fK2JLfH",
+          "title": "Defining methods",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DzolktV1UUCdSWqmqWgV3",
+          "title": "Blocks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dbdllih50mNFBrP9huQz9",
+          "title": "Instance variables",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iwXBPrnuwPvNRbOIDxWvq",
+          "title": "RubyGems",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Y6yFuFfcdlcupQUFHV3cg",
+          "title": "Bundler",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Tb5DcDuAZNyuIPepJ_yy4",
+          "title": "Lambdas",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DD3TQAEl2JD0TIPDNZXXl",
+          "title": "Procs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m4QhKH7mVhxRqnJOF5Xc2",
+          "title": "Method Parameters",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SB_IzxfilaHBVL1fe5aYG",
+          "title": "Scope",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CIV4Ph1B-kUcYv_EqVw2I",
+          "title": "Chaining Methods",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lPPdaW7EEyUCxV41ljvPY",
+          "title": "Defining Classes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0c_0zyh1LQA80gmriWOT3",
+          "title": "RVM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VaRe4VrB7hjGp2UUFxtGf",
+          "title": "Rbenv",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ufLdyKM3iya8zuMD1_sIj",
+      "title": "Metaprogramming",
+      "subtopics": [
+        {
+          "id": "aU4XniRWyGKQxGnrxYKyE",
+          "title": "Ruby DSL",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "pBbtuN36wqgXz4Oua0ukX",
+          "title": "method_missing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iwLZktEcLmnahj4o-IgWB",
+          "title": "define_method",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5uayAWgKAYW_mJiMxuXmK",
+          "title": "send",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yqsXD8ugaAHPnLJsd5XDQ",
+          "title": " Recursion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hD6uldPLaedTvUwAWKFYY",
+          "title": "Sorting Algorithms",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "oM4ezZoguNFOALXH3Sl6E",
+      "title": "Concurrency",
+      "subtopics": [
+        {
+          "id": "xJ_F95dKmaRKE42yQ2R-r",
+          "title": " Threads",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "toevE0eM7c5f_zeSaVjdr",
+          "title": "Concurrent Ruby",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "H4Cz_4xcMJmU0UwvEhNIn",
+          "title": "Ractors",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yaC-XKRT0dWDFmDqpCvUw",
+          "title": "Closures",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "I9dIFxsUrysgrcqUSBNsW",
+          "title": "Attributes accessors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QFkREObmZZebsCwXM3ML0",
+          "title": "RDoc",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EDfqLvVxq-PIqb1eGYL20",
+          "title": "YARD",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gHn3q_539Ia31Kviem8lK",
+          "title": "RuboCop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Wf6AYAz8gTpaj6ZfOxoZM",
+          "title": "Standard",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7HSJh15ice_CG3FtfQ5x6",
+          "title": "Inheritance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8OF85n6CRQ3u3GFxlJlc8",
+          "title": "Modules & Mixins",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ihUJHaZ1gu3Fb7MiybXCj",
+          "title": "Method Lookup",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6mCtbDW5pkFQdLSjsr_Ad",
+          "title": "Monkey Patching",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aNf0-Yhwl98L_oNfipvj3",
+          "title": "Refinements",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_ruCDzzaSuoE_8tRacTeK",
+          "title": " Fibers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Voz_H9SBIeOndzl3gmuS7",
+          "title": "Pry",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_TyiwnXJ7kQI8Z02ooAIy",
+          "title": "irb",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C7Dy0rqAo-HotIVlCBa1G",
+          "title": " Minitest",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "E6k00oTuohQOBkPNyuKAA",
+          "title": "RSpec",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Tzf1uJDIeIjPAVleVe_yx",
+          "title": " Test::Unit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2y9U11vXpTXHwkIGogzaf",
+          "title": "byebug",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JSauSDvDotwrWZiyLuWks",
+          "title": "debug",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WNiD4Tllt2uDncEVPg8Pm",
+          "title": "Singleton Classes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9_KhHCWRDTNl1nroot_Ri",
+          "title": "VS Code",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WQQuaLnCCzy48uDPJ-sDb",
+          "title": "RubyMine",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AE7YB3XH70HJWCf51i5YH",
+          "title": "Ruby on Rails",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qvg65UaeythwvO38wn8Gc",
+          "title": "Rack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XI-1114QVFgALBF9VAb99",
+          "title": "Sinatra",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "A_ftl-42mIGBk-9S5LgCv",
+      "title": "Introduction",
+      "subtopics": []
+    },
+    {
+      "id": "Av5hlCtE-ZoeKpS0k3kLA",
+      "title": "Setting things Up",
+      "subtopics": [
+        {
+          "id": "RnKFjcscp8nqwesQ06YWU",
+          "title": "Managers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zY4gsqXOOT3yp9ad9-T5a",
+          "title": "Installers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cRQjwGKIG7CmbDOwj7dfU",
+          "title": "Package Managers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aLIXcqB258WNrdASuN_7G",
+          "title": "Floats",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "FIALdP3ZhOlzW-OIlJoT2",
+      "title": "Conditional Statements",
+      "subtopics": [
+        {
+          "id": "cVSN9992bpxZwZ9JC1HHg",
+          "title": "if, elsif, else",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "MrPUYjPaz2F7c77GoPmue",
+          "title": "unless",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "aZYZcRlB1Azm4N_jox0Ow",
+      "title": "Handling exceptions",
+      "subtopics": [
+        {
+          "id": "-2BSGoXGMMP50en_NnQ97",
+          "title": "begin, rescue, ensure",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "NjCor7ePiZapd4f6bMZlV",
+      "title": "Type Casting",
+      "subtopics": [
+        {
+          "id": "WMa8k6sbhow-TXNibFj0a",
+          "title": "nil",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "UQeCaogH4IJg4_Inxsjg1",
+      "title": "File I/O",
+      "subtopics": [
+        {
+          "id": "wcw4QurFUczUKnyBPpnr5",
+          "title": "Stacks  & queues",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EPNxjJqcP10c1__q1KKea",
+          "title": "Search Algorithms",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "B5T4d3FYTvydh4DOcTFFR",
+      "title": "Regex",
+      "subtopics": []
+    },
+    {
+      "id": "RGo3VGXftLx877w0Cxhwb",
+      "title": "Date & Time",
+      "subtopics": []
+    },
+    {
+      "id": "wsnjdnZZohQsVBfM1uN8H",
+      "title": "Data Types",
+      "subtopics": [
+        {
+          "id": "_-bUq5jtewDmsmnzYw1-q",
+          "title": "Integers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "F-0Rxwu_RcNF_NOoFHoo7",
+          "title": "Strings",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2QHXNKV0tETI5FroFNylt",
+          "title": "Arrays",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "U-V-MNSnIL17Imug_iFvE",
+          "title": "Symbols",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ze02ApxTvyQqtB3VYv3d4",
+          "title": "Booleans",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mpsx0lr9ljlMEzuU5cZD6",
+          "title": "Hashes",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5ThpsSMnFZUxWV1Y2Z75A",
+      "title": "Operators",
+      "subtopics": [
+        {
+          "id": "vLgIRI5GD9ANBjYJoZmid",
+          "title": " Logical",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NpHLz4I9wwwXX-KBrjdgU",
+          "title": "Assignment",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OHq_172eTWaVlxES7Ccfc",
+          "title": "Ranges",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HiDx1OWbSDJJb7APHwG34",
+          "title": "Comparison",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "I708SVAEVSpdHzwxoHhgD",
+          "title": "Arithmetic",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BiUeOOd9E7V4Gpmu3PWj7",
+          "title": "case",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "dRfPXHrI5CHCELySKLZuQ",
+      "title": "Loops & Enumerations",
+      "subtopics": [
+        {
+          "id": "xO2RCVIxZprDgEW4-O9n9",
+          "title": "while",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VlhY73X3c0PnA1uYjbfZH",
+          "title": "for",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0gjDinuRDgPV9iTm39ZnS",
+          "title": "break",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "gUa4S-_xZhClyiit_MSkQ",
+          "title": "redo",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ueQ4bgcEXEgEDGhfVPjH8",
+          "title": "next",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OVPm4SgT7wvapUNWKQOdH",
+          "title": "until",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1NIxWfLiaXKNZJSmrudPv",
+          "title": "times",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iJ7e3-VJV6l-Qe-b5yAgC",
+          "title": "each",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OwRukUn8ypko_hPUHkxv_",
+          "title": "do/while",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jw218cE_PQDRnOTzCXpXr",
+      "title": "Enumerable",
+      "subtopics": [
+        {
+          "id": "PQX6c9h1O_p-ExDvC88zl",
+          "title": "Fetching",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Zil-9cf_-g1H5VUF52bxo",
+          "title": "Searching & Filtering",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "knmTmlDbyRwZKxuIIVbwn",
+          "title": "Sorting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "frFY2AeO2BQF6I0CmTLkV",
+          "title": "Iterating",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZQuUDWqbNUxOYc-Fkk2pI",
+          "title": "Querying",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

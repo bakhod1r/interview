@@ -1,0 +1,373 @@
+{
+  "id": "i4",
+  "name": "Networking & protocols",
+  "domain": "infra",
+  "domainLabel": "Infrastructure & DevOps",
+  "topics": [
+    "Network",
+    "TCP/IP",
+    "TLS"
+  ],
+  "questions": [
+    {
+      "id": 73,
+      "code": 74,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "CDN nima qiladi va qanday sozlanadi?",
+      "options": [
+        "Faqat rasmlarni siqadi",
+        "Kontentni foydalanuvchiga yaqin edge serverlarda keshlaydi: latency va origin yuki kamayadi. Boshqaruv Cache-Control/ETag headerlari, cache key'i (URL + tanlangan header) va invalidatsiya (purge yoki versiyalangan URL) orqali",
+        "Faqat statik saytlar uchun",
+        "DNS o'rnini bosadi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qoidalar: o'zgarmas fayllarga uzoq max-age va fayl nomida hash (app.9f2a.js), HTML'ga qisqa yoki no-cache; dinamik javoblarni ham qisqa TTL bilan keshlash mumkin (stale-while-revalidate). Ehtiyot: shaxsiy ma'lumotli javoblar cache'ga tushmasin (Cache-Control: private, Vary: Authorization)."
+    },
+    {
+      "id": 74,
+      "code": 75,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "Forward proxy va reverse proxy farqi?",
+      "options": [
+        "Bir xil",
+        "Forward proxy — client tomonida (chiquvchi trafikni boshqarish, filtrlash, anonimlik). Reverse proxy — server oldida (nginx, Envoy): TLS termination, marshrutlash, keshlash, rate limiting, yuk taqsimlash",
+        "Reverse proxy client tomonda bo'ladi",
+        "Proxy faqat VPN uchun"
+      ],
+      "answer": 1,
+      "explanation": "Reverse proxy backend'ni tashqi dunyodan yashiradi va cross-cutting vazifalarni ilovadan oladi. Tipik zanjir: CDN → LB → reverse proxy → ilova. Muhim tafsilot: client IP ni X-Forwarded-For orqali uzatish va ilovada uni to'g'ri o'qish (rate limit va audit uchun)."
+    },
+    {
+      "id": 2025,
+      "code": "I26",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "L4 va L7 load balancer farqi?",
+      "options": [
+        "L4 tezroq, chunki ko'proq ish qiladi",
+        "L4 — TCP/UDP level'ida (IP va port bo'yicha), kontentni ko'rmaydi, juda tez; L7 — HTTP level'ida: URL yo'li, header, cookie bo'yicha marshrutlash, TLS termination, retry",
+        "L7 faqat ichki network'da ishlaydi",
+        "Farqi faqat narxda"
+      ],
+      "answer": 1,
+      "explanation": "L7 kerak bo'lgan holat: /api → servis A, /admin → servis B, canary uchun header bo'yicha bo'lish. L4 — oddiy TCP servis (DB proxy, gRPC stream) yoki maksimal throughput. Kubernetes'da Service (L4) va Ingress/Gateway (L7)."
+    },
+    {
+      "id": 2026,
+      "code": "I27",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "Failover'ni faqat DNS o'zgartirish bilan qilishning muammosi?",
+      "options": [
+        "DNS o'zgarishi bir zumda tarqaladi",
+        "Cache: resolver va clientlar TTL tugaguncha (ba'zi client'lar undan ham uzoq — JVM, brauzer, connection pool) eski IP'ni ishlatadi — uzilish cho'ziladi",
+        "DNS failover uchun ishlatilmaydi",
+        "TTL ni 0 qilib qo'yish hamma muammoni yechadi"
+      ],
+      "answer": 1,
+      "explanation": "Rejalashtirilgan o'tishdan oldin TTL'ni pasaytirish (60s) — standart amaliyot, lekin hamma resolver hurmat qilmaydi. Tezroq yechimlar: anycast IP, LB level'ida qayta yo'naltirish, health check bilan avtomatik target o'zgarishi. Uzoq yashaydigan TCP connection'lar DNS o'zgarishini umuman sezmaydi — ularni uzish kerak."
+    },
+    {
+      "id": 2027,
+      "code": "I28",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "mTLS (mutual TLS) oddiy TLS'dan nimasi bilan farq qiladi?",
+      "options": [
+        "Shifrlash kuchliroq",
+        "Ikki tomon ham sertifikat bilan o'zini tanitadi — server clientni ham tekshiradi; servis-servis autentifikatsiyasi uchun ishlatiladi",
+        "Faqat ichki network'da shifrlaydi",
+        "Sertifikat kerak emas"
+      ],
+      "answer": 1,
+      "explanation": "Oddiy TLS'da faqat server o'zini tanitadi (brauzer stsenariysi). Ichki network'da 'network ichida bo'lsa ishonamiz' — eskirgan model (zero trust). mTLS servis identifikatsiyasini beradi, lekin sertifikat rotatsiyasi kerak — service mesh yoki SPIFFE buni avtomatlashtiradi."
+    },
+    {
+      "id": 2028,
+      "code": "I29",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "A → B → C zanjiri. A timeout 10s, B timeout 10s, C sekinlashdi. Nima bo'ladi?",
+      "options": [
+        "Hammasi yaxshi ishlaydi",
+        "A 10s kutadi, B ham 10s — A ning butun byudjeti B ga ketadi; connection va thread'lar band bo'lib, yuqori oqimda tugaydi. To'g'ri: deadline propagation — har qadam qolgan vaqtni uzatadi, ichki timeout tashqisidan kichik bo'ladi",
+        "C avtomatik o'chiriladi",
+        "Retry muammoni hal qiladi"
+      ],
+      "answer": 1,
+      "explanation": "Timeout'lar ichma-ich kamayib borishi kerak (10s → 3s → 1s), aks holda cascading failure. Retry bilan birga bo'lsa yanada yomon: har qadam 3 marta urinsa, 3 qadamda 27 ta query — retry amplification. Yechim: deadline (gRPC'da bor), retry budget, circuit breaker."
+    },
+    {
+      "id": 6000,
+      "code": "F1",
+      "level": "J",
+      "type": "mcq",
+      "topic": "TCP/IP",
+      "domain": "infra",
+      "section": "i4",
+      "question": "TCP va UDP farqi?",
+      "options": [
+        "UDP ishonchliroq",
+        "TCP — connection'ga asoslangan: tartib, qayta yuborish, oqim va tirbandlik nazorati; UDP — datagram: kafolat yo'q, lekin yengil va kechikish kam",
+        "TCP tez, UDP sekin",
+        "Ikkalasi bir xil, faqat port raqami boshqa"
+      ],
+      "answer": 1,
+      "explanation": "UDP mos keladigan joylar: video/ovozli qo'ng'iroq (eski paket keraksiz), DNS, o'yin, QUIC (HTTP/3 ham UDP ustida — ishonchlilikni o'zi amalga oshiradi). TCP'da 'ishonchlilik' latency narxiga keladi: paket yo'qolsa qayta yuborish kutiladi va butun oqim to'xtaydi (head-of-line blocking)."
+    },
+    {
+      "id": 6001,
+      "code": "F2",
+      "level": "J",
+      "type": "mcq",
+      "topic": "TCP/IP",
+      "domain": "infra",
+      "section": "i4",
+      "question": "TCP connection qanday o'rnatiladi?",
+      "options": [
+        "Bitta paket yuborish bilan",
+        "Uch qadamli qo'l berish: SYN → SYN-ACK → ACK; yopilish esa FIN/ACK almashinuvi bilan (va TIME_WAIT holati bilan)",
+        "Faqat server boshlaydi",
+        "DNS orqali"
+      ],
+      "answer": 1,
+      "explanation": "Har yangi connection kamida bitta round-trip (RTT) — TLS bo'lsa yana qo'shiladi. Shuning uchun keep-alive va connection pool'i muhim: har query'ga yangi connection ochish uzoq masofada juda qimmat. Serverda TIME_WAIT ko'payishi va ephemeral port tugashi — yuqori yukdagi klassik muammo."
+    },
+    {
+      "id": 6003,
+      "code": "F4",
+      "level": "M",
+      "type": "mcq",
+      "topic": "TLS",
+      "domain": "infra",
+      "section": "i4",
+      "question": "TLS qo'l berishda (handshake) nima sodir bo'ladi?",
+      "options": [
+        "Parol almashinadi",
+        "Server sertifikatini beradi (client uni ishonchli CA zanjiri, muddati va domen nomi bo'yicha tekshiradi), tomonlar key almashinuvi (ECDHE) orqali seans key'ini hosil qiladi va keyin simmetrik shifrlashga o'tadi",
+        "Butun trafik ochiq matn qoladi",
+        "Faqat parol shifrlanadi"
+      ],
+      "answer": 1,
+      "explanation": "TLS 1.3 qo'l berishni 1-RTT ga qisqartirdi (0-RTT ham bor, lekin replay xavfi tufayli ehtiyotkorlik talab qiladi). Asimmetrik kriptografiya faqat key kelishuvi uchun — qolgani simmetrik (tez). Forward secrecy: ECDHE tufayli server key'i keyin sizib chiqsa ham eski trafik ochilmaydi. mTLS'da client ham sertifikat beradi."
+    },
+    {
+      "id": 30040,
+      "code": "SN41",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TCP/IP",
+      "domain": "infra",
+      "section": "i4",
+      "question": "Servis ko'p chiquvchi ulanish qiladi va `connect: cannot assign requested address` xatosi keladi. Sabab?",
+      "options": [
+        "DNS ishlamayapti",
+        "Ephemeral port tugagan — ko'p qisqa muddatli ulanish, TIME_WAIT'da to'planish; connection reuse (keep-alive/pool) yo'q",
+        "TLS handshake xatosi",
+        "MTU kichik"
+      ],
+      "answer": 1,
+      "explanation": "Har ulanish (src IP, src port, dst IP, dst port) to'rtligi bilan aniqlanadi; bir xil dst uchun ~28k ephemeral port. Yechim tartibi: (1) HTTP client'da `Transport` qayta ishlatish va `MaxIdleConnsPerHost` oshirish — Go'da har request'da yangi client yaratish klassik xato, (2) keep-alive, (3) port diapazonini kengaytirish, (4) NAT'da SNAT pool. `tw_reuse` — palliativ."
+    },
+    {
+      "id": 30041,
+      "code": "SN42",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "Kubernetes'da DNS so'rovlar sekin va ba'zan 5s kechikadi. Klassik sabab?",
+      "options": [
+        "CoreDNS podida CPU limit",
+        "`ndots:5` + search domenlari tufayli har nom uchun bir necha so'rov, va conntrack/UDP race (parallel A/AAAA) — 5s = resolver retry timeout",
+        "Node DNS server yo'q",
+        "Service IP yetmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Tashqi domenga (`api.stripe.com`) so'rov avval `.svc.cluster.local` variantlari bilan sinaladi — ortiqcha yuk. Yechimlar: `dnsConfig` bilan `ndots:1`, FQDN ishlatish (nuqta bilan tugash), NodeLocal DNSCache, resolver keshi. 5 sekundli kechikish deyarli har doim DNS retry timeoutning izi."
+    },
+    {
+      "id": 30042,
+      "code": "SN43",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TLS",
+      "domain": "infra",
+      "section": "i4",
+      "question": "TLS handshake narxini kamaytirish uchun eng samarali choralar?",
+      "options": [
+        "Sertifikatni o'chirish",
+        "Ulanishni qayta ishlatish (keep-alive), TLS 1.3 (1-RTT, 0-RTT ehtiyotkorlik bilan), session resumption, ECDSA sertifikat, OCSP stapling",
+        "Faqat RSA 4096 ishlatish",
+        "Har request'da yangi ulanish"
+      ],
+      "answer": 1,
+      "explanation": "Eng katta g'alaba — handshake'ni umuman qilmaslik (pool). TLS 1.3 to'liq handshake'ni 1-RTT ga tushiradi; 0-RTT replay xavfi bor, faqat idempotent GET uchun. ECDSA P-256 RSA-2048 dan tez imzo tekshiruvi beradi. OCSP stapling client tomonidagi qo'shimcha so'rovni yo'qotadi."
+    },
+    {
+      "id": 30043,
+      "code": "SN44",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "Ma'lumot markazlar orasida throughput past, latency 80ms. Kanal keng. Sabab?",
+      "options": [
+        "Paket yo'qolishi bo'lishi shart",
+        "Bandwidth-delay product: TCP oynasi (va app buffer) yetmaydi — yuqori RTT'da bitta oqim kanalni to'ldirmaydi; parallel oqim yoki buffer/oyna kattalashtirish kerak",
+        "MTU 1500 juda katta",
+        "DNS sekin"
+      ],
+      "answer": 1,
+      "explanation": "BDP = bandwidth × RTT: 1 Gbit/s × 80ms ≈ 10 MB 'uchishda' bo'lishi kerak. Oyna kichik bo'lsa oqim ACK kutib turadi. Choralar: window scaling va socket buffer'lar, bir nechta parallel oqim, BBR congestion control (loss-based emas), yoki ma'lumotni siqish/yaqinga ko'chirish. Ozgina loss ham yuqori RTT'da throughputni keskin tushiradi."
+    },
+    {
+      "id": 30204,
+      "code": "SN205",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TCP/IP",
+      "domain": "infra",
+      "section": "i4",
+      "question": "TCP va UDP orasidagi tanlov qachon UDP tomonga o'tadi?",
+      "options": [
+        "UDP har doim tezroq, doim tanlanadi",
+        "Yo'qolishga bardoshli va latency muhim bo'lgan oqimlarda (video/ovoz, o'yin holati, metrikalar/statsd, DNS) yoki o'z ustiga ishonchlilik qurganda (QUIC) — TCP head-of-line blocking va retransmit kechikishini olib tashlash uchun",
+        "Faqat lokal tarmoqda",
+        "UDP'da tartib kafolatlangan"
+      ],
+      "answer": 1,
+      "explanation": "TCP bitta paket yo'qolsa keyingi kelgan ma'lumotni ham kutishga majbur qiladi (head-of-line) — real-time uchun yomon. QUIC (HTTP/3) UDP ustida oqimlarni mustaqil qilib shu muammoni yechadi va handshake'ni 1-RTT/0-RTT ga tushiradi. UDP tanlansa: retransmit, tartib, congestion control kimning zimmasida — aniq javob bo'lishi kerak."
+    },
+    {
+      "id": 30205,
+      "code": "SN206",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "`ss -s` da `Recv-Q` katta. Bu nimani ko'rsatadi?",
+      "options": [
+        "Tarmoq sekin",
+        "Ilova socket'dan yetarlicha tez o'qimayapti — accept/read qatlamida bo'g'iz (goroutine yetmaydi, handler bloklangan); `Send-Q` katta bo'lsa teskarisi — qabul qiluvchi yoki tarmoq sekin",
+        "Paket yo'qolgan",
+        "MTU kichik"
+      ],
+      "answer": 1,
+      "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
+    },
+    {
+      "id": 30354,
+      "code": "SN355",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TCP/IP",
+      "domain": "infra",
+      "section": "i4",
+      "question": "TCP va UDP orasidagi tanlov qachon UDP tomonga o'tadi?",
+      "options": [
+        "UDP har doim tezroq, doim tanlanadi",
+        "Yo'qolishga bardoshli va latency muhim bo'lgan oqimlarda (video/ovoz, o'yin holati, metrikalar/statsd, DNS) yoki o'z ustiga ishonchlilik qurganda (QUIC) — TCP head-of-line blocking va retransmit kechikishini olib tashlash uchun",
+        "Faqat lokal tarmoqda",
+        "UDP'da tartib kafolatlangan"
+      ],
+      "answer": 1,
+      "explanation": "TCP bitta paket yo'qolsa keyingi kelgan ma'lumotni ham kutishga majbur qiladi (head-of-line) — real-time uchun yomon. QUIC (HTTP/3) UDP ustida oqimlarni mustaqil qilib shu muammoni yechadi va handshake'ni 1-RTT/0-RTT ga tushiradi. UDP tanlansa: retransmit, tartib, congestion control kimning zimmasida — aniq javob bo'lishi kerak."
+    },
+    {
+      "id": 30355,
+      "code": "SN356",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "`ss -s` da `Recv-Q` katta. Bu nimani ko'rsatadi?",
+      "options": [
+        "Tarmoq sekin",
+        "Ilova socket'dan yetarlicha tez o'qimayapti — accept/read qatlamida bo'g'iz (goroutine yetmaydi, handler bloklangan); `Send-Q` katta bo'lsa teskarisi — qabul qiluvchi yoki tarmoq sekin",
+        "Paket yo'qolgan",
+        "MTU kichik"
+      ],
+      "answer": 1,
+      "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
+    },
+    {
+      "id": 30437,
+      "code": "SN438",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Network",
+      "domain": "infra",
+      "section": "i4",
+      "question": "HTTP/1.1 keep-alive, HTTP/2 multiplexing va HTTP/3 farqi nimada?",
+      "options": [
+        "Faqat tezlik",
+        "HTTP/1.1: bitta ulanishda navbat bilan (head-of-line blocking so'rov darajasida, shuning uchun brauzer 6 ulanish ochadi); HTTP/2: bitta TCP'da parallel oqimlar + HPACK header siqish, lekin TCP darajasida HOL qoladi (bitta paket yo'qolsa hamma oqim kutadi); HTTP/3: QUIC (UDP) bilan oqimlar mustaqil, 1-RTT handshake va ulanish migratsiyasi",
+        "HTTP/2 UDP ishlatadi",
+        "HTTP/3 eskirgan"
+      ],
+      "answer": 1,
+      "explanation": "Backend uchun amaliy oqibatlar: HTTP/2 bilan bitta ulanish — L4 balansirovka yuklamani tarqatmaydi (gRPC muammosi), va server tomonda `MaxConcurrentStreams` bo'g'iz bo'lishi mumkin. Yuqori paket yo'qotishli mobil tarmoqlarda HTTP/3 sezilarli yutuq beradi; ma'lumot markazi ichida esa farq kam."
+    },
+    {
+      "id": 30438,
+      "code": "SN439",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TLS",
+      "domain": "infra",
+      "section": "i4",
+      "question": "mTLS'da sertifikat rotatsiyasi qanday tashkil qilinadi?",
+      "options": [
+        "Yiliga bir marta qo'lda",
+        "Qisqa muddatli sertifikatlar (soatlar/kunlar) avtomatik chiqariladi (SPIFFE/cert-manager/mesh agent), ilova sertifikatni diskdan/SDS orqali qayta yuklaydi (restart shart emas), CA ishonch zanjiri esa uzoqroq muddatli va alohida rotatsiya rejasi bilan",
+        "Sertifikat muddatsiz bo'lishi kerak",
+        "Faqat TLS termination'da"
+      ],
+      "answer": 1,
+      "explanation": "Nozik joylar: ilova sertifikatni ishga tushganda bir marta o'qisa — muddati tugagach barcha ulanish yiqiladi (klassik yarim tunlik incident); `tls.Config.GetCertificate`/`GetClientCertificate` bilan har handshake'da yangisi olinadi. CA rotatsiyasida ikki CA bir vaqtda ishonchli bo'lishi kerak (overlap), aks holda hamma yoqda uzilish."
+    },
+    {
+      "id": 30439,
+      "code": "SN440",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TLS",
+      "domain": "infra",
+      "section": "i4",
+      "question": "TLS 1.3 handshake'da nima o'zgardi va 0-RTT xavfi nimada?",
+      "options": [
+        "Hech nima o'zgarmadi",
+        "1-RTT: client birinchi xabarda kalit almashinuv ulushini yuboradi; eskirgan shifrlar (RSA key exchange, CBC, RC4) olib tashlandi va forward secrecy majburiy. 0-RTT esa qayta ulanishda darhol ma'lumot yuborishga ruxsat beradi — lekin replay hujumiga ochiq, shuning uchun faqat idempotent so'rovlar uchun",
+        "TLS 1.3 sekinroq",
+        "0-RTT xavfsiz"
+      ],
+      "answer": 1,
+      "explanation": "0-RTT ma'lumotini hujumchi yozib olib qayta yuborishi mumkin — `POST /transfer` bo'lsa ikki marta o'tkazma bo'lishi mumkin. Shuning uchun CDN/proxy'da 0-RTT faqat `GET`/idempotent yo'llarga ruxsat etiladi yoki umuman o'chiriladi. Forward secrecy: kalit o'g'irlansa ham o'tmishdagi trafikni ochib bo'lmaydi."
+    }
+  ]
+}

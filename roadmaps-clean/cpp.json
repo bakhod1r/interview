@@ -1,0 +1,678 @@
+{
+  "slug": "cpp",
+  "title": "C++ Developer Roadmap",
+  "description": "Step by step guide to becoming a C++ developer in @currentYear@",
+  "url": "https://roadmap.sh/cpp",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-07-08T11:38:30.950Z",
+  "relatedRoadmaps": [
+    "rust",
+    "linux",
+    "python",
+    "computer-science",
+    "java",
+    "datastructures-and-algorithms"
+  ],
+  "topicCount": 20,
+  "subtopicCount": 107,
+  "topics": [
+    {
+      "id": "NvODRFR0DLINB0RlPSsvt",
+      "title": "Introduction to Language",
+      "subtopics": [
+        {
+          "id": "x_28LiDVshqWns_aIBsdx",
+          "title": "What is C++?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tl6VCQ5IEGDVyFcgj7jDm",
+          "title": "Why use C++",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2Ag0t3LPryTF8khHLRfy-",
+          "title": "C vs C++",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Zc_TTzmM36yWsu3GvOy9x",
+      "title": "Setting up your Environment",
+      "subtopics": [
+        {
+          "id": "0J_ltQEJh2g28OE2ZEYJj",
+          "title": "Installing C++",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ew0AfyadpXPRO0ZY3Z19k",
+          "title": "Code Editors / IDEs",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "kl2JI_Wl47c5r8SYzxvCq",
+      "title": "Basic Operations",
+      "subtopics": [
+        {
+          "id": "8aOSpZLWwZv_BEYiurhyR",
+          "title": "Arithmetic Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Y9gq8WkDA_XGe68JkY2UZ",
+          "title": "Logical Operators",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "s5Gs4yF9TPh-psYmtPzks",
+      "title": "Control Flow & Statements",
+      "subtopics": [
+        {
+          "id": "_IP_e1K9LhNHilYTDh7L5",
+          "title": "for / while / do while loops",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bjpFWxiCKGz28E-ukhZBp",
+          "title": "if else / switch / goto",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "oYi3YOc1GC2Nfp71VOkJt",
+      "title": "Functions",
+      "subtopics": [
+        {
+          "id": "llCBeut_uc9IAe2oi4KZ9",
+          "title": "Operator Overloading",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "obZIxRp0eMWdG7gplNIBc",
+          "title": "Static Polymorphism",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sgfqb22sdN4VRJYkhAVaf",
+          "title": "Function Overloading",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xjiFBVe-VGqCqWfkPVGKf",
+          "title": "Lambdas",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "MwznA4qfpNlv6sqSNjPZi",
+      "title": "Data Types",
+      "subtopics": [
+        {
+          "id": "f1djN0GxoeVPr_0cl6vMq",
+          "title": "Static Typing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zE4iPSq2KsrDSByQ0sGK_",
+          "title": "Bitwise Operators",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "i0EAFEUB-F0wBJWOtrl1A",
+          "title": "Dynamic Typing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "r0yD1gfn03wTpEBi6zNsu",
+          "title": "RTTI",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "DWw8NxkLpIpiOSUaZZ1oA",
+      "title": "Pointers and References",
+      "subtopics": [
+        {
+          "id": "uUzRKa9wGzdUwwmAg3FWr",
+          "title": "References",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "SEq0D2Zg5WTsIDtd1hW9f",
+          "title": "Running your First Program",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mSFwsTYvmg-GwG4_DEIEf",
+          "title": "Memory Model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9aA_-IfQ9WmbPgwic0mFN",
+          "title": "Lifetime of Objects",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ulvwm4rRPgkpgaqGgyH5a",
+          "title": "Smart Pointers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vUwSS-uX36OWZouO0wOcy",
+          "title": "weak_ptr",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Zw2AOTK5uc9BoKEpY7W1C",
+      "title": "Structuring Codebase",
+      "subtopics": [
+        {
+          "id": "dKCYmxDNZubCVcR5rf8b-",
+          "title": "Scope",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZHjU60uzJTezADRhDTESG",
+          "title": "Forward Declaration",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iIdC7V8sojwyEqK1xMuHn",
+          "title": "Namespaces",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CK7yf8Bo7kfbV6x2tZTrh",
+          "title": "Headers / CPP Files",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "CMlWNQwpywNhO9B6Yj6Me",
+      "title": "Structures and Classes",
+      "subtopics": [
+        {
+          "id": "ofwdZm05AUqCIWmfgGHk8",
+          "title": "Diamond Inheritance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7sdEzZCIoarzznwO4XcCv",
+          "title": "Rule of Zero, Five, Three",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WjHpueZDK-d3oDNMVZi9w",
+          "title": "Multiple Inheritance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b3-QYKNcW3LYCNOza3Olf",
+          "title": "Object Oriented Programming",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hNBErGNiegLsUJn_vgcOR",
+          "title": "Virtual Methods",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "s99ImazcwCgAESxZd8ksa",
+          "title": "Virtual Tables",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7h1VivjCPDwriL7FirtFv",
+          "title": "Dynamic Polymorphism",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WptReUOwVth3C9-AVmMHF",
+          "title": "Type Traits",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3C5UfejDX-1Z8ZF6C53xD",
+          "title": "SFINAE",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "B2SGBENzUMl0SAjG4j91V",
+      "title": "Exception Handling",
+      "subtopics": [
+        {
+          "id": "oWygnpwHq2poXQMTTSCpl",
+          "title": "Exit Codes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NJud5SXBAUZ6Sr78kZ7jx",
+          "title": "Exceptions",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "-6fwJQOfsorgHkoQGp4T3",
+      "title": "Language Concepts",
+      "subtopics": [
+        {
+          "id": "CG01PTVgHtjfKvsJkJLGl",
+          "title": "auto (Automatic Type Deduction)",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "b5jZIZD_U_CPg-_bdndjz",
+          "title": "shared_ptr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "k9c5seRkhgm_yHPpiz2X0",
+          "title": "unique_ptr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uEGEmbxegATIrvGfobJb9",
+          "title": "Raw Pointers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Gld0nRs0sM8kRe8XmYolu",
+          "title": "New/Delete Operators",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6w0WExQ4lGIGgok6Thq0s",
+          "title": "Memory Leakage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PiMhw1oP9-NZEa6I9u4lX",
+          "title": "Type Casting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_XB2Imyf23-6AOeoNLhYQ",
+          "title": "static_cast",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5g22glc97siQOcTkHbwan",
+          "title": "const_cast",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4BdFcuQ5KNW94cu2jz-vE",
+          "title": "dynamic_cast",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZMyFDJrpCauGrY5NZkOwg",
+          "title": "reinterpret_cast",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IDOlquv6jlfecwQoBwkGZ",
+          "title": "Undefined Behavior (UB)",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "DHdNBP7_ixjr6h-dIQ7g6",
+      "title": "Standard Library + STL",
+      "subtopics": [
+        {
+          "id": "y4-P4UNC--rE1vni8HdTn",
+          "title": "Access Violations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YSWN7nS8vA9nMldSUrZRT",
+          "title": "Argument Dependent Lookup (ADL)",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zKdlfZTRHwjtmRUGW9z9-",
+          "title": "Macros",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ebu8gzbyyXEeJryeE0SpG",
+          "title": "Iterators",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VeVxZ230xkesQsIDig8zQ",
+          "title": "iostream",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "whyj6Z4RXFsVQYRfYYn7B",
+          "title": "Algorithms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yGvE6eHKlPMBB6rde0llR",
+          "title": "Date / Time",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OXQUPqxzs1-giAACwl3X1",
+          "title": "Multithreading",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "-6AOrbuOE7DJCmxlcgCay",
+      "title": "Templates",
+      "subtopics": [
+        {
+          "id": "w4EIf58KP-Pq-yc0HlGxc",
+          "title": "Variadic Templates",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sObOuccY0PDeGG-9GrFDF",
+          "title": "Template Specialization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6hTcmJwNnQstbWWzNCfTe",
+          "title": "Full Template Specialization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1NYJtbdcdOB4-vIrnq4yX",
+          "title": "Partial Template Specialization",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "fb3bnfKXjSIjPAk4b95lg",
+      "title": "Idioms",
+      "subtopics": [
+        {
+          "id": "xjUaIp8gGxkN-cp8emJ2M",
+          "title": "Non-Copyable / Non-Moveable",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YvmjrZSAOmjhVPo05MJqN",
+          "title": "Erase-Remove",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lxAzI42jQdaofzQ5MXebG",
+          "title": "Copy and Swap",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "O2Du5gHHxFxAI2u5uO8wu",
+          "title": "Copy on Write",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MEoWt8NKjPLVTeGgYf3cR",
+          "title": "Pimpl",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ttt-yeIi4BPWrgvW324W7",
+          "title": "CRTP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "vvE1aUsWbF1OFcmMUHbJa",
+      "title": "Standards",
+      "subtopics": [
+        {
+          "id": "T6rCTv9Dxkm-tEA-l9XEv",
+          "title": "C++ 11 / 14",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sxbbKtg7kMNbkx7fXhjR9",
+          "title": "C++ 23",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1pydf-SR0QUfVNuBEyvzc",
+          "title": "Containers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "R2-qWGUxsTOeSHRuUzhd2",
+          "title": "C++ 17",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "o3no4a5_iMFzEAGs56-BJ",
+          "title": "C++ 20",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "qmHs6_BzND_xpMmls5YUH",
+      "title": "Debuggers",
+      "subtopics": [
+        {
+          "id": "Lt7ss59KZw9Jwqj234jm2",
+          "title": "Name Mangling",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VtPb8-AJKzhTB0QbMtoU4",
+          "title": "Understanding Debugger Messages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sR_FxGZHoMCV9Iv7z2_SX",
+          "title": "Debugging Symbols",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "y8VCbGDUco9bzGRfIBD8R",
+          "title": "WinDBg",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BmWsoL9c_Aag5nVlMsKm2",
+          "title": "GDB",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "FTMHsUiE8isD_OVZr62Xc",
+      "title": "Compilers",
+      "subtopics": [
+        {
+          "id": "DVckzBUMgk_lWThVkLyAT",
+          "title": "Compiler Stages",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hSG6Aux39X0cXi6ADy2al",
+          "title": "Compilers and Features",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "jVXFCo6puMxJ_ifn_uwim",
+      "title": "Build Systems",
+      "subtopics": [
+        {
+          "id": "ysnXvSHGBMMozBJyXpHl5",
+          "title": "CMAKE",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "t6rZLH7l8JQm99ax_fEJ9",
+          "title": "Makefile",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HkUCD5A_M9bJxJRElkK0x",
+          "title": "Ninja",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "h29eJG1hWHa7vMhSqtfV2",
+      "title": "Package Managers",
+      "subtopics": [
+        {
+          "id": "PKG5pACLfRS2ogfzBX47_",
+          "title": "vcpkg",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "g0s0F4mLV16eNvMBflN2e",
+          "title": "NuGet",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ky_UqizToTZHC_b77qFi2",
+          "title": "Conan",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3ehBc2sKVlPj7dn4RVZCH",
+          "title": "Spack",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "4kkX5g_-plX9zVqr0ZoiR",
+      "title": "Working with Libraries",
+      "subtopics": [
+        {
+          "id": "5mNqH_AEiLxUmgurNW1Fq",
+          "title": "Library Inclusion",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OmHDlLxCnH8RDdu5vx9fl",
+          "title": "RAII",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PPg0V5EzGBeJsysg1215V",
+          "title": "C++ 0x",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sLVs95EOeHZldoKY0L_dH",
+          "title": "Licensing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1d7h5P1Q0RVHryKPVogQy",
+          "title": "Boost",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Eq3TKSFJ2F2mrTHAaU2J4",
+          "title": "OpenCV",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nOkniNXfXwPPlOEJHJoGl",
+          "title": "POCO",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jpMCIWQko7p3ndezYHL4D",
+          "title": "protobuf",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "621J9W4xCofumNZGo4TZT",
+          "title": "gRPC",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "j_eNHhs0J08Dt7HVbo4Q2",
+          "title": "Tensorflow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tEkvlJPAkD5fji-MMODL7",
+          "title": "pybind11",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "q64qFxoCrR38RPsN2lC8x",
+          "title": "spdlog",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GGZJaYpRENaqloJzt0VtY",
+          "title": "opencl",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1CqQgmHDeo1HlPdpUJS7H",
+          "title": "fmt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "et-dXKPYuyVW6eV2K3CM8",
+          "title": "ranges_v3",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MrAM-viRaF8DSxB6sVdD9",
+          "title": "gtest / gmock",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gAZ9Dqgj1_UkaLzVgzx1t",
+          "title": "Qt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "s13jQuaC6gw0Lab3Cbyy6",
+          "title": "Catch2",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "O0lVEMTAV1pq9sYCKQvh_",
+          "title": "Orbit Profiler",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "88pr5aN7cctZfDVVo-2ns",
+          "title": "PyTorch C++",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "id": "a5",
+  "name": "Resilience",
+  "domain": "api",
+  "domainLabel": "API, HTTP, security",
+  "topics": [
+    "Resilience"
+  ],
+  "questions": [
+    {
+      "id": 1008,
+      "code": "B9",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Token bucket rate limiting qanday ishlaydi?",
+      "options": [
+        "Har query bucketga token qo'shadi, bucket to'lsa bloklanadi",
+        "Bucketga doimiy tezlikda token tushadi (masalan 10/s, max 100); har query bitta token oladi; token yo'q bo'lsa 429",
+        "Har daqiqa boshida hisoblagich 0 ga tushadi",
+        "Query'lar queue'da turadi va doimiy tezlikda chiqadi"
+      ],
+      "answer": 1,
+      "explanation": "Token bucket burst'ga ruxsat beradi (capacity gacha), o'rtacha tezlikni cheklaydi. Fixed window — oyna chegarasida 2x burst muammosi. Leaky bucket — chiqishni tekislaydi (4-variant). Javobda 429 + Retry-After header."
+    },
+    {
+      "id": 1010,
+      "code": "B11",
+      "level": "M",
+      "type": "code",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Bu kodning muammosi nima?",
+      "snippet": "for attempt in range(5):\n    try:\n        return payments.charge(user_id, amount)   # POST\n    except Timeout:\n        continue",
+      "options": [
+        "Hech qanday muammo yo'q",
+        "Timeout — to'lov o'tmadi degani emas; idempotency key'siz retry ikki marta yechishi mumkin; backoff ham yo'q",
+        "5 marta kam, 10 kerak",
+        "except juda keng"
+      ],
+      "answer": 1,
+      "explanation": "Timeout = natija noma'lum. Idempotent bo'lmagan operatsiyani retry qilishdan oldin Idempotency-Key yuborish kerak. Yana: darhol retry — tushib qolgan servisni bosadi; exponential backoff + jitter va umumiy deadline kerak."
+    },
+    {
+      "id": 1012,
+      "code": "B13",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Circuit breaker'ning 'half-open' holati nima uchun?",
+      "options": [
+        "Faqat yarim query'larni o'tkazadi doim",
+        "Open holatdan keyin timeout o'tgach bir nechta sinov query'ini o'tkazadi: success'li bo'lsa closed, bo'lmasa yana open",
+        "Servis yarim quvvatda ishlayotganini bildiradi",
+        "Loglashni yarimga kamaytiradi"
+      ],
+      "answer": 1,
+      "explanation": "Closed — normal; xatolar chegarasidan oshsa Open — query'lar darhol fail (fallback), bog'liq servisga dam beradi. Half-open — tiklanganini tekshirish. Maqsad: cascading failure va thread/connection pool tugashining oldini olish."
+    },
+    {
+      "id": 1015,
+      "code": "B16",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Retry'da nega exponential backoff'ga <b>jitter</b> qo'shiladi?",
+      "options": [
+        "Kodni murakkablashtirish uchun",
+        "Barcha clientlar bir vaqtda xato olib, bir xil vaqtda qayta urinmasligi uchun — sinxron to'lqinlarni sochib yuboradi",
+        "Retry sonini kamaytirish uchun",
+        "Latency'ni kamaytirish uchun"
+      ],
+      "answer": 1,
+      "explanation": "Jitter'siz 1000 client 1s, 2s, 4s da birga uradi — tiklanayotgan servisni qayta yiqitadi. Full jitter: sleep = random(0, base*2^n). Retry budget (masalan query'larning 10%idan ko'p emas) retry storm'ning oldini oladi."
+    },
+    {
+      "id": 1020,
+      "code": "B21",
+      "level": "St",
+      "type": "open",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Ko'p instance'li API uchun distributed rate limiter loyihalang.",
+      "modelAnswer": [
+        "Key: user/API key/IP + endpoint; limitlar tariflarga bog'liq",
+        "Redis: sliding window (sorted set) yoki token bucket — Lua skript bilan atomik",
+        "Har query'ga Redis round-trip narxi; lokal token + davriy sinxron (aniqlik vs latency)",
+        "Redis yiqilsa: fail-open (mavjudlik) yoki fail-closed (security) — ongli tanlov",
+        "Qatlamlar: edge/gateway (qo'pol), servis (aniq); javob 429 + RateLimit header'lar"
+      ],
+      "explanation": "Staff level'da kutiladi: aniqlik va latency trade-off, failure rejimi, multi-region (global vs regional limit)."
+    },
+    {
+      "id": 1021,
+      "code": "B22",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Backpressure nima?",
+      "options": [
+        "Serverni tezlashtirish texnikasi",
+        "Tizim yuk ko'tara olmayotganini yuqoriga signal qilish mexanizmi — cheklangan queue, query'ni rad etish (429/503), consumer tezligiga moslash",
+        "Cache strategiyasi",
+        "DB replikatsiya turi"
+      ],
+      "answer": 1,
+      "explanation": "Cheksiz queue — backpressure yo'qligi: memory tugaydi, latency cheksiz o'sadi. Yaxshisi — tez va aniq rad etish (load shedding) va bounded queue. Reactive streams, TCP flow control — misollar."
+    },
+    {
+      "id": 14030,
+      "code": "SR31",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Go'da client tomonda rate limiting uchun standart yechim?",
+      "options": [
+        "time.Sleep bilan kutish",
+        "golang.org/x/time/rate — token bucket: limiter.Wait(ctx) yoki Allow(); burst va tezlikni alohida sozlash mumkin, context bilan bekor qilinadi",
+        "Har so'rovdan keyin 1 soniya kutish",
+        "Faqat server tomonda cheklanadi"
+      ],
+      "answer": 1,
+      "explanation": "Tashqi API limitiga rioya qilish uchun ayni muddao. Server tomonda esa taqsimlangan limiter kerak (Redis). Diqqat: Wait(ctx) navbatga qo'yadi — deadline bo'lmasa goroutine'lar yig'ilib qoladi; shuning uchun context deadline bilan ishlating.",
+      "source": "https://pkg.go.dev/golang.org/x/time/rate"
+    },
+    {
+      "id": 30020,
+      "code": "SN21",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Circuit breaker qo'ydingiz, lekin baribir cascading failure bo'ldi. Nega?",
+      "options": [
+        "Breaker keraksiz",
+        "Breaker per-instance/per-endpoint emas, yoki threshold sekin javoblarni (latency) hisobga olmaydi; bulkhead va timeout yo'q — thread/goroutine pool to'lib boshqa yo'nalishlar ham o'ladi",
+        "Breaker faqat HTTP 500 bilan ishlaydi",
+        "Retry breaker bilan mos kelmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Tizim ko'pincha 'error' emas, 'sekin' bo'lib o'ladi: timeout uzun bo'lsa so'rovlar yig'ilib resursni yeydi. Kerak: agressiv timeout (p99 asosida), concurrency cheklovi/bulkhead (bir dependency uchun ajratilgan budjet), latency asosidagi breaker, load shedding va degradatsiya yo'li (kesh yoki qisqartirilgan javob). Breaker yolg'iz yetmaydi."
+    },
+    {
+      "id": 30021,
+      "code": "SN22",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Yuk ostida servis butunlay yiqilmasligi uchun <b>load shedding</b> qanday qilinadi?",
+      "options": [
+        "Barcha so'rovni navbatga qo'yish",
+        "Navbat uzunligi/kutish vaqti chegaradan oshsa, so'rovni tez 503 + Retry-After bilan rad etish; prioritet bo'yicha (kritik yo'nalish oxirida tashlanadi)",
+        "Replikani ko'paytirish yetarli",
+        "Timeout'ni uzaytirish"
+      ],
+      "answer": 1,
+      "explanation": "Cheksiz navbat = latency portlashi va bufferbloat: barcha so'rov deadline'dan oshib ketadi, ish bekorga ketadi (`queueing collapse`). To'g'ri: kichik, chegarali navbat + CoDel uslubidagi kutish vaqti bo'yicha tashlash, prioritetlash (health/checkout > analytics), va client'ga aniq backoff signal. Tashlangan so'rov arzon, o'lgan servis qimmat."
+    },
+    {
+      "id": 30022,
+      "code": "SN23",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Downstream servis 30% xatolik beradi. Client'da qaysi kombinatsiya to'g'ri?",
+      "options": [
+        "Cheksiz retry",
+        "Retry budget (masalan trafikning 10%) + jitterli backoff + breaker + idempotency key",
+        "Har xatoda darhol 5 marta retry",
+        "Retry'ni butunlay o'chirish"
+      ],
+      "answer": 1,
+      "explanation": "30% xatolikda ko'r-ko'rona retry yukni ~1.4x oshiradi va servis tiklanishiga yo'l bermaydi. Retry budget global cheklov beradi, jitter sinxron bo'ronni yo'qotadi, breaker umidsiz holatda tezda tushadi, idempotency key esa mutatsiyalarda dublikat effektni oldini oladi."
+    },
+    {
+      "id": 30023,
+      "code": "SN24",
+      "level": "St",
+      "type": "open",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Timeout budjetini butun zanjir uchun qanday taqsimlaysiz? (client → gateway → A → B → DB)",
+      "modelAnswer": [
+        "Boshi: foydalanuvchi SLO'si, masalan 1s p99. Gateway shu budjetni oladi va deadline sifatida propagate qiladi",
+        "Har hop qolgan budjetdan kichik ulush oladi; retry ham shu budjet ichida (2 urinish = har biri ~budjet/2 dan kam)",
+        "Har chaqiruvdan oldin: qolgan vaqt minimal ishga yetmasa — darhol rad etish (`deadline exceeded` oldindan), bekorga ish qilmaslik",
+        "DB uchun `statement_timeout`/query timeout budjetdan kichik; lock kutish alohida cheklanadi",
+        "Cancellation propagatsiyasi: context bekor bo'lganda pastdagi barcha ish to'xtaydi (Go'da `ctx` har qatlamda)",
+        "Backgroundga surish: budjetga sig'maydigan ish (email, hisobot) async queue'ga chiqariladi",
+        "Monitoring: budjet oshib ketish nisbati va qaysi hop yedi — tracing bo'yicha"
+      ],
+      "explanation": "Senior'dan kutilayotgani: timeout mustaqil konstantalar to'plami emas, taqsimlanadigan budjet. Aks holda 'har joyda 5s' → foydalanuvchi 20s kutadi yoki client ketgach server ishlashda davom etadi."
+    },
+    {
+      "id": 30024,
+      "code": "SN25",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Idempotency key qanday to'g'ri implement qilinadi (to'lov API'si)?",
+      "options": [
+        "Key'ni logga yozib qo'yish",
+        "Key + request fingerprint DB'da unique constraint; birinchi so'rov natijasi saqlanadi, takror so'rovga aynan shu natija qaytariladi, boshqa payload bilan kelsa 409",
+        "Faqat keshda 5 daqiqa ushlash",
+        "Client har retry'da yangi key yuborishi kerak"
+      ],
+      "answer": 1,
+      "explanation": "Muhim detallar: (1) yozuv atomik bo'lishi kerak — `INSERT ... ON CONFLICT DO NOTHING` bilan 'birinchi kim keldi' aniqlanadi, aks holda parallel retry ikki to'lov qiladi; (2) javob saqlanadi (status va body), shuning uchun takror so'rov yangi effekt bermaydi; (3) TTL biznes talabiga qarab (24h+); (4) bir xil key boshqa payload bilan — mijoz xatosi, 409/422."
+    },
+    {
+      "id": 30524,
+      "code": "SN525",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Graceful degradation amalda qanday loyihalanadi?",
+      "options": [
+        "Xato sahifasini chiroyli qilish",
+        "Har dependency uchun oldindan belgilangan zaxira xatti-harakat: tavsiyalar servisi yiqilsa — statik ro'yxat, reyting yo'q bo'lsa — maydon ko'rsatilmaydi, kesh eskirgan bo'lsa — stale ma'lumot 'yangilanmoqda' belgisi bilan; kritik yo'l (checkout) esa hech qachon ixtiyoriy dependency'ga bog'lanmaydi",
+        "Barcha xatoni yashirish",
+        "Faqat retry"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qadam: dependency'larni 'kritik' va 'ixtiyoriy' deb tasniflash va buni kodda ifodalash (ixtiyoriy chaqiruv qisqa timeout + xatoni yutish + metrika). Test: chaos mashqida har ixtiyoriy dependency'ni o'chirib, asosiy oqim ishlashini tekshirish — aks holda 'ixtiyoriy' faqat qog'ozda qoladi."
+    },
+    {
+      "id": 30525,
+      "code": "SN526",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Resilience",
+      "domain": "api",
+      "section": "a5",
+      "question": "Bulkhead (to'siq) naqshi qanday amalga oshiriladi?",
+      "options": [
+        "Alohida server sotib olish",
+        "Resurslarni ajratish: har downstream dependency uchun alohida konkurentlik limiti/pool (semaphore), kritik va kritik bo'lmagan trafik uchun alohida worker pool yoki instansiya guruhi — bitta sekin dependency butun servisni yeb qo'ymaydi",
+        "Faqat timeout",
+        "Faqat breaker"
+      ],
+      "answer": 1,
+      "explanation": "Klassik ssenariy: hisobot endpointi sekin DB query bilan barcha goroutine va DB poolni band qiladi — checkout ham o'ladi. Bulkhead bilan hisobotga masalan pool'ning 20% ajratiladi. Kubernetes darajasida ham qo'llanadi: og'ir endpointlarni alohida Deployment'ga ajratish (bir xil kod, boshqa resurs va HPA)."
+    }
+  ]
+}

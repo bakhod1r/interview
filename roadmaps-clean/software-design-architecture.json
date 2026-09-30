@@ -1,0 +1,505 @@
+{
+  "slug": "software-design-architecture",
+  "title": "Software Design and Architecture",
+  "description": "Step by step guide to learn software design and architecture",
+  "url": "https://roadmap.sh/software-design-architecture",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2025-09-12T12:38:05.654Z",
+  "relatedRoadmaps": [
+    "backend",
+    "software-architect",
+    "devops",
+    "python",
+    "java",
+    "golang"
+  ],
+  "topicCount": 13,
+  "subtopicCount": 81,
+  "topics": [
+    {
+      "id": "08qKtgnhJ3tlb5JKfTDf5",
+      "title": "Clean Code Principles",
+      "subtopics": [
+        {
+          "id": "TJZgsxpfOmltUUChMzlEM",
+          "title": "Clean Code",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RgYq3YOJhPGSf5in1Rcdp",
+          "title": "Programming Paradigms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qZQDOe2MHBh8wNcmvkLQm",
+          "title": "Object Oriented Programming",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "p96fNXv0Z4rEEXJR9hAYX",
+          "title": "Design Principles",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gyQw885dvupmkohzJPg3a",
+          "title": "Design Patterns",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XBCxWdpvQyK2iIG2eEA1K",
+          "title": "Architectural Principles",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "En_hvwRvY6k_itsNCQBYE",
+          "title": "Architectural Styles",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jq916t7svaMw5sFOcqZSi",
+          "title": "Architectural Patterns",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WrzsvLgo7cf2KjvJhtJEC",
+          "title": "Enterprise Patterns",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2SOZvuEcy8Cy8ymN7x4L-",
+          "title": "Be consistent",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6Cd1BbGsmPJs_5jKhumyV",
+          "title": "Meaningful names over comments",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "81WOL1nxb56ZbAOvxJ7NK",
+          "title": "Indentation and Code Style",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XEwC6Fyf2DNNHQsoGTrQj",
+          "title": "Keep methods / classes / files small",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "TDhTYdEyBuOnDKcQJzTAk",
+      "title": "Programming Paradigms",
+      "subtopics": [
+        {
+          "id": "VhSEH_RoWFt1z2lial7xZ",
+          "title": "Structured Programming",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YswaOqZNYcmDwly2IXrTT",
+          "title": "Functional Programming",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VZrERRRYhmqDx4slnZtdc",
+          "title": "Object Oriented Programming",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5S5A5wCJUCNPLlHJ5fRjU",
+          "title": "Pure functions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qZzl0hAD2LkShsPql1IlZ",
+          "title": "Minimize cyclomatic complexity",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yyKvmutbxu3iVHTuqr5q4",
+          "title": "Avoid passing nulls, booleans",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "HhYdURE4X-a9GVwJhAyE0",
+      "title": "Object Oriented Programming",
+      "subtopics": [
+        {
+          "id": "4DVW4teisMz8-58XttMGt",
+          "title": "Polymorphism",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vnLhItObDgp_XaDmplBsJ",
+          "title": "Law of Demeter",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3XckqZA--knUb8IYKOeVy",
+          "title": "SOLID",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "0VO_-1g-TS29y0Ji2yCjc",
+      "title": "Model-Driven Design",
+      "subtopics": [
+        {
+          "id": "I25ghe8xYWpZ-9pRcHfOh",
+          "title": "Domain Models",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "c6n-wOHylTbzpxqgoXtdw",
+          "title": "Class Variants",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kWNQd3paQrhMHMJzM35w8",
+          "title": "Domain Language",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nVaoI4IDPVEsdtFcjGNRw",
+          "title": "Anemic Models",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RMkEE7c0jdVFqZ4fmjL6Y",
+          "title": "Abstract Classes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hd6GJ-H4p9I4aaiRTni57",
+          "title": "Concrete Classes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b-YIbw-r-nESVt_PUFQeq",
+          "title": "Scope / Visibility",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SrcPhS4F7aT80qNjbv54f",
+          "title": "Interfaces",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Dj36yLBShoazj7SAw6a_A",
+          "title": "Inheritance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VA8FMrhF4non9x-J3urY8",
+          "title": "Abstraction",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GJxfVjhiLuuc36hatx9dP",
+          "title": "Encapsulation",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "9dMbo4Q1_Sd9wW6-HSCA9",
+      "title": "Design Principles",
+      "subtopics": [
+        {
+          "id": "Izno7xX7wDvwPEg7f_d1Y",
+          "title": "Composition over Inheritance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DlefJ9JuJ1LdQYC4WSx6y",
+          "title": "Encapsulate what varies",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UZeY36dABmULhsHPhlzn_",
+          "title": "Program against abstractions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WzUhKlmFB9alTlAyV-MWJ",
+          "title": "Hollywood Principle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0rGdh72HjqPZa2bCbY9Gz",
+          "title": "Tell, don't ask",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ltBnVWZ3UMAuUvDkU6o4P",
+          "title": "DRY",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eEO-WeNIyjErBE53n8JsD",
+          "title": "YAGNI",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Jd79KXxZavpnp3mtE1q0n",
+      "title": "Design Patterns",
+      "subtopics": [
+        {
+          "id": "OoCCy-3W5y7bUcKz_iyBw",
+          "title": "Keep framework code distant",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S1m7ty7Qrzu1rr4Jl-WgM",
+          "title": "Use correct constructs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mzt7fvx6ab3tmG1R1NcLO",
+          "title": "Tests should be fast and independent",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kp86Vc3uue3IxTN9B9p59",
+          "title": "Organize code by actor it belongs to",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tLbckKmfVxgn59j_dlh8b",
+          "title": "Command query separation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9naCfoHF1LW1OEsVZGi8v",
+          "title": "Keep it simple and refactor often",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hlHl00ELlK9YdnzHDGnEW",
+          "title": "GoF Design Patterns",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6VoDGFOPHj5p_gvaZ8kTt",
+          "title": "PoSA Patterns",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "dBq7ni-of5v1kxpdmh227",
+      "title": "Architectural Principles",
+      "subtopics": [
+        {
+          "id": "8Bm0sRhUg6wZtnvtTmpgY",
+          "title": "Component Principles",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b_PvjjL2ZpEKETa5_bd0v",
+          "title": "Policy vs Detail",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TXus3R5vVQDBeBag6B5qs",
+          "title": "Coupling and Cohesion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-Kw8hJhgQH2qInUFj2TUe",
+          "title": "Boundaries",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "37xWxG2D9lVuDsHUgLfzP",
+      "title": "Architectural Styles",
+      "subtopics": []
+    },
+    {
+      "id": "j9j45Auf60kIskyEMUGE3",
+      "title": "Messaging",
+      "subtopics": [
+        {
+          "id": "KtzcJBb6-EcIoXnwYvE7a",
+          "title": "Event-Driven",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SX4vOVJY9slOXGwX_q1au",
+          "title": "Publish-Subscribe",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3V74lLPlcOXFB-QRTUA5j",
+      "title": "Distributed",
+      "subtopics": [
+        {
+          "id": "ZGIMUaNfBwE5b6O1yexSz",
+          "title": "Client-Server",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Cf9Z2wxBcbnNg_q9PA6xA",
+          "title": "Peer-to-Peer",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "86Jw9kMBD7YP5nTV5jTz-",
+      "title": "Structural",
+      "subtopics": [
+        {
+          "id": "HN160YgryBBtVGjnWxNie",
+          "title": "Layered Architectures",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "a0geFJWl-vi3mYytTjYdb",
+          "title": "Component-Based",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xYPR_X1KhBwdpqYzNJiuT",
+          "title": "Monolithic",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IELEJcKYdZ6VN-UIq-Wln",
+          "title": "Layered",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "gJYff_qD6XS3dg3I-jJFK",
+      "title": "Architectural Patterns",
+      "subtopics": [
+        {
+          "id": "Kk7u2B67Fdg2sU8E_PGqr",
+          "title": "Blackboard Pattern",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "eJsCCURZAURCKnOK-XeQe",
+          "title": "Microservices",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-arChRC9zG2DBmuSTHW0J",
+          "title": "Model-View Controller",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CD20zA6k9FxUpMgHnNYRJ",
+          "title": "Domain-Driven Design",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "r-Yeca-gpdFM8iq7f0lYQ",
+          "title": "Microkernel",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5WSvAA3h3lmelL53UJSMy",
+          "title": "Serverless Architecture",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GAs6NHBkUgxan3hyPvVs7",
+          "title": "Message Queues / Streams",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "K8X_-bsiy7gboInPzbiEb",
+          "title": "Event Sourcing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IU86cGkLPMXUJKvTBywPu",
+          "title": "CQRS",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "h0aeBhQRkDxNeFwDxT4Tf",
+      "title": "Enterprise Patterns",
+      "subtopics": [
+        {
+          "id": "tyReIY4iO8kmyc_LPafp1",
+          "title": "Transaction Script",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ndUTgl2YBzOdu1MQKJocu",
+          "title": "Mappers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8y0ot5sbplUIUyXe9gvc8",
+          "title": "Repositories",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "gQ7Xj8tsl6IlCcyJgSz46",
+          "title": "Usecases",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tb0X1HtuiGwz7YhQ5xPsV",
+          "title": "Identity Maps",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "y_Qj7KITSB8aUWHwiZ2It",
+          "title": "DTOs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "j_SUD3SxpKYZstN9LSP82",
+          "title": "Commands / Queries",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ks6njbfxOHiZ_TrJDnVtk",
+          "title": "Value Objects",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NpSfbzYtGebmfrifkKsUf",
+          "title": "Domain Models",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VnW_7dl5G0IFL9W3YF_W3",
+          "title": "Entities",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "SYYulHfDceIyDkDT5fcqj",
+          "title": "ORMs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "FysFru2FJN4d4gj11gv--",
+          "title": "SOA",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

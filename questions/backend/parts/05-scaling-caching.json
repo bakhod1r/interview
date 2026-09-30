@@ -1,0 +1,352 @@
+[
+  {
+    "topicId": "95d9itpUZ4s9roZN8kG9x",
+    "topicTitle": "Scaling Databases",
+    "questions": [
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-01",
+        "question": "What does the CAP theorem actually state, and why is \"CA\" not a real design choice?",
+        "answer": "CAP says that when a network partition (P) occurs, a distributed system must choose between consistency (every read sees the latest write) and availability (every request gets a non-error response). Partitions are not a design option — packets get dropped, links fail — so P is always present in a distributed system. That leaves a real choice only between CP (refuse requests on the minority side, like a majority-quorum system such as etcd or ZooKeeper) and AP (keep serving possibly stale data, like Cassandra or Dynamo with low quorums). A single-node database is the only honest \"CA\" system, and it trades away partition tolerance by not being distributed at all.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "CAP Theorem",
+        "followUps": [
+          "Where does a Postgres primary with a synchronous standby sit on CAP?",
+          "What does 'consistency' in CAP mean compared with the C in ACID?"
+        ],
+        "tags": ["cap", "distributed-systems", "consistency", "availability"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-02",
+        "question": "What does PACELC add on top of CAP?",
+        "answer": "PACELC says: if there is a Partition (P), choose Availability or Consistency (A/C); Else (E), in normal operation, choose Latency or Consistency (L/C). It captures the cost CAP ignores — even with a healthy network, strong consistency requires cross-node or cross-region round trips that add latency. DynamoDB default reads are PA/EL (eventually consistent, fast), while a strongly consistent read is PC/EC. Spanner is PC/EC: it pays TrueTime commit-wait latency to keep external consistency.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "CAP Theorem",
+        "followUps": [
+          "Classify Cassandra with QUORUM reads and writes under PACELC.",
+          "Why does cross-region synchronous replication make the EL/EC trade-off unavoidable?"
+        ],
+        "tags": ["pacelc", "cap", "latency", "consistency"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-03",
+        "question": "Compare range-based, hash-based, and directory-based sharding.",
+        "answer": "Range sharding assigns contiguous key ranges to shards (users A-F, G-M): range scans stay on one shard, but monotonically increasing keys (timestamps, auto-increment ids) send all writes to the last shard. Hash sharding routes by hash(key) % N or consistent hashing: distribution is even, but range queries fan out to every shard and adding a shard with plain modulo remaps almost every key. Directory sharding keeps an explicit lookup table mapping key to shard, giving full flexibility and easy per-tenant moves, at the cost of an extra lookup hop and a lookup service that becomes a single point of failure and must itself be cached and replicated.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Sharding Strategies",
+        "followUps": [
+          "How do you serve range queries on a hash-sharded table?",
+          "How would you shard a multi-tenant SaaS where one tenant is 40% of the data?"
+        ],
+        "tags": ["sharding", "partitioning", "consistent-hashing"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-04",
+        "question": "One shard of eight is at 90% CPU while the rest sit at 15%. How do you diagnose and fix it?",
+        "answer": "This is a hotspot from a poor shard key. Diagnose by grouping recent queries by shard key value (top-N by request count and rows read) — typical causes are a low-cardinality key like country or status, a time-ordered key sending all new writes to the newest shard, or one whale tenant. Fixes: change the shard key to something high-cardinality (user_id, or tenant_id+entity_id composite), add a salt prefix such as hash(user_id)%16 + timestamp for time-series writes, or split the whale tenant onto dedicated shards via a directory mapping. Short term, add read replicas for that shard and cache its hottest reads while the reshard is prepared.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Sharding Strategies",
+        "followUps": [
+          "How do you change a shard key with zero downtime?",
+          "What metrics would have caught this before it became a page?"
+        ],
+        "tags": ["sharding", "hotspot", "shard-key", "troubleshooting"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-05",
+        "question": "You must grow from 4 shards to 6 without downtime. What is your plan, and how does consistent hashing help?",
+        "answer": "With hash(key) % 4 moving to % 6, roughly 2/3 of all keys change owner — an unacceptable full data reshuffle. Consistent hashing places shards on a hash ring with many virtual nodes each, so adding a shard only moves the keys in the arc it takes over, about 1/N of the data. The zero-downtime procedure: add the new shards to the ring, replicate the affected key ranges to their new owners in the background, run a dual-read (new shard, fall back to old) or dual-write phase while backfilling, verify with row counts and checksums, then flip the routing table and delete the stale copies. A common alternative is pre-splitting into many logical shards (e.g. 1024) mapped to few physical nodes, so growth is only remapping logical shards, not rehashing rows.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Sharding Strategies",
+        "followUps": [
+          "Why do consistent hashing implementations use virtual nodes?",
+          "How do you handle writes landing on the old shard during the migration window?"
+        ],
+        "tags": ["resharding", "consistent-hashing", "migration", "scaling"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-06",
+        "question": "What is the difference between synchronous and asynchronous replication, and when do you pick each?",
+        "answer": "In synchronous replication the primary does not acknowledge a commit until at least one replica has persisted the WAL record, so a primary loss costs zero committed data (RPO = 0) but every write pays the replica round trip and a stalled replica can block writes. In asynchronous replication the primary acknowledges immediately and ships WAL in the background, so writes stay fast but a failover can lose everything not yet shipped. Postgres offers a middle ground with synchronous_commit levels and synchronous_standby_names such as ANY 1 (s1, s2), giving durability against one node loss without waiting for all replicas. Use sync within a region for money-critical data, async across regions where the round trip would dominate latency.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Data Replication",
+        "followUps": [
+          "What happens in Postgres if the only synchronous standby goes offline?",
+          "How do semi-synchronous replication in MySQL and ANY quorum in Postgres differ?"
+        ],
+        "tags": ["replication", "durability", "rpo", "postgres"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-07",
+        "question": "Users report that right after saving a profile they see the old value, but a refresh a second later shows the new one. What is happening and how do you fix it?",
+        "answer": "Classic replication lag with read-your-writes violation: the write went to the primary, the following read was load-balanced to a replica that had not yet applied the WAL. Confirm with replica lag metrics (pg_stat_replication replay_lag, or Seconds_Behind_Master in MySQL). Fixes, cheapest first: route reads to the primary for a short window after a user's write (sticky session keyed by user id, typically a few seconds); or capture the write's LSN/GTID and have the replica wait for it before answering, so the read is causally consistent; or read from the primary only on endpoints that must be fresh. Reducing the lag itself (faster replica disks, fewer long-running queries blocking WAL replay, more parallel apply workers) is the durable fix.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Data Replication",
+        "followUps": [
+          "How would you implement LSN-based read-your-writes at the connection-pool level?",
+          "Why can a long-running SELECT on a hot standby delay WAL replay?"
+        ],
+        "tags": ["replication-lag", "read-your-writes", "consistency", "debugging"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-08",
+        "question": "What is split brain in a replicated database, and how do you prevent it during failover?",
+        "answer": "Split brain occurs when a network partition leaves the old primary alive and reachable by some clients while a failover promotes a replica, so two nodes accept conflicting writes and the datasets diverge irreconcilably. Prevention rests on quorum: promotion requires a majority of an odd-sized cluster (or witness node), so a minority side can never elect a leader. Layer on fencing — STONITH, revoking the old primary's storage or VIP, or a lease with a monotonically increasing epoch/term that storage checks and rejects when stale. Tools like Patroni implement this with a DCS (etcd/Consul) leader key plus a TTL lease; the old primary demotes itself when it cannot renew the key.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Data Replication",
+        "followUps": [
+          "Why is a 2-node cluster with automatic failover unsafe?",
+          "How does a fencing token prevent a paused old primary from writing after it resumes?"
+        ],
+        "tags": ["failover", "split-brain", "quorum", "high-availability"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-09",
+        "question": "What is a database index and how does a B-tree index make lookups faster?",
+        "answer": "An index is a separate, ordered data structure mapping column values to row locations, so the engine can find rows without scanning the whole table. A B+tree keeps keys sorted in a shallow, high-fanout tree (typically 3-4 levels even for hundreds of millions of rows), so a lookup is a handful of page reads — O(log n) — instead of O(n). Because leaves are sorted and linked, the same index also serves range scans (BETWEEN, >) and ORDER BY without a sort step. It does not help for predicates that are not sargable, such as WHERE lower(email) = ... unless you build a matching expression index.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Database Indexes",
+        "followUps": [
+          "When would the planner choose a sequential scan even though an index exists?",
+          "What is the difference between a clustered and a non-clustered index?"
+        ],
+        "tags": ["indexes", "b-tree", "query-performance"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-10",
+        "question": "Why does column order matter in a composite index? Given queries filtering on (tenant_id, status) and sometimes only status, what do you build?",
+        "answer": "A composite index is sorted by the leading column first, so it can be used only for a prefix of its columns: an index on (tenant_id, status) serves WHERE tenant_id = ? and WHERE tenant_id = ? AND status = ?, but not WHERE status = ? alone, because the status values are scattered across every tenant's subtree. General rule: equality columns first, highest selectivity first among equals, and the range or ORDER BY column last. So build (tenant_id, status) for the combined query, and add a separate index on (status, tenant_id) — or on status alone — only if the status-only query is frequent and status is selective enough to beat a scan.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Database Indexes",
+        "followUps": [
+          "What is an index-only scan and what does it require in Postgres?",
+          "When is a partial index (WHERE status = 'active') better than a full one?"
+        ],
+        "tags": ["composite-index", "index-design", "leftmost-prefix", "sql"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-11",
+        "question": "A team added nine indexes to a high-write table and insert throughput dropped by half. Explain the cost and how you would decide what to drop.",
+        "answer": "Every INSERT, DELETE, and any UPDATE touching an indexed column must maintain each index: more random page writes, more WAL/redo volume, page splits, and more buffer-pool pressure, so write cost grows roughly linearly with index count. Measure actual usage: in Postgres, pg_stat_user_indexes.idx_scan identifies indexes with zero or near-zero scans, and pg_index/pg_size_pretty shows what they cost in space. Drop unused indexes and redundant ones whose columns are already a leftmost prefix of another index — (a) is redundant when (a, b) exists. In Postgres, HOT updates only apply when no indexed column changes, so trimming indexes on frequently updated columns also reduces bloat and vacuum load.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Database Indexes",
+        "followUps": [
+          "How do you drop an index safely in production without blocking traffic?",
+          "Why can over-indexing make the planner pick worse plans?"
+        ],
+        "tags": ["indexes", "write-amplification", "performance", "postgres"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-12",
+        "question": "A read-heavy service is saturating its single Postgres primary. Walk through the scaling steps you would take, in order.",
+        "answer": "First exhaust the cheap wins: find the top queries with pg_stat_statements, fix missing indexes and N+1 patterns, and add connection pooling (PgBouncer) since idle connections alone can pin CPU. Next add caching for hot read paths, then vertical scaling if the instance is undersized. Then add read replicas and route read-only traffic to them, accepting replication lag and handling read-your-writes explicitly. Only when the write path or the working-set size exceeds one node do you shard, because sharding costs you cross-shard joins, distributed transactions, and global uniqueness; functional partitioning (moving a whole table family to its own database) is often the cheaper intermediate step.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "",
+        "followUps": [
+          "What breaks in your application code the day you shard?",
+          "How do you enforce a globally unique username across shards?"
+        ],
+        "tags": ["scaling", "read-replicas", "sharding", "capacity"]
+      },
+      {
+        "id": "95d9itpUZ4s9roZN8kG9x-13",
+        "question": "What is a shard key, and what makes a good one?",
+        "answer": "The shard key is the column (or set of columns) whose value decides which shard a row lives on. A good shard key has high cardinality, an even access distribution, and matches the dominant query pattern so most queries hit a single shard — for example tenant_id in a B2B product, or user_id in a consumer app. Bad keys are low-cardinality (country, status), monotonically increasing (created_at, auto-increment id), or misaligned with queries, which forces scatter-gather across all shards. Changing a shard key later means a full data migration, so it is one of the hardest decisions to reverse.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Sharding Strategies",
+        "followUps": [
+          "Why are cross-shard JOINs expensive?",
+          "How do you generate unique primary keys across shards without a central sequence?"
+        ],
+        "tags": ["sharding", "shard-key", "data-modeling"]
+      }
+    ]
+  },
+  {
+    "topicId": "uPjCrDGA2MHylWXbZvMBM",
+    "topicTitle": "Caching",
+    "questions": [
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-01",
+        "question": "Compare cache-aside, read-through, write-through, and write-behind.",
+        "answer": "Cache-aside (lazy loading): the application checks the cache, and on a miss reads the database and populates the cache itself — simple, resilient to cache outages, but the first request after every miss is slow and the app owns invalidation. Read-through pushes that miss handling into the cache library/provider, so the app only talks to the cache. Write-through writes to cache and database synchronously, keeping them consistent at the cost of higher write latency and caching data that may never be read. Write-behind (write-back) acknowledges the write into the cache and flushes to the database asynchronously, giving the fastest writes but risking data loss if the cache node dies before the flush.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "Which pattern fits a write-heavy counter, and why?",
+          "Why is cache-aside the most common pattern in practice?"
+        ],
+        "tags": ["cache-aside", "write-through", "write-behind", "patterns"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-02",
+        "question": "On a write, is it better to update the cache or delete the key? Why?",
+        "answer": "Delete (invalidate) is usually safer. Updating the cache from the write path introduces a race: two concurrent writers can apply their cache updates in the opposite order from their database commits, leaving the cache permanently stale. Deleting means the next reader reloads the authoritative value from the database, and it also avoids computing derived values that may never be read. The standard order is write to the database first, then delete the key; for the residual race (a reader repopulating with a stale value read just before the commit) use delayed double-delete or bind the entry to a version/updated_at so a stale write cannot overwrite a newer one.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "Why is 'delete cache, then write DB' worse than 'write DB, then delete cache'?",
+          "How does change-data-capture on the WAL improve invalidation reliability?"
+        ],
+        "tags": ["invalidation", "consistency", "cache-aside", "race-condition"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-03",
+        "question": "How do you choose a TTL, and why is a TTL still needed when you invalidate explicitly?",
+        "answer": "Pick a TTL from how stale the data may be for the business and how expensive a recompute is: seconds for prices or inventory, minutes for feeds, hours for rarely changing reference data. Explicit invalidation is best-effort — a dropped event, a failed delete, a code path that writes without invalidating, or a bug will leave stale entries — so the TTL is the backstop that guarantees the error is bounded in time. It also caps memory for keys that stop being read. Add jitter (TTL plus a random percentage) so entries created together do not all expire in the same second and cause a synchronized miss storm.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "What TTL would you give a user's permission set, and what else must you add?",
+          "How do you invalidate immediately across many application nodes?"
+        ],
+        "tags": ["ttl", "invalidation", "jitter", "staleness"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-04",
+        "question": "A popular key expires and the database instantly gets thousands of identical queries. What is this and how do you prevent it?",
+        "answer": "That is a cache stampede (dog-piling / thundering herd): many concurrent readers miss the same key at once and all recompute it. Fix it by letting only one requester recompute: take a short-lived distributed lock (SET lock:key token NX PX 5000) and have the losers either wait briefly and retry or serve the stale value. Probabilistic early expiration (XFetch) is often better — each reader recomputes with a probability that grows as the expiry approaches, so exactly one refresh typically happens before the entry dies and no request ever sees a miss. Complementary measures: store the value with a logical expiry longer than the physical TTL so stale-while-revalidate is possible, add TTL jitter, and pre-warm known-hot keys.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "",
+        "followUps": [
+          "How do you release the recompute lock safely if the worker crashes?",
+          "How is a stampede different from a cache penetration attack?"
+        ],
+        "tags": ["cache-stampede", "thundering-herd", "locking", "early-expiry"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-05",
+        "question": "A single celebrity user's key is drawing so much traffic that one Redis shard is saturated while others idle. What do you do?",
+        "answer": "This is a hot key: sharding by key hash cannot help because all requests target the same key, so the shard hosting it is the bottleneck. Remedies: add a small in-process local cache (a few seconds TTL) in front of Redis so most requests never leave the app node; replicate the key under N suffixed copies (user:123#0..#9) and have clients pick one at random, accepting N-fold invalidation work; or use Redis read replicas for that shard. Also check the client is not doing a round trip per field — pipelining or a single hash fetch cuts request count. Detect these with redis-cli --hotkeys or the LFU-based OBJECT FREQ.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "",
+        "followUps": [
+          "What consistency problem does replicating a key under 10 names create?",
+          "How would you detect a hot key before it saturates a node?"
+        ],
+        "tags": ["hot-key", "redis", "sharding", "local-cache"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-06",
+        "question": "Requests for non-existent IDs are hitting the database on every call because misses are never cached. How do you handle it?",
+        "answer": "This is cache penetration, and it is a cheap denial-of-service vector when the IDs are attacker-chosen. Use negative caching: store an explicit tombstone (empty value or null marker) with a short TTL, typically 30 seconds to a few minutes, so repeated lookups for a missing key are answered from cache. Keep the negative TTL much shorter than the positive one so a newly created entity becomes visible quickly, and delete the tombstone on create. For very large key spaces add a Bloom filter of existing ids in front of the cache: a negative answer is definitive and costs no cache or database lookup, while false positives just fall through to the normal path. Validate ID format first so obviously malformed keys never reach the cache at all.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "",
+        "followUps": [
+          "What is the risk of a long negative TTL on a signup-name-availability check?",
+          "Why can a Bloom filter never give a false negative?"
+        ],
+        "tags": ["negative-caching", "cache-penetration", "bloom-filter", "security"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-07",
+        "question": "Explain Redis eviction policies and which one you would set for a pure cache.",
+        "answer": "When memory hits maxmemory, Redis applies maxmemory-policy: noeviction (default — writes fail with OOM error), allkeys-lru / allkeys-lfu / allkeys-random (evict from all keys), and volatile-lru / volatile-lfu / volatile-ttl / volatile-random (evict only among keys that have a TTL). For a pure cache use allkeys-lru, or allkeys-lfu when the access pattern has a stable hot set and you want a one-off scan not to flush it, since LFU counts frequency rather than recency. volatile-* is right only when the same instance also holds keys that must never be evicted — and it will return OOM errors once no volatile keys remain. Never leave noeviction on a cache instance; that turns a memory-full condition into write failures.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "Why is Redis LRU approximated rather than exact?",
+          "What happens to a cache instance running noeviction when it fills up?"
+        ],
+        "tags": ["redis", "eviction", "lru", "lfu", "memory"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-08",
+        "question": "Explain the main Cache-Control directives for an HTTP response.",
+        "answer": "max-age=N sets how long a response is fresh in seconds; s-maxage=N overrides it for shared caches (CDN, proxy) only. public allows shared caches to store it, private restricts storage to the end user's browser (use it for anything per-user), and no-store forbids storing it at all. no-cache is not \"do not cache\" — it means store it but always revalidate with the origin before reuse. must-revalidate forbids serving stale content once expired, while immutable tells the browser never to revalidate within max-age, which is exactly right for content-hashed asset URLs such as app.9f3a2c.js with max-age=31536000.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "HTTP Caching",
+        "followUps": [
+          "Which header would you send on an authenticated JSON API response?",
+          "What is the difference between no-cache and no-store in practice?"
+        ],
+        "tags": ["http-caching", "cache-control", "headers"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-09",
+        "question": "How do ETag, Last-Modified, and 304 Not Modified work together?",
+        "answer": "The origin sends a validator with the response: ETag (an opaque version token, usually a hash of the body) and/or Last-Modified (a timestamp with one-second granularity). When the cached copy goes stale, the client revalidates by sending If-None-Match: \"<etag>\" or If-Modified-Since: <date>. If the resource is unchanged, the server replies 304 Not Modified with headers and no body, so the client reuses its stored copy and only the headers cross the wire. ETag is more precise than Last-Modified because it detects sub-second changes and content that was rewritten with identical bytes; a weak ETag (W/\"abc\") signals semantic rather than byte-for-byte equivalence. The same If-None-Match / If-Match mechanism also powers optimistic concurrency on PUT, returning 412 Precondition Failed on a conflict.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "HTTP Caching",
+        "followUps": [
+          "Why can a gzip-rewriting proxy break ETags?",
+          "How would you use If-Match to prevent a lost update on PUT?"
+        ],
+        "tags": ["etag", "last-modified", "304", "revalidation", "http-caching"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-10",
+        "question": "What does stale-while-revalidate do, and how would you configure caching for an HTML page behind a CDN?",
+        "answer": "Cache-Control: max-age=60, stale-while-revalidate=600 lets a cache serve the stale response immediately for up to 600 seconds past expiry while it refreshes the entry in the background, so users never wait on an origin round trip and the origin sees one refresh instead of a burst. Its sibling stale-if-error=86400 serves the stale copy when the origin returns 5xx or is unreachable, turning an outage into slightly old content. For an HTML page behind a CDN a common setup is Cache-Control: public, max-age=0, s-maxage=60, stale-while-revalidate=600 plus an ETag, so browsers always revalidate but the CDN absorbs the traffic; add Vary: Accept-Encoding (and any header that changes the body) and use surrogate keys / tag-based purge to invalidate instantly on publish.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "HTTP Caching",
+        "followUps": [
+          "What goes wrong if you put a user-specific response in a CDN without Cache-Control: private?",
+          "Why is Vary: User-Agent almost always a mistake?"
+        ],
+        "tags": ["stale-while-revalidate", "cdn", "vary", "http-caching"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-11",
+        "question": "After a deploy, some users still run the old JavaScript bundle for days. Diagnose and fix.",
+        "answer": "The asset was served with a long max-age under a stable filename (app.js), so browsers reuse the cached copy without revalidating until it expires — a CDN purge does nothing for copies already in browsers. Confirm by comparing the response headers and the ETag the browser sends on reload against the deployed file. Fix with content-hashed filenames (app.<contenthash>.js) served as Cache-Control: public, max-age=31536000, immutable, so a new deploy produces a new URL that is guaranteed to be fetched; the HTML entry point that references it must be short-lived (max-age=0, must-revalidate, or s-maxage with revalidation) so the new reference is picked up. To unstick users already holding the bad copy, change the URL and, if the app is long-lived in the tab, have the service worker or a version endpoint prompt a reload.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "HTTP Caching",
+        "followUps": [
+          "Why does a CDN purge not help here?",
+          "How does a service worker change the cache invalidation story?"
+        ],
+        "tags": ["http-caching", "cache-busting", "deploy", "cdn", "debugging"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-12",
+        "question": "Why is MD5 acceptable for building a cache key but unacceptable for passwords or signatures?",
+        "answer": "A cache key only needs a fast, well-distributed fingerprint of the inputs — MD5 of a normalized query string gives a compact 128-bit key, and no adversary gains anything from a collision because a collision merely returns the wrong cached value, and even that is avoidable by including the raw inputs in the stored entry. MD5 is broken for security: practical collisions are computable in seconds (chosen-prefix collisions since 2009), so it offers no integrity guarantee for signatures or certificates, and it is far too fast — commodity GPUs compute tens of billions of MD5 hashes per second, so any password digest, salted or not, falls to brute force. Use bcrypt, scrypt, or Argon2id with a per-user salt for passwords, and HMAC-SHA256 or Ed25519 for signatures and message authentication. If the cache key is derived from attacker-controlled data and a wrong hit would leak another user's data, use SHA-256 instead — the speed difference is irrelevant at cache-key sizes.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "MD5",
+        "followUps": [
+          "Why is a fast hash specifically the wrong property for password storage?",
+          "When does a cache-key collision become a security bug rather than a correctness bug?"
+        ],
+        "tags": ["md5", "hashing", "security", "cache-key", "passwords"]
+      },
+      {
+        "id": "uPjCrDGA2MHylWXbZvMBM-13",
+        "question": "A reviewer finds md5(file_bytes) used to deduplicate user uploads and md5(password + salt) in the login code. What do you tell them?",
+        "answer": "The password use is a critical bug: MD5 is a fast general-purpose hash, so an attacker with the database can try billions of candidates per second per GPU, and salting only stops precomputed rainbow tables, not brute force. Migrate to Argon2id (or bcrypt with cost >= 12), rehashing transparently on next successful login and wrapping existing digests in the meantime. The dedup use is mostly fine for accidental duplicates, but because MD5 chosen-prefix collisions are cheap, a user can deliberately upload two different files with the same digest and make one overwrite or shadow the other — so if dedup decides what content is served back, switch to SHA-256 and compare byte length too. Neither MD5 use should appear in anything a security decision depends on.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "MD5",
+        "followUps": [
+          "How do you migrate a password table off MD5 without forcing every user to reset?",
+          "What is a chosen-prefix collision and why does it matter for file dedup?"
+        ],
+        "tags": ["md5", "password-storage", "argon2", "code-review", "security"]
+      }
+    ]
+  }
+]

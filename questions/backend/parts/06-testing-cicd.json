@@ -1,0 +1,274 @@
+[
+  {
+    "topicId": "STQQbPa7PE3gbjMdL6P-t",
+    "topicTitle": "Testing",
+    "questions": [
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-01",
+        "question": "What is the difference between a unit test, an integration test, and a functional (end-to-end) test?",
+        "answer": "A unit test exercises one module in isolation with its collaborators replaced by test doubles; it runs in milliseconds and fails for exactly one reason. An integration test wires real adapters together — service plus real Postgres, real HTTP client against a stub server — and proves the seams (SQL, serialization, transactions) actually work. A functional/E2E test drives the system through its public entry point (HTTP request in, HTTP response and DB state out) and asserts business outcomes, not internals. The trade-off is speed and fault localisation versus realism: unit tests tell you where it broke, E2E tests tell you that it is actually broken for users.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Unit Testing",
+        "followUps": ["Where do you draw the boundary of a 'unit' — a class or a use case?", "Why can a suite of 100% passing unit tests still ship a broken feature?"],
+        "tags": ["testing", "unit-testing", "integration-testing", "fundamentals"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-02",
+        "question": "Explain the test pyramid and the 'testing trophy'. When would you choose one shape over the other?",
+        "answer": "The pyramid (Cohn) says: many fast unit tests, fewer integration tests, very few E2E tests, because cost and flakiness grow as you go up. The trophy (Dodds) puts the bulk of the investment in integration tests, with static analysis/types as the base and unit and E2E as thin layers, arguing that most real bugs live in the wiring, not in pure functions. Pick the pyramid when you have rich domain logic (pricing, scheduling, state machines) worth testing directly; pick the trophy when the service is mostly glue — HTTP handler, ORM query, external call — where a unit test with everything mocked only asserts that the mocks were configured. Modern containerized DBs made integration tests cheap enough that a trophy shape is viable where it once was not.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Unit Testing",
+        "followUps": ["How does a hexagonal/DDD architecture change the ideal shape?", "What is your target for total CI suite wall-clock time?"],
+        "tags": ["test-pyramid", "test-strategy", "testing"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-03",
+        "question": "Distinguish mock, stub, fake, and spy. Give a case where each is the right choice.",
+        "answer": "A stub returns canned data to drive a code path (a payment gateway stub returning DECLINED). A mock is a stub with assertions on the interaction — it verifies that charge() was called once with a given amount — so it tests behaviour, not state. A fake is a working lightweight implementation (in-memory repository, in-memory bus) used when you need real semantics without real infrastructure. A spy wraps the real object and records calls, letting you assert an email was sent while the rest still executes. Use a fake for repositories, a stub for inbound data, a mock only for genuine outgoing commands you cannot observe otherwise, and a spy when you must keep real behaviour and still check a side effect.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Unit Testing",
+        "followUps": ["Why is asserting on a mock of a query (not a command) usually a smell?", "How do you keep an in-memory fake repository honest against the real SQL one?"],
+        "tags": ["test-doubles", "mocking", "unit-testing"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-04",
+        "question": "A team's unit tests all pass but every refactor breaks dozens of them, and production bugs still slip through. Diagnose the problem.",
+        "answer": "This is classic over-mocking: the tests assert interactions with mocked collaborators, so they encode the current call graph rather than observable behaviour. Renaming a method or moving a call between layers breaks tests even though behaviour is identical (false failures), while a wrong SQL query or a serialization mismatch passes because the real dependency was never executed (false confidence). The fix is to move assertions to inputs and outputs of a use case, replace mocked repositories with in-memory fakes or a real containerized DB, and reserve mocks for the few true external boundaries (payment provider, SMTP). Test the public contract of a module, not its private collaborators.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Unit Testing",
+        "followUps": ["How would you migrate a large mock-heavy suite incrementally?", "What metric would show the suite is improving?"],
+        "tags": ["over-mocking", "refactoring", "test-smells"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-05",
+        "question": "For integration tests against a database, would you use Testcontainers or an in-memory DB like H2/SQLite? Argue the trade-off.",
+        "answer": "Testcontainers runs the real engine (postgres:16 in Docker), so migrations, JSONB, arrays, partial indexes, CTEs, isolation levels, and vendor-specific SQL behave exactly as in production; the cost is Docker availability in CI and a few seconds of container startup, mitigated by reusing one container per suite and template databases or transaction rollback per test. An in-memory DB starts in milliseconds but is a different engine: H2's Postgres compatibility mode silently diverges on upserts, locking, and types, so tests can pass on a query that fails in production — the worst possible failure mode. Use Testcontainers as the default and in-memory only where the storage is genuinely trivial. Keep test isolation by wrapping each test in a transaction that is rolled back, or truncating tables between tests.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Integration Testing",
+        "followUps": ["How do you keep a shared container from leaking state between parallel tests?", "How do you test code that itself manages transactions?"],
+        "tags": ["testcontainers", "integration-testing", "database"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-06",
+        "question": "One CI job fails roughly 1 in 15 runs, always in a different test. How do you find and fix the flakiness?",
+        "answer": "First make it measurable: record per-test pass/fail history across runs so you can rank flaky tests instead of guessing, and quarantine the worst offenders out of the blocking path (never just add a blanket retry, which hides real races). Then reproduce: run the suite with a fixed but reported random seed, run it repeatedly (--count/-repeat), and run the suspect test alone versus in the full suite — if it only fails in the suite, the cause is shared state (leftover DB rows, a static singleton, a cache, a global clock). The usual root causes are order dependence, wall-clock and timezone assumptions, sleep-based waits instead of polling on a condition, unseeded randomness, unclosed connections, and parallel tests sharing a fixed port or fixed primary key. Fix by injecting a controllable clock, seeding randomness, isolating data per test (unique tenant/ids, transactional rollback), and replacing sleeps with explicit awaits.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Integration Testing",
+        "followUps": ["When is auto-retry acceptable, and how do you stop it hiding real bugs?", "How do you prevent quarantined tests from being forgotten forever?"],
+        "tags": ["flaky-tests", "ci", "debugging"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-07",
+        "question": "What is consumer-driven contract testing, and how does it apply to REST, gRPC, and GraphQL?",
+        "answer": "In contract testing, each consumer records the requests it makes and the response shape it needs; that pact is verified against the real provider in the provider's own CI, so the provider learns at build time that a change breaks someone — without running a full integrated environment. For REST, tools like Pact replay the interactions against the provider; for gRPC, the .proto is already a machine-checkable contract, so you add a buf breaking (or protolock) check plus pact-style verification of semantics; for GraphQL, the schema is the contract and you run a schema diff plus persisted consumer queries validated against the new schema, since a field removal only breaks the clients that actually select it. The key property is that contract tests are fast and run per-service, unlike E2E environments which are slow, shared, and flaky.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "GraphQL",
+        "followUps": ["How do you handle a breaking change that every consumer must adopt?", "Where does contract testing fail to catch a bug?"],
+        "tags": ["contract-testing", "pact", "grpc", "graphql", "rest"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-08",
+        "question": "A GraphQL query for 50 posts with their authors fires 51 database queries. What is happening and how do you fix it?",
+        "answer": "This is the N+1 problem: the posts resolver runs one query, then GraphQL invokes the author resolver once per post, each issuing its own SELECT. The standard fix is a DataLoader per request: resolvers call loader.load(authorId), the loader batches all ids collected within a tick into one SELECT * FROM users WHERE id = ANY($1) and caches by key for the request lifetime only (a longer-lived cache would leak data across users and serve stale rows). Alternatives are a look-ahead resolver that inspects the selection set and issues a single JOIN, or projecting the query at the persistence layer. You also cap the blast radius with query depth limits, complexity scoring, and persisted queries so a client cannot request an arbitrarily deep graph.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "GraphQL",
+        "followUps": ["Why must the DataLoader cache be scoped per request?", "How would you detect N+1 automatically in CI?"],
+        "tags": ["graphql", "n+1", "dataloader", "performance"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-09",
+        "question": "Which changes to a protobuf message are backward compatible, and which break existing gRPC clients? What are the four streaming modes?",
+        "answer": "Safe: adding a new field with a fresh tag number, adding a new RPC or service, adding an enum value (if clients tolerate unknown values), renaming a field (the wire format uses tag numbers, not names). Breaking: reusing or changing a tag number, changing a field's type in an incompatible way (int32 to string), moving a field in or out of a oneof, changing cardinality, and deleting a field without marking it reserved — a later reuse of that tag silently misinterprets old data. gRPC has four modes: unary, server streaming, client streaming, and bidirectional streaming; streams are multiplexed over one HTTP/2 connection. Enforce compatibility mechanically with buf breaking against the main branch in CI rather than by review.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "gRPC",
+        "followUps": ["How do you test a bidirectional streaming RPC deterministically?", "Why is a proto3 field with a default value indistinguishable from an unset one, and what do you do about it?"],
+        "tags": ["grpc", "protobuf", "backward-compatibility", "streaming"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-10",
+        "question": "You must integrate with a legacy SOAP service. What do WSDL and the SOAP envelope give you, and how do you test the integration?",
+        "answer": "SOAP is an XML messaging protocol: every message is an Envelope with an optional Header (WS-Security tokens, transaction context) and a Body; errors come back as a soap:Fault with faultcode/faultstring, typically over HTTP 500. The WSDL is the machine-readable contract — types (XSD), messages, portType operations, binding, and service endpoint — from which you generate a strongly typed client, so the schema is the contract and there is no need for hand-rolled parsing. For testing, generate the client from the WSDL, validate requests against the XSD, and run integration tests against a recorded/stubbed endpoint (WireMock or a SOAP mock server) since the real service is usually rate-limited and stateful. Wrap it in an anti-corruption layer so SOAP types never leak into your domain model.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "SOAP",
+        "followUps": ["How does SOAP differ from REST in error handling and transactions?", "How do you handle WS-Security signing in tests?"],
+        "tags": ["soap", "wsdl", "legacy-integration", "xml"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-11",
+        "question": "Compare cookie/session-based auth with token (JWT in header) auth. How do HttpOnly, Secure, and SameSite change the risk profile?",
+        "answer": "Cookie sessions keep an opaque session id server-side, so revocation is instant and the payload leaks nothing; the browser attaches the cookie automatically, which is convenient but is exactly what makes CSRF possible. Set HttpOnly so JavaScript (and therefore an XSS payload) cannot read the cookie, Secure so it is only sent over HTTPS, and SameSite=Lax (default in modern browsers) or Strict so it is not attached to cross-site POSTs — SameSite=None requires Secure and reopens CSRF exposure. JWTs are stateless and scale across services but cannot be revoked before expiry without a denylist, and storing them in localStorage makes any XSS a full account takeover since the token is readable. In practice: short-lived access token plus refresh token in an HttpOnly, Secure, SameSite cookie gives both statelessness and safe storage.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Cookie Based Auth",
+        "followUps": ["Why does SameSite not fully replace CSRF tokens?", "How do you revoke a JWT that has 15 minutes left to live?"],
+        "tags": ["cookies", "jwt", "authentication", "web-security", "samesite"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-12",
+        "question": "A money-transfer endpoint can be triggered by a hidden form on an attacker's site while the user is logged in. Name the attack and the layered defence, and explain session fixation while you are at it.",
+        "answer": "That is CSRF: the browser attaches the session cookie to the cross-site request, so the server sees an authenticated user. Defences, layered: SameSite=Lax/Strict on the session cookie; a synchronizer token (per-session or per-request, validated server-side) or the double-submit cookie pattern; verifying Origin/Sec-Fetch-Site headers; and never using GET for state changes. Session fixation is a different attack: the attacker plants a known session id (via a URL parameter or a set cookie) before login, and if the server keeps that id after authentication, the attacker now shares the victim's authenticated session — the fix is to regenerate the session id on every privilege change (login, logout, role elevation) and to never accept session ids from the URL. Also set a short idle timeout and bind the session to a rotating fingerprint where it does not break legitimate users.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Web Security",
+        "followUps": ["Why does a CSRF token not protect you if the site also has an XSS hole?", "How do you protect a CORS-enabled JSON API from CSRF?"],
+        "tags": ["csrf", "session-fixation", "web-security", "owasp"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-13",
+        "question": "OpenID Connect versus SAML: what are they, how do they differ, and when would you still pick SAML?",
+        "answer": "OIDC is an identity layer on top of OAuth 2.0: the client runs an authorization-code flow with PKCE and gets back a JSON Web Token id_token (signed, claims like sub, iss, aud, exp, nonce) plus an access token, with metadata at /.well-known/openid-configuration and keys at the JWKS endpoint. SAML 2.0 is XML-based: the SP redirects to the IdP, which POSTs back a signed XML Assertion, usually via the HTTP-POST binding with an XML-DSig signature. OIDC is far better suited to mobile apps, SPAs, and APIs — JSON, small tokens, simple libraries — while SAML remains the requirement in large enterprises and government, where existing IdPs, ADFS, and procurement checklists demand it. If you support both, normalise at the edge into one internal session so the rest of the system never knows which protocol was used.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "OpenID",
+        "followUps": ["What does the nonce in an id_token protect against?", "Why is XML signature wrapping a recurring SAML vulnerability class?"],
+        "tags": ["oidc", "saml", "sso", "authentication"]
+      },
+      {
+        "id": "STQQbPa7PE3gbjMdL6P-t-14",
+        "question": "How do you write automated tests for an SSO login flow without a real identity provider in CI?",
+        "answer": "Run a local IdP in the test environment — a container such as Keycloak or a mock OIDC provider — so the full authorization-code + PKCE round trip, the JWKS lookup, and signature validation are genuinely exercised; that catches issuer/audience misconfiguration that a mocked verifier would hide. For unit tests of the relying-party code, generate a keypair in the test, mint an id_token yourself, and serve it from a stub JWKS endpoint, then write negative tests: expired exp, wrong aud, wrong iss, tampered signature, replayed nonce, alg set to none — each must be rejected. For SAML the equivalent is a fixture assertion signed by a test certificate plus negative cases for expired NotOnOrAfter and signature-wrapping payloads. Never disable signature validation to make tests pass; that flag inevitably escapes into production config.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "OpenID",
+        "followUps": ["How do you keep test certificates from expiring and breaking CI?", "What does a PKCE code_challenge protect against for a public client?"],
+        "tags": ["oidc", "saml", "testing", "security-testing"]
+      }
+    ]
+  },
+  {
+    "topicId": "mGfD7HfuP184lFkXZzGjG",
+    "topicTitle": "CI / CD",
+    "questions": [
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-01",
+        "question": "What stages would you put in a CI/CD pipeline for a backend service, and in what order?",
+        "answer": "Fast feedback first: checkout, dependency restore from cache, lint and type check, unit tests — everything that can fail in under two minutes. Then build the artifact exactly once (container image or jar), run integration tests against that artifact with Testcontainers, run security gates (SAST, dependency/CVE scan, secret scan, image scan), and publish the artifact to a registry tagged with the immutable commit SHA. Deployment then promotes that same artifact through staging and production with smoke tests and a manual or policy gate before prod. The rule is build once, deploy many: rebuilding per environment means the thing you tested is not the thing you shipped.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["Which stages would you run in parallel?", "What belongs in a pre-merge pipeline versus a post-merge one?"],
+        "tags": ["ci-cd", "pipeline", "build"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-02",
+        "question": "What is the difference between continuous integration, continuous delivery, and continuous deployment?",
+        "answer": "Continuous integration means every developer merges to trunk frequently (at least daily) and each merge triggers an automated build and test run, so integration problems surface in minutes instead of at the end of a sprint. Continuous delivery means every green build produces a deployable artifact that could go to production at any moment — the release itself is a business decision, triggered by a human. Continuous deployment removes that button: every commit passing the pipeline goes to production automatically. Moving from delivery to deployment requires trustworthy tests, feature flags for incomplete work, automated rollback, and good production monitoring.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["What must be true before you can turn on continuous deployment?", "How do trunk-based development and long-lived branches affect CI?"],
+        "tags": ["ci-cd", "fundamentals", "trunk-based-development"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-03",
+        "question": "Compare rolling, blue-green, and canary deployments.",
+        "answer": "Rolling replaces instances in batches behind the load balancer: no extra infrastructure, but both versions serve traffic at once (so the code must be backward compatible) and rollback means another slow roll. Blue-green runs a full second environment, then flips the router in one step: instant cutover and instant rollback, at the cost of double capacity and the hard part of sharing one database between both colours. Canary sends a small slice (1%, then 5%, 25%...) to the new version while comparing error rate and latency against the baseline, automatically halting or rolling back on SLO breach — the best risk/cost balance, but it needs per-version metrics and traffic splitting at the proxy or service mesh. All three assume the new version is compatible with the data and with the old version still running.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["How does a blue-green deploy handle a schema change?", "What signals would you gate a canary promotion on?"],
+        "tags": ["deployment", "blue-green", "canary", "rolling"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-04",
+        "question": "A release must rename a column and ship code that uses the new name. How do you order the deploy so it can be rolled back safely?",
+        "answer": "Never couple a destructive migration to the code deploy — use expand/contract across at least three releases. Expand: add the new column, backfill it in batches, and have the application dual-write to both old and new while still reading the old one. Migrate: deploy code that reads the new column (old column still written, so rolling back one version is safe). Contract: after the new version has been stable and no rollback target still needs it, stop writing the old column and drop it in a separate release. The invariant is that the schema must be compatible with both the current and previous application version at all times, because during a rolling or canary deploy both are live; also run migrations as a separate step before the app rollout, keep them additive and non-locking (CREATE INDEX CONCURRENTLY, no long ALTER on a hot table), and never write a migration whose rollback loses data.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "",
+        "followUps": ["How do you back out a deploy that already ran an irreversible migration?", "How do you backfill 200 million rows without blocking writes?"],
+        "tags": ["migrations", "zero-downtime", "expand-contract", "rollback"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-05",
+        "question": "What problems do feature flags solve in a CD pipeline, and what problems do they create?",
+        "answer": "Flags decouple deploy from release: unfinished code can merge to trunk behind a disabled flag (keeping trunk-based development viable), a feature can be enabled for 1% of users or one tenant, and a bad feature can be turned off in seconds without a redeploy — a far faster rollback than shipping a new build. The costs are combinatorial explosion of untested code paths, flags that become permanent hidden configuration, and tests that only cover one side of the branch. Manage them as inventory: an owner and an expiry date per flag, a removal ticket created when the flag is created, flag state visible in logs and traces, and a distinction between short-lived release toggles (delete after rollout) and long-lived ops/kill switches (keep, and test both states).",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["How do you test a codebase with 30 interacting flags?", "Should flag evaluation be cached, and what breaks if it is?"],
+        "tags": ["feature-flags", "release-management", "ci-cd"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-06",
+        "question": "Why must build artifacts be immutable, and how do you enforce that in practice?",
+        "answer": "If an artifact can change after it was tested, the evidence from CI no longer describes what runs in production — and an incident becomes unreproducible because you cannot get back the exact bits. Enforce it by tagging images with the immutable commit SHA (never deploying by :latest or a moving tag), enabling registry tag immutability, pinning by digest in the deployment manifest, and recording a provenance/SBOM attestation (SLSA, cosign signature) that ties the image digest to the source commit and build. Deployments then promote a digest between environments, with environment-specific values supplied as configuration, never as a rebuild. Reproducible builds and locked dependency files (package-lock.json, go.sum) close the remaining gap.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["How do you handle a base-image CVE patch without breaking immutability?", "What does deploying by :latest break during a rollback?"],
+        "tags": ["artifacts", "immutability", "supply-chain", "registry"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-07",
+        "question": "Your pipeline takes 40 minutes and developers have stopped waiting for it. How do you cut it down?",
+        "answer": "Measure per-stage timings first, then attack the top items. Typical wins: cache dependencies and build outputs keyed by a lockfile hash (with a restore-key fallback so a near-miss still helps), order Dockerfile layers so dependency installation is cached and use multi-stage builds plus BuildKit cache mounts, run independent jobs in parallel, and shard the test suite across runners by recorded duration rather than alphabetically. Then reduce work: run affected-only tests for monorepo packages, move slow E2E suites out of the pre-merge gate into a post-merge or nightly run, and keep the pre-merge gate under about ten minutes. Verify the fix by tracking p50/p95 pipeline duration, and never cache anything keyed loosely enough to leak stale or cross-branch artifacts.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "",
+        "followUps": ["What should never be cached between runs?", "How do you keep test sharding balanced as the suite grows?"],
+        "tags": ["build-caching", "pipeline-performance", "ci"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-08",
+        "question": "How do you handle secrets in CI/CD pipelines?",
+        "answer": "Secrets never live in the repository, in the Dockerfile, or in build args that end up in image layers — they come from a secret manager (Vault, AWS Secrets Manager, GitHub/GitLab secret store) injected as environment variables or mounted files at run time. Prefer short-lived, workload-identity credentials over static keys: OIDC federation lets a CI job assume a cloud role for minutes with no long-lived key to leak. Scope secrets per environment and per job, block them from pull-request builds of forks, enable log masking, and add a secret scanner (gitleaks/trufflehog) as a pipeline gate plus pre-commit hook. Rotate on a schedule and immediately on any exposure, and remember that masking is not protection against a malicious build step — review who can edit pipeline files.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["Why is a secret passed via docker build --build-arg still recoverable?", "How does OIDC federation remove the need for stored cloud keys?"],
+        "tags": ["secrets", "ci-security", "oidc", "vault"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-09",
+        "question": "What does ACID mean, and what does each letter actually guarantee?",
+        "answer": "Atomicity: a transaction applies entirely or not at all — a partial commit is impossible, implemented with a write-ahead log and rollback. Consistency: the transaction moves the database from one valid state to another, respecting declared constraints (FK, unique, check) and the application's invariants. Isolation: concurrent transactions do not observe each other's intermediate state, to the degree the isolation level promises — READ COMMITTED still allows non-repeatable reads and phantoms, REPEATABLE READ prevents non-repeatable reads, SERIALIZABLE gives the effect of some serial order (Postgres does this with SSI, aborting with error 40001 on a conflict). Durability: once COMMIT returns, the change survives a crash, because the WAL was flushed to stable storage (fsync) before the acknowledgement.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "ACID",
+        "followUps": ["Which anomalies does READ COMMITTED still permit?", "How does synchronous_commit=off change the D in ACID?"],
+        "tags": ["acid", "transactions", "database"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-10",
+        "question": "Should a whole HTTP request run inside one database transaction? Discuss the trade-offs.",
+        "answer": "A transaction should span exactly one unit of business work — typically one use case in the application layer, opened as late and closed as early as possible. Wrapping the entire request (an open-session-in-view style filter) keeps a connection and its locks held while you render a response or call a third-party API, which exhausts the pool and stretches lock windows until throughput collapses; it also masks lazy-loading bugs by letting the ORM fetch inside the view. Never perform external I/O — HTTP calls, emails, queue publishes — inside a transaction, because a rollback cannot undo them and a remote timeout holds your locks; use the transactional outbox pattern instead so the event is written in the same transaction and published after commit. Where a request genuinely spans several services, use a saga with compensating actions rather than a distributed transaction.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "ACID",
+        "followUps": ["How does the transactional outbox guarantee at-least-once delivery?", "Where do you put the transaction boundary in a DDD layered architecture?"],
+        "tags": ["transactions", "outbox", "architecture", "acid"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-11",
+        "question": "What is an ORM, and what are its main pitfalls in a production backend?",
+        "answer": "An ORM maps rows to objects and generates SQL, saving boilerplate for CRUD and giving you identity map, change tracking, and unit of work. The pitfalls: lazy loading producing N+1 queries (fix with explicit eager fetch/JOIN or a batch size, and assert query counts in tests); a leaky abstraction where the object model dictates bad SQL and you cannot express window functions, CTEs, or index hints without dropping to raw SQL anyway; implicit cascades and dirty-checking flushes that write when you did not expect it; and accidental full-table loads because a collection was iterated. The workable stance is to use the ORM for aggregate-shaped writes and simple reads, and hand-written SQL (or a query builder) for reporting and hot read paths — a CQRS-ish split — while always logging generated SQL in development.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "ORMs",
+        "followUps": ["How would you detect an N+1 regression automatically?", "What does the identity map save you, and when does it hurt?"],
+        "tags": ["orm", "n+1", "lazy-loading", "sql"]
+      },
+      {
+        "id": "mGfD7HfuP184lFkXZzGjG-12",
+        "question": "Your team lets the ORM auto-generate migrations and applies them on application startup. What can go wrong, and what would you do instead?",
+        "answer": "Auto-generated migrations produce whatever DDL reconciles the model diff — often a blocking ALTER TABLE, a non-concurrent index build, or a DROP COLUMN that silently destroys data, and the diff can be non-deterministic between developers' local states. Running them at startup is worse: with several replicas rolling out, multiple instances race on the same DDL, a long migration blocks the readiness probe until the orchestrator kills the pod mid-migration, and a rollback of the deployment does not roll back the schema. Instead, treat migrations as reviewed, checked-in, hand-edited SQL under a versioned tool (Flyway, Liquibase, Alembic, golang-migrate) with an advisory lock, run them as a separate pipeline step or Kubernetes Job before the app rollout, keep them additive and backward compatible per the expand/contract rule, and test them against a production-sized copy to measure lock time before they touch prod.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "ORMs",
+        "followUps": ["How would you add a NOT NULL column to a 100M-row table without downtime?", "How do you coordinate migrations across several services sharing a database?"],
+        "tags": ["migrations", "orm", "deployment", "postgres"]
+      }
+    ]
+  }
+]

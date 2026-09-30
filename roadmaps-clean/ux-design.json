@@ -1,0 +1,494 @@
+{
+  "slug": "ux-design",
+  "title": "UX Design",
+  "description": "Step by step guide to becoming a UX Designer in @currentYear@",
+  "url": "https://roadmap.sh/ux-design",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-07-20T12:22:38.616Z",
+  "relatedRoadmaps": [
+    "design-system",
+    "frontend"
+  ],
+  "topicCount": 10,
+  "subtopicCount": 83,
+  "topics": [
+    {
+      "id": "liUKYf7UghuPk25xMPPYj",
+      "title": "Human Decision Making",
+      "subtopics": [
+        {
+          "id": "D553-nVELaB5gdxtoKSVc",
+          "title": "Behavioral Science",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "K22gvF9DLt0Ikc80yZLCb",
+          "title": "Persuasive Technology",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6ffY5wO-XhkiDJJ5YcI0x",
+          "title": "Nudge Theory",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_lv6GJ0wlMfhJ7PHRGQ_V",
+          "title": "Behavioral Economics",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zYCBEUqZVlvjlAKnh5cPQ",
+          "title": "Behavior Design",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2NlgbLeLBYwZX2u2rKkIO",
+          "title": "BJ Fogg's Behavior Model",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "kcG4IpneJzA6di0uqTiwb",
+          "title": "CREATE Action Funnel",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0Df110GZcDw5wbAe1eKoA",
+          "title": "Spectrum of Thinking Interventions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "kWA8CvocP1pkom2N7O4gb",
+          "title": "Dual Process Theory",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "PTZROvpPtEvu06szwmt4K",
+      "title": "Support Conscious Action",
+      "subtopics": [
+        {
+          "id": "SLXjoYL-lhPef8s9V3jpf",
+          "title": "Educate & Encourage User",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "e9n9an1PGxDPGkLCOHIwz",
+          "title": "Help User think about their Action",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_C-55tciBzc6_Kyk6272k",
+          "title": "Replace the Routine",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0MbrHG-VDrdZqQ0jWtiDo",
+          "title": "Use Consciousness to Interfere",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "d1dXGCHmMF2EFpL5yKVJA",
+          "title": "Mindfulness to Avoid Acting on the Cue",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "B0gg7Z5JL9m9Srb89KcN5",
+          "title": "Crowd Out Old Habit with New Behavior",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "zVXJPpqZvUFIxTGVrr0rN",
+      "title": "Cheating",
+      "subtopics": [
+        {
+          "id": "IpKCXqf_PkxIllwmiIZsq",
+          "title": "Defaulting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ix5Fll_dAINWLxVF2DXFI",
+          "title": "Making it Incidental",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZufrLRNkMoJ4e2T-vWxCR",
+          "title": "Automate the Act of Repetition",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "y6CqgqTvOt-LrvTnPJkQQ",
+      "title": "Make or Change Habits",
+      "subtopics": [
+        {
+          "id": "S2TgqNDjvmcJTaXncM09u",
+          "title": "Help user Avoiding the Cue",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "w_QWN80zCf1tsVROeyuvo",
+      "title": "Behavior Change Strategies",
+      "subtopics": [
+        {
+          "id": "lRBC8VYJPsR65LHDuuIsL",
+          "title": "BJ Fogg's Behavior Grid",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "q1WX2Cp4k4-o1T1vgL8FH",
+      "title": "Understanding the Product",
+      "subtopics": [
+        {
+          "id": "7J8F9dn1jGaVlhLVVRPrG",
+          "title": "Target Outcome",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FRn2MaR0-ehSD3zmwXcCI",
+          "title": "Target Actor",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AXn-N15U_z4OagClNoXrW",
+          "title": "Target Action",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SGO9hHju49_py0n0ASGBe",
+          "title": "Business Model Canvas",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sc8jJ_77CrkQuxIJYk28Q",
+          "title": "Lean Canvas",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GI06-DbGyJlQXq5Tyi-aH",
+          "title": "Business Model Inspirator",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HUZ5n2MRHzQPyjwX2h6Q4",
+          "title": "Competitor Analysis",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "r6D07cN0Mg4YXsiRSrl1_",
+      "title": "Conceptual Design",
+      "subtopics": [
+        {
+          "id": "PLLTcrHkhd1KYaMSRKALp",
+          "title": "Nir Eyal's Hook Model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "X1AroUI8Fge_lRpKab4A9",
+          "title": "Cue Routine Reward Model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "s2KJ5kNv9UcnsP0QKIKQ7",
+          "title": "Create User Personas",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tkbkpvHlWQeOnReanR8J7",
+          "title": "User Stories",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QNJ-LxfYtR8lbnmuy2Qm9",
+          "title": "In general, keep it short and simple",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vAu2c45c7DgoRydHR2tvD",
+          "title": "Make it easy to understand and complete",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8YePym3cQtoVY0DJQLllK",
+          "title": "Make progress visible to user",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "t46s6Piyd8MoJYzdDTsjr",
+          "title": "Figma",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nb7Ql1gvxqEucsGnIWTyY",
+          "title": "Sketch",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6yCBFwntQ_KxFmmGTJ8iR",
+      "title": "Prototyping",
+      "subtopics": [
+        {
+          "id": "90_M5qABC1vZ1nsXVyqFJ",
+          "title": "Good Layout Rules",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "F9gpGTRwXq08jNo5pPKm6",
+          "title": "Five Forces Model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XiEn1OGFY1bMCoB0Pk8N_",
+          "title": "SWOT Analysis",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D3LVYuCDHD6-kU8GhXokf",
+          "title": "Make progress meaningful to reward user",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "94V3wUtZ0NMm_0Vb1pBju",
+          "title": "Make successful completion clearly visible",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0KEqAjHFBjfmGA1bKzXuD",
+          "title": "Customer Experience Map by Mel Edwards",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JCP5_jyvh9u7hxp379iW2",
+          "title": "Simple Flowchart",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nccToz_0FUvHMJytpDpM0",
+          "title": "Event-driven Process Chain Model (EPC)",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jy5jtSEyNE8iJpad27rPX",
+          "title": "Business Process Model & Notation (BPMN)",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fZkARg6kPXPemYW1vDMTe",
+          "title": "Balsamiq",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U4ZEFUcghr9XjSyf-0Np7",
+          "title": "Call to Action",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "G4Ap91NgZfkV-54EuWe-Z",
+          "title": "Status Reports",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mzWd-xSr7sO2RgfPbKy4T",
+          "title": "How-to-Tips",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "VUf72i5hYaLR_8ul9EzmM",
+      "title": "UX Best Practices",
+      "subtopics": [
+        {
+          "id": "wFWidrOZ5EHPgo9uuUclK",
+          "title": "Reminders & Planning Prompts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9vA3ZWMiKG6NiEqGDvcFR",
+          "title": "Decision-Making Support",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JSBiw0C6aq1LhA33y79PM",
+          "title": "Behavior Change Games",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fbIur1tEIdNDE6gls4Bru",
+          "title": "Gamification",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "esWGzYUJwv7_xGjq6kpVE",
+          "title": "Reminders",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FoKtBRuTuMD2SZDHLWS-5",
+          "title": "Social Sharing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "g-bcan_JnjJfg0_fMOb64",
+          "title": "Goal Trackers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IjqH_Ev2fDWG0QDQ9c9eN",
+          "title": "Clear the Page of Distractions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hDj3HaYAM7K1UJmP_T52n",
+          "title": "Make it Clear, Where to Act",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FXJpJDIp-JBc0-0z4PIRo",
+          "title": "Tell User what the Action is and ask for it",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ahhffBkmd-feroleBrhJm",
+          "title": "Make UI Professional and Beautiful",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "GgBazWfF2OvOqkuo3DO2L",
+      "title": "Measuring the Impact",
+      "subtopics": [
+        {
+          "id": "eYZf67rnhOksfh44hnzHg",
+          "title": "Planners",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f0n2JKxpcuP0JW-h4CvwN",
+          "title": "Tutorials",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C1NwA0Pivoo73GANoOaPi",
+          "title": "Deploy Social Proof",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C5dKHIIgBzxtBpFgDs-hB",
+          "title": "Deploy Strong Authority on Subject",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m30ePaw_qa36m9Rv9NSFf",
+          "title": "Be Authentic and Personal",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jBQtuiHGl3eyCTZG85Vz5",
+          "title": "Prime User-Relevant Associations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zXinWCEH4LlYvXekLK0Ju",
+          "title": "Leverage Loss-Aversion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iKHU0O0z6gCunCgv_aZye",
+          "title": "Use Peer Comparisons",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6Mvm8SrISyTT99AJ-VFaW",
+          "title": "Use Competition",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4AzPOKXUN32CkgchRMrRY",
+          "title": "Avoid Cognitive Overhead",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8wxlu4KA2iu9CJa1UAUll",
+          "title": "Avoid Choice Overload",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iQNvKhwhvbis4Yn1ZxQua",
+          "title": "Avoid Direct Payments",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S9rJr8pc-Ln8BxG0suBWa",
+          "title": "Frame Text to Avoid Temporal Myopia",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kR-UbUFdELVeiPJqT0GlZ",
+          "title": "Remind of Prior Commitment to Act",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dOL2z6ULpmzRD5N3MrYCy",
+          "title": "Make Commitment to Friends",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1pzONoWafLAeX8eWbH-Dz",
+          "title": "Make Reward Scarce",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EmDgiwaknBz5lXr1rwalE",
+          "title": "Elicit Implementation Intentions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wE5gt1vMgbF3csA61VO2-",
+          "title": "Default Everything",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gf7et64xCqkYBrP9HwWs_",
+          "title": "Lessen the Burden of Action / Info",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gqOnzmiLQHmIXuEe4jG2e",
+          "title": "Deploy Peer Comparisons",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Q4xBz9f3yyZi2F_aZ5ixL",
+          "title": "Incremental A/B Testing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-_T2nzp1vV1jUcpsC5DI3",
+          "title": "Multivariate Testing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Emby09Nsm_j6uNreT58r6",
+          "title": "Gather Lessons, Prioritize & Integrate",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

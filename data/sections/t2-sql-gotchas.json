@@ -1,0 +1,428 @@
+{
+  "id": "t2",
+  "name": "SQL gotchas",
+  "domain": "tricky",
+  "domainLabel": "Edge cases & gotchas",
+  "topics": [
+    "SQL gotcha"
+  ],
+  "questions": [
+    {
+      "id": 8010,
+      "code": "T11",
+      "level": "M",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "<code>status</code> column'ida 100 row bor: 60 'active', 30 'banned', 10 NULL. Natija nechta row?",
+      "snippet": "SELECT count(*) FROM users WHERE status <> 'active';",
+      "options": [
+        "40",
+        "30 — NULL row'lar tushib qoladi, chunki NULL <> 'active' natijasi UNKNOWN",
+        "10",
+        "100"
+      ],
+      "answer": 1,
+      "explanation": "Bu eng ko'p uchraydigan 'yo'qolgan row'lar' sababi. To'g'ri yozish: WHERE status IS DISTINCT FROM 'active' (Postgres) yoki WHERE status <> 'active' OR status IS NULL. Xuddi shu tarzda NOT IN va ba'zi JOIN shartlari ham NULL bilan kutilmagan natija beradi."
+    },
+    {
+      "id": 8011,
+      "code": "T12",
+      "level": "M",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "PostgreSQL'da natija?",
+      "snippet": "SELECT 5 / 2 AS a, 5.0 / 2 AS b, AVG(x) FROM (VALUES (1),(2)) t(x);",
+      "options": [
+        "2.5, 2.5, 1.5",
+        "2, 2.5, 1.5 — butun sonlar bo'linishi butun son beradi (kasr tashlanadi)",
+        "2, 2, 1",
+        "Xato"
+      ],
+      "answer": 1,
+      "explanation": "integer / integer = integer. Foiz hisoblashda klassik xato: (count_a / count_b) * 100 doim 0 chiqadi. Tuzatish: 100.0 * a / b yoki a::numeric / b. Pul bilan ishlashda umuman float ishlatmang — numeric yoki minor unit integer."
+    },
+    {
+      "id": 8012,
+      "code": "T13",
+      "level": "M",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Sahifalash paytida ba'zi row'lar ikki marta, ba'zilari umuman ko'rinmayapti. Sabab?",
+      "snippet": "SELECT * FROM posts ORDER BY created_at DESC LIMIT 20 OFFSET 40;",
+      "options": [
+        "OFFSET buzuq",
+        "ORDER BY unikal emas: bir xil created_at'li row'lar tartibi har query'da boshqacha bo'lishi mumkin. Tie-breaker kerak: ORDER BY created_at DESC, id DESC",
+        "LIMIT kichik",
+        "Index yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Barqaror tartib uchun ORDER BY oxirida unikal column bo'lishi shart. Qo'shimcha sabab: page'lar orasida yangi row qo'shilsa OFFSET siljiydi — keyset (cursor) pagination bu muammoni ham yechadi. ORDER BY'siz LIMIT esa umuman kafolatsiz tartib beradi."
+    },
+    {
+      "id": 8013,
+      "code": "T14",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Transaction rollback bo'ldi. <code>id</code> ketma-ketligi qanday bo'ladi?",
+      "snippet": "BEGIN;\nINSERT INTO t DEFAULT VALUES;   -- id = 5\nROLLBACK;\nINSERT INTO t DEFAULT VALUES;   -- id = ?",
+      "options": [
+        "5 — sequence ham rollback bo'ladi",
+        "6 — sequence transaction'ga bo'ysunmaydi, rollback qilinmaydi; shuning uchun id'larda bo'shliqlar bo'lishi normal",
+        "1",
+        "Xato"
+      ],
+      "answer": 1,
+      "explanation": "Bu ataylab qilingan: aks holda har INSERT sequence ustida lock talab qilardi. Oqibati: id ketma-ket deb faraz qilish (masalan 'bugun nechta buyurtma bo'ldi' ni max(id)-min(id) bilan hisoblash) — xato. Xuddi shunday, id tartibi vaqt tartibini kafolatlamaydi (parallel transaction'lar turli vaqtda commit bo'ladi)."
+    },
+    {
+      "id": 8014,
+      "code": "T15",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "<code>timestamp</code> va <code>timestamptz</code> farqi bo'yicha qaysi to'g'ri?",
+      "snippet": "SET timezone = 'Asia/Tashkent';\nSELECT now()::timestamp, now()::timestamptz;",
+      "options": [
+        "Ikkalasi ham vaqt zonasini saqlaydi",
+        "timestamptz lahzani UTC sifatida saqlaydi va ko'rsatishda sessiya zonasiga o'giradi; timestamp esa zonasiz 'devordagi soat' — turli zonadagi serverlarda bir xil qiymat boshqa lahzani anglatadi",
+        "timestamptz zona nomini saqlaydi",
+        "Farqi faqat formatda"
+      ],
+      "answer": 1,
+      "explanation": "Qoida: hodisa vaqti (created_at, logged_at) uchun DOIM timestamptz. timestamp faqat zona ma'nosiz bo'lgan holatlarda (tug'ilgan sana, 'har kuni 09:00'). Tipik bug: timestamp column'ga UTC yozib, lokal zonada o'qish — 5 soatlik siljish. DST o'tishida esa lokal vaqt takrorlanadi yoki yo'qoladi."
+    },
+    {
+      "id": 8015,
+      "code": "T16",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Bu <code>UPDATE ... FROM</code> da nima xavf bor?",
+      "snippet": "UPDATE orders o\nSET status = p.status\nFROM payments p\nWHERE p.order_id = o.id;",
+      "options": [
+        "Xavf yo'q",
+        "Bitta order uchun bir nechta payment bo'lsa, qaysi qiymat yozilishi aniqlanmagan — natija tasodifiy va takrorlanmaydi. Avval agregatsiya yoki DISTINCT ON bilan bitta row'ga keltirish kerak",
+        "Sintaksis xatosi",
+        "Barcha row'lar NULL bo'ladi"
+      ],
+      "answer": 1,
+      "explanation": "SQL bu holatda xato bermaydi — jimgina bitta mos row'ni tanlaydi. Xavfsiz yozish: FROM (SELECT DISTINCT ON (order_id) order_id, status FROM payments ORDER BY order_id, created_at DESC) p. Xuddi shunday JOIN bilan UPDATE ham dublikat row'larni yashiradi."
+    },
+    {
+      "id": 8016,
+      "code": "T17",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "<code>DISTINCT ON</code> (PostgreSQL) to'g'ri ishlatilganmi?",
+      "snippet": "SELECT DISTINCT ON (user_id) user_id, created_at, amount\nFROM orders\nORDER BY created_at DESC;",
+      "options": [
+        "Ha, har user'ning oxirgi buyurtmasini beradi",
+        "Yo'q — ORDER BY birinchi DISTINCT ON column'idan boshlanishi shart: ORDER BY user_id, created_at DESC. Aks holda xato yoki kutilmagan row qaytadi",
+        "DISTINCT ON Postgres'da yo'q",
+        "Faqat LIMIT bilan ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "DISTINCT ON har guruhdan ORDER BY bo'yicha BIRINCHI row'ni oladi — shuning uchun tartib guruh column'idan boshlanishi kerak. Muqobil yozuv: ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY created_at DESC) = 1 — ko'proq portativ, lekin ko'pincha sekinroq.",
+      "source": "https://www.postgresql.org/docs/current/sql-select.html#SQL-DISTINCT"
+    },
+    {
+      "id": 8017,
+      "code": "T18",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "<code>CHAR(10)</code> column'da saqlangan 'abc' bilan taqqoslash:",
+      "snippet": "-- c CHAR(10) column'ida 'abc' saqlangan\nSELECT c = 'abc', length(c), c || '!' FROM t;",
+      "options": [
+        "true, 3, 'abc!'",
+        "true, 3, 'abc       !' — CHAR bo'shliq bilan to'ldiriladi: taqqoslashda bo'shliqlar e'tiborga olinmaydi, lekin konkatenatsiyada ular chiqadi",
+        "false, 10, 'abc!'",
+        "Xato"
+      ],
+      "answer": 1,
+      "explanation": "CHAR(n) — deyarli har doim keraksiz tip: padding kutilmagan natijalar beradi (konkatenatsiya, uzunlik, ba'zi funksiyalar). Postgres'da length() padding'ni hisobga olmaydi, char_length esa... aynan shu chalkashlik sababli amaliyotda faqat text yoki varchar ishlatiladi."
+    },
+    {
+      "id": 16020,
+      "code": "E21",
+      "level": "M",
+      "type": "sql",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Nega bu query kutilganidan kam row qaytaradi?",
+      "snippet": "SELECT u.id, o.total\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.status = 'paid';",
+      "keywords": [
+        "AND",
+        "ON"
+      ],
+      "explanation": "WHERE dagi o.status LEFT JOIN'ni INNER JOIN'ga aylantiradi: buyurtmasiz user'lar uchun o.status NULL bo'ladi va NULL = 'paid' hech qachon TRUE emas, shuning uchun row tashlanadi. To'g'risi — shartni ON ichiga ko'chirish: LEFT JOIN orders o ON o.user_id = u.id AND o.status = 'paid'. Qoida: LEFT JOIN'ning o'ng tomonidagi filtr ON'da, chap tomondagi filtr WHERE'da."
+    },
+    {
+      "id": 16021,
+      "code": "E22",
+      "level": "M",
+      "type": "sql",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Nega `WHERE id NOT IN (SELECT user_id FROM bans)` bo'sh natija qaytarishi mumkin?",
+      "snippet": "-- bans.user_id ustunida NULL bor",
+      "keywords": [
+        "NOT EXISTS",
+        "NULL"
+      ],
+      "explanation": "NOT IN ro'yxatida bitta NULL bo'lsa, natija hech qachon TRUE bo'lmaydi (3-qiymatli mantiq: id <> NULL = UNKNOWN), shuning uchun query bo'sh qaytaradi. Yechimlar: NOT EXISTS (NULL'ga sezgir emas), yoki subquery'ga WHERE user_id IS NOT NULL qo'shish. NOT EXISTS odatda planner uchun ham qulayroq (anti-join)."
+    },
+    {
+      "id": 16022,
+      "code": "E23",
+      "level": "S",
+      "type": "sql",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Bu ikki hisob nega farq qiladi?",
+      "snippet": "SELECT count(*), count(rating), avg(rating) FROM reviews;",
+      "keywords": [
+        "NULL"
+      ],
+      "explanation": "count(*) barcha row'ni sanaydi; count(rating) NULL bo'lmaganlarini; avg(rating) esa NULL'larni butunlay e'tiborsiz qoldiradi (yig'indi/NULL bo'lmagan soni). Ya'ni avg 'nolga teng' deb hisoblamaydi. NULL'ni 0 sifatida sanash kerak bo'lsa: avg(coalesce(rating,0)). Shuningdek sum() hech row bo'lmasa NULL qaytaradi, 0 emas."
+    },
+    {
+      "id": 16023,
+      "code": "E24",
+      "level": "S",
+      "type": "sql",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Nega `SELECT ... WHERE lower(email) = $1` index'dan foydalanmayapti?",
+      "snippet": "CREATE INDEX idx_email ON users(email);",
+      "keywords": [
+        "expression index",
+        "lower"
+      ],
+      "explanation": "Ustunga funksiya qo'llanganda oddiy B-tree index ishlamaydi (predikat sargable emas). Yechim: expression index — CREATE INDEX ON users(lower(email)); yoki citext tipi. Xuddi shu qoida: WHERE created_at::date = '2024-01-01' o'rniga created_at >= '2024-01-01' AND created_at < '2024-01-02' yozing."
+    },
+    {
+      "id": 16024,
+      "code": "E25",
+      "level": "P",
+      "type": "sql",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Bu migratsiya production'da nega xavfli?",
+      "snippet": "ALTER TABLE orders ADD COLUMN status text NOT NULL DEFAULT 'new';\nCREATE INDEX idx_orders_status ON orders(status);",
+      "keywords": [
+        "CONCURRENTLY",
+        "ACCESS EXCLUSIVE",
+        "lock_timeout"
+      ],
+      "explanation": "Postgres 11+ da volatile bo'lmagan DEFAULT bilan ustun qo'shish jadvalni qayta yozmaydi (tez), lekin baribir qisqa ACCESS EXCLUSIVE lock oladi — uzoq ishlayotgan query orqasida navbatga turib, butun jadvalni bloklaydi. CREATE INDEX esa CONCURRENTLY'siz yozuvlarni index qurilguncha bloklaydi. To'g'ri retsept: lock_timeout = '3s' + retry, CREATE INDEX CONCURRENTLY (transaction ichida emas), va migratsiyani kichik qadamlarga bo'lish.",
+      "source": "https://www.postgresql.org/docs/current/sql-createindex.html"
+    },
+    {
+      "id": 16025,
+      "code": "E26",
+      "level": "P",
+      "type": "sql",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "`SELECT ... FOR UPDATE` bilan ikki servis deadlock berayapti. Sabab va yechim?",
+      "snippet": "-- A: UPDATE accounts WHERE id=1; UPDATE accounts WHERE id=2;\n-- B: UPDATE accounts WHERE id=2; UPDATE accounts WHERE id=1;",
+      "keywords": [
+        "ORDER BY",
+        "tartib",
+        "deadlock"
+      ],
+      "explanation": "Klassik lock ordering deadlock: ikki tranzaksiya resurslarni teskari tartibda qulflaydi. Postgres deadlock_timeout (default 1s) dan keyin birini bekor qiladi: 'deadlock detected'. Yechim: barcha kod yo'llarida qat'iy bir xil tartib (masalan id bo'yicha o'sish: SELECT ... WHERE id = ANY($1) ORDER BY id FOR UPDATE), yoki bitta ledger row'ga serializatsiya, yoki SKIP LOCKED bilan navbat. Ilova darajasida 40P01 xatosini retry qilish ham kerak."
+    },
+    {
+      "id": 16026,
+      "code": "E27",
+      "level": "M",
+      "type": "sql",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Nega `LIMIT 20 OFFSET 100000` sekin?",
+      "snippet": "SELECT * FROM events ORDER BY created_at DESC LIMIT 20 OFFSET 100000;",
+      "keywords": [
+        "keyset",
+        "seek"
+      ],
+      "explanation": "OFFSET row'larni tashlab yubormaydi — ularni baribir o'qib, keyin tashlaydi. 100k offset = 100020 row o'qish. Yechim: keyset (seek) pagination — WHERE (created_at, id) < ($1,$2) ORDER BY created_at DESC, id DESC LIMIT 20. Bonus: keyset yangi row qo'shilganda dublikat/tushib qolish muammosini ham yopadi, OFFSET esa yopmaydi."
+    },
+    {
+      "id": 30145,
+      "code": "SN146",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Bu query nega kutilganidan kam qator qaytaradi?",
+      "snippet": "SELECT u.id, u.email\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.status = 'paid';",
+      "options": [
+        "`LEFT JOIN` noto'g'ri yozilgan",
+        "`WHERE` filtri JOIN'dan keyin qo'llanadi va `NULL` qatorlarni kesib tashlaydi — LEFT JOIN amalda INNER JOIN'ga aylanadi; shart `ON`ga ko'chirilishi kerak",
+        "`status` indeksi yo'q",
+        "`u.id` unique emas"
+      ],
+      "answer": 1,
+      "explanation": "Outer join'da o'ng tomon shartlari `ON` ichida bo'lishi kerak: `LEFT JOIN orders o ON o.user_id = u.id AND o.status = 'paid'`. Agar maqsad 'to'lovi yo'q userlar' bo'lsa — `WHERE o.id IS NULL` (anti-join). Bu xato kod review'da eng ko'p o'tib ketadigan SQL xatolaridan biri."
+    },
+    {
+      "id": 30146,
+      "code": "SN147",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "`NOT IN` bilan nega bo'sh natija keladi?",
+      "snippet": "SELECT * FROM users\nWHERE id NOT IN (SELECT user_id FROM orders);",
+      "options": [
+        "Jadval bo'sh",
+        "`orders.user_id` ichida bitta `NULL` bo'lsa — butun shart `UNKNOWN` bo'ladi va hech qanday qator qaytmaydi; `NOT EXISTS` yoki `IS NOT NULL` filtri ishlatiladi",
+        "Indeks yo'q",
+        "`NOT IN` sintaksisi xato"
+      ],
+      "answer": 1,
+      "explanation": "`id NOT IN (1, NULL)` = `id <> 1 AND id <> NULL` = `... AND UNKNOWN` — hech qachon rost bo'lmaydi. `NOT EXISTS` NULL bilan to'g'ri ishlaydi va planner uchun ko'pincha samaraliroq (anti-join). Bu klassik jim bug: ma'lumotga bitta NULL kelgan kuni hisobot bo'shab qoladi."
+    },
+    {
+      "id": 30147,
+      "code": "SN148",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Pagination'da qatorlar takrorlanib/tushib qolyapti. Nega?",
+      "snippet": "SELECT * FROM events ORDER BY created_at DESC LIMIT 20 OFFSET 40;",
+      "options": [
+        "OFFSET har doim xato",
+        "`created_at` unique emas — teng qiymatlarda tartib barqaror emas, shuning uchun sahifalar orasida qator takrorlanadi yoki yo'qoladi; tie-breaker (`, id DESC`) va keyset pagination kerak",
+        "LIMIT 20 kichik",
+        "Indeks yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Ikki muammo birga: (1) barqaror bo'lmagan tartib — har doim unique tie-breaker qo'shiladi; (2) OFFSET chuqurlashganda sekinlashadi (N qatorni tashlab o'tish) va yangi yozuvlar sahifani surib yuboradi. Yechim — keyset: `WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT 20`."
+    },
+    {
+      "id": 30148,
+      "code": "SN149",
+      "level": "S",
+      "type": "mcq",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "`SELECT count(*)` katta jadvalda sekin. PostgreSQL'da nega va nima qilinadi?",
+      "options": [
+        "Indeks qo'shish `count(*)`ni tezlashtiradi",
+        "MVCC tufayli aniq sanoq har qatorning ko'rinishini tekshirishni talab qiladi (index-only scan bo'lsa ham to'liq skan) — taxminiy sanoq (`pg_class.reltuples`), alohida hisoblagich jadval yoki keshlangan qiymat ishlatiladi",
+        "`count(1)` tezroq",
+        "`VACUUM` count'ni tezlashtiradi"
+      ],
+      "answer": 1,
+      "explanation": "MySQL InnoDB'da ham shunday. Amaliy yechimlar: UI'da 'taxminan N natija' (reltuples yoki `EXPLAIN` bahosi), filtrlangan sanoq uchun alohida agregat jadval (trigger yoki eventdan yangilanadi), yoki `count(*) OVER ()` bilan faqat joriy sahifa kontekstida. `count(1)` va `count(*)` bir xil tezlikda."
+    },
+    {
+      "id": 30295,
+      "code": "SN296",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Bu query nega kutilganidan kam qator qaytaradi?",
+      "snippet": "SELECT u.id, u.email\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.status = 'paid';",
+      "options": [
+        "`LEFT JOIN` noto'g'ri yozilgan",
+        "`WHERE` filtri JOIN'dan keyin qo'llanadi va `NULL` qatorlarni kesib tashlaydi — LEFT JOIN amalda INNER JOIN'ga aylanadi; shart `ON`ga ko'chirilishi kerak",
+        "`status` indeksi yo'q",
+        "`u.id` unique emas"
+      ],
+      "answer": 1,
+      "explanation": "Outer join'da o'ng tomon shartlari `ON` ichida bo'lishi kerak: `LEFT JOIN orders o ON o.user_id = u.id AND o.status = 'paid'`. Agar maqsad 'to'lovi yo'q userlar' bo'lsa — `WHERE o.id IS NULL` (anti-join). Bu xato kod review'da eng ko'p o'tib ketadigan SQL xatolaridan biri."
+    },
+    {
+      "id": 30296,
+      "code": "SN297",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "`NOT IN` bilan nega bo'sh natija keladi?",
+      "snippet": "SELECT * FROM users\nWHERE id NOT IN (SELECT user_id FROM orders);",
+      "options": [
+        "Jadval bo'sh",
+        "`orders.user_id` ichida bitta `NULL` bo'lsa — butun shart `UNKNOWN` bo'ladi va hech qanday qator qaytmaydi; `NOT EXISTS` yoki `IS NOT NULL` filtri ishlatiladi",
+        "Indeks yo'q",
+        "`NOT IN` sintaksisi xato"
+      ],
+      "answer": 1,
+      "explanation": "`id NOT IN (1, NULL)` = `id <> 1 AND id <> NULL` = `... AND UNKNOWN` — hech qachon rost bo'lmaydi. `NOT EXISTS` NULL bilan to'g'ri ishlaydi va planner uchun ko'pincha samaraliroq (anti-join). Bu klassik jim bug: ma'lumotga bitta NULL kelgan kuni hisobot bo'shab qoladi."
+    },
+    {
+      "id": 30297,
+      "code": "SN298",
+      "level": "S",
+      "type": "code",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "Pagination'da qatorlar takrorlanib/tushib qolyapti. Nega?",
+      "snippet": "SELECT * FROM events ORDER BY created_at DESC LIMIT 20 OFFSET 40;",
+      "options": [
+        "OFFSET har doim xato",
+        "`created_at` unique emas — teng qiymatlarda tartib barqaror emas, shuning uchun sahifalar orasida qator takrorlanadi yoki yo'qoladi; tie-breaker (`, id DESC`) va keyset pagination kerak",
+        "LIMIT 20 kichik",
+        "Indeks yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Ikki muammo birga: (1) barqaror bo'lmagan tartib — har doim unique tie-breaker qo'shiladi; (2) OFFSET chuqurlashganda sekinlashadi (N qatorni tashlab o'tish) va yangi yozuvlar sahifani surib yuboradi. Yechim — keyset: `WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT 20`."
+    },
+    {
+      "id": 30298,
+      "code": "SN299",
+      "level": "S",
+      "type": "mcq",
+      "topic": "SQL gotcha",
+      "domain": "tricky",
+      "section": "t2",
+      "question": "`SELECT count(*)` katta jadvalda sekin. PostgreSQL'da nega va nima qilinadi?",
+      "options": [
+        "Indeks qo'shish `count(*)`ni tezlashtiradi",
+        "MVCC tufayli aniq sanoq har qatorning ko'rinishini tekshirishni talab qiladi (index-only scan bo'lsa ham to'liq skan) — taxminiy sanoq (`pg_class.reltuples`), alohida hisoblagich jadval yoki keshlangan qiymat ishlatiladi",
+        "`count(1)` tezroq",
+        "`VACUUM` count'ni tezlashtiradi"
+      ],
+      "answer": 1,
+      "explanation": "MySQL InnoDB'da ham shunday. Amaliy yechimlar: UI'da 'taxminan N natija' (reltuples yoki `EXPLAIN` bahosi), filtrlangan sanoq uchun alohida agregat jadval (trigger yoki eventdan yangilanadi), yoki `count(*) OVER ()` bilan faqat joriy sahifa kontekstida. `count(1)` va `count(*)` bir xil tezlikda."
+    }
+  ]
+}

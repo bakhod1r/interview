@@ -1,0 +1,305 @@
+{
+  "slug": "backend-performance-best-practices",
+  "title": "Backend Performance",
+  "description": "Detailed list of best practices to improve your backend performance",
+  "url": "https://roadmap.sh/backend-performance-best-practices",
+  "groups": [
+    "Best Practices"
+  ],
+  "type": "best-practice",
+  "updatedAt": "2025-11-14T22:08:05.149Z",
+  "relatedRoadmaps": [
+    "backend",
+    "api-design",
+    "system-design"
+  ],
+  "topicCount": 10,
+  "subtopicCount": 45,
+  "topics": [
+    {
+      "id": "im1nMFkPRX-1kmsIpe40L",
+      "title": "Caching",
+      "subtopics": [
+        {
+          "id": "v6NU0oVHDXAHmMsyuarQe",
+          "title": "Utilize caching mechanisms (HTTP, Server/Client, CDN)",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "esHYpt1jW2UksqGi3MmyU",
+          "title": "Use cache-aside, write-through, or read-through caching patterns based on your application requirements",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "tTZjy_KznzXUqCJNBKJYh",
+          "title": "Use proper cache-invalidation strategies to ensure data consistency and prevent stale content",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "5B1NCOBg170dU9q3it7hB",
+      "title": "Databases",
+      "subtopics": [
+        {
+          "id": "o_yM-il5MO7n_k9j-mKWx",
+          "title": "Use connection pooling to reduce connection overhead",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "u5nkMzhx9wRSj3IQgU0AL",
+          "title": "Fine-tune connection pool settings (e.g., max connections, idle timeout, connection reuse params) to optimize resource utilization and prevent connection exhaustion",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "9TsTb9mwwd9rsMsYXzFr4",
+          "title": "Create efficient database indexes",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "RtYqrZ4rsAoI_jJA35oOx",
+          "title": "Keep an eye on and fine-tune ORM queries",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "93-4NKYCb3yr_xPRP_1zC",
+          "title": "Utilize lazy loading, eager loading, and batch processing to optimize data retrieval",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "-O_XHp98vnGG2wx6l2C2_",
+          "title": "Implement efficient pagination for large datasets",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "i0rK8QiLTR6p9qS69SvPt",
+          "title": "Avoid SELECT * queries and fetch only required columns",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "tmAJ28B9bUO9E8nRqxDZ_",
+          "title": "Consider denormalizing schema for read-heavy workloads and reducing JOIN operations",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "IU_YDe8sYyMdqbAdFapEz",
+          "title": "Optimize JOIN operations and avoid unnecessary joins",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "7BoKMZiArN9lIYpDCZBu_",
+          "title": "Regularly clean up unused data and perform maintenance tasks like vacuuming, indexing, and optimizing queries",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "DMxySmdTq9TJalEIqMZf1",
+          "title": "Enable slow-query logging and monitor it",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "5yWiMxl7cq-K1W-hdL2_K",
+          "title": "Set up database replication for redundancy and improved read performance",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "kBIgN3xFiynb3nQ0PnS9N",
+          "title": "Use DB sharding for data distribution if required",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "uSQyKsu-Vj5Ycdq4k-Nna",
+          "title": "Use profiling tools offered by your database",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "yqA9FsmYMmkb5qSyDasv-",
+      "title": "Security",
+      "subtopics": [
+        {
+          "id": "hN6qL8GY7ShptLoc0xi0p",
+          "title": "Keep your dependencies up to date",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "QAHiyjLYP_DD3GtlZ7zfX",
+          "title": "Implement proper authentication and authorization to prevent unauthorized access",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "VoPDfoxc5qgbVzG81tC64",
+          "title": "Implement request throttling and rate limiting",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "cdJ0cHIWcVzvG-hxdBFTH",
+          "title": "Regularly audit and update security measures",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "wJrT9PHgVurLUjgFUrZDg",
+      "title": "Network",
+      "subtopics": [
+        {
+          "id": "Y3FWqBSKTcOKpD3bMrM1d",
+          "title": "Minimize network latency by hosting your backend close to your users",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "HvgCoSpAO9Jqc4c9CSz-r",
+          "title": "Utilize HTTP keep-alive to reduce connection overhead",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "SZnEr0xNgGj6Kg4yHUW01",
+          "title": "Use CDNs for static and frequently accessed assets",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "bUVBdgXDSwFdtYOZ8VCpR",
+          "title": "Prefetch or preload resources, data, or dependencies needed for subsequent requests to minimize latency",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "QTgJLewn79WOuEqR0Jk1-",
+      "title": "Optimize API Response",
+      "subtopics": [
+        {
+          "id": "8k1bqLu-aJXfYfEXK1-Ef",
+          "title": "Enforce reasonable payload size limits",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "uhEobuJbm1Y0XIwjQyxqz",
+          "title": "Enable compression for responses",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "V14-uK8RBOcPYfQPENRZz",
+          "title": "Implement efficient pagination for large datasets",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "I1NlQf6FpwLfZoMgwrhSn",
+          "title": "Minimise unnecessary processing or expensive computation on the server.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "bbctWQmEVPSeZ_WJ9dy5r",
+      "title": "Asynchronism",
+      "subtopics": [
+        {
+          "id": "jS9z85EPYBk9acZcibw03",
+          "title": "Offload heavy tasks to background jobs or queues",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "unpUVm6N-YofbGg577MIy",
+          "title": "Utilize message brokers for asynchrnous communication between services.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "bUEhIxYBXd0PStE0K6Aui",
+      "title": "Load Balancing & Scaling",
+      "subtopics": [
+        {
+          "id": "vQNWF8NFAvpj4qzmnbC2i",
+          "title": "Use Horizontal or Vertical scaling whatever appropriate",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "TBzuwA6bHubh0cTdP9RYS",
+          "title": "Use load balancing to distribute traffic across servers",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "vdVRO0pJRDdwh4kiRRxC-",
+      "title": "Code Optimization",
+      "subtopics": [
+        {
+          "id": "Tui1_AzUeZiLCD4cCHO8L",
+          "title": "Implement streaming of large requests/responses",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "YBTvZiA3mDF7Xcq-M5xp6",
+          "title": "Profile your code to identify performance bottlenecks",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "L-_M_pfpjNqChlawdQyFw",
+          "title": "Optimize algorithms and data structures used",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "uGB4sxzblsgc-uP6pvoW0",
+          "title": "Identify and optimize critical paths or frequently accessed endpoints for overall system health.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "74GQ3bCwJzxOzMjgcpKMZ",
+          "title": "Consider using compiled languages like Go or Rust for performance-critical parts of your backend.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "xUkd2puPLlrjz4IKVUDSS",
+          "title": "Look into different architectural styles (SOA, Micro services) and decompose services if required.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "_ceo4yRUXi1RdrXpLXT_H",
+          "title": "Set appropriate connection timeouts and implement efficient retry mechanism to handle network issues",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "kvL7deLtqoqycqU10S0xV",
+          "title": "Batch similar requests together to minimize overhead and reduce the number of round trips.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "f_PG0zOizhzjnf0LxwhRk",
+      "title": "Monitoring and Logging",
+      "subtopics": [
+        {
+          "id": "l77liqzk0p-HQ6Q8O051j",
+          "title": "Implement comprehensive monitoring and logging to track performance metrics and troubleshoot issues",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "ijhZfnwa8dP-XI7Tz-AF7",
+          "title": "Use tools like Prometheus, Grafana, ELK stack.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "PT-WM1d2TpTvjxe97R0uA",
+          "title": "Use asynchronous logging mechanisms to minimise the logging overhead.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "T1utpBUbbzsaIliJn5OYg",
+      "title": "Performance Testing",
+      "subtopics": [
+        {
+          "id": "PscZM6j7pTT4a1ruJ-zrw",
+          "title": "Conduct regular performance testing and benchmarking to identify performance regressions, track improvements, and fine-tune optimization efforts over time",
+          "linkedBy": "checklist"
+        }
+      ]
+    }
+  ]
+}

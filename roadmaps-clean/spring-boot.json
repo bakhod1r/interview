@@ -1,0 +1,261 @@
+{
+  "slug": "spring-boot",
+  "title": "Spring Boot Developer",
+  "description": "Step by step guide to becoming a Spring Boot developer in @currentYear@",
+  "url": "https://roadmap.sh/spring-boot",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-03-17T15:55:08.992Z",
+  "relatedRoadmaps": [
+    "backend",
+    "java",
+    "devops",
+    "python",
+    "golang"
+  ],
+  "topicCount": 11,
+  "subtopicCount": 35,
+  "topics": [
+    {
+      "id": "jy2heDVZuM6ASCXlI1TDn",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "wV1_I_4czMIxpBionvLs4",
+          "title": "Spring AOP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QiNWE4sMTao3cVzjt3yPp",
+          "title": "Spring MVC",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "PlUU_vzFQ3Xx6Z5XREIYP",
+          "title": "Spring IOC",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "C2EQ5J1aJYF9e9Rr2KysT",
+          "title": "Dependency Injection",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OB--nMudscm0p6RqqfA7T",
+          "title": "Configuration",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HdCpfGMrMaXxk5QrtYn3X",
+          "title": "Annotations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "KdN62IpNgPFMndXfLaYa1",
+          "title": "Spring Bean Scope",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WGf3W6bdWL0rK0o6O28G2",
+          "title": "Why use Spring?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yuXN-rD4AyyPYUYOR50L_",
+          "title": "Architecture",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WrUCyVfFNUpHB8jyjjKna",
+          "title": "Terminology",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "KaUdyVWEiZa6lUDRBlOKt",
+      "title": "Spring Security",
+      "subtopics": [
+        {
+          "id": "ssdk2iAt4avhc8B5tnIzQ",
+          "title": "Authentication",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "c7w7Z3Coa81FKa_yAKTse",
+          "title": "Authorization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "p7t3RlIIm9U08GFC6azff",
+          "title": "OAuth2",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1My7mbdwAbRcJoiA50pWW",
+          "title": "JWT Authentication",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "JrH2hiu27PhIO1VtrArMa",
+      "title": "Spring Boot Starters",
+      "subtopics": []
+    },
+    {
+      "id": "88-h3d7kb-VmUBsnUUXW_",
+      "title": "Autoconfiguration",
+      "subtopics": [
+        {
+          "id": "f-i0NX2KOzCh3JwkaSPFo",
+          "title": "Spring Cloud Gateway",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "N7hd3d_XQtvOgnCqdCFt3",
+      "title": "Actuators",
+      "subtopics": [
+        {
+          "id": "9hG3CB8r41bUb_s8-0u73",
+          "title": "Cloud Config",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ONb0VnSUMY8JBeW3G2mTp",
+      "title": "Embedded Server",
+      "subtopics": []
+    },
+    {
+      "id": "h5-HnycxfbJgwalSdXTAz",
+      "title": "Hibernate",
+      "subtopics": [
+        {
+          "id": "Ijmy0J3VyaeTGXtu2VkkQ",
+          "title": "Entity Lifecycle",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "H9Z0EvKT_148vD0mR-dUf",
+          "title": "Transactions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D4ybyh0ydvl9W2_xUcvZ_",
+          "title": "Relationships",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "pvVLbFQoT50vz_VRK4VbJ",
+      "title": "Spring Data",
+      "subtopics": [
+        {
+          "id": "6u08QN-pUeFm3o0h5Scfm",
+          "title": "Spring Data JPA",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fy-TphbqkLpR1zvFcr7dg",
+          "title": "Spring Data MongoDB",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dd1A-MyzBs_kNOtVG7f1D",
+          "title": "Spring Data JDBC",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Nhx2QiSD_4pVWD17lsCbu",
+          "title": "JPA Test",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jU_KHoPUSU_HoIKk0ZpRF",
+      "title": "Microservices",
+      "subtopics": [
+        {
+          "id": "VWNDYSw83Vzi2UPQprJ5z",
+          "title": "Spring Cloud",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "kqpSlO--X9-xYxfq1KFVe",
+          "title": "Spring Cloud Circuit Breaker",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EKSXTMSN2xdaleJ4wOV1A",
+          "title": "Spring Cloud Open Feign",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "S-BbOoRD7anvoJrprjoKF",
+      "title": "Spring MVC",
+      "subtopics": [
+        {
+          "id": "35NTx2eO1j02sjy4m6DPq",
+          "title": "Servlet",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Lz0GPMiYzb30iFJdv1dL6",
+          "title": "JSP Files",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_vS_zdJZegZS6MIKAFyg8",
+          "title": "Architecture",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sgA06Tu9Y4cEHtfI8CyLL",
+          "title": "Components",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GsmBGRohWbJ6XOaALFZ8o",
+          "title": "Micrometer",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6sLE6gb5Y477SmO2GhQIG",
+          "title": "Eureka",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "7Qqrh_Rz_7uAD49g9sDzi",
+      "title": "Testing",
+      "subtopics": [
+        {
+          "id": "5d1BERqTKNJMKiBcqa8Ie",
+          "title": "Mock MVC",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "p91CaVPh5GMzFU0yEU_hl",
+          "title": "@SpringBootTest Annotation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "i77NTa0hpGGBjmql9u_CT",
+          "title": "@MockBean Annotation",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

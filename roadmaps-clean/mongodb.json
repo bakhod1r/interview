@@ -1,0 +1,562 @@
+{
+  "slug": "mongodb",
+  "title": "MongoDB",
+  "description": "Step by step guide to learning MongoDB in @currentYear@",
+  "url": "https://roadmap.sh/mongodb",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-07-15T09:50:03.565Z",
+  "relatedRoadmaps": [
+    "postgresql-dba",
+    "backend",
+    "nodejs",
+    "redis"
+  ],
+  "topicCount": 11,
+  "subtopicCount": 95,
+  "topics": [
+    {
+      "id": "z50iixpcCMe9sTh-gwTI3",
+      "title": "MongoDB Basics",
+      "subtopics": [
+        {
+          "id": "tJljSlb5S_tZLZhZHHd_I",
+          "title": "What is MongoDB?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cMfsRtvzvDZZJ0TqeUOxm",
+          "title": "SQL vs NoSQL",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qh8MEbXKPVt8mqlarhUj0",
+          "title": "When to use MongoDB?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1UXfFROvcunyhkx0zB_1S",
+          "title": "What is MongoDB Atlas?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1pCWjSvjvbox5OpyWJ8Kv",
+          "title": "MongoDB Terminology",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "F4W9XBSbkpzWIrAhRBSRS",
+          "title": "BSON vs JSON",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6MqhN-PTf1PRzYCTxC8pn",
+          "title": "Embedded Objects & Arrays",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4Cf_wcoByPqpOOpdbAJuq",
+          "title": "Double",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eU4XCnrf27FO3KCda8QYw",
+          "title": "String",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "q6ZKxFcSAQ8bgUdGaDpuu",
+          "title": "Array",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QcdZKNcCtKls6P4YNXR2W",
+          "title": "Object",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_UIfRdlj6BeEESw1FW9RH",
+      "title": "Data Model & Data Types",
+      "subtopics": [
+        {
+          "id": "UM6jH6bAijYS0Hmw87UQ-",
+          "title": "Binary Data",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kx_GOr51UMpdUAnS5u9qZ",
+          "title": "Undefined",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mxd3-l3-NtPw53dEvhqm4",
+          "title": "Object ID",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hmo7zCZ1jKgobS5R0eBSD",
+          "title": "Boolean",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "T6cq--pute6-8aG7z6QKN",
+          "title": "Date",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "g6AKQiFcY_8lsWRbkbZSC",
+          "title": "Null",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "7SGYNo3oHlgm_1cwhWfw7",
+      "title": "Collections & Methods",
+      "subtopics": [
+        {
+          "id": "liGbnGyQaG-Vqt6cuB91N",
+          "title": "update() and relevant",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iMpCEXRDXg0Kq9OFNywbI",
+          "title": "find() and relevant",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qjoLxSkfKbzG1sZUXnyw9",
+          "title": "delete() and relevant",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mXdn4u5CiQRDE83qMiWZX",
+          "title": "insert() and relevant",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yc2HqhjhIV6UU_2P-ykKB",
+          "title": "bulkWrite() and relevant",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hC83jKoO_XFI83WpsdN_Z",
+          "title": "Counting Documents",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4h8NdcdXmNqJxLkVJqPtX",
+          "title": "validate()",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "z6I9XgIGQYWUd5l9DIZRX",
+          "title": "Regular Expression",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UXO5i6nPa5CRW1z7FAn_S",
+          "title": "JavaScript",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XAS4jQlsHkttLDuSSsD2o",
+          "title": "Symbol",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xKFZSKG2GPD-phY2HLMsx",
+          "title": "Int32/Int",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OGtR5D_DUCSci1lFBT83z",
+          "title": "Decimal128",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "B8SFhoVV8ei1Yz6vl57l_",
+      "title": "Query Operators",
+      "subtopics": [
+        {
+          "id": "gakF5Zfgk7QIgg_UwqG_Y",
+          "title": "$project",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sxDyp3bP-YhgmDMVUFTaA",
+          "title": "$include",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nk0V3o3oKuIb8A0gDECFJ",
+          "title": "$exclude",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9mmxYBtvPYZlvFjQvE-2N",
+          "title": "$slice",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2h8z2mrgRKSLKI-eBc3zM",
+          "title": "$eq",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wbZb0RwmANH4ssF07cAar",
+          "title": "$gt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5-MLEEigFPRloN7wLa05T",
+          "title": "$lt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eOfsrmOQI0dJW6HV_myVH",
+          "title": "$lte",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kV5Tmu9ocDnuPQvkx2W0u",
+          "title": "$gte",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Q8dr1JPEnLX0z4DiQwnAz",
+          "title": "$ne",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Wd20OKQYYuW_bT6U-yRxT",
+          "title": "$in",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZKHUCskdKQf4IaMUTN_e7",
+          "title": "$nin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hPPoO8ysGeEGEQhdveiDO",
+          "title": "$all",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TJHVY8DRWbDKeT_pIPJay",
+          "title": "$elemMatch",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-VMIkV6S6H1blngxLXk7Y",
+          "title": "$size",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qaUj9916Fh4BtiLz_pwQs",
+          "title": "$not",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7xq_mdQOlUTuhfnogOl8h",
+          "title": "$nor",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "A9W2LsivDc0ialLp83fYP",
+      "title": "Performance Optimization",
+      "subtopics": [
+        {
+          "id": "YidhAuVk_VGukx_FfJSz2",
+          "title": "Atlas Search Indexes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bqXlDnPuMQIKulD9cTvPf",
+          "title": "Geospatial Indexes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kG0ZeGatgvC1azZKMQiA_",
+          "title": "Query Optimization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "73REfcB_T0yBP-KQ0EYmF",
+          "title": "Language Drivers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JAosQ9tFj7y70lGQ0vHzC",
+          "title": "Kafka",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "haA1ltV6VzgJVJcJNMK0W",
+      "title": "Creating Indexes",
+      "subtopics": [
+        {
+          "id": "iJFDFdIN_N4-DlJwrFIiB",
+          "title": "Int64 / Long",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zbFH2NRHZEOv5eKLL_HR0",
+          "title": "Timestamp",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jQSMLd6gG158tJDzo1k_1",
+          "title": "Min Key",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QF7SL237FyBQdqvKUzop6",
+          "title": "Max Key",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "thOckmrCJ45NVNPNxm4eg",
+          "title": "Read / Write Concerns",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "K9x7yQP59cB764Q5PqAs_",
+          "title": "Cursors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "s8El0Q22GD_rOZGlDtkgH",
+          "title": "Retryable Reads / Writes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SjPzR6JjdBeiqFsrRJPfW",
+          "title": "Single Field",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eSb4WAfWxJu6R95pPX6wm",
+          "title": "Compound",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PV_3TEYdtVZ2VCDZEOsu_",
+          "title": "Text",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "butGgZXGPTZI-sWx24bOr",
+          "title": "Expiring",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "gpihoIJkzSS1WOvmH2ueo",
+      "title": "Aggregation",
+      "subtopics": [
+        {
+          "id": "eDks8Jmsbq3_nHgLydyxP",
+          "title": "Pipelines, Stages and Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "12kfpSapv2uNxpHzLkFSL",
+          "title": "$exists",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BxzMbF7cdvGPuy1EcRvWd",
+          "title": "$type",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PmfjHFz-DW69pNh_t13Nm",
+          "title": "$regex",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-62S4wRxHpIM2I59xjGun",
+          "title": "$and",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "43BfjlUju-yJaGv-FaJty",
+          "title": "$or",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "aHcmsaqAfG5fC90VV-EHP",
+      "title": "Transactions",
+      "subtopics": [
+        {
+          "id": "_c7itVw1R1_UB-NPtL-WI",
+          "title": "$match",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nz048lC4Q4S7fMVbxLGEk",
+          "title": "$group",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BCWS8uV2pSWe7CX-VlnTg",
+          "title": "$sort",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dO2mJejkWBH903LG0dWgN",
+          "title": "$project",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4CjjGPOy-385Bco_PeQwa",
+          "title": "$skip",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AzUVaGnGv9uypJ31alR9r",
+          "title": "$limit",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6H2MMnEfS6uHGS-6pFo8u",
+      "title": "Developer Tools",
+      "subtopics": [
+        {
+          "id": "AY-8KJGA9ZA6ay3rbURt3",
+          "title": "$unwind",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "strw_oGTkZEH-o8zA4IRP",
+          "title": "$lookup",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CfM0iyd2bNRIiDWTUkspd",
+          "title": "$sum",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "K09-nD6xF5YJUQBBpFXMz",
+          "title": "Spark",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kJJ-W6BV1ofIvuFT_PCcz",
+          "title": "Elastic Search",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "cOKQQ7SaiawWF49MdCGTh",
+      "title": "Scaling MongoDB",
+      "subtopics": [
+        {
+          "id": "QrHT-H12AV4-V-y_nzmNk",
+          "title": "Replicasets",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CijW3HCjVRZHQIBsQ9_0H",
+          "title": "Sharded Clusters",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iVDxuERBjKMBHueEfqP0x",
+          "title": "Tuning Configuration",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XjB0uOnsYl4edzZWpQ-nm",
+          "title": "Indexing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4L9UQ4oaaK3wZwOLIMa6T",
+          "title": "Query Optimization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xaWDHCkcGm4oovPPxVMB9",
+          "title": "mongodump",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TKngxMNGMgrdO26D7eeSg",
+          "title": "mongorestore",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "LC923iJhfiUDIs_0-9rc7",
+      "title": "MongoDB Security",
+      "subtopics": [
+        {
+          "id": "YuzMOO7kf2tO6V6WehqF_",
+          "title": "Kerberos Authentication",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NoDNdno9UOlMrOC0Wga9E",
+          "title": "LDAP Proxy Auth",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "w1L-yFBM2AyeNBFyH5skW",
+          "title": "MongoDB Audit",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NV39oWwr7iB_dnlnD_Q6Y",
+          "title": "X.509 Certificate Auth",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yRJ6jeysFXBpwLEqvrdKk",
+          "title": "Role-based Access Control",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iJjqlTgXxHWC-8bh6uCGQ",
+          "title": "Encryption at Rest",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LpfuM6SuhlNNjBcHM68ee",
+          "title": "Queryable Encryption",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YJiWemHO1l5q9WhgoHyYd",
+          "title": "Client-Side Field Level",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5F7zAAnvnVTTnBzOB7TSu",
+          "title": "TLS / SSL Encryption",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,601 @@
+{
+  "slug": "python-data-analysis",
+  "title": "Python for Data Analysis",
+  "description": "Step-by-step guide to master Python for Data Analysis in @currentYear@",
+  "url": "https://roadmap.sh/python-data-analysis",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-09-04T06:58:29.551Z",
+  "relatedRoadmaps": [
+    "python",
+    "devops-beginner",
+    "data-analyst",
+    "data-engineer",
+    "machine-learning",
+    "bi-analyst"
+  ],
+  "topicCount": 19,
+  "subtopicCount": 93,
+  "topics": [
+    {
+      "id": "kyrS5ez7_85AnNt8Bojz_",
+      "title": "Functions & Methods",
+      "subtopics": [
+        {
+          "id": "0XtKHqPS6AfhQvhH5cu7Q",
+          "title": "Defining Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "7ukR74cN6lHbvhs4mFn6R",
+          "title": "args & kwargs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AzsZhpK-wuWtafVFJMhdY",
+          "title": "Lambda Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "KtV5Jl-hOcUS5L-15BUDD",
+          "title": "Built-in Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Md0yXC3JTH56Wky5jA8Fk",
+          "title": "Comparison",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6dJaQRj2zMz00sfTiTdww",
+          "title": "pip",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "j1jq5_64lBuYQQjJWKIuI",
+          "title": "conda",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IL0fFEs4CgK_eBft-SYAl",
+          "title": "virtualenv / venv",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0w4i0aavs0j2hl9Fbqy4Y",
+          "title": "uv",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "8Z20apU8ugXwdH8rRZAcr",
+      "title": "Environment Setup",
+      "subtopics": [
+        {
+          "id": "2m8uQRGaVZUd4mfm7bRou",
+          "title": "JupyterLab",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "IO-disDSfkPau4Pd_TNwc",
+      "title": "NumPy",
+      "subtopics": [
+        {
+          "id": "qiUPTXFgfukxlPhnv76jo",
+          "title": "Arrays & ndarray",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qOZ-T7zaPjvIT222rSV4o",
+          "title": "Array Operations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mAOljEWt_0Hb9jLBKuc-H",
+          "title": "Indexing & Slicing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xHDrwKDE_mrSihCsPQMBF",
+          "title": "Linear Algebra Basics",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XizmE-QroU4GJbjvqNYxe",
+          "title": "Random Module",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3N5N6qe8JVr0XGOFdn5-8",
+          "title": "Series and DataFrame",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "w2j11Jyr_qLP1Y9ST-06O",
+          "title": "Reading Data ",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "w8iQWthKu1w75z36B8Ir3",
+      "title": "Reading Web Data",
+      "subtopics": [
+        {
+          "id": "10c4tiBOR68J3qa55LcJS",
+          "title": "APIs with requests",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "w4K_ffCUbzhGxWyoKsspu",
+          "title": "BeautifulSoup",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UImXdBHQKCzp9NdjF9xMi",
+          "title": "scrapy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bcODvfBqCUwLVXa8HKOFB",
+          "title": "isnull, isna",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Md9Yq7bwDNo6hO_A9aa9N",
+      "title": "Matplotlib",
+      "subtopics": [
+        {
+          "id": "5HEYmbVJ6Z7lvgqalVjxW",
+          "title": "Plot Categories",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GRg7HyeVuSwkKD5bCOFiY",
+          "title": "Subplots and figures",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JTYST4p4O9RQbCzxsoQhA",
+          "title": "Customizing Plots",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mElhFGGT2GnLg2AkJFETN",
+          "title": "Saving figures",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "oRaag-FOl50NJM0y4joBm",
+          "title": "Histogram",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YCMSjDjUCnkz2VPXfLxz5",
+          "title": "Correlation & Covariance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ij8PMz519gC9WIxlWGD7B",
+          "title": "Boxplot",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "zx7uCaQiCxvXMhm9FG3XG",
+      "title": "Seaborn",
+      "subtopics": [
+        {
+          "id": "Xq7Ho2kWg5AtZK0G6z02U",
+          "title": "Distribution plots",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Dj8Ar4-NQ5mQQhNHmQJVy",
+          "title": "Categorical Plots",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "PcGJMkmZrl4xc2ADT9dF3",
+          "title": "Regression Plots",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Bk3z1CHnrnV6ii2Y0BF8G",
+          "title": "Heatmaps",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "j4UHICw-niFv1RRlC-vk1",
+          "title": "Customizing Plots",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4ce2yYLRCSb3azsOMpE-U",
+          "title": "Scatterplot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PHfLEgeEMChsSOSIgMoWH",
+          "title": "Correlation Matrix",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7XHYCVpUpvwAtaUBjTa4O",
+          "title": "Cross-tabulation",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ES8zVixZ5wZ0tW6beOWxJ",
+      "title": "Interactive Visualization",
+      "subtopics": [
+        {
+          "id": "J_u8yvrHEWKKmVsVgPN7L",
+          "title": "Plotly",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "uyhlD_ZBCCd3IvrWZ5mlh",
+      "title": "Dashboards",
+      "subtopics": [
+        {
+          "id": "-dsafcJlA16H_ji0zQvKy",
+          "title": "Dash",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EHVXO79NGpLC1i8x4Y7g1",
+          "title": "Power BI / Tableau",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Z-inS5OKdXi6yveKgxMeC",
+          "title": "Streamlit",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "GkxSrpOJx-SWvnDkTPcJt",
+      "title": "Big Data Tools",
+      "subtopics": [
+        {
+          "id": "ApowKoA3C1B8oUr4-sltZ",
+          "title": "Dask",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XTXm8aIDbRkTXoAck_m3I",
+          "title": "PySpark",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "f3YL32h2gbU_G8kkNC3Vc",
+      "title": "Data Pipelines",
+      "subtopics": [
+        {
+          "id": "LERo7-ggtfZ-KZyNdBwt6",
+          "title": "Airflow",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "GISOFMKvnBys0O0IMpz2J",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "icVUQgedEGcaPpJSV8JdI",
+          "title": "Printing Variables",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "so95CO6Qw3I0S98ISENS-",
+          "title": "Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Dvy7BnNzK55qbh_SgOk8m",
+          "title": "Loops",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_0K6o-R0F2a9bpEDfRcTi",
+          "title": "Logical",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AAxvIAas2Sdkz9-2uNHXq",
+          "title": "Arithmetic",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "la9oiXURvw6AH-Vuh-WqT",
+          "title": "List Comprehensions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NP1kjSk0ujU0Gx-ajNHlR",
+          "title": "Conditionals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sg5w8zO2Ji-uDJKEoWey9",
+          "title": "Working with Strings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_-bUq5jtewDmsmnzYw1-q",
+          "title": "Integers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aLIXcqB258WNrdASuN_7G",
+          "title": "Floats",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ze02ApxTvyQqtB3VYv3d4",
+          "title": "Booleans",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "F-0Rxwu_RcNF_NOoFHoo7",
+          "title": "Strings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NjCor7ePiZapd4f6bMZlV",
+          "title": "Type Casting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "F4dp3Ip8G-EI1hprtv3do",
+          "title": "Lists",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "olniprgaL7l-9YhwbFfmN",
+          "title": "Tuples",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GvV_thqIC0yXyJbJt_Zmu",
+          "title": "Sets",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lReYQM-p8rrYcHkaqzbMr",
+          "title": "Dictionaries",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GidLncxwx7d1QzAOfHRLX",
+          "title": "Null",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "E_r4BLrSyHkrxpg4HDkUm",
+      "title": "SQL Fundamentals",
+      "subtopics": [
+        {
+          "id": "k63rFXaVDUX2ZOVI_O9WG",
+          "title": "SQLAlchemy",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cD139cRk1xj2ip-o_078l",
+          "title": "Pandas",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "c8uLNJMr6UZfvjFwFhxvd",
+          "title": "Google Colab",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ObA_xZDY7PxU54NGBwyVI",
+          "title": "VS Code",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-RepeaHp66GGuM66k9JHd",
+          "title": "sqlite3",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "a6HiqhsJJijqObw9pNOqb",
+          "title": "DuckDB",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "bIblb5cVNSZLqSuskmKnP",
+      "title": "Pandas",
+      "subtopics": [
+        {
+          "id": "18eitPvBQKdeM3K33d59g",
+          "title": "Polars",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "PlFcaQsvFSK0Y-LKGu0eH",
+          "title": "Indexing & Slicing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wxO7f8wh6JTXHYDiPcbmy",
+          "title": "Filtering & Querying",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KnSv5dPToipoz2RF1dDnO",
+          "title": "Groupby & Aggregation",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "34DL5RWQtHkvgVhI9a_ZQ",
+      "title": "Reading Local Files",
+      "subtopics": [
+        {
+          "id": "nDUOJPCEzkCxX8B63HBP3",
+          "title": "CSV",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VEetEvKGNzAO9QdZY2g86",
+          "title": "JSON",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Rq9TFEEJnjEgVa1DiJxFz",
+          "title": "Merging & Joining",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ACr__YweG2xOAf56FK8tE",
+          "title": "Reshaping",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OwEBYI4u7nb9-UGOR9SQf",
+          "title": "Excel",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sBKhhjfFTpbj7TQwVnX7F",
+          "title": "Parquet",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "K53X-NB1S9XXSF6j8q1qu",
+      "title": "Data Cleaning",
+      "subtopics": [
+        {
+          "id": "ucEFYVtXIvuYKjudK3pwB",
+          "title": "IQR",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yRHodYYqdICLZyG3J9qjc",
+          "title": "Pandas String Methods",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xIS0cJ8ui0siBoZJr3-B_",
+          "title": "Dropping vs. Imputing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9mFT0z5yT446_-nGdG492",
+          "title": "Forward / Backward Fill",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2HIeG6ywOA9BkE9W3Gu9v",
+          "title": "Z-score",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S1EzGF-CLu7tWDb1V6RQc",
+          "title": "strip, replace, split",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oXhGEIie-MzfUSM2Ng4Zm",
+          "title": "re",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "eObhSoXcbqLdwegzaWmi7",
+      "title": "Exploratory Data Analysis",
+      "subtopics": [
+        {
+          "id": "UIFNQ9g5fMK-KoZCrqv27",
+          "title": "Visual Inspection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "L7btVRwvkEVX0K8LxnbqJ",
+          "title": "Parsing Dates",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1bHv3_acNts_BeOn3l6DF",
+          "title": "Encoding Categories",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XI8bvhQ3ugezTu60USUG2",
+          "title": "Casting Types",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DdA2gJKpgOHj9mqZL-c4F",
+          "title": "Mean, Median, Mode",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nZl1ngETFxKStt0tFvOpR",
+          "title": "Variance & Std. Deviation",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "KLXFKVb-EC5WOigI63y09",
+      "title": "Statistics & ML",
+      "subtopics": [
+        {
+          "id": "YxA0ms9vkufKGOguRNK1B",
+          "title": "SciPy",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "npndQC8OIfP1wwn_iswPy",
+          "title": "Scikit-learn",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "hTAQSe0rHv7fuAMfxJwGp",
+      "title": "OOP for Data Analysis",
+      "subtopics": []
+    },
+    {
+      "id": "SWrijRzSZxhnSYDwv1_pH",
+      "title": "Geospatial Analysis",
+      "subtopics": [
+        {
+          "id": "-Bxn2sj2NjHLhRZrPIi0n",
+          "title": "GeoPandas",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,228 @@
+{
+  "id": "r3",
+  "name": "Design patterns",
+  "domain": "arch",
+  "domainLabel": "Architecture & OOP",
+  "topics": [
+    "Pattern"
+  ],
+  "questions": [
+    {
+      "id": 6029,
+      "code": "F30",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Strategy pattern qachon kerak?",
+      "options": [
+        "Obyektni bitta nusxada saqlash uchun",
+        "Bir vazifani bajarishning bir nechta almashtiriladigan algoritmi bo'lsa (turli chegirma hisoblash, turli saralash, turli to'lov provayderi) — algoritm interfeys ortiga olinadi va ish vaqtida tanlanadi",
+        "Obyekt yaratishni yashirish uchun",
+        "Interfeysni moslashtirish uchun"
+      ],
+      "answer": 1,
+      "explanation": "Go'da strategiya ko'pincha oddiy funksiya tipi bilan ifodalanadi (type Discount func(Order) Money) — alohida struct shart emas. Alomat: uzun switch zanjiri har yangi holatda o'sib boryapti. Lekin ikki holat bo'lsa oddiy if ham yetarli — pattern o'zi maqsad emas."
+    },
+    {
+      "id": 6030,
+      "code": "F31",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Decorator pattern va HTTP middleware qanday bog'liq?",
+      "options": [
+        "Bog'liq emas",
+        "Middleware — decorator'ning aynan o'zi: mavjud handler'ni o'rab, uning oldidan/keyinidan xulq qo'shadi (log, auth, metrika) va asosiy interfeysni o'zgartirmaydi; ular zanjir bo'lib joylashadi",
+        "Middleware — bu singleton",
+        "Decorator faqat UI uchun"
+      ],
+      "answer": 1,
+      "explanation": "Go'da: func Logging(next http.Handler) http.Handler — kirish va chiqish bir xil tip, shuning uchun istalgancha zanjirlash mumkin. Tartib muhim: recover → request id → log → auth → rate limit → handler. Xuddi shu yondashuv gRPC interceptor va DB qatlamida ham ishlatiladi."
+    },
+    {
+      "id": 6031,
+      "code": "F32",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Singleton nega ko'pincha anti-pattern deb ataladi?",
+      "options": [
+        "Sekin ishlagani uchun",
+        "Global holat va yashirin bog'liqlik keltiradi: testda almashtirish qiyin, parallel testlar bir-biriga ta'sir qiladi, ishga tushish tartibi va konkurentlik muammolari paydo bo'ladi. Yaxshiroq: bitta nusxani main'da yaratib, bog'liqlik sifatida uzatish",
+        "Ko'p memory olgani uchun",
+        "Faqat Java'da muammo"
+      ],
+      "answer": 1,
+      "explanation": "Go'da tipik ko'rinishi: paket darajasidagi global DB yoki logger. Kichik ilovada qulay, lekin o'sgan sari og'riq beradi. init() ichida connection ochish — ayniqsa yomon: xatoni boshqarib bo'lmaydi va test uchun boshqa konfiguratsiya berib bo'lmaydi."
+    },
+    {
+      "id": 6032,
+      "code": "F33",
+      "level": "S",
+      "type": "open",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Jamoada 'hamma joyda pattern ishlatamiz' degan kod paydo bo'ldi — 5 row'lik mantiq uchun factory, builder va interfeys. Qanday yondashasiz?",
+      "modelAnswer": [
+        "Pattern — muammoga javob, bezak emas: har mavhumlik uchun 'qanday real o'zgarish kutilyapti?' deb so'rash",
+        "YAGNI va rule of three: ikkinchi-uchinchi holat paydo bo'lgach umumlashtirish",
+        "O'lchov: kodni o'qib tushunish vaqti, o'zgartirish uchun nechta faylga tegish kerakligi",
+        "Review'da standart: yangi mavhumlik kiritilsa, uning sababini PR tavsifida yozish",
+        "Teskari tomon ham xavfli — takrorlanuvchi if zanjirlari; muvozanat konkret misollarda muhokama qilinadi",
+        "Jamoaviy kelishuv: kod uslubi hujjati va misollar"
+      ],
+      "explanation": "Senior/Staff signal: 'to'g'ri' javobni emas, jamoada qaror qabul qilish yo'lini ko'rsatish. Ortiqcha mavhumlik ham, uning yo'qligi ham bir xil zarar — muhimi, o'zgarish ehtimoli asosida qaror qilish."
+    },
+    {
+      "id": 30079,
+      "code": "SN80",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Go'da tashqi API client uchun qaysi pattern kombinatsiyasi amaliy?",
+      "options": [
+        "Singleton + global o'zgaruvchi",
+        "Interface (port) + adapter, dekorator zanjiri (retry, circuit breaker, metrics, logging), va `Options` pattern bilan konfiguratsiya",
+        "Abstract factory har doim",
+        "Visitor"
+      ],
+      "answer": 1,
+      "explanation": "Dekorator zanjiri kesishuvchi masalalarni biznes mantiqdan ajratadi: `Metrics(Retry(Breaker(HTTPClient)))` — har qatlam mustaqil test qilinadi. Interface iste'molchi tomonda e'lon qilinadi (Go idiomasi), shuning uchun mock oson. Global singleton testni buzadi va lifecycle (shutdown, pool) boshqarilmaydi."
+    },
+    {
+      "id": 30080,
+      "code": "SN81",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Strategy pattern'ni qachon ishlatmaslik kerak?",
+      "options": [
+        "Har doim ishlatilsin",
+        "Variantlar 2 ta va o'zgarmasa — oddiy `if` yoki funksiya argumenti yetarli; abstraksiya faqat haqiqiy o'zgarish o'qi mavjud bo'lganda (uchinchi variant kelganida) qo'shiladi",
+        "Faqat Java'da",
+        "Test yozilmasa"
+      ],
+      "answer": 1,
+      "explanation": "Pattern narxi — indirection va o'qilishning pasayishi. 'Rule of three': uchinchi variant paydo bo'lganda abstraksiya real ehtiyojni aks ettiradi. Oldindan qo'yilgan interfeys ko'pincha noto'g'ri chiziqda bo'ladi va keyin refactor uni buzishdan ko'ra qiyinroq bo'ladi."
+    },
+    {
+      "id": 30081,
+      "code": "SN82",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Repository pattern'da eng ko'p uchraydigan xato?",
+      "options": [
+        "Interface ishlatish",
+        "Leaky abstraction: repository'dan ORM query builder yoki `*sql.Tx` chiqib ketadi, yoki har use case uchun `GetByXWithYSortedByZ` metodlar portlashi — natijada abstraksiya foyda bermaydi",
+        "DB'ni almashtirmaslik",
+        "Testda mock ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "Repository maqsadi — domainni persistensiyadan ajratish, DB'ni almashtirish emas. Sog'lom yondashuv: domain atamalaridagi cheklangan metodlar to'plami (`FindActiveByTenant`), murakkab o'qishlar uchun alohida query/read model (CQRS yengil ko'rinishi), transaksiya boshqaruvi application qatlamida (Unit of Work) — domain uni bilmaydi."
+    },
+    {
+      "id": 30082,
+      "code": "SN83",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Outbox, Saga, CQRS — qaysi muammoni yechadi va narxi nima?",
+      "options": [
+        "Uchtasi ham bir xil",
+        "Outbox — dual write atomikligi (narxi: publisher va lag); Saga — taqsimlangan jarayon izchilligi (narxi: compensation mantiqi va eventual consistency); CQRS — o'qish/yozuv modellarini ajratish (narxi: sinxronlash kechikishi va ikki model)",
+        "Faqat CQRS amaliy",
+        "Narxi yo'q, hammasi foyda"
+      ],
+      "answer": 1,
+      "explanation": "Senior'dan farqlovchi savol: har pattern konkret muammoga javob, universal yaxshilanish emas. CQRS'ni event sourcing bilan aralashtirmaslik kerak — CQRS eventsiz ham (materiallashgan view/read replica) ishlaydi. Ular kiritilgandan keyin operatsion yuk (lag monitoringi, replay vositalari) paydo bo'ladi."
+    },
+    {
+      "id": 30474,
+      "code": "SN475",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Go'da funksional opsiyalar (functional options) naqshi qachon oqlanadi?",
+      "options": [
+        "Har konstruktorda",
+        "Ko'p ixtiyoriy parametrli va kelajakda kengayadigan komponentlarda (client, server, pool): `New(addr, WithTimeout(5*time.Second), WithRetry(3))` — orqaga moslik saqlanadi va nol qiymatlar aniq bo'ladi; 2-3 parametrli oddiy holatda esa struct config yetarli",
+        "Hech qachon",
+        "Faqat kutubxonalarda"
+      ],
+      "answer": 1,
+      "explanation": "Almashinuv: opsiyalar API'ni kengaytiriladigan qiladi, lekin kod hajmi va IDE orqali 'qanday parametrlar bor' savoli qiyinlashadi. Muqobil — `Config` struct + validatsiya (oddiy va o'qilishi oson), yoki ikkisining kombinatsiyasi: `New(cfg Config, opts ...Option)`."
+    },
+    {
+      "id": 30504,
+      "code": "SN505",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Circuit breaker'ning uch holati qanday ishlaydi?",
+      "options": [
+        "Ikki holat: ochiq va yopiq",
+        "Closed (so'rovlar o'tadi, xatolar sanaladi) → Open (chegaradan oshgach so'rovlar darhol rad etiladi, tiklanish taymeri ishlaydi) → Half-Open (cheklangan sinov so'rovlari; muvaffaqiyatli bo'lsa Closed, aks holda yana Open)",
+        "Faqat timeout bilan",
+        "Har doim ochiq"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy sozlash nuqtalari: xato chegarasi nisbat bo'yicha (masalan 50% oxirgi 100 so'rovdan) va minimal so'rov soni bilan (kam trafikda tasodifan ochilmasin); Half-Open'da bir vaqtda faqat bir necha so'rov (aks holda qayta tiklanayotgan servisni yana yiqitasiz); va slow-call (latency) ham xato sifatida hisoblanishi kerak."
+    },
+    {
+      "id": 30505,
+      "code": "SN506",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Saga orchestrator'ni holat mashinasi sifatida qanday implement qilasiz?",
+      "options": [
+        "Cron bilan tekshirish",
+        "Har saga instansiyasi DB'da: joriy qadam, holat, retry soni, timeout vaqti; har tashqi javob (event/callback) holatni o'zgartiradi, o'tishlar idempotent; timeout bo'yicha compensation ishga tushadi; jarayon qayta ishga tushganda holatdan davom etadi",
+        "Xotirada ushlash",
+        "Faqat eventlar bilan, holat saqlamasdan"
+      ],
+      "answer": 1,
+      "explanation": "Holatsiz choreography'da 'buyurtma qaysi bosqichda qotib qoldi' savoliga javob yo'q — shuning uchun pul bilan bog'liq jarayonlarda orkestratsiya afzal. Tayyor vositalar (Temporal) shu mantiqni (durable execution, retry, timeout, versiyalash) o'zi beradi; o'z yechimida esa timeout skaneri va idempotentlik eng ko'p unutiladigan qismlar."
+    },
+    {
+      "id": 30506,
+      "code": "SN507",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Pattern",
+      "domain": "arch",
+      "section": "r3",
+      "question": "Ports & adapters (hexagonal) arxitekturasi Go loyihada nimani beradi?",
+      "options": [
+        "Ko'proq fayl",
+        "Domen tashqi texnologiyadan mustaqil bo'ladi: portlar (interfeyslar) domen tomonidan e'lon qilinadi, adapterlar (Postgres, Kafka, HTTP) ularni implement qiladi — natijada domen testlari infrastrukturasiz ishlaydi va texnologiya almashtirish lokal bo'ladi",
+        "DB'ni almashtirish oson bo'ladi faqat",
+        "Performansni oshiradi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy foyda 'DB almashtirish' emas (bu kamdan-kam bo'ladi), balki tez va barqaror testlar hamda chegaralarning aniqligi. Narxi — ortiqcha qatlam: kichik CRUD servisda bu byurokratiyaga aylanadi. Qoida: murakkab domen mantiqi bor joyda qo'llash, oddiy o'tkazuvchi servislarda yo'q."
+    }
+  ]
+}

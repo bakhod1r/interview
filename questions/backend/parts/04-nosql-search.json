@@ -1,0 +1,274 @@
+[
+  {
+    "topicId": "F8frGuv1dunOdcVJ_IiGs",
+    "topicTitle": "NoSQL Databases",
+    "questions": [
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-01",
+        "question": "Compare the five main NoSQL families: document, key-value, wide-column, graph and time-series. What access pattern is each optimised for?",
+        "answer": "Document stores (MongoDB, CouchDB) keep self-contained JSON/BSON documents and are optimised for fetching one aggregate by id or by a secondary index. Key-value stores (Redis, DynamoDB in its simplest form) give O(1) GET/PUT on an opaque value and nothing else. Wide-column stores (Cassandra) store rows partitioned by a partition key and sorted by clustering columns, so they are optimised for range scans inside one partition at very high write throughput. Graph databases (Neo4j, AWS Neptune) store relationships as first-class pointers, making multi-hop traversals O(hops) instead of repeated joins. Time-series stores (InfluxDB, TimescaleDB) shard by time, compress columnar blocks and answer downsampled range aggregations over metric tags.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "MongoDB",
+        "followUps": ["Which family would you pick for a shopping cart and why?", "Where does TimescaleDB differ from InfluxDB in storage engine?"],
+        "tags": ["nosql", "data-modeling", "fundamentals"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-02",
+        "question": "When should you NOT use NoSQL?",
+        "answer": "When the workload needs multi-entity ACID transactions with foreign-key integrity, ad-hoc joins across many entities, or flexible reporting queries that were not known at design time — a relational engine with a query planner wins there. NoSQL models are query-first: you denormalise for the access patterns you know, so an unknown future query can force a full scan or a migration of every document. Also avoid it when your data volume fits comfortably on one Postgres node; you would pay the operational cost of a distributed system for nothing. Finally, if the team needs strong referential guarantees (billing, ledgers), eventual consistency is a liability, not a feature.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["How do MongoDB multi-document transactions change this answer?", "What is the cost of a schema change in a denormalised NoSQL model?"],
+        "tags": ["nosql", "trade-offs", "architecture"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-03",
+        "question": "In MongoDB, how do you decide between embedding a sub-document and referencing another collection?",
+        "answer": "Embed when the child is always read with the parent, is owned by it, and the array is bounded — for example order line items. Reference when the child is queried independently, shared between parents (a user referenced by many posts), or grows unbounded, because a BSON document is hard-capped at 16 MB and a growing document forces costly rewrites and index churn. The classic middle ground is the extended-reference / subset pattern: embed the few fields you display (name, thumbnail) and keep the full record in its own collection. Unbounded arrays are the number-one modelling mistake; use the outlier or bucket pattern instead.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "MongoDB",
+        "followUps": ["How would you model a chat with millions of messages per room?", "What does $lookup cost compared to an embedded read?"],
+        "tags": ["mongodb", "data-modeling", "embedding"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-04",
+        "question": "A MongoDB query on a 40M-document collection takes 8 seconds. Walk through how you diagnose and fix it.",
+        "answer": "Run the query with .explain(\"executionStats\") and look at the winning plan stage: COLLSCAN plus totalDocsExamined roughly equal to the collection size means no usable index. Compare nReturned with totalKeysExamined and totalDocsExamined — a healthy indexed query has all three close. Build a compound index following ESR (Equality fields first, then Sort, then Range) so the sort is satisfied by the index instead of an in-memory SORT stage, which aborts at 100 MB without allowDiskUse. Also check that the index fits in the WiredTiger cache (db.collection.stats().indexSizes) and consider a covered query by projecting only indexed fields so the FETCH stage disappears.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "MongoDB",
+        "followUps": ["What does an IXSCAN with high keysExamined but low nReturned tell you?", "When is a partial or sparse index the better choice?"],
+        "tags": ["mongodb", "indexing", "performance", "explain"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-05",
+        "question": "Explain the MongoDB aggregation pipeline and the ordering rules that matter for performance.",
+        "answer": "The pipeline is an ordered list of stages ($match, $group, $sort, $project, $lookup, $unwind, $facet) where each stage streams documents to the next. Put $match and $project as early as possible so the planner can push $match into an index scan and shrink the working set before $group. $group and $sort are blocking and capped at 100 MB per stage unless you pass allowDiskUse: true. $lookup is a left outer join executed per input document, so it is only cheap when the foreign field is indexed and the input set is already small. Use $merge or $out to materialise expensive aggregations into a rollup collection instead of recomputing per request.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "MongoDB",
+        "followUps": ["How do you see which stages used an index?", "When would you replace an aggregation with a change-stream-maintained rollup?"],
+        "tags": ["mongodb", "aggregation", "performance"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-06",
+        "question": "Your DynamoDB table throttles at 20% of provisioned capacity. What is happening and how do you fix the key design?",
+        "answer": "This is a hot partition: throughput is allocated per partition, so if most traffic hits one partition key value (for example a partition key of the current date, or a single tenant id) that partition's share of capacity is exhausted while the table average looks fine. Enable CloudWatch Contributor Insights for DynamoDB to identify the hottest keys. Fix it by choosing a high-cardinality, uniformly-accessed partition key, or by write sharding — append a suffix like #0..#9 to the key and fan out reads across the shards. Adaptive capacity absorbs short bursts but not a structurally skewed key.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "DynamoDB",
+        "followUps": ["How would you shard a key while keeping range queries possible?", "When does on-demand capacity mode not solve a hot partition?"],
+        "tags": ["dynamodb", "partition-key", "hot-partition", "scaling"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-07",
+        "question": "What is DynamoDB single-table design, and how do GSIs and LSIs support it?",
+        "answer": "Single-table design stores multiple entity types in one table with generic attributes (PK, SK) whose values are overloaded — for example PK=USER#123 with SK=PROFILE, SK=ORDER#2024-01-05 — so one Query returns a user and their orders in a single round trip instead of joining. A Global Secondary Index has its own partition/sort key and its own capacity, is updated asynchronously (eventually consistent) and can project only the attributes you need (KEYS_ONLY/INCLUDE/ALL) to keep it cheap. A Local Secondary Index shares the table's partition key, supports strongly consistent reads, must be created with the table, and imposes a 10 GB limit per partition key. GSI overloading — a generic GSI1PK/GSI1SK pair reused by several entities — is how you serve additional access patterns without new tables.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "DynamoDB",
+        "followUps": ["What happens when a GSI is under-provisioned relative to the base table?", "How do you add a new access pattern to an existing single-table design?"],
+        "tags": ["dynamodb", "single-table", "gsi", "design"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-08",
+        "question": "Explain Cassandra's query-first data modelling and what a partition key plus clustering columns actually control.",
+        "answer": "In Cassandra you list the queries first and create one table per query, duplicating data across tables rather than joining. The partition key determines which node (via the token ring hash) owns the row and must be chosen so that partitions stay under roughly 100 MB and 100k rows; clustering columns define the on-disk sort order inside the partition, which is what makes range scans and ORDER BY cheap. Queries that do not include the full partition key require ALLOW FILTERING and become cluster-wide scans — a production anti-pattern. Secondary indexes in Cassandra are per-node and scatter-gather, so a denormalised query table or a materialised view is usually preferred.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Cassandra",
+        "followUps": ["How do you bucket a time-series partition that would otherwise grow forever?", "Why are tombstones a problem for queue-like tables?"],
+        "tags": ["cassandra", "data-modeling", "partitioning"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-09",
+        "question": "What is tunable consistency in Cassandra/DynamoDB, and when does R + W > N actually guarantee you read your writes?",
+        "answer": "With replication factor N, a write acknowledged by W replicas and a read served from R replicas overlap in at least one up-to-date replica whenever R + W > N, so the newest value (decided by timestamp / last-write-wins) is visible. With N=3, QUORUM read plus QUORUM write (2+2>3) gives strong consistency at the cost of latency; ONE/ONE is fast but can read stale data. The guarantee breaks under clock skew with last-write-wins, during a partition where a client uses LOCAL_QUORUM in each datacenter, and for read-modify-write races, which need lightweight transactions (Paxos, SERIAL consistency) instead. DynamoDB exposes the same choice more simply as eventually consistent (default, half the read cost) versus ConsistentRead=true.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Cassandra",
+        "followUps": ["What does LOCAL_QUORUM buy in a multi-region deployment?", "How do hinted handoff and read repair fit in?"],
+        "tags": ["cassandra", "consistency", "quorum", "distributed-systems"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-10",
+        "question": "Why do Cassandra, RocksDB and other NoSQL engines use LSM-trees while PostgreSQL uses a B-tree?",
+        "answer": "An LSM-tree buffers writes in an in-memory memtable plus a commit log and flushes them as immutable, sorted SSTables, so every write is a sequential append — excellent write throughput and no random in-place page updates. The price is read amplification (a key may live in several SSTables, mitigated by bloom filters and per-SSTable indexes) and background compaction, which costs I/O and can cause latency spikes. A B-tree updates pages in place, giving predictable low read amplification and cheap range scans, but each write may be a random write plus WAL. So write-heavy, append-style workloads favour LSM; read-heavy workloads with updates in place favour B-tree.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Cassandra",
+        "followUps": ["How does compaction strategy (STCS vs LCS vs TWCS) change the trade-off?", "Why do tombstones hurt an LSM engine specifically?"],
+        "tags": ["storage-engine", "lsm-tree", "b-tree", "internals"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-11",
+        "question": "You ingest 500k metric points per second. How do InfluxDB and TimescaleDB handle compression and retention, and what do you configure?",
+        "answer": "Both store data in time-ordered chunks so that old data becomes read-only and compressible. TimescaleDB uses hypertables partitioned by time (and optionally by a space dimension), with a compression policy that converts row chunks into columnar batches using delta-of-delta encoding for timestamps and Gorilla/dictionary encoding for values, often 90%+ savings; continuous aggregates precompute rollups incrementally. InfluxDB's TSM engine does the same delta-of-delta plus XOR float compression and organises data by series key. Retention is a policy, not a DELETE: drop_chunks / retention policies detach whole chunks or shards, which is O(1) instead of a scan, and you keep long-term history only as downsampled aggregates.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "TimescaleDB",
+        "followUps": ["What is high series cardinality and why does it kill InfluxDB?", "How do continuous aggregates handle late-arriving data?"],
+        "tags": ["time-series", "timescaledb", "influxdb", "compression", "retention"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-12",
+        "question": "When is a graph database like Neo4j or AWS Neptune clearly the right tool over a relational schema?",
+        "answer": "When the value is in variable-depth relationships: fraud rings, recommendation (\"people who bought X also connected to Y\"), access-control/permission inheritance, supply-chain or network impact analysis, and identity resolution. In a relational model each hop is another self-join whose cost grows multiplicatively, whereas a native graph stores adjacency as direct pointers, so traversal is index-free adjacency and costs roughly O(edges visited) regardless of total graph size. Neo4j uses Cypher and Neptune supports both Gremlin and SPARQL, with Neptune Analytics for whole-graph algorithms. If your queries are always one or two hops with fixed shape, a relational join is simpler and faster to operate.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Neo4j",
+        "followUps": ["How would you model a permissions hierarchy in Cypher?", "What does AWS Neptune offer that Neo4j does not?"],
+        "tags": ["neo4j", "neptune", "graph", "traversal"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-13",
+        "question": "Redis memory usage climbs until the instance is evicting keys that should have survived. How do you investigate?",
+        "answer": "Check INFO memory for used_memory vs maxmemory and evicted_keys, and confirm maxmemory-policy — noeviction returns OOM errors on writes, while allkeys-lru will happily evict keys you considered permanent, so volatile-lru with TTLs on cacheable keys is usually correct. Run redis-cli --bigkeys or MEMORY USAGE <key> to find large collections, and scan for keys without a TTL (a common leak: SET without EX in a cache path). Look for unbounded data structures such as a list used as a queue whose consumer died, and for fragmentation via mem_fragmentation_ratio. Never use KEYS * on production; use SCAN with a cursor.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Redis",
+        "followUps": ["Difference between volatile-lru, allkeys-lfu and noeviction?", "How do RDB snapshots affect peak memory?"],
+        "tags": ["redis", "memory", "eviction", "debugging"]
+      },
+      {
+        "id": "F8frGuv1dunOdcVJ_IiGs-14",
+        "question": "CouchDB, RethinkDB and Firebase all push data to clients. Compare their models and the consistency trade-offs.",
+        "answer": "CouchDB is multi-master with MVCC document revisions (_rev) and a replication protocol built on the _changes feed; concurrent edits produce conflicts that the application must resolve, which is what makes offline-first sync (PouchDB in the browser) work. RethinkDB offered changefeeds — a live query whose results stream to subscribers — on a single-master, strongly consistent cluster, but the company shut down and the project is community-maintained, which is a real operational risk. Firebase Realtime Database / Firestore push snapshot updates over a persistent connection with optimistic local writes and server reconciliation, plus declarative security rules, but you pay per document read and cannot run ad-hoc server-side queries. All three trade query power for push-based freshness.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "CouchDB",
+        "followUps": ["How does CouchDB decide the winning revision in a conflict?", "What are Firestore's query limitations compared to MongoDB?"],
+        "tags": ["couchdb", "rethinkdb", "firebase", "replication", "sync"]
+      }
+    ]
+  },
+  {
+    "topicId": "gKTSe9yQFVbPVlLzWB0hC",
+    "topicTitle": "Search Engines",
+    "questions": [
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-01",
+        "question": "What is an inverted index and why is it faster than a SQL LIKE '%term%' query?",
+        "answer": "An inverted index maps each term to a posting list of the documents (and positions) containing it, so a search is a lookup of a few sorted posting lists plus an intersection, independent of total corpus size. A LIKE '%term%' cannot use a B-tree index because the pattern is unanchored, so PostgreSQL falls back to a sequential scan over every row. Lucene stores the term dictionary as an FST in memory and the postings on disk in compressed, skip-list-friendly blocks. The cost is that the index must be built at write time and only matches analysed tokens, not arbitrary substrings.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Elasticsearch",
+        "followUps": ["How does a PostgreSQL GIN index compare?", "What are doc values used for and how do they differ from postings?"],
+        "tags": ["elasticsearch", "lucene", "inverted-index"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-02",
+        "question": "Explain the analyzer chain in Elasticsearch and what breaks when index-time and search-time analyzers differ.",
+        "answer": "An analyzer is character filters → tokenizer → token filters; for example the standard tokenizer plus lowercase, stop and stemmer filters turns \"Running Shoes!\" into [run, shoe]. The same chain must produce compatible tokens at index and query time, otherwise a query token never matches an indexed token and you get zero hits with no error. A classic bug is indexing with an edge_ngram analyzer for autocomplete and also using it as the search analyzer, which explodes the query into every prefix and returns garbage — set search_analyzer to standard instead. Use GET /index/_analyze to see exactly which tokens each side produces before blaming relevance.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Elasticsearch",
+        "followUps": ["Why does a keyword field ignore the analyzer entirely?", "How do you support multiple languages in one index?"],
+        "tags": ["elasticsearch", "analyzers", "text-analysis"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-03",
+        "question": "What is the text vs keyword distinction, and when do you use a multi-field?",
+        "answer": "A text field is analysed into tokens and is used for full-text relevance matching; it cannot be used for exact term matching, sorting or aggregation reliably. A keyword field is stored verbatim as a single token and is what you use for filters, term queries, sorting, and terms aggregations. When you need both — searching a product name and also faceting on it — you declare a multi-field: name as text with a name.keyword sub-field, which is the default dynamic mapping for strings. Getting this wrong shows up as a term query on a text field returning nothing because the indexed token was lowercased.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Elasticsearch",
+        "followUps": ["Why does aggregating on a text field require fielddata and why is that dangerous?", "What is ignore_above on a keyword field for?"],
+        "tags": ["elasticsearch", "mapping", "text", "keyword"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-04",
+        "question": "A cluster becomes unstable after a service starts indexing arbitrary JSON from customers. What is mapping explosion and how do you prevent it?",
+        "answer": "Dynamic mapping creates a new field for every new JSON key; if keys are user-controlled (for example event payloads keyed by id) the mapping grows to thousands of fields, and since the cluster state holding those mappings is replicated to every node, updates become slow and the master is overwhelmed. Guard it with index.mapping.total_fields.limit (default 1000), set dynamic: strict or dynamic: false on the offending object, and model variable data with the flattened field type or as an array of {key, value} pairs instead of arbitrary object keys. Fixing an exploded index requires reindexing into a correctly mapped one, because mappings cannot be removed in place.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Elasticsearch",
+        "followUps": ["What does the flattened type give up in return?", "Why does nested field type multiply document count?"],
+        "tags": ["elasticsearch", "mapping-explosion", "cluster-state", "debugging"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-05",
+        "question": "A document is indexed and a search one second later does not return it. Explain refresh_interval and near-real-time search.",
+        "answer": "Elasticsearch is near-real-time, not real-time: a document is written to the in-memory buffer and translog immediately, but it is not searchable until a refresh creates a new Lucene segment, which happens every 1s by default (index.refresh_interval) and only on indices that have been queried recently. So expect up to one refresh interval of lag. For read-your-own-writes use GET /index/_doc/<id>, which reads from the translog and is always current, or pass ?refresh=wait_for on the index request rather than ?refresh=true, which forces a segment and hurts throughput. For bulk loads set refresh_interval to -1 and restore it afterwards.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Elasticsearch",
+        "followUps": ["How do refresh, flush and fsync of the translog differ?", "What does increasing refresh_interval to 30s cost you?"],
+        "tags": ["elasticsearch", "refresh", "near-real-time", "indexing"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-06",
+        "question": "How do you size shards for a log index that grows by 200 GB per day and is kept for 30 days?",
+        "answer": "Target 20–50 GB per shard and keep the total under roughly 20 shards per GB of JVM heap per node, because every shard is a Lucene index with fixed memory and file-handle overhead. 200 GB/day with one index per day and 5 primaries gives 40 GB shards, 30 days of retention is 150 primaries plus replicas — manageable. Use a data stream with ILM rollover on max_primary_shard_size rather than a fixed daily index, so a quiet day does not create tiny shards; then shrink/forcemerge to one segment when the index is read-only and move it to warm/cold tier. Over-sharding is the more common failure: thousands of small shards make the master slow and searches CPU-bound on coordination.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Elasticsearch",
+        "followUps": ["Why can primary shard count not be changed after creation?", "When is the _split or _shrink API appropriate?"],
+        "tags": ["elasticsearch", "sharding", "capacity-planning", "ilm"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-07",
+        "question": "How does BM25 score a document, and what levers do you have when relevance is wrong?",
+        "answer": "BM25 combines inverse document frequency (rare terms score higher), term frequency with saturation controlled by k1 (default 1.2, so the 10th occurrence adds little), and field-length normalisation controlled by b (default 0.75, so a match in a short title beats one in a long body). Levers: per-field boosts in a multi_match, function_score or a rank_feature field to fold in popularity/recency, a should clause on a phrase match to reward proximity, and tuning k1/b in the similarity settings. Use the _explain API on a specific document to see exactly which term contributed what before changing anything. Note that scores are computed per shard, so with few documents, dfs_query_then_fetch or a single shard avoids skewed IDF.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Elasticsearch",
+        "followUps": ["Why are scores not comparable across two different queries?", "When would you add a learning-to-rank or vector rerank stage?"],
+        "tags": ["elasticsearch", "bm25", "relevance", "scoring"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-08",
+        "question": "You must change the mapping of a live 500 GB index with zero downtime. Describe the alias-based reindex procedure.",
+        "answer": "Applications should already read and write through an alias (products), never the concrete index name. Create products_v2 with the new mapping, run POST /_reindex with wait_for_completion=false and slices=auto to copy products_v1 into it, monitoring the task via _tasks. While reindexing, keep dual-writing new changes to both indices, or reindex with a range query on an updated_at field and then catch up the delta. Finally swap atomically in one call: POST /_aliases with remove products_v1 and add products_v2 as the same alias, verify, then delete the old index. The alias swap is atomic, so no request ever sees a missing index.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Elasticsearch",
+        "followUps": ["How do you handle deletes that happen during the reindex window?", "What does slices=auto actually parallelise on?"],
+        "tags": ["elasticsearch", "reindex", "aliases", "zero-downtime"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-09",
+        "question": "How do you keep Elasticsearch in sync with PostgreSQL as the system of record?",
+        "answer": "Do not dual-write from application code inside the request path — the two writes are not atomic and a crash between them leaves the index permanently wrong. Prefer change data capture: Debezium reads the Postgres WAL into Kafka and a consumer bulk-indexes into Elasticsearch, which gives ordered, at-least-once delivery that survives restarts. If CDC is too heavy, use the transactional outbox pattern (write the row and an outbox event in one transaction, a relay publishes it) — same guarantee, less infrastructure. Make the indexer idempotent by using the primary key as _id and external versioning (version_type=external with updated_at or the LSN) so out-of-order events cannot overwrite newer data, and schedule a periodic full reconciliation to catch drift.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Elasticsearch",
+        "followUps": ["How do you detect drift without reindexing everything?", "What happens to deletes in a naive polling-by-updated_at sync?"],
+        "tags": ["elasticsearch", "cdc", "outbox", "data-sync", "consistency"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-10",
+        "question": "A search endpoint that paginates with from=10000&size=10 times out. Why, and what do you use instead?",
+        "answer": "Deep pagination requires every shard to build and sort from+size hits and send them to the coordinating node, so from=10000 makes each shard sort 10010 documents; index.max_result_window caps this at 10000 by default and beyond it the query is rejected or crushes heap. For user-facing infinite scroll use search_after with a tie-broken sort (for example [score, _id]), which is stateless and O(size) per page. For full exports use the point-in-time API plus search_after, or slice a scroll; classic scroll holds segment files open and is now discouraged for live traffic. If the UI truly needs jump-to-page-500, rethink the product requirement — no search engine does that cheaply.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Elasticsearch",
+        "followUps": ["Why does search_after need a unique tiebreaker field?", "What does a point-in-time cost on the cluster while open?"],
+        "tags": ["elasticsearch", "pagination", "search-after", "performance"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-11",
+        "question": "What is the difference between the query context and the filter context, and how does it affect caching?",
+        "answer": "Clauses in query context (must, should) compute a _score, while clauses in filter context (filter, must_not, and everything inside a bool filter) answer only yes/no. Filters are cacheable: Elasticsearch keeps a bitset of matching documents per segment in the node query cache once a filter is used frequently on a segment of meaningful size, making repeated category/date filters nearly free. So put anything non-relevance — status, tenant id, date ranges, term filters — in filter, and leave only the actual text matching in must. A common performance bug is placing a high-cardinality term filter in must, which forces scoring work and defeats caching.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Elasticsearch",
+        "followUps": ["Why are now-based date ranges bad for filter caching?", "How does a constant_score query fit in?"],
+        "tags": ["elasticsearch", "query-dsl", "caching", "performance"]
+      },
+      {
+        "id": "gKTSe9yQFVbPVlLzWB0hC-12",
+        "question": "Your cluster health goes yellow, then red, during a node restart. What do those states mean and what do you check first?",
+        "answer": "Yellow means all primary shards are assigned but some replicas are not — the cluster is fully queryable but has no redundancy; red means at least one primary is unassigned and part of your data is unreadable. Call GET /_cluster/allocation/explain to get the exact reason a shard is not allocating: disk watermark exceeded (low 85% / high 90% / flood_stage 95%, which sets indices read-only), a missing node holding the only copy, or an allocation filter/awareness rule with nowhere to place it. Yellow during a rolling restart is expected and resolves as the node returns; disable shard allocation with cluster.routing.allocation.enable=primaries before restarting to avoid needless rebalancing. Red that persists after the node returns usually means data loss on that shard and a restore from a snapshot repository.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Elasticsearch",
+        "followUps": ["How do you clear the flood_stage read-only block after freeing disk?", "What is the role of the master-eligible node quorum here?"],
+        "tags": ["elasticsearch", "cluster-health", "operations", "debugging"]
+      }
+    ]
+  }
+]

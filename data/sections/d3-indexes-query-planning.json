@@ -1,0 +1,684 @@
+{
+  "id": "d3",
+  "name": "Indexes & query planning",
+  "domain": "db",
+  "domainLabel": "PostgreSQL & SQL",
+  "topics": [
+    "Index",
+    "Planner",
+    "ORM"
+  ],
+  "questions": [
+    {
+      "id": 12,
+      "code": 13,
+      "level": "J",
+      "type": "open",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Index nima, qanday ishlaydi va uning narxi nima?",
+      "modelAnswer": [
+        "Alohida saralangan struktura (odatda B-tree): key → row manzili (TID)",
+        "Qidiruv O(n) seq scan o'rniga O(log n)",
+        "WHERE, JOIN, ORDER BY ni tezlashtiradi",
+        "Narx: har INSERT/UPDATE/DELETE indexni ham yangilaydi — yozish sekinlashadi",
+        "Disk/memory egallaydi; past selektivlikdagi column'da (masalan boolean) foyda kam"
+      ],
+      "explanation": "Yaxshi javob 'kitob oxiridagi mundarija' o'xshatishi + trade-off. Senior signal: write amplification, selektivlik, va 'ishlatilmayotgan indexlarni pg_stat_user_indexes bilan topib o'chiraman' deyish."
+    },
+    {
+      "id": 14,
+      "code": 15,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>CREATE INDEX ON orders(customer_id, created_at)</code>. Qaysi query bu indexdan <b>samarali</b> foydalana olmaydi?",
+      "options": [
+        "WHERE customer_id = 5",
+        "WHERE customer_id = 5 AND created_at > now() - interval '1 day'",
+        "WHERE created_at > now() - interval '1 day'",
+        "WHERE customer_id = 5 ORDER BY created_at DESC"
+      ],
+      "answer": 2,
+      "explanation": "Composite B-tree 'leftmost prefix' qoidasi: index avval customer_id, keyin ichida created_at bo'yicha saralangan. Faqat created_at bo'yicha filtrda boshlang'ich nuqta yo'q. Column tartibi qoidasi: tenglik (=) column'lari oldin, diapazon/sort column'i keyin. (Postgres ba'zan butun indexni skan qiladi, lekin bu samarali emas.)"
+    },
+    {
+      "id": 18,
+      "code": 19,
+      "level": "M",
+      "type": "open",
+      "topic": "ORM",
+      "domain": "db",
+      "section": "d3",
+      "question": "N+1 query muammosi nima va uni qanday hal qilasiz?",
+      "modelAnswer": [
+        "1 query ro'yxatni oladi, keyin har element uchun alohida query → N+1 round trip",
+        "Odatda ORM lazy loading sababli (post.author har loopda)",
+        "Yechim: eager loading (JOIN yoki WHERE id IN (...) batch) — include/prefetch_related/joinedload",
+        "GraphQL da DataLoader bilan batching",
+        "Aniqlash: query log, APM, testda query sonini assert qilish"
+      ],
+      "explanation": "Muhim nuqta: muammo har query sekinligida emas, round-trip soni va latencyda. 100 ta 1ms query + network = 100ms+. Yaxshi javob aniqlash usulini ham aytadi."
+    },
+    {
+      "id": 19,
+      "code": 20,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Planner",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>status</code> column'ida index bor, lekin <code>WHERE status='active'</code> uchun EXPLAIN <b>Seq Scan</b> ko'rsatyapti. Eng ehtimoliy sabab?",
+      "options": [
+        "Index buzilgan",
+        "Row'larning katta qismi (masalan 90%) 'active' — planner seq scanni arzonroq deb hisoblaydi",
+        "Postgres string column'da index ishlatmaydi",
+        "WHERE da tirnoq noto'g'ri"
+      ],
+      "answer": 1,
+      "explanation": "Past selektivlikda random I/O (index → heap) ketma-ket o'qishdan qimmat. Planner statistikaga (pg_stats) tayanadi. Agar kam uchraydigan qiymat bo'yicha qidirsangiz — partial index: CREATE INDEX ... WHERE status='pending'. Statistika eskirgan bo'lsa ANALYZE."
+    },
+    {
+      "id": 20,
+      "code": 21,
+      "level": "M",
+      "type": "code",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>users(email)</code> da B-tree index bor. Bu query indexni ishlatadimi?",
+      "snippet": "SELECT * FROM users WHERE LOWER(email) = 'ali@x.uz';",
+      "options": [
+        "Ha, har doim",
+        "Yo'q — column'ga funksiya qo'llangan; expression index kerak: CREATE INDEX ON users (LOWER(email))",
+        "Ha, lekin faqat MySQLda",
+        "Yo'q, chunki = operatori index ishlatmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Index email qiymatlari bo'yicha saralangan, LOWER(email) bo'yicha emas — 'non-sargable' predicate. Yechimlar: expression index, citext tipi, yoki yozishda normalizatsiya (emailni doim lowercase saqlash). Xuddi shu: WHERE created_at::date = ... yoki WHERE col + 1 = 5."
+    },
+    {
+      "id": 24,
+      "code": 25,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "'Covering index' (index-only scan) nima?",
+      "options": [
+        "Jadvaldagi hamma column'ni o'z ichiga olgan index",
+        "Query'ga kerak bo'lgan hamma column indexda bor — heapga murojaat qilmasdan javob beriladi",
+        "Bir nechta table'ni qamragan index",
+        "Primary key indexi"
+      ],
+      "answer": 1,
+      "explanation": "Postgres 11+: CREATE INDEX ON orders(customer_id) INCLUDE (total, status). Ogohlantirish: Postgresda index-only scan visibility map'ga bog'liq — VACUUM yaqinda ishlamagan bo'lsa baribir heapga boradi (EXPLAIN dagi 'Heap Fetches')."
+    },
+    {
+      "id": 36,
+      "code": 37,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>jsonb</code> column'da <code>data @> '{\"tags\":[\"sql\"]}'</code> va full-text qidiruv uchun qaysi index turi mos?",
+      "options": [
+        "B-tree",
+        "Hash",
+        "GIN",
+        "BRIN"
+      ],
+      "answer": 2,
+      "explanation": "GIN — inverted index: bitta row'da ko'p key (array elementlari, jsonb key'lari, lexeme'lar). B-tree — tartib/diapazon. BRIN — juda katta, tabiiy tartiblangan (append-only vaqt) table'lar uchun juda kichik index. GiST — geometriya, range, nearest-neighbor. GIN kamchiligi: yozish qimmat (fastupdate/pending list)."
+    },
+    {
+      "id": 60,
+      "code": 61,
+      "level": "J",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "B-tree index qidiruvni nega tezlashtiradi?",
+      "options": [
+        "Ma'lumotni siqadi",
+        "Qiymatlar saralangan daraxtda saqlanadi — har bosqichda qidiruv maydoni ko'p marta qisqaradi, 1 mln row'da ~3–4 page o'qish yetarli (O(log n))",
+        "Hamma row'ni memory'ga yuklaydi",
+        "Faqat hash hisoblaydi"
+      ],
+      "answer": 1,
+      "explanation": "O'xshatish: telefon kitobi alifbo tartibida — 'Karimov'ni topish uchun hamma page'ni o'qimaysiz, o'rtasini ochib, yarmini tashlaysiz. B-tree: root → ichki page'lar → leaf; leaf'da key + row manzili (TID). Leaf'lar bir-biriga ulangan — shuning uchun diapazon (BETWEEN, >, <) va ORDER BY ham tez. Indexsiz — Seq Scan: 1 mln row'ni birma-bir tekshirish."
+    },
+    {
+      "id": 61,
+      "code": 62,
+      "level": "J",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>users</code> table'i 10 mln row. Qaysi column'ga index eng ko'p foyda beradi?",
+      "options": [
+        "is_active (true/false, 95% true)",
+        "gender (3 xil qiymat)",
+        "email (har user uchun unikal, login'da qidiriladi)",
+        "created_by_admin (hech qachon WHERE'da ishlatilmaydi)"
+      ],
+      "answer": 2,
+      "explanation": "Ikki savol bering: 1) Bu column WHERE/JOIN/ORDER BY'da tez-tez ishlatiladimi? 2) Selektivligi yuqorimi (bitta qiymat kam row'ni beradimi)? email — ikkalasiga ha. is_active=true 95% row'ni qaytaradi — index foydasiz, planner baribir Seq Scan tanlaydi. Istisno: kam qiymat (is_active=false 5%) bo'yicha qidirsangiz — partial index."
+    },
+    {
+      "id": 62,
+      "code": 63,
+      "level": "M",
+      "type": "code",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "EXPLAIN natijasida quyidagilar nimani bildiradi?",
+      "snippet": "1) Seq Scan on orders\n2) Index Scan using orders_customer_idx on orders\n3) Index Only Scan using orders_cust_total_idx on orders\n4) Bitmap Heap Scan on orders\n     -> Bitmap Index Scan on orders_status_idx",
+      "options": [
+        "Hammasi bir xil, faqat nomi boshqa",
+        "1 — butun table ketma-ket; 2 — indexdan topib har row uchun table'ga boradi; 3 — javob faqat indexdan, table'ga bormaydi; 4 — indexdan manzillarni yig'ib, page'larni tartib bilan o'qiydi (o'rta selektivlik uchun)",
+        "2 va 3 da table o'qilmaydi",
+        "4 — xato, index buzilgan"
+      ],
+      "answer": 1,
+      "explanation": "Tezlik taxminan: Index Only < Index Scan < Bitmap < Seq Scan (kam row uchun). Lekin ko'p row kerak bo'lsa Seq Scan eng arzon bo'lishi mumkin — planner to'g'ri qilgan. Bitmap — 'qaysi page'lar kerak'ni avval belgilab, keyin har page'ni bir marta o'qiydi; bir nechta indexni AND/OR bilan birlashtira oladi. EXPLAIN ANALYZE haqiqiy vaqt va row sonini ko'rsatadi — 'rows' taxmini va 'actual rows' keskin farq qilsa, statistika eskirgan (ANALYZE)."
+    },
+    {
+      "id": 63,
+      "code": 64,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>name</code> column'ida B-tree index bor. Qaysi query indexdan foydalana <b>olmaydi</b>?",
+      "options": [
+        "WHERE name = 'Ali'",
+        "WHERE name LIKE 'Ali%'",
+        "WHERE name LIKE '%li'",
+        "WHERE name > 'A' AND name < 'B'"
+      ],
+      "answer": 2,
+      "explanation": "B-tree prefiks bo'yicha saralangan — 'Ali%' boshlanishini biladi, '%li' esa istalgan joyda bo'lishi mumkin, boshlang'ich nuqta yo'q. (Postgres'da 'Ali%' uchun ham C collation yoki text_pattern_ops kerak bo'lishi mumkin.) '%li%' qidiruv uchun: pg_trgm + GIN index yoki full-text search."
+    },
+    {
+      "id": 64,
+      "code": 65,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>jobs</code> table'ida 50 mln row, faqat ~1000 tasi <code>status='pending'</code>. Worker'lar doim pending'larni oladi. Eng yaxshi index?",
+      "options": [
+        "CREATE INDEX ON jobs(status)",
+        "CREATE INDEX ON jobs(created_at) WHERE status = 'pending'",
+        "Index kerak emas",
+        "CREATE INDEX ON jobs USING hash(id)"
+      ],
+      "answer": 1,
+      "explanation": "Partial index faqat shartga mos row'larni saqlaydi — 50 mln emas, ~1000 yozuv: juda kichik, tez, memory'da turadi. Job bajarilib status o'zgarsa, yozuv indexdan chiqadi. Query: WHERE status='pending' ORDER BY created_at LIMIT 10 FOR UPDATE SKIP LOCKED — queue uchun klassik. Shart: query'dagi WHERE index shartiga mos bo'lishi kerak."
+    },
+    {
+      "id": 65,
+      "code": 66,
+      "level": "M",
+      "type": "code",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Index: <code>(a, b, c)</code>. Qaysi query'lar indexdan to'liq (hamma shart uchun) foydalanadi?",
+      "snippet": "Q1: WHERE a = 1 AND b = 2 AND c = 3\nQ2: WHERE a = 1 AND c = 3\nQ3: WHERE b = 2 AND c = 3\nQ4: WHERE a = 1 AND b > 5 AND c = 3",
+      "options": [
+        "Hammasi",
+        "Faqat Q1 to'liq; Q2 va Q4 — faqat boshlang'ich qismi bilan qidiradi (a / a,b), qolgan shart index ichida filtr; Q3 — samarali emas",
+        "Q1 va Q3",
+        "Faqat Q3"
+      ],
+      "answer": 1,
+      "explanation": "Composite index telefon kitobiga o'xshaydi: familiya (a) → ism (b) → otasining ismi (c). Familiyasiz (Q3) ism bo'yicha qidirib bo'lmaydi. Q2: b tashlab ketilgan — a bo'yicha topadi, c ni birma-bir tekshiradi. Q4: b diapazon — diapazondan keyingi column (c) qidiruvda ishlatilmaydi. Qoida: tenglik column'lari oldinga, diapazon oxiriga: (a, c, b) Q4 uchun yaxshiroq."
+    },
+    {
+      "id": 66,
+      "code": 67,
+      "level": "M",
+      "type": "sql",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Bu query uchun eng mos indexni yozing:<br><code>SELECT * FROM orders WHERE customer_id = $1 AND status = 'paid' ORDER BY created_at DESC LIMIT 10;</code>",
+      "modelAnswer": "CREATE INDEX CONCURRENTLY orders_cust_status_created_idx\n  ON orders (customer_id, status, created_at DESC);",
+      "keywords": [
+        "CREATE INDEX",
+        "customer_id",
+        "status",
+        "created_at"
+      ],
+      "explanation": "Tartib: avval tenglik column'lari (customer_id, status), keyin ORDER BY column'i (created_at). Shunda DB indexda to'g'ri joyga sakraydi va 10 ta row'ni tayyor tartibda oladi — alohida Sort yo'q, LIMIT darhol to'xtaydi. Agar created_at birinchi bo'lsa — butun indexni aylanib chiqish kerak bo'lardi. Production'da CONCURRENTLY — yozishni bloklamaslik uchun."
+    },
+    {
+      "id": 67,
+      "code": 68,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Table'da 15 ta index bor, INSERT/UPDATE sekinlashdi. Asosiy sabab va birinchi qadam?",
+      "options": [
+        "Index ko'pligi faqat disk joyiga ta'sir qiladi",
+        "Har yozish har bir indexni yangilaydi (write amplification), HOT update imkoniyati kamayadi; pg_stat_user_indexes'da idx_scan = 0 bo'lgan va dublikat (prefiks bir xil) indexlarni topib o'chirish",
+        "Hamma indexni REINDEX qilish",
+        "Table'ni partition qilish"
+      ],
+      "answer": 1,
+      "explanation": "Index (a) va (a, b) bo'lsa — (a) ko'pincha ortiqcha. idx_scan = 0 — hech kim ishlatmagan (lekin statistika reset vaqtini va replicalarni tekshiring). Har index bufer memory'ni ham egallaydi. O'chirishdan oldin: unique/constraint indexlarga tegmang."
+    },
+    {
+      "id": 68,
+      "code": 69,
+      "level": "J",
+      "type": "open",
+      "topic": "Planner",
+      "domain": "db",
+      "section": "d3",
+      "question": "EXPLAIN va EXPLAIN ANALYZE farqi nima va natijada nimalarga qaraysiz?",
+      "modelAnswer": [
+        "EXPLAIN — reja va taxminiy narx, query bajarilmaydi; EXPLAIN ANALYZE — haqiqatda bajaradi (UPDATE/DELETE'ni transaction'da ROLLBACK bilan!)",
+        "Scan turi: Seq Scan katta table'da — shubhali",
+        "rows (taxmin) va actual rows farqi katta bo'lsa — statistika eskirgan, ANALYZE",
+        "Eng qimmat tugun (actual time), Sort / Hash diskka tushishi (external merge)",
+        "BUFFERS opsiyasi — qancha page o'qildi"
+      ],
+      "explanation": "Rejani ichkaridan tashqariga (eng ichki tugundan) o'qing. Amaliy mashq: explain.depesz.com yoki explain.dalibo.com ga reja qo'yib ko'ring — vizual ko'rinadi."
+    },
+    {
+      "id": 84,
+      "code": 85,
+      "level": "M",
+      "type": "mcq",
+      "topic": "ORM",
+      "domain": "db",
+      "section": "d3",
+      "question": "ORM ishlatishning asosiy xavfi nima?",
+      "options": [
+        "Sekin kompilyatsiya",
+        "Yaratilayotgan SQL ko'rinmay qoladi: N+1 query'lar, keraksiz column'lar (SELECT *), lazy loading transaction'dan tashqarida, va noto'g'ri transaction chegaralari",
+        "ORM'lar xavfsiz emas",
+        "ORM indexlarni o'chiradi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qoida: ORM CRUD uchun, murakkab query uchun qo'lda SQL (Go'da sqlc/sqlx, boshqa tillarda query builder). Har feature uchun log'da yaratilgan SQL'ni ko'rib chiqish odat bo'lishi kerak; testda query'lar sonini assert qilish N+1 ni qaytib kelishidan saqlaydi. ORM SQL bilishni almashtirmaydi — intervyuda aynan shuni tekshirishadi."
+    },
+    {
+      "id": 86,
+      "code": 87,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Planner",
+      "domain": "db",
+      "section": "d3",
+      "question": "Ilova sekin. DB tomonida profil qilishni qayerdan boshlaysiz (PostgreSQL)?",
+      "options": [
+        "Serverga ko'proq RAM qo'shish",
+        "pg_stat_statements — umumiy vaqt bo'yicha eng qimmat query'larni topish (nafaqat eng sekin bitta bajarilish, balki chastota × vaqt), keyin o'sha query'larga EXPLAIN (ANALYZE, BUFFERS)",
+        "Hamma table'ga index qo'yish",
+        "Barcha query'larni keshlash"
+      ],
+      "answer": 1,
+      "explanation": "Muhim nuqta: 5 ms lik query soniyasiga 10 000 marta bajarilsa, 2 soniyalik hisobotdan qimmatroq. Qo'shimcha asboblar: auto_explain (sekin rejalarni logga yozish), log_min_duration_statement, pg_stat_activity (hozir nima ishlayapti), wait event'lar. Optimallashtirishdan oldin o'lchash — asosiy tartib."
+    },
+    {
+      "id": 101,
+      "code": 102,
+      "level": "J",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "PostgreSQL va MySQL (InnoDB) da primary key indexi qanday farq qiladi?",
+      "options": [
+        "Ikkalasida bir xil",
+        "Postgres: table — tartibsiz heap, hamma indexlar (PK ham) alohida strukturada va row manzilini (TID) saqlaydi. InnoDB: table PK bo'yicha clustered — row'lar PK tartibida saqlanadi, ikkilamchi indexlar esa PK qiymatini saqlaydi",
+        "Postgres'da index yo'q",
+        "InnoDB'da PK index yaratmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy oqibat InnoDB'da: ikkilamchi index bo'yicha qidiruv ikki bosqichli (index → PK → clustered index), shuning uchun PK qisqa bo'lgani yaxshi (UUID v4 — yomon: katta va tasodifiy, page'larni parchalaydi). Postgres'da esa CLUSTER buyrug'i bir martalik va avtomatik saqlanmaydi."
+    },
+    {
+      "id": 102,
+      "code": 103,
+      "level": "J",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>UNIQUE constraint</code> va <code>UNIQUE INDEX</code> farqi (PostgreSQL)?",
+      "options": [
+        "Umuman boshqa narsalar",
+        "Amalda constraint ostida unique index yaratiladi; farq — constraint katalogda e'lon qilinadi va FK uchun manba bo'la oladi, index esa partial (WHERE) yoki expression bo'lishi mumkin — constraint bunday bo'la olmaydi",
+        "Index tezroq tekshiradi",
+        "Constraint indexsiz ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun 'faqat o'chirilmagan userlar orasida email unikal' talabi constraint bilan emas, partial unique index bilan yechiladi: CREATE UNIQUE INDEX ... ON users (email) WHERE deleted_at IS NULL. ON CONFLICT bilan ishlatish uchun index ifodasi query'dagi ifodaga mos bo'lishi kerak."
+    },
+    {
+      "id": 103,
+      "code": 104,
+      "level": "M",
+      "type": "code",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "EXPLAIN quyidagini ko'rsatyapti. Muammo va yechim?",
+      "snippet": "EXPLAIN SELECT * FROM events ORDER BY created_at DESC LIMIT 10;\n\nLimit\n  ->  Sort  (cost=250000.00..250010.00)\n        Sort Key: created_at DESC\n        ->  Seq Scan on events  (rows=5000000)",
+      "options": [
+        "Hammasi normal, LIMIT 10 tez ishlaydi",
+        "5 mln row o'qilib to'liq saralanmoqda, faqat keyin 10 tasi olinmoqda. created_at bo'yicha index qo'yilsa, planner indexdan tayyor tartibda 10 ta row'ni oladi va Sort yo'qoladi",
+        "LIMIT ni oshirish kerak",
+        "work_mem ni kamaytirish kerak"
+      ],
+      "answer": 1,
+      "explanation": "Rejadagi 'Sort' + 'Seq Scan' + ORDER BY + LIMIT — indexsizlikning klassik imzosi. B-tree ikki tomonlama o'qiy oladi, shuning uchun (created_at) indexi DESC uchun ham ishlaydi. Aralash tartib (ORDER BY a ASC, b DESC) bo'lsa — index ham (a ASC, b DESC) bo'lishi kerak."
+    },
+    {
+      "id": 104,
+      "code": 105,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "<code>WHERE a = 1 AND b = 2</code> uchun bitta (a,b) index yaxshimi yoki alohida (a) va (b) indexlari?",
+      "options": [
+        "Alohida indexlar doim yaxshi",
+        "(a,b) composite yaxshiroq: bitta strukturadan to'g'ridan-to'g'ri kerakli row'lar topiladi. Alohida indexlar bo'lsa Postgres BitmapAnd bilan birlashtiradi — ishlaydi, lekin sekinroq",
+        "Farqi yo'q",
+        "Ikkita index memory tejaydi"
+      ],
+      "answer": 1,
+      "explanation": "Qoida: ko'p uchraydigan query shablonini qoplaydigan composite index. Bonus: (a,b) indexi (a) bo'yicha query'larni ham qoplaydi — alohida (a) index ortiqcha bo'lib qoladi. Lekin har xil shartlar ko'p bo'lsa (a=?, b=?, c=?) hammasi uchun alohida composite yaratish ham yozishni sekinlashtiradi — eng muhim 2–3 tasini tanlash kerak."
+    },
+    {
+      "id": 105,
+      "code": 106,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "PostgreSQL B-tree indexi NULL qiymatlarni saqlaydimi?",
+      "options": [
+        "Yo'q, NULLlar indexga tushmaydi",
+        "Ha — shuning uchun WHERE col IS NULL ham indexdan foydalana oladi (Oracle'da esa oddiy B-tree NULLni saqlamaydi)",
+        "Faqat unique indexda saqlaydi",
+        "NULL indexni buzadi"
+      ],
+      "answer": 1,
+      "explanation": "Bog'liq nozik nuqta: unique index bir nechta NULLga ruxsat beradi, chunki NULL ≠ NULL. 'Bitta aktiv yozuv' talabi kerak bo'lsa NULLS NOT DISTINCT (Postgres 15+) yoki partial unique index ishlatiladi. Tartibda NULL joyi: ASC da oxirida, kerak bo'lsa NULLS FIRST/LAST bilan boshqariladi va index ham shu tartibda yaratilishi mumkin."
+    },
+    {
+      "id": 106,
+      "code": 107,
+      "level": "M",
+      "type": "sql",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Email katta-kichik harf farqisiz unikal bo'lsin, lekin faqat o'chirilmagan (deleted_at IS NULL) foydalanuvchilar orasida. Indexni yozing.",
+      "modelAnswer": "CREATE UNIQUE INDEX CONCURRENTLY users_email_lower_active_idx\n  ON users (LOWER(email))\n  WHERE deleted_at IS NULL;",
+      "keywords": [
+        "CREATE UNIQUE INDEX",
+        "LOWER",
+        "WHERE",
+        "deleted_at"
+      ],
+      "explanation": "Bu bitta indexda ikki texnika: expression (LOWER) va partial (WHERE). Query ham shu ifodaga mos bo'lishi kerak: WHERE LOWER(email) = LOWER($1) AND deleted_at IS NULL. Muqobil: citext tipi yoki emailni yozishda normalizatsiya qilish (ko'pincha eng sodda va ishonchli yo'l)."
+    },
+    {
+      "id": 107,
+      "code": 108,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Milliardlab row'li, faqat qo'shiladigan (append-only) va <code>created_at</code> bo'yicha tabiiy tartiblangan table'da sana diapazoni bo'yicha qidiruv uchun qaysi index turi juda kam joy egallaydi?",
+      "options": [
+        "B-tree",
+        "Hash",
+        "BRIN (Block Range INdex) — har blok diapazoni uchun min/max saqlaydi, hajmi juda kichik",
+        "GIN"
+      ],
+      "answer": 2,
+      "explanation": "BRIN faqat ma'lumot jismoniy tartibda saqlansa yaxshi ishlaydi (vaqt bo'yicha o'suvchi log table'lari) — aks holda deyarli foydasiz. B-tree aniqroq, lekin katta table'da gigabaytlab joy oladi. Tez-tez UPDATE bo'ladigan table'da tartib buziladi va BRIN samarasi tushadi."
+    },
+    {
+      "id": 108,
+      "code": 109,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Index vaqt o'tib 'shishib' (bloat) ketdi va sekinlashdi. Production'da nima qilasiz?",
+      "options": [
+        "Indexni DROP qilib qayta yaratish (uzoq vaqt yozish bloklanadi)",
+        "REINDEX INDEX CONCURRENTLY (Postgres 12+) — yozishni bloklamaydi; sabablarini ham ko'rish kerak: tez-tez UPDATE, autovacuum yetishmasligi, uzoq transaction'lar",
+        "VACUUM FULL har kuni ishlatish",
+        "Hech narsa qilib bo'lmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Bloat sababi — MVCC: UPDATE yangi versiya yaratadi, eski index yozuvlari qoladi. Profilaktika: autovacuum sozlamalari (table level'ida scale_factor pasaytirish), fillfactor bilan HOT update imkoniyatini oshirish, uzoq transaction'larni cheklash. VACUUM FULL table'ni to'liq qulflaydi — production'da odatda mumkin emas."
+    },
+    {
+      "id": 109,
+      "code": 110,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Standart (C bo'lmagan) collation'da <code>WHERE name LIKE 'Ali%'</code> uchun oddiy B-tree index ishlamadi. Sabab?",
+      "options": [
+        "LIKE hech qachon index ishlatmaydi",
+        "Prefiks qidiruvi uchun taqqoslash tartibi bayt tartibiga mos bo'lishi kerak: C/POSIX collation'da ishlaydi, boshqa collation'da esa text_pattern_ops bilan alohida index kerak: CREATE INDEX ON t (name text_pattern_ops)",
+        "name column'i NULL bo'lgani uchun",
+        "Index buzilgan"
+      ],
+      "answer": 1,
+      "explanation": "Tekshirish: EXPLAIN bilan. Muhim: text_pattern_ops indexi faqat prefiks LIKE uchun ishlaydi, oddiy teng taqqoslash (=) va ORDER BY uchun asosiy index kerak bo'lib qolishi mumkin — ba'zan ikkala index ham saqlanadi. '%li%' kabi qidiruv uchun esa pg_trgm + GIN."
+    },
+    {
+      "id": 110,
+      "code": 111,
+      "level": "S",
+      "type": "code",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Index <code>(customer_id, created_at)</code> bor. Nega bu query'da hali ham 'Sort' bor?",
+      "snippet": "SELECT * FROM orders\nWHERE customer_id = 42\nORDER BY created_at DESC, id ASC\nLIMIT 20;",
+      "options": [
+        "Index umuman ishlamayapti",
+        "ORDER BY da qo'shimcha column (id) va aralash yo'nalish bor — index tartibi query tartibiga to'liq mos emas. Mos index: (customer_id, created_at DESC, id ASC)",
+        "LIMIT 20 juda katta",
+        "created_at tipi noto'g'ri"
+      ],
+      "answer": 1,
+      "explanation": "Planner Sort'ni faqat index tartibi ORDER BY bilan to'liq mos kelganda olib tashlaydi (column'lar ketma-ketligi va yo'nalishi). Bir tomonga teskari yo'nalish (hammasi DESC) muammo emas — index ikki tomonlama o'qiladi; aralash yo'nalish esa alohida index talab qiladi. Keyset pagination uchun ham aynan shu index kerak bo'ladi."
+    },
+    {
+      "id": 30208,
+      "code": "SN209",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "B-tree indeks nima uchun hash indeksdan ko'proq ishlatiladi (DB'da)?",
+      "options": [
+        "Hash indeks tezroq emas",
+        "B-tree tartibni saqlaydi: diapazon (`>`, `BETWEEN`), `ORDER BY`, prefiks va `LIKE 'abc%'` ishlaydi, hamda balanslangan chuqurlik (3-4 daraja) bilan disk o'qishlari kam; hash faqat tenglik uchun",
+        "B-tree kam joy oladi",
+        "Hash indeks PostgreSQL'da yo'q"
+      ],
+      "answer": 1,
+      "explanation": "B-tree node'i disk sahifasi (8 KB) o'lchamida — bir o'qishda yuzlab kalit, shuning uchun milliard qatorda ham 3-4 sahifa o'qish yetadi. Hash indeks faqat `=` uchun va PostgreSQL'da ham bor, lekin ustunligi kam. Ma'lumot turiga qarab boshqa turlar: GIN (array/jsonb/full-text), GiST (geometriya), BRIN (katta, tabiiy tartiblangan jadval)."
+    },
+    {
+      "id": 30209,
+      "code": "SN210",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Planner",
+      "domain": "db",
+      "section": "d3",
+      "question": "Planner nega ba'zan indeksni tashlab Seq Scan tanlaydi?",
+      "options": [
+        "Bug",
+        "Tanlanuvchanlik (selectivity) past bo'lsa: jadvalning katta ulushi qaytadi va tasodifiy sahifa o'qishlar ketma-ket o'qishdan qimmat bo'ladi; shuningdek statistika eskirgan bo'lsa yoki `random_page_cost` noto'g'ri sozlangan bo'lsa qaror xato bo'lishi mumkin",
+        "Indeks buzilgan",
+        "Faqat kichik jadvalda"
+      ],
+      "answer": 1,
+      "explanation": "Tekshirish tartibi: `EXPLAIN (ANALYZE, BUFFERS)` bilan kutilgan va haqiqiy qator sonini solishtirish (katta farq — statistika muammosi: `ANALYZE`, `default_statistics_target`, korrelyatsiyalangan ustunlar uchun `CREATE STATISTICS`). SSD'da `random_page_cost` 1.1 atrofida bo'lishi kerak (default 4 — HDD davridan qolgan)."
+    },
+    {
+      "id": 30358,
+      "code": "SN359",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "B-tree indeks nima uchun hash indeksdan ko'proq ishlatiladi (DB'da)?",
+      "options": [
+        "Hash indeks tezroq emas",
+        "B-tree tartibni saqlaydi: diapazon (`>`, `BETWEEN`), `ORDER BY`, prefiks va `LIKE 'abc%'` ishlaydi, hamda balanslangan chuqurlik (3-4 daraja) bilan disk o'qishlari kam; hash faqat tenglik uchun",
+        "B-tree kam joy oladi",
+        "Hash indeks PostgreSQL'da yo'q"
+      ],
+      "answer": 1,
+      "explanation": "B-tree node'i disk sahifasi (8 KB) o'lchamida — bir o'qishda yuzlab kalit, shuning uchun milliard qatorda ham 3-4 sahifa o'qish yetadi. Hash indeks faqat `=` uchun va PostgreSQL'da ham bor, lekin ustunligi kam. Ma'lumot turiga qarab boshqa turlar: GIN (array/jsonb/full-text), GiST (geometriya), BRIN (katta, tabiiy tartiblangan jadval)."
+    },
+    {
+      "id": 30359,
+      "code": "SN360",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Planner",
+      "domain": "db",
+      "section": "d3",
+      "question": "Planner nega ba'zan indeksni tashlab Seq Scan tanlaydi?",
+      "options": [
+        "Bug",
+        "Tanlanuvchanlik (selectivity) past bo'lsa: jadvalning katta ulushi qaytadi va tasodifiy sahifa o'qishlar ketma-ket o'qishdan qimmat bo'ladi; shuningdek statistika eskirgan bo'lsa yoki `random_page_cost` noto'g'ri sozlangan bo'lsa qaror xato bo'lishi mumkin",
+        "Indeks buzilgan",
+        "Faqat kichik jadvalda"
+      ],
+      "answer": 1,
+      "explanation": "Tekshirish tartibi: `EXPLAIN (ANALYZE, BUFFERS)` bilan kutilgan va haqiqiy qator sonini solishtirish (katta farq — statistika muammosi: `ANALYZE`, `default_statistics_target`, korrelyatsiyalangan ustunlar uchun `CREATE STATISTICS`). SSD'da `random_page_cost` 1.1 atrofida bo'lishi kerak (default 4 — HDD davridan qolgan)."
+    },
+    {
+      "id": 30396,
+      "code": "SN397",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Kompozit indeks `(a, b, c)` bor. Qaysi query'lar undan foydalanadi?",
+      "options": [
+        "Faqat uchchalasi shartda bo'lsa",
+        "`a`, `(a,b)`, `(a,b,c)` prefikslari bo'yicha samarali; `b` yoki `c` yolg'iz bo'lsa odatda yaramaydi (PostgreSQL ba'zan index scan qiladi, lekin samarasiz). Tartib qoidasi: tenglik shartlari avval, diapazon oxirida",
+        "Har qanday kombinatsiya bir xil ishlaydi",
+        "Faqat `ORDER BY` uchun"
+      ],
+      "answer": 1,
+      "explanation": "B-tree kalitlarni leksikografik tartibda saqlaydi — shuning uchun chapdan prefiks muhim. Amaliy natija: `(tenant_id, created_at)` indeksi `WHERE tenant_id = ? ORDER BY created_at DESC LIMIT 20` uchun ideal (filtr + tartib bitta indeksda). Diapazon shartidan keyingi ustunlar saralash uchun ishlatilmaydi — shuning uchun `(status, created_at)` va `(created_at, status)` butunlay boshqa natija beradi."
+    },
+    {
+      "id": 30397,
+      "code": "SN398",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "Partial va covering (INCLUDE) indekslar qachon foyda beradi?",
+      "options": [
+        "Hech qachon, oddiy indeks yetarli",
+        "Partial: faqat kerakli qatorlar indekslanadi (`WHERE deleted_at IS NULL` yoki `status='pending'`) — indeks kichik va tez; covering: `INCLUDE (cols)` bilan query indeksdan chiqmasdan bajariladi (index-only scan), heap'ga bormaydi",
+        "Faqat kichik jadvalda",
+        "Faqat unique indeksda"
+      ],
+      "answer": 1,
+      "explanation": "Navbat jadvallarida partial indeks ayniqsa kuchli: 10 mln yozuvdan faqat 500 `pending` indekslanadi. Index-only scan uchun visibility map yangi bo'lishi kerak (vacuum bilan) — aks holda heap tekshiruvi qaytadi. Narxi: har indeks yozuvni sekinlashtiradi va joy egallaydi, shuning uchun `pg_stat_user_indexes` bilan ishlatilmayotganlar tozalanadi."
+    },
+    {
+      "id": 30424,
+      "code": "SN425",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Planner",
+      "domain": "db",
+      "section": "d3",
+      "question": "Nested loop, hash join va merge join — qaysi biri qachon tanlanadi?",
+      "options": [
+        "Har doim hash join eng tez",
+        "Nested loop: bir tomon kichik va ikkinchisida indeks bor (OLTP'da eng ko'p); hash join: ikkala tomon katta, tenglik sharti, xotirada hash jadval quriladi (`work_mem` yetmasa diskka to'kiladi); merge join: ikkala tomon sort kaliti bo'yicha tartiblangan (yoki indeks bor) va juda katta",
+        "Merge join eskirgan",
+        "Planner tasodifiy tanlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Debug uchun muhim: `EXPLAIN ANALYZE`da 'Batches: 5, Memory Usage: ...' hash join diskka to'kilganini bildiradi — `work_mem` oshirish yoki natijani kamaytirish kerak. Nested loop noto'g'ri tanlansa (qator soni past baholangan) query 1000x sekinlashadi — sabab ko'pincha eskirgan statistika yoki korrelyatsiyalangan shartlar."
+    },
+    {
+      "id": 30425,
+      "code": "SN426",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Planner",
+      "domain": "db",
+      "section": "d3",
+      "question": "Planner qator sonini 10x xato baholayapti. Nima qilinadi?",
+      "options": [
+        "`enable_seqscan=off` qo'yish",
+        "Statistikani yaxshilash: `ANALYZE`, `ALTER TABLE ... ALTER COLUMN ... SET STATISTICS 500` (ko'proq histogram), korrelyatsiyalangan ustunlar uchun `CREATE STATISTICS (dependencies, ndistinct)`; ifoda bo'yicha filtr bo'lsa expression index yoki generated column",
+        "Query'ni qayta yozish har doim",
+        "Indeks qo'shish"
+      ],
+      "answer": 1,
+      "explanation": "Klassik sabab: `WHERE city = 'Tashkent' AND country = 'UZ'` — planner ikkisini mustaqil deb hisoblab selektivlikni ko'paytiradi va qatorlarni juda kam baholaydi. Kengaytirilgan statistika bu bog'liqlikni o'rgatadi. `enable_*` flaglari faqat diagnostika uchun — productionda qotirib qo'yish plan regressiyasini yashiradi."
+    },
+    {
+      "id": 30426,
+      "code": "SN427",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Index",
+      "domain": "db",
+      "section": "d3",
+      "question": "`jsonb` ustunni indekslash variantlari?",
+      "options": [
+        "Faqat B-tree",
+        "GIN (`jsonb_ops` — barcha kalit/qiymat, `jsonb_path_ops` — kichikroq va `@>` uchun tez), yoki aniq yo'lga B-tree expression index (`((data->>'status'))`) / generated column; tanlov query naqshiga bog'liq",
+        "GIN har doim",
+        "jsonb indekslanmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Qoida: ma'lum va tez-tez ishlatiladigan maydon bo'lsa — uni ustunga chiqarish (generated column + B-tree) eng tez va eng arzon; erkin sxema bo'yicha qidiruv bo'lsa — GIN. GIN yozuvda qimmat (`fastupdate` bilan kechiktiriladi lekin keyin katta pauza) va kattaroq. jsonb'ni relyatsion sxema o'rniga ishlatish — eng ko'p uchraydigan dizayn xatosi."
+    }
+  ]
+}

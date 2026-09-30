@@ -1,0 +1,266 @@
+{
+  "id": "a3",
+  "name": "Realtime",
+  "domain": "api",
+  "domainLabel": "API, HTTP, security",
+  "topics": [
+    "Realtime"
+  ],
+  "questions": [
+    {
+      "id": 89,
+      "code": 90,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "Short polling, long polling, SSE va WebSocket — farqi?",
+      "options": [
+        "Hammasi bir xil",
+        "Short polling — client doim qayta so'raydi (oddiy, isrofgarchilik). Long polling — server ma'lumot paydo bo'lguncha javobni ushlab turadi. SSE — serverdan clientga bir tomonlama uzluksiz oqim (HTTP ustida, avtomatik qayta connection). WebSocket — ikki tomonlama doimiy connection",
+        "SSE ikki tomonlama",
+        "WebSocket HTTP emas va proxy'lardan o'tmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Tanlov qoidasi: faqat serverdan yangilik kerakmi (narx, bildirishnoma, progress) — SSE yetarli va soddaroq; chat, o'yin, hamkorlikdagi tahrir kabi ikki tomonlama aloqa kerakmi — WebSocket. Long polling — eski client/proxy'lar uchun zaxira variant.",
+      "source": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events"
+    },
+    {
+      "id": 90,
+      "code": 91,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "SSE ning WebSocket'ga nisbatan amaliy afzalligi?",
+      "options": [
+        "Ikki tomonlama aloqa",
+        "Oddiy HTTP: mavjud autentifikatsiya, proxy va load balancer bilan muammosiz ishlaydi, avtomatik qayta connection va Last-Event-ID bilan uzilgan joydan davom etish qo'llab-quvvatlanadi",
+        "Ko'proq ma'lumot uzatadi",
+        "Brauzerda qo'llab-quvvatlanmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Cheklovlari: faqat matn (UTF-8), HTTP/1.1 da domenga connection'lar soni cheklangan (HTTP/2 da bu muammo yo'q), ba'zi proxy'lar javobni buferlashi mumkin (nginx'da proxy_buffering off). Serverda har connection resurs — goroutine/thread modeli va connection'lar soni rejalashtirilishi kerak."
+    },
+    {
+      "id": 91,
+      "code": 92,
+      "level": "S",
+      "type": "open",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket'li servisni masshtablashda qanday muammolar chiqadi?",
+      "modelAnswer": [
+        "Connection stateful: LB sticky bo'lishi yoki connection qayerdaligini bilish kerak (presence/registry)",
+        "Bir foydalanuvchiga xabar yuborish uchun uning qaysi instance'ga ulanganini topish — odatda Redis Pub/Sub yoki mesh orqali fan-out",
+        "Deploy: har deployda hamma connection uziladi — client tomonda backoff bilan qayta connection va holatni tiklash shart",
+        "Resurs: har connection memory va fayl deskriptori; connection'lar soniga limit va gorizontal masshtab",
+        "Sog'liq: heartbeat/ping-pong bilan o'lik connection'larni tozalash; idle timeout'lar LB bilan muvofiq",
+        "Backpressure: sekin client uchun bufer cheklovi va uzish siyosati"
+      ],
+      "explanation": "Senior signal: 'stateful connection stateless servis modelini buzadi' va deploy/qayta connection strategiyasini aytish. Ko'pincha soddaroq yechim — SSE yoki push notification."
+    },
+    {
+      "id": 18033,
+      "code": "GR34",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket, SSE va long polling — Go'da qaysi biri qachon?",
+      "options": [
+        "SSE — faqat serverdan clientga oqim (oddiy, HTTP ustida, avtomatik qayta ulanish); WebSocket — ikki tomonlama (chat, o'yin); long polling — eski clientlar uchun zaxira; tanlov yo'nalish va infratuzilmaga (proxy, LB timeout) bog'liq",
+        "WebSocket har doim to'g'ri tanlov",
+        "SSE ikki tomonlama",
+        "Long polling WebSocket'dan tez"
+      ],
+      "answer": 0,
+      "explanation": "Go'da: SSE — oddiy handler + http.Flusher (yoki ResponseController), hech qanday kutubxona kerak emas; WebSocket — nhooyr/coder websocket yoki gorilla. Masshtablashda asosiy muammo — holat: ulanish bitta podda, shuning uchun Redis pub/sub yoki Centrifugo kabi broker orqali fan-out kerak. LB/proxy idle timeout'idan qisqa heartbeat (ping) yuborilishi shart."
+    },
+    {
+      "id": 30006,
+      "code": "SN7",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket bilan 200k ulanishni bir necha podda ushlab turasiz. Foydalanuvchiga xabar yuborish kerak, lekin u qaysi podda ekani noma'lum. Eng to'g'ri arxitektura?",
+      "options": [
+        "Barcha podlarni ketma-ket so'rash",
+        "Pub/Sub (Redis/NATS/Kafka) fan-out: har pod o'zining ulanishlariga tegishli kanalga subscribe bo'ladi",
+        "Sticky session cookie yetarli",
+        "Har pod barcha foydalanuvchilar ulanishini saqlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Standart pattern: ulanish holati podda (local), yo'naltirish pub/sub orqali. Redis pub/sub oddiy lekin at-most-once — pod ulanmagan payt xabar yo'qoladi; kafolat kerak bo'lsa Kafka/NATS JetStream + per-user offset. Presence uchun TTL'li Redis kalit (`presence:user:42 -> podID`, heartbeat bilan yangilanadi)."
+    },
+    {
+      "id": 30007,
+      "code": "SN8",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket ulanish 60 sekunddan keyin jim uziladi, xato log yo'q. Eng ehtimolli sabab?",
+      "options": [
+        "TLS sertifikat muddati",
+        "Oradagi L7 proxy/LB yoki NAT idle timeout — ping/pong keepalive yo'q",
+        "Brauzer bug'i",
+        "Payload juda katta"
+      ],
+      "answer": 1,
+      "explanation": "nginx `proxy_read_timeout` default 60s, ALB idle timeout 60s, NAT/conntrack jadvali ham idle flow'ni tashlaydi. Yechim: server tomondan davriy `ping` (20-30s) va `pong` deadline; proxy timeout'ni ping intervalidan katta qilish. Bundan tashqari client'da exponential backoff + resume token bilan reconnect kerak."
+    },
+    {
+      "id": 30008,
+      "code": "SN9",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "Realtime kanalda <b>at-least-once</b> yetkazib berish kerak. Client reconnect qilganda xabarlar yo'qolmasligi uchun?",
+      "options": [
+        "Faqat qayta yuborish",
+        "Har xabarga monoton `seq`/offset berish; client oxirgi ko'rgan seq'ni reconnect'da yuborib, serverdan qolganini so'raydi",
+        "TCP o'zi kafolatlaydi",
+        "WebSocket'da yo'qolish bo'lmaydi"
+      ],
+      "answer": 1,
+      "explanation": "TCP faqat ulanish ichida tartib beradi — uzilish oralig'idagi xabarlar yo'q. Shuning uchun per-kanal cursor: server oxirgi N xabarni (yoki stream'ni) saqlaydi, client `Last-Event-ID`/seq bilan resume qiladi (SSE'da bu standart). Dublikat bo'lishi mumkin — client dedupe qiladi, ya'ni idempotent qo'llash."
+    },
+    {
+      "id": 30009,
+      "code": "SN10",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "Bir yo'nalishli server→client oqim uchun SSE va WebSocket qaysi holatda afzal?",
+      "options": [
+        "SSE har doim yomon",
+        "SSE: faqat server→client, HTTP/1.1+ oddiy, avtomatik reconnect va Last-Event-ID bor, proxy'lar bilan do'st; WebSocket: ikki yo'nalishli, binary, past latency",
+        "WebSocket faqat chatda ishlaydi",
+        "SSE binary uzatishga optimal"
+      ],
+      "answer": 1,
+      "explanation": "Notification/progress/feed uchun SSE arzon va operatsion jihatdan sodda (oddiy HTTP, LB muammosi kam, auth cookie/header ishlaydi). Cheklov: HTTP/1.1'da brauzer per-domen ulanish limiti (~6) va faqat text; HTTP/2 multiplexing bilan bu yengillashadi. Ikki yo'nalish yoki juda tez almashinuv kerak bo'lsa — WebSocket."
+    },
+    {
+      "id": 30010,
+      "code": "SN11",
+      "level": "St",
+      "type": "open",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket gateway'ni deploy qilayotganda 200k ulanish bir zumda uzilib, hammasi qayta ulanadi (thundering herd). Qanday oldini olasiz?",
+      "modelAnswer": [
+        "Graceful drain: pod `SIGTERM` olgach yangi ulanish qabul qilmaydi, mavjudlarini bosqichma-bosqich (masalan 1-2% / sekund) yopadi va client'ga 'reconnect after N' hint yuboradi",
+        "Client'da jitterli exponential backoff — barchasi bir vaqtda qaytmasin",
+        "preStop hook + `terminationGracePeriodSeconds` yetarlicha uzun (30-120s)",
+        "Rolling deploy: maxUnavailable kichik, surge cheklangan; kanareyka bilan avval 5% pod",
+        "Auth/handshake narxi katta bo'lsa — resume token bilan arzon reconnect yo'li",
+        "Reconnect paytdagi 'catch-up' o'qishni rate-limit va cache orqali berish, DB'ga to'g'ridan-to'g'ri urmaslik"
+      ],
+      "explanation": "Reconnect bo'roni ko'pincha o'zi incident'ni keltiradi: handshake + auth + state yuklash bir vaqtda kelib DB va identity servisini o'ldiradi. Shuning uchun uzish ham, qaytish ham asta bo'lishi kerak."
+    },
+    {
+      "id": 30011,
+      "code": "SN12",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket'da autentifikatsiya: qaysi yondashuv to'g'ri?",
+      "options": [
+        "Token'ni query string'da yuborish eng yaxshi",
+        "Handshake'da (header yoki qisqa muddatli ticket) tekshirish, ulanish davomida token muddati tugashini alohida kuzatib davriy re-auth qilish",
+        "Bir marta auth qilib umrbod ishonish",
+        "Har xabarda JWT tekshirish shart"
+      ],
+      "answer": 1,
+      "explanation": "Brauzer WebSocket API custom header bermaydi, shuning uchun qisqa TTL'li (10-60s) bir martalik ticket olinadi va `?ticket=` bilan ulanadi (query'dagi uzoq muddatli JWT log'larga tushadi — leak). Ulanish uzoq yashaydi: token/scope o'zgarsa yoki muddati tugasa — server ulanishni yopadi yoki re-auth frame talab qiladi, aks holda revoke ishlamaydi."
+    },
+    {
+      "id": 30442,
+      "code": "SN443",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket gateway'da per-client backpressure qanday qilinadi?",
+      "options": [
+        "Hech narsa qilinmaydi",
+        "Har client uchun chegaralangan yozuv navbati: to'lsa — eski xabarlarni tashlash (fan-out telemetriya uchun), yoki snapshot bilan almashtirish (holat oqimida), yoki ulanishni uzish (slow consumer); yozuvda deadline (`SetWriteDeadline`) majburiy",
+        "Navbatni cheksiz qilish",
+        "Faqat TCP buferi yetarli"
+      ],
+      "answer": 1,
+      "explanation": "Cheksiz bufer — OOM va butun gateway yiqilishi. Siyosat ma'lumot turiga bog'liq: narx oqimida oxirgi qiymat muhim (conflate — eskisini yangisi bilan almashtirish), chatda esa yo'qotish mumkin emas (shuning uchun clientni uzib, u qayta ulanib kursordan davom etadi). Metrikalar: tashlangan xabarlar, navbat uzunligi taqsimoti, uzilgan sekin clientlar."
+    },
+    {
+      "id": 30507,
+      "code": "SN508",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "Real-time tizimda 'presence' (kim onlayn) nega qiyin?",
+      "options": [
+        "Oddiy masala",
+        "Ulanish uzilishini darhol bilib bo'lmaydi (TCP jim o'ladi) — heartbeat + TTL kerak; N foydalanuvchi × M kuzatuvchi fan-out portlashi; va tez-tez o'zgaruvchi holat (flapping) — shuning uchun debounce, faqat ko'rinadigan kontaktlarga yuborish va taxminiy holat qabul qilinadi",
+        "Faqat WebSocket bilan mumkin",
+        "DB'da flag yetarli"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy dizayn: Redis'da `presence:<user>` kaliti TTL bilan (heartbeat har 20-30s yangilaydi), o'zgarishlar pub/sub orqali faqat kerakli kuzatuvchilarga, va 'last seen' taxminiy aniqlik bilan. Aniq real-time presence katta miqyosda juda qimmat — mahsulot talabini yumshatish (masalan '5 daqiqa ichida faol') to'g'ri muhandislik qarori."
+    },
+    {
+      "id": 30508,
+      "code": "SN509",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "WebSocket o'rniga long polling qachon hali ham to'g'ri tanlov?",
+      "options": [
+        "Hech qachon",
+        "Eski/cheklangan infratuzilma (WebSocket'ni o'tkazmaydigan proksi), juda kam va noregulyar yangilanishlar, yoki mavjud HTTP autentifikatsiya/kesh qatlamidan foydalanish kerak bo'lganda; shuningdek fallback sifatida",
+        "Har doim",
+        "Faqat mobil ilovada"
+      ],
+      "answer": 1,
+      "explanation": "Long polling narxi: har sikl yangi so'rov (header overhead, ulanish o'rnatish), server tomonda uzoq ochiq so'rovlar (goroutine va timeout boshqaruvi). Lekin operatsion jihatdan oddiy: oddiy HTTP monitoringi, LB va auth ishlaydi. Ko'p tizim SSE'ni o'rtacha yechim sifatida tanlaydi — bir yo'nalishli oqim uchun yetarli va sodda."
+    },
+    {
+      "id": 30509,
+      "code": "SN510",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Realtime",
+      "domain": "api",
+      "section": "a3",
+      "question": "Real-time narx oqimida (masalan birja) sekin client uchun to'g'ri strategiya?",
+      "options": [
+        "Barcha yangilanishni navbatda saqlash",
+        "Conflation: oxirgi qiymat muhim — har instrument uchun navbatda faqat oxirgi yangilanish saqlanadi (eskisi almashtiriladi), va yuborish chastotasi cheklanadi (masalan 10 Hz); shunda sekin client eskirgan ma'lumot to'plamaydi",
+        "Clientni darhol uzish",
+        "Barchaga bir xil tezlikda yuborish"
+      ],
+      "answer": 1,
+      "explanation": "Bu naqsh moliyaviy va telemetriya oqimlarida standart: navbat o'rniga `map[instrument]lastValue` + davriy flush. Chat yoki buyurtma eventlarida esa conflation mumkin emas (har xabar muhim) — u yerda backpressure boshqacha hal qilinadi (uzish + kursordan tiklanish)."
+    }
+  ]
+}

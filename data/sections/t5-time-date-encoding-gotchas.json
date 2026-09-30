@@ -1,0 +1,244 @@
+{
+  "id": "t5",
+  "name": "Time, date, encoding gotchas",
+  "domain": "tricky",
+  "domainLabel": "Edge cases & gotchas",
+  "topics": [
+    "Time gotcha"
+  ],
+  "questions": [
+    {
+      "id": 16015,
+      "code": "E16",
+      "level": "M",
+      "type": "code",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Bu taqqoslash nega xato?",
+      "snippet": "t1, _ := time.Parse(time.RFC3339, \"2024-01-01T00:00:00Z\")\nt2 := t1.In(time.FixedZone(\"UTC+5\", 5*3600))\nfmt.Println(t1 == t2)",
+      "options": [
+        "false — `==` monotonic clock va Location'ni ham solishtiradi; to'g'risi t1.Equal(t2)",
+        "true",
+        "panic",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 0,
+      "explanation": "time.Time struct: wall clock + monotonic reading + *Location. `==` barcha maydonlarni solishtiradi, shuning uchun bir xil lahzaning turli zonadagi ko'rinishlari teng chiqmaydi. Har doim t1.Equal(t2) ishlating. time.Now() dan olingan qiymatda monotonic qism bor — uni Round(0) olib tashlaydi (DB'ga yozishdan oldin foydali).",
+      "source": "https://pkg.go.dev/time#Time"
+    },
+    {
+      "id": 16016,
+      "code": "E17",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Vaqt oralig'ini o'lchash uchun nima ishlatiladi?",
+      "options": [
+        "time.Since(start) — u monotonic clock'dan foydalanadi, NTP sakrashi yoki DST ta'sir qilmaydi",
+        "time.Now().Unix() farqi",
+        "time.Now().Sub(start.UTC())",
+        "Har biri bir xil"
+      ],
+      "answer": 0,
+      "explanation": "Wall clock NTP tuzatishi bilan orqaga sakrashi mumkin — o'lchov manfiy chiqadi. Go time.Now() ichida monotonic reading saqlaydi va Sub/Since shu qismni ishlatadi. Lekin Unix() yoki UTC()/Round(0) chaqirsangiz monotonic qism yo'qoladi va wall clock'ga qaytasiz."
+    },
+    {
+      "id": 16017,
+      "code": "E18",
+      "level": "M",
+      "type": "open",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Kelajakdagi uchrashuvni qanday saqlaysan: UTC timestamp'mi yoki local vaqt + timezone'mi?",
+      "modelAnswer": "O'tgan hodisa (log, audit, created_at) — UTC instant (timestamptz). Kelajakdagi inson rejalashtirgan hodisa (uchrashuv, budilnik, cron) — local wall time + IANA timezone nomi ('Asia/Tashkent'), UTC emas. Sabab: davlat DST yoki offset qoidasini o'zgartirsa (bu har yili bir necha marta yuz beradi), saqlangan UTC noto'g'ri mahalliy vaqtga aylanadi; zona nomi bilan saqlansa qayta hisoblash to'g'ri chiqadi. Takrorlanuvchi hodisa uchun RRULE + zona saqlanadi, har instance oldindan UTC'ga materializatsiya qilinmaydi (yoki qilinsa, tzdata yangilanganda qayta hisoblanadi).",
+      "explanation": "Postgres'da timestamptz aslida zona saqlamaydi — u kiruvchi qiymatni UTC'ga o'girib saqlaydi. Shuning uchun zona nomi alohida ustunda kerak. Server tzdata versiyasi ham deploy artefakti — Go'da `time/tzdata` paketini import qilib binary ichiga joylash mumkin.",
+      "source": "https://www.postgresql.org/docs/current/datatype-datetime.html"
+    },
+    {
+      "id": 16018,
+      "code": "E19",
+      "level": "M",
+      "type": "code",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "JSON'da nima chiqadi?",
+      "snippet": "type U struct {\n    ID   int64  `json:\"id\"`\n    Name string `json:\"name\"`\n    age  int\n}\nb, _ := json.Marshal(U{1, \"ali\", 30})",
+      "options": [
+        "{\"id\":1,\"name\":\"ali\"} — kichik harfli (unexported) maydon marshal bo'lmaydi",
+        "{\"id\":1,\"name\":\"ali\",\"age\":30}",
+        "Xato qaytaradi",
+        "{\"ID\":1,...}"
+      ],
+      "answer": 0,
+      "explanation": "encoding/json faqat exported maydonlarni ko'radi (reflection unexported'ga yoza olmaydi). Yana tuzoqlar: int64 JavaScript'da 2^53 dan keyin aniqlikni yo'qotadi — katta ID'larni string sifatida yuboring (`json:\"id,string\"`); `omitempty` 0 va false ni ham tashlab yuboradi — ixtiyoriy maydon uchun pointer yoki *sql.Null* ishlating."
+    },
+    {
+      "id": 16019,
+      "code": "E20",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Ikki service o'rtasida UUID'ni tartiblash kerak. Qaysi variant to'g'ri?",
+      "options": [
+        "UUIDv7 — vaqt prefiksi bor, leksikografik tartib vaqt tartibiga mos, B-tree index'da ham lokal",
+        "UUIDv4 — tasodifiy, tartiblash mumkin emas va index'da random insert",
+        "Har ikkisi bir xil",
+        "MD5 hash"
+      ],
+      "answer": 0,
+      "explanation": "UUIDv4 to'liq tasodifiy — B-tree'ga insert har safar boshqa sahifaga tushadi (WAL amplification, cache miss). UUIDv7 (RFC 9562, 2024) birinchi 48 bit — Unix millisekund; monotonik o'sish B-tree'ning o'ng chetiga insert qiladi, ULID bilan bir xil g'oya. Ogohlantirish: vaqt prefiksi yaratilish vaqtini oshkor qiladi.",
+      "source": "https://datatracker.ietf.org/doc/html/rfc9562"
+    },
+    {
+      "id": 30155,
+      "code": "SN156",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Kunlik hisobot `WHERE created_at >= current_date` bilan yozilgan, lekin natijalar 5 soatga surilgan. Sabab?",
+      "options": [
+        "Server sekin",
+        "`timestamp without time zone` vs `timestamptz` va sessiya `TimeZone` sozlamasi aralashgan — UTC'da saqlanib mahalliy vaqt bilan solishtirilgan yoki teskarisi",
+        "Indeks yo'q",
+        "DST"
+      ],
+      "answer": 1,
+      "explanation": "Qoida: hamma joyda `timestamptz` (UTC'da saqlanadi, chiqishda konvertatsiya) va biznes 'kun' chegarasi aniq vaqt zonasida hisoblanadi: `created_at >= (date_trunc('day', now() AT TIME ZONE 'Asia/Tashkent')) AT TIME ZONE 'Asia/Tashkent'`. Hisobot talabini 'kimning kuni' deb aniqlash — mahsulot qarori, texnik emas."
+    },
+    {
+      "id": 30156,
+      "code": "SN157",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Go'da ikki vaqt orasidagi o'tgan muddatni o'lchash uchun nima ishlatiladi?",
+      "options": [
+        "`time.Now().Sub(start)` — lekin `start` boshqa mashinadan kelgan bo'lsa ham to'g'ri",
+        "`time.Since(start)` bir jarayon ichida monoton soatni ishlatadi; lekin vaqt DB/tarmoqdan kelib serializatsiya qilinsa monoton komponent yo'qoladi va NTP tuzatishlari natijani buzadi",
+        "`time.Unix()` har doim",
+        "Faqat `time.Sleep`"
+      ],
+      "answer": 1,
+      "explanation": "Go `time.Time` ichida wall clock va monoton o'qish ikkalasini saqlaydi; `Sub`/`Since` monotondan foydalanadi. Ammo `t.Round(0)`, JSON marshal yoki DB'ga yozib qaytarish monoton qismni o'chiradi — shundan keyin o'lchov NTP sakrashiga bog'liq bo'ladi, hatto manfiy davomiylik chiqishi mumkin."
+    },
+    {
+      "id": 30157,
+      "code": "SN158",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "'Har oyning 31-kuni' obunasini hisoblashda qanday edge case bor?",
+      "options": [
+        "Yo'q",
+        "Fevralda 31-kun yo'q — siyosat aniq belgilanishi kerak (oyning oxirgi kuni yoki 1-mart); shuningdek DST kunida mahalliy 02:30 mavjud bo'lmasligi va ikki marta bo'lishi mumkin",
+        "Faqat yillik hisobda",
+        "Faqat ma'lumot bazasida"
+      ],
+      "answer": 1,
+      "explanation": "Go'da `AddDate(0, 1, 0)` 31-yanvarga qo'shilsa 3-mart chiqadi (kun oshib ketadi) — bu odatda biznes kutganidan boshqa. Shuning uchun davriy hisob-kitob 'anchor day' + oy oxiri bilan clamp qilib yoziladi va testlarda fevral, kabisa yil, DST kunlari alohida holat sifatida bo'ladi."
+    },
+    {
+      "id": 30305,
+      "code": "SN306",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Kunlik hisobot `WHERE created_at >= current_date` bilan yozilgan, lekin natijalar 5 soatga surilgan. Sabab?",
+      "options": [
+        "Server sekin",
+        "`timestamp without time zone` vs `timestamptz` va sessiya `TimeZone` sozlamasi aralashgan — UTC'da saqlanib mahalliy vaqt bilan solishtirilgan yoki teskarisi",
+        "Indeks yo'q",
+        "DST"
+      ],
+      "answer": 1,
+      "explanation": "Qoida: hamma joyda `timestamptz` (UTC'da saqlanadi, chiqishda konvertatsiya) va biznes 'kun' chegarasi aniq vaqt zonasida hisoblanadi: `created_at >= (date_trunc('day', now() AT TIME ZONE 'Asia/Tashkent')) AT TIME ZONE 'Asia/Tashkent'`. Hisobot talabini 'kimning kuni' deb aniqlash — mahsulot qarori, texnik emas."
+    },
+    {
+      "id": 30306,
+      "code": "SN307",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Go'da ikki vaqt orasidagi o'tgan muddatni o'lchash uchun nima ishlatiladi?",
+      "options": [
+        "`time.Now().Sub(start)` — lekin `start` boshqa mashinadan kelgan bo'lsa ham to'g'ri",
+        "`time.Since(start)` bir jarayon ichida monoton soatni ishlatadi; lekin vaqt DB/tarmoqdan kelib serializatsiya qilinsa monoton komponent yo'qoladi va NTP tuzatishlari natijani buzadi",
+        "`time.Unix()` har doim",
+        "Faqat `time.Sleep`"
+      ],
+      "answer": 1,
+      "explanation": "Go `time.Time` ichida wall clock va monoton o'qish ikkalasini saqlaydi; `Sub`/`Since` monotondan foydalanadi. Ammo `t.Round(0)`, JSON marshal yoki DB'ga yozib qaytarish monoton qismni o'chiradi — shundan keyin o'lchov NTP sakrashiga bog'liq bo'ladi, hatto manfiy davomiylik chiqishi mumkin."
+    },
+    {
+      "id": 30307,
+      "code": "SN308",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "'Har oyning 31-kuni' obunasini hisoblashda qanday edge case bor?",
+      "options": [
+        "Yo'q",
+        "Fevralda 31-kun yo'q — siyosat aniq belgilanishi kerak (oyning oxirgi kuni yoki 1-mart); shuningdek DST kunida mahalliy 02:30 mavjud bo'lmasligi va ikki marta bo'lishi mumkin",
+        "Faqat yillik hisobda",
+        "Faqat ma'lumot bazasida"
+      ],
+      "answer": 1,
+      "explanation": "Go'da `AddDate(0, 1, 0)` 31-yanvarga qo'shilsa 3-mart chiqadi (kun oshib ketadi) — bu odatda biznes kutganidan boshqa. Shuning uchun davriy hisob-kitob 'anchor day' + oy oxiri bilan clamp qilib yoziladi va testlarda fevral, kabisa yil, DST kunlari alohida holat sifatida bo'ladi."
+    },
+    {
+      "id": 30496,
+      "code": "SN497",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "`time.Time` ni DB'ga yozib o'qiganda vaqt o'zgarib qolyapti. Sabab?",
+      "options": [
+        "Driver bug'i",
+        "Ustun turi `timestamp` (zonasiz) bo'lsa zona ma'lumoti tashlanadi va o'qishda sessiya zonasi qo'llanadi; `timestamptz` + hamma joyda UTC bilan ishlash muammoni yo'qotadi",
+        "Go vaqtni saqlamaydi",
+        "Faqat SQLite'da"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qoidalar: DB'da `timestamptz`, ilovada UTC, foydalanuvchiga ko'rsatishda mahalliy zona; `time.Time` monoton komponenti serializatsiyada yo'qoladi (davomiylik o'lchash uchun yaramaydi); testlarda `time.Now()` ni inject qilinadigan `Clock` bilan almashtirish — aks holda testlar zonaga va soatga bog'liq bo'ladi."
+    },
+    {
+      "id": 30497,
+      "code": "SN498",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Time gotcha",
+      "domain": "tricky",
+      "section": "t5",
+      "question": "Kunlik cron soat 02:30 da ishlaydi. DST o'tishida nima bo'ladi?",
+      "options": [
+        "Hech narsa",
+        "Bahorda 02:30 mavjud bo'lmasligi mumkin (ish o'tkazib yuboriladi), kuzda esa ikki marta bo'ladi (ish ikki marta ishlaydi) — shuning uchun jadval UTC'da yuritiladi va ish idempotent qilinadi (`run_key` bilan)",
+        "Cron avtomatik to'g'rilaydi",
+        "Faqat AQShda"
+      ],
+      "answer": 1,
+      "explanation": "Xuddi shu muammo 'oyning oxirgi kuni' va kabisa yil bilan ham bor. Yechim naqshi: rejalashtirishni UTC'da saqlash, foydalanuvchiga mahalliy zonada ko'rsatish, va har bajarilishga `(job_id, scheduled_for)` unique kaliti berish — takror ishga tushsa ikkinchisi o'tkazib yuboriladi."
+    }
+  ]
+}

@@ -1,0 +1,471 @@
+{
+  "id": "g7",
+  "name": "Runtime internals",
+  "domain": "go",
+  "domainLabel": "Go",
+  "topics": [
+    "Runtime"
+  ],
+  "questions": [
+    {
+      "id": 19000,
+      "code": "RT1",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Goroutine stack'i qanday o'sadi?",
+      "options": [
+        "~2 KB dan boshlanadi; funksiya prologidagi tekshiruv (morestack) yetishmasligini sezsa, ikki barobar katta stack ajratib butun stack'ni NUSXA ko'chiradi va pointer'larni tuzatadi; GC vaqtida qisqarishi ham mumkin",
+        "Fiksirlangan 8 MB, OS thread kabi",
+        "Heap'da bog'langan ro'yxat sifatida o'sadi",
+        "O'smaydi — chuqur rekursiya darhol crash beradi"
+      ],
+      "answer": 0,
+      "explanation": "Stack ko'chirilishi mumkin bo'lgani uchun Go'da stack'dagi obyektga tashqi (unsafe) pointer saqlash xavfli — runtime faqat o'zi biladigan pointer'larni tuzatadi. Maksimal stack default 1 GB (runtime/debug.SetMaxStack); cheksiz rekursiya 'goroutine stack exceeds' bilan tugaydi. Amaliy xulosa: goroutine arzon (~2 KB), lekin million goroutine baribir gigabayt demak.",
+      "source": "https://go.dev/doc/faq#goroutines"
+    },
+    {
+      "id": 19001,
+      "code": "RT2",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go 1.14 gacha `for {}` tight loop butun GC'ni to'xtatib qo'yardi. Nima o'zgardi?",
+      "options": [
+        "Asinxron preemption: runtime goroutine'ga signal (SIGURG) yuborib uni to'xtatadi — endi funksiya chaqiruvisiz loop ham preempt qilinadi",
+        "GC endi goroutine'larni kutmaydi",
+        "Kompilyator loop'ga chaqiruv qo'shadi",
+        "Hech narsa o'zgarmagan"
+      ],
+      "answer": 0,
+      "explanation": "Oldin preemption faqat kooperativ edi: chaqiruv nuqtasidagi stack tekshiruvida. Chaqiruvsiz hisob-kitob loop'i P ni ushlab turar, STW fazasi cheksiz kutardi. 1.14 dan signal asosidagi preemption bor. Baribir cgo chaqiruvi yoki uzoq syscall preempt qilinmaydi — sysmon 10 ms dan keyin P ni tortib oladi (handoff).",
+      "source": "https://go.dev/doc/go1.14#runtime"
+    },
+    {
+      "id": 19002,
+      "code": "RT3",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Bloklovchi tarmoq o'qishi (conn.Read) OS thread'ni bloklaydimi?",
+      "options": [
+        "Yo'q — fayl deskriptori netpoller'ga (epoll/kqueue/IOCP) qo'yiladi, goroutine park qilinadi, M boshqa goroutine'ga o'tadi; tayyor bo'lganda goroutine runq'ga qaytariladi",
+        "Ha, har ulanish uchun bitta OS thread",
+        "Ha, lekin faqat TLS'da",
+        "Netpoller faqat Linux'da ishlaydi"
+      ],
+      "answer": 0,
+      "explanation": "Shuning uchun Go'da 'thread per connection' modeli sodda ko'rinib, ichkarida event loop bilan ishlaydi. Ammo fayl I/O va cgo chaqiruvi HAQIQIY bloklovchi syscall — u M ni bloklaydi va runtime yangi M yaratadi (thread soni o'sadi). Ko'p cgo yoki disk I/O bo'lgan servisda thread soni kutilmaganda o'sishining sababi shu; runtime/metrics bilan kuzatiladi."
+    },
+    {
+      "id": 19003,
+      "code": "RT4",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go scheduler'da work stealing nima?",
+      "options": [
+        "P o'z lokal runq'i bo'shasa, global navbatdan, netpoller'dan yoki boshqa P'ning navbatidan (yarmini) goroutine o'g'irlaydi — yuk avtomatik balanslanadi",
+        "Har goroutine o'z thread'ini oladi",
+        "OS scheduler bilan bir xil",
+        "Faqat GOMAXPROCS=1 da ishlaydi"
+      ],
+      "answer": 0,
+      "explanation": "GMP: G — goroutine, M — OS thread, P — bajarish konteksti (GOMAXPROCS ta). Lokal runq 256 ta, to'lgani global'ga tushadi. Adolat uchun har 61-planlashtirishda global navbatdan olinadi, yangi yaratilgan goroutine esa runnext slot'iga tushadi (lokallikni saqlash). Diagnostika: GODEBUG=schedtrace=1000 va `go tool trace`."
+    },
+    {
+      "id": 19004,
+      "code": "RT5",
+      "level": "P",
+      "type": "code",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Bu struct necha bayt egallaydi (64-bit)?",
+      "snippet": "type A struct {\n    a bool   // 1\n    b int64  // 8\n    c bool   // 1\n}",
+      "options": [
+        "24 — alignment tufayli a dan keyin 7 bayt padding, oxirida ham 7 bayt; maydonlarni kattadan kichikka tartiblasa 16 bayt",
+        "10",
+        "16",
+        "24, lekin tartib hech narsani o'zgartirmaydi"
+      ],
+      "answer": 0,
+      "explanation": "Har maydon o'z alignment'iga (int64 uchun 8) moslanadi, struct hajmi esa eng katta alignment'ga karrali bo'ladi. Millionlab element bo'lgan slice'da bu jiddiy: 24 va 16 bayt orasidagi farq 33% xotira. Tekshirish: unsafe.Sizeof, `fieldalignment` linter (golangci-lint). Lekin mikro-optimizatsiya sifatida emas — faqat katta massivlar va hot struct'larda."
+    },
+    {
+      "id": 19005,
+      "code": "RT6",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "False sharing nima va Go'da qanday hal qilinadi?",
+      "options": [
+        "Turli goroutine'lar bir kesh qatoridagi (64 bayt) qo'shni o'zgaruvchilarni yangilasa, kesh qatori yadrolar orasida urishadi; yechim — counter'larni padding bilan alohida qatorga ajratish yoki shardlash",
+        "Bir o'zgaruvchiga parallel yozish — data race bilan bir xil",
+        "Faqat atomic bo'lmagan kodda bo'ladi",
+        "Go runtime buni o'zi hal qiladi"
+      ],
+      "answer": 0,
+      "explanation": "Tipik shakl: []int64 counter massivi, har worker o'z indeksini oshiradi — mantiqan race yo'q, lekin throughput keskin tushadi. Yechim: struct { v int64; _ [56]byte } yoki per-P/per-worker holat + oxirida yig'ish. Runtime o'zi ham shunday qiladi (masalan per-P kesh, mcache). Aniqlash: perf/pprof'da atomik operatsiyalarda kutilmagan vaqt."
+    },
+    {
+      "id": 19006,
+      "code": "RT7",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go memory model bo'yicha qaysi kafolat to'g'ri?",
+      "options": [
+        "Channel'ga yuborish, o'sha qiymatni qabul qilish tugashidan OLDIN sodir bo'ladi; yopilgan channel'dan o'qish close'dan keyin; Unlock keyingi Lock'dan oldin; Go 1.19 dan sync/atomic ketma-ket izchil (sequentially consistent)",
+        "Har yozuv darhol barcha goroutine'larga ko'rinadi",
+        "volatile kalit so'zi kerak",
+        "Faqat mutex sinxronizatsiya beradi"
+      ],
+      "answer": 0,
+      "explanation": "Sinxronizatsiyasiz parallel kirish — aniqlanmagan xatti-harakat, 'faqat bayroq o'zgaruvchisi' ham race. Amaliy xulosa: bayroqni bool bilan emas, atomic.Bool yoki channel bilan bering. Data race — bug, 'toqat qilinadigan' holat emas: kompilyator va CPU qayta tartiblashi mumkin.",
+      "source": "https://go.dev/ref/mem"
+    },
+    {
+      "id": 19007,
+      "code": "RT8",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Map'ga bir vaqtda yozish nima bilan tugaydi?",
+      "options": [
+        "`fatal error: concurrent map writes` — bu panic emas, recover bilan ushlab bo'lmaydi va jarayon o'ladi; runtime buni ehtimollik bilan aniqlaydi",
+        "panic, recover bilan ushlanadi",
+        "Jimgina buzilgan ma'lumot",
+        "Hech narsa, map thread-safe"
+      ],
+      "answer": 0,
+      "explanation": "Runtime map'da yozuv bayrog'ini tekshiradi — aniqlangan holatda darhol throw qiladi (xotira buzilishidan ko'ra o'lish xavfsizroq). Aniqlash kafolatlangan emas, shuning uchun `-race` kerak. Yechim: mutex, sharded map, yoki sync.Map (faqat mos ssenariyda). Go 1.24 dan map ichki tuzilishi Swiss table — tezroq, lekin semantikasi o'zgarmagan."
+    },
+    {
+      "id": 19008,
+      "code": "RT9",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "`sync.Map` qachon oddiy map+RWMutex'dan yaxshi?",
+      "options": [
+        "Ikki ssenariy: (1) kalit bir marta yozilib ko'p marta o'qiladi, (2) turli goroutine'lar turli kalitlar bilan ishlaydi; aks holda mutex bilan oddiy map tezroq va tipli",
+        "Har doim yaxshiroq",
+        "Hech qachon ishlatilmaydi",
+        "Faqat kichik map'lar uchun"
+      ],
+      "answer": 0,
+      "explanation": "Ichkarida: atomik o'qiladigan `read` map + mutex bilan himoyalangan `dirty` map; o'qish ko'pincha lock'siz. Yozuv ko'p bo'lsa dirty doimiy qayta qurilib, sekinlashadi. Kamchiliklari: any tiplar (allokatsiya, tip xavfsizligi yo'q), Len yo'q. Go 1.24 da ichki implementatsiya HashTrieMap'ga almashtirildi. Tanlovni benchmark bilan tasdiqlang."
+    },
+    {
+      "id": 19009,
+      "code": "RT10",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go GC haqida qaysi ta'rif to'g'ri?",
+      "options": [
+        "Konkurent, uch rangli mark-sweep, kompaktlashtirmaydi; write barrier bilan ishlaydi; STW pauzalari juda qisqa (odatda <1 ms), lekin mark assist orqali allokatsiya qiluvchi goroutine GC ishining bir qismini bajaradi",
+        "Generatsion (young/old)",
+        "To'liq stop-the-world",
+        "Reference counting"
+      ],
+      "answer": 0,
+      "explanation": "Kompaktlashtirmagani uchun Go'da xotira fragmentatsiyasi bo'lishi mumkin, lekin pointer'lar barqaror (cgo uchun qulay). 'GC vaqti ko'p' muammosi odatda pauza emas, balki mark assist va yuqori allokatsiya tezligi: yechim — allokatsiyani kamaytirish (sync.Pool, oldindan Grow, pointer'siz tuzilmalar), GOGC/GOMEMLIMIT sozlash. Kuzatuv: GODEBUG=gctrace=1, /gc/ metrikalar, pprof allocs profili.",
+      "source": "https://go.dev/doc/gc-guide"
+    },
+    {
+      "id": 19010,
+      "code": "RT11",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Pointer'siz tuzilma GC uchun nega muhim?",
+      "options": [
+        "GC faqat pointer saqlaydigan obyektlarni skanerlaydi — []int yoki []byte skanerlanmaydi, []*T esa har elementni skanerlaydi; katta map/slice'da bu GC vaqtini belgilaydi",
+        "GC hamma obyektni bir xil skanerlaydi",
+        "Pointer'siz tuzilma sekinroq",
+        "Faqat 32-bit tizimlarda farq qiladi"
+      ],
+      "answer": 0,
+      "explanation": "Amaliy naqsh: map[string]*Item o'rniga slice ichida indeks bilan ishlash (map[string]int32 + []Item) katta keshlarda GC vaqtini bir necha barobar kamaytiradi. Shu g'oya asosida freecache/bigcache kabi kutubxonalar ma'lumotni []byte arenalarda saqlaydi. String ham pointer saqlaydi — millionlab string kalitlar GC uchun qimmat."
+    },
+    {
+      "id": 19011,
+      "code": "RT12",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "`defer` narxi qanday?",
+      "options": [
+        "Go 1.14 dan ochiq kodlangan (open-coded) defer deyarli bepul; lekin LOOP ichidagi yoki shartli defer heap'ga tushib qimmatlashadi",
+        "Har doim juda qimmat, hot path'da ishlatilmaydi",
+        "Umuman narxi yo'q",
+        "Faqat panic bo'lsa ishlaydi"
+      ],
+      "answer": 0,
+      "explanation": "Kompilyator defer'lar soni statik ma'lum bo'lsa ularni to'g'ridan-to'g'ri funksiya oxiriga inline qiladi. Qo'shimcha: recover bo'lgan funksiya inline qilinmaydi. Qoida: mutex Unlock uchun defer'dan tortinmang (to'g'rilik muhimroq), lekin million marta aylanuvchi loop ichida defer o'rniga aniq chaqiruv yoki ichki funksiya ishlating.",
+      "source": "https://go.dev/doc/go1.14#runtime"
+    },
+    {
+      "id": 19012,
+      "code": "RT13",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Interface orqali metod chaqirish nega konkret tipdan sekinroq?",
+      "options": [
+        "itab orqali dinamik dispatch — inline qilib bo'lmaydi va qiymat interface'ga solinganda ko'pincha heap allokatsiyasi (boxing) bo'ladi; PGO devirtualizatsiya bilan qisman yechadi",
+        "Sekinroq emas, bir xil",
+        "Har chaqiruvda reflection ishlatiladi",
+        "Interface metodlari sinxronizatsiya talab qiladi"
+      ],
+      "answer": 0,
+      "explanation": "Asosiy narx chaqiruvning o'zi emas, inline qilinmasligi va allokatsiya. Tipik misol: fmt.Println(x) — x interface{} ga boxing qilinadi va escape qiladi (shuning uchun hot path'da log qo'shish allokatsiyani oshiradi). Go 1.21+ PGO profil asosida eng ko'p uchraydigan konkret tipni topib devirtualize qiladi."
+    },
+    {
+      "id": 19013,
+      "code": "RT14",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Generiklar Go'da qanday kompilyatsiya qilinadi?",
+      "options": [
+        "GC shape stenciling: bir xil 'shakl'dagi tiplar (barcha pointer tiplar) bitta instansiyani ulashadi va dictionary orqali metadata oladi; shuning uchun generic kod ba'zan qo'lda yozilgan konkret koddan sekinroq",
+        "Har tip uchun to'liq alohida kod (C++ kabi)",
+        "Runtime'da reflection bilan",
+        "Type erasure (Java kabi)"
+      ],
+      "answer": 0,
+      "explanation": "int, float64 kabi qiymat tiplari o'z stensilini oladi; barcha pointer tiplar bitta shaklni ulashadi va metod chaqiruvi dictionary orqali ketadi — bu inline'ni to'sadi. Xulosa: generiklar tip xavfsizligi va takrorlanishni kamaytirish uchun, avtomatik tezlik uchun emas — ishlash muhim bo'lsa benchmark qiling.",
+      "source": "https://go.dev/blog/intro-generics"
+    },
+    {
+      "id": 19018,
+      "code": "RT19",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "`runtime.SetFinalizer` nega tavsiya etilmaydi?",
+      "options": [
+        "Finalizer ishga tushishi kafolatlanmaydi, GC'ni kechiktiradi, tsikl hosil qilsa obyekt hech qachon ozod bo'lmaydi; resurslarni aniq Close/defer bilan yopish kerak (Go 1.24 dan AddCleanup va weak pointer'lar bor)",
+        "Finalizer determinstik ishlaydi va yaxshi usul",
+        "Faqat cgo'da ishlaydi",
+        "GC'ni tezlashtiradi"
+      ],
+      "answer": 0,
+      "explanation": "Go'da resurs boshqaruvi aniq: Close(), defer, context bilan bekor qilish. Finalizer faqat 'zaxira tarmoq' sifatida (masalan os.File unutilgan deskriptorni yopadi). Go 1.24 da runtime.AddCleanup finalizer'ning kamchiliklarini (obyektni tiriltirish, tsikllar) yopadi, weak.Pointer esa kesh uchun zaif havolalar beradi.",
+      "source": "https://pkg.go.dev/runtime#AddCleanup"
+    },
+    {
+      "id": 19020,
+      "code": "RT21",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "`time.After` ni loop ichida ishlatish nima uchun xavfli?",
+      "options": [
+        "Har chaqiruv yangi timer yaratadi va u ishlab bo'lgunicha ozod bo'lmaydi — uzoq davom etadigan select loop'da xotira va timer navbati o'sadi; time.NewTimer + Reset yoki context ishlatiladi",
+        "Timer umuman ishlamaydi",
+        "Timer GC tomonidan darhol tozalanadi va hodisa yo'qoladi",
+        "Faqat 1 soniyadan katta interval xavfli"
+      ],
+      "answer": 0,
+      "explanation": "Go 1.23 da timer implementatsiyasi qayta yozildi va ishlamagan timer endi tezroq yig'iladi, shuningdek Timer.Stop/Reset semantikasi soddalashdi (kanal buferi yo'q). Baribir to'g'ri naqsh: uzoq yashaydigan select'da bitta timer/ticker yaratib qayta ishlatish va defer t.Stop() qilish; bekor qilish uchun esa ctx.Done().",
+      "source": "https://go.dev/doc/go1.23#timer-changes"
+    },
+    {
+      "id": 19022,
+      "code": "RT23",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "GODEBUG nima uchun kerak va go.mod bilan qanday bog'liq?",
+      "options": [
+        "Runtime xatti-harakatini diagnostika va moslik uchun o'zgartiradi (gctrace, schedtrace, http2debug, x509 kabi); Go 1.21 dan mosliksiz o'zgarishlar GODEBUG bilan qaytariladi va go.mod'dagi `go` yo'nalishi default qiymatlarni belgilaydi",
+        "Faqat kompilyator bayrog'i",
+        "Production'da har doim yoqiladi",
+        "Test uchun kutubxona"
+      ],
+      "answer": 0,
+      "explanation": "Misollar: GODEBUG=gctrace=1 har GC bo'yicha qator; schedtrace=1000 scheduler holati; madvdontneed=1 xotirani OS'ga tezroq qaytarish. Moslik mexanizmi: Go versiyasini oshirganda xatti-harakat o'zgarsa, eski holatni GODEBUG=<name>=<val> bilan vaqtincha qaytarish mumkin — migratsiyani bosqichli qiladi.",
+      "source": "https://go.dev/doc/godebug"
+    },
+    {
+      "id": 30401,
+      "code": "SN402",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "G-M-P modelida `P` nima uchun kerak?",
+      "options": [
+        "P — protsessor yadrosi",
+        "P (processor) — rejalashtirish konteksti: mahalliy run queue va mahalliy xotira keshini (mcache) ushlaydi; `GOMAXPROCS` P sonini belgilaydi, shu bilan bir vaqtda bajariluvchi goroutine soni cheklanadi va global qulf kerak bo'lmaydi",
+        "P — goroutine",
+        "P — OS threadning boshqa nomi"
+      ],
+      "answer": 1,
+      "explanation": "P bo'lmasa har goroutine olish uchun global navbat qulfi kerak bo'lardi — bu miqyoslashmaydi. P bilan har thread o'z lokal navbatidan oladi (256 ta slot), bo'shasa boshqa P'dan yarmini o'g'irlaydi (work stealing) yoki global navbatdan oladi. `mcache` ham P'ga bog'langan — kichik ajratmalar qulfsiz bo'ladi."
+    },
+    {
+      "id": 30402,
+      "code": "SN403",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Blokirovka qiluvchi syscall (masalan fayl o'qish) bajarilganda scheduler nima qiladi?",
+      "options": [
+        "Butun dastur to'xtaydi",
+        "M (thread) syscall'da bloklanadi, lekin `sysmon` uni sezib P'ni ajratib oladi va boshqa M'ga beradi — qolgan goroutine'lar ishlashda davom etadi; syscall tugagach goroutine yana P kutadi",
+        "Goroutine bekor qilinadi",
+        "Yangi P yaratiladi"
+      ],
+      "answer": 1,
+      "explanation": "Shu sabab `GOMAXPROCS=4` bo'lsa ham jarayonda o'nlab thread bo'lishi mumkin (`runtime/metrics` yoki `/debug/pprof/threadcreate` bilan ko'rinadi). Tarmoq I/O esa boshqacha: u netpoller (epoll/kqueue) orqali asinxron bo'ladi va thread bloklanmaydi — shuning uchun 100k tarmoq ulanishi arzon, 100k fayl o'qish esa emas. cgo chaqiruvi ham syscall kabi thread band qiladi."
+    },
+    {
+      "id": 30403,
+      "code": "SN404",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go GC tricolor marking'da write barrier nimaga kerak?",
+      "options": [
+        "Xotirani tezlashtirish",
+        "Konkurent marking paytida ilova pointerlarni o'zgartiradi — write barrier yangi havolalarni qayd qilib 'oq' obyekt qora obyektga ulanib yashirin qolib ketishini oldini oladi (strong/weak tricolor invariantini saqlaydi)",
+        "GC'ni to'xtatish",
+        "Stack o'sishi uchun"
+      ],
+      "answer": 1,
+      "explanation": "Barriersiz konkurent GC tirik obyektni o'chirib yuborishi mumkin. Go hybrid write barrier (Yuasa + Dijkstra) ishlatadi — bu stack'larni qayta skanerlash zaruratini yo'qotdi va STW pauzani mikrosekundlarga tushirdi (Go 1.8+). Narxi: har pointer yozuvida kichik qo'shimcha, shuning uchun pointer-og'ir strukturalar GC bosimini oshiradi (`[]*T` o'rniga `[]T` ko'pincha tezroq)."
+    },
+    {
+      "id": 30404,
+      "code": "SN405",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go'da GC qachon ishga tushadi va `GOGC` nimani boshqaradi?",
+      "options": [
+        "Har sekundda",
+        "Heap oldingi sikl oxiridagi tirik hajmdan `GOGC` foizga o'sganda (`GOGC=100` = ikki barobar); `GOMEMLIMIT` esa qattiq yuqori chegara — unga yaqinlashganda GC chastotasi oshadi. Ikkisi birga ishlatiladi",
+        "Faqat `runtime.GC()` bilan",
+        "Xotira tugaganda"
+      ],
+      "answer": 1,
+      "explanation": "Konteynerda tipik sozlama: `GOMEMLIMIT` limitdan ~10-20% past, `GOGC` esa o'rtacha holatda CPU/xotira balansi uchun (masalan 100 yoki 200). Faqat `GOGC=off` + `GOMEMLIMIT` kombinatsiyasi ham qo'llanadi: GC faqat limitga yaqinlashganda ishlaydi — bu latency-sezgir servislarda CPU'ni tejaydi, lekin xotira profilini yaxshi bilish kerak."
+    },
+    {
+      "id": 30405,
+      "code": "SN406",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Goroutine preemption qanday ishlaydi (Go 1.14+)?",
+      "options": [
+        "Faqat funksiya chaqiruvida",
+        "Asinxron preemption: `sysmon` 10ms dan uzun ishlayotgan goroutine'ga signal (SIGURG) yuboradi va uni xavfsiz nuqtada to'xtatadi — shuning uchun tsikl ichida chaqiruvsiz `for {}` ham endi butun P'ni bloklamaydi",
+        "Preemption yo'q",
+        "OS o'zi qiladi"
+      ],
+      "answer": 1,
+      "explanation": "1.14 gacha preemption kooperativ edi: funksiya prologidagi stack tekshiruvi orqali. Shuning uchun `for i := 0; i < 1e10; i++ {}` kabi tsikl GC'ni ham to'xtatib qo'yardi (butun dastur qotib qolardi). Hozir bu muammo yo'q, lekin cgo chaqiruvi va ba'zi assembler bo'laklari hali ham preempt qilinmaydi."
+    },
+    {
+      "id": 30406,
+      "code": "SN407",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go xotira modeli (happens-before) nimani kafolatlaydi?",
+      "options": [
+        "Har yozuv darhol barcha goroutine'ga ko'rinadi",
+        "Faqat sinxronizatsiya orqali tartib: kanal yuborish/qabul qilish, mutex `Unlock`/`Lock`, `sync.Once`, `WaitGroup`, va `sync/atomic` operatsiyalari happens-before munosabatini o'rnatadi; ularsiz bir goroutine yozgan qiymatni boshqasi hech qachon ko'rmasligi ham mumkin",
+        "Volatile o'zgaruvchi kerak",
+        "Hamma narsa avtomatik sinxron"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natija: `done = true` va `data = x` ni oddiy o'zgaruvchi bilan sinxronlash noto'g'ri — kompilyator va CPU tartibni o'zgartirishi mumkin. To'g'ri: kanal, mutex yoki `atomic.Bool`/`atomic.Pointer`. Go 1.19'dan atomiklar sequentially consistent deb rasman hujjatlashtirilgan. `-race` aynan shu qoidalar buzilishini aniqlaydi."
+    },
+    {
+      "id": 30407,
+      "code": "SN408",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go'da map ichki tuzilishi qanday va nega iteratsiya tartibi tasodifiy?",
+      "options": [
+        "Qizil-qora daraxt",
+        "Bucket'lar massivi (har bucketda 8 kalit, tophash bilan tez solishtirish), kolliziyada overflow bucket; o'sishda incremental rehash (evacuation). Iteratsiya tasodifiy bucket'dan boshlanadi — bu ataylab, dasturchilar tartibga tayanmasligi uchun",
+        "Bog'langan ro'yxat",
+        "Ochiq adreslash, tartib doimiy"
+      ],
+      "answer": 1,
+      "explanation": "Nozik natijalar: map o'sishi amortizatsiyalangan lekin evacuation paytida yozuvlar biroz sekinroq; map elementi addressable emas (ko'chishi mumkin); katta map GC skan vaqtini oshiradi (agar kalit/qiymatda pointer bo'lsa — `map[int]int` pointersiz va arzonroq). Kutilgan hajm ma'lum bo'lsa `make(map[K]V, n)` rehash'ni oldini oladi."
+    },
+    {
+      "id": 30408,
+      "code": "SN409",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Unbuffered kanal orqali yuborish ichkarida qanday bajariladi?",
+      "options": [
+        "Xotiraga yoziladi va keyin o'qiladi",
+        "Kutayotgan qabul qiluvchi bo'lsa — qiymat to'g'ridan-to'g'ri uning stack'iga ko'chiriladi va goroutine darhol ishga tayyor qilinadi (bufer yo'q); bo'lmasa yuboruvchi `sudog` sifatida navbatga qo'yilib parkga (uyquga) ketadi",
+        "OS pipe ishlatiladi",
+        "Har doim bloklanmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun unbuffered kanal 'sinxronlash nuqtasi' deyiladi va happens-before beradi. Ishlash nuqtai nazaridan: kanal har operatsiyada `hchan` mutexini oladi — juda yuqori chastotali hisoblagich uchun kanal `atomic`dan sekinroq. Select esa bir necha kanalga navbatga turadi va tasodifiy tanlaydi (starvationni oldini olish uchun)."
+    }
+  ]
+}

@@ -1,0 +1,421 @@
+{
+  "slug": "code-review-best-practices",
+  "title": "Code Review",
+  "description": "Detailed list of best practices for effective code reviews and quality",
+  "url": "https://roadmap.sh/code-review-best-practices",
+  "groups": [
+    "Best Practices"
+  ],
+  "type": "best-practice",
+  "updatedAt": "2025-11-17T13:15:14.497Z",
+  "relatedRoadmaps": [
+    "code-review",
+    "frontend",
+    "backend",
+    "system-design",
+    "software-architect",
+    "engineering-manager"
+  ],
+  "topicCount": 8,
+  "subtopicCount": 70,
+  "topics": [
+    {
+      "id": "zIe8oVwRPkMiAelRCGnMX",
+      "title": "Team Wide Practices",
+      "subtopics": [
+        {
+          "id": "T7MVfQ83t6BE9vmpzaUht",
+          "title": "Document and standardize the code review process.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "ehE5l_WqbJLxsgWdEl0x4",
+          "title": "Ensure that the purpose of code reviews is clear to everyone.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "rVSsMoYYzA-J1WR7Lg4rL",
+          "title": "Ensure that \"Definition of Done\" is documented and clear to everyone",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "LS_8tF9jxSMV9_kINuzUD",
+          "title": "Encourage team members to participate in code reviews.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "CZL7lE5eY6fWdJzoxGeFj",
+          "title": "Define a process for conflict resolution in code reviews.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "AL9JjC7FBmTEL29IEh01n",
+          "title": "Have a definitive style guide for style preferences.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "dGIXxZsVqmjOj1zTxSLJP",
+          "title": "Use automation to speed up the code reviews (linting, sniffing etc)",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "jDlN3ur6BBPu-3ekxr60Z",
+          "title": "Set clear expectations for code review turnaround times.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "c1jaEaau4bwUa9YJY5Dkt",
+          "title": "Provide adequate time for code reviews and ensure that it is a priority.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "0qLP7W7xUjQQW_tfGCKvK",
+          "title": "Use code reviews as an opportunity for knowledge sharing and learning.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "R4VvLERznwaGfobSzE7HH",
+          "title": "Encourage reviewing code in unknown-areas for cross-functional knowledge.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "mVgyN-QcnzKf3NnOH0s9v",
+          "title": "Constantly monitor and improve code review process.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "3tWwh57PzrchYxImA15jr",
+          "title": "Recognition and rewards for those with track record of quality feedback.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "EiBsJq0itHNmEBUWIlN6n",
+          "title": "Encourage communication/collaboration; avoid treating code reviews as a one-way process.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "AzuffOsYr4G0lC7TWCpxT",
+          "title": "Hold regular code review sessions to discuss broader trends or issues that arise during the review process.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "UkTIpoE_E_D-hKUnVVusF",
+          "title": "Encourage authors to seek feedback during development before submitting a formal code review.Retry",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "dR2FyZHi8vWnF-yeqLCSW",
+      "title": "Development (Author)",
+      "subtopics": [
+        {
+          "id": "0iZnwFroy9r4hFLRVO4xr",
+          "title": "Follow the coding standards and any other team guidelines.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "rUj9Rg-OWzLhIz3TeB_8f",
+          "title": "Stay consistent with the overall project design and architecture.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "SUTP4c43Pg2jFCiB_a-oC",
+          "title": "Write a failing test if the change is for a bug fix.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "Xr0gIYZjvRrsYe988ZICH",
+          "title": "Break down complex tasks into smaller easily manageable PRs.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "7CbtJ8k96rgFgVyLZc3KJ",
+          "title": "Consider the impact of the change on other parts of the system.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "1_A2vQO4vYrX6r4hhdgpp",
+          "title": "Take notes on any questions or concerns about the change to discuss them during the review.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "KUSuhknTQleWBdo5IX532",
+          "title": "Write the automated tests.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "PlW1xJD3QlTZvne6D8YDE",
+          "title": "Write the documentation for the feature or changes if required.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "R_GA5FmJQENr36LH08mSm",
+          "title": "Update any documentation that may have made obsolete through the changes.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "IDizJtnubM_XEF4BEdr9Z",
+      "title": "Post Development (Author)",
+      "subtopics": [
+        {
+          "id": "fjdsrCF8MmSvv5D53yKRC",
+          "title": "Review your code before submitting for review.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "aiMf2dPA8muhDS6l0lrQo",
+          "title": "Ensure that the changes are complete and ready for review, including all necessary tests and documentation.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "m76WiT-GpbZzFb9jXQabt",
+          "title": "Verify that the code change has been properly tested in a development environment.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "qBOld8wsz0uVFKzswghNk",
+          "title": "Double-check that the code adheres to the project's coding standards and best practices.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "XX9R8nAH7WmxjRY5DC9D2",
+          "title": "Identify any potential performance, security, or scalability concerns and note them for discussion during the review.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "HyV5NfOeXxp8A6tPEC6-z",
+          "title": "Make sure to add proper title, description, any screenshots, relevant links, configuration changes etc in the PR.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "GI4xxRUcO4uySlwEVZC78",
+          "title": "Approach the review process with an open mind, and be willing to learn from and collaborate with other team members.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "4J4GzUP0AMCOd4PD_W8KU",
+      "title": "Before Review (Reviewer)",
+      "subtopics": [
+        {
+          "id": "7qo_yXWXfaqdAix5ICpx8",
+          "title": "Understand the requirements and the context in which change was made.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "TW4WR6k4OxND9vSxSZVhn",
+          "title": "Based on the requirements, prepare a list of items that should have been covered in the changes.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "FfQCEQzNHV8T6A0sJ5OAH",
+          "title": "Ensure that you understand the codebase and its architecture.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "FylLalihY6WSxOL7TshPE",
+          "title": "Review any documentation or design specifications related to the change.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "ykKaoI3dbHH5eQ25qDlxX",
+          "title": "Make list of any potential risks or issues that could arise with the change.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "2rq1Y0vgBNejGx6ZCBAs2",
+          "title": "Approach the process with an open mind, be willing to provide constructive feedback and collaborate to improve code quality",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "z1-pBoaED78ag1EuZa9Aw",
+          "title": "Consider the overall quality of the code, including readability, maintainability, and scalability.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "zfkRUBbiMEX6ArR5T6QVj",
+          "title": "Determine the appropriate level of review needed based on the scope and impact of the code change.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "B4V3lRYoJiMiy5WUDRPAw",
+          "title": "Be willing to collaborate with the author to resolve any issues or concerns that arise during the review process.Retry",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "CUwj117WQa4ulAyViX3sW",
+      "title": "During Review (Reviewer)",
+      "subtopics": [
+        {
+          "id": "D46ofUOkbJfOEngyrFtou",
+          "title": "Be respectful and professional in your feedback, avoiding personal attacks or derogatory comments.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "bLhOoyfOgQA12RIIMTKrD",
+          "title": "Provide clear and actionable feedback, including specific suggestions for improvement and explanations of any concerns.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "UluUhUOjICjdzVe8S6abp",
+          "title": "Identify any potential performance, security, or scalability concerns, and discuss them with the author.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "htZEWfHMr6lAe8os4BdC-",
+          "title": "Prioritize your feedback, focusing on the most important issues first.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "_ikL6fwrVtQYinUrCAJW_",
+          "title": "Review any tests included with the code change to verify that they adequately cover the functionality and edge cases.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "3Mh3By6sRGyxoAkrNn0rX",
+          "title": "Ensure that the code change adheres to the project's coding standards and best practices.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "cz4OLM06-yszCBrdYjYX1",
+          "title": "Ensure that the relevant documentation has been updated.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "S4y-DPpW4_jNkAkajiR0b",
+          "title": "Team wide styleguide is the absolute authority styling. Verify changes against those instead of personal preferences",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "L4O2FnOwkQdZQnasKea3U",
+          "title": "Leave comments to suggest improvements, but prefix it with \"Nit\" if it's not critical to meeting the standards",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "UuGrZZKtMAglBtkjz4ghy",
+          "title": "Seek continuous improvement, not perfection.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "re_QIKOxzNrdjEbFbHA08",
+          "title": "Keep the short-term and long-term considerations in mind.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "U7bXFRcG-0_wBSYJjmpKe",
+          "title": "Consider using pair programming as an alternative or supplement to code reviews.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "B4MNj1KETlm_3DLvCOdn6",
+          "title": "Provide positive feedback in addition to constructive criticism, to reinforce good practices and boost team morale.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "o1W6YQx36_CWpvAmgLzam",
+      "title": "After Review (Author)",
+      "subtopics": [
+        {
+          "id": "3C7qvM9nnaog9QrwiJq98",
+          "title": "Address all the feedback received, including any concerns or questions raised.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "NdJBdFOnyuFdpWdQyyA4u",
+          "title": "Implement the suggested changes and provide explanations where needed.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "20a8C__CZIpuY0AmA-VZ5",
+          "title": "Run the tests and ensure that they all pass after making changes",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "c2X-AymI9QlHtcXuhsFat",
+          "title": "Update any documentation or code comments affected by the changes.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "LEPwXv2XRoCukQTVeQ01Y",
+          "title": "Seek feedback from other team members if you are unsure about the changes.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "8TwmrtYcAuSUEWvE8-bsl",
+          "title": "Submit the updated code for a second review if needed.",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "L2PBkQobjXnRRc_bgMbA_",
+      "title": "After Review (Reviewer)",
+      "subtopics": [
+        {
+          "id": "jMXefJ4qvXBknpXOSHmmT",
+          "title": "Resolve conflicting opinions in a timely manner; don't let a PR sit around due to disagreement.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "GlaFNI2pk_2NOvh71XLUK",
+          "title": "Verify that all the feedback has been addressed by the author.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "1iU6B5-zHLTyC5aUs_3Id",
+          "title": "Review the updated code and ensure that the suggested changes have been implemented as expected.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "cFxmzADuKKHkqlguwiIKE",
+          "title": "Run the tests again and ensure that they all pass.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "zxcbsL5mOlaEqNtmjw3J0",
+          "title": "Address any questions or concerns that the author may have.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "Zp9kVAgYxYttSwBhO0ciC",
+          "title": "Be open to feedback from the author and be willing to make adjustments to your feedback if necessary.Retry",
+          "linkedBy": "checklist"
+        }
+      ]
+    },
+    {
+      "id": "wlrqUL0nTe1q4wE3ejAUe",
+      "title": "After Approval (Both)",
+      "subtopics": [
+        {
+          "id": "7C9SweJUbAGHL6XLUt1nK",
+          "title": "Merge the approved code change into the main/feature branch.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "0U8a0lfCizq7TXX5WWf8x",
+          "title": "Verify that the code change is functioning as expected in the production environment.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "XYKhLc-rZNrwrQQcgaxkH",
+          "title": "Monitor the performance and functionality of the code change and address any issues that arise.",
+          "linkedBy": "checklist"
+        },
+        {
+          "id": "8aintb8b62TR1ssqn6uGH",
+          "title": "Celebrate the successful completion of the code change!Retry",
+          "linkedBy": "checklist"
+        }
+      ]
+    }
+  ]
+}

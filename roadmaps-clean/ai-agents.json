@@ -1,0 +1,543 @@
+{
+  "slug": "ai-agents",
+  "title": "AI Agents",
+  "description": "Learn to design, build and ship AI agents in @currentYear@",
+  "url": "https://roadmap.sh/ai-agents",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-03-09T11:24:39.307Z",
+  "relatedRoadmaps": [
+    "ai-engineer",
+    "ai-data-scientist",
+    "prompt-engineering",
+    "data-analyst",
+    "mlops",
+    "claude-code",
+    "vibe-coding"
+  ],
+  "topicCount": 34,
+  "subtopicCount": 67,
+  "topics": [
+    {
+      "id": "VPI89s-m885r2YrXjYxdd",
+      "title": "Basic Backend Development",
+      "subtopics": []
+    },
+    {
+      "id": "McREk2zHOlIrqbGSKbX-J",
+      "title": "Git and Terminal Usage",
+      "subtopics": []
+    },
+    {
+      "id": "QtTwecLdvQa8pgELJ6i80",
+      "title": "REST API Knowledge",
+      "subtopics": []
+    },
+    {
+      "id": "ZF5_5Y5zqa75Ov22JACX6",
+      "title": "Transformer Models and LLMs",
+      "subtopics": [
+        {
+          "id": "GAjuWyJl9CI1nqXBp6XCf",
+          "title": "Tokenization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dyn1LSioema-Bf9lLTgUZ",
+          "title": "Context Windows",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1fiWPBV99E2YncqdCgUw2",
+          "title": "Token Based Pricing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "L1zL1GzqjSAjF06pIIXhy",
+          "title": "Temperature",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "z_N-Y0zGkv8_qHPuVtimL",
+          "title": "Frequency Penalty",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Vd8ycw8pW-ZKvg5WYFtoh",
+          "title": "Presence Penalty",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "icbp1NjurQfdM0dHnz6v2",
+          "title": "Top-p",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "DSJAhQhc1dQmBHQ8ZkTau",
+      "title": "Open Weight Models",
+      "subtopics": []
+    },
+    {
+      "id": "tJYmEDDwK0LtEux-kwp9B",
+      "title": "Closed Weight Models",
+      "subtopics": []
+    },
+    {
+      "id": "i2NE6haX9-7mdoV5LQ3Ah",
+      "title": "Streamed vs Unstreamed Responses",
+      "subtopics": []
+    },
+    {
+      "id": "N3yZfUxphxjiupqGpyaS9",
+      "title": "Reasoning vs Standard Models",
+      "subtopics": []
+    },
+    {
+      "id": "5OW_6o286mj470ElFyJ_5",
+      "title": "Fine-tuning vs Prompt Engineering",
+      "subtopics": []
+    },
+    {
+      "id": "UIm54UmICKgep6s8Itcyv",
+      "title": "Embeddings and Vector Search",
+      "subtopics": []
+    },
+    {
+      "id": "qwVQOwBTLA2yUgRISzC8k",
+      "title": "Understand the Basics of RAG",
+      "subtopics": []
+    },
+    {
+      "id": "B8dzg61TGaknuruBgkEJd",
+      "title": "Pricing of Common Models",
+      "subtopics": []
+    },
+    {
+      "id": "Eih4eybuYB3C2So8K0AT3",
+      "title": "Agent Loop",
+      "subtopics": [
+        {
+          "id": "ZJTrun3jK3zBGOTm1jdMI",
+          "title": "Observation & Reflection",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "K0G-Lw069jXUJwZqHtybd",
+          "title": "Stopping Criteria",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LU76AhCYDjxdBhpMQ4eMU",
+          "title": "Perception / User Input",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ycPRgRYR4lEBQr_xxHKnM",
+          "title": "Reason and Plan",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sHYd4KsKlmw5Im3nQ19W8",
+          "title": "Acting / Tool Invocation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PPdAutqJF5G60Eg9lYBND",
+          "title": "Personal assistant",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Bn_BkthrVX_vOuwQzvPZa",
+          "title": "Max Length",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Y8EqzFx3qxtrSh7bWbbV8",
+      "title": "What is Prompt Engineering",
+      "subtopics": [
+        {
+          "id": "aFZAm44nP5NefX_9TpT0A",
+          "title": "What are AI Agents?",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2zsOUWJQ8e7wnoHmq1icG",
+          "title": "What are Tools?",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qFKFM2qNPEN7EoD0V-1SM",
+          "title": "Be specific in what you want",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6I42CoeWX-kkFXTKAY7rw",
+          "title": "Provide additional context",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sUwdtOX550tSdceaeFPmF",
+          "title": "Use relevant technical terms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yulzE4ZNLhXOgHhG7BtZQ",
+          "title": "Use Examples in your Prompt",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "qakbxB8xe7Y8gejC5cZnK",
+      "title": "Tool Definition",
+      "subtopics": [
+        {
+          "id": "kBtqT8AduLoYDWopj-V9_",
+          "title": "Web Search",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "TBH_DZTAfR8Daoh-njNFC",
+      "title": "What is Agent Memory?",
+      "subtopics": [
+        {
+          "id": "mS0EVCkWuPN_GkVPng4A2",
+          "title": "Code Execution / REPL",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sV1BnA2-qBnXoKpUn-8Ub",
+          "title": "Database Queries",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "52qxjZILV-X1isup6dazC",
+          "title": "API Requests",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qaNr5I-NQPnfrRH7ynGTl",
+          "title": "Email / Slack / SMS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BoJqZvdGam4cd6G6yK2IV",
+          "title": "File System Access",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "M3U6RfIqaiut2nuOibY8W",
+      "title": "Short Term  Memory",
+      "subtopics": []
+    },
+    {
+      "id": "Ue633fz6Xu2wa2-KOAtdP",
+      "title": "Long Term Memory",
+      "subtopics": []
+    },
+    {
+      "id": "EfCCNqLMJpWKKtamUa5gK",
+      "title": "Episodic vs Semantic Memory",
+      "subtopics": [
+        {
+          "id": "yv_-87FVM7WKn5iv6LW9q",
+          "title": "MCP Servers",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "53xDks6JQ33fHMa3XcuCd",
+      "title": "ReAct (Reason + Act)",
+      "subtopics": []
+    },
+    {
+      "id": "1B0IqRNYdtbHDi1jHSXuI",
+      "title": "Model Context Protocol (MCP)",
+      "subtopics": [
+        {
+          "id": "9FryAIrWRHh8YlzKX3et5",
+          "title": "MCP Hosts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CGVstUxVXLJcYZrwk3iNQ",
+          "title": "MCP Client",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "1NXIN-Hbjl5rPy_mqxQYW",
+      "title": "Creating MCP Servers",
+      "subtopics": [
+        {
+          "id": "noTuUFnHSBzn7GKG9UZEi",
+          "title": "Iterate and Test your Prompts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wwHHlEoPAx0TLxbtY6nMA",
+          "title": "Specify Length, format etc",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wkS4yOJ3JdZQE_yBID8K7",
+          "title": "RAG and Vector Databases",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QJqXHV8VHPTnfYfmKPzW7",
+          "title": "User Profile Storage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iBtJp24F_kJE3YlBsW60s",
+          "title": "Local Desktop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dHNMX3_t1KSDdAWqgdJXv",
+          "title": "Remote / Cloud",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "qwdh5pkBbrF8LKPxbZp4F",
+      "title": "Chain of Thought (CoT)",
+      "subtopics": [
+        {
+          "id": "5oLc-235bvKhApxzYFkEc",
+          "title": "Web Scraping / Crawling",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ok8vN7VtCgyef5x6aoQaL",
+          "title": "NPC / Game AI",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "cW8O4vLLKEG-Q0dE8E5Zp",
+      "title": "RAG Agent",
+      "subtopics": [
+        {
+          "id": "jTDC19BTWCqxqMizrIJHr",
+          "title": "Summarization / Compression",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m-97m7SI0XpBnhEE8-_1S",
+          "title": "Forgetting / Aging Strategies",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6YLCMWzystao6byCYCTPO",
+      "title": "Planner Executor",
+      "subtopics": []
+    },
+    {
+      "id": "Ep8RoZSy_Iq_zWXlGQLZo",
+      "title": "DAG Agents",
+      "subtopics": [
+        {
+          "id": "Ka6VpCEnqABvwiF9vba7t",
+          "title": "LangChain",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XS-FsvtrXGZ8DPrwOsnlI",
+          "title": "Haystack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uFPJqgU4qGvZyxTv-osZA",
+          "title": "CrewAI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v8qLnyFRnEumodBYxQSXQ",
+          "title": "Metrics to Track",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qo_O4YAe4-MTP_ZJoXJHR",
+          "title": "Unit Testing for Individual Tools",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "P9-SiIda3TSjHsfkI5OUV",
+          "title": "Integration Testing for Flows",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rHxdxN97ZcU7MPl8L1jzN",
+          "title": "Human in the Loop Evaluation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xp7TCTRE9HP60_rGzTUF6",
+          "title": "LangSmith",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YzEDtGEaMaMWVt0W03HRt",
+          "title": "Ragas",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0924QUH1wV7Mp-Xu0FAhF",
+          "title": "DeepEval",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zs6LM8WEnb0ERWpiaQCgc",
+          "title": "Structured logging & tracing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SS8mGqf9wfrNqenIWvN8Z",
+          "title": "LangSmith",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MLxP5N0Vrmwh-kyvNeGXn",
+          "title": "Helicone",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UoIheaJlShiceafrWALEH",
+          "title": "LangFuse",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hBW8-z72NcETDn_cearYc",
+          "title": "Self-critique Agents",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FjAYD6ZhAuPcS6gbvBBtE",
+          "title": "Multi-Agents",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Nmy1PoB32DcWZnPM8l8jT",
+      "title": "Tree-of-Thought",
+      "subtopics": [
+        {
+          "id": "PK8w31GlvtmAuU92sHaqr",
+          "title": "Code generation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wKYEaPWNsR30TIpHaxSsq",
+          "title": "Data analysis",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "US6T5dXM8IY9V2qZnTOFW",
+      "title": "Manual (from scratch)",
+      "subtopics": []
+    },
+    {
+      "id": "aafZxtjxiwzJH1lwHBODi",
+      "title": "LLM Native \"Function Calling\"",
+      "subtopics": [
+        {
+          "id": "AQtxTTxmBpfl8BMgJbGzc",
+          "title": "OpenAI Functions Calling",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_iIsBJTVS6OBf_dsdmbVO",
+          "title": "Gemini Function Calling",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "37GBFVZ2J2d5r8bd1ViHq",
+          "title": "OpenAI Assistant API",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iEHF-Jm3ck-Iu85EbCoDi",
+          "title": "LlamaIndex",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7YtnQ9-KIvGPSpDzEDexl",
+          "title": "AutoGen",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "O53AvUSRB5SI6hhwKxniL",
+          "title": "LangGraph",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "SU2RuicMUo8tiAsQtDI1k",
+      "title": "Prompt Injection / Jailbreaks",
+      "subtopics": [
+        {
+          "id": "eWxQiBrxIUG2JNcrdfIHS",
+          "title": "Smol Depot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1EZFbDHA5J5_5BPMLMxXb",
+          "title": "Anthropic Tool Use",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7UqPXUzqKYXklnB3x-tsv",
+          "title": "openllmetry",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PY5WTJgRnXiYeOM6BBUvn",
+          "title": "Agno",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "UVzLGXG6K7HQVHmw8ZAv2",
+      "title": "Tool sandboxing / Permissioning",
+      "subtopics": []
+    },
+    {
+      "id": "rdlYBJNNyZUshzsJawME4",
+      "title": "Data Privacy + PII Redaction",
+      "subtopics": []
+    },
+    {
+      "id": "EyLo2j8IQsIK91SKaXkmK",
+      "title": "Bias & Toxicity Guardrails",
+      "subtopics": []
+    },
+    {
+      "id": "63nsfJFO1BwjLX_ZVaPFC",
+      "title": "Safety + Red Team Testing",
+      "subtopics": []
+    }
+  ]
+}

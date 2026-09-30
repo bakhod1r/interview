@@ -1,0 +1,290 @@
+{
+  "slug": "ai-product-builder",
+  "title": "AI Product Builder",
+  "description": "A step-by-step guide to building and shipping products with AI.",
+  "url": "https://roadmap.sh/ai-product-builder",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-06-25T07:26:26.674Z",
+  "relatedRoadmaps": [
+    "claude-code",
+    "vibe-coding",
+    "devops",
+    "full-stack",
+    "openclaw",
+    "forward-deployed-engineer"
+  ],
+  "topicCount": 7,
+  "subtopicCount": 45,
+  "topics": [
+    {
+      "id": "4dxljr8BtYkJDXbLeE0gW",
+      "title": "Definition & Scope",
+      "subtopics": [
+        {
+          "id": "kxDCkO0aZLY4_hd4_ykH6",
+          "title": "Problem Definition",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5qljkbrUWUAn-5Ng2AiaJ",
+          "title": "Feature Scoping",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tN2X9NW0PhcP21OptheoD",
+          "title": "Tech Stack & Constraints",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "ZGqeasMGuEiZvrdyjSNuM",
+      "title": "1. Prototyping",
+      "subtopics": [
+        {
+          "id": "mQzAgHoM3DS_zn2zr2FXg",
+          "title": "Choose a Prototype Tool",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZQ-kWlp5v9fimgHmG5hlR",
+          "title": "Feedback & Validation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "T-NUiQvT8dKmg6UDGVSt_",
+          "title": "Lovable",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Gf1egAjfyQyAJ4I-aT_Ip",
+          "title": "Replit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xKBoLYQgpLDmOtDweVHei",
+          "title": "v0",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Z6x8QhsYOO9LB6fHGMTLL",
+          "title": "Claude Design",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "COeXWV8fCTHXPZnErXcGZ",
+      "title": "AI Product Creation Cycle ",
+      "subtopics": [
+        {
+          "id": "ncU03bZztHwt9VrQbEZ15",
+          "title": "App Anatomy",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "t03SkyX28SacfP_DpmHUf",
+      "title": "5. Deployment",
+      "subtopics": [
+        {
+          "id": "-MWVEd4dEfGcwBTxKh9WM",
+          "title": "AWS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UoZoN-nN8eTnI-J5ma-oq",
+          "title": "Azure",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6hl4_ft8onzq80v_nD8Q4",
+          "title": "GCP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wUg8ypt4aWXgMYGiaIdgy",
+          "title": "Vercel",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OBGQ-1bjYBdYi-_oFpmj8",
+          "title": "Render",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sv7QfwPKaTsviScn2axhk",
+          "title": "Railway",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZxLukZLdGXGvV4MRHmoGh",
+          "title": "DigitalOcean",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gwHXA4WBrZN0VeAx5NKz7",
+          "title": "MongoDB / Atlas",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kfl0oJKi1OusryrSqO2jn",
+          "title": "PostgreSQL / MySQL",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "p4Ku5RT5uOVYPuduqz80M",
+          "title": "Supabase",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OFscURhjqJfh8qA3SKSfh",
+          "title": "GitHub",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f_d4JlYSbP9BHuCR0kBpP",
+          "title": "GitLab",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AlE1rcdp-5RVihRMpshnh",
+          "title": "Bit Cloud",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DAEMRai6FpPrmRkmKTOhV",
+          "title": "Azure DevOps",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NCO0PyktX4UzVCsyqZpAO",
+          "title": "Bit Cloud",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "rcR8DMzELUnmJ7I_pwWpI",
+      "title": "4. Collaboration",
+      "subtopics": [
+        {
+          "id": "Q6PzFpT_4kElowvvB2u_v",
+          "title": "Cloudflare",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Cem2u4lHoA8KW-0GqVzcw",
+          "title": "HTML / CSS / JavaScript",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aHQ8f3ulEeUxTYCifzcPq",
+          "title": "React",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iRey4hwJCIraoNsIZELZv",
+          "title": "Browsers / DevTools",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "d_2Uq2_Befe1tqM8_Y8lq",
+          "title": "Node.js",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aRA5S0Mmmhx9F0nhD3Wcp",
+          "title": "User Testing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VxqhYHA9YpWx70GIhKghY",
+          "title": "Unit Testing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MXPA6I8K1_aKKQpgk2EcW",
+          "title": "Integration Testing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MB_6yVmgPZugbjxGzoq09",
+          "title": "E2E Testing",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "S9fE9eG1YWSfVRi8h13U1",
+      "title": "3. Refinement",
+      "subtopics": [
+        {
+          "id": "HZHzCLbK-oQh7gSokxHWq",
+          "title": "New Feature / Structural Change",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ydzaN2EHBVAavHS3iPQ40",
+          "title": "Targeted Change",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BEw1Iowb0KMiChtDGvKep",
+          "title": "Cursor",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xCoG801UzwsRaK0xmI9_B",
+          "title": "Codex",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Fa06GTSwYb9x0QuGsp8et",
+          "title": "Claude Code",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6HLxaflojoF0-cuIuPDeG",
+          "title": "Copilot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vGtnZaa5vH02cTgkVG6A-",
+          "title": "Gemini CLI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S7uHXLcxvtegkI1kirVS9",
+          "title": "Codex",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "G86QePmTB5LX4_dMkVgoK",
+          "title": "Claude Code",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "DCcj2_9a7aYi6qCnI4TMV",
+      "title": "2. Generation",
+      "subtopics": [
+        {
+          "id": "YZi89ogkfzKIivbdFmcP_",
+          "title": "Bolt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8ePFxmPv_Vm7SKoleM1tT",
+          "title": "Hope",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

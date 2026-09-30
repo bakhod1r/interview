@@ -1,0 +1,429 @@
+{
+  "id": "g4",
+  "name": "Production cases (Go)",
+  "domain": "go",
+  "domainLabel": "Go",
+  "topics": [
+    "Go case"
+  ],
+  "questions": [
+    {
+      "id": 12000,
+      "code": "GC1",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Go servisining xotirasi kun davomida asta o'sib boradi va kechga borib OOMKilled bo'ladi. Qanday tekshirasiz?",
+      "modelAnswer": [
+        "Metrikalar: go_memstats_heap_inuse_bytes, go_goroutines, RSS — qaysi biri o'syapti (heap, goroutine, yoki heap'dan tashqari)",
+        "pprof: /debug/pprof/heap ni ikki vaqtda olib -base bilan farqini ko'rish (go tool pprof -base old.pb.gz new.pb.gz)",
+        "Goroutine soni o'sayotgan bo'lsa — leak: /debug/pprof/goroutine?debug=2 dagi stack'lar qayerda bloklanganini ko'rsatadi",
+        "Tipik sabablar: context'siz kutayotgan goroutine, to'xtatilmagan time.Ticker, resp.Body yopilmagan, cheksiz o'sadigan map/cache, katta massivni ushlab turgan kichik slice",
+        "Tuzatish: har goroutine'ga tugash yo'li, cache'ga TTL va hajm chegarasi, defer resp.Body.Close()",
+        "Himoya: GOMEMLIMIT qo'yish, goroutine soni va heap bo'yicha alert, testda goleak"
+      ],
+      "explanation": "Intervyuda kutilgan tartib: o'lchash → farqni olish → stack'dan sababni topish → tuzatish → qaytalanmasligi uchun alert. 'Restart qo'yamiz' javobi — mitigatsiya, yechim emas (lekin incident paytida to'g'ri birinchi qadam bo'lishi mumkin).",
+      "source": "https://go.dev/blog/pprof"
+    },
+    {
+      "id": 12001,
+      "code": "GC2",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Servis CPU 100% da, lekin trafik o'zgarmagan. Nima qilasiz?",
+      "modelAnswer": [
+        "30 soniyalik CPU profil: go tool pprof http://host/debug/pprof/profile?seconds=30 — top va flame graph",
+        "Tipik aybdorlar: siklda regexp.MustCompile yoki json.Marshal, katta struct nusxalash, tartibsiz o'sgan slice'da chiziqli qidiruv, siqish/шифрlash, log darajasi debug'ga o'tib ketgani",
+        "GC ulushi: GODEBUG=gctrace=1 yoki go_gc_duration; allokatsiya ko'p bo'lsa — memory profili (allocs) va sync.Pool / buferlarni qayta ishlatish",
+        "Bloklanish emasligini tekshirish: agar CPU emas, kutish bo'lsa — block va mutex profillari",
+        "Tarqalish: bitta pod'dami yoki hammasidami; oxirgi deploy va feature flag bilan bog'liqmi",
+        "Tezkor chora: aybdor endpoint'ni rate limit qilish yoki flag bilan o'chirish, keyin tuzatish"
+      ],
+      "explanation": "Kuchli javob profil ma'lumotisiz taxmin qilmaydi. Yana bir tez tekshiruv: konteyner CPU limiti va GOMAXPROCS mosligi — throttling ham 'CPU to'la' bo'lib ko'rinadi."
+    },
+    {
+      "id": 12002,
+      "code": "GC3",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: p99 latency vaqti-vaqti bilan 50 ms dan 2 s gacha sakraydi, p50 esa barqaror. Sabablarni qanday qidirasiz?",
+      "modelAnswer": [
+        "Qachon sakraydi: deploy, cron, GC, trafik cho'qqisi bilan bog'liqmi — metrikalarni bir oynada solishtirish",
+        "GC pauzalari: gctrace yoki runtime metrikalari; katta heap va yuqori allokatsiya tezligi sabab bo'lishi mumkin",
+        "Lock contention: /debug/pprof/mutex va block profillari — bitta mutex ostidagi uzun operatsiya (masalan lock ushlab turib DB chaqiruvi)",
+        "Resurs to'yinishi: DB connection pool kutish vaqti, Redis, tashqi API p99, HTTP client pool (MaxIdleConnsPerHost kichik bo'lsa har so'rovga yangi ulanish)",
+        "Qo'shni ta'sir: node'da boshqa pod, CPU throttling (container_cpu_cfs_throttled_seconds)",
+        "Tracing bilan sekin so'rovning qaysi bosqichida vaqt ketayotganini ko'rish"
+      ],
+      "explanation": "p50 yaxshi, p99 yomon — bu deyarli doim navbat (queueing) yoki vaqti-vaqti bilan yuz beradigan bloklanish. O'rtacha qiymatga qarab xulosa qilmaslik — senior signal."
+    },
+    {
+      "id": 12003,
+      "code": "GC4",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Servis 'osilib qoldi' — hech qanday so'rovga javob bermayapti, CPU ham past. Birinchi nima qilasiz?",
+      "modelAnswer": [
+        "Stack dump olish: /debug/pprof/goroutine?debug=2 (yoki jarayonga SIGQUIT yuborish) — hamma goroutine qayerda turganini ko'rsatadi",
+        "Naqshni qidirish: ko'p goroutine bitta mutex yoki kanalda kutyaptimi (deadlock/live-lock), yoki hammasi tashqi chaqiruvda turibdimi",
+        "Bog'liqliklarni tekshirish: DB, Redis, tashqi API javob beryaptimi; timeout qo'yilmagan chaqiruv bormi",
+        "Pool tugaganmi: DB pool va HTTP client pool metrikalari; barcha ulanishlar band bo'lsa yangi so'rovlar kutadi",
+        "Tezkor chora: dump olingach restart (dalilni yo'qotmaslik uchun avval dump)",
+        "Tuzatish: har tashqi chaqiruvga context deadline, lock ichida I/O qilmaslik, pool o'lchami va kutish timeout'i"
+      ],
+      "explanation": "Muhim tafsilot: restartdan OLDIN stack dump olish — aks holda sabab yo'qoladi. Deadlock runtime tomonidan faqat hamma goroutine uxlab qolganda aniqlanadi; bitta mutexda osilgan servis esa 'tirik' ko'rinadi."
+    },
+    {
+      "id": 12004,
+      "code": "GC5",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Hisoblagichlar ba'zan noto'g'ri, xatolar takrorlanmaydi. Race'ni qanday isbotlaysiz?",
+      "modelAnswer": [
+        "go test -race bilan testlarni ishga tushirish; mavjud test qamramasa — konkurent stress test yozish (t.Parallel, ko'p goroutine bir xil kodni chaqiradi)",
+        "Staging'da -race bilan qurilgan build ni cheklangan trafik bilan ishlatish (2–10x sekin, prod uchun emas)",
+        "Shubhali joylar: global o'zgaruvchilar, umumiy map/slice, struct'dagi maydonni mutexsiz o'qish, sync.WaitGroup noto'g'ri ishlatilishi",
+        "Tuzatish: mutex bilan o'rash, atomic tiplar, yoki holatni bitta goroutine'ga (owner) berib kanal orqali ishlash",
+        "Regressiyani to'sish: CI'da -race majburiy, topilgan holat uchun test qoldirish"
+      ],
+      "explanation": "Race detector faqat bajarilgan kod yo'lini ko'radi — shuning uchun 'topilmadi' degani 'yo'q' degani emas. Topilgani esa har doim real bug: 'kamdan-kam bo'ladi' degan bahona yo'q."
+    },
+    {
+      "id": 12005,
+      "code": "GC6",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Konteyner OOMKilled bo'lyapti, lekin pprof heap atigi 200 MB ko'rsatyapti. Nima bo'layotgan bo'lishi mumkin?",
+      "modelAnswer": [
+        "Heap ≠ RSS: Go runtime bo'shatilgan xotirani darhol OS'ga qaytarmasligi mumkin; runtime/metrics va GODEBUG=madvdontneed tarixini hisobga olish",
+        "GOMEMLIMIT qo'yilmagan bo'lsa GC konteyner limitini bilmaydi — limitdan oldin yetarlicha yig'ishtirmaydi",
+        "Heap'dan tashqari: goroutine stack'lari (yuz minglab goroutine), mmap qilingan fayllar, cgo/kutubxona allokatsiyalari, katta bufer poollari",
+        "Kirish hajmi: cheklanmagan request body yoki javobni butunlay xotiraga o'qish (io.ReadAll) — bitta katta so'rov pod'ni o'ldiradi",
+        "Tuzatish: GOMEMLIMIT = limitning ~80%, MaxBytesReader / streaming o'qish, goroutine sonini cheklash, bufer hajmini chegaralash"
+      ],
+      "explanation": "Amaliy qoida: Kubernetes'da Go servisi uchun memory request = limit va GOMEMLIMIT shu limitdan biroz past. Shunda GC agressivroq ishlaydi va OOMKill o'rniga latency biroz oshadi — bu ancha yaxshi ayirboshlash."
+    },
+    {
+      "id": 12006,
+      "code": "GC7",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Loglar 'context deadline exceeded' bilan to'lib ketdi. Qanday tahlil qilasiz?",
+      "modelAnswer": [
+        "Qayerda: qaysi bog'liqlik (DB, Redis, tashqi API) va qaysi endpoint — xatoga kontekst qo'shilganmi (%w bilan o'ralganmi)",
+        "Haqiqatan sekinmi yoki navbatdami: bog'liqlikning o'z p99 si yaxshi bo'lsa — muammo pool/navbatda (connection pool kutish vaqti)",
+        "Timeout qiymatlari mantiqiymi: ichki timeout tashqisidan kichikmi, retry bilan birga umumiy byudjet oshib ketmayaptimi",
+        "Retry amplification: har qadam 3 martadan urinib, yuk ko'paytirilyaptimi — retry budget va circuit breaker",
+        "Tezkor chora: aybdor oqimni cheklash, timeout va pool sozlamalarini to'g'rilash, kerak bo'lsa degradatsiya (keshdan eski javob)",
+        "Kuzatuv: bog'liqlik bo'yicha alohida latency va xato metrikalari"
+      ],
+      "explanation": "Klassik tuzoq: timeout'ni oshirib qo'yish. Bu ko'pincha holatni yomonlashtiradi — goroutine va ulanishlar uzoqroq band bo'ladi. To'g'ri yo'nalish: sababni topish va tez fail qilish (fail fast) + backpressure."
+    },
+    {
+      "id": 12007,
+      "code": "GC8",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: 'too many open files' va 'connection reset by peer' xatolari paydo bo'ldi. Sabab va tuzatish?",
+      "modelAnswer": [
+        "Eng tipik sabab: HTTP javobida resp.Body yopilmagan — ulanish pool'ga qaytmaydi va fayl deskriptori sizadi (defer resp.Body.Close(), body o'qilmasa ham)",
+        "Har so'rovda yangi http.Client yaratish — transport va ulanish pool'i qayta ishlatilmaydi; bitta Client'ni umumiy qilish kerak",
+        "Transport sozlamalari: MaxIdleConnsPerHost juda kichik bo'lsa ulanishlar doim ochilib-yopiladi (TIME_WAIT to'planadi)",
+        "Tekshirish: lsof/ss bilan ochiq deskriptorlar, ulimit -n, konteyner limitlari; metrikada FD soni",
+        "DB tomonida: rows.Close() unutilgan bo'lsa pool tugaydi",
+        "Tuzatish + himoya: linter (bodyclose), FD va pool metrikalari bo'yicha alert"
+      ],
+      "explanation": "Bu xatolar 'tarmoq muammosi' bo'lib ko'rinadi, lekin deyarli har doim resursni yopmaslik natijasi. Yaxshi javob aniq kod naqshini nomlaydi va linter bilan qaytalanmasligini ta'minlaydi."
+    },
+    {
+      "id": 12008,
+      "code": "GC9",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Deploy paytida har safar bir nechta so'rov 502 bilan yiqiladi. Go servisi tomonida nima qilasiz?",
+      "modelAnswer": [
+        "SIGTERM'ni ushlash: signal.NotifyContext bilan kontekst yaratish va srv.Shutdown(ctx) chaqirish (Close emas)",
+        "Shutdown'dan oldin readiness'ni 'not ready' qilib, LB/Service'dan chiqarilishini kutish (preStop sleep bir necha soniya)",
+        "Joriy so'rovlarga tugash uchun vaqt berish: shutdown deadline terminationGracePeriodSeconds dan kichik bo'lsin",
+        "Fon ishlarini to'xtatish: worker'lar ctx.Done() bo'yicha chiqadi, queue consumer joriy xabarni ack qilib to'xtaydi",
+        "Keep-alive: server IdleTimeout LB idle timeout'idan katta bo'lsin (aks holda LB yopilgan ulanishdan foydalanib 502 oladi)",
+        "Tekshirish: deploy paytida yuk testi va 5xx metrikasi bilan isbotlash"
+      ],
+      "explanation": "Deploy'dagi 5xx 'normal' emas. Ko'pincha ikki sabab birga bo'ladi: graceful shutdown yo'qligi va readiness/endpoint yangilanishidagi kechikish — ikkalasi ham hal qilinishi kerak."
+    },
+    {
+      "id": 12009,
+      "code": "GC10",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Kafka consumer (Go) sekinlashdi va xotira o'sdi. Qanday yondashasiz?",
+      "modelAnswer": [
+        "Lag qaysi partition'larda o'syapti — notekis bo'lsa key taqsimoti (hot key) yoki bitta consumer sekin",
+        "Ishlov profili: har xabarga DB yozish N+1 bo'lsa — batch qilish, prepared statement, bulk insert",
+        "Xotira: butun batch'ni xotiraga yig'ish, cheklanmagan kanal buferi yoki har xabarda katta obyekt yaratish — bufer hajmini cheklash, sync.Pool",
+        "Parallellik: partition soniga qarab worker; lekin tartib talab qilinsa kalit bo'yicha ketma-ketlikni saqlash",
+        "Sozlamalar: max.poll.interval.ms ishlov vaqtidan katta, fetch hajmi va commit strategiyasi (ishlovdan keyin)",
+        "Xatolar: poyson xabar uchun retry limiti va DLQ — cheksiz sikl xotirani ham yeydi"
+      ],
+      "explanation": "Go tomonidagi tipik xato: har xabar uchun goroutine ochish va ularni cheklamaslik — yuk cho'qqisida minglab goroutine va OOM. To'g'ri: worker pool + bounded channel."
+    },
+    {
+      "id": 12010,
+      "code": "GC11",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Yangi versiya chiqarilgandan so'ng xatolar 5% ga oshdi, lekin faqat ba'zi foydalanuvchilarda. Qanday harakat qilasiz?",
+      "modelAnswer": [
+        "Avval qaytarish: canary bo'lsa to'xtatish, to'liq chiqarilgan bo'lsa rollback — tergov keyin",
+        "Segmentlash: xatolar qaysi endpoint, qaysi tenant, qaysi client versiyasi, qaysi region — log va metrikani shu kesimda ko'rish",
+        "Diff: oxirgi deploy nimani o'zgartirdi (kod, konfiguratsiya, migratsiya, bog'liqlik versiyasi, feature flag)",
+        "Ma'lumot tomoni: yangi kod eski ma'lumot formatini o'qiy oladimi (nullable maydon, enum qiymati) — ko'pincha 'ba'zi foydalanuvchilar' aynan shu",
+        "Takrorlash: muammoli so'rov namunasini olib, staging'da qayta ishlab ko'rish; test yozish",
+        "Postmortem: nega canary ushlamadi — metrika, trafik ulushi yoki kuzatuv oynasi yetarli emasmi"
+      ],
+      "explanation": "Staff signal: 'avval mitigatsiya, keyin tahlil' va 'ba'zi foydalanuvchilar' iborasini segmentga aylantirish. Deploy'ni shubhali deb hisoblash — statistik jihatdan to'g'ri boshlanish nuqtasi."
+    },
+    {
+      "id": 12011,
+      "code": "GC12",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "CASE: Bitta og'ir hisobot endpoint'i butun servisni sekinlashtirmoqda. Arxitektura darajasida nima qilasiz?",
+      "modelAnswer": [
+        "Izolyatsiya: og'ir ishni alohida servis/worker pool'ga chiqarish (bulkhead) — bitta oqim boshqasini o'ldirmasin",
+        "Asinxronlashtirish: hisobotni so'rov ichida emas, job sifatida bajarish va tayyor bo'lgach havola/bildirishnoma berish",
+        "Cheklash: parallel hisobotlar soniga semaphore, foydalanuvchi bo'yicha rate limit, natijani keshlash",
+        "Ma'lumot tomoni: analitik query'ni replica yoki DWH'ga ko'chirish, oldindan agregatsiya (materialized view)",
+        "Timeout va bekor qilish: client uzilsa ishni to'xtatish (context), uzoq ishlar uchun deadline",
+        "Kuzatuv: endpoint bo'yicha resurs iste'moli va navbat uzunligi metrikalari"
+      ],
+      "explanation": "Staff javobning o'zagi — resursni ajratish (bulkhead) va sinxron so'rovdan chiqarish. Faqat 'query'ni optimallashtiramiz' deyish qisqa muddatli yechim: yuk oshsa muammo qaytadi."
+    },
+    {
+      "id": 20013,
+      "code": "GT14",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Monolitdan Go mikroservislariga o'tish taklif qilindi. Staff sifatida qanday javob berasan?",
+      "modelAnswer": "Avval savol: qanday muammoni yechyapmiz? Sabab jamoalar bir-birini bloklashi bo'lsa — modullilik va deploy mustaqilligi kerak, bu monolit ichida ham (modular monolith, alohida deploy birligi) erishiladi. Sabab masshtab bo'lsa — faqat tor joy (hot path) ajratiladi. Reja: (1) o'lchov — deploy chastotasi, lead time, incident sabablari; (2) domen chegaralarini aniqlash (DDD, event storming) va monolit ichida modul sifatida mustahkamlash; (3) faqat isbotlangan chegarani strangler fig bilan ajratish, avval o'qish yo'lini; (4) ma'lumot: har servisga o'z sxemasi, o'zaro JOIN o'rniga API/event, outbox bilan izchillik; (5) platforma tayyorligi — CI/CD, kuzatuv, tracing, on-call; bularsiz mikroservis tarqoq monolitga aylanadi; (6) narxni ochiq aytish: tarqoq tranzaksiya yo'qligi, tarmoq xatolari, versiyalash, lokal ishlab chiqish murakkabligi.",
+      "explanation": "Staff javobining mohiyati — texnologiya tanlovi emas, muammoni aniqlash va eng arzon yechimni taklif qilish, hamda tashkiliy narxni (Conway qonuni, on-call yuki) ko'rsatish. 'Yo'q' deyishning ham asosli varianti bo'lishi kerak."
+    },
+    {
+      "id": 20014,
+      "code": "GT15",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Go servisi p99 latency SLO'sini buzyapti, lekin CPU 30%. Qanday tizimli yondashasan?",
+      "modelAnswer": "1) Muammoni raqamlashtirish: qaysi endpoint, qaysi tenant, qaysi vaqt; SLO va error budget qancha yeyilgan. 2) USE/RED bo'yicha qarash: utilizatsiya past bo'lsa muammo navbatda yoki kutishda. 3) Kutish joylarini topish: DB pool kutishi (pool metrikalari), lock contention (mutex profil), channel/worker navbati (block profil), tashqi chaqiruv (tracing span'lari), GC assist (gctrace), CFS throttling. 4) Little's law bilan konkurentlik chegarasini tekshirish; bitta sekin bog'liqlik butun pool'ni egallayotgan bo'lishi mumkin (bulkhead kerak). 5) Gipotezani load test bilan tasdiqlash, bitta o'zgarish kiritish, o'lchash. 6) Tuzatish variantlari: pool hajmi va timeout, N+1 query, kesh, batching, hedged request, load shedding, adaptive concurrency. 7) Qaytalanmasligi uchun: SLO alert, dashboards, yuk testini CI'ga qo'yish, post-mortem.",
+      "explanation": "Asosiy tushuncha: CPU past bo'lganda ham tizim to'yingan bo'lishi mumkin — cheklov navbat va kutishda. Staff darajasida kutilgani — o'lchov asosidagi ketma-ketlik va tashkiliy davomi (SLO, alert, post-mortem), shunchaki 'profil oldim' emas."
+    },
+    {
+      "id": 20015,
+      "code": "GT16",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Jamoada ikki dasturchi 'DDD kerak' va 'oddiy CRUD yetarli' deb bahslashyapti. Qaror qanday chiqariladi?",
+      "modelAnswer": "Mezon — domen murakkabligi, o'zgarish tezligi va qoidalarning qayerdaligi. Agar biznes qoidalari ko'p, ular tez-tez o'zgaradi va bir necha joyda takrorlanadi — domen modeli (invariantlar entity/aggregate ichida, use case application qatlamida) foyda beradi. Agar mohiyatan ma'lumot kiritish-chiqarish bo'lsa — qatlam qo'shish faqat qimmat. Amaliy yo'l: bitta bounded context'ni tanlab ikkala uslubni taqqoslash; qoidalarni testlar bilan qamrab, keyin ko'chirish; 'hamma joyda bir xil arxitektura' talab qilmaslik — kontekstlar har xil bo'lishi normal. Qarorni ADR sifatida yozib, qayta ko'rish sanasini belgilash.",
+      "explanation": "Go'da DDD ko'pincha og'ir freymvorksiz amalga oshadi: domain paketi tashqi kutubxonalarsiz (faqat standart kutubxona), repository interfeysi domen tomonida e'lon qilinadi, adapterlar tashqarida. Staff javobi bahsni texnologiya emas, mezon va o'lchov bilan yopadi."
+    },
+    {
+      "id": 20016,
+      "code": "GT17",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Umumiy kutubxona (shared library) 8 ta servisda ishlatiladi. Unga breaking change kerak. To'g'ri yo'l?",
+      "options": [
+        "Yangi API'ni yonma-yon qo'shib, eskisini Deprecated deb belgilash; iste'molchilar ko'chgach yangi major (v2) chiqarish — hech qachon bir vaqtda hammani majburlamaslik",
+        "Darhol o'zgartirib, hamma repo'ni tuzatish",
+        "Kutubxonani har servisga nusxalash",
+        "Faqat jamoaga xabar berish yetarli"
+      ],
+      "answer": 0,
+      "explanation": "Expand/contract (parallel change) naqshi: qo'shish, ko'chirish, o'chirish. Go'da yordam beradigan vositalar: `// Deprecated:` kommentariysi (IDE va linter ko'rsatadi), /v2 modul yo'li, va migratsiya uchun gofmt -r yoki go fix uslubidagi skript. Tashkiliy tomoni: ko'chish muddati, egalik va kim qo'llab-quvvatlashi kelishilgan bo'lsin — aks holda uchta versiya abadiy yashaydi."
+    },
+    {
+      "id": 30179,
+      "code": "SN180",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Production'da Go servis p99 latency 2 sekundga chiqdi, CPU 30%. Qanday tekshirasiz?",
+      "modelAnswer": [
+        "Avval o'lchov: p99 qaysi endpoint va qaysi instansiyada — hammasida yoki bittasida (hot shard/pod)? Trace bilan qaysi hop vaqt yeganini aniqlash",
+        "Bloklanish gipotezalari: DB pool tugagan (`sql.DBStats.WaitCount`/`WaitDuration`), tashqi HTTP timeout, mutex contention, kanal navbati",
+        "`/debug/pprof/block` va `/debug/pprof/mutex` (yoqilgan bo'lsa), `goroutine?debug=2` bilan bloklangan stack'lar — 10k goroutine bir joyda kutayotgani darhol ko'rinadi",
+        "GC: `GODEBUG=gctrace=1` yoki runtime metrikalari — pauza uzunligi va chastotasi; STW pauza p99'ni ko'tarishi mumkin (katta heap, ko'p pointer)",
+        "Runtime scheduling: `GOMAXPROCS` vs CPU limiti, CFS throttling (`container_cpu_cfs_throttled_seconds_total`) — CPU 30% ko'rinib turib throttle bo'lishi mumkin",
+        "Tashqi: DNS (5s retry), TLS handshake, keep-alive yo'qligi, downstream p99",
+        "Tuzatgandan keyin: xuddi shu metrikaga alert va yuk testi bilan regressiyani tekshirish"
+      ],
+      "explanation": "CPU past + latency yuqori — deyarli har doim kutish: qulf, pool, tashqi chaqiruv yoki throttling. Kutilayotgan javob tartibi: o'lchash → bloklanishni topish (block/mutex/goroutine profil) → runtime/infra cheklovlarini tekshirish."
+    },
+    {
+      "id": 30180,
+      "code": "SN181",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Servisda goroutine soni monoton o'sib boradi (leak). Qanday topib tuzatasiz?",
+      "modelAnswer": [
+        "Dalil: `runtime.NumGoroutine()` metrikasi vaqt bo'yicha o'sish grafigi (alert shu metrikaga qo'yilishi kerak)",
+        "Aniqlash: `curl /debug/pprof/goroutine?debug=1` — o'sayotgan stack guruhi darhol ko'rinadi; ikki snapshot farqi eng ishonchli",
+        "Eng ko'p uchraydigan sabablar: `resp.Body` yopilmagan (HTTP client goroutine'i qoladi), kanalga yozuv/ o'qish abadiy bloklangan, `time.Ticker` `Stop` qilinmagan, `ctx` uzatilmagan fon ishlari, `for { go ... }` cheksiz spawn",
+        "Tuzatish naqshlari: har goroutine uchun 'kim to'xtatadi' aniq bo'lishi, kanal operatsiyalari `select`da `ctx.Done()` bilan, `defer resp.Body.Close()` + `io.Copy(io.Discard, body)`",
+        "Profilaktika: `go.uber.org/goleak` bilan testda leak tekshiruvi, va `-race` bilan CI",
+        "Tasdiqlash: tuzatishdan keyin yuk testi ostida goroutine soni stabillashishi (grafik bilan), xotira RSS ham tekis bo'lishi"
+      ],
+      "explanation": "Bu savolda intervyuer aniq vositalarni eshitmoqchi: pprof goroutine ikki snapshot farqi va goleak. 'Xotira oshdi, GOGC o'zgartirdim' javobi sababni ko'rmaganlikni ko'rsatadi."
+    },
+    {
+      "id": 30181,
+      "code": "SN182",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Go servis DB bilan ishlaydi. Ulanish pool'ini qanday sozlaysiz va nega?",
+      "modelAnswer": [
+        "`SetMaxOpenConns`: DB tomonidagi `max_connections` va boshqa iste'molchilar bilan hisoblanadi — barcha pod × pool ≤ DB limiti (minus zaxira); PostgreSQL'da har ulanish alohida jarayon, shuning uchun 100-200 dan oshirish odatda zarar",
+        "`SetMaxIdleConns` = MaxOpen (yoki yaqin) — aks holda ulanishlar doimiy yopilib-ochiladi (handshake narxi)",
+        "`SetConnMaxLifetime` (masalan 30 daqiqa) — LB/PgBouncer orqasida eski ulanishlarni yangilash va failover'dan keyin trafik qayta taqsimlanishi uchun; `SetConnMaxIdleTime` bilan bo'sh ulanishlarni bo'shatish",
+        "Sizing: Little's law — kerakli parallel query = RPS × query_duration; pool shundan kichik bo'lsa navbat kutish latency'ga qo'shiladi (`DBStats.WaitDuration` bilan kuzatiladi)",
+        "Juda ko'p ulanish ham yomon: DB'da kontekst almashinish va lock contention oshadi — ko'pincha PgBouncer (transaction pooling) bilan markazlashtirish to'g'riroq",
+        "Har query'da `context` timeout; `statement_timeout` DB tomonda ham qo'yiladi",
+        "Kuzatuv: `WaitCount`, `WaitDuration`, `InUse`, `Idle` metrikalari — pool tugashi incident'larda eng ko'p uchraydigan bo'g'iz"
+      ],
+      "explanation": "Kutilayotgan asosiy fikr: pool o'lchami tasodifiy raqam emas, DB sig'imi va Little's law bilan hisoblanadi; `ConnMaxLifetime` esa failover va PgBouncer bilan ishlashda majburiy."
+    },
+    {
+      "id": 30329,
+      "code": "SN330",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Production'da Go servis p99 latency 2 sekundga chiqdi, CPU 30%. Qanday tekshirasiz?",
+      "modelAnswer": [
+        "Avval o'lchov: p99 qaysi endpoint va qaysi instansiyada — hammasida yoki bittasida (hot shard/pod)? Trace bilan qaysi hop vaqt yeganini aniqlash",
+        "Bloklanish gipotezalari: DB pool tugagan (`sql.DBStats.WaitCount`/`WaitDuration`), tashqi HTTP timeout, mutex contention, kanal navbati",
+        "`/debug/pprof/block` va `/debug/pprof/mutex` (yoqilgan bo'lsa), `goroutine?debug=2` bilan bloklangan stack'lar — 10k goroutine bir joyda kutayotgani darhol ko'rinadi",
+        "GC: `GODEBUG=gctrace=1` yoki runtime metrikalari — pauza uzunligi va chastotasi; STW pauza p99'ni ko'tarishi mumkin (katta heap, ko'p pointer)",
+        "Runtime scheduling: `GOMAXPROCS` vs CPU limiti, CFS throttling (`container_cpu_cfs_throttled_seconds_total`) — CPU 30% ko'rinib turib throttle bo'lishi mumkin",
+        "Tashqi: DNS (5s retry), TLS handshake, keep-alive yo'qligi, downstream p99",
+        "Tuzatgandan keyin: xuddi shu metrikaga alert va yuk testi bilan regressiyani tekshirish"
+      ],
+      "explanation": "CPU past + latency yuqori — deyarli har doim kutish: qulf, pool, tashqi chaqiruv yoki throttling. Kutilayotgan javob tartibi: o'lchash → bloklanishni topish (block/mutex/goroutine profil) → runtime/infra cheklovlarini tekshirish."
+    },
+    {
+      "id": 30330,
+      "code": "SN331",
+      "level": "St",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Servisda goroutine soni monoton o'sib boradi (leak). Qanday topib tuzatasiz?",
+      "modelAnswer": [
+        "Dalil: `runtime.NumGoroutine()` metrikasi vaqt bo'yicha o'sish grafigi (alert shu metrikaga qo'yilishi kerak)",
+        "Aniqlash: `curl /debug/pprof/goroutine?debug=1` — o'sayotgan stack guruhi darhol ko'rinadi; ikki snapshot farqi eng ishonchli",
+        "Eng ko'p uchraydigan sabablar: `resp.Body` yopilmagan (HTTP client goroutine'i qoladi), kanalga yozuv/ o'qish abadiy bloklangan, `time.Ticker` `Stop` qilinmagan, `ctx` uzatilmagan fon ishlari, `for { go ... }` cheksiz spawn",
+        "Tuzatish naqshlari: har goroutine uchun 'kim to'xtatadi' aniq bo'lishi, kanal operatsiyalari `select`da `ctx.Done()` bilan, `defer resp.Body.Close()` + `io.Copy(io.Discard, body)`",
+        "Profilaktika: `go.uber.org/goleak` bilan testda leak tekshiruvi, va `-race` bilan CI",
+        "Tasdiqlash: tuzatishdan keyin yuk testi ostida goroutine soni stabillashishi (grafik bilan), xotira RSS ham tekis bo'lishi"
+      ],
+      "explanation": "Bu savolda intervyuer aniq vositalarni eshitmoqchi: pprof goroutine ikki snapshot farqi va goleak. 'Xotira oshdi, GOGC o'zgartirdim' javobi sababni ko'rmaganlikni ko'rsatadi."
+    },
+    {
+      "id": 30331,
+      "code": "SN332",
+      "level": "S",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Go servis DB bilan ishlaydi. Ulanish pool'ini qanday sozlaysiz va nega?",
+      "modelAnswer": [
+        "`SetMaxOpenConns`: DB tomonidagi `max_connections` va boshqa iste'molchilar bilan hisoblanadi — barcha pod × pool ≤ DB limiti (minus zaxira); PostgreSQL'da har ulanish alohida jarayon, shuning uchun 100-200 dan oshirish odatda zarar",
+        "`SetMaxIdleConns` = MaxOpen (yoki yaqin) — aks holda ulanishlar doimiy yopilib-ochiladi (handshake narxi)",
+        "`SetConnMaxLifetime` (masalan 30 daqiqa) — LB/PgBouncer orqasida eski ulanishlarni yangilash va failover'dan keyin trafik qayta taqsimlanishi uchun; `SetConnMaxIdleTime` bilan bo'sh ulanishlarni bo'shatish",
+        "Sizing: Little's law — kerakli parallel query = RPS × query_duration; pool shundan kichik bo'lsa navbat kutish latency'ga qo'shiladi (`DBStats.WaitDuration` bilan kuzatiladi)",
+        "Juda ko'p ulanish ham yomon: DB'da kontekst almashinish va lock contention oshadi — ko'pincha PgBouncer (transaction pooling) bilan markazlashtirish to'g'riroq",
+        "Har query'da `context` timeout; `statement_timeout` DB tomonda ham qo'yiladi",
+        "Kuzatuv: `WaitCount`, `WaitDuration`, `InUse`, `Idle` metrikalari — pool tugashi incident'larda eng ko'p uchraydigan bo'g'iz"
+      ],
+      "explanation": "Kutilayotgan asosiy fikr: pool o'lchami tasodifiy raqam emas, DB sig'imi va Little's law bilan hisoblanadi; `ConnMaxLifetime` esa failover va PgBouncer bilan ishlashda majburiy."
+    },
+    {
+      "id": 30419,
+      "code": "SN420",
+      "level": "P",
+      "type": "open",
+      "topic": "Go case",
+      "domain": "go",
+      "section": "g4",
+      "question": "Go servisda p99 latency GC pauzalari tufayli sakramoqda deb gumon qilinyapti. Qanday isbotlaysiz va tuzatasiz?",
+      "modelAnswer": [
+        "Isbot: `GODEBUG=gctrace=1` yoki `runtime/metrics` (`gc/pauses`, `gc/cycles`) — pauza davomiyligi va chastotasi; `go tool trace` bilan GC bosqichlari va assist vaqtini so'rov timeline'iga solishtirish",
+        "Zamonaviy Go'da STW pauza odatda <1ms — shuning uchun ko'pincha aybdor pauza emas, balki GC assist (ajratuvchi goroutine GC ishining bir qismini bajaradi) va CPU raqobati",
+        "Allocation profili: `-alloc_space` bilan eng ko'p ajratuvchi yo'l; issiq yo'lda `[]byte`/string konversiyalari, log formatlash, JSON, slice/map oldindan sig'imsiz",
+        "Tuzatish: allocation kamaytirish (Builder, preallocation, buffer qayta ishlatish), pointer sonini kamaytirish (GC skan vaqti), va kerak bo'lsa `GOGC` oshirish + `GOMEMLIMIT` bilan chegaralash",
+        "Infra tomoni: CPU limiti va CFS throttling — GC CPU talab qiladi, kvota kichik bo'lsa pauza uzayadi; `GOMAXPROCS` kvotaga moslanishi shart",
+        "Tasdiqlash: o'zgarishdan oldin/keyin p99 va `gc/pauses` taqsimoti, yuk testi bilan; bitta o'zgarish — bitta o'lchov"
+      ],
+      "explanation": "Kutilayotgan asosiy nuqta: GC'ni ayblashdan oldin o'lchash, va zamonaviy Go'da muammo odatda pauza emas — allocation tezligi va CPU kvotasi. `GOGC`ni ko'r-ko'rona o'zgartirish javobi yetarli emas."
+    }
+  ]
+}

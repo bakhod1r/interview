@@ -1,0 +1,230 @@
+{
+  "id": "p1",
+  "name": "Payments & PSP",
+  "domain": "fin",
+  "domainLabel": "Fintech & payments",
+  "topics": [
+    "Payments"
+  ],
+  "questions": [
+    {
+      "id": 10001,
+      "code": "P2",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "Authorization, capture va settlement farqi?",
+      "options": [
+        "Bir xil narsaning uch nomi",
+        "Authorization — mablag' bloklanadi (hold), pul ko'chmaydi; capture — blokdan haqiqiy yechish so'raladi; settlement — banklar orasida pulning haqiqiy ko'chishi (odatda keyingi kunlar). Shuning uchun 'to'landi' holati vaqt bo'yicha bosqichma-bosqich",
+        "Settlement birinchi bo'ladi",
+        "Capture faqat qaytarishda"
+      ],
+      "answer": 1,
+      "explanation": "Dizaynga ta'siri: buyurtma holati va pul holati alohida modellanadi; auth muddati tugashi (odatda 7 kun) hisobga olinadi; qisman capture va qisman refund qo'llab-quvvatlanadi. Foydalanuvchi ko'radigan 'pending' summa — bank tomonidagi hold, sizning ledger'ingizda esa alohida yozuv turi."
+    },
+    {
+      "id": 10002,
+      "code": "P3",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "Karta ma'lumotlarini saqlash bo'yicha to'g'ri yondashuv?",
+      "options": [
+        "Shifrlab o'z bazangizda saqlash",
+        "Umuman saqlamaslik: karta ma'lumoti to'g'ridan-to'g'ri provayderga (hosted field/SDK) ketadi, sizga token qaytadi — bu PCI DSS qamrovini (scope) keskin kamaytiradi",
+        "Faqat oxirgi 4 raqamni shifrlash shart",
+        "CVV ni keyingi to'lovlar uchun saqlash"
+      ],
+      "answer": 1,
+      "explanation": "CVV ni avtorizatsiyadan keyin saqlash umuman taqiqlangan. Saqlash mumkin bo'lgan minimal ma'lumot: token, oxirgi 4 raqam, brend, muddat — ko'rsatish uchun. Tokenizatsiya bilan takroriy to'lov (recurring) ham ishlaydi. Qamrov kichrayganda audit va sertifikatsiya xarajati ham kamayadi (SAQ A darajasi)."
+    },
+    {
+      "id": 10003,
+      "code": "P4",
+      "level": "S",
+      "type": "open",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "PSP webhook'larini qanday ishonchli qabul qilasiz?",
+      "modelAnswer": [
+        "Imzoni tekshirish (HMAC, timestamp bilan) — imzosiz webhook'ka ishonmaslik; replay uchun timestamp oynasi",
+        "Idempotentlik: event_id bo'yicha dedup — bir xil hodisa bir necha marta kelishi normal",
+        "Tartib kafolatlanmagan: 'succeeded' 'created' dan oldin kelishi mumkin — holat mashinasi faqat oldinga siljisin, eski hodisani rad etsin",
+        "Tez javob qaytarish (2xx) va og'ir ishni navbatga qo'yish — aks holda provayder retry qiladi",
+        "Yo'qolgan hodisalar uchun zaxira: davriy reconciliation (provayder API'sidan holatni so'rash)",
+        "Kuzatuv: ishlanmagan webhook'lar va imzo xatolari bo'yicha alert"
+      ],
+      "explanation": "Webhook — at-least-once va tartibsiz. Ishonchli tizim ikki manbaga tayanadi: webhook (tez) va polling/reconciliation (kafolat). Faqat webhook'ga tayanish — pul yo'qolishining klassik sababi."
+    },
+    {
+      "id": 30090,
+      "code": "SN91",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "To'lov so'rovi timeout bo'ldi — PSP javobi noma'lum. To'g'ri harakat?",
+      "options": [
+        "Qayta to'lov yaratish",
+        "Aynan shu idempotency key bilan retry qilish yoki PSP'dan tranzaksiya holatini so'rash (reconcile); mahalliy holat `pending` da qoladi, yakuniy qaror webhook yoki so'rov natijasi bilan",
+        "Foydalanuvchiga 'xato' deb ko'rsatib unutish",
+        "Balansni qo'lda tuzatish"
+      ],
+      "answer": 1,
+      "explanation": "Timeout — 'bo'lmadi' degani emas: pul olingan bo'lishi mumkin. Shuning uchun har to'lov mahalliy `payment_intent` ID bilan boshlanadi, PSP'ga shu ID idempotency key sifatida beriladi, va noma'lum holat uchun reconciliation jarayoni (davriy `GET /charges` yoki settlement fayli bilan solishtirish) bo'ladi. Ikki marta to'lash — eng qimmat bug turi."
+    },
+    {
+      "id": 30091,
+      "code": "SN92",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "Kartadan pul yechishning `authorization` va `capture` bosqichlari nima beradi?",
+      "options": [
+        "Bir xil narsa, faqat nomi boshqa",
+        "Authorization mablag'ni bloklaydi (hold), capture haqiqiy yechish — tovar jo'natilganda yoki xizmat ko'rsatilganda capture qilinadi; hold muddati o'tsa avtomatik bo'shaydi (expiry)",
+        "Capture avval bo'ladi",
+        "Authorization pulni darhol o'tkazadi"
+      ],
+      "answer": 1,
+      "explanation": "Ikki bosqich biznes uchun muhim: buyurtma bekor bo'lsa `void` (capture'gacha) arzon va mijozga tez, `refund` (capture'dan keyin) sekin va komissiyali. Partial capture va multiple capture qo'llanishi PSP'ga bog'liq. Hold muddati (odatda 7 kun) o'tsa capture rad etiladi — shuning uchun jo'natish muddati bilan moslashtiriladi."
+    },
+    {
+      "id": 30092,
+      "code": "SN93",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "Chargeback (dispute) oqimini tizimda qanday qo'llab-quvvatlaysiz?",
+      "options": [
+        "Faqat pulni qaytarish",
+        "Dispute ham holat mashinasi: webhook bilan `dispute_opened` → dalil yig'ish muddati → `won/lost`; hisobda pul vaqtincha ushlanadi, ledger'da alohida yozuv (reversal + fee), va buyurtma tomonida yetkazib berish dalillari saqlanadi",
+        "Dispute'ni qo'lda Excel'da yuritish",
+        "Dispute'ni e'tiborsiz qoldirish"
+      ],
+      "answer": 1,
+      "explanation": "Texnik talablar: dalillar (IP, qurilma, yetkazib berish tasdig'i, shartlar qabul qilingani) audit bilan saqlanadi va muddatga bog'langan; ledger'da chargeback va uning komissiyasi alohida hisob (hech qachon asl yozuvni o'chirish emas); fraud metrikasi (dispute rate) kuzatiladi, chunki kart tizimlari chegaradan oshsa jarima qo'yadi."
+    },
+    {
+      "id": 30093,
+      "code": "SN94",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "PCI DSS doirasini kamaytirish uchun eng samarali qarori?",
+      "options": [
+        "Karta raqamini shifrlab o'z DB'da saqlash",
+        "Karta ma'lumotini umuman qabul qilmaslik: PSP tokenizatsiyasi (hosted field/iframe, client'dan to'g'ridan-to'g'ri PSP'ga), serverda faqat token saqlanadi",
+        "Log'larni o'chirish",
+        "Faqat HTTPS ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "PAN tizimga kirsa — butun infra PCI doirasiga tushadi (audit, segmentatsiya, kalit boshqaruvi). Hosted fields bilan SAQ A darajasiga tushish mumkin. Qo'shimcha: CVV hech qachon saqlanmaydi, log/APM'da karta maydonlari maskalanadi, va takroriy to'lov uchun PSP tokeni (network token) ishlatiladi."
+    },
+    {
+      "id": 30462,
+      "code": "SN463",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "3-D Secure (SCA) to'lov oqimini qanday o'zgartiradi?",
+      "options": [
+        "Hech narsa o'zgarmaydi",
+        "To'lov sinxron tugamaydi: challenge uchun foydalanuvchi bankka yo'naltiriladi va natija redirect/webhook bilan keladi — demak `pending` holati, holat mashinasi, TTL va foydalanuvchi qaytmasa nima bo'lishi (bekor qilish yoki reconcile) oldindan aniqlanishi kerak",
+        "Faqat UI masalasi",
+        "Faqat Yevropada kartani bloklaydi"
+      ],
+      "answer": 1,
+      "explanation": "Muhandislik oqibatlari: buyurtma 'to'langan' deb belgilanmaydi to natija kelmaguncha; inventar rezervi challenge davomida ushlab turilishi kerak (TTL bilan); frictionless flow (challenge'siz) va exemption'lar konversiyaga ta'sir qiladi. Natija ikki kanaldan kelishi mumkin (redirect va webhook) — ikkisi ham idempotent qayta ishlanishi shart."
+    },
+    {
+      "id": 30463,
+      "code": "SN464",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "To'lov retry'lari (dunning) qanday loyihalanadi?",
+      "options": [
+        "Har soatda cheksiz qayta urinish",
+        "Xato turiga qarab: 'insufficient funds' — kechiktirilgan retry jadvali (1/3/5 kun); 'card expired'/'do not honor' — foydalanuvchidan yangi karta so'rash, retry befoyda; soft decline (3DS kerak) — challenge bilan qayta; har urinish va sabab kodi saqlanadi, kart tarmoqlari retry chastotasini cheklaydi",
+        "Bir marta urinib bekor qilish",
+        "Har daqiqada"
+      ],
+      "answer": 1,
+      "explanation": "Ko'r-ko'rona retry ikki zarar keltiradi: kart tarmog'i jarima/blok qo'yadi (yuqori decline nisbati) va mijoz bir necha marta hold ko'radi. To'g'ri yondashuv sabab kodini tasniflash (hard vs soft decline), retry oynasini kartaning to'lov kuniga moslash, va har urinishda idempotency key yangilash siyosatini aniq belgilash."
+    },
+    {
+      "id": 30513,
+      "code": "SN514",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "To'lov holatini nima belgilaydi: webhook, API javobi yoki ichki holat?",
+      "options": [
+        "Faqat webhook",
+        "Ichki holat mashinasi yagona haqiqat: webhook va API javobi — kirish signallari; ikkalasi ham idempotent qayta ishlanadi, tartibsiz kelishi mumkin (versiya/timestamp bilan), va hech biri kelmasa reconciliation holatni aniqlaydi",
+        "Faqat API javobi",
+        "Frontend belgilaydi"
+      ],
+      "answer": 1,
+      "explanation": "Webhook'ga yolg'iz ishonish klassik xato: u kechikadi, yo'qoladi, yoki tartibsiz keladi (`succeeded` dan keyin `processing`). Shuning uchun holat o'tishlari faqat oldinga (monoton) va har signal versiyasi tekshiriladi. Yakuniy himoya — davriy pull/reconcile, chunki pul masalasida 'signal kelmadi' ham holat."
+    },
+    {
+      "id": 30517,
+      "code": "SN518",
+      "level": "St",
+      "type": "open",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "To'lov servisida 'double charge' hodisasi bo'ldi. Qanday tekshirasiz va tuzatasiz?",
+      "modelAnswer": [
+        "Darhol: ta'sir doirasini aniqlash — PSP tomonidagi tranzaksiyalarni ichki `payment_intent` bo'yicha guruhlab, bir intentga ikki charge topilganlarni ro'yxatlash (SQL bilan aniq raqam)",
+        "Mijozga ta'sir: avtomatik refund qarori (kutmasdan qaytarish odatda to'g'ri), va xabar berish; qo'llab-quvvatlash uchun ro'yxat",
+        "Sabab gipotezalari: idempotency key yuborilmagan yoki har retry'da yangi generatsiya qilingan; key faqat keshda saqlangan va evict bo'lgan; parallel so'rovlar `INSERT` dan oldin `SELECT` bilan tekshirgan (race); retry client va gateway ikkala qatlamda",
+        "Isbot: log va DB bo'yicha ikki so'rovning vaqt farqi va key qiymatlari; agar keylar farq qilsa — client tomoni, bir xil bo'lsa — server tomonidagi race",
+        "Tuzatish: `unique(idempotency_key)` DB constraint (kesh emas), `INSERT ... ON CONFLICT DO NOTHING` bilan atomik 'birinchi kim keldi', javob snapshot'ini saqlash, va PSP'ga ham idempotency key uzatish",
+        "Profilaktika: dublikat detektori (bir foydalanuvchi, bir summa, qisqa oyna) alert bilan; reconciliation kunlik; va integratsion test — parallel ikki so'rov bilan",
+        "Postmortem: nega monitoring ushlamadi (dublikat alerti yo'q edi), va action item'lar"
+      ],
+      "explanation": "Pul bilan bog'liq incidentda tartib: ta'sirni o'lchash → mijozni himoya qilish (refund) → sababni dalil bilan aniqlash → DB darajasida tizimli to'siq. 'Kodni tuzatdim' javobi yetarli emas — constraint va detektor talab qilinadi."
+    },
+    {
+      "id": 30518,
+      "code": "SN519",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Payments",
+      "domain": "fin",
+      "section": "p1",
+      "question": "PSP webhook imzosi qanday tekshiriladi?",
+      "options": [
+        "Faqat `Content-Type` tekshirish",
+        "Xom (raw) body ustidan HMAC hisoblash (JSON qayta serializatsiya qilingan matn emas!), constant-time solishtirish, timestamp bilan replay oynasi, va kalit rotatsiyasi uchun ikki kalitni parallel qabul qilish",
+        "Body'ni parse qilib keyin tekshirish",
+        "IP bo'yicha tekshirish yetarli"
+      ],
+      "answer": 1,
+      "explanation": "Eng ko'p uchraydigan xato: framework body'ni parse qilib qayta serializatsiya qiladi (probel/tartib o'zgaradi) va imza mos kelmaydi — shuning uchun raw body middleware'da saqlanishi kerak. Ikkinchi xato: `==` bilan solishtirish (timing). Uchinchisi: timestamp tekshirilmasa eski so'rov qayta yuborilishi mumkin."
+    }
+  ]
+}

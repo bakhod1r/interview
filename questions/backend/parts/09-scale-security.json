@@ -1,0 +1,294 @@
+[
+  {
+    "topicId": "SHmbcMRsc3SygEDksJQBD",
+    "topicTitle": "Building For Scale",
+    "questions": [
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-01",
+        "question": "What is graceful degradation, and when should a service fail closed instead?",
+        "answer": "Graceful degradation means shedding non-essential functionality so the core path keeps working: if the recommendation service times out, render the product page with a static fallback list instead of returning 500. It applies when the missing data is advisory. Fail closed when the dependency is a correctness or safety gate - payment authorization, permission checks, fraud scoring - where serving the request without it means money loss or a security hole. The rule of thumb: degrade on read-side enrichment, fail closed on authorization and money.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Graceful Degradation",
+        "followUps": ["How do you cache a fallback response so degradation has something to serve?", "Which HTTP status do you return for a degraded but successful response?"],
+        "tags": ["resilience", "fallback", "availability"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-02",
+        "question": "Compare token bucket, leaky bucket and sliding window rate limiting.",
+        "answer": "Token bucket refills tokens at a fixed rate up to a capacity; a request consumes one token, so bursts up to the capacity are allowed - good for APIs that want smooth average rate with burst tolerance. Leaky bucket drains at a constant rate through a queue, producing perfectly smooth output and shaping traffic, but it delays instead of allowing bursts. Fixed-window counters are cheap but allow 2x the limit across a window boundary; sliding window log stores timestamps (exact, memory-heavy) and sliding window counter interpolates the previous window's count (approximate, O(1) memory) to fix the boundary problem.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Throttling",
+        "followUps": ["Which headers do you return when throttling (X-RateLimit-*, Retry-After)?", "Why is 429 preferred over 503 for a rate-limited caller?"],
+        "tags": ["rate-limiting", "algorithms", "throttling"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-03",
+        "question": "Design distributed rate limiting for 40 API nodes. Why Redis plus a Lua script?",
+        "answer": "Per-node limits do not compose: 40 nodes each allowing 100 rps means 4000 rps globally, and sticky routing breaks on rebalance. Centralize the counter in Redis keyed by tenant plus route, and run the check-and-decrement as a Lua script (EVALSHA) so read-modify-write is atomic on the server - otherwise GET then INCR races between nodes. A typical token-bucket script stores tokens and last_refill in a HASH, computes refill from redis TIME, decrements, sets a TTL, and returns allowed plus retry_after. Accept the added ~1ms hop, use a local in-process limiter as a fast pre-filter, and fail open (or fall back to a conservative local limit) if Redis is unreachable so the limiter is not itself an outage.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "Throttling",
+        "followUps": ["How do you shard the limiter keys to avoid a hot Redis slot?", "What changes with Redis Cluster and multi-key Lua scripts?"],
+        "tags": ["redis", "lua", "distributed", "rate-limiting"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-04",
+        "question": "What is backpressure, and how is it expressed in queues versus streams?",
+        "answer": "Backpressure is the consumer telling the producer to slow down instead of silently buffering until memory or latency explodes. In streams it is explicit demand: TCP's receive window, HTTP/2 flow control, Reactive Streams request(n), or Node's writable.write() returning false plus the 'drain' event. In message queues it is indirect - you bound the queue, and when it is full you block the producer, reject with 429/503, or drop by priority; Kafka instead bounds consumer fetch (max.poll.records) and lets lag grow on durable storage. Unbounded queues are the anti-pattern: they convert a throughput problem into an unbounded latency problem and eventually an OOM.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Backpressure",
+        "followUps": ["Why does Little's Law say a bigger queue cannot fix an under-provisioned consumer?", "How does a bounded thread pool with a rejection policy act as backpressure?"],
+        "tags": ["backpressure", "queues", "streaming", "flow-control"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-05",
+        "question": "Traffic triples during a flash sale and every request gets slow, including health checks. How do you shed load by priority?",
+        "answer": "Classify traffic before you shed it: checkout and payment callbacks are critical, search and product reads are important, analytics beacons and recommendation refreshes are droppable. At the edge, drop the lowest class first with 429/503 plus Retry-After once a signal crosses a threshold - CPU, or better, queue wait time / concurrency in flight (a Little's Law estimate of latency). Keep a reserved concurrency bulkhead for critical traffic and an admin/health path that is never shed, and shed early at the LB rather than after the request already consumed a DB connection. Shedding 20% fast beats letting 100% time out, because timed-out work still costs full capacity.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Loadshifting",
+        "followUps": ["Why is queue-wait-time a better shed signal than CPU?", "How do you avoid shedding a user's retry after already accepting their payment?"],
+        "tags": ["load-shedding", "prioritization", "capacity", "incident"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-06",
+        "question": "Explain circuit breaker states and how half-open probing works.",
+        "answer": "Closed: calls pass, failures and slow calls are counted over a rolling window. When the failure ratio crosses a threshold (say 50% over the last 100 calls, with a minimum call volume so 2 of 2 does not trip it), it moves to Open and fails fast immediately - no connection, no timeout wait - for a cooldown like 30s. It then moves to Half-Open and admits a small fixed number of trial calls (e.g. 5, with concurrency capped); if they succeed it closes, if any fail it re-opens with a longer cooldown. Half-open must limit concurrency, otherwise the whole backlog stampedes the recovering dependency and immediately re-trips the breaker.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Circuit Breaker",
+        "followUps": ["Why count slow calls, not only errors, toward tripping?", "Should a 400 from the dependency count as a failure? Why not?"],
+        "tags": ["circuit-breaker", "resilience", "failure-handling"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-07",
+        "question": "A downstream service has a 10s blip, but your service stays down for 20 minutes afterwards. What happened and how do you fix the retry policy?",
+        "answer": "A retry storm: every client retried 3 times immediately and in lockstep, tripling load on a service that was already at the edge, and synchronized retries kept re-hammering it in waves. Fix with exponential backoff plus full jitter - sleep = random(0, min(cap, base * 2^attempt)) - which spreads retries instead of aligning them. Add a retry budget (e.g. retries capped at 10% of requests, as in gRPC's retryThrottling), stop retrying non-idempotent or 4xx responses, honor Retry-After, and put a circuit breaker in front so retries stop entirely while the dependency is open. Also cap total attempts by a deadline, not a count.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Graceful Degradation",
+        "followUps": ["Why is 'equal jitter' usually worse than full jitter?", "How do layered retries at 3 tiers turn 3 attempts into 27?"],
+        "tags": ["retry", "backoff", "jitter", "cascading-failure"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-08",
+        "question": "What is the bulkhead pattern and how do you implement it in a service?",
+        "answer": "Bulkheads partition resources so one saturated dependency cannot consume the whole process, named after ship compartments. Concretely: a separate bounded thread pool or semaphore per downstream (e.g. 20 permits for the search client, 50 for the DB), separate connection pools, and at infrastructure level separate instance groups or cells per tenant class. Without it, one slow dependency holds every request thread and the service becomes 100% unavailable even though 90% of its endpoints do not use that dependency. The cost is lower utilization and more tuning knobs, and permits must be sized from concurrency = throughput x latency.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Graceful Degradation",
+        "followUps": ["Semaphore isolation vs thread-pool isolation - when is each right?", "How do cell-based architectures extend bulkheads to blast radius?"],
+        "tags": ["bulkhead", "isolation", "resilience", "thread-pool"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-09",
+        "question": "Design timeouts and deadline budgets across a 4-hop request chain.",
+        "answer": "Set a single deadline at the edge (say 2s), propagate the remaining budget on every hop (gRPC deadlines, or a header like grpc-timeout / X-Request-Deadline), and have each hop subtract its own elapsed time before calling the next. A hop must never set a timeout larger than its remaining budget, and each layer's timeout must be strictly shorter than its caller's, otherwise the caller gives up while the callee keeps burning capacity on work nobody will read. Base per-call timeouts on measured p99 plus headroom, not round numbers, and cancel downstream work when the deadline passes (context cancellation, closing the connection). Separate connect, TLS, and read timeouts - a missing read timeout is the classic cause of permanently hung pools.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Graceful Degradation",
+        "followUps": ["What happens when retries are allowed inside a shared deadline budget?", "How do you decide between hedged requests and a longer timeout?"],
+        "tags": ["timeouts", "deadlines", "distributed-systems"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-10",
+        "question": "Define SLI, SLO and error budget with a worked example.",
+        "answer": "An SLI is a measured ratio of good events to valid events, e.g. the fraction of HTTP requests returning non-5xx in under 300ms. An SLO is the target on that SLI over a window, e.g. 99.9% over 28 days. The error budget is the allowed shortfall: 0.1% of 28 days is about 40 minutes of total unavailability, or 0.1% of requests. It turns reliability into a spendable resource - budget left means ship faster and run experiments; budget exhausted means freeze risky releases and work reliability. Alert on burn rate (e.g. page at 14.4x burn over 1h, which consumes 2% of a 30-day budget) rather than on every individual error spike.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Monitoring",
+        "followUps": ["Why should an SLO be below what you currently achieve, but not at 100%?", "How do multi-window multi-burn-rate alerts reduce false pages?"],
+        "tags": ["slo", "sli", "error-budget", "sre"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-11",
+        "question": "Logs, metrics and traces - what does each answer, and where does OpenTelemetry fit?",
+        "answer": "Metrics are cheap pre-aggregated numeric time series that answer 'is something wrong and how much' (request rate, error ratio, p99) and drive alerts, but cannot explain a single request. Logs are high-cardinality discrete events that answer 'what exactly happened to this request', ideally structured JSON with a trace_id. Traces stitch spans across services with a trace context, answering 'where did the 900ms go' and revealing the dependency graph. OpenTelemetry is the vendor-neutral standard for all three: SDKs plus auto-instrumentation produce the data, W3C traceparent propagates context, and the Collector receives, processes (batching, tail sampling, attribute scrubbing) and exports to backends like Prometheus, Tempo or ClickHouse.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Observability",
+        "followUps": ["Head sampling vs tail sampling - why keep all error traces?", "How do exemplars link a metric spike to a specific trace?"],
+        "tags": ["observability", "opentelemetry", "tracing", "logging"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-12",
+        "question": "Prometheus starts OOM-killing after a deploy and queries time out. Investigation shows 4 million active series. What went wrong and how do you fix it?",
+        "answer": "Cardinality explosion: someone added an unbounded label such as user_id, order_id, full URL path, or a raw error message to a metric. Total series is the product of all label value counts, so one label with a million values multiplies every other dimension. Diagnose with `topk(10, count by (__name__)({__name__=~\".+\"}))` and the /api/v1/status/tsdb cardinality endpoint. Fix by removing the unbounded label, templating the path (/users/{id}) before it becomes a label, moving per-entity detail to logs or traces where it belongs, and enforcing limits with metric_relabel_configs plus sample_limit / label limits so the next bad deploy is dropped at scrape time instead of taking the server down.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Instrumentation",
+        "followUps": ["Why do histogram metrics multiply cardinality by the bucket count?", "When is a high-cardinality store like ClickHouse a better fit than Prometheus?"],
+        "tags": ["prometheus", "cardinality", "metrics", "incident"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-13",
+        "question": "What are the RED and USE methods, and when do you use each?",
+        "answer": "RED is for request-driven services: Rate (requests/sec), Errors (failed requests/sec or ratio), Duration (latency distribution, p50/p90/p99 - never just the mean). It describes the user-visible symptom, so it drives SLOs and paging. USE is for resources: for every resource (CPU, memory, disk, network, connection pool, thread pool) track Utilization, Saturation (queue depth or wait time) and Errors. USE finds the cause once RED says there is a symptom - e.g. RED shows p99 at 3s, USE shows the DB connection pool at 100% utilization with a growing wait queue. Page on RED, diagnose with USE.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Telemetry",
+        "followUps": ["Why is saturation often a better early warning than utilization?", "What are the Four Golden Signals and how do they map onto RED?"],
+        "tags": ["monitoring", "red-method", "use-method", "dashboards"]
+      },
+      {
+        "id": "SHmbcMRsc3SygEDksJQBD-14",
+        "question": "You must store 50 TB of clickstream events for analytics, plus a low-latency per-user event feed, plus a social graph for 'friends of friends'. Which of ClickHouse, ScyllaDB and DGraph fits each, and why?",
+        "answer": "ClickHouse for the analytics: it is a columnar OLAP engine with a MergeTree primary-key sort order, per-column compression and vectorized execution, so scanning billions of rows for GROUP BY aggregates over a few columns is fast and cheap - but it is poor at single-row point updates and high-QPS point lookups. ScyllaDB for the per-user feed: it is a C++ Cassandra-compatible wide-column store with a shard-per-core (thread-per-core, shared-nothing) architecture pinned to cores with its own scheduler, giving predictable sub-millisecond p99 point reads by partition key at very high throughput - provided you model by query, since there are no joins and secondary indexes are limited. DGraph for the graph: multi-hop traversals like friends-of-friends are joins in SQL that explode combinatorially, while a native graph store follows adjacency lists directly and exposes a GraphQL-style query language. Do not force all three into one store; each is optimized for a different access pattern.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "ClickHouse",
+        "followUps": ["Why does ScyllaDB avoid the JVM GC pauses Cassandra suffers from?", "How do ClickHouse materialized views pre-aggregate on insert?"],
+        "tags": ["clickhouse", "scylladb", "dgraph", "olap", "data-modeling"]
+      }
+    ]
+  },
+  {
+    "topicId": "UTupdqjOyLh7-56_0SXJ8",
+    "topicTitle": "Learn the Basics",
+    "questions": [
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-01",
+        "question": "Why is SHA-256 the wrong choice for storing passwords, and what should you use instead?",
+        "answer": "SHA-256 is designed to be fast - a GPU rig computes billions of hashes per second, so an offline attacker brute-forces common passwords from a leaked table almost instantly. Password hashing needs a deliberately slow, tunable function: bcrypt (Blowfish-based, cost factor, memory-light), scrypt (adds a memory-hard parameter N/r/p so GPUs and ASICs lose their advantage), or Argon2id (current OWASP recommendation, tunable memory, iterations and parallelism, resistant to both GPU and side-channel attacks). These also generate and embed a per-password salt automatically. Use SHA-256 for integrity and HMAC, never as a raw password store.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "SHA",
+        "followUps": ["What Argon2id parameters does OWASP suggest as a baseline?", "Why is HMAC-SHA256 fine for signing tokens but not for passwords?"],
+        "tags": ["password-hashing", "sha", "argon2", "bcrypt"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-02",
+        "question": "What do a salt, a pepper and a work factor each protect against?",
+        "answer": "A salt is a unique random value per password, stored alongside the hash; it defeats precomputed rainbow tables and ensures two users with the same password get different hashes, so cracking must be done one account at a time. A pepper is a secret value shared across all hashes but stored outside the database (in a KMS or app config); it means a database-only leak is not crackable at all, but it must be rotated carefully. The work factor (bcrypt cost, scrypt N, Argon2 memory/iterations) sets how expensive one guess is - target roughly 250-500ms per hash on your hardware and raise it as hardware improves.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "bcrypt",
+        "followUps": ["Why must salts be random rather than the username?", "How do you rotate a pepper without invalidating all passwords?"],
+        "tags": ["salt", "pepper", "work-factor", "password-hashing"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-03",
+        "question": "Your legacy database has unsalted MD5 password hashes and bcrypt cost 8. How do you migrate without forcing every user to reset?",
+        "answer": "Wrap the old hash: store bcrypt(md5(password)) for existing rows, computable offline without users, and mark the row with an algorithm/version column. On next successful login you have the plaintext momentarily, so re-hash with Argon2id (or bcrypt at the new cost) and overwrite. Store the algorithm and parameters in the hash string itself so verification dispatches per row, and for the cost bump the same on-login rehash applies - bcrypt's `$2b$08$` prefix tells you the stored cost so you can compare it to the target. Note bcrypt truncates input at 72 bytes, so pre-hashing with a hex MD5 or SHA-256 digest is safe length-wise, but never pre-hash raw with base64 of SHA-512 without checking length. Force-reset only accounts you believe were breached.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "bcrypt",
+        "followUps": ["Why does bcrypt's 72-byte limit matter for passphrases?", "How do you avoid a timing side channel when the algorithm differs per user?"],
+        "tags": ["migration", "bcrypt", "legacy", "password-hashing"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-04",
+        "question": "Walk through the TLS 1.3 handshake and what changed from TLS 1.2.",
+        "answer": "TLS 1.3 is one round trip: ClientHello carries the supported groups plus a key_share guess (usually X25519) and cipher suites; the server replies ServerHello with its key_share, and from there both sides derive the shared secret so EncryptedExtensions, Certificate, CertificateVerify and Finished are already encrypted. TLS 1.2 needed two round trips and sent the certificate in the clear. TLS 1.3 also removes RSA key transport (forward secrecy is mandatory - ephemeral ECDHE only), drops CBC, RC4, compression and renegotiation, and cuts the cipher suite list to five AEAD suites. 0-RTT resumption sends application data in the first flight but is replayable, so restrict it to idempotent requests.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "SSL/TLS",
+        "followUps": ["Why is 0-RTT data unsafe for a POST /transfer?", "What does SNI reveal, and what does Encrypted Client Hello fix?"],
+        "tags": ["tls", "handshake", "forward-secrecy", "https"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-05",
+        "question": "Your service calls a partner API and suddenly gets 'x509: certificate signed by unknown authority', but curl from your laptop works. How do you debug it?",
+        "answer": "The difference is the trust store, not the certificate. Reproduce with `openssl s_client -connect host:443 -servername host -showcerts` and compare the chain your server receives against your laptop's: the common cause is the partner serving a leaf without the intermediate, which browsers and desktop curl paper over via AIA fetching or a cached intermediate, while a slim container image cannot. The second common cause is a container with no ca-certificates package installed, or an image built FROM scratch. Fixes: ask the partner to send the full chain, install ca-certificates in the image, and only pin or add a custom CA bundle deliberately - never set InsecureSkipVerify / verify=False, which disables authentication entirely and makes MITM trivial. Also check clock skew, since an expired-or-not-yet-valid error looks similar.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "SSL/TLS",
+        "followUps": ["What is the difference between chain validation and hostname verification?", "How would you detect an expiring certificate before it fires an incident?"],
+        "tags": ["tls", "certificates", "debugging", "x509"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-06",
+        "question": "When is certificate pinning worth it, and what is the failure mode?",
+        "answer": "Pinning binds a client to a specific key or CA - typically pin the SPKI hash of the leaf or intermediate public key, not the certificate, so renewal with the same key does not break. It is worth it for mobile apps and service-to-service calls where you control both ends and want protection against a compromised or coerced CA, or against a user-installed MITM proxy. The failure mode is a self-inflicted outage: if the pinned key is rotated or revoked and clients cannot be updated (app store review takes days), every client hard-fails. Mitigate with at least one backup pin for a key you hold offline, a short pin lifetime, and a remote kill switch. HPKP, the HTTP header version, was removed from browsers precisely because of this bricking risk; use certificate transparency monitoring plus CAA records instead for the web.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "SSL/TLS",
+        "followUps": ["Why pin the SPKI rather than the whole certificate?", "How does Certificate Transparency detect mis-issuance?"],
+        "tags": ["pinning", "tls", "mobile-security", "pki"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-07",
+        "question": "What does HSTS do that a 301 redirect from HTTP to HTTPS does not?",
+        "answer": "A redirect still allows one plaintext request, which an on-path attacker can intercept and strip (sslstrip), serving the user a plain HTTP version forever. `Strict-Transport-Security: max-age=31536000; includeSubDomains` tells the browser to rewrite every future request to that host to HTTPS internally, before it hits the network, and to refuse click-through on certificate errors. The gap is the very first visit, which preload solves: adding the `preload` directive and submitting to hstspreload.org ships the domain in the browser binary. Cost: once preloaded you cannot serve any subdomain over plain HTTP, and removal takes months, so roll out with a short max-age first.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "HTTPS",
+        "followUps": ["Why is includeSubDomains risky with internal-only subdomains?", "What other security headers would you set alongside HSTS?"],
+        "tags": ["hsts", "https", "security-headers"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-08",
+        "question": "Explain injection with a concrete SQL and a concrete command example, and the correct fix for each.",
+        "answer": "SQL: `\"SELECT * FROM users WHERE email='\" + input + \"'\"` with input `' OR '1'='1' --` dumps the table. The fix is parameterized queries / prepared statements, where the driver sends the SQL and the values separately so the value can never become syntax; escaping by hand and blocklists both fail on encodings and quirks. Identifiers (table and column names) cannot be parameterized, so validate them against an allowlist. Command injection: `os.system(\"convert \" + filename)` with filename `a.png; rm -rf /` - fix by using the exec-array form (`subprocess.run([\"convert\", filename], shell=False)`) so no shell parses the string. The same principle covers NoSQL (reject operator objects like {\"$ne\": null} from JSON input), LDAP and template injection: never concatenate untrusted data into an interpreter's grammar.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "OWASP Risks",
+        "followUps": ["Why does an ORM not automatically make you safe?", "How would you detect existing injection points in a large codebase?"],
+        "tags": ["owasp", "sql-injection", "command-injection", "validation"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-09",
+        "question": "A pentest finds that any authenticated user can fetch GET /api/invoices/{id} for any id. What class of bug is this and how do you fix it properly?",
+        "answer": "Broken access control - specifically IDOR / BOLA, the number one item in the OWASP Top 10 and OWASP API Top 10. Authentication passed; authorization was never checked against the object owner. The wrong fixes are switching to UUIDs (security through obscurity - ids leak via logs, referers and other endpoints) or hiding the link in the UI. The right fix is a server-side ownership check on every object access, ideally enforced structurally: scope the query itself (`WHERE id = ? AND tenant_id = ?`) or use a centralized policy layer (Casbin, OPA, Rails Pundit) that every handler must call, deny by default. Then add a regression test per endpoint that a user from tenant B gets 404 (not 403, which confirms existence) and audit every other endpoint taking an id.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "OWASP Risks",
+        "followUps": ["Why return 404 rather than 403 for another tenant's resource?", "How do you catch IDOR automatically in CI?"],
+        "tags": ["owasp", "idor", "authorization", "multi-tenancy"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-10",
+        "question": "Your service fetches a user-supplied image URL to generate thumbnails. Explain the SSRF risk and a defense that actually holds.",
+        "answer": "An attacker submits `http://169.254.169.254/latest/meta-data/iam/security-credentials/` and your server, which sits inside the VPC with an instance role, returns cloud credentials - or hits internal admin endpoints, `http://localhost:9200`, or `file:///etc/passwd`. Blocklisting strings fails: DNS rebinding, decimal/octal IP encodings, `[::1]`, redirects to 127.0.0.1, and `0.0.0.0` all bypass it. A defense that holds: allowlist schemes (http/https only) and hosts, resolve the DNS name yourself, reject any resolved address in private/loopback/link-local ranges, then connect to that exact validated IP with the Host header set (pinning resolution to defeat rebinding), disable redirects or re-validate each hop, and cap size and timeout. Layer on network isolation - run the fetcher in an egress-restricted subnet behind a proxy and require IMDSv2, which requires a PUT-obtained token that SSRF cannot send.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "OWASP Risks",
+        "followUps": ["Why does IMDSv2's hop limit of 1 also block containerized SSRF?", "How does DNS rebinding beat a validate-then-fetch implementation?"],
+        "tags": ["ssrf", "owasp", "cloud-security", "network"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-11",
+        "question": "Explain how CORS actually works, including when a preflight is sent.",
+        "answer": "CORS is a browser mechanism that relaxes the same-origin policy for JavaScript reading cross-origin responses. Simple requests (GET/HEAD/POST with only CORS-safelisted headers and a content type of form-urlencoded, multipart or text/plain) are sent directly, and the browser hides the response unless `Access-Control-Allow-Origin` matches. Anything else - PUT/DELETE/PATCH, `Content-Type: application/json`, a custom header like Authorization or X-Request-Id - triggers a preflight `OPTIONS` with `Access-Control-Request-Method` and `Access-Control-Request-Headers`; the server must answer with matching `Access-Control-Allow-Methods`/`-Headers` and may cache it via `Access-Control-Max-Age`. For cookies you need `credentials: 'include'` plus `Access-Control-Allow-Credentials: true` and a specific origin - the wildcard `*` is illegal with credentials. `Access-Control-Expose-Headers` is needed before JS can read non-safelisted response headers.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "CORS",
+        "followUps": ["Why must you add `Vary: Origin` when reflecting the origin?", "Why do curl and mobile apps ignore CORS entirely?"],
+        "tags": ["cors", "browser-security", "http", "preflight"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-12",
+        "question": "A developer sets `Access-Control-Allow-Origin: *` on an internal API and says CORS now secures it. Why is that wrong, and what is the real danger?",
+        "answer": "CORS is not authorization - it only tells a browser whether page JavaScript may read a response. It does not stop the request from being sent and processed (a non-preflighted POST still executes server-side), and it is irrelevant to curl, Postman, server-to-server calls and mobile apps, which never enforce it. Authorization must be a server-side check of the caller's identity and permissions on every request. The real danger in the other direction is a permissive config: reflecting any `Origin` header while also sending `Access-Control-Allow-Credentials: true` lets any malicious site read authenticated responses on behalf of a logged-in victim - a full account data leak. Use a strict allowlist of origins, add `Vary: Origin`, and never reflect `null`.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "CORS",
+        "followUps": ["How does a permissive CORS policy interact with CSRF defenses?", "Which requests bypass preflight and therefore still hit your handler?"],
+        "tags": ["cors", "authorization", "misconfiguration", "security"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-13",
+        "question": "Design a Content-Security-Policy for an app that currently uses inline scripts and a few CDNs.",
+        "answer": "Target `default-src 'none'; script-src 'nonce-{random}' 'strict-dynamic'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; require-trusted-types-for 'script'`. Generate a cryptographically random nonce per response, put it on every legitimate `<script nonce=...>` tag, and never on user-controllable markup - a per-response nonce means injected script has no valid nonce and is blocked. `'strict-dynamic'` lets a trusted script load its own dependencies, which removes the need to maintain a CDN host allowlist (host allowlists are commonly bypassable via JSONP endpoints or hosted user content). `frame-ancestors` replaces X-Frame-Options. Roll out with `Content-Security-Policy-Report-Only` plus `report-to` first, fix the violations, refactor inline event handlers (`onclick=`) into addEventListener since a nonce cannot cover them, then enforce. CSP is defense in depth - contextual output encoding remains the primary XSS fix.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "CSP",
+        "followUps": ["Why is a hash-based CSP awkward for dynamically rendered scripts?", "What does 'unsafe-inline' do to a nonce-based policy in older browsers?"],
+        "tags": ["csp", "xss", "nonce", "security-headers"]
+      },
+      {
+        "id": "UTupdqjOyLh7-56_0SXJ8-14",
+        "question": "How would you harden a production Linux server and manage its secrets?",
+        "answer": "Least privilege first: the app runs as a dedicated non-root user with no shell, on a read-only filesystem where possible, with Linux capabilities dropped (`CAP_NET_BIND_SERVICE` only if it must bind port 80) and systemd hardening (`NoNewPrivileges`, `ProtectSystem=strict`, `PrivateTmp`). Network: default-deny inbound in the security group and firewall, SSH by key only with `PasswordAuthentication no` and `PermitRootLogin no`, reachable only via a bastion or SSM Session Manager, plus automatic security updates and a minimal base image. Secrets never live in the repo, in environment variables baked into an image, or in a Dockerfile layer - store them in Vault, AWS Secrets Manager or SOPS-encrypted files, inject at runtime, scope each credential to one workload with short-lived dynamic credentials or a workload identity (IRSA, instance role), and rotate automatically. Add secret scanning (gitleaks) in CI, audit logging of every secret access, and a documented rotation runbook for when one leaks.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Server Security",
+        "followUps": ["Why are env-var secrets readable from /proc and crash dumps?", "How do short-lived dynamic database credentials change the blast radius of a leak?"],
+        "tags": ["server-hardening", "secrets-management", "least-privilege", "linux"]
+      }
+    ]
+  }
+]

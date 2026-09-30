@@ -1,0 +1,795 @@
+{
+  "id": "d5",
+  "name": "Operations, scaling, Go+DB",
+  "domain": "db",
+  "domainLabel": "PostgreSQL & SQL",
+  "topics": [
+    "Migrations",
+    "Migration",
+    "Ops",
+    "Backup",
+    "Replication",
+    "Partitioning",
+    "Sharding",
+    "Incident",
+    "Cost",
+    "Go+DB"
+  ],
+  "questions": [
+    {
+      "id": 29,
+      "code": 30,
+      "level": "S",
+      "type": "open",
+      "topic": "Migrations",
+      "domain": "db",
+      "section": "d5",
+      "question": "Production'da katta table'dagi column nomini downtime'siz qanday o'zgartirasiz?",
+      "modelAnswer": [
+        "To'g'ridan-to'g'ri RENAME — eski kod versiyasi darhol sinadi (deploy paytida ikki versiya ishlaydi)",
+        "Expand–contract: 1) yangi column qo'shish (nullable, default'siz)",
+        "2) Ilova ikkala column'ga yozadi (dual write) yoki trigger",
+        "3) Eski ma'lumotni batchlab backfill (kichik batch, throttle)",
+        "4) O'qishni yangi column'ga o'tkazish, 5) eski column'dan yozishni to'xtatish, 6) keyinroq DROP",
+        "lock_timeout qo'yish; ALTER qisqa ACCESS EXCLUSIVE lock kutib, butun trafikni bloklashi mumkin"
+      ],
+      "explanation": "Senior signal: deploy vaqtida eski va yangi kod parallel ishlashini hisobga olish, backfill'ni bitta ulkan UPDATE emas batch bilan qilish va lock_timeout. Har bosqich alohida deploy va alohida rollback qilinadi."
+    },
+    {
+      "id": 32,
+      "code": 33,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Replication",
+      "domain": "db",
+      "section": "d5",
+      "question": "Asinxron replikatsiyaning asosiy xavfi?",
+      "options": [
+        "Yozish sekinlashadi",
+        "Failover paytida primary'da commit bo'lgan, lekin replicaga yetib bormagan ma'lumot yo'qoladi (RPO > 0)",
+        "Replica yozishni qabul qiladi",
+        "Indexlar replicaga ko'chmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Sinxron replikatsiya: commit kamida bitta replica tasdiqlagach — RPO=0, lekin latency oshadi va replica o'lsa yozish to'xtashi mumkin. Amaliy kompromis: quorum/semi-sync (Postgres synchronous_standby_names = ANY 1 (...)). Async'da replica lag ham o'qishlarda eskirgan ma'lumot beradi."
+    },
+    {
+      "id": 33,
+      "code": 34,
+      "level": "S",
+      "type": "open",
+      "topic": "Replication",
+      "domain": "db",
+      "section": "d5",
+      "question": "Read replica ishlatyapsiz. User profilini yangiladi, page yangilanganda eski ma'lumot ko'rindi. Sabab va yechimlar?",
+      "modelAnswer": [
+        "Sabab: replication lag — o'qish replicadan, yozish primary'dan",
+        "Read-your-writes: yozgan userning keyingi N soniyadagi o'qishlarini primary'ga yo'naltirish",
+        "LSN tracking: yozishdan keyin LSN ni saqlash, replica shu LSN ga yetguncha kutish yoki primary'ga o'tish",
+        "Kritik o'qishlar (to'lov, balans) doim primary'dan",
+        "Lag monitoringi va alert (pg_stat_replication replay_lag)"
+      ],
+      "explanation": "Yaxshi javob biznesga qarab tabaqalaydi: ko'p o'qishlar eventual consistency'ga chidaydi, faqat 'o'z yozganini ko'rish' kerak. Sticky session / LSN-based routing — Staff darajadagi detal."
+    },
+    {
+      "id": 34,
+      "code": 35,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Partitioning",
+      "domain": "db",
+      "section": "d5",
+      "question": "Katta <code>events</code> table'ini <code>created_at</code> bo'yicha oylik RANGE partition qilishning eng katta foydasi?",
+      "options": [
+        "Har qanday query tezlashadi",
+        "Partition pruning (sana bo'yicha query faqat kerakli partitionni o'qiydi) va eski ma'lumotni DROP/DETACH PARTITION bilan bir zumda o'chirish",
+        "UNIQUE constraint'lar osonlashadi",
+        "Replikatsiya kerak bo'lmay qoladi"
+      ],
+      "answer": 1,
+      "explanation": "DELETE WHERE created_at < ... millionlab dead tuple va WAL yaratadi; DROP PARTITION — metadata operatsiya. Kamchiliklar: partition key'siz query'lar hamma partitionni skan qiladi; unique/PK partition key'ni o'z ichiga olishi shart; juda ko'p partition planner'ni sekinlatadi."
+    },
+    {
+      "id": 37,
+      "code": 38,
+      "level": "S",
+      "type": "open",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Connection pool hajmini qanday tanlaysiz? PgBouncer transaction mode'ning tuzoqlari nima?",
+      "modelAnswer": [
+        "Postgres har connection'ga process ochadi — minglab connection memory va context switch muammosi",
+        "Formula boshlang'ich nuqta: ~ (CPU yadro × 2) + disk; ko'proq connection ≠ ko'proq throughput",
+        "Ilova instance'lari × pool size ≤ max_connections (replica, admin uchun zaxira)",
+        "Transaction mode: session state yo'qoladi — SET, advisory lock, LISTEN, temp table, session-level prepared statement ishlamaydi (PgBouncer 1.21+ protocol-level prepared statement'larni qo'llaydi)",
+        "Pool kutish vaqtini (wait time) monitoring qilish"
+      ],
+      "explanation": "Senior signal: 'pool'ni oshiraylik' refleksiga qarshi turish — DB to'yingan bo'lsa ko'proq connection latency'ni oshiradi. Queueing ilovada bo'lgani yaxshiroq."
+    },
+    {
+      "id": 38,
+      "code": 39,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Migrations",
+      "domain": "db",
+      "section": "d5",
+      "question": "50M row'li table'ga production'da <code>CREATE INDEX</code> ishga tushirildi. Nima bo'ladi va to'g'ri yo'l?",
+      "options": [
+        "Hech narsa, indexlar fon rejimida quriladi",
+        "Table'ga yozish (INSERT/UPDATE/DELETE) index qurilguncha bloklanadi; to'g'ri yo'l — CREATE INDEX CONCURRENTLY",
+        "O'qish ham, yozish ham bloklanmaydi",
+        "Table o'chib ketadi"
+      ],
+      "answer": 1,
+      "explanation": "Oddiy CREATE INDEX SHARE lock oladi — o'qish mumkin, yozish yo'q. CONCURRENTLY sekinroq, transaction ichida ishlamaydi va success'siz bo'lsa INVALID index qoldiradi (DROP qilib qayta urinish kerak). Migratsiya toollari (Rails, Django) uchun buni alohida belgilash kerak."
+    },
+    {
+      "id": 40,
+      "code": 41,
+      "level": "St",
+      "type": "open",
+      "topic": "Sharding",
+      "domain": "db",
+      "section": "d5",
+      "question": "Multi-tenant SaaS uchun sharding strategiyasini loyihalang. Shard key, 'hot tenant' va rebalancing?",
+      "modelAnswer": [
+        "Shard key: tenant_id — tenant ichidagi query'lar bitta shardda, JOIN va transaction lokal",
+        "Cross-tenant query'lar (analitika) — alohida DWH/CDC orqali, OLTP'da emas",
+        "Hot/katta tenant: alohida dedicated shard; directory-based (lookup) mapping hash'dan moslashuvchan",
+        "Rebalancing: tenant'ni ko'chirish — logical replication/dual-write + cutover, qisqa read-only oyna",
+        "Global table'lar (plans, config) — har shardga replikatsiya",
+        "Avval vertikal masshtab, read replica, partitioning — sharding oxirgi chora (operatsion narx)"
+      ],
+      "explanation": "Staff signal: 'sharding kerakmi?' degan savoldan boshlash va operatsion narxni aytish. Directory mapping (tenant → shard table'i) consistent hashing'dan ko'ra tenant ko'chirishni osonlashtiradi. Citus, Vitess misol sifatida."
+    },
+    {
+      "id": 42,
+      "code": 43,
+      "level": "St",
+      "type": "open",
+      "topic": "Migration",
+      "domain": "db",
+      "section": "d5",
+      "question": "Monolit bitta umumiy DB'dan mikroservislarga har servisga o'z DB bilan o'tishni qanday rejalashtirasiz?",
+      "modelAnswer": [
+        "Avval bounded context bo'yicha table egaligini aniqlash; boshqa servis table'iga to'g'ridan-to'g'ri JOIN'larni topish",
+        "Strangler fig: bitta context'ni ajratish, avval kod level'ida (modul), keyin DB",
+        "Ma'lumot ko'chirish: CDC (Debezium) bilan yangi DB'ga sinxron, keyin read switch, keyin write switch",
+        "JOIN'lar o'rniga API chaqiruv yoki lokal read-model (event orqali)",
+        "Transaction'lar → saga + outbox; konsistentlik chegarasi o'zgaradi — biznes bilan kelishish",
+        "Har qadam rollback qilinadigan, feature flag bilan"
+      ],
+      "explanation": "Staff level'da kutiladi: 'big bang' emas, bosqichli; va texnik bo'lmagan narx — cross-servis hisobotlar, eventual consistency'ni biznes qabul qilishi. Shared DB — integratsiya anti-pattern, lekin tezda ajratish ham xavfli."
+    },
+    {
+      "id": 47,
+      "code": 48,
+      "level": "St",
+      "type": "open",
+      "topic": "Backup",
+      "domain": "db",
+      "section": "d5",
+      "question": "Muhim DB uchun backup/DR strategiyasini loyihalang. RPO va RTO qanday belgilanadi?",
+      "modelAnswer": [
+        "RPO — qancha ma'lumot yo'qotishga chidaymiz; RTO — qancha vaqtda tiklanamiz; biznes bilan kelishiladi",
+        "Base backup + WAL arxiv (pgBackRest/WAL-G) → PITR (masalan xato DELETE'dan oldingi daqiqaga)",
+        "Replika backup emas: DROP TABLE replicaga ham ketadi; delayed replica qo'shimcha himoya",
+        "Backup'lar boshqa region/akkauntda, shifrlangan, immutable (ransomware)",
+        "Tiklashni muntazam test qilish — tekshirilmagan backup = backup yo'q",
+        "Tiklash vaqtini o'lchash, runbook"
+      ],
+      "explanation": "Staff javobning o'zagi: 'backup'ni qilish emas, tiklashni isbotlash'. RPO/RTO'ni texnik emas biznes qarori sifatida qo'yish."
+    },
+    {
+      "id": 48,
+      "code": 49,
+      "level": "St",
+      "type": "mcq",
+      "topic": "Sharding",
+      "domain": "db",
+      "section": "d5",
+      "question": "Consistent hashing'ning oddiy <code>hash(key) % N</code> ga nisbatan asosiy afzalligi?",
+      "options": [
+        "Hash tezroq hisoblanadi",
+        "Node qo'shilganda/olib tashlanganda key'larning faqat ~1/N qismi ko'chadi (% N da deyarli hammasi ko'chadi)",
+        "Hot key muammosini butunlay hal qiladi",
+        "Replikatsiya kerak emas"
+      ],
+      "answer": 1,
+      "explanation": "% N da N o'zgarsa deyarli hamma key boshqa node'ga tushadi — cache yoki shard uchun halokat. Virtual node'lar yukni tekisroq taqsimlaydi. Hot key muammosini hal qilmaydi — buning uchun key splitting yoki keshlash kerak."
+    },
+    {
+      "id": 55,
+      "code": 56,
+      "level": "P",
+      "type": "open",
+      "topic": "Cost",
+      "domain": "db",
+      "section": "d5",
+      "question": "DB xarajati yiliga $2M ga yetdi. Uni qanday kamaytirasiz?",
+      "modelAnswer": [
+        "Avval o'lchash: qaysi servis/query/table qancha resurs yeydi (pg_stat_statements, cost attribution)",
+        "Qimmat query'lar: indexlar, N+1, keraksiz polling; cache qatlami",
+        "Ma'lumot lifecycle: eski ma'lumot → arzon storage (S3/Parquet), partition drop",
+        "Right-sizing: haddan tashqari instance, ishlatilmagan replica; reserved/savings plan",
+        "Analitik yukni OLTP'dan DWH'ga ko'chirish",
+        "Har tejash taklifini risk va muhandislik vaqti bilan solishtirish"
+      ],
+      "explanation": "Principal javob: tartib — o'lchash, eng katta ulushdan boshlash, unit economics (query/user boshiga narx) ni kuzatish, va tejash reliability'ni buzmasligi."
+    },
+    {
+      "id": 57,
+      "code": 58,
+      "level": "P",
+      "type": "open",
+      "topic": "Incident",
+      "domain": "db",
+      "section": "d5",
+      "question": "Peak vaqtida DB CPU 100%, API latency 10x oshdi. Birinchi 15 daqiqada nima qilasiz?",
+      "modelAnswer": [
+        "Incident e'lon qilish, rollarni belgilash (IC, comms), status page",
+        "Oxirgi o'zgarishlar: deploy, migratsiya, feature flag — shubha bo'lsa rollback",
+        "pg_stat_activity: uzoq query'lar, lock kutish; pg_stat_statements: top query'lar",
+        "Tez yengillatish: aybdor query'ni o'ldirish, og'ir feature/cron'ni o'chirish, rate limit, load shedding",
+        "Stabilizatsiyadan keyin ildiz sabab; blameless postmortem va takrorlanmaslik choralari"
+      ],
+      "explanation": "Principal signal: avval mitigatsiya, keyin tahlil; kommunikatsiya; 'nima o'zgardi?' birinchi savol. Instance'ni kattalashtirish — oxirgi chora, chunki vaqt oladi va sababni yashiradi."
+    },
+    {
+      "id": 69,
+      "code": 70,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "PostgreSQL'da <code>shared_buffers</code> va <code>work_mem</code> nima?",
+      "options": [
+        "Ikkalasi ham disk cache'i",
+        "shared_buffers — butun instance uchun umumiy page cache'i (odatda RAM ning ~25%). work_mem — HAR sort/hash operatsiyasi uchun ajratiladigan memory: ko'p parallel query'da ko'paytiriladi, shuning uchun ehtiyot bo'lib oshiriladi",
+        "work_mem butun server uchun",
+        "shared_buffers har connection uchun"
+      ],
+      "answer": 1,
+      "explanation": "work_mem yetmasa Sort/Hash diskka tushadi (EXPLAIN'da 'external merge Disk: ...'). Xavf: work_mem × parallel operatsiyalar soni × connection'lar = OOM. Yaxshi amaliyot: global qiymatni mo''tadil qoldirib, og'ir hisobot uchun sessiyada oshirish (SET LOCAL work_mem). Boshqa muhim parametrlar: effective_cache_size (planner uchun maslahat), maintenance_work_mem (VACUUM/CREATE INDEX), max_connections.",
+      "source": "https://www.postgresql.org/docs/current/runtime-config-resource.html"
+    },
+    {
+      "id": 70,
+      "code": 71,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "WAL va checkpoint qanday bog'liq?",
+      "options": [
+        "Bog'liq emas",
+        "Har o'zgarish avval WAL'ga yoziladi (durability); checkpoint esa 'iflos' page'larni ma'lumot fayllariga tushiradi va tiklash uchun boshlanish nuqtasini belgilaydi. Checkpoint tez-tez bo'lsa I/O tepaligi, kam bo'lsa tiklash uzoq davom etadi",
+        "Checkpoint WAL'ni o'chiradi va ma'lumot yo'qoladi",
+        "WAL faqat replikatsiya uchun"
+      ],
+      "answer": 1,
+      "explanation": "Sozlamalar: max_wal_size, checkpoint_timeout, checkpoint_completion_target (yozishni vaqtga yoyish). 'checkpoints are occurring too frequently' logdagi ogohlantirish — max_wal_size ni oshirish signali. WAL shuningdek PITR va logical/physical replikatsiya asosi."
+    },
+    {
+      "id": 71,
+      "code": 72,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Postgres'da security'ni qanday tashkil qilasiz (rollar va kirish)?",
+      "options": [
+        "Hamma ilovaga superuser berish",
+        "Eng kam huquq: ilova uchun alohida rol, faqat kerakli schema/table huquqlari; migratsiya uchun alohida rol; pg_hba.conf bilan kirish manbai va autentifikatsiya usuli (scram-sha-256), TLS majburiy; kerak bo'lsa Row Level Security (multi-tenant)",
+        "Faqat parol qo'yish yetarli",
+        "Ruxsatlar ilovada tekshirilsa kifoya"
+      ],
+      "answer": 1,
+      "explanation": "Rollar meros oladi (GRANT role TO role) — jamoaviy huquqlarni boshqarish uchun qulay. RLS multi-tenant izolyatsiyada kuchli: WHERE tenant_id unutilsa ham DB himoya qiladi. Yana: default privileges (kelajakdagi table'lar uchun), audit (pgaudit), maxfiy column'lar uchun shifrlash.",
+      "source": "https://www.postgresql.org/docs/current/ddl-rowsecurity.html"
+    },
+    {
+      "id": 72,
+      "code": 73,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Migrations",
+      "domain": "db",
+      "section": "d5",
+      "question": "Katta production DB'ni yangi major versiyaga (masalan 14 → 16) qanday ko'tarasiz?",
+      "options": [
+        "Faqat paketni yangilash yetarli",
+        "Variantlar: pg_upgrade (--link bilan tez, lekin qaytarish qiyin, downtime bor) yoki logical replication bilan yangi versiyaga ko'chirib, qisqa cutover qilish (deyarli nol downtime). Ikkala holatda ham: test muhitida mashq, ANALYZE ni qayta ishga tushirish, rollback rejasi",
+        "Major yangilanish ma'lumotni saqlab qolmaydi",
+        "Faqat dump/restore mumkin"
+      ],
+      "answer": 1,
+      "explanation": "Major yangilanishda ichki format o'zgaradi — oddiy restart yetarli emas. Yangilanishdan keyin statistikalar yo'qoladi: darhol ANALYZE (yoki vacuumdb --analyze-in-stages), aks holda query'lar sekin bo'ladi. Extension'lar va ularning versiyalari ham tekshiriladi."
+    },
+    {
+      "id": 85,
+      "code": 86,
+      "level": "S",
+      "type": "open",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "DB bilan bog'liq qanday failure mode'larni bilasiz va har biriga qanday tayyorgarlik ko'rasiz?",
+      "modelAnswer": [
+        "Primary yiqilishi — failover (Multi-AZ/Patroni), ilovada qayta connection va retry, RPO ni bilish",
+        "Connection'lar tugashi — pool cheklovi, PgBouncer, timeout'lar",
+        "Disk to'lishi — WAL va log o'sishi, unutilgan replication slot; monitoring va alert",
+        "Uzoq transaction va lock zanjiri — lock_timeout, statement_timeout, idle_in_transaction_session_timeout",
+        "Sekin query tufayli CPU 100% — pg_stat_statements, plan regressiya, query'ni o'ldirish",
+        "Replica lag — o'qishni primary'ga qaytarish, lag alert",
+        "Inson xatosi (DROP/DELETE) — PITR, delayed replica, ruxsatlarni cheklash",
+        "Har biri uchun runbook va muntazam tiklash mashqi"
+      ],
+      "explanation": "Senior intervyusida 'nima bo'lishi mumkin va siz nima qilasiz' shaklida so'raladi. Kuchli javob har nosozlikka aniq mexanizm va o'lchov (alert) bog'laydi."
+    },
+    {
+      "id": 87,
+      "code": 88,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Kecha tez ishlagan query bugun sekin (plan regressiya). Ehtimoliy sabablar?",
+      "options": [
+        "Faqat ma'lumot ko'payganligi",
+        "Statistika eskirgan (ANALYZE ishlamagan), ma'lumot taqsimoti o'zgargan, index bloat, parametr sniffing / noto'g'ri baholash, yoki yangi index/versiya planner tanlovini o'zgartirgan",
+        "Faqat network",
+        "DB versiyasi hech qachon ta'sir qilmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Diagnostika: EXPLAIN (ANALYZE) da 'rows' taxmini va 'actual rows' farqi — statistikaga ishora; ANALYZE yoki column uchun statistika maqsadini oshirish (ALTER TABLE ... SET STATISTICS), ko'p column'li bog'liqlik uchun CREATE STATISTICS. Vaqtinchalik chora sifatida query'ni qayta yozish (masalan LATERAL yoki CTE MATERIALIZED) ishlatiladi."
+    },
+    {
+      "id": 5014,
+      "code": "V15",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d5",
+      "question": "Go'da <code>database/sql</code> yoki <code>pgx</code> pool'ini sozlashda eng muhim parametr?",
+      "options": [
+        "Hech qanday sozlash kerak emas",
+        "SetMaxOpenConns — cheklanmasa yuk paytida Postgres max_connections tugaydi; shuningdek SetMaxIdleConns va SetConnMaxLifetime (uzoq yashagan connection'larni almashtirish uchun)",
+        "Faqat SetMaxIdleConns",
+        "Driver o'zi optimal sozlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Default MaxOpenConns — cheksiz: 50 pod × cheksiz = DB yiqiladi. Hisob: hamma instance × pool ≤ max_connections minus zaxira. MaxIdleConns MaxOpenConns'dan kichik bo'lsa, connection'lar doim yopilib-ochiladi (TLS handshake narxi). ConnMaxLifetime — LB va failover'dan keyin eski connection'larni tozalaydi.",
+      "source": "https://pkg.go.dev/database/sql#DB.SetMaxOpenConns"
+    },
+    {
+      "id": 5015,
+      "code": "V16",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d5",
+      "question": "Go'da <code>rows, err := db.QueryContext(...)</code> dan keyin eng ko'p uchraydigan xato?",
+      "options": [
+        "err ni tekshirmaslik",
+        "defer rows.Close() ni unutish — connection pool'ga qaytmaydi va pool tugaydi; shuningdek sikl tugagach rows.Err() ni tekshirmaslik (yarim o'qilgan natija xatosi yashirin qoladi)",
+        "Context uzatish",
+        "QueryRow ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "rows.Close() bitta row qolib ketganda ham zarur (return yoki break bilan chiqilsa). QueryRow'da Close kerak emas — Scan o'zi yopadi. Context bekor bo'lsa query ham bekor qilinadi (Postgres'ga cancel yuboriladi) — HTTP handler context'ini DB chaqiruviga uzating."
+    },
+    {
+      "id": 5016,
+      "code": "V17",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d5",
+      "question": "PgBouncer transaction mode ortida Go ilovasi 'prepared statement does not exist' xatosi beryapti. Sabab?",
+      "options": [
+        "Driver eskirgan",
+        "Transaction mode'da har transaction boshqa serverdagi connection'ga tushishi mumkin — session'ga bog'langan prepared statement'lar yo'qoladi. Yechim: prepared statement cache'ini o'chirish (pgx'da QueryExecModeSimpleProtocol/exec) yoki PgBouncer 1.21+ dagi protokol darajasidagi qo'llab-quvvatlashdan foydalanish",
+        "Postgres versiyasi eski",
+        "Pool hajmi katta"
+      ],
+      "answer": 1,
+      "explanation": "Transaction mode'da yo'qoladigan boshqa narsalar: SET, LISTEN/NOTIFY, temp table'lar, session-level advisory lock. Shuning uchun advisory lock kerak bo'lsa transaction-level (pg_advisory_xact_lock) variantini ishlating."
+    },
+    {
+      "id": 14010,
+      "code": "SR11",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Ilovada 200 ta ishchi thread/goroutine bor, DB pool hajmi 30. Yuk oshganda nima bo'ladi?",
+      "options": [
+        "200 ta so'rov bir vaqtda DB'ga boradi",
+        "Bir vaqtda ko'pi bilan 30 tasi DB bilan ishlaydi, qolganlari pool'dan ulanish kutadi — kutish vaqti latency'ga qo'shiladi va pool timeout bo'lsa xato qaytadi. Muammo DB sekinligi emas, navbat",
+        "Pool avtomatik kengayadi",
+        "So'rovlar yo'qoladi"
+      ],
+      "answer": 1,
+      "explanation": "Kuzatiladigan metrika: pool wait time va band ulanishlar ulushi. Pool'ni ko'r-ko'rona oshirish DB'ni yiqitadi (Postgres'da har ulanish — alohida process). To'g'ri yo'l: sekin query'larni tuzatish, tranzaksiyani qisqartirish, kerakli joyda kesh, va ilova darajasida konkurentlikni cheklash (semaphore).",
+      "source": "https://www.secondtalent.com/interview-guide/backend-performance-optimization/"
+    },
+    {
+      "id": 14028,
+      "code": "SR29",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d5",
+      "question": "Go'da NULL bo'lishi mumkin bo'lgan ustunlarni qanday o'qiysiz?",
+      "options": [
+        "Oddiy string'ga skanerlash yetarli",
+        "sql.NullString / sql.NullInt64 yoki pointer (*string); pgx'da esa pgtype tiplari. Oddiy string'ga NULL skanerlansa xato qaytadi ('converting NULL to string is unsupported')",
+        "NULL avtomatik bo'sh satrga aylanadi",
+        "COALESCE ishlatish taqiqlangan"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy maslahat: domain modelda Null* tiplarini tarqatmang — repository qatlamida pointer yoki default qiymatga aylantiring. Ko'pincha eng yaxshi yechim — sxemada NOT NULL DEFAULT qo'yib, NULL'ni umuman yo'q qilish."
+    },
+    {
+      "id": 30229,
+      "code": "SN230",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Partitioning",
+      "domain": "db",
+      "section": "d5",
+      "question": "PostgreSQL'da vaqt bo'yicha partitionlash qanday foyda beradi?",
+      "options": [
+        "Query har doim tezlashadi",
+        "Eski ma'lumotni `DROP PARTITION` bilan bir zumda o'chirish (`DELETE` va vacuum yuki yo'q), partition pruning bilan skan hajmini kamaytirish, indekslarni kichik ushlash va `VACUUM`/`REINDEX` ni bo'laklab qilish",
+        "Faqat disk tejaydi",
+        "Indeks keraksiz bo'ladi"
+      ],
+      "answer": 1,
+      "explanation": "Eng katta amaliy foyda — retention: `DELETE FROM events WHERE created_at < ...` milliard qatorda soatlab ishlaydi va bloat qoldiradi, `DROP TABLE` esa millisekund. Shartlar: partition kaliti query'larda bo'lishi kerak (aks holda barcha partition skan qilinadi), unique constraint kalitni o'z ichiga olishi kerak, va partitionlarni oldindan yaratish avtomatlashtirilishi lozim (`pg_partman`)."
+    },
+    {
+      "id": 30230,
+      "code": "SN231",
+      "level": "St",
+      "type": "open",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Productionda PostgreSQL CPU 100%, ilova timeout beryapti. Qadam-baqadam nima qilasiz?",
+      "modelAnswer": [
+        "Birinchi: ta'sirni cheklash — `pg_stat_activity` dan eng og'ir/uzun query'larni topish, kerak bo'lsa `pg_cancel_backend` (avval cancel, keyin `pg_terminate_backend`)",
+        "Sabab toifalari: yangi deploy bilan kelgan query (plan o'zgardi), statistikaning eskirishi, indeks yo'qligi, lock kutish zanjiri (`pg_locks`, `pg_blocking_pids`), vacuum/autovacuum og'ir ishi, yoki trafik o'sishi",
+        "Tez choralar: eng qimmat query'ni bloklash/rate limit qilish, `statement_timeout` qo'yish, kesh qatlamini yoqish, read replica'ga o'qishni ko'chirish, ilova pool'ini kamaytirish (paradoks: kamroq ulanish — kamroq kontention)",
+        "`pg_stat_statements` bo'yicha total vaqt reytingi — real aybdor ko'pincha 'sekin' emas, 'juda tez-tez' query",
+        "Tuzatgandan keyin: `EXPLAIN (ANALYZE, BUFFERS)` bilan plan tekshirish, indeks qo'shish (`CONCURRENTLY`), `ANALYZE`, va zarur bo'lsa query'ni qayta yozish",
+        "Profilaktika: `pg_stat_statements` doimiy monitoringda, sekin query log, migratsiya va deploy'da plan regressiyasini tekshirish, `lock_timeout` standart sozlama sifatida",
+        "Aloqa: incident kanalida holat, ta'sir va ETA; postmortem bilan yopish"
+      ],
+      "explanation": "Kutiladigan tartib: mitigation avval (cancel/timeout/trafikni kamaytirish), keyin sabab (`pg_stat_statements`, `EXPLAIN`), keyin profilaktika. 'Indeks qo'shaman' darhol aytilishi — diagnozsiz harakat belgisidir."
+    },
+    {
+      "id": 30379,
+      "code": "SN380",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Partitioning",
+      "domain": "db",
+      "section": "d5",
+      "question": "PostgreSQL'da vaqt bo'yicha partitionlash qanday foyda beradi?",
+      "options": [
+        "Query har doim tezlashadi",
+        "Eski ma'lumotni `DROP PARTITION` bilan bir zumda o'chirish (`DELETE` va vacuum yuki yo'q), partition pruning bilan skan hajmini kamaytirish, indekslarni kichik ushlash va `VACUUM`/`REINDEX` ni bo'laklab qilish",
+        "Faqat disk tejaydi",
+        "Indeks keraksiz bo'ladi"
+      ],
+      "answer": 1,
+      "explanation": "Eng katta amaliy foyda — retention: `DELETE FROM events WHERE created_at < ...` milliard qatorda soatlab ishlaydi va bloat qoldiradi, `DROP TABLE` esa millisekund. Shartlar: partition kaliti query'larda bo'lishi kerak (aks holda barcha partition skan qilinadi), unique constraint kalitni o'z ichiga olishi kerak, va partitionlarni oldindan yaratish avtomatlashtirilishi lozim (`pg_partman`)."
+    },
+    {
+      "id": 30380,
+      "code": "SN381",
+      "level": "St",
+      "type": "open",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Productionda PostgreSQL CPU 100%, ilova timeout beryapti. Qadam-baqadam nima qilasiz?",
+      "modelAnswer": [
+        "Birinchi: ta'sirni cheklash — `pg_stat_activity` dan eng og'ir/uzun query'larni topish, kerak bo'lsa `pg_cancel_backend` (avval cancel, keyin `pg_terminate_backend`)",
+        "Sabab toifalari: yangi deploy bilan kelgan query (plan o'zgardi), statistikaning eskirishi, indeks yo'qligi, lock kutish zanjiri (`pg_locks`, `pg_blocking_pids`), vacuum/autovacuum og'ir ishi, yoki trafik o'sishi",
+        "Tez choralar: eng qimmat query'ni bloklash/rate limit qilish, `statement_timeout` qo'yish, kesh qatlamini yoqish, read replica'ga o'qishni ko'chirish, ilova pool'ini kamaytirish (paradoks: kamroq ulanish — kamroq kontention)",
+        "`pg_stat_statements` bo'yicha total vaqt reytingi — real aybdor ko'pincha 'sekin' emas, 'juda tez-tez' query",
+        "Tuzatgandan keyin: `EXPLAIN (ANALYZE, BUFFERS)` bilan plan tekshirish, indeks qo'shish (`CONCURRENTLY`), `ANALYZE`, va zarur bo'lsa query'ni qayta yozish",
+        "Profilaktika: `pg_stat_statements` doimiy monitoringda, sekin query log, migratsiya va deploy'da plan regressiyasini tekshirish, `lock_timeout` standart sozlama sifatida",
+        "Aloqa: incident kanalida holat, ta'sir va ETA; postmortem bilan yopish"
+      ],
+      "explanation": "Kutiladigan tartib: mitigation avval (cancel/timeout/trafikni kamaytirish), keyin sabab (`pg_stat_statements`, `EXPLAIN`), keyin profilaktika. 'Indeks qo'shaman' darhol aytilishi — diagnozsiz harakat belgisidir."
+    },
+    {
+      "id": 30388,
+      "code": "SN389",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "PostgreSQL'da `shared_buffers` qanday qo'yiladi va nega RAM'ning 100% emas?",
+      "options": [
+        "RAM'ning 90% — qancha ko'p bo'lsa shuncha yaxshi",
+        "~25% RAM (odatda 8-16 GB dan oshirish kam foyda beradi) — qolgani OS page cache uchun kerak, u ham keshlaydi; ikki marta keshlash foydasiz va `work_mem`, ulanishlar, autovacuum uchun ham xotira qolishi kerak",
+        "Default 128MB yetarli",
+        "Faqat `work_mem` muhim"
+      ],
+      "answer": 1,
+      "explanation": "PostgreSQL ikki qatlamli kesh bilan ishlaydi: `shared_buffers` + OS page cache. Bundan tashqari har ulanish `work_mem` gacha (sort/hash uchun, bir query'da bir necha marta!) ajratadi — `max_connections × work_mem` RAM'dan oshmasligi kerak. Amaliy boshlang'ich: `shared_buffers` 25%, `effective_cache_size` 50-75% (planner uchun maslahat), `work_mem` 16-64 MB, `maintenance_work_mem` kattaroq."
+    },
+    {
+      "id": 30389,
+      "code": "SN390",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Autovacuum katta jadvalga yetib bormayapti, bloat o'syapti. Nima sozlanadi?",
+      "options": [
+        "Autovacuum'ni o'chirish",
+        "Jadval darajasida agressivroq qilish: `autovacuum_vacuum_scale_factor` pasaytirish (0.2 → 0.01), `autovacuum_vacuum_cost_limit` oshirish/`cost_delay` kamaytirish, va parallel worker soni; sababni ham yopish — uzoq tranzaksiyalar va to'xtagan replication slot'lar",
+        "`VACUUM FULL` cron bilan har kuni",
+        "Jadvalni qayta yaratish"
+      ],
+      "answer": 1,
+      "explanation": "Default `scale_factor=0.2` degani 100 mln qatorli jadval 20 mln dead tuple yig'ilgach tozalanadi — juda kech. `VACUUM FULL` esa `ACCESS EXCLUSIVE` qulf oladi (jadval productionda ishlamaydi) — uning o'rniga `pg_repack`. Eng muhimi: vacuum `xmin` horizontidan o'ta olmaydi, shuning uchun uzoq ochiq tranzaksiya tuzatilmasa hech qanday sozlama yordam bermaydi."
+    },
+    {
+      "id": 30390,
+      "code": "SN391",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Backup",
+      "domain": "db",
+      "section": "d5",
+      "question": "PITR (point-in-time recovery) nimaga tayanadi va nega `pg_dump` yetarli emas?",
+      "options": [
+        "`pg_dump` har doim yetarli",
+        "PITR = bazaviy nusxa (`pg_basebackup`) + uzluksiz WAL arxivi — har qanday vaqt nuqtasiga tiklash imkonini beradi; `pg_dump` mantiqiy snapshot bo'lib, oxirgi dump'dan keyingi o'zgarishlar yo'qoladi (RPO = dump davri) va katta bazada tiklash soatlab ketadi",
+        "WAL keraksiz",
+        "Faqat replica yetarli"
+      ],
+      "answer": 1,
+      "explanation": "Replica ham backup emas: `DROP TABLE` replicaga ham replikatsiya qilinadi. Shuning uchun: PITR (WAL arxivi) + davriy to'liq nusxa + sinovdan o'tgan tiklash protsedurasi. RTO/RPO raqamda belgilanadi va muntazam tiklash mashqi qilinadi — 'backup bor' degan gap tiklash sinovi bo'lmasa qiymatsiz."
+    },
+    {
+      "id": 30391,
+      "code": "SN392",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Replication",
+      "domain": "db",
+      "section": "d5",
+      "question": "Streaming replikatsiyada `hot_standby_feedback = on` nima qiladi?",
+      "options": [
+        "Replicani tezlashtiradi",
+        "Replica o'zining eng qadimgi query snapshot'ini primary'ga xabar qiladi — primary shu qatorlarni vacuum qilmaydi, natijada replicada `canceling statement due to conflict with recovery` xatosi kamayadi; narxi — primary'da bloat o'sishi",
+        "Replikani sinxron qiladi",
+        "WAL'ni siqadi"
+      ],
+      "answer": 1,
+      "explanation": "Almashinuv aniq: replicada uzoq analitik query'lar ishlashi kerak bo'lsa `hot_standby_feedback=on` (lekin primary'da dead tuple to'planadi), aks holda `max_standby_streaming_delay` bilan konfliktni boshqarish. Uchinchi variant — analitikani alohida, kechikishi muhim bo'lmagan replicaga ajratish."
+    },
+    {
+      "id": 30392,
+      "code": "SN393",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "PgBouncer'ni `transaction` rejimida ishlatganda nima ishlamay qoladi?",
+      "options": [
+        "Hech narsa",
+        "Sessiya holatiga bog'liq narsalar: prepared statement'lar (nomli), `SET`/sessiya o'zgaruvchilari, `LISTEN/NOTIFY`, advisory lock va kursorlar tranzaksiyadan tashqarida — chunki har tranzaksiya boshqa server ulanishiga tushishi mumkin",
+        "Tranzaksiyalar ishlamaydi",
+        "Faqat `SELECT` ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Transaction pooling minglab client ulanishini o'nlab server ulanishiga siqadi (PostgreSQL'da har ulanish jarayon — bu katta tejamkorlik). Lekin ilova moslashishi kerak: Go'da `pgx` bilan `statement_cache_mode=describe` yoki prepared statement'larni o'chirish, `SET` o'rniga query darajasida sozlash. `session` rejimi hammasini qo'llaydi, lekin poolingdan foyda kam."
+    },
+    {
+      "id": 30393,
+      "code": "SN394",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "`statement_timeout`, `lock_timeout`, `idle_in_transaction_session_timeout` — qaysi biri nimadan himoya qiladi?",
+      "options": [
+        "Uchtasi bir xil",
+        "`statement_timeout` — uzoq query'ni kesadi; `lock_timeout` — qulf kutishni cheklaydi (migratsiyada majburiy, aks holda `ALTER TABLE` butun jadvalni to'sib qo'yadi); `idle_in_transaction_session_timeout` — ochiq qolgan tranzaksiyani yopib vacuum'ni bo'shatadi",
+        "Faqat `statement_timeout` kerak",
+        "Ilova darajasida timeout yetarli"
+      ],
+      "answer": 1,
+      "explanation": "Migratsiya uchun standart naqsh: `SET lock_timeout = '3s'; SET statement_timeout = '30s';` — qulf olinmasa migratsiya tez yiqiladi va productionni to'xtatib qo'ymaydi (keyin retry qilinadi). Ilova timeout'i yetmaydi: client uzilsa ham DB'da query davom etishi mumkin (shu sabab server tomonda ham chegara kerak)."
+    },
+    {
+      "id": 30394,
+      "code": "SN395",
+      "level": "St",
+      "type": "open",
+      "topic": "Sharding",
+      "domain": "db",
+      "section": "d5",
+      "question": "PostgreSQL bitta node sig'imidan chiqdi. Qanday tartibda miqyoslaysiz?",
+      "modelAnswer": [
+        "Avval o'lchash: yozuv bo'g'izimi yoki o'qish? CPU, IOPS, qulflar, yoki query samarasizligi? Ko'p holatda 'sharding kerak' deb kelingan muammo aslida indeks yoki N+1 muammosi",
+        "1. Query va sxema optimizatsiyasi: `pg_stat_statements` top query'lari, indekslar, `COPY`/batch yozuv, keraksiz yozuvlarni olib tashlash",
+        "2. Vertikal: tezroq disk (IOPS), ko'proq RAM (kesh hit), connection pooling (PgBouncer) — arzon va tez natija",
+        "3. O'qishni ko'chirish: read replica'lar + read-your-writes siyosati; analitikani alohida replicaga yoki omborga",
+        "4. Ma'lumotni kamaytirish: partitionlash + retention (eski ma'lumotni arxivga), katta ustunlarni alohida jadvalga",
+        "5. Funksional bo'lish: modul bo'yicha alohida DB (eng og'ir domenni ajratish) — bu shardlashdan oddiyroq",
+        "6. Gorizontal sharding: tenant/user ID bo'yicha; kalit tanlovi, cross-shard query va resharding rejasi oldindan; Citus yoki ilova darajasida routing",
+        "Har qadamda o'lchash va to'xtash nuqtasi: sharding oxirgi chora, chunki operatsion murakkablik (migratsiya, backup, monitoring, tranzaksiyalar) keskin oshadi"
+      ],
+      "explanation": "Kutilayotgan asosiy signal — tartib va o'lchash. Darhol 'shardlaymiz' deyish senior darajada salbiy baholanadi; 'avval nima to'yingan' savoli va arzon bosqichlarni sanash to'g'ri javob."
+    },
+    {
+      "id": 30395,
+      "code": "SN396",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Migrations",
+      "domain": "db",
+      "section": "d5",
+      "question": "100 mln qatorli jadvalga `NOT NULL` ustun qo'shish kerak. Xavfsiz ketma-ketlik?",
+      "options": [
+        "`ALTER TABLE ... ADD COLUMN x int NOT NULL DEFAULT 0` — darhol",
+        "1) nullable ustun qo'shish, 2) kod ikkisini ham yozadigan holatda deploy, 3) batch'lab backfill (kichik tranzaksiyalar, throttling bilan), 4) `CHECK (x IS NOT NULL) NOT VALID` + `VALIDATE CONSTRAINT`, 5) `SET NOT NULL`",
+        "`UPDATE` bilan hammasini bir tranzaksiyada to'ldirish",
+        "Jadvalni qayta yaratib ma'lumotni ko'chirish"
+      ],
+      "answer": 1,
+      "explanation": "PostgreSQL 11+ da `ADD COLUMN ... DEFAULT` jadvalni qayta yozmaydi (metadata default) — shuning uchun oddiy holatlarda tez. Lekin `SET NOT NULL` to'liq skan va `ACCESS EXCLUSIVE` qulf talab qiladi; `NOT VALID` CHECK bilan bosqichma-bosqich qilinadi. Bitta katta `UPDATE` esa WAL portlashi, qulf va replikatsiya lag'ini keltiradi — shuning uchun batch va pauza."
+    },
+    {
+      "id": 30420,
+      "code": "SN421",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "PostgreSQL'da WAL nima uchun kerak va checkpoint nima qiladi?",
+      "options": [
+        "Faqat replikatsiya uchun",
+        "WAL — write-ahead log: o'zgarish avval jurnal(ga) yoziladi va `fsync` qilinadi, shundan keyin commit tasdiqlanadi (durability); ma'lumot sahifalari keyinroq diskka tushadi. Checkpoint — kir sahifalarni diskka yozib, tiklash boshlanadigan nuqtani oldinga suradi",
+        "WAL — backup fayli",
+        "Checkpoint jadvalni qulflaydi"
+      ],
+      "answer": 1,
+      "explanation": "Nega tez: ketma-ket WAL yozuvi tasodifiy sahifa yozuvidan ancha arzon. Operatsion oqibatlar: checkpoint paytida I/O spike bo'ladi (`checkpoint_completion_target` bilan yoyiladi), `max_wal_size` katta bo'lsa checkpoint kam lekin tiklash uzunroq, va `full_page_writes` checkpoint'dan keyingi birinchi o'zgarishda butun sahifani WAL'ga yozadi (WAL hajmi shuning uchun sakraydi)."
+    },
+    {
+      "id": 30421,
+      "code": "SN422",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "`full_page_writes` nima uchun yoqilgan va nimaga ta'sir qiladi?",
+      "options": [
+        "Ishlashni tezlashtirish uchun",
+        "Torn page (qisman yozilgan 8 KB sahifa) muammosiga qarshi: checkpoint'dan keyin sahifaga birinchi tegishda butun sahifa WAL'ga yoziladi. Natija — WAL hajmi va I/O oshadi, ayniqsa tez-tez checkpoint bo'lsa",
+        "Replikatsiya uchun shart",
+        "Faqat SSD'da kerak"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun UUIDv4 primary key yomon: tasodifiy insert ko'p turli sahifaga tegadi, har biri to'liq sahifa yozuvini keltiradi — WAL bir necha barobar o'sadi. Yumshatish: checkpoint intervalini oshirish (`max_wal_size`), WAL siqish (`wal_compression`), va monoton kalit ishlatish. Fayl tizimi/qurilma atomik yozuvni kafolatlasa o'chirish mumkin, lekin bu kamdan-kam holat."
+    },
+    {
+      "id": 30422,
+      "code": "SN423",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "HOT (Heap-Only Tuple) update nima beradi?",
+      "options": [
+        "Yozuvni ikki barobar tezlashtiradi",
+        "Agar yangilangan ustunlar indekslanmagan bo'lsa va yangi versiya bir xil sahifaga sig'sa — indekslar yangilanmaydi (indeks yozuvi eski tupleni ko'rsatib turadi, zanjir orqali yangisiga boriladi). Bu yozuv amplifikatsiyasini va indeks bloatini keskin kamaytiradi",
+        "Faqat o'qishni tezlashtiradi",
+        "Indekslarni o'chiradi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy xulosalar: tez-tez yangilanadigan ustunni indekslamang (masalan `last_seen_at`) — aks holda har update barcha indekslarga yoziladi; `fillfactor` ni pasaytirish (masalan 80) sahifada joy qoldirib HOT ehtimolini oshiradi. `pg_stat_user_tables.n_tup_hot_upd` nisbati bilan kuzatiladi."
+    },
+    {
+      "id": 30423,
+      "code": "SN424",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "TOAST nima va qachon muammo bo'ladi?",
+      "options": [
+        "Kesh turi",
+        "Katta qiymatlar (>~2 KB) alohida TOAST jadvaliga siqilib ko'chiriladi; asosiy jadval ixcham qoladi. Muammo: katta `jsonb`/`text` ustunni tez-tez o'qish/yangilash qo'shimcha I/O va TOAST bloatini keltiradi, hamda siqish CPU yeydi",
+        "Faqat rasm uchun",
+        "Indeks turi"
+      ],
+      "answer": 1,
+      "explanation": "Nozik joylar: TOAST qiymatining bir qismini o'zgartirish butun qiymatni qayta yozadi (jsonb'da kichik maydonni yangilash qimmat); `SELECT *` bilan keraksiz katta ustunni tortish latency beradi. Yechimlar: katta ustunni alohida jadvalga, `storage EXTERNAL` (siqishsiz, substring tez), yoki hujjatni obyekt saqlashga chiqarish."
+    },
+    {
+      "id": 30431,
+      "code": "SN432",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Replication",
+      "domain": "db",
+      "section": "d5",
+      "question": "Fizik (streaming) va mantiqiy (logical) replikatsiya farqi?",
+      "options": [
+        "Ikkisi bir xil",
+        "Fizik: WAL baytma-bayt, butun klaster nusxasi, bir xil versiya/arxitektura, replica faqat o'qish; mantiqiy: o'zgarishlar dekodlanib jadval darajasida uzatiladi — tanlangan jadvallar, versiyalar orasida migratsiya, va replica yozishga ochiq (lekin konflikt sizning zimmangizda)",
+        "Mantiqiy sekinroq va foydasiz",
+        "Fizik faqat backup uchun"
+      ],
+      "answer": 1,
+      "explanation": "Mantiqiy replikatsiya asosiy qo'llanishlari: katta versiya yangilanishi (minimal downtime), ma'lumotni boshqa tizimga oqizish (CDC), va jadval darajasidagi sharding migratsiyasi. Cheklovlari: DDL replikatsiya qilinmaydi, sequence holati ko'chmaydi, primary key yoki `REPLICA IDENTITY` kerak, va slot iste'mol qilinmasa WAL to'planadi."
+    },
+    {
+      "id": 30432,
+      "code": "SN433",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Partitioning",
+      "domain": "db",
+      "section": "d5",
+      "question": "Partition pruning qachon ishlamaydi?",
+      "options": [
+        "Har doim ishlaydi",
+        "Partition kaliti query'da yo'q bo'lsa, yoki shart ifoda ostida bo'lsa (`WHERE date_trunc('day', ts) = ...`), yoki kalit qiymati faqat runtime'da ma'lum bo'lsa (prepared statement generic plan) — oxirgisini runtime pruning qisman hal qiladi",
+        "Faqat katta jadvalda",
+        "Indeks bo'lsa ishlamaydi"
+      ],
+      "answer": 1,
+      "explanation": "Tekshirish: `EXPLAIN`da nechta partition skanerlanayotgani ko'rinadi (`Subplans Removed`). Amaliy qoidalar: shartni kalitga to'g'ridan-to'g'ri yozish (`ts >= $1 AND ts < $2`), `enable_partition_pruning` yoqilgan bo'lishi, va juda ko'p partition (minglab) planner vaqtini oshirishini hisobga olish — partition soni ham me'yorida bo'lishi kerak."
+    },
+    {
+      "id": 30433,
+      "code": "SN434",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Cost",
+      "domain": "db",
+      "section": "d5",
+      "question": "Indeks bloat aniqlandi. Xavfsiz tozalash?",
+      "options": [
+        "`VACUUM FULL`",
+        "`REINDEX INDEX CONCURRENTLY` (PG12+) — jadval yoziladigan holatda qoladi; yoki yangi indeksni `CREATE INDEX CONCURRENTLY` bilan qurib eskisini almashtirish. `VACUUM FULL`/oddiy `REINDEX` `ACCESS EXCLUSIVE` qulf oladi",
+        "Indeksni o'chirib qoldirish",
+        "`ANALYZE` yetarli"
+      ],
+      "answer": 1,
+      "explanation": "`CONCURRENTLY` sekinroq va ikki marta skan qiladi, yiqilsa `INVALID` indeks qoladi (topib o'chirish kerak — `pg_index.indisvalid`). Jadval bloati uchun esa `pg_repack`. Profilaktika muhimroq: autovacuum sozlamalari, uzoq tranzaksiyalarni yo'q qilish, va tez-tez yangilanadigan ustunlarni indekslamaslik."
+    }
+  ]
+}

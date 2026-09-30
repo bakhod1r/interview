@@ -1,0 +1,247 @@
+{
+  "id": "t3",
+  "name": "System & infra gotchas",
+  "domain": "tricky",
+  "domainLabel": "Edge cases & gotchas",
+  "topics": [
+    "System gotcha"
+  ],
+  "questions": [
+    {
+      "id": 8018,
+      "code": "T19",
+      "level": "S",
+      "type": "code",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Redis'da natija: TTL qanday bo'ladi?",
+      "snippet": "SET session:1 \"data\" EX 600\n# 5 daqiqa o'tdi\nSET session:1 \"yangi-data\"\nTTL session:1",
+      "options": [
+        "300 — qolgan TTL saqlanadi",
+        "-1 — oddiy SET key'ni qayta yozadi va TTL ni butunlay olib tashlaydi (key abadiy qoladi)",
+        "600 ga qayta tiklanadi",
+        "-2 — key o'chadi"
+      ],
+      "answer": 1,
+      "explanation": "TTL ni saqlash uchun: SET key val KEEPTTL, yoki qayta yozishda muddatni ham berish (EX). Bu sessiya va lock'larda xavfli bug manbai: memory asta to'ladi yoki lock abadiy qoladi. Eslatma: GETSET, SETRANGE kabi ba'zi buyruqlar ham TTL bilan turlicha ishlaydi — hujjatdan tekshiring.",
+      "source": "https://redis.io/docs/latest/commands/set/"
+    },
+    {
+      "id": 8019,
+      "code": "T20",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Cache invalidatsiyasi: DB'ga yozganda cache'ni qachon o'chirish kerak?",
+      "options": [
+        "Transaction ichida, yozishdan oldin",
+        "Transaction COMMIT bo'lgandan keyin. Commit'dan oldin o'chirilsa, boshqa query eski qiymatni o'qib cache'ga qaytadan yozib qo'yishi mumkin — cache abadiy eskirgan qoladi",
+        "Umuman o'chirmaslik, faqat TTL'ga tayanish",
+        "Cache'ni yangilash (set), o'chirish emas"
+      ],
+      "answer": 1,
+      "explanation": "Ketma-ketlik: transaction → commit → cache key'ini DELETE (update emas). Yana bir himoya: qisqa TTL va kritik joylarda versiyalangan key (user:42:v7). To'liq yechim uchun: yozishdan keyin key'ni qisqa muddatga 'bloklash' (delayed double delete) yoki CDC orqali invalidatsiya."
+    },
+    {
+      "id": 8020,
+      "code": "T21",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Client timeout olib, <code>DELETE /orders/42</code> ni qayta yubordi. Server 404 qaytardi. Bu to'g'rimi?",
+      "options": [
+        "Ha, resurs yo'q — 404 to'g'ri",
+        "Texnik jihatdan to'g'ri, lekin client uchun yomon: birinchi query success'li bo'lgan bo'lsa ham u xato ko'radi. Idempotent DELETE uchun 204 (yoki 200) qaytarish va 'allaqachon o'chirilgan' holatini success deb hisoblash yaxshiroq",
+        "Har doim 500 qaytarish kerak",
+        "DELETE ni retry qilish taqiqlangan"
+      ],
+      "answer": 1,
+      "explanation": "Idempotentlik faqat 'ma'lumot buzilmasligi' emas — client uchun natija ham bir xil bo'lishi kerak. Shunga o'xshash holatlar: PUT takrorlansa 200, POST uchun Idempotency-Key bilan saqlangan javobni qaytarish. Aks holda retry mantig'i 'xato' deb yozib, alert va noto'g'ri statistika yaratadi."
+    },
+    {
+      "id": 8021,
+      "code": "T22",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Kafka consumer og'ir xabarni 10 daqiqa ishlayapti, <code>max.poll.interval.ms</code> 5 daqiqa. Nima bo'ladi?",
+      "options": [
+        "Hech narsa, ishlov tugaydi",
+        "Broker consumer'ni o'lgan deb hisoblab group'dan chiqaradi va rebalance boshlanadi; ishlov tugagach commit rad etiladi va xabar boshqa consumer'da qaytadan ishlanadi — cheksiz sikl bo'lishi mumkin",
+        "Xabar DLQ'ga ketadi",
+        "Consumer avtomatik ko'proq vaqt oladi"
+      ],
+      "answer": 1,
+      "explanation": "Yechimlar: max.poll.interval.ms ni real ishlov vaqtidan katta qilish, max.poll.records ni kamaytirish, yoki og'ir ishni alohida worker pool'ga berib, poll siklini bo'sh tutish (lekin unda offset boshqaruvi murakkablashadi). Aynan shu sabab 'xabarlar ikki-uch marta ishlanyapti' shikoyatining eng ko'p uchraydigan ildizi."
+    },
+    {
+      "id": 8022,
+      "code": "T23",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Saytda <code>301 Moved Permanently</code> qaytarildi, keyin bu xato ekani aniqlandi. Muammo nimada?",
+      "options": [
+        "Muammo yo'q, o'zgartirish yetarli",
+        "Brauzerlar 301 ni uzoq muddat (ba'zan cheksiz) keshlaydi — foydalanuvchilar eski qayta yo'naltirishda qolib ketadi va serverdagi tuzatish ularga yetmaydi. Vaqtinchalik holatlar uchun 302/307 ishlatish kerak",
+        "301 keshlanmaydi",
+        "302 doimiy, 301 vaqtinchalik"
+      ],
+      "answer": 1,
+      "explanation": "Tiklash juda qiyin: foydalanuvchi brauzer cache'ini tozalashi kerak. Shuning uchun 301 faqat haqiqatan abadiy o'zgarishlarda (domen ko'chishi). 307/308 — metodni saqlaydigan variantlar (POST POST bo'lib qoladi), 302 esa amalda ko'pincha GET'ga o'zgartiradi."
+    },
+    {
+      "id": 8023,
+      "code": "T24",
+      "level": "St",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Kunlik cron 02:30 da ishlaydi. DST o'tishida nima bo'lishi mumkin?",
+      "options": [
+        "Hech narsa",
+        "Soat orqaga surilganda 02:30 ikki marta keladi — vazifa ikki marta bajariladi; oldinga surilganda esa 02:30 umuman bo'lmaydi va vazifa o'tkazib yuboriladi",
+        "Cron avtomatik tuzatadi",
+        "Faqat yillik ishlarda muammo"
+      ],
+      "answer": 1,
+      "explanation": "Yechimlar: serverni va cron'ni UTC'da ishlatish, vazifalarni idempotent qilish (bir kunda bir marta bajarilganini DB'da belgilash), va DST o'tish soatlariga (00:00–04:00) muhim ishlarni qo'ymaslik. Xuddi shu muammo 'har oyning 31-kuni' va kabisa soniyalarida ham chiqadi."
+    },
+    {
+      "id": 8024,
+      "code": "T25",
+      "level": "St",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "PK sifatida UUIDv4 tanlandi va table 100 mln row'ga yetdi. Qanday muammo kutiladi?",
+      "options": [
+        "Hech qanday",
+        "Tasodifiy tartib tufayli index page'lariga yozish sochilib ketadi: cache samarasi tushadi, page bo'linishlari va index hajmi ortadi (ayniqsa InnoDB clustered indexda). Yechim: vaqt bo'yicha tartiblangan identifikator — UUIDv7, ULID yoki Snowflake",
+        "UUID qisqa bo'lgani uchun to'qnashuv bo'ladi",
+        "Faqat JOIN sekinlashadi"
+      ],
+      "answer": 1,
+      "explanation": "UUIDv4 ning afzalligi bor (client tomonda generatsiya, ketma-ketlikni oshkor qilmaslik), shuning uchun tanlov UUIDv7 kabi variant bilan ikkalasini birlashtiradi. Postgres'da saqlash uchun uuid tipi (16 bayt) ishlating — text sifatida saqlash 37 bayt va sekinroq taqqoslash degani."
+    },
+    {
+      "id": 30149,
+      "code": "SN150",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Servis `context.Background()` bilan DB query qiladi (HTTP handler ichida). Nima yo'qoladi?",
+      "options": [
+        "Hech narsa",
+        "Cancellation: client ketganda yoki deadline o'tganda query to'xtamaydi — DB va goroutine bekorga ishlaydi, yuk ostida bu resurs tugashiga olib keladi",
+        "Tracing faqat",
+        "Metrikalar"
+      ],
+      "answer": 1,
+      "explanation": "`r.Context()` uzatilishi kerak: client uzilsa `ctx` bekor bo'ladi, `database/sql` query'ni cancel qiladi (PostgreSQL'da cancel request yuboriladi). `context.Background()` — faqat haqiqatan mustaqil fon ishi uchun, va u holda ham o'z deadline'i va shutdown'da to'xtash mexanizmi bo'lishi kerak."
+    },
+    {
+      "id": 30150,
+      "code": "SN151",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Graceful shutdown yozilgan, lekin deploy paytida so'rovlar uziladi. Eng ko'p uchraydigan sabab?",
+      "options": [
+        "`http.Server.Shutdown` ishlamaydi",
+        "SIGTERM kelishi bilan darhol shutdown boshlanadi, lekin LB/endpoint ro'yxati hali yangilanmagan — `preStop` kutish (yoki readiness'ni avval false qilish) qo'shilmagan",
+        "Timeout kichik",
+        "Port band"
+      ],
+      "answer": 1,
+      "explanation": "Tartib muhim: (1) readiness false / preStop sleep — yangi trafik kelishi to'xtaydi, (2) `srv.Shutdown(ctx)` mavjud so'rovlarni tugatadi, (3) background workerlar `ctx` bilan to'xtaydi, (4) DB pool yopiladi. `terminationGracePeriodSeconds` shu jamiga yetishi kerak, aks holda SIGKILL keladi."
+    },
+    {
+      "id": 30151,
+      "code": "SN152",
+      "level": "St",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Servis xotirasi asta o'sadi, pprof heap'da hech narsa ko'rinmaydi. Qaysi variantni tekshirasiz?",
+      "options": [
+        "Faqat GOGC",
+        "Go heap tashqarisidagi o'sish: goroutine leak (stack), `mmap`/cgo ajratmalari, fayl deskriptorlari, yoki fragmentatsiya — `runtime.NumGoroutine()`, `/debug/pprof/goroutine`, RSS va `runtime.MemStats` (HeapSys vs HeapInuse) solishtiriladi",
+        "Faqat CPU profili",
+        "Disk"
+      ],
+      "answer": 1,
+      "explanation": "Heap profil faqat Go ajratmalarini ko'rsatadi. Tekshirish zanjiri: goroutine soni (eng ko'p uchraydigan sabab — bloklangan kanal yoki yopilmagan `resp.Body`), `HeapReleased`/RSS farqi (OS xotirani qaytarmagan), cgo yoki `mmap` ishlatadigan kutubxona, va bir marta katta ajratilgan buferlar (pool ichida ushlanib qolgan)."
+    },
+    {
+      "id": 30299,
+      "code": "SN300",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Servis `context.Background()` bilan DB query qiladi (HTTP handler ichida). Nima yo'qoladi?",
+      "options": [
+        "Hech narsa",
+        "Cancellation: client ketganda yoki deadline o'tganda query to'xtamaydi — DB va goroutine bekorga ishlaydi, yuk ostida bu resurs tugashiga olib keladi",
+        "Tracing faqat",
+        "Metrikalar"
+      ],
+      "answer": 1,
+      "explanation": "`r.Context()` uzatilishi kerak: client uzilsa `ctx` bekor bo'ladi, `database/sql` query'ni cancel qiladi (PostgreSQL'da cancel request yuboriladi). `context.Background()` — faqat haqiqatan mustaqil fon ishi uchun, va u holda ham o'z deadline'i va shutdown'da to'xtash mexanizmi bo'lishi kerak."
+    },
+    {
+      "id": 30300,
+      "code": "SN301",
+      "level": "S",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Graceful shutdown yozilgan, lekin deploy paytida so'rovlar uziladi. Eng ko'p uchraydigan sabab?",
+      "options": [
+        "`http.Server.Shutdown` ishlamaydi",
+        "SIGTERM kelishi bilan darhol shutdown boshlanadi, lekin LB/endpoint ro'yxati hali yangilanmagan — `preStop` kutish (yoki readiness'ni avval false qilish) qo'shilmagan",
+        "Timeout kichik",
+        "Port band"
+      ],
+      "answer": 1,
+      "explanation": "Tartib muhim: (1) readiness false / preStop sleep — yangi trafik kelishi to'xtaydi, (2) `srv.Shutdown(ctx)` mavjud so'rovlarni tugatadi, (3) background workerlar `ctx` bilan to'xtaydi, (4) DB pool yopiladi. `terminationGracePeriodSeconds` shu jamiga yetishi kerak, aks holda SIGKILL keladi."
+    },
+    {
+      "id": 30301,
+      "code": "SN302",
+      "level": "St",
+      "type": "mcq",
+      "topic": "System gotcha",
+      "domain": "tricky",
+      "section": "t3",
+      "question": "Servis xotirasi asta o'sadi, pprof heap'da hech narsa ko'rinmaydi. Qaysi variantni tekshirasiz?",
+      "options": [
+        "Faqat GOGC",
+        "Go heap tashqarisidagi o'sish: goroutine leak (stack), `mmap`/cgo ajratmalari, fayl deskriptorlari, yoki fragmentatsiya — `runtime.NumGoroutine()`, `/debug/pprof/goroutine`, RSS va `runtime.MemStats` (HeapSys vs HeapInuse) solishtiriladi",
+        "Faqat CPU profili",
+        "Disk"
+      ],
+      "answer": 1,
+      "explanation": "Heap profil faqat Go ajratmalarini ko'rsatadi. Tekshirish zanjiri: goroutine soni (eng ko'p uchraydigan sabab — bloklangan kanal yoki yopilmagan `resp.Body`), `HeapReleased`/RSS farqi (OS xotirani qaytarmagan), cgo yoki `mmap` ishlatadigan kutubxona, va bir marta katta ajratilgan buferlar (pool ichida ushlanib qolgan)."
+    }
+  ]
+}

@@ -1,0 +1,248 @@
+[
+  {
+    "topicId": "tHiUpG9LN35E5RaHddMv5",
+    "topicTitle": "Architectural Patterns",
+    "questions": [
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-01",
+        "question": "What is a monolith, and what does 'modular monolith' add on top of it?",
+        "answer": "A monolith is one deployable unit: a single process/artifact containing all features, with one database and in-process calls between modules. A modular monolith keeps that single deployment but enforces internal module boundaries — each module owns its tables, exposes a narrow public API (interfaces/facades), and cross-module access goes through that API rather than direct table joins or internal classes. Enforcement is done with package-private visibility, build modules (Gradle/Maven submodules, .NET projects, Go internal/ packages) or ArchUnit-style tests. You get single-transaction simplicity and one deploy, while keeping the seams that would later allow extraction.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Monolith",
+        "followUps": ["How would you mechanically enforce that module A cannot import module B's internals?", "What is the first thing that breaks module boundaries in practice?"],
+        "tags": ["monolith", "modularity", "boundaries"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-02",
+        "question": "Name three concrete signs that splitting a system into microservices is the wrong decision right now.",
+        "answer": "First, the domain boundaries are still unstable — if you cannot name the bounded contexts and their invariants, every split will cut through an aggregate and produce chatty, distributed transactions. Second, the team is small (say under ~15 engineers): you pay for CI/CD per service, per-service on-call, service discovery, tracing and schema versioning without gaining independent deployability. Third, the real bottleneck is a single hot path (one slow query, one CPU-bound endpoint) — that is solved by an index, a cache or vertical scaling, not by a network hop. The honest test: if you cannot deploy the monolith independently per module today because of process, microservices will not fix the process.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Microservices",
+        "followUps": ["What would you do instead as a first step?", "Which metric would tell you the split is now justified?"],
+        "tags": ["microservices", "trade-offs", "team-topology"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-03",
+        "question": "What is a bounded context, and how does it relate to a microservice?",
+        "answer": "A bounded context is a DDD boundary inside which a term has exactly one meaning and one model — 'Customer' in Billing (tax id, invoices) is a different model from 'Customer' in Support (tickets, SLA). Integration between contexts happens through explicit contracts: published events, an anti-corruption layer that translates the foreign model, or a shared kernel that both teams co-own. A microservice should never be smaller than one aggregate and is usually one bounded context or a slice of it; deploying two contexts in one service is fine, but splitting one aggregate across two services forces distributed transactions. Context mapping (upstream/downstream, customer-supplier, conformist) is what tells you which direction the dependency is allowed to point.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Microservices",
+        "followUps": ["When is an anti-corruption layer worth the extra code?", "Can two bounded contexts share a database schema?"],
+        "tags": ["ddd", "bounded-context", "microservices"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-04",
+        "question": "Describe DDD layering (domain / application / infrastructure / interfaces) and the dependency rule.",
+        "answer": "Domain holds entities, value objects, aggregates and domain services — pure business rules with no framework, no SQL, no HTTP. Application holds use cases: it orchestrates aggregates, opens the transaction, and calls ports (interfaces) it declares itself. Infrastructure implements those ports — repositories over JPA/SQL, message publishers, HTTP clients. Interfaces/adapters is the delivery edge: controllers, CLI, consumers, which map DTOs to commands. The dependency rule is one-directional and inward: infrastructure and interfaces depend on application and domain, never the reverse; the domain compiles without any of them, which is exactly what makes domain unit tests fast and framework-free.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "SOA",
+        "followUps": ["Where does an ORM entity annotation belong under this rule?", "How do you invert the dependency for a repository?"],
+        "tags": ["ddd", "layering", "dependency-inversion"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-05",
+        "question": "Why is two-phase commit (2PC) rarely used across microservices, and what replaces it?",
+        "answer": "2PC gives atomicity via a coordinator (prepare → commit), but participants hold locks for the whole round trip, and if the coordinator dies after prepare the participants are blocked in-doubt until it recovers — availability drops to the product of all participants' availability. It also requires XA support, which HTTP APIs, Kafka and most SaaS backends do not offer. The replacement is a saga: a sequence of local transactions, each publishing an event, with a compensating transaction per step (refund for charge, release for reserve) instead of rollback. Sagas trade atomicity for eventual consistency, so the business must accept intermediate states like 'order pending payment'.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Microservices",
+        "followUps": ["Which steps cannot be compensated, and how do you order them?", "Choreography or orchestration for a 6-step saga?"],
+        "tags": ["2pc", "saga", "distributed-transactions"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-06",
+        "question": "Your service writes a row to Postgres and then publishes a Kafka event. Occasionally the DB row exists but no event was published. Diagnose and fix it.",
+        "answer": "That is the dual-write problem: the commit and the publish are two separate non-atomic operations, so a crash or broker timeout between them loses the event (and publishing before the commit can produce a phantom event for a rolled-back row). Fix with the transactional outbox: in the same DB transaction as the business write, INSERT into an `outbox` table (aggregate_id, type, payload, created_at); a relay — a poller with `SELECT ... FOR UPDATE SKIP LOCKED`, or CDC via Debezium reading the WAL — publishes rows to Kafka and marks them sent. Delivery is then at-least-once, so consumers must be idempotent, keyed on the outbox row's event id (an inbox/dedup table or an upsert). Order per aggregate is preserved by partitioning Kafka on aggregate_id.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Failure Modes",
+        "followUps": ["Why SKIP LOCKED rather than a plain SELECT for the relay?", "How do you keep the outbox table from growing unbounded?"],
+        "tags": ["outbox", "kafka", "dual-write", "idempotency"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-07",
+        "question": "A product manager says 'the inventory count on the product page is wrong for a few seconds after an order'. Is this a bug?",
+        "answer": "Not necessarily — it is the expected behaviour of eventual consistency: the write went to the Orders service, an event propagates to the read model, and the projection lags by the queue delay. It is a bug only against a stated guarantee, so the real answer is to pin the SLO: e.g. 99% of projections applied within 2s, measured as event-timestamp to projection-commit lag, alerted on consumer lag. Where staleness is unacceptable (the decrement that decides oversell), you move that invariant inside one aggregate and one transaction rather than relying on a projection. For the UI, read-your-writes can be given by routing the user's own reads to the primary or by returning the optimistic value after their own write.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Microservices",
+        "followUps": ["How do you measure projection lag end to end?", "What breaks if two projections apply events out of order?"],
+        "tags": ["eventual-consistency", "cqrs", "slo"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-08",
+        "question": "What does a service mesh give you that a resilience library (Resilience4j, Polly, Hystrix) does not, and what is the cost?",
+        "answer": "A mesh (Istio, Linkerd) runs a sidecar proxy — or an ambient/node proxy — beside every pod and takes over L7 concerns outside the process: mTLS with automatic cert rotation and SPIFFE identities, retries/timeouts/outlier detection, traffic shifting for canaries (90/10 by weight, header-based routing), and uniform RED metrics plus trace headers, all applied identically to Java, Go and Python services without a code change. A library gives the same retries and circuit breaking but only for languages it supports, needs a redeploy to change policy, and cannot enforce mTLS between services it does not own. The cost is real: extra hop latency (typically sub-millisecond to a few ms p99), per-pod memory/CPU, a control plane to run and upgrade, and much harder debugging — a 503 may now come from Envoy, not your app.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Service Mesh",
+        "followUps": ["How would you tell an Envoy-generated 503 from an application 503?", "When is a mesh overkill for 5 services?"],
+        "tags": ["service-mesh", "istio", "mtls", "resilience"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-09",
+        "question": "What is a sidecar proxy, in concrete terms of how traffic reaches it?",
+        "answer": "It is a second container in the same pod, sharing the pod's network namespace and localhost with the app. An init container (or a CNI plugin) installs iptables REDIRECT rules so that all inbound and outbound TCP traffic of the pod is diverted to the proxy's ports (Envoy's 15006 inbound / 15001 outbound in Istio), so the application dials a plain hostname and never knows it was intercepted. The proxy then does service discovery from the control plane, applies routing/retry/mTLS policy, and forwards to the peer's sidecar. Practical consequences: the app must start tolerating the proxy not being ready yet, and the sidecar must be shut down last or in-flight requests on pod termination fail.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Service Mesh",
+        "followUps": ["Why do batch Jobs hang when they finish before the sidecar exits?", "What does ambient mode change about this?"],
+        "tags": ["sidecar", "envoy", "kubernetes", "iptables"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-10",
+        "question": "What causes serverless cold starts, and how do you reduce them without paying for idle?",
+        "answer": "A cold start happens when no warm execution environment exists: the platform must fetch and unpack the deployment artifact, boot the sandbox (Firecracker microVM for Lambda), start the runtime, and run your init code — the last part dominates for JVM/.NET and for anything doing DI scanning or TLS handshakes at import time. Reduce it by shrinking the package, moving SDK/DB client creation into init (reused across invocations) rather than per request, lazy-loading rarely used modules, and choosing a lighter runtime (Go/Node) or ahead-of-time compilation (GraalVM native image, .NET ReadyToRun). Platform levers: SnapStart (restores a pre-initialized snapshot), provisioned concurrency (costs money when idle) and higher memory settings, since memory also buys CPU and cuts init time. Cold starts also spike on scale-out and after every deploy, so they show up as p99 latency, not p50.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Serverless",
+        "followUps": ["Why does raising memory from 512MB to 1769MB often halve cold start?", "How do you measure cold start share of traffic?"],
+        "tags": ["serverless", "lambda", "cold-start", "latency"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-11",
+        "question": "Why must a serverless function be stateless, and where does state actually live?",
+        "answer": "Because the platform can create, freeze, reuse or destroy an execution environment at any time and routes each invocation to an arbitrary instance — in-memory state and local disk (/tmp) survive only by luck for warm reuse, and never across instances. So session data goes to Redis/DynamoDB, uploaded files to S3, long-running work to a queue plus a state machine (Step Functions), and locks/counters to a store with conditional writes. What you may legitimately keep in the module scope is idempotent, derivable state: DB connection or SDK clients, parsed config, a small TTL'd cache — with the caveat that a pooled DB connection per instance multiplies by concurrency and can exhaust Postgres, which is why RDS Proxy or a serverless-friendly pooler exists.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Serverless",
+        "followUps": ["What breaks if you cache a user's data in module scope?", "How do you bound DB connections from 500 concurrent functions?"],
+        "tags": ["serverless", "statelessness", "connection-pooling"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-12",
+        "question": "A Lambda behind SQS suddenly scales to 800 concurrent executions, the RDS instance hits max_connections, and the bill triples. What do you change?",
+        "answer": "Serverless auto-scaling turns a traffic spike into a stampede against a non-elastic downstream, so you must cap concurrency, not the database. Set reserved concurrency on the function (e.g. 50) — SQS then simply keeps messages queued instead of amplifying — and tune the event source mapping's maximum concurrency and batch size so fewer invocations do more work per call. Put RDS Proxy (or PgBouncer) in front of Postgres so 50 executions share a small pool, and make handlers idempotent since SQS is at-least-once and throttled batches get redelivered. On cost: serverless is priced per GB-second plus per-request, so it wins for spiky and low-duty-cycle traffic and loses badly against a always-busy container — if the function runs near 100% of the time, a right-sized ECS/K8s deployment is cheaper, and that is the migration to propose.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Serverless",
+        "followUps": ["Where do throttled messages end up, and how do you avoid silent loss?", "At what utilization does the cost crossover happen for your workload?"],
+        "tags": ["serverless", "concurrency-limits", "cost", "sqs"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-13",
+        "question": "State the Twelve-Factor rules on config and backing services, and what violating them looks like in code.",
+        "answer": "Config (factor III) is everything that varies between deploys — credentials, hostnames, feature toggles — and it lives in environment variables, not in code and not in a checked-in `application-prod.yml`; the test is 'could this repo be open-sourced right now without leaking secrets?'. Backing services (factor IV) are attached resources reached only through a URL/credentials in config, so swapping a local Postgres for RDS, or a local file store for S3, is a config change with no code change. Violations look like `if (env == \"prod\") host = \"db-prod.internal\"` branching inside the app, a hardcoded connection string, or a per-environment build artifact — which also breaks factor V (build once, run the same artifact everywhere). In practice env vars come from Kubernetes Secrets/Vault/SSM injected at start, and the app fails fast at boot when a required variable is missing.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Twelve Factor Apps",
+        "followUps": ["How do you handle 200 config values without a 200-line env block?", "Why is failing fast on missing config better than a default?"],
+        "tags": ["twelve-factor", "config", "backing-services"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-14",
+        "question": "Explain the twelve-factor rules on disposability and logs, and why both matter in Kubernetes.",
+        "answer": "Disposability (factor IX) means processes start fast and shut down gracefully: on SIGTERM stop accepting new work, finish in-flight requests within the grace period, and return unacknowledged queue messages so another worker picks them up. In Kubernetes that maps to terminationGracePeriodSeconds, a readiness probe that starts failing before the process dies (and usually a preStop sleep so endpoints are deregistered first) — without it, every rollout causes a burst of 502s. Logs (factor XI) are an event stream: the app writes plain unbuffered events to stdout/stderr and never manages files, rotation or shipping; the platform (kubectl logs → Fluent Bit → Loki/ELK) does routing. Emit structured JSON with a trace/request id so lines from many replicas can be correlated — with a dozen pods, grep on a local file is useless.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Twelve Factor Apps",
+        "followUps": ["What order do readiness failure, SIGTERM and endpoint removal actually happen in?", "Why is writing to a log file inside a container harmful?"],
+        "tags": ["twelve-factor", "disposability", "logging", "kubernetes"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-15",
+        "question": "Walk through 1NF, 2NF, 3NF and BCNF with a concrete example.",
+        "answer": "1NF: atomic column values and no repeating groups — `phones = '555-1,555-2'` or columns `item1,item2,item3` violate it; split into rows in a child table. 2NF: 1NF plus no partial dependency on part of a composite key — in `OrderLine(order_id, product_id, qty, product_name)`, `product_name` depends only on `product_id`, so it moves to `Product`. 3NF: 2NF plus no transitive dependency of a non-key on another non-key — `Employee(id, dept_id, dept_name)` must drop `dept_name` to the `Department` table. BCNF is the stricter form: every determinant must be a candidate key; the classic violation is `Enrollment(student, course, instructor)` where an instructor teaches exactly one course, so `instructor → course` holds although `instructor` is not a key, and the fix is to decompose into `(instructor, course)` and `(student, instructor)`.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Normalization",
+        "followUps": ["Which anomaly (insert/update/delete) does each form eliminate?", "Can a BCNF decomposition lose a functional dependency?"],
+        "tags": ["normalization", "1nf", "3nf", "bcnf"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-16",
+        "question": "When is denormalization the right call, and how do you keep the duplicated data from drifting?",
+        "answer": "When a read-heavy path pays too much for joins or aggregates that a normalized schema recomputes constantly: a feed joining 6 tables at 10k rps, a dashboard summing a billion rows, or a report needing a value that is historically frozen. The typical moves are a precomputed counter (`post.comment_count`), a materialized view refreshed on a schedule or CONCURRENTLY, a JSONB blob for the rendered object, or a read model in Elasticsearch fed by events. Crucially, some 'duplication' is not denormalization at all — an order line must store `unit_price` at purchase time, because the price is a fact of the order, not of the product. Keep the copies honest with a single writer plus a mechanism: triggers or an application-level update inside the same transaction, event-driven projection with a reconciliation job that recomputes and diffs nightly, and a monitored staleness metric. Denormalize only after measuring, since you trade write amplification and anomaly risk for read latency.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Normalization",
+        "followUps": ["Trigger or application code for maintaining a counter — which and why?", "How would you detect drift before a customer does?"],
+        "tags": ["denormalization", "materialized-view", "read-model"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-17",
+        "question": "One downstream service slows from 50ms to 4s, and within two minutes every service in the cluster is unhealthy. Explain the mechanism and the fixes.",
+        "answer": "This is a cascading failure driven by thread/connection exhaustion: callers hold a worker per in-flight request, a 4s latency multiplies concurrency by ~80x (Little's Law: L = λ × W), the caller's pool fills, its own callers time out, and the failure walks up the graph. Retries make it worse — a retry storm with 3 attempts triples load exactly when the dependency is weakest, and synchronized client-side retries produce a thundering herd on recovery. Fixes: aggressive per-call timeouts smaller than the caller's own deadline (and deadline propagation so the whole chain gives up together), a circuit breaker that trips on error/slow-call rate and fails fast, bulkheads so one dependency gets its own bounded thread pool, retry budgets (retry only if retries are <10% of traffic) with exponential backoff plus full jitter, and load shedding at the edge returning 429/503 early. Long-term, the call should be asynchronous or the response degraded (cached/default value) rather than blocking.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Failure Modes",
+        "followUps": ["How do you pick the timeout value — from which percentile?", "Why full jitter rather than plain exponential backoff?"],
+        "tags": ["cascading-failure", "retry-storm", "circuit-breaker", "timeouts"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-18",
+        "question": "What is a gray failure, and why do health checks miss it?",
+        "answer": "A gray failure is degraded-but-not-dead behaviour: the process answers /health with 200 because the check only proves the HTTP thread is alive, while real requests are slow, one shard or one AZ is failing, GC pauses are 2s, or a disk returns errors on 5% of writes. The system's internal view (up) differs from the observer's view (unusable), so the load balancer keeps sending traffic and nothing fails over — the classic 'differential observability' problem. Detect it with deep health checks that touch real dependencies, with client-side success/latency metrics rather than server-side liveness, outlier detection that ejects hosts whose error rate deviates from peers, and per-AZ/per-instance percentile dashboards instead of fleet averages, which hide a single bad node. Automatic remediation is typically eject-and-replace, plus enough capacity headroom that removing a suspect host is safe.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Failure Modes",
+        "followUps": ["What's the risk of making liveness probes deep?", "How do you avoid ejecting the whole fleet when the dependency itself is down?"],
+        "tags": ["gray-failure", "health-checks", "outlier-detection"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-19",
+        "question": "A Kafka consumer group stops making progress; lag grows and the same offset is reprocessed forever. What happened and what is the fix?",
+        "answer": "A poison pill: one message that always fails deserialization or processing (bad schema, null field, oversized payload), so the consumer throws, never commits the offset, rebalances or restarts, and re-reads the same record in an infinite loop — blocking every later message in that partition. Fix operationally by identifying the offset (consumer logs plus `kafka-consumer-groups --describe`) and either fixing the code or seeking past it with `--reset-offsets --shift-by 1` for that partition. Fix structurally: bound retries per record, then route the failure to a dead-letter topic with the original headers, error and stack trace, and commit the offset; add an ErrorHandlingDeserializer so malformed bytes become a marker rather than an exception, enforce compatibility with a schema registry, and alert on DLQ rate so failures are visible instead of silent. Then build the DLQ replay tool — a DLQ nobody can reprocess is just a landfill.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Failure Modes",
+        "followUps": ["Why does one poison pill block only one partition, not the topic?", "How do you preserve ordering after replaying from a DLQ?"],
+        "tags": ["poison-pill", "kafka", "dlq", "consumer-lag"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-20",
+        "question": "A cache key with a 1-hour TTL expires and the database instantly gets 20k identical queries. Name the pattern and the mitigations.",
+        "answer": "That is a thundering herd / cache stampede on a hot key (the 'dogpile' effect): every concurrent request misses simultaneously and all recompute the same value. Mitigations: single-flight — first miss takes a short-lived lock (`SET key:lock NX PX 5000`) or a per-key in-process mutex, and the others wait briefly or serve the stale value; probabilistic early expiration (XFetch), where a request refreshes before the TTL with probability rising as expiry approaches; background refresh-ahead for known hot keys; and serve-stale-while-revalidate so a miss never reaches the DB synchronously. Add jitter to TTLs (3600 ± 300s) so a batch of keys populated together does not expire together, which is the same herd at fleet scale — and note that a cold restart or cache flush produces the same spike, so warm the cache before shifting traffic.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Failure Modes",
+        "followUps": ["What TTL jitter distribution would you pick and why?", "How does this differ from cache penetration on a nonexistent key?"],
+        "tags": ["thundering-herd", "cache-stampede", "single-flight"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-21",
+        "question": "An endpoint has p50 of 40ms and p99 of 3s. How do you find the cause, and why is averaging useless here?",
+        "answer": "The average hides a bimodal distribution — 40ms of real work plus a rare 3s stall — so you work on the tail directly: look at the p99 histogram, then use distributed tracing filtered to slow traces to see which span owns the time (DB, downstream call, queue wait, lock). Typical tail causes are GC pauses, a cold cache or cold start, connection-pool wait (queueing, not service time), a lock held across I/O, an N+1 that only triggers for large accounts, or one slow shard. Then profile the right dimension: a CPU flame graph (perf/async-profiler/pprof) if CPU is saturated, a wall-clock or off-CPU profile if the thread is blocked — a CPU profile shows nothing for a thread waiting on a socket. Fix by attacking the queue (pool size, concurrency limits), not just the code, since at high utilization latency is dominated by waiting.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Profiling Performance",
+        "followUps": ["Why can p99 rise while p50 is flat as load increases?", "How do you tell GC pause from pool wait in a trace?"],
+        "tags": ["percentiles", "tracing", "tail-latency", "profiling"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-22",
+        "question": "How do you read a flame graph, and how do CPU, allocation and lock-contention profiles differ?",
+        "answer": "In a flame graph the x-axis is the share of collected samples (not time order, and the alphabetical ordering is meaningless), the y-axis is stack depth, and width equals cost — so you look for wide frames near the top, which are the leaves actually burning the resource; a wide bottom frame is just a common caller. A CPU profile samples on-CPU stacks and answers 'what is the processor executing'. An allocation profile samples by bytes allocated (async-profiler `-e alloc`, Go's `heap`/`allocs`) and finds GC pressure — code that is cheap on CPU but forces collections. A lock-contention/off-CPU profile (`-e lock`, `block`/`mutex` profiles, wall-clock mode) shows time threads spend blocked on monitors or I/O, which never appears in a CPU profile at all. Choosing the wrong one is the classic mistake: a service at 15% CPU and 4s latency needs the off-CPU view, not a CPU flame graph.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Profiling Performance",
+        "followUps": ["What is a differential flame graph used for?", "Why is the JVM's safepoint bias a problem for sampling profilers?"],
+        "tags": ["flame-graph", "profiling", "gc", "lock-contention"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-23",
+        "question": "Your load test reports p99 = 120ms but production users see seconds. What is coordinated omission and how do you avoid it?",
+        "answer": "Coordinated omission happens when the load generator sends the next request only after the previous response arrives (closed-loop). When the server stalls for 2s, the generator simply stops issuing requests, so the many slow requests that would have occurred during the stall are never measured — one 2s sample replaces hundreds, and the tail is silently deleted. Avoid it by testing open-loop against a fixed arrival rate and measuring latency from the request's intended send time, not from when it was actually dispatched: wrk2, Gatling's constantUsersPerSec / injection profiles, k6 with constant-arrival-rate, or HdrHistogram's `recordValueWithExpectedInterval`. Also drop averages in favour of full histograms with p99/p99.9, and sanity-check against real production RUM percentiles, since a test whose throughput drops when the server slows down is measuring the server's permission to be slow.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Profiling Performance",
+        "followUps": ["Why does an open-loop test require queue/backpressure handling in the client?", "How do you pick the target arrival rate?"],
+        "tags": ["coordinated-omission", "load-testing", "percentiles", "hdrhistogram"]
+      },
+      {
+        "id": "tHiUpG9LN35E5RaHddMv5-24",
+        "question": "How would you migrate a large legacy monolith to services with a strangler-fig approach, and where do the API gateway and a BFF fit?",
+        "answer": "Put a facade — gateway or reverse proxy — in front of the monolith so all traffic is routable, then move one capability at a time: build the new service, dual-write or replicate its data, shift a small percentage of traffic by route with the old path as fallback, compare results (shadow traffic / diff testing), then cut over and delete the monolith code so the branch does not live forever. Order the slices by value and independence — a leaf capability with few writes first, never the shared core entity first — and keep every step reversible with a feature flag. The API gateway is the single edge concern: TLS termination, authn, rate limiting, routing and request aggregation shared by all clients. A BFF is one gateway per client type (web, iOS, partner API) owned by that client's team, shaping and aggregating responses for that UI — it exists so a mobile screen needing 5 services makes one call with the fields it needs, instead of bloating a shared gateway with client-specific logic. The risk is BFF proliferation and duplicated cross-cutting logic, so authn/rate limiting stay in the shared edge, and only shaping lives in the BFF.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "SOA",
+        "followUps": ["How do you split the shared database during the strangle?", "What tells you a slice is done and the old code can be deleted?"],
+        "tags": ["strangler-fig", "migration", "api-gateway", "bff"]
+      }
+    ]
+  }
+]

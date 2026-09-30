@@ -1,0 +1,379 @@
+{
+  "id": "m1",
+  "name": "Kafka",
+  "domain": "msg",
+  "domainLabel": "Kafka & messaging",
+  "topics": [
+    "Kafka"
+  ],
+  "questions": [
+    {
+      "id": 5000,
+      "code": "V1",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Kafka'da xabarlar tartibi qay level'da kafolatlanadi?",
+      "options": [
+        "Butun topic bo'yicha global tartib",
+        "Faqat bitta partition ichida tartib kafolatlanadi; bir xil key'li xabarlar bir partitionga tushgani uchun key bo'yicha tartib saqlanadi",
+        "Hech qanday tartib yo'q",
+        "Consumer group bo'yicha"
+      ],
+      "answer": 1,
+      "explanation": "Partition — parallellik va tartib birligi. Agar order_id ni key qilsangiz, o'sha buyurtmaning hamma hodisalari bitta partitionda va tartibda bo'ladi. Global tartib kerak bo'lsa — bitta partition, lekin u throughput'ni cheklaydi. Partition sonini keyin oshirish key→partition taqsimotini o'zgartiradi — tartib kafolati buziladi, shuning uchun oldindan rejalashtiriladi.",
+      "source": "https://kafka.apache.org/documentation/#intro_concepts"
+    },
+    {
+      "id": 5001,
+      "code": "V2",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Consumer group va partition munosabati?",
+      "options": [
+        "Har consumer hamma partitiondan o'qiydi",
+        "Bitta group ichida har partitionni faqat bitta consumer o'qiydi — shuning uchun parallellik partition soni bilan cheklangan (10 partition = maksimal 10 ta ishchi consumer)",
+        "Partition soni consumer sonidan kichik bo'lishi shart",
+        "Group'lar bir-birining offsetini bo'lishadi"
+      ],
+      "answer": 1,
+      "explanation": "Consumer qo'shsangiz ham partitiondan ko'p bo'lsa, ortiqchalari bo'sh turadi. Turli group'lar bir xil xabarlarni mustaqil o'qiydi (fan-out). Consumer qo'shilishi/chiqishi rebalance'ga olib keladi — bu paytda iste'mol to'xtaydi; uzoq ishlov (max.poll.interval.ms dan oshsa) consumer'ni group'dan chiqarib yuboradi va cheksiz rebalance sikli boshlanadi."
+    },
+    {
+      "id": 5002,
+      "code": "V3",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Producer'da <code>acks=1</code> va <code>acks=all</code> farqi?",
+      "options": [
+        "Farqi faqat tezlikda, ma'lumot yo'qolmaydi",
+        "acks=1 — faqat leader yozganini tasdiqlaydi: leader yiqilsa, replikaga yetmagan xabar yo'qoladi. acks=all + min.insync.replicas=2 — kamida ikki nusxa yozilgach tasdiq, ishonchli lekin sekinroq",
+        "acks=all xabarni ikki marta yuboradi",
+        "acks=0 eng ishonchli"
+      ],
+      "answer": 1,
+      "explanation": "To'lov/buyurtma hodisalari uchun: acks=all, min.insync.replicas=2, replication.factor=3, enable.idempotence=true (takror yozishni oldini oladi va retry xavfsiz bo'ladi). Analitika/telemetriya uchun acks=1 maqbul. Yana: retries + max.in.flight.requests.per.connection idempotence bilan birga tartibni saqlaydi.",
+      "source": "https://kafka.apache.org/documentation/#producerconfigs"
+    },
+    {
+      "id": 5003,
+      "code": "V4",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Consumer'da auto-commit yoqilgan (<code>enable.auto.commit=true</code>). Qanday xavf bor?",
+      "options": [
+        "Hech qanday",
+        "Offset ishlov tugashidan oldin commit bo'lishi mumkin — crash bo'lsa xabar qayta o'qilmaydi va yo'qoladi; to'g'ri yo'l: ishlov tugagach qo'lda commit qilish (at-least-once) va consumer'ni idempotent qilish",
+        "Xabarlar ikki marta commit bo'ladi",
+        "Offsetlar umuman saqlanmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Tartib muhim: o'qish → ishlov → commit. Bu at-least-once beradi (crash bo'lsa takror), shuning uchun dedup kerak: message_id yoki biznes key'i bo'yicha unique constraint. Teskarisi (avval commit) at-most-once — yo'qotishga yo'l qo'yadi. 'Exactly-once' faqat Kafka ichidagi transaction'larda, tashqi DB uchun idempotentlik zarur."
+    },
+    {
+      "id": 5004,
+      "code": "V5",
+      "level": "S",
+      "type": "open",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Consumer lag o'sib ketdi (millionlab xabar orqada). Sabablarni va yechimlarni ayting.",
+      "modelAnswer": [
+        "O'lchash: lag qaysi partitionlarda? Hammasidami yoki bir nechtasidami (skew — issiq key)",
+        "Sabab 1: consumer sekin — tashqi API yoki DB kutish, N+1, batch'siz yozish; profil qilib tuzatish",
+        "Sabab 2: parallellik yetmaydi — partition soni cheklab qo'ygan; partition va consumer sonini oshirish",
+        "Sabab 3: rebalance sikli (uzoq ishlov, max.poll.interval.ms), yoki poyson xabar qayta-qayta retry bo'lyapti — DLQ kerak",
+        "Vaqtinchalik chora: og'ir ishni ajratib, faqat qabul qilib boshqa topicga yozish; keraksiz xabarlarni filtrlash",
+        "Oldini olish: lag bo'yicha alert (SLO), yuk testi, batch ishlov va connection pool'ini sozlash"
+      ],
+      "explanation": "Intervyuda kutiladi: avval o'lchash va sababni ajratish, keyin chora. 'Consumer sonini oshiraman' — partition soni yetmasa foyda bermaydi."
+    },
+    {
+      "id": 5005,
+      "code": "V6",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Log compaction (<code>cleanup.policy=compact</code>) nima qiladi?",
+      "options": [
+        "Xabarlarni siqib diskni tejaydi",
+        "Har key uchun oxirgi qiymatni saqlaydi, eskilarini o'chiradi — topic 'joriy holat table'i' bo'lib qoladi (masalan user profili oxirgi holati)",
+        "Xabarlarni arxivga ko'chiradi",
+        "Faqat vaqt bo'yicha o'chiradi"
+      ],
+      "answer": 1,
+      "explanation": "Oddiy retention (delete) — vaqt yoki hajm bo'yicha o'chiradi. Compact — CDC/state uchun: yangi consumer topicni boshidan o'qib joriy holatni tiklay oladi. O'chirish uchun tombstone (key bilan null qiymat) yoziladi. Ikkalasini birga ishlatish ham mumkin (compact,delete)."
+    },
+    {
+      "id": 30065,
+      "code": "SN66",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Kafka'da 'exactly-once' amalda nimani bildiradi?",
+      "options": [
+        "Xabar hech qachon takrorlanmaydi, tarmoq ham buzilmaydi",
+        "Kafka ichida (read-process-write) transactional producer + `isolation.level=read_committed` bilan atomik offset commit; tashqi tizimga yozishda esa idempotent consumer (dedupe kaliti) kerak",
+        "Faqat `acks=all` qo'yish yetarli",
+        "Consumer group avtomatik ta'minlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Kafka EOS Kafka→Kafka oqimida ishlaydi: producer idempotent (PID + sequence), transaksiya offset commit bilan bir atomikada. DB yoki tashqi API'ga yozganda transaksiya Kafka'dan tashqariga chiqmaydi — shuning uchun consumer o'zi idempotent bo'ladi: `unique(message_id)` yoki `ON CONFLICT DO NOTHING`, yoki outbox/inbox jadval. Amaliy formulasi: at-least-once + idempotent handler."
+    },
+    {
+      "id": 30066,
+      "code": "SN67",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Consumer group doimiy rebalance qilyapti (`Rebalancing` loop), lag o'syapti. Sabab?",
+      "options": [
+        "Partition soni kam",
+        "Handler `max.poll.interval.ms`dan uzun ishlaydi — broker consumer'ni o'lik deb hisoblaydi va guruhni qayta taqsimlaydi",
+        "Replikatsiya faktori 1",
+        "`acks=0`"
+      ],
+      "answer": 1,
+      "explanation": "`session.timeout.ms` heartbeat uchun (alohida thread), `max.poll.interval.ms` esa ishlov berish vaqti uchun. Sekin handler — klassik sabab. Choralar: `max.poll.records`ni kamaytirish, ishni background worker'ga berib poll'ni bo'shatish (offset faqat tugagach commit qilinadi), timeoutni realga moslash, cooperative sticky assignor bilan rebalance narxini pasaytirish."
+    },
+    {
+      "id": 30067,
+      "code": "SN68",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Xabarlar tartibi qanday kafolatlanadi va nima uni buzadi?",
+      "options": [
+        "Kafka global tartib beradi",
+        "Tartib faqat bitta partition ichida; kalit bo'yicha partitionlash (masalan `order_id`) tartibni saqlaydi. Buzadi: kalitsiz yuborish, partition sonini o'zgartirish, retry bilan `max.in.flight>1` idempotentsiz, va parallel handler",
+        "Consumer soni tartibni belgilaydi",
+        "Tartib har doim yo'qoladi"
+      ],
+      "answer": 1,
+      "explanation": "Partition sonini oshirish kalit→partition moslashuvini o'zgartiradi — bir entity eventlari ikki partitionda qoladi va tartib buziladi (shu sabab oldindan zapas partition olinadi). Consumer tomonda tartib kerak bo'lsa parallelizm partition darajasida bo'ladi yoki entity kaliti bo'yicha in-order worker (key-based queue)."
+    },
+    {
+      "id": 30068,
+      "code": "SN69",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "`acks=all` bilan ham ma'lumot yo'qolishi mumkin bo'lgan holat?",
+      "options": [
+        "Yo'q, mumkin emas",
+        "`min.insync.replicas=1` bo'lsa: 'all' bitta replica (leader) degani bo'lib qoladi va leader yo'qolsa yozuv yo'qoladi. Shuningdek `unclean.leader.election.enable=true` bo'lsa eskirgan replica leader bo'lib ma'lumot kesiladi",
+        "Faqat disk to'lsa",
+        "Producer buffer kichik bo'lsa"
+      ],
+      "answer": 1,
+      "explanation": "Durability uchun uchlik birga sozlanadi: `replication.factor=3`, `min.insync.replicas=2`, `acks=all`, `unclean.leader.election.enable=false`, va producer'da `enable.idempotence=true` + cheksiz retry. Aks holda konfiguratsiya 'kafolat bordek' ko'rinadi, lekin yo'q."
+    },
+    {
+      "id": 30069,
+      "code": "SN70",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Poison message (parse bo'lmaydigan xabar) partitionni to'sib qo'ydi. To'g'ri strategiya?",
+      "options": [
+        "Offsetni qo'lda o'tkazib yuborish va unutish",
+        "Retry cheklangan marta (backoff bilan), keyin DLQ topikka original xabar + xato konteksti (headerlar, offset, sabab) bilan ko'chirish; DLQ kuzatiladi va qayta o'ynatish vositasi bo'ladi",
+        "Cheksiz retry",
+        "Topikni o'chirish"
+      ],
+      "answer": 1,
+      "explanation": "Bitta xabar butun partitionni to'xtatib qo'yishi — Kafka'ning eng ko'p uchraydigan operatsion muammosi. DLQ'dan tashqari kerak: alert (DLQ hajmi), replay skripti (tuzatilgandan keyin), va xabar sxemasini oldinga/orqaga mos qilish (schema registry, compatibility qoidalari) — poison ko'pincha sxema o'zgarishidan keladi."
+    },
+    {
+      "id": 30070,
+      "code": "SN71",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Consumer lag 10 mln xabarga chiqdi. Qanday tiklaysiz?",
+      "options": [
+        "Consumer sonini 100 ga chiqarish",
+        "Diagnoz: lag bir partitionda yoki hammasida; handler latency va tashqi dependency; keyin — parallelizm partition chegarasida, batch ishlov berish, tashqi chaqiruvni batch/async qilish, kerak bo'lsa vaqtincha kritik bo'lmagan ishni o'tkazib yuborish",
+        "Retentionni 1 soatga tushirish",
+        "Topikni yangisiga ko'chirish"
+      ],
+      "answer": 1,
+      "explanation": "Birinchi savol — bottleneck qayerda: bir partition hot (kalit taqsimoti yomon) yoki handler sekin (N+1 DB query, sinxron HTTP). Consumer'ni partitiondan ko'p qo'yish foyda bermaydi. Tez g'alaba ko'pincha batching (DB'ga bitta `COPY`/bulk insert) va kerak bo'lmagan sinxron chaqiruvni olib tashlash."
+    },
+    {
+      "id": 30071,
+      "code": "SN72",
+      "level": "St",
+      "type": "open",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Servisda DB yozuvi va Kafka'ga event yuborish atomik bo'lishi kerak. Qanday qilasiz?",
+      "modelAnswer": [
+        "Muammo: dual write — DB commit bo'lib, Kafka publish yiqilsa (yoki teskari) tizim nomuvofiq qoladi",
+        "Transactional outbox: bir transaksiyada biznes yozuvi + `outbox` jadvaliga event; alohida publisher (poller yoki CDC/Debezium) outbox'ni o'qib Kafka'ga yuboradi va belgilaydi",
+        "Yetkazib berish at-least-once bo'ladi — consumer idempotent (event_id bo'yicha dedupe / inbox jadval)",
+        "Tartib: outbox'da `aggregate_id` bo'yicha ketma-ketlik va Kafka kaliti aynan shu aggregate_id",
+        "Alternativalar: listen-to-yourself (avval eventni yozib, holatni consumer'da qurish) yoki CDC to'g'ridan-to'g'ri jadvaldan — lekin CDC ichki sxemani tashqariga oqizadi",
+        "Kuzatuv: outbox lag (eng qadimgi yuborilmagan yozuv yoshi) — alert shu metrikaga"
+      ],
+      "explanation": "Intervyuda 'distributed transaction/2PC' javobi kutilmaydi — outbox amaliy standart. Muhim nuqta: atomiklik DB ichida hal qilinadi, tashqarida esa idempotentlik bilan."
+    },
+    {
+      "id": 30072,
+      "code": "SN73",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Log compaction qachon ishlatiladi?",
+      "options": [
+        "Disk tejash uchun har doim",
+        "Kalit bo'yicha oxirgi holat kerak bo'lganda (masalan `user_id -> profile` snapshot, konfiguratsiya, materiallashgan view manbasi) — compaction har kalitning oxirgi qiymatini saqlaydi, `null` value tombstone bilan o'chirish",
+        "Event tarixini saqlash uchun",
+        "Faqat test muhitida"
+      ],
+      "answer": 1,
+      "explanation": "Compacted topic — cheksiz holat jurnali: yangi consumer noldan o'qib to'liq joriy holatni qurishi mumkin (Kafka Streams KTable shunga tayanadi). Cheklov: tarix yo'qoladi (audit uchun yaroqsiz), tombstone `delete.retention.ms` davomida saqlanadi, va compaction fon jarayoni — darhol bo'lmaydi."
+    },
+    {
+      "id": 30250,
+      "code": "SN251",
+      "level": "S",
+      "type": "open",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Real-time event distribution (yengil pub/sub) tizimini loyihalang — miqyos va ishonchlilikka fokus.",
+      "modelAnswer": [
+        "Talablar: eventlar/sekund, iste'molchilar soni, yetkazib berish kafolati (at-least-once?), tartib talabi, latency maqsadi (ms yoki sekund), retention",
+        "Ingest: gateway faqat validatsiya va tenant aniqlash, so'ng Kafka topikka yozish; kalit — tartib kerak bo'lgan entity (`aggregate_id`), partition soni oldindan zapas bilan",
+        "Distribution: consumer group'lar mustaqil (har iste'molchi o'z offseti bilan), fan-out uchun topic-per-event-type yoki bitta topic + filtrlash; tashqi iste'molchilarga webhook yoki WebSocket gateway orqali",
+        "Ishonchlilik: `acks=all` + `min.insync.replicas=2`, idempotent producer, consumer tomonda idempotent handler (event_id dedupe), DLQ va retry topiklari",
+        "Backpressure: sekin iste'molchi butun tizimni to'xtatmasligi kerak — har iste'molchi o'z lag'i bilan ketadi (log modelining asosiy afzalligi); WebSocket qatlamida esa per-client bufer va sekin clientni uzish siyosati",
+        "Sxema: registry + backward compatibility, faqat qo'shimcha maydon; `occurred_at` va versiya har eventda",
+        "Miqyos: partition bo'yicha parallel consumer, KEDA bilan lag asosida skale; hot kalit bo'lsa kalitni sub-shardlash",
+        "Kuzatuv: end-to-end latency (produce→consume), lag per group, DLQ hajmi, dublikat nisbati",
+        "Cheklovlarni aytish: qat'iy global tartib yo'q (faqat partition ichida), exactly-once faqat Kafka ichida — tashqariga idempotentlik bilan"
+      ],
+      "explanation": "Bu savol senior intervyularda aynan shu shaklda so'raladi. Kutiladigan signal — talabni aniqlash, kalit/partition tanlovi, kafolatlar konfiguratsiyasi (acks/min.insync/idempotent), sekin iste'molchi muammosi va cheklovlarni oshkora aytish."
+    },
+    {
+      "id": 30251,
+      "code": "SN252",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Kafka'da `retention.ms` va `log.retention.bytes` tugaganda nima bo'ladi va bu qanday xatarni keltiradi?",
+      "options": [
+        "Eski xabarlar arxivga ko'chadi",
+        "Segmentlar o'chiriladi — hali o'qimagan consumer offseti yo'qolib `OFFSET_OUT_OF_RANGE` oladi va `auto.offset.reset` bo'yicha boshidan yoki oxiridan boshlaydi (ya'ni ma'lumot jim tashlanadi)",
+        "Producer bloklanadi",
+        "Hech narsa o'chmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Bu incident ko'rinishi: consumer bir kecha to'xtab qolgan, retention 24 soat — uyg'onganda `latest` bilan boshlab o'rtadagi eventlarni yo'qotadi. Himoya: retention'ni tiklanish vaqtidan katta qo'yish, lag'ga alert (nafaqat xato), `auto.offset.reset=earliest` bilan ehtiyot (dublikat yaxshi, yo'qotishdan), va muhim ma'lumotni ombor/S3 ga arxivlash."
+    },
+    {
+      "id": 30252,
+      "code": "SN253",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Kafka Streams/consumer'da stateful agregatsiya kerak (5 daqiqali oyna). Holat qayerda saqlanadi?",
+      "options": [
+        "Ilova xotirasida, restartda yo'qolsa qaytadan hisoblanadi",
+        "Mahalliy state store (RocksDB) + changelog topikka backup — instansiya yiqilsa boshqa joyda changelog'dan tiklanadi; kechikkan eventlar uchun grace period va oyna semantikasi (tumbling/hopping/session) aniq belgilanadi",
+        "Faqat Redis'da",
+        "DB'da har event uchun UPDATE"
+      ],
+      "answer": 1,
+      "explanation": "Changelog compacted topic bo'ladi, shuning uchun tiklash oxirgi holatdan boshlanadi. Muhim detallar: standby replica bilan tiklash vaqtini qisqartirish, event-time vs processing-time farqi (kechikkan eventlar `grace` ichida hisobga olinadi), va rebalance paytida state ko'chishi qimmat — `static membership` bu narxni kamaytiradi."
+    },
+    {
+      "id": 30443,
+      "code": "SN444",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Kafka'da ISR va high watermark nima?",
+      "options": [
+        "Consumer offseti",
+        "ISR — leader bilan yetarlicha sinxron replikalar to'plami; high watermark — barcha ISR tomonidan replikatsiya qilingan oxirgi offset. Consumer faqat high watermark'gacha o'qiy oladi — shu bilan 'commit bo'lmagan' ma'lumot ko'rinmaydi va leader almashsa tartib buzilmaydi",
+        "Partition soni",
+        "Retention chegarasi"
+      ],
+      "answer": 1,
+      "explanation": "`replica.lag.time.max.ms` dan orqada qolgan replica ISR'dan chiqariladi — shundan keyin `min.insync.replicas` shartini buzsa producer `acks=all` bilan xato oladi (bu himoya, nosozlik emas). Leader almashganda yangi leader ISR'dan tanlanadi; `unclean.leader.election` yoqilgan bo'lsa ISR'dan tashqaridagi replica ham leader bo'lib ma'lumot kesilishi mumkin."
+    },
+    {
+      "id": 30444,
+      "code": "SN445",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Consumer rebalance protokollari: eager, cooperative, static membership — farqi?",
+      "options": [
+        "Farqi yo'q",
+        "Eager: barcha consumer barcha partitionni qo'yib yuboradi va qayta taqsimlanadi (stop-the-world); cooperative (incremental): faqat ko'chadigan partitionlar qo'yiladi — pauza minimal; static membership (`group.instance.id`): restart/deploy paytida a'zolik saqlanadi va rebalance umuman bo'lmaydi (session timeout ichida)",
+        "Static eskirgan",
+        "Cooperative faqat Streams'da"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy tavsiya: `CooperativeStickyAssignor` + static membership — deploy paytidagi lag sakrashini deyarli yo'qotadi. Static membership'da diqqat: instansiya haqiqatan o'lsa ham session timeout tugaguncha uning partitionlari qayta taqsimlanmaydi, shuning uchun timeout deploy vaqtiga moslanadi."
+    },
+    {
+      "id": 30445,
+      "code": "SN446",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Kafka",
+      "domain": "msg",
+      "section": "m1",
+      "question": "Kafka transactional producer ichkarida qanday ishlaydi?",
+      "options": [
+        "DB tranzaksiyasi kabi",
+        "Transaction coordinator (ichki `__transaction_state` topic) `transactional.id` bo'yicha holat yuritadi: producer epoch bilan zombi instansiyalar bloklanadi (fencing), yozuvlar commit/abort markerlari bilan belgilanadi, va `read_committed` consumer abort qilingan yozuvlarni o'tkazib yuboradi",
+        "2PC bilan DB'ga ulanadi",
+        "Faqat bitta partitionda"
+      ],
+      "answer": 1,
+      "explanation": "Muhim cheklov: atomiklik faqat Kafka ichida (bir necha partition/topic + consumer offset). Tashqi DB bilan atomiklik yo'q — shuning uchun outbox yoki idempotent consumer kerak. Narxi: latency oshadi (markerlar, coordinator round-trip) va `transactional.id` har instansiya uchun barqaror bo'lishi kerak, aks holda fencing ishlamaydi."
+    }
+  ]
+}

@@ -1,0 +1,248 @@
+[
+  {
+    "topicId": "EwvLPSI6AlZ4TnNIJTZA4",
+    "topicTitle": "Learn about APIs",
+    "questions": [
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-01",
+        "question": "What are the architectural constraints of REST, and which one is most often skipped in practice?",
+        "answer": "REST defines six constraints: client-server, statelessness, cacheability, uniform interface, layered system, and optional code-on-demand. The uniform interface breaks down into resource identification via URIs, manipulation through representations, self-descriptive messages, and HATEOAS. The constraint almost always skipped is HATEOAS - most 'REST' APIs return plain JSON with no hypermedia links, which Roy Fielding's own critique says disqualifies them from being REST. Statelessness is also frequently violated by server-side sessions stored in memory.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "REST",
+        "followUps": ["Why does statelessness help horizontal scaling?", "What does code-on-demand look like in a real API?"],
+        "tags": ["rest", "fielding", "constraints"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-02",
+        "question": "Explain the Richardson Maturity Model levels and place a typical CRUD JSON API on it.",
+        "answer": "Level 0 is a single endpoint tunneling everything over POST (RPC-over-HTTP, like SOAP). Level 1 introduces distinct resources (/orders/42) but still one verb. Level 2 uses HTTP verbs and status codes correctly: GET /orders/42 returns 200, POST /orders returns 201 with Location, DELETE returns 204. Level 3 adds hypermedia controls (HATEOAS) so responses carry links like {\"rel\":\"cancel\",\"href\":\"/orders/42/cancel\"}. A typical CRUD JSON API sits at Level 2, which is where most teams deliberately stop because the tooling payoff of Level 3 is small.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "REST",
+        "followUps": ["What does Level 3 buy you that Level 2 does not?", "Which media types support hypermedia natively?"],
+        "tags": ["rest", "richardson", "maturity-model"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-03",
+        "question": "Which HTTP methods are safe, which are idempotent, and why is POST neither?",
+        "answer": "Safe methods (GET, HEAD, OPTIONS, TRACE) must not change server state. Idempotent methods (GET, HEAD, OPTIONS, TRACE, PUT, DELETE) produce the same server state whether called once or N times - DELETE /orders/42 twice leaves the order deleted, even if the second call returns 404. POST is neither: it is defined as 'process this representation according to the resource's own semantics', so two identical POST /payments calls normally create two payments. That is exactly why POST needs an application-level idempotency mechanism.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "REST",
+        "followUps": ["Is PATCH idempotent?", "Can a safe method still have side effects like logging or rate-limit counters?"],
+        "tags": ["http-methods", "idempotency", "safety"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-04",
+        "question": "A mobile client on a flaky network times out during POST /payments and retries. The customer is charged twice. How do you design idempotency keys to fix this?",
+        "answer": "The client generates a UUID per logical payment attempt and sends it as the Idempotency-Key header; retries of the same attempt reuse the same key. The server stores (key, request fingerprint, response) in a table with a unique constraint on the key, inside the same transaction that creates the payment - so the insert either wins or violates the constraint. On a duplicate key with a matching request hash, replay the stored response including the original status code; on a mismatched hash return 422 (or 409) because the key was reused for a different body. Keys need a TTL (Stripe uses 24h) and in-flight requests must be handled with a lock or a 409 'request in progress' rather than a second charge.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "REST",
+        "followUps": ["How do you handle a crash between charging the PSP and storing the response?", "Why store the request hash and not just the key?"],
+        "tags": ["idempotency", "payments", "retries", "reliability"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-05",
+        "question": "When do you choose POST vs PUT vs PATCH, and what are the semantics of each?",
+        "answer": "POST creates a subordinate resource where the server assigns the identifier - POST /articles returns 201 plus Location: /articles/9. PUT replaces the resource at a client-known URI in full; missing fields are treated as removed, and it is idempotent, so it can also create at that URI (upsert) returning 201 or 204. PATCH applies a partial modification, typically with application/merge-patch+json (RFC 7396, where null deletes a field) or application/json-patch+json (RFC 6902, an op array). PATCH is not inherently idempotent - a JSON Patch {\"op\":\"add\",\"path\":\"/tags/-\"} appends each time it runs.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "REST",
+        "followUps": ["How do you make PATCH safe against lost updates?", "Why is merge-patch unable to update a single array element?"],
+        "tags": ["http-methods", "put", "patch", "json-patch"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-06",
+        "question": "Distinguish 401 vs 403, 400 vs 422, and explain when 409 and 202 are the right answers.",
+        "answer": "401 Unauthorized means authentication failed or is missing and MUST come with a WWW-Authenticate header - the client should re-authenticate; 403 Forbidden means the identity is known but lacks permission, so retrying with the same credentials is pointless. 400 Bad Request means the payload is malformed at the syntax level (broken JSON, wrong content type); 422 Unprocessable Content means the syntax is valid but the semantics fail validation, such as email format or a negative amount. 409 Conflict signals a state conflict - an optimistic-locking version mismatch, a duplicate unique field, or cancelling an already-shipped order. 202 Accepted means the request was queued for asynchronous processing; return a Location or a status URL so the client can poll the job.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "JSON APIs",
+        "followUps": ["Why do some APIs deliberately return 404 instead of 403?", "What status do you return when a rate limit is hit, and which header accompanies it?"],
+        "tags": ["status-codes", "http", "error-handling"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-07",
+        "question": "A client reports that paging through /events?page=N&limit=50 skips and duplicates records during high write traffic. Diagnose and fix.",
+        "answer": "Offset pagination computes OFFSET N*50 against a live table; rows inserted or deleted before the current offset shift the window, so items get skipped or repeated between pages. It also degrades in cost because the database must scan and discard all skipped rows, so deep pages get slow. The fix is cursor (keyset) pagination: order by a stable, unique, immutable tuple such as (created_at, id) and query WHERE (created_at, id) < ($ts, $id) ORDER BY created_at DESC, id DESC LIMIT 50, returning an opaque base64 cursor as next_cursor. Trade-off: no random page jumps and no total count, so keep offset only for small admin tables where 'page 7' matters.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "JSON APIs",
+        "followUps": ["Why must the cursor tiebreaker column be unique?", "How do you support sorting by a mutable column with cursors?"],
+        "tags": ["pagination", "cursor", "keyset", "performance"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-08",
+        "question": "Compare API versioning strategies and say what actually counts as a breaking change.",
+        "answer": "Options are URI versioning (/v1/orders - most visible, cache- and log-friendly, but duplicates routes), custom header or media-type versioning (Accept: application/vnd.acme.v2+json - clean URIs, harder to test in a browser and often broken by caches), and query parameter (?version=2). Breaking changes are: removing or renaming a field or endpoint, tightening validation, changing a type or a status code, changing default values, or making an optional request field required. Adding optional response fields and new endpoints is additive, so clients must be built tolerant readers that ignore unknown fields. In practice most teams use URI versioning for major versions plus a deprecation policy with Deprecation and Sunset headers and a dated end-of-life.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "REST",
+        "followUps": ["How do you version only a single endpoint without bumping the whole API?", "How would you measure which clients still use v1 before shutting it off?"],
+        "tags": ["versioning", "backward-compatibility", "deprecation"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-09",
+        "question": "Explain ETag and conditional requests, and how you use them to prevent lost updates.",
+        "answer": "The server returns ETag: \"abc123\" (a strong validator derived from the representation or a row version) with a GET. On the next read the client sends If-None-Match: \"abc123\" and gets 304 Not Modified with an empty body, saving bandwidth. For writes the client sends If-Match: \"abc123\" on PUT/PATCH; if the resource changed meanwhile the server returns 412 Precondition Failed instead of silently overwriting another user's edit - this is optimistic concurrency control over HTTP. If-Match: * plus a create can also enforce 'only update if it exists', and Last-Modified/If-Modified-Since is the weaker second-resolution alternative.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "JSON APIs",
+        "followUps": ["What is the difference between a strong and a weak ETag?", "Why is 428 Precondition Required useful on a write endpoint?"],
+        "tags": ["etag", "caching", "concurrency", "conditional-requests"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-10",
+        "question": "What is HATEOAS, and what real problem does it solve versus the cost it adds?",
+        "answer": "HATEOAS means responses embed the available state transitions as links, so a client discovers what it can do next instead of hardcoding URL templates - an order in state 'pending' includes a 'cancel' link that disappears once it ships. The benefit is that server-side workflow rules and URL structure can change without a client release, and the client's UI can enable actions directly from the links. The cost is bigger payloads, a media type that clients must understand (HAL, JSON:API, Siren), and client code that is significantly harder to write than fetch('/orders/42'). It pays off for long-lived public or machine-driven APIs and rarely pays off for a single-team backend serving one SPA.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "REST",
+        "followUps": ["How does JSON:API structure links and relationships?", "How do you document a hypermedia API in OpenAPI?"],
+        "tags": ["hateoas", "hypermedia", "hal", "json-api"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-11",
+        "question": "Your error responses are inconsistent across services. How does RFC 7807/9457 problem details standardize them?",
+        "answer": "RFC 9457 (which obsoletes RFC 7807) defines the media type application/problem+json with the members type (a URI identifying the problem class), title (a short human-readable summary), status (the HTTP code), detail (an explanation of this occurrence), and instance (a URI for this specific occurrence). Extensions are allowed as additional members, for example an errors array of field-level validation failures or a traceId. Clients switch on type, not on parsing prose from title, so wording can change without breaking anyone. Key discipline: the type URI should be stable and documented, and detail must never leak stack traces, SQL, or internal hostnames.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "JSON APIs",
+        "followUps": ["How do you carry a correlation id through problem details for support tickets?", "How would you map framework exceptions to problem types centrally?"],
+        "tags": ["rfc7807", "rfc9457", "error-handling", "problem-details"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-12",
+        "question": "What is the OpenAPI Specification, and what does a spec-first workflow look like?",
+        "answer": "OpenAPI (3.0/3.1; 3.1 is a full JSON Schema 2020-12 superset) is a machine-readable YAML/JSON description of paths, operations, parameters, request/response schemas, security schemes, and examples. Spec-first means the contract is written and reviewed before code: the spec lives in the repo, generates server stubs and typed clients (openapi-generator, oapi-codegen, orval), backs a mock server (Prism) so frontend work starts on day one, and renders documentation. CI then lints the spec (Spectral) and runs a breaking-change diff (oasdiff) against the main branch so removing a field fails the build. Code-first annotations are an acceptable alternative, but only if the generated spec is still diffed and linted in CI.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Open API Specs",
+        "followUps": ["What changes between OpenAPI 3.0 and 3.1?", "How do you describe polymorphic payloads with oneOf and discriminator?"],
+        "tags": ["openapi", "swagger", "spec-first", "codegen"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-13",
+        "question": "A frontend deploy broke because the backend silently renamed a response field. Both sides had green unit tests. What testing would have caught it?",
+        "answer": "Unit tests with hand-written mocks cannot catch it because the mock encodes the old shape. Two complementary controls catch it: schema/contract validation of real responses against the OpenAPI spec in the backend's integration tests (Dredd, schemathesis, or a response-validating middleware in CI), and consumer-driven contract testing with Pact, where the frontend publishes expectations to a broker and the backend build fails verification if it stops satisfying them. On top of that, an oasdiff breaking-change gate on the spec in the pull request would have flagged the rename before merge, and can-i-deploy checks would block the release. The rule is: the spec must be generated from or verified against running code, otherwise it drifts.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Open API Specs",
+        "followUps": ["How does consumer-driven contract testing differ from end-to-end testing?", "What is the role of the Pact broker in a can-i-deploy gate?"],
+        "tags": ["contract-testing", "pact", "openapi", "ci"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-14",
+        "question": "What are the three parts of a JWT, and what exactly does the signature guarantee?",
+        "answer": "A JWS-format JWT is base64url(header).base64url(payload).base64url(signature), where the header carries alg and usually kid, and the payload carries claims such as iss, sub, aud, exp, nbf, iat, jti. The signature guarantees integrity and authenticity - that the holder of the key produced these bytes and nobody altered them - but it does NOT provide confidentiality: the payload is base64url encoded, not encrypted, so anyone with the token can read it. That means no passwords, PII, or secrets in claims unless you use JWE. Verification must check the signature, exp/nbf, and iss/aud; skipping aud lets a token minted for another service be replayed against yours.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "JWT",
+        "followUps": ["What is the jti claim used for?", "When would you use JWE instead of JWS?"],
+        "tags": ["jwt", "jws", "claims"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-15",
+        "question": "HS256 vs RS256 for signing JWTs: when do you pick each?",
+        "answer": "HS256 is HMAC-SHA256 with one shared secret used for both signing and verification, so every service that validates tokens can also forge them - fine for a single monolith issuing and consuming its own tokens. RS256 (and ES256) is asymmetric: the issuer signs with a private key and consumers verify with the public key, published as a JWKS at /.well-known/jwks.json with kid-based key selection. Pick RS256/ES256 whenever tokens cross a trust boundary - multiple services, third parties, mobile clients, or any OIDC setup - because it enables rotation and revokes nothing from the verifiers' side. ES256 gives much shorter signatures than RS256 at equivalent strength, which matters for header size.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "JWT",
+        "followUps": ["How does kid-based key rotation work without downtime?", "Why must a verifier cache but also periodically refresh the JWKS?"],
+        "tags": ["jwt", "hs256", "rs256", "jwks", "crypto"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-16",
+        "question": "Explain the 'alg: none' and the HS256/RS256 algorithm-confusion attacks, and how to prevent both.",
+        "answer": "In the 'alg': 'none' attack the attacker strips the signature and sets the header algorithm to none; a library that trusts the header accepts an unsigned, attacker-authored payload. In algorithm confusion, a server that verifies RS256 is sent a token with alg switched to HS256, signed with the server's own PUBLIC RSA key as the HMAC secret - since the public key is published in the JWKS, the attacker can compute a valid MAC and the library verifies it if it picks the algorithm from the token. The fix in both cases is the same: never let the token choose the algorithm. Pin the expected algorithm at verification (jwt.verify(token, key, {algorithms: ['RS256']})), disallow none, and use typed key objects so an RSA public key cannot be used as an HMAC secret.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "JWT",
+        "followUps": ["Why does an unpinned kid also enable key-injection via jku/x5u headers?", "How would you detect such an attack in logs?"],
+        "tags": ["jwt", "security", "algorithm-confusion", "vulnerability"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-17",
+        "question": "Design refresh token rotation with reuse detection for a mobile app.",
+        "answer": "Issue a short-lived access token (5-15 minutes) and a long-lived, opaque, single-use refresh token stored hashed server-side with a family id. Every refresh call invalidates the presented token and issues a new access/refresh pair in the same family - that is rotation. If a refresh token that was already used is presented again, treat it as theft: revoke the entire family so both the attacker and the legitimate client are logged out and forced to re-authenticate, and alert. Store the refresh token in platform secure storage (Keychain/Keystore) on mobile or an HttpOnly, Secure, SameSite cookie on web, and handle the race where a flaky network causes a legitimate double-refresh by allowing a short grace window on the immediately-previous token.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Token Authentication",
+        "followUps": ["How do you keep concurrent tabs from triggering reuse detection?", "What do you log for a forensic trail when a family is revoked?"],
+        "tags": ["refresh-token", "rotation", "reuse-detection", "auth"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-18",
+        "question": "An admin's account is compromised and you must log them out immediately, but your access tokens are stateless JWTs valid for one hour. What are your options?",
+        "answer": "A stateless JWT is valid until exp by definition - the only true fixes reintroduce state or shorten the window. Practical options: keep access tokens short (5-15 min) so revocation of the refresh token bounds the damage; maintain a denylist of jti values (or a per-user 'tokens_not_valid_before' timestamp) in Redis checked on each request, keyed only until exp so it stays small; or bump a per-user token version claim so all older tokens fail validation. The tokens_not_valid_before approach is usually best because it is one small key per affected user rather than a list per token. Emergency-only global invalidation can be done by rotating the signing key, at the cost of logging everyone out.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Token Authentication",
+        "followUps": ["What latency and availability cost does the Redis check add to every request?", "How do you propagate revocation across regions?"],
+        "tags": ["jwt", "revocation", "stateless", "incident-response"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-19",
+        "question": "How does HTTP Basic authentication work, and what must be true for it to be acceptable?",
+        "answer": "The client sends Authorization: Basic base64(username:password) on every request; the server returns 401 with WWW-Authenticate: Basic realm=\"...\" when it is missing. Base64 is encoding, not encryption, so the credential is effectively plaintext - it is only acceptable over TLS, and never with the credentials in a URL or a query string where they land in logs, proxies, and browser history. Because the password is replayed on every call, it must be verified against a slow hash (bcrypt/argon2), which makes it expensive per request unless you cache or issue a session/token after the first call. In practice it is fine for machine-to-machine internal calls and health endpoints, but for user-facing auth prefer a token flow since Basic has no logout, no scopes, and no expiry.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Basic Authentication",
+        "followUps": ["Why is Digest auth not a good modern substitute?", "How do constant-time comparisons matter when checking API keys?"],
+        "tags": ["basic-auth", "tls", "http-auth"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-20",
+        "question": "Walk through the OAuth 2.0 authorization code flow with PKCE and name each party.",
+        "answer": "Parties: resource owner (the user), client (your app), authorization server, and resource server (the API). The client generates a random code_verifier, derives code_challenge = base64url(SHA256(verifier)), and redirects the browser to /authorize with response_type=code, client_id, redirect_uri, scope, state, code_challenge and code_challenge_method=S256. The user authenticates and consents, the authorization server redirects back to redirect_uri with a short-lived single-use code plus the state that the client must verify against CSRF. The client then POSTs to /token with the code and the original code_verifier; the server recomputes the challenge and, on a match, returns an access token (and optionally a refresh token and id_token), which the client sends to the resource server as Authorization: Bearer.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "OAuth",
+        "followUps": ["What attack does PKCE stop that state does not?", "Why must redirect_uri be matched exactly rather than by prefix?"],
+        "tags": ["oauth2", "pkce", "authorization-code", "flow"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-21",
+        "question": "What changes in OAuth 2.1 compared to OAuth 2.0, and why?",
+        "answer": "OAuth 2.1 consolidates the security best-current-practice into the core: PKCE is mandatory for all clients using the authorization code flow, not just public ones; the implicit grant (response_type=token) is removed because tokens in the URL fragment leak via history, referrers and logs; the resource owner password credentials grant is removed because it trains users to hand their password to third-party apps and blocks MFA; redirect URIs must be compared with exact string matching; and bearer tokens may no longer be passed in query strings. Refresh tokens for public clients must be sender-constrained or one-time-use with rotation. Net effect: authorization code + PKCE for user-facing apps, client credentials for machine-to-machine, device code for input-constrained devices.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "OAuth",
+        "followUps": ["What is a sender-constrained token (DPoP or mTLS) and how does it help?", "What replaces the password grant for a first-party mobile login?"],
+        "tags": ["oauth2.1", "pkce", "implicit-grant", "security"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-22",
+        "question": "A team implemented 'Login with Provider' by calling the provider's /userinfo endpoint with an access token they received from the mobile client. Why is this unsafe, and what is the correct approach?",
+        "answer": "This is the confused-deputy problem: an access token is a bearer credential for an API, not proof of authentication, and it carries no audience binding the team can check, so an attacker can take a token their own malicious app obtained for the same provider and present it to log in as that user. OAuth 2.0 is an authorization protocol; authentication belongs to OpenID Connect, which adds an id_token - a signed JWT with iss, aud (your client_id), sub, nonce and exp. The correct approach is the authorization code flow with PKCE where the backend exchanges the code, then validates the id_token signature against the provider's JWKS and checks iss, aud equals your client_id, exp, and the nonce it originally sent. If you must accept an access token, at minimum call the provider's token introspection endpoint and verify the client_id it was issued to.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Authentication",
+        "followUps": ["What is the difference between the nonce and the state parameter?", "Why is sub, not email, the correct user identifier from an id_token?"],
+        "tags": ["oidc", "oauth2", "id-token", "confused-deputy"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-23",
+        "question": "Compare session-cookie authentication with token (JWT) authentication for a web app, including where to store the token.",
+        "answer": "Sessions keep state server-side (Redis/DB) with an opaque id in an HttpOnly cookie: revocation is instant, the cookie reveals nothing, but every request needs a session lookup and cookies need CSRF defenses (SameSite=Lax/Strict plus a CSRF token). JWTs are self-contained, so any service can verify them with a public key and no shared session store - good for microservices and third-party APIs - but they cannot be revoked before exp without adding state back. For browsers, storing a JWT in localStorage exposes it to any XSS, so the safer pattern is an HttpOnly, Secure, SameSite cookie for the token (or a short access token in memory plus a refresh token in an HttpOnly cookie). Choose sessions for a classic server-rendered app and tokens when multiple independent services or native clients must verify identity.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "Authentication",
+        "followUps": ["How does SameSite=Lax interact with an OAuth redirect back to your site?", "Why does 'JWTs are stateless so they scale better' often not hold in practice?"],
+        "tags": ["sessions", "jwt", "csrf", "xss", "cookies"]
+      },
+      {
+        "id": "EwvLPSI6AlZ4TnNIJTZA4-24",
+        "question": "Your public JSON API returns 200 OK with {\"success\": false, \"error\": \"...\"} for failures. A customer's retry library never retries and their monitoring shows zero errors. Explain the design flaw and the migration path.",
+        "answer": "Tunneling errors inside a 200 breaks every layer that reads HTTP semantics: HTTP client libraries do not raise, retry policies keyed on 5xx never fire, CDNs and proxies cache the error response, and APM dashboards report a 100% success rate while users are failing. The correct mapping is 4xx for client faults (400 malformed, 401 unauthenticated, 403 unauthorized, 404 missing, 409 conflict, 422 semantic validation, 429 rate limited) and 5xx for server faults, with the body as application/problem+json. Migrate without breaking clients by introducing correct codes behind a new version or an opt-in header (or a new media type), publishing a Deprecation/Sunset timeline, tracking which client ids still use the old behavior, and flipping the default only after that count is near zero. Keep the legacy success field in the body during the transition so existing parsers keep working.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "JSON APIs",
+        "followUps": ["Which 4xx codes should a client actually retry, and after which header?", "How would you instrument adoption of the new behavior per client?"],
+        "tags": ["status-codes", "error-handling", "migration", "api-design"]
+      }
+    ]
+  }
+]

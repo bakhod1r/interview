@@ -1,0 +1,343 @@
+{
+  "id": "i3",
+  "name": "Observability & SRE",
+  "domain": "infra",
+  "domainLabel": "Infrastructure & DevOps",
+  "topics": [
+    "Logging",
+    "Metrics",
+    "Tracing",
+    "Alerting",
+    "SRE"
+  ],
+  "questions": [
+    {
+      "id": 1025,
+      "code": "B26",
+      "level": "P",
+      "type": "mcq",
+      "topic": "SRE",
+      "domain": "infra",
+      "section": "i3",
+      "question": "SLO 99.9% (oylik), error budget tugadi. Yetuk tashkilot nima qiladi?",
+      "options": [
+        "SLOni 99% ga tushiradi",
+        "Oldindan kelishilgan siyosat bo'yicha: yangi feature release'lar muzlatiladi, jamoa reliability ishiga o'tadi, budget tiklangach davom etadi",
+        "Hech narsa — SLO shunchaki raqam",
+        "On-call muhandisni jazolaydi"
+      ],
+      "answer": 1,
+      "explanation": "99.9% ≈ oyiga 43 daqiqa. Error budget — tezlik va ishonchlilik o'rtasidagi kelishuv; ma'no faqat oqibat bo'lganda. SLO userga ko'rinadigan SLI'ga (success'li query'lar %, p99 latency) asoslanadi, CPU'ga emas."
+    },
+    {
+      "id": 1028,
+      "code": "B29",
+      "level": "P",
+      "type": "open",
+      "topic": "SRE",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
+      "modelAnswer": [
+        "Paved road: standart servis shabloni — logging, tracing, metrikalar, health check, graceful shutdown tayyor",
+        "Production readiness checklist va avtomatik tekshiruvlar (CI)",
+        "SLO va on-call egalik har jamoada; blameless postmortem, takrorlanuvchi sabablar tahlili",
+        "Platforma jamoasi mahsulot sifatida — ichki mijozlar fikri",
+        "Metrikalar: DORA (deploy chastotasi, lead time, change failure rate, MTTR)"
+      ],
+      "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
+    },
+    {
+      "id": 2019,
+      "code": "I20",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Logging",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Log, metrika va trace farqi?",
+      "options": [
+        "Uchalasi bir xil ma'lumot",
+        "Log — alohida hodisa yozuvi (nima bo'ldi, kontekst bilan); metrika — vaqt bo'yicha agregat son (RPS, latency, xatolar %); trace — bitta query'ning servislar bo'ylab yo'li va har qadamning vaqti",
+        "Metrika faqat CPU uchun",
+        "Trace — bu log fayli"
+      ],
+      "answer": 1,
+      "explanation": "Ishlatish tartibi: metrika 'muammo bor va qayerda' (alert), trace 'qaysi qadam sekin', log 'aniq nima bo'ldi'. Metrika arzon va agregat; log qimmat (hajm); trace odatda sampling bilan. Uchalasini bog'lovchi element — trace_id."
+    },
+    {
+      "id": 2020,
+      "code": "I21",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Logging",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Mikroservislarda loglarni tekshirishni haqiqatan osonlashtiradigan narsa?",
+      "options": [
+        "Har servisda o'z fayl formatida yozish",
+        "Strukturaviy (JSON) log + har query'ga trace_id/correlation_id berib, uni hamma servisga header orqali uzatish; markaziy log tizimi",
+        "Ko'proq log yozish",
+        "Faqat xatolarni loglash"
+      ],
+      "answer": 1,
+      "explanation": "Bitta query 6 ta servisdan o'tadi — trace_id'siz ularni bog'lab bo'lmaydi. Har logda: trace_id, service, level, user/tenant id (PII'siz), xabar. Qo'shimcha: sampling va log level'si (debugni prodda yoqmaslik), maxfiy ma'lumotni maskalash, saqlash muddati va narxi."
+    },
+    {
+      "id": 2021,
+      "code": "I22",
+      "level": "M",
+      "type": "code",
+      "topic": "Tracing",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Trace servis chegarasida uzilib qolyapti (har servis alohida trace ko'rsatadi). Sabab?",
+      "snippet": "// A servis\nspan = tracer.start_span(\"call_b\")\nresp = http.get(\"http://b/api/items\")   # header yo'q\nspan.end()",
+      "options": [
+        "B servisda tracing yoqilmagan",
+        "Trace konteksti (traceparent header) uzatilmagan — HTTP client'ga propagation qo'shish kerak (instrumented client yoki inject(headers))",
+        "Span nomi noto'g'ri",
+        "Sampling 0 ga teng"
+      ],
+      "answer": 1,
+      "explanation": "Distributed tracing — kontekstni uzatishga asoslangan (W3C traceparent). OpenTelemetry auto-instrumentation buni ko'pincha o'zi qiladi, lekin qo'lda yozilgan client, message queue (headerni xabar atributiga qo'yish) va async ish (goroutine/thread) — tipik uzilish nuqtalari."
+    },
+    {
+      "id": 2022,
+      "code": "I23",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Metrics",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Servis uchun qaysi to'plam asosiy metrika sifatida eng foydali (RED metodikasi)?",
+      "options": [
+        "CPU, RAM, disk",
+        "Rate (query/s), Errors (xato %), Duration (latency taqsimoti: p50/p95/p99)",
+        "Faqat o'rtacha javob vaqti",
+        "Log row'lari soni"
+      ],
+      "answer": 1,
+      "explanation": "RED — servis uchun (userga ko'rinadigan), USE (Utilization, Saturation, Errors) — resurs uchun. O'rtacha latency yashiradi: 100 ta query'dan 99 tasi 10ms, bittasi 5s bo'lsa o'rtacha 60ms — 'yaxshi', lekin p99 5s. Shuning uchun persentil va histogram; SLO ham persentilga qo'yiladi."
+    },
+    {
+      "id": 2023,
+      "code": "I24",
+      "level": "S",
+      "type": "open",
+      "topic": "Alerting",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Alertlar juda ko'p, jamoa ularga e'tibor bermay qo'ydi. Nima qilasiz?",
+      "modelAnswer": [
+        "Symptom-based alert: user his qiladigan narsa (xato %, latency, SLO burn rate) — sabab-based (CPU 80%) emas",
+        "Har alert harakat talab qilishi shart: harakat yo'q bo'lsa — dashboard yoki ticket, page emas",
+        "SLO va error budget burn rate bo'yicha ko'p tezlikli alert (tez yonish — darhol, sekin — ish vaqtida)",
+        "Shovqinlarni o'lchash: har alert bo'yicha 'foydali/bekor' statistikasi, muntazam tozalash",
+        "Har page uchun runbook havolasi; takrorlanuvchi alertlarni avtomatlashtirish",
+        "O'chirish/ta'mirlash oynasi (maintenance window), flapping uchun 'for' davri"
+      ],
+      "explanation": "Senior/Staff signal: alert charchashi — texnik emas, jarayon muammosi. O'lchov: haftada nechta page, nechtasi harakatga olib keldi."
+    },
+    {
+      "id": 2024,
+      "code": "I25",
+      "level": "St",
+      "type": "open",
+      "topic": "Metrics",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Metrika tizimi hisobi keskin oshdi (kardinallik portlashi). Sabab va yechim?",
+      "modelAnswer": [
+        "Har label kombinatsiyasi — alohida vaqt row'i; user_id, email, URL yo'li, trace_id kabi labellar millionlab row yaratadi",
+        "Yechim: yuqori kardinallikdagi labellarni olib tashlash yoki bucketlash (/users/123 → /users/:id)",
+        "Bunday tafsilot metrikada emas, log/trace'da (exemplar bilan bog'lash)",
+        "Saqlash muddati va agregatsiya (downsampling) siyosati",
+        "Kardinallik limiti va monitoring: eng ko'p row yaratayotgan metrikani kuzatish"
+      ],
+      "explanation": "Staff signal: observability xarajatini mahsulot xarajati sifatida boshqarish — qaysi signal qancha turadi va qancha qiymat beradi."
+    },
+    {
+      "id": 14029,
+      "code": "SR30",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Logging",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Go 1.21+ da strukturaviy loglash uchun nima ishlatiladi?",
+      "options": [
+        "fmt.Println",
+        "log/slog — standart kutubxonadagi strukturaviy logger: JSON yoki matn handler, daraja, atributlar va context bilan ishlaydi (slog.InfoContext)",
+        "Faqat uchinchi tomon kutubxonalari",
+        "panic bilan loglash"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qoidalar: har logda trace_id va so'rov konteksti (handler orqali), maxfiy ma'lumotni maskalash, daraja siyosati (debug prodda o'chiq), va xatoni bir marta — eng yuqori qatlamda loglash. slog handler'ini almashtirib, chiqish formatini muhitga qarab o'zgartirish mumkin.",
+      "source": "https://pkg.go.dev/log/slog"
+    },
+    {
+      "id": 30035,
+      "code": "SN36",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tracing",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Distributed tracing joriy qilindi, lekin sekin so'rovlar trace'da ko'rinmaydi. Sabab?",
+      "options": [
+        "Jaeger buzilgan",
+        "Head-based sampling 1% — sekin so'rovlar tasodifan tushmaydi; tail-based sampling yoki latency/xato bo'yicha majburiy sampling kerak",
+        "Trace ID yo'q",
+        "Log yetarli emas"
+      ],
+      "answer": 1,
+      "explanation": "Head sampling qarorni boshida qabul qiladi — natija noma'lum. Tail-based sampling (OTel Collector) butun trace'ni yig'ib, keyin 'sekin yoki xato bo'lsa saqla' qaroriga keladi. Amalda aralash: 1% baseline + 100% xato/p99 ustidagi. Shuningdek context propagation (traceparent) har hop va queue orqali o'tishi kerak, aks holda trace uzilib qoladi."
+    },
+    {
+      "id": 30036,
+      "code": "SN37",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Metrics",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Prometheus'da p99 latency'ni to'g'ri o'lchash uchun?",
+      "options": [
+        "`avg(response_time)` yetarli",
+        "Histogram (`_bucket`) + `histogram_quantile` — bucket chegaralari SLO atrofida tanlanadi; oldindan hisoblangan summary quantile'lari agregatlanmaydi",
+        "Gauge'da oxirgi qiymat",
+        "Counter'ni ikkiga bo'lish"
+      ],
+      "answer": 1,
+      "explanation": "Summary quantile instansiyalar bo'ylab qo'shib bo'lmaydi (p99'lar o'rtachasi p99 emas) — histogram esa bucket'lar yig'indisi orqali agregatlanadi. Kamchiligi: aniqlik bucket'ga bog'liq, shuning uchun SLO chegarasi (masalan 300ms) bucket bo'lishi kerak. Cardinality: label'da user ID/URL ID qo'yilmaydi — TSDB portlaydi."
+    },
+    {
+      "id": 30037,
+      "code": "SN38",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Alerting",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Alert shovqini ko'p, dejurlik charchagan. To'g'ri qayta qurish?",
+      "options": [
+        "Alert chegarasini oshirish",
+        "Symptom-based alerting: SLO va error budget burn rate bo'yicha (tez va sekin burn uchun ikki oyna); sabab-metrikalar (CPU, disk) dashboardda qoladi, page qilmaydi",
+        "Barcha alertni Slack'ga ko'chirish",
+        "Alertlarni o'chirish"
+      ],
+      "answer": 1,
+      "explanation": "Foydalanuvchi ta'sirini ko'rsatadigan signal page qiladi: 'checkout xato nisbati budjetni 14x tezlikda yeyapti'. Sabab metrikasi (CPU 90%) o'z-o'zidan muammo emas. Multi-window burn rate: tez oyna (5m/1h) darhol page, sekin oyna (6h) ticket. Har alertda runbook havolasi va aniq harakat bo'lishi shart."
+    },
+    {
+      "id": 30038,
+      "code": "SN39",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Logging",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Yuqori RPS'li servisda log xarajati portladi. Nima qilinadi?",
+      "options": [
+        "Log'ni butunlay o'chirish",
+        "Strukturaviy log + darajalar, kritik yo'lda per-request log o'rniga metrika/trace; sampling (masalan bir xil xatoni 1/100), va uzoq saqlash faqat audit uchun",
+        "Har so'rovni DEBUG bilan yozish",
+        "Faqat stdout'ga yozmaslik"
+      ],
+      "answer": 1,
+      "explanation": "Log qimmat va qidirish sekin; metrika agregat uchun, trace sababni topish uchun arzonroq. Amaliy chora: request log'ni faqat xato/sekin holatlarda to'liq yozish, `trace_id`ni har log qatoriga qo'yish (log↔trace bog'lanadi), PII maskalash, retention siyosati (7 kun hot, 90 kun arxiv)."
+    },
+    {
+      "id": 30039,
+      "code": "SN40",
+      "level": "St",
+      "type": "open",
+      "topic": "SRE",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Yangi servis uchun SLO'ni qanday belgilaysiz va error budget bilan nima qilasiz?",
+      "modelAnswer": [
+        "Foydalanuvchi yo'nalishini (critical user journey) aniqlash: masalan 'checkout POST /orders'",
+        "SLI aniq ta'rifi: muvaffaqiyatli so'rov = 5xx emas VA p99 < 500ms, o'lchash joyi — LB yoki client tomoni",
+        "Maqsad biznesga asoslangan va 100% emas: 99.9% / 28 kun oynasi. Error budget = 0.1% ≈ 43 daqiqa/oy",
+        "Budget policy: budjet tugasa — yangi feature to'xtaydi, ishonchlilik ishiga o'tiladi; budjet ko'p bo'lsa — tezroq chiqarish, chaos test",
+        "Burn rate alert (tez/sekin), dashboardda qolgan budjet",
+        "Dependency SLO'lari bilan solishtirish: siz 99.99% bera olmaysiz agar DB 99.9% bo'lsa (yoki degradatsiya yo'li kerak)"
+      ],
+      "explanation": "Senior'dan kutiladigan asosiy g'oya: SLO — muhandislik qarorlarini boshqaradigan budjet, shunchaki grafik emas. Va o'lchash foydalanuvchi ko'rgan joyda bo'lishi kerak."
+    },
+    {
+      "id": 30266,
+      "code": "SN267",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Metrics",
+      "domain": "infra",
+      "section": "i3",
+      "question": "RED va USE metodikalari nimani anglatadi?",
+      "options": [
+        "Alert nomlari",
+        "RED (servis uchun): Rate, Errors, Duration — foydalanuvchi ko'rgan holat; USE (resurs uchun): Utilization, Saturation, Errors — bo'g'izni topish. Ikkisi birga: RED bilan muammo borligini bilamiz, USE bilan qayerda ekanini",
+        "Faqat Prometheus'da",
+        "Log formatlari"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qo'llash: har servisda standart RED dashboard (va alert faqat shunga), har resursda (CPU, pool, disk, navbat) USE paneli. Saturation eng ko'p e'tibordan qoladigan signal: DB pool navbati, goroutine kutishi, Kafka lag — utilization 100% ga yetmasa ham saturation muammoni ko'rsatadi."
+    },
+    {
+      "id": 30267,
+      "code": "SN268",
+      "level": "S",
+      "type": "mcq",
+      "topic": "SRE",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Postmortem 'blameless' bo'lishi nima uchun texnik jihatdan muhim?",
+      "options": [
+        "Faqat xushmuomalalik uchun",
+        "Ayblash bo'lsa odamlar ma'lumotni yashiradi va haqiqiy sabab (tizimdagi zaiflik) topilmaydi — natijada bir xil incident takrorlanadi; maqsad — kim emas, qanday shart-sharoit xatoni mumkin qilgani va qanday tizimli to'siq qo'yish",
+        "Xatolarni yashirish uchun",
+        "Hujjat talabi uchun"
+      ],
+      "answer": 1,
+      "explanation": "Yaxshi postmortem tarkibi: vaqt chizig'i (aniq timestamp bilan), ta'sir (foydalanuvchi va biznes raqamda), aniqlash vaqti (nega tezroq bilmadik — monitoring bo'shlig'i), tiklanish qadamlari, va action item'lar egasi/muddati bilan. Eng qadrli qism — 'nega bu xato mumkin edi' (guardrail yo'qligi), 'kim bosdi' emas."
+    },
+    {
+      "id": 30449,
+      "code": "SN450",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tracing",
+      "domain": "infra",
+      "section": "i3",
+      "question": "OpenTelemetry'da span, trace va context propagation qanday bog'lanadi?",
+      "options": [
+        "Har servis o'z trace ID sini yaratadi",
+        "Trace — bitta so'rov bo'ylab spanlar daraxti; har span parent span ID bilan bog'lanadi; `traceparent` headeri (W3C) hop'lar orasida uzatiladi — HTTP, gRPC metadata va xabar broker headerlari orqali ham qo'lda propagate qilinishi kerak",
+        "Log orqali bog'lanadi",
+        "Faqat sinxron chaqiruvlarda ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Eng ko'p uchraydigan bo'shliq — asinxron chegara: Kafka'ga yozishda `traceparent` xabar headeriga solinmasa trace uziladi va 'ish qayerda sekinlashdi' savoliga javob yo'qoladi. Ikkinchi bo'shliq: log va trace bog'lanmagan (`trace_id` log maydoni sifatida yozilishi kerak). Span atributlari kardinalligi ham nazorat qilinadi."
+    },
+    {
+      "id": 30450,
+      "code": "SN451",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Metrics",
+      "domain": "infra",
+      "section": "i3",
+      "question": "Prometheus'da yuqori kardinallik nega xavfli va qanday nazorat qilinadi?",
+      "options": [
+        "Xavfli emas",
+        "Har unikal label kombinatsiyasi alohida time series — user_id/URL/trace_id label sifatida qo'yilsa seriyalar millionlab bo'lib xotira va query vaqti portlaydi (OOM). Nazorat: label allowlist, `metric_relabel_configs` bilan tashlash, kardinallik alertlari va yuqori kardinallikni log/trace'ga o'tkazish",
+        "Faqat disk oshadi",
+        "Faqat eski versiyalarda"
+      ],
+      "answer": 1,
+      "explanation": "Qoida: metrika — agregat (nima bo'lyapti), trace/log — individual (qaysi so'rovda). Foydali label'lar: servis, endpoint shabloni (`/users/:id`, konkret ID emas), status klassi, metod. Kardinallikni kuzatish uchun `topk(10, count by (__name__)({__name__=~\".+\"}))` kabi so'rovlar va scrape darajasidagi limitlar (`sample_limit`) ishlatiladi."
+    }
+  ]
+}

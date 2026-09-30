@@ -1,0 +1,598 @@
+{
+  "id": "n1",
+  "name": "Redis & caching",
+  "domain": "nosql",
+  "domainLabel": "Redis, Mongo, Elastic",
+  "topics": [
+    "Redis",
+    "Cache"
+  ],
+  "questions": [
+    {
+      "id": 1006,
+      "code": "B7",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Cache-aside (lazy loading) pattern'da o'qish oqimi qanday?",
+      "options": [
+        "Ilova faqat cache'ga yozadi, cache DBga o'zi yozadi",
+        "Ilova cache'dan o'qiydi; miss bo'lsa DBdan o'qib cache'ga yozadi; yozishda DB yangilanadi va cache key'i o'chiriladi",
+        "Cache har daqiqada butun DBni nusxalaydi",
+        "DB cache'ni triggerlar orqali yangilaydi"
+      ],
+      "answer": 1,
+      "explanation": "Eng keng tarqalgan pattern. Yozishda cache'ni yangilash emas, o'chirish (invalidate) xavfsizroq — ikki parallel yozish cache'ga eski qiymatni qoldirishi mumkin. TTL qo'shimcha himoya. Boshqalari: write-through, write-behind."
+    },
+    {
+      "id": 1013,
+      "code": "B14",
+      "level": "S",
+      "type": "open",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Cache stampede (thundering herd) nima va qanday oldini olasiz?",
+      "modelAnswer": [
+        "Mashhur key TTL tugaydi → minglab query bir vaqtda miss → hammasi DBga",
+        "Request coalescing / single-flight: faqat bitta query qayta hisoblaydi, qolganlar kutadi (lock yoki promise)",
+        "Distributed lock (Redis SET NX PX) bilan qayta hisoblash",
+        "Probabilistic early expiration (XFetch) yoki fon rejimida yangilash",
+        "TTL jitter — ko'p key bir vaqtda tugamasin; stale-while-revalidate"
+      ],
+      "explanation": "Senior signal: bir nechta usulni va ularning trade-off'ini bilish. Cache 'yiqilganda' (cold start) ham xuddi shu muammo — cache'ni isitish (warmup)."
+    },
+    {
+      "id": 5040,
+      "code": "V41",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis buyruqlari qanday bajariladi?",
+      "options": [
+        "Har connection uchun alohida thread, parallel",
+        "Buyruqlar bitta thread'da ketma-ket bajariladi — shuning uchun har buyruq atomik; network I/O uchun qo'shimcha threadlar bo'lishi mumkin (io-threads), lekin buyruq bajarilishi baribir bitta",
+        "Buyruqlar random tartibda",
+        "Har buyruq alohida jarayonda"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natijalar: INCR, SETNX, LPUSH kabi buyruqlarga lock kerak emas — ular allaqachon atomik. Lekin bitta sekin buyruq (KEYS *, katta ZRANGE, O(n) buyruq) butun serverni bloklaydi — barcha clientlar kutadi. Shuning uchun Redis'da 'sekin buyruq' = 'incident'. SLOWLOG bilan kuzatiladi.",
+      "source": "https://redis.io/docs/latest/develop/reference/eviction/"
+    },
+    {
+      "id": 5041,
+      "code": "V42",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Reyting table'i (leaderboard: ball bo'yicha top 10 va foydalanuvchi o'rni) uchun qaysi struktura?",
+      "options": [
+        "List",
+        "Sorted set (ZSET): ZADD bilan ball, ZREVRANGE bilan top N, ZREVRANK bilan o'rin — O(log n)",
+        "Hash",
+        "String"
+      ],
+      "answer": 1,
+      "explanation": "ZSET — skiplist + hash: tartib va tezkor kirish. Boshqa moslamalar: String — cache/hisoblagich; Hash — obyekt maydonlari; Set — unikal to'plam va SINTER; List — oddiy queue/stack; Stream — hodisalar loglari va consumer group; HyperLogLog — taxminiy unikal sanoq (kam memory); Bitmap — kunlik faollik."
+    },
+    {
+      "id": 5042,
+      "code": "V43",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Distributed lock uchun to'g'ri buyruq va bo'shatish usuli?",
+      "options": [
+        "SET key 1, keyin DEL key",
+        "SET key <tasodifiy_token> NX PX 30000 — atomik olish va muddat; bo'shatishda Lua skript bilan 'token mos kelsa DEL' qilish",
+        "SETNX, keyin alohida EXPIRE",
+        "GETSET bilan"
+      ],
+      "answer": 1,
+      "explanation": "Ikki nozik nuqta: 1) SETNX + EXPIRE alohida bo'lsa, orasida crash bo'lganda lock abadiy qoladi — shuning uchun bitta SET ... NX PX; 2) Oddiy DEL boshqa egasining lockini o'chirishi mumkin (sizning ishingiz TTL dan uzoq davom etsa) — shuning uchun token tekshiruvi Lua'da atomik qilinadi. Ish TTL dan uzoq cho'zilsa lock uzaytiriladi (watchdog).",
+      "source": "https://redis.io/docs/latest/develop/clients/patterns/distributed-locks/"
+    },
+    {
+      "id": 5043,
+      "code": "V44",
+      "level": "S",
+      "type": "open",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redlock (bir necha Redis node'da lock) ishonchlimi? Qanday yondashasiz?",
+      "modelAnswer": [
+        "Redlock N node'ning ko'pchiligidan lock olishga asoslangan",
+        "Tanqid (Martin Kleppmann): soat siljishi, GC pauzasi va network kechikishi TTL tugagach ham client o'zini egaman deb o'ylashiga olib keladi — o'zaro istisno kafolatlanmaydi",
+        "Himoya: fencing token — har lockda o'suvchi raqam, resurs (DB) eski tokenli yozuvni rad etadi",
+        "Amaliy qoida: lock 'optimizatsiya' uchun bo'lsa (ikki marta ishlamaslik) — Redis lock yetarli; 'to'g'rilik' uchun bo'lsa (pul, unikal yozuv) — DB constraint/transaction yoki konsensus tizimi (etcd, ZooKeeper)",
+        "Ko'p holatda idempotentlik lockdan yaxshiroq yechim"
+      ],
+      "explanation": "Bu savol senior level'ni ajratadi: 'Redlock ishlatamiz' emas, 'lock nima uchun kerak — tezlik uchunmi yoki to'g'rilik uchunmi' degan savoldan boshlash.",
+      "source": "https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html"
+    },
+    {
+      "id": 5044,
+      "code": "V45",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "<code>maxmemory</code> ga yetganda nima bo'ladi?",
+      "options": [
+        "Redis eski key'larni doim o'zi o'chiradi",
+        "maxmemory-policy ga bog'liq: default noeviction — yozish buyruqlari OOM xatosi qaytaradi; allkeys-lru / allkeys-lfu — har qanday key'ni siqib chiqaradi; volatile-* — faqat TTL qo'yilgan key'larni",
+        "Redis qayta ishga tushadi",
+        "Ma'lumot diskka ko'chadi"
+      ],
+      "answer": 1,
+      "explanation": "Cache sifatida ishlatsangiz: allkeys-lru yoki allkeys-lfu (takroriy murojaat ko'p bo'lsa LFU yaxshiroq). Queue/lock/session saqlasangiz noeviction xavfsizroq — lekin unda memory monitoringi va alert majburiy. LRU/LFU Redis'da taxminiy (sampling bilan) — aniq emas, bu ataylab qilingan.",
+      "source": "https://redis.io/docs/latest/develop/reference/eviction/"
+    },
+    {
+      "id": 5045,
+      "code": "V46",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "TTL tugagan key memory'dan qachon o'chadi?",
+      "options": [
+        "Aniq shu soniyada",
+        "Ikki mexanizm: lazy — key'ga murojaat qilinganda tekshiriladi; active — fon rejimida tasodifiy namuna olib o'chiriladi. Shuning uchun muddati o'tgan key biroz vaqt memory'da turishi mumkin",
+        "Faqat restartda",
+        "O'chmaydi, faqat ko'rinmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natija: 'TTL qo'ydim, demak memory darhol bo'shaydi' degan hisob noto'g'ri — ayniqsa ko'p key bir vaqtda tugasa. Bir vaqtda ommaviy tugash yukni ham oshiradi, shuning uchun TTL'ga tasodifiy jitter qo'shiladi. Replicada key'ni faqat primary o'chiradi (DEL replikatsiya qilinadi)."
+    },
+    {
+      "id": 5046,
+      "code": "V47",
+      "level": "M",
+      "type": "code",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Production'da bu buyruq nima uchun xavfli va o'rniga nima ishlatiladi?",
+      "snippet": "KEYS session:*",
+      "options": [
+        "Xavfli emas",
+        "KEYS butun keyspace'ni skanerlaydi va bitta threadli serverni millionlab key'da bloklaydi — hamma query'lar kutadi. O'rniga SCAN (kursorli, bosqichma-bosqich) ishlatiladi",
+        "Faqat sekin, lekin xavfsiz",
+        "O'rniga FLUSHALL"
+      ],
+      "answer": 1,
+      "explanation": "Xuddi shunday xavfli buyruqlar: FLUSHALL, katta key'da DEL (o'rniga UNLINK — asinxron), katta HGETALL/SMEMBERS/ZRANGE 0 -1. Redis'da 'big key' va 'hot key' — ikki klassik muammo: birinchisi bloklaydi, ikkinchisi bitta shardni qizdiradi. Key'larni ro'yxatlash kerak bo'lsa — alohida index (SET) yuriting."
+    },
+    {
+      "id": 5047,
+      "code": "V48",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Pipeline, MULTI/EXEC va Lua skript farqi?",
+      "options": [
+        "Uchalasi bir xil",
+        "Pipeline — bir nechta buyruqni bitta round-tripda yuborish (atomiklik bermaydi). MULTI/EXEC — buyruqlar queue'i ketma-ket va uzilmasdan bajariladi, lekin oraliq natijaga qarab qaror qilib bo'lmaydi. Lua (EVAL) — server tomonida mantiq: o'qib, tekshirib, yozish atomik",
+        "MULTI rollback qiladi",
+        "Lua sekinroq va atomik emas"
+      ],
+      "answer": 1,
+      "explanation": "MULTI/EXEC'da rollback yo'q: buyruq ishlash vaqtida xato bersa, qolganlari baribir bajariladi. Shartli mantiq kerak bo'lsa (lockni tokenga qarab o'chirish, rate limit hisoblash) — Lua. Lua skript ham bitta threadda ishlaydi, shuning uchun qisqa bo'lishi shart — uzun skript butun serverni bloklaydi. WATCH — optimistik variant."
+    },
+    {
+      "id": 5048,
+      "code": "V49",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "RDB va AOF persistence farqi?",
+      "options": [
+        "Bir xil, faqat fayl formati boshqa",
+        "RDB — davriy snapshot: kichik fayl, tez tiklanish, lekin oxirgi snapshotdan keyingi yozuvlar yo'qoladi. AOF — har yozish buyrug'i logga yoziladi (appendfsync everysec bo'lsa ≤1 soniya yo'qotish), fayl kattaroq va tiklanish sekinroq; AOF rewrite uni ixchamlashtiradi",
+        "AOF ma'lumot yo'qotmaydi va tezroq",
+        "RDB har buyruqni yozadi"
+      ],
+      "answer": 1,
+      "explanation": "Ko'pincha ikkalasi birga yoqiladi (Redis 7'da multi-part AOF + RDB preamble). Muhim tushuncha: Redis — birinchi queue'da xotiradagi tizim; appendfsync always bo'lsa ham disk kafolati klassik DB level'ida emas. Kritik ma'lumotni Redis'da yagona nusxada saqlamaslik kerak.",
+      "source": "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/"
+    },
+    {
+      "id": 5049,
+      "code": "V50",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis replikatsiyasi va failover haqida qaysi to'g'ri?",
+      "options": [
+        "Replikatsiya sinxron, ma'lumot yo'qolmaydi",
+        "Replikatsiya asinxron: primary yiqilsa, replicaga yetmagan yozuvlar yo'qoladi. Sentinel (yoki Cluster) avtomatik failover qiladi; WAIT buyrug'i bilan N replica tasdig'ini kutish mumkin, lekin bu ham to'liq kafolat emas",
+        "Replica ham yozishni qabul qiladi",
+        "Failover uchun qo'lda aralashuv shart"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun Redis'ni yagona haqiqat manbai sifatida ishlatish (to'lov, buyurtma) tavsiya etilmaydi — cache, sessiya, rate limit, queue uchun juda yaxshi. Sentinel — HA bitta master uchun; Cluster — sharding + HA. Split-brain holatlari uchun min-replicas-to-write sozlamasi bor."
+    },
+    {
+      "id": 5050,
+      "code": "V51",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis Cluster'da <code>MGET user:1:name user:2:name</code> xato berdi (CROSSSLOT). Sabab va yechim?",
+      "options": [
+        "Cluster ko'p key'li buyruqni umuman qo'llamaydi",
+        "Key'lar 16384 hash slot bo'yicha taqsimlanadi; ko'p key'li buyruq faqat bir slotdagi key'lar bilan ishlaydi. Birga turishi kerak bo'lsa — hash tag: user:{1}:name va user:{1}:email bitta slotga tushadi",
+        "MGET o'rniga KEYS ishlatish kerak",
+        "Node sonini oshirish kerak"
+      ],
+      "answer": 1,
+      "explanation": "Hash tag {...} ichidagi qism bo'yicha slot hisoblanadi. Ehtiyot bo'ling: hammasini bitta tagga solsangiz, ma'lumot bitta shardga yig'iladi (hot shard). Transaction va Lua ham bitta slot talab qiladi. Ko'pincha oddiyroq yechim — pipeline bilan alohida GET'lar."
+    },
+    {
+      "id": 5051,
+      "code": "V52",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Pub/Sub va Streams farqi?",
+      "options": [
+        "Bir xil",
+        "Pub/Sub — fire-and-forget: obuna bo'lmagan yoki uzilgan client xabarni umuman olmaydi, saqlanmaydi. Streams — saqlanadigan log: consumer group, offset, ACK, qayta o'qish (Kafka'ga o'xshash model)",
+        "Streams xabarni saqlamaydi",
+        "Pub/Sub ACK talab qiladi"
+      ],
+      "answer": 1,
+      "explanation": "Ishonchli yetkazish kerak bo'lsa Pub/Sub mos emas (deploy paytida uzilish = yo'qolgan xabarlar). Streams: XADD, XREADGROUP, XACK, pending entries list (XPENDING) bilan ishlanmagan xabarlarni ko'rish va XCLAIM bilan boshqa consumer'ga o'tkazish. Kichik hajmdagi ishonchli queue uchun Streams — Kafka o'rniga arzon variant."
+    },
+    {
+      "id": 5052,
+      "code": "V53",
+      "level": "St",
+      "type": "open",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "'Redis bizga sekin' deyishdi: p99 latency sakraydi. Qanday tekshirasiz?",
+      "modelAnswer": [
+        "SLOWLOG GET — sekin buyruqlar (KEYS, katta ZRANGE/HGETALL, uzun Lua)",
+        "Big key va hot key tahlili: redis-cli --bigkeys / --hotkeys, MEMORY USAGE",
+        "INFO: used_memory va maxmemory nisbati, evicted_keys, blocked_clients, instantaneous_ops_per_sec",
+        "Latency manbalari: fork paytida RDB/AOF rewrite (katta memory'da sezilarli), transparent huge pages, swap",
+        "Network va client tomoni: round-trip soni (pipeline'ga o'tish), connection pool sozlamalari, TLS narxi",
+        "Arxitektura: hot keyni lokal (in-process) cache bilan yumshatish, shardlash, o'qishni replicaga bo'lish"
+      ],
+      "explanation": "Staff signal: Redis'da latency muammosi deyarli doim 'bitta og'ir operatsiya butun threadni bloklagan' yoki 'memory/fork' bilan bog'liq. Tartib: o'lchash (SLOWLOG, INFO) → sabab → chora."
+    },
+    {
+      "id": 13004,
+      "code": "K5",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Write-through, write-back va write-around farqi?",
+      "options": [
+        "Faqat nomi bilan farq qiladi",
+        "Write-through — keshga va DB'ga birga yoziladi (o'qish tez, yozish sekinroq, ma'lumot mos). Write-back — avval keshga, DB'ga keyin asinxron (juda tez, lekin kesh yo'qolsa ma'lumot yo'qoladi). Write-around — to'g'ridan-to'g'ri DB'ga, kesh faqat o'qishda to'ladi (bir marta yoziladigan ma'lumot uchun)",
+        "Write-back eng xavfsiz",
+        "Write-around keshni o'chiradi"
+      ],
+      "answer": 1,
+      "explanation": "Eng keng tarqalgani — cache-aside (lazy loading) + yozishda kalitni invalidate qilish. Write-back faqat ishonchli, replikatsiyalangan kesh bilan (masalan Redis AOF) va yo'qotishga chidamli ma'lumot uchun. Tanlovda savol: kesh yo'qolsa nima bo'ladi va eskirgan ma'lumot qancha vaqt maqbul."
+    },
+    {
+      "id": 14013,
+      "code": "SR14",
+      "level": "S",
+      "type": "open",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Kesh invalidatsiyasi subsystem'ini loyihalang — ko'p servis bir xil ma'lumotni keshlaydi.",
+      "modelAnswer": [
+        "Kalit sxemasi va egalik: har ma'lumot turi uchun kim yozadi va kim invalidate qiladi",
+        "Usullar: TTL (eng sodda), yozishdan keyin delete, versiyalangan kalit (user:42:v7), yoki event/CDC orqali global invalidatsiya",
+        "Ko'p qatlam: CDN, ilova xotirasidagi kesh, Redis — invalidatsiya hammasiga yetishi kerak (lokal kesh uchun pub/sub)",
+        "Xavflar: commit'dan oldin o'chirish, stampede, invalidatsiya xabarining yo'qolishi — TTL zaxira sifatida",
+        "Kuzatuv: hit ratio, eskirgan javoblar bo'yicha shikoyat, kesh va DB farqini davriy tekshirish",
+        "Qaror: qaysi ma'lumot qancha eskirishi mumkin — bu mahsulot talabi"
+      ],
+      "explanation": "Kuchli javob 'kesh invalidatsiyasi — eng qiyin ikki masaladan biri' degan hazil bilan cheklanmaydi: aniq mexanizm, zaxira TTL va kuzatuvni aytadi."
+    },
+    {
+      "id": 30224,
+      "code": "SN225",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis'da eviction policy `noeviction` bo'lsa xotira tugaganda nima bo'ladi?",
+      "options": [
+        "Eng eski kalitlar o'chadi",
+        "Yozuv operatsiyalari xato qaytaradi (`OOM command not allowed`) — kesh sifatida ishlatilganda bu incident'ga olib keladi; kesh uchun `allkeys-lru`/`allkeys-lfu`, ma'lumot ombori sifatida esa `noeviction` + xotira nazorati to'g'ri",
+        "Redis qayta ishga tushadi",
+        "Diskka yoziladi"
+      ],
+      "answer": 1,
+      "explanation": "Qaror 'Redis nima vazifada' degan savoldan kelib chiqadi: kesh — yo'qotish mumkin, demak LRU/LFU; navbat yoki yagona holat ombori — yo'qotish mumkin emas, demak `noeviction`, `maxmemory` zapas bilan va alert. Ikkisini bir instansiyada aralashtirish klassik xato — kesh yozuvi muhim ma'lumotni evict qiladi."
+    },
+    {
+      "id": 30225,
+      "code": "SN226",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Kesh kaliti dizaynida nimalarga e'tibor beriladi?",
+      "options": [
+        "Faqat qisqa bo'lishi",
+        "Versiya/sxema prefiksi (`v2:user:42`) — format o'zgarganda eski qiymatlarni bir zumda 'bekor qilish' imkonini beradi; tenant/locale kabi barcha kontekst kalitda bo'lishi (aks holda ma'lumot oqadi), va kalit kardinalligini nazorat qilish",
+        "Foydalanuvchi ID'sini qo'shmaslik",
+        "Kalitni hash qilish shart"
+      ],
+      "answer": 1,
+      "explanation": "Eng xavfli bug: kontekstni kalitga qo'shmaslik — bir tenant/til uchun keshlangan javob boshqasiga beriladi (ma'lumot oqishi). Versiyalash esa deploy paytida strukturasi o'zgargan qiymatlar bilan crash bo'lishini oldini oladi; alternativa — kesh qiymatida sxema versiyasini saqlab, mos kelmasa miss deb hisoblash."
+    },
+    {
+      "id": 30226,
+      "code": "SN227",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis'ni navbat (queue) sifatida ishlatish qachon to'g'ri, qachon yo'q?",
+      "options": [
+        "Har doim to'g'ri, Kafka keraksiz",
+        "Qisqa muddatli, yo'qotilishi mumkin bo'lgan ishlar uchun maqbul (`LPUSH`/`BRPOPLPUSH` yoki Streams consumer group bilan). Durability, uzun retention, qayta o'ynatish va ko'p consumer guruhi kerak bo'lsa — Kafka/RabbitMQ; Redis'da failover paytida ack qilinmagan ish yo'qolishi mumkin",
+        "Redis'da navbat yo'q",
+        "Faqat Streams bilan mumkin"
+      ],
+      "answer": 1,
+      "explanation": "Redis Streams (`XADD`/`XREADGROUP`/`XACK`) haqiqiy consumer group va pending list beradi — bu `LPUSH`/`RPOP` dan ancha ishonchli (ishlov berilayotgan xabar yo'qolmaydi). Lekin asinxron replikatsiya tufayli failover'da oxirgi yozuvlar yo'qolishi mumkin: pul yoki buyurtmaga tegishli ishni Redis navbatiga yolg'iz ishonib topshirmaslik kerak."
+    },
+    {
+      "id": 30238,
+      "code": "SN239",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "RDB va AOF persistensiya farqi va productionda qaysi tanlanadi?",
+      "options": [
+        "RDB har doim yetarli",
+        "RDB — davriy snapshot (tez tiklanadi, oxirgi daqiqalar yo'qolishi mumkin); AOF — har yozuv komandasi jurnali (`appendfsync everysec` bilan ~1s yo'qotish, tiklanish sekinroq). Ko'p holatda ikkisi birga yoqiladi, muhim ma'lumotda AOF majburiy",
+        "AOF keraksiz",
+        "Faqat replika yetarli"
+      ],
+      "answer": 1,
+      "explanation": "`appendfsync always` durability beradi lekin throughputni keskin tushiradi; `everysec` — amaliy kelishuv. RDB `fork` qiladi, shuning uchun yozuv intensiv bo'lsa copy-on-write xotirasi oshadi (OOM xavfi). Redis 7'da multi-part AOF va RDB preamble bilan tiklanish tezlashgan. Eslatma: kesh vazifasida persistensiyani umuman o'chirish ham to'g'ri qaror."
+    },
+    {
+      "id": 30239,
+      "code": "SN240",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis Sentinel va Redis Cluster farqi?",
+      "options": [
+        "Bir xil narsa",
+        "Sentinel — yagona master bilan avtomatik failover (sig'im bitta node bilan cheklangan, sharding yo'q); Cluster — 16384 hash slot bo'yicha sharding + failover, lekin multi-key operatsiyalar faqat bir slot ichida (hash tag `{user:42}` kerak) va ba'zi komandalar cheklangan",
+        "Cluster failover qilmaydi",
+        "Sentinel shardlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Tanlov: ma'lumot bitta node RAM'iga sig'sa — Sentinel (oddiyroq, tranzaksiya va Lua cheklovsiz); sig'masa yoki throughput yetmasa — Cluster. Cluster'da `MGET key1 key2` turli slotda bo'lsa xato beradi, shuning uchun kalit dizayni hash tag bilan oldindan rejalashtiriladi. Ikkisida ham replikatsiya asinxron — failover'da oxirgi yozuvlar yo'qolishi mumkin."
+    },
+    {
+      "id": 30240,
+      "code": "SN241",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redlock (ko'p node'li Redis lock) tanqidi nimada?",
+      "options": [
+        "Juda sekin",
+        "GC pauza yoki tarmoq kechikishi bo'lsa qulf egasi TTL tugaganini bilmay yozishda davom etadi — fencing token'siz durability kafolati yo'q; kritik (pul) operatsiyalarda qulf o'rniga DB constraint yoki linearizable store (etcd/ZooKeeper) ishlatiladi",
+        "Redis'da lock qilinmaydi",
+        "Faqat Cluster'da ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Martin Kleppmann tanqidining mohiyati: qulf 'mutual exclusion' uchun optimizatsiya sifatida (ishni ikki marta qilmaslik) yaxshi, lekin to'g'rilik kafolati sifatida yaroqsiz. Shuning uchun amaliy naqsh: Redis lock bilan takroriy ishni kamaytirish + DB'da unique constraint/versiya bilan yakuniy to'g'rilikni ta'minlash."
+    },
+    {
+      "id": 30241,
+      "code": "SN242",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "HyperLogLog (`PFADD`/`PFCOUNT`) qachon ishlatiladi?",
+      "options": [
+        "Aniq sanoq kerak bo'lganda",
+        "Unikal elementlar sonini taxminiy (~0.81% xato) va doimiy ~12 KB xotirada hisoblashda — masalan kunlik unique visitor; `PFMERGE` bilan davrlarni birlashtirish mumkin, lekin alohida elementni tekshirib bo'lmaydi",
+        "Faqat kichik to'plamda",
+        "Set o'rniga har doim"
+      ],
+      "answer": 1,
+      "explanation": "Set bilan 10 mln unique IP saqlash yuzlab MB, HyperLogLog esa 12 KB. Almashinuv — aniqlik. `PFMERGE` assotsiativ va idempotent bo'lgani uchun kunlik HLL'larni haftalikka birlashtirish to'g'ri natija beradi (oddiy sanoqlarni qo'shish esa bermaydi, chunki bir xil foydalanuvchi ikki kunda bo'lishi mumkin)."
+    },
+    {
+      "id": 30242,
+      "code": "SN243",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Pipelining va Lua scripting orasidagi farq?",
+      "options": [
+        "Ikkisi bir xil",
+        "Pipelining — bir necha komandani bitta round-trip'da yuborish (latency tejaydi, atomiklik bermaydi); Lua/`MULTI` — server tomonda atomik bajarish (o'qib-qaror qilib-yozish naqshi uchun). Yuqori RPS'da ikkisi birga ishlatiladi",
+        "Lua sekinroq, ishlatilmaydi",
+        "Pipelining atomik"
+      ],
+      "answer": 1,
+      "explanation": "Tipik xato: `GET` qilib, ilovada tekshirib, `SET` qilish — orada boshqa client o'zgartiradi. Lua bir oqimda bajariladi (Redis single-threaded), shuning uchun atomik. Lekin Lua uzoq ishlasa butun serverni bloklaydi — skript qisqa bo'lishi va `KEYS` orqali kalitlarni e'lon qilishi kerak (Cluster'da shart)."
+    },
+    {
+      "id": 30243,
+      "code": "SN244",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Cache-aside, read-through, write-through, write-around — qisqa farqi?",
+      "options": [
+        "Faqat nom farqi",
+        "Cache-aside: ilova miss'da DB'dan o'qib keshga yozadi (eng ko'p ishlatiladi, moslashuvchan); read-through: kesh kutubxonasi o'zi yuklaydi; write-through: yozuv keshga va DB'ga birga (kesh doim yangi, yozuv sekinroq); write-around: yozuv faqat DB'ga, kesh keyin miss bilan to'ladi (kam o'qiladigan yozuvlar uchun)",
+        "Write-through ma'lumot yo'qotadi",
+        "Cache-aside atomik"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy tanlov naqshi: ko'p o'qiladigan issiq ma'lumot — cache-aside + TTL + invalidatsiya; yozib darhol o'qiladigan ma'lumot — write-through; bir marta yozilib kam o'qiladigan ma'lumot — write-around (aks holda kesh keraksiz ma'lumot bilan to'ladi). Write-behind esa tez lekin durability'ni qurbon qiladi."
+    },
+    {
+      "id": 30244,
+      "code": "SN245",
+      "level": "St",
+      "type": "open",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Kesh hit ratio 60% ga tushdi, DB yuklamasi oshdi. Qanday tekshirasiz va tuzatasiz?",
+      "modelAnswer": [
+        "O'lchash: `INFO stats` (keyspace_hits/misses), evicted_keys, expired_keys, used_memory va `maxmemory` — evict ko'p bo'lsa xotira yetmayapti, expired ko'p bo'lsa TTL juda qisqa",
+        "Kalit kardinalligini tekshirish: kalitga ortiqcha kontekst qo'shilgan bo'lsa (masalan timestamp yoki request ID) har so'rov yangi kalit yaratadi — hit bo'lmaydi",
+        "Hot/cold taqsimot: `--hotkeys` yoki sampling bilan eng ko'p so'ralgan kalitlar; Zipf taqsimotda kichik kesh ham yuqori hit beradi — agar bermasa kalit dizayni yoki TTL muammosi",
+        "Deploy bilan bog'liqlik: kesh versiya prefiksi o'zgargan (to'liq miss), yoki kod boshqa serializatsiyaga o'tib eski qiymatlarni o'qimayapti",
+        "Chora: TTL'ni uzaytirish + jitter, eviction policy `allkeys-lfu` (Zipf uchun LRU'dan yaxshi), xotirani oshirish, katta qiymatlarni siqish yoki bo'lish, stale-while-revalidate bilan DB'ni himoyalash",
+        "DB tomonini himoyalash: single-flight (bir kalit uchun bitta qayta hisoblash), negative caching, va kritik query'larga rate limit",
+        "Natijani tasdiqlash: hit ratio va DB QPS grafigi bilan, hamda p99 latency"
+      ],
+      "explanation": "Intervyuda kutiladigan ketma-ketlik: metrikadan boshlash (`INFO stats`), sabab toifasini ajratish (evict/expire/kalit kardinalligi/deploy), keyin chora. LFU vs LRU tanlovini asoslash — kuchli detal."
+    },
+    {
+      "id": 30245,
+      "code": "SN246",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis single-threaded bo'lsa, nega bunday tez va qachon bu muammo?",
+      "options": [
+        "Ko'p oqimli, shuning uchun tez",
+        "Xotirada ishlaydi va qulf/kontekst almashinishi yo'q, I/O multiplexing (epoll) bilan yuz minglab operatsiya/sekund beradi; muammo — bitta sekin komanda (`KEYS`, katta `HGETALL`, uzun Lua) barcha clientni bloklaydi va CPU bo'yicha vertikal skale chegarasi bor",
+        "Har doim muammo",
+        "Faqat Cluster'da tez"
+      ],
+      "answer": 1,
+      "explanation": "Redis 6+ da I/O threads bor (tarmoq o'qish/yozish uchun), lekin komanda bajarilishi baribir bitta oqimda. Shu sabab operatsiyalar O(1) yoki O(log N) bo'lishi kerak; O(N) komandalar (`SMEMBERS`, `LRANGE 0 -1`) katta kolleksiyada latency spike beradi. CPU yetmasa — Cluster bilan shardlash yoki bir necha instansiya."
+    },
+    {
+      "id": 30246,
+      "code": "SN247",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis'da TTL qanday amalga oshiriladi (expiry mexanizmi)?",
+      "options": [
+        "Timer har kalit uchun",
+        "Ikki yo'l birga: lazy (kalit o'qilganda muddati tekshiriladi) va active (fon jarayoni tasodifiy namuna olib muddati o'tganlarni o'chiradi) — shuning uchun muddati o'tgan kalit birozdan keyin ham xotirada bo'lishi mumkin",
+        "Faqat restart'da",
+        "Faqat `DEL` bilan"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natijalar: `used_memory` muddati o'tgan kalitlarni darhol qaytarmaydi (xotira rejasida hisobga olinadi); replicada kalitlar mustaqil o'chirilmaydi — master `DEL` yuboradi (shuning uchun eski versiyalarda replicadan o'qishda stale qiymat muammosi bo'lgan); ko'p kalit bir vaqtda expire bo'lsa active cycle CPU spike beradi — TTL'ga jitter shuning uchun ham kerak."
+    },
+    {
+      "id": 30374,
+      "code": "SN375",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis'da eviction policy `noeviction` bo'lsa xotira tugaganda nima bo'ladi?",
+      "options": [
+        "Eng eski kalitlar o'chadi",
+        "Yozuv operatsiyalari xato qaytaradi (`OOM command not allowed`) — kesh sifatida ishlatilganda bu incident'ga olib keladi; kesh uchun `allkeys-lru`/`allkeys-lfu`, ma'lumot ombori sifatida esa `noeviction` + xotira nazorati to'g'ri",
+        "Redis qayta ishga tushadi",
+        "Diskka yoziladi"
+      ],
+      "answer": 1,
+      "explanation": "Qaror 'Redis nima vazifada' degan savoldan kelib chiqadi: kesh — yo'qotish mumkin, demak LRU/LFU; navbat yoki yagona holat ombori — yo'qotish mumkin emas, demak `noeviction`, `maxmemory` zapas bilan va alert. Ikkisini bir instansiyada aralashtirish klassik xato — kesh yozuvi muhim ma'lumotni evict qiladi."
+    },
+    {
+      "id": 30375,
+      "code": "SN376",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Cache",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Kesh kaliti dizaynida nimalarga e'tibor beriladi?",
+      "options": [
+        "Faqat qisqa bo'lishi",
+        "Versiya/sxema prefiksi (`v2:user:42`) — format o'zgarganda eski qiymatlarni bir zumda 'bekor qilish' imkonini beradi; tenant/locale kabi barcha kontekst kalitda bo'lishi (aks holda ma'lumot oqadi), va kalit kardinalligini nazorat qilish",
+        "Foydalanuvchi ID'sini qo'shmaslik",
+        "Kalitni hash qilish shart"
+      ],
+      "answer": 1,
+      "explanation": "Eng xavfli bug: kontekstni kalitga qo'shmaslik — bir tenant/til uchun keshlangan javob boshqasiga beriladi (ma'lumot oqishi). Versiyalash esa deploy paytida strukturasi o'zgargan qiymatlar bilan crash bo'lishini oldini oladi; alternativa — kesh qiymatida sxema versiyasini saqlab, mos kelmasa miss deb hisoblash."
+    },
+    {
+      "id": 30376,
+      "code": "SN377",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Redis",
+      "domain": "nosql",
+      "section": "n1",
+      "question": "Redis'ni navbat (queue) sifatida ishlatish qachon to'g'ri, qachon yo'q?",
+      "options": [
+        "Har doim to'g'ri, Kafka keraksiz",
+        "Qisqa muddatli, yo'qotilishi mumkin bo'lgan ishlar uchun maqbul (`LPUSH`/`BRPOPLPUSH` yoki Streams consumer group bilan). Durability, uzun retention, qayta o'ynatish va ko'p consumer guruhi kerak bo'lsa — Kafka/RabbitMQ; Redis'da failover paytida ack qilinmagan ish yo'qolishi mumkin",
+        "Redis'da navbat yo'q",
+        "Faqat Streams bilan mumkin"
+      ],
+      "answer": 1,
+      "explanation": "Redis Streams (`XADD`/`XREADGROUP`/`XACK`) haqiqiy consumer group va pending list beradi — bu `LPUSH`/`RPOP` dan ancha ishonchli (ishlov berilayotgan xabar yo'qolmaydi). Lekin asinxron replikatsiya tufayli failover'da oxirgi yozuvlar yo'qolishi mumkin: pul yoki buyurtmaga tegishli ishni Redis navbatiga yolg'iz ishonib topshirmaslik kerak."
+    }
+  ]
+}

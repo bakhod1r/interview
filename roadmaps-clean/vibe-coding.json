@@ -1,0 +1,113 @@
+{
+  "slug": "vibe-coding",
+  "title": "Vibe Coding",
+  "description": "Step-by-step guide to master Vibe Coding in @currentYear@",
+  "url": "https://roadmap.sh/vibe-coding",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-09-11T12:29:23.039Z",
+  "relatedRoadmaps": [
+    "claude-code",
+    "ai-agents",
+    "ai-engineer",
+    "prompt-engineering"
+  ],
+  "topicCount": 10,
+  "subtopicCount": 8,
+  "topics": [
+    {
+      "id": "lzHnwx_3gftRZbstk6INB",
+      "title": "What is vibe coding?",
+      "subtopics": [
+        {
+          "id": "wr5ddjutC-fX_ixysTHaT",
+          "title": "Claude Code",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hzeEo8COf2l07iu5EdlFo",
+          "title": "Gemini",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Xsl8mx6J182TxPPtNP471",
+          "title": "Devin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MWhoqhNnBaoeCdN_8i15k",
+          "title": "Cursor",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ubk4GN0Z4XlDJ3EbRXdxg",
+          "title": "Copilot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eMMFaVwsxY2tVE9uWz5qT",
+          "title": "Codex",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "LkLQ8GjBXDuw1XsrE4Cjj",
+      "title": "The vibe coder mindset",
+      "subtopics": [
+        {
+          "id": "eX9-1I_hC2zwJNiBYXFu6",
+          "title": "v0",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5WogJrcXhNXewsXzSAME7",
+          "title": "Lovable",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "pfgsxuQ-D7dTMPNWKG9OY",
+      "title": "Plan before you Code",
+      "subtopics": []
+    },
+    {
+      "id": "GC4vVcOcFWE1RByD-sd4G",
+      "title": "Tech Stack and Coding",
+      "subtopics": []
+    },
+    {
+      "id": "6GvIXEzWbSD8q6Qt-BsHP",
+      "title": "Prompting Best Practices",
+      "subtopics": []
+    },
+    {
+      "id": "0ZJrFxKo5HyD9OgzG5LWp",
+      "title": "Context",
+      "subtopics": []
+    },
+    {
+      "id": "mHChjJd39ofwPBS-v_sQY",
+      "title": "Debugging",
+      "subtopics": []
+    },
+    {
+      "id": "q5lkCO_uGmkcJopjltg8j",
+      "title": "Master Version Control",
+      "subtopics": []
+    },
+    {
+      "id": "4bJRhuZzVc32x2Y0gGGrh",
+      "title": "Testing",
+      "subtopics": []
+    },
+    {
+      "id": "2omItZjkVFW9kMiNXdt-h",
+      "title": "Security Best Practices",
+      "subtopics": []
+    }
+  ]
+}

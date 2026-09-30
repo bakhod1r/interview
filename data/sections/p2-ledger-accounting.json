@@ -1,0 +1,212 @@
+{
+  "id": "p2",
+  "name": "Ledger & accounting",
+  "domain": "fin",
+  "domainLabel": "Fintech & payments",
+  "topics": [
+    "Ledger"
+  ],
+  "questions": [
+    {
+      "id": 10000,
+      "code": "P1",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Double-entry ledger nima va nega fintech'da shu model tanlanadi?",
+      "options": [
+        "Har tranzaksiyani ikki bazaga yozish",
+        "Har pul harakati kamida ikki yozuv bilan qayd etiladi: bir hisobdan debet, ikkinchisiga kredit — barcha yozuvlar yig'indisi doim nolga teng. Balans o'zgaruvchi emas, yozuvlardan hisoblanadi",
+        "Ikki marta tasdiqlash",
+        "Ikki valyutada saqlash"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy foydalari: har balans tarix bilan izohlanadi (audit), yo'qolgan pul darhol ko'rinadi (yig'indi nolga teng bo'lmaydi), va balansni UPDATE qilishdagi lost update muammosi yo'qoladi — faqat INSERT. Balansni tez o'qish uchun snapshot/materialized qiymat saqlanadi, lekin haqiqat manbai — yozuvlar.",
+      "source": "https://martinfowler.com/eaaDev/AccountingNarrative.html"
+    },
+    {
+      "id": 10004,
+      "code": "P5",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Foydalanuvchi balansini qanday saqlaysiz?",
+      "options": [
+        "accounts.balance ustunini har to'lovda UPDATE qilish",
+        "O'zgarmas (immutable) yozuvlar jurnali + tez o'qish uchun agregat: balans yozuvlardan hisoblanadi, kerak bo'lsa davriy snapshot bilan tezlashtiriladi. Yozish faqat INSERT — tarix buzilmaydi",
+        "Faqat Redis'da saqlash",
+        "Har kuni qayta hisoblash yetarli"
+      ],
+      "answer": 1,
+      "explanation": "Agar tezlik uchun balans ustuni ham saqlansa, u bitta transaction ichida yozuv bilan birga yangilanadi va CHECK bilan himoyalanadi (masalan balans manfiy bo'lmasin). Muhim: mablag' yetarliligini tekshirish va yechish bitta atomik operatsiyada bo'lishi kerak — aks holda double-spend."
+    },
+    {
+      "id": 10005,
+      "code": "P6",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Reconciliation (yarashtirish) nima uchun kerak?",
+      "options": [
+        "Hisobotni chiroyli ko'rsatish uchun",
+        "Ichki ledger va tashqi manba (bank/PSP hisoboti) bir xilligini muntazam tekshirish: yo'qolgan, takrorlangan yoki summasi farq qiladigan tranzaksiyalarni topish va tekshiruvga chiqarish",
+        "Faqat yillik audit uchun",
+        "Bazani zaxiralash uchun"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy dizayn: kunlik fayl/API hisoboti → moslashtirish kaliti (provayder tranzaksiya id) → farqlar jadvali → operatsion panel va alert. Farqlar normal hodisa (vaqt farqi, valyuta konvertatsiyasi, komissiya) — muhimi ularni tushuntirib yopish jarayoni bo'lishi. Yarashtirilmagan farqlar yig'ilib qolsa, keyin tergov qilish deyarli imkonsiz."
+    },
+    {
+      "id": 10008,
+      "code": "P9",
+      "level": "S",
+      "type": "code",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Pul o'tkazishda qaysi yozuv to'g'ri?",
+      "snippet": "-- A dan B ga 100.00 (10000 tiyin)\n-- Variant 1\nUPDATE accounts SET balance = balance - 10000 WHERE id='A';\nUPDATE accounts SET balance = balance + 10000 WHERE id='B';\n\n-- Variant 2\nINSERT INTO entries(tx_id, account, amount) VALUES\n  ('t1','A',-10000), ('t1','B',+10000);",
+      "options": [
+        "Variant 1 — soddaroq",
+        "Variant 2: bitta transaction ichida ikki yozuv, yig'indisi 0; balans yozuvlardan olinadi, tarix saqlanadi. Variant 1 da mablag' yetarliligi sharti (WHERE balance >= 10000) va natijani tekshirish ham bo'lishi shart, aks holda balans manfiy bo'ladi",
+        "Ikkalasi ham noto'g'ri",
+        "Variant 2 faqat NoSQL uchun"
+      ],
+      "answer": 1,
+      "explanation": "Ikkala variantda ham BEGIN/COMMIT majburiy. Variant 2 uchun invariantlar: (tx_id) bo'yicha yig'indi = 0 (constraint yoki test bilan), amount ≠ 0, va tx_id unikal — idempotentlik shu orqali beriladi (takror so'rov unique violation beradi, pul ikki marta ko'chmaydi)."
+    },
+    {
+      "id": 30094,
+      "code": "SN95",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Double-entry ledger'da balansni qanday hisoblaysiz — yuqori yuklamada?",
+      "options": [
+        "Har `UPDATE accounts SET balance = balance + x`",
+        "Immutable `entries` jadvali (debit/credit) — balans yozuvlar yig'indisi; tezlik uchun davriy snapshot/materiallashgan balans (`balance_at_version`) va undan keyingi yozuvlar qo'shiladi",
+        "Balansni faqat keshda saqlash",
+        "Har o'qishda butun tarixni sanash"
+      ],
+      "answer": 1,
+      "explanation": "Mutable balans ustuni audit va tiklashni yo'qotadi (qanday qilib shu raqam chiqdi?). Immutable yozuvlar + snapshot ikki narsani beradi: to'liq izlanish va tez o'qish. Har tranzaksiya uchun invariant `sum(debit) = sum(credit)` DB constraint yoki test bilan tekshiriladi; yozuvlar hech qachon `UPDATE`/`DELETE` qilinmaydi — faqat qarama-qarshi yozuv (reversal)."
+    },
+    {
+      "id": 30095,
+      "code": "SN96",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Ledger yozuvlarida konkurent yozuv va izchillik uchun to'g'ri yondashuv?",
+      "options": [
+        "Serializable izolyatsiya har doim va boshqa hech narsa",
+        "Har hisob uchun monoton `sequence`/`version` bilan optimistik yozuv yoki hisob bo'yicha qulf; balans cheklovi (`balance >= 0`) atomik shartli yozuv bilan tekshiriladi; idempotency key har tranzaksiyada",
+        "Faqat app'da mutex",
+        "Yozuvlarni navbatga qo'yib bitta worker bilan yozish har doim"
+      ],
+      "answer": 1,
+      "explanation": "Pul harakatida ikki xatarni yopish kerak: qo'sh yozuv (idempotency key + unique constraint) va minusga tushish (atomik shart). Hot hisob bo'lsa (masalan merchant hisobi) per-account navbat yoki sharding (bir hisobni ko'p sub-balansga bo'lish) qo'llanadi. `SERIALIZABLE` to'g'ri, lekin retry siyosati va throughput narxi bor."
+    },
+    {
+      "id": 30096,
+      "code": "SN97",
+      "level": "St",
+      "type": "open",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Kunlik reconciliation: PSP settlement fayli bilan ichki ledger mos kelmadi. Qanday ishlaysiz?",
+      "modelAnswer": [
+        "Jarayon: settlement faylini import (immutable, raw saqlanadi) → external ID bo'yicha matching → uch guruh: mos, faqat bizda, faqat PSP'da",
+        "Sabab toifalari: kechikkan capture/settlement (timing), komissiya va FX farqi, qaytarish/chargeback, bizdagi yo'qolgan webhook, PSP tomonidagi qo'lda operatsiya",
+        "Farq har biri uchun 'exception' yozuvi ochiladi: egasi, sababi, yechimi; hech narsa jimgina yo'q qilinmaydi",
+        "Tuzatish faqat ledger'ga qo'shimcha (reversal/adjustment) yozuv bilan — mavjud yozuv o'zgartirilmaydi, izoh va manba havolasi bilan",
+        "Avtomatlashtirish: timing farqini T+1 oynasi bilan avtomatik yopish, qolganiga alert va dashboard (ochiq farq summasi va yoshi — KPI)",
+        "Profilaktika: webhook'ni yagona haqiqat manbasi qilib qo'ymaslik (davriy pull/reconcile), idempotency, va har tashqi tranzaksiya ID'sini saqlash"
+      ],
+      "explanation": "Fintechda reconciliation — ixtiyoriy emas: webhook yo'qoladi, PSP kechikadi. Intervyuda kutiladigan detal — farqni toifalash va tuzatishni append-only yozuv bilan qilish."
+    },
+    {
+      "id": 30464,
+      "code": "SN465",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Ledger'da pul o'tkazish (A→B) yozuvi qanday bo'ladi va nega ikki yozuv?",
+      "options": [
+        "Bitta `UPDATE` bilan ikki balansni o'zgartirish",
+        "Bitta tranzaksiyada ikki entry: A hisobiga debit, B hisobiga kredit, bir `transaction_id` ostida; `sum(debit) = sum(credit)` invarianti har tranzaksiya uchun tekshiriladi — shu bilan har pul harakati izlanadi va hisobot yozuvlardan qayta hisoblanadi",
+        "Faqat jurnal yozish",
+        "Har hisob uchun alohida tranzaksiya"
+      ],
+      "answer": 1,
+      "explanation": "Ikki alohida tranzaksiya ishlatilsa pul 'havoda' qolishi mumkin (birinchi commit, ikkinchi fail). Bir DB ichida bu oddiy tranzaksiya; servislar orasida bo'lsa — saga bilan ikki bosqich (`pending` yozuv → tasdiq) yoki umuman ledgerni bitta servisda ushlash. Amaliyotda ledgerni bo'lish eng oxirgi chora, chunki invariant butunligi shu yerda."
+    },
+    {
+      "id": 30465,
+      "code": "SN466",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Ledger'da yaxlitlash (rounding) qanday boshqariladi?",
+      "options": [
+        "Har joyda yaxlitlash",
+        "Yaxlitlash faqat aniq belgilangan nuqtalarda (masalan komissiya hisoblashda), qoidasi hujjatlashtirilgan (half-up/banker's), va yo'qolgan tiyinlar alohida 'rounding' hisobiga yoziladi — shunda `sum(debit)=sum(credit)` buzilmaydi",
+        "Float bilan avtomatik",
+        "Yaxlitlamaslik"
+      ],
+      "answer": 1,
+      "explanation": "Klassik xato: 100.00 ni uchga bo'lib 33.33 × 3 = 99.99 — 1 tiyin yo'qoladi va reconciliation buziladi. Yechim: qoldiqni oxirgi qismga qo'shish yoki rounding hisobiga yozish. Foiz/soliq hisoblari uchun qaysi tartibda yaxlitlash (avval jamlab keyin yaxlitlashmi) ham biznes qoidasi sifatida qat'iy belgilanadi."
+    },
+    {
+      "id": 30514,
+      "code": "SN515",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Ledger jadvali juda katta bo'lib ketdi (mlrd qator). Qanday boshqariladi?",
+      "options": [
+        "Eski yozuvlarni o'chirish",
+        "Vaqt bo'yicha partitionlash + davriy balans snapshot (hisob bo'yicha `balance_at(period)`): joriy balans snapshot + keyingi yozuvlar; eski partitionlar arxivga (sovuq saqlash) ko'chiriladi, lekin o'chirilmaydi — qonuniy saqlash muddati bor",
+        "Balansni ustunda saqlash",
+        "Ma'lumotni siqish yetarli"
+      ],
+      "answer": 1,
+      "explanation": "Snapshot qoidalari: snapshot ham immutable yozuv sifatida saqlanadi (qaysi entry ID gacha hisoblangani bilan), shunda tekshirish (audit) mumkin bo'ladi. Arxivga ko'chirishda so'rov yo'li saqlanishi kerak (masalan yillik hisobot uchun) — ko'pincha ombor (ClickHouse/BigQuery) nusxasi shu maqsadda ishlatiladi."
+    },
+    {
+      "id": 30519,
+      "code": "SN520",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ledger",
+      "domain": "fin",
+      "section": "p2",
+      "question": "Hisob balansi manfiyga tushmasligini qanday kafolatlaysiz (yuqori konkurentlikda)?",
+      "options": [
+        "Ilovada `if balance >= amount`",
+        "DB darajasida atomik shart: balans yozuvini `UPDATE ... SET balance = balance - $1 WHERE account_id = $2 AND balance >= $1` (ta'sirlangan qator 0 bo'lsa rad etish) yoki `CHECK (balance >= 0)` constraint; ilovadagi tekshiruv faqat UX uchun",
+        "`SERIALIZABLE` yetarli",
+        "Mutex bilan"
+      ],
+      "answer": 1,
+      "explanation": "Read-then-write har doim race beradi. Hot hisob (masalan merchant) bo'lsa bitta qatorga contention paydo bo'ladi — chora: hisobni sub-balanslarga bo'lish (N ta shard qator, tasodifiy tanlab yechish, jamlab o'qish) yoki navbat bilan ketma-ketlashtirish. Ledger yozuvlari esa baribir append-only qoladi."
+    }
+  ]
+}

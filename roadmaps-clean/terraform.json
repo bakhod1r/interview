@@ -1,0 +1,593 @@
+{
+  "slug": "terraform",
+  "title": "Terraform Roadmap",
+  "description": "Step by step guide to learn Terraform in @currentYear@",
+  "url": "https://roadmap.sh/terraform",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-06-30T16:00:17.476Z",
+  "relatedRoadmaps": [
+    "devops",
+    "aws",
+    "git-github",
+    "cloudflare",
+    "backend"
+  ],
+  "topicCount": 23,
+  "subtopicCount": 87,
+  "topics": [
+    {
+      "id": "h6qRrUe-bn25s0UkxU600",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "twR3k9D-qDr1CbyW6K0Fs",
+          "title": "What is Infrastructure as Code?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CU9V3iRdssamsG-xMouXT",
+          "title": "What is Terraform?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hRIDJHIxWc5Iav7tsu8l-",
+          "title": "Usecases and Benefits",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UsINvx84pBF1hp8XoLF4c",
+          "title": "CaC vs IaC",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AYtBLFU1nowEq-EVlXrEZ",
+          "title": "Installing Terraform",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "GlIXmCuvR_C81RMeMM1Kz",
+      "title": "Project Initialization",
+      "subtopics": [
+        {
+          "id": "VxMse1VTZAUtVhpKv1OHS",
+          "title": "Input Variables",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ZRVv9onD7KGz1cJLcsnwy",
+      "title": "Providers",
+      "subtopics": [
+        {
+          "id": "iIjUG_N_mQtLHG25v4-xg",
+          "title": "Terraform Registry",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JJ-QhLWqT0luis_kVDVHW",
+          "title": "Configuring Providers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bnQ2YLHd7E-vRxX3PnUEX",
+          "title": "Versions",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "qhO7CY-1_vuh2BVJYQCzh",
+      "title": "Hashicorp Config. Language (HCL)",
+      "subtopics": [
+        {
+          "id": "Hma2IgatFME8STHPwpeMG",
+          "title": "What is HCL?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LaD0H7XhoEEaXbcwjxAbw",
+          "title": "Basic Syntax",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "BYydmFc2e-YPCC4MCWmh2",
+      "title": "Resources",
+      "subtopics": [
+        {
+          "id": "BgZu7Xao5GjR8StVL7qhM",
+          "title": "Resource Behavior",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "76kp98rvph_8UOXZR-PBC",
+          "title": "Resource Lifecycle",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "TPd00dRndj1P8674KTTrm",
+          "title": "Meta Arguments",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EIsex6gNHDRYHn0o2spzi",
+          "title": "depends_on",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1T35eNO18qoyXcX7S-Jox",
+          "title": "Versioning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "16vLOPP9lTCuBh0q-UVMk",
+          "title": "Sensitive Data",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "AY7_xUeCl6ilqZzg1YFoP",
+      "title": "Variables",
+      "subtopics": [
+        {
+          "id": "rdphcVd-Vq972y4H8CxIj",
+          "title": "Variable Definition File",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1mFih8uFs3Lc-1PLgwiAU",
+          "title": "Local Values",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HUiodBFIp_rsQDkf3WgbI",
+          "title": "Type Constraints",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fm8oUyNvfdGWTgLsYANUr",
+          "title": "Environment Variables",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U2n2BtyUrOFLnw9SZYV_w",
+          "title": "Validation Rules",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "7GK4fQf1FRKrZgZkxNahj",
+      "title": "Outputs",
+      "subtopics": [
+        {
+          "id": "DB-p_S4Ce4tDWF4wDiGSt",
+          "title": "Preconditions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "31fa8kBzCEn-uCrTSoPM4",
+          "title": "Output Syntax",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8giL6H5944M2L0rwxjPso",
+          "title": "Sensitive Outputs",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Xes24SqkwSaO844kLbClj",
+      "title": "Format & Validate",
+      "subtopics": [
+        {
+          "id": "78bGm8J5Y1I8H4qioOvWb",
+          "title": "terraform fmt",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wdYLjB-tKg76B7YcnhevQ",
+          "title": "terraform validate",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YftsQYpcqJqBKPjy5tWOq",
+          "title": "TFLint",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "pjmOK1MEMnIV_zAlaOF01",
+      "title": "Deployment",
+      "subtopics": [
+        {
+          "id": "LDpj-LY_SOXzno04D-Y25",
+          "title": "terraform apply",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LDxAXmTKyvogvgUpvN5pT",
+          "title": "terraform plan",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "KXlLlaR0_S7gE_ZB1hNEd",
+      "title": "Inspect / Modify State",
+      "subtopics": [
+        {
+          "id": "vAFFgKSthyj_3Lxt-Z6pg",
+          "title": "graph",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Y-mgCkDpawt5NrMwDH9Ki",
+          "title": "list",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kw32gb4HSeCEoBwkeziS_",
+          "title": "output",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jvHtSRLuCXJrGIiesgbE-",
+          "title": "-replace option in apply",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7DZB2VeyuouFXOdFEfeZt",
+          "title": "show",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uR6Vjm8cek9JRzZV0iTXh",
+          "title": "rm",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0xVXwjWPFXDGRw_3p6th6",
+          "title": "mv",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wSh7bbPswcFAzOicX8VPx",
+          "title": "state pull / push",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Os6AOXp1CVI_Bh3NYnX17",
+          "title": "state replace-provider",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Trpi2ZlnXZVYJCibE2bQ8",
+          "title": "state force-unlock",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "inbTto9Qukdj6egRJ0Zh9",
+      "title": "Clean Up",
+      "subtopics": [
+        {
+          "id": "LPI13FILvkD55hWcWbPrV",
+          "title": "terraform destroy",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "5xAE-9viD7DP_ugQ6NE_C",
+      "title": "State",
+      "subtopics": [
+        {
+          "id": "pDm08NBVwGf9rAIZC_ZIR",
+          "title": "Remote State",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GseYuG9wT8H9R_enxWzuQ",
+          "title": "State Locking",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "L7wAMGi_yU-Bbc9fXlmxZ",
+          "title": "Import Existing Resources",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "a0rUMnYluVUGhyhlDK5S8",
+          "title": "Splitting State Files",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jas0XILqCUXjWRk3ZoSEO",
+      "title": "Best Practices for State",
+      "subtopics": [
+        {
+          "id": "kyScfijEntX9H1mp7tmej",
+          "title": "count",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gcdg_GhAacIWzv19ITTE_",
+          "title": "for_each",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5FLOFTP_nCa3qi1wbV4qE",
+          "title": "provider",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0A8zTuCXVmcruJdfH3cNu",
+          "title": "lifecycle",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "R2AORYmc1NgGTqLZY5Fu-",
+      "title": "Modules",
+      "subtopics": [
+        {
+          "id": "6W4_akHG9YtvN6dpbZnG-",
+          "title": "Root vs Child Modules",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AAg_iFggkEZNL12-6nkgK",
+          "title": "Published Modules Usage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wQN1QrK9VB_fHlXrBzDoU",
+          "title": "Creating Local Modules",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NsBJTYH9KXvjJuhPzjE_L",
+          "title": "Inputs / Outputs",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6vs1VvjeILgAPLL6g7dfy",
+      "title": "Provisioners",
+      "subtopics": [
+        {
+          "id": "CmmoshFC1dKE4y3SMN2bl",
+          "title": "When to Use?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CJfCpRN_oVf6n_EfLNJSV",
+          "title": "Creation / Destroy Time",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Qch8k6e4pS8OlmG_sI0hH",
+          "title": "file provisioner",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "g2F5-nX4Aw-xWZiypNbnL",
+          "title": "local-exec provisioner",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JQE3_KakBXZdMVP_pPFNS",
+          "title": "remote-exec provisioner",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HEr-BBxE3jRKTqRnguds1",
+          "title": "Custom Provisioners",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "huXZz55P7kVJwTn5BS_Wk",
+      "title": "Data Sources",
+      "subtopics": [
+        {
+          "id": "gTMPK0tfs2JYgoL7SAGW6",
+          "title": "Modules Best Practices",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "tB4zfwY4E3GmXo-XQwS-l",
+      "title": "Template Files",
+      "subtopics": []
+    },
+    {
+      "id": "nFq-64JQoYAKjN9YkmOfO",
+      "title": "Workspaces",
+      "subtopics": []
+    },
+    {
+      "id": "O194eWh529jj4VDhKxNSj",
+      "title": "CI / CD Integration",
+      "subtopics": [
+        {
+          "id": "weIlGqGN15U8BH1yE9moA",
+          "title": "GitHub Actions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6OoAdvikyp0byMH2oZhyQ",
+          "title": "Circle CI",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fH27mGrdnkDQCrGGDFU6p",
+          "title": "GitLab CI",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qFpaqOSoefTyKxmI-FRZt",
+          "title": "Jenkins",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "QSftI21seX6I_xPonlfmU",
+      "title": "Testing",
+      "subtopics": [
+        {
+          "id": "V7_NnDIY1MefV_xjCCsnI",
+          "title": "Unit Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bjozhkpOI9UjjNfmT5HhY",
+          "title": "Contract Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ENkLj3z6hR2cKT7rBhYp5",
+          "title": "Integration Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QqwlAtz7VfrMtNEGpT5Sa",
+          "title": "End to End Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "H3_So6qX-s2131WHGR_GO",
+          "title": "Testing Modules",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "ECcHo0KTDN27MuVTC-Fwy",
+      "title": "Scaling Terraform",
+      "subtopics": [
+        {
+          "id": "zCU02_5Pide5BZiuMuqEU",
+          "title": "Splitting Large State",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "RtwZy60ruRpskmgr1qYYf",
+          "title": "Parallelism",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wL3WWhjPEgFmumOmCPRDf",
+          "title": "Deployment Workflow",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AEtW6j2GcfZz7IXk4sM6c",
+          "title": "Terragrunt",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "oANePqjkwtNMwvV-_W0B7",
+          "title": "Infracost",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6zFuSNOfbPaYIE_t--2nr",
+          "title": "Version Management",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3MnZK2V5KhBhw67SyUVPk",
+      "title": "Security",
+      "subtopics": [
+        {
+          "id": "uVz9WwVAgMu1ZU0qjqVnc",
+          "title": "Secret Management",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "z0PcbgpHbR6Fm07-On4P8",
+          "title": "Compliance / Sentinel",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NSWG79dEygyl6pb54wLrE",
+          "title": "Terrascan",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Vxo_gNdFl3CZXV7GLPqjD",
+          "title": "Trivy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MUkbLTMzmaVWbAJj6G3aj",
+          "title": "KICS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ljj7ngl1N4ezCXQ0o6Y8x",
+          "title": "Checkov",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "erxow5xNRj01WepdFOhVf",
+      "title": "HCP",
+      "subtopics": [
+        {
+          "id": "K_7dB-5cCYzGbwYXXaoiY",
+          "title": "What and when to use HCP?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "elW7IMBSF0ydmlb7rtI1o",
+          "title": "Enterprise Features",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "RPcsyhIG027uP7KF0hwaY",
+          "title": "Authentication",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JoUWF6AQoreELxFHNi9oo",
+          "title": "Workspaces",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Z6dG92afC8SGwCFNTx4ac",
+          "title": "VCS Integration",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "nU1WoRtxRF9KeNhzuwNUB",
+          "title": "Run Tasks",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

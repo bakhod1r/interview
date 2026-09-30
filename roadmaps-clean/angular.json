@@ -1,0 +1,837 @@
+{
+  "slug": "angular",
+  "title": "Angular Developer",
+  "description": "Everything that is there to learn about Angular and the ecosystem in @currentYear@.",
+  "url": "https://roadmap.sh/angular",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-06-15T11:34:57.179Z",
+  "relatedRoadmaps": [
+    "frontend",
+    "javascript",
+    "react",
+    "vue",
+    "nodejs"
+  ],
+  "topicCount": 26,
+  "subtopicCount": 132,
+  "topics": [
+    {
+      "id": "KDd40JOAvZ8O1mfhTYB3K",
+      "title": "Introduction to Angular",
+      "subtopics": [
+        {
+          "id": "EbFRcy4s6yzzIApBqU77Y",
+          "title": "Setting up a New Project",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hpShWwL0M57ZAzqkB4I8t",
+          "title": "Angular and History",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DE3cMpeRYuUPw2ADtfS-3",
+          "title": "Angular Architecture",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Mp056kNnwsRWeEXuhGPy-",
+          "title": "Component Anatomy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-gUpm3OLUJl9iAyx6fmHN",
+          "title": "Template",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ex8FOKrUlbu4MuEq2czyW",
+          "title": "Creating Components",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "kGnKzCkQCNFEdgCBRtNuW",
+      "title": "Components",
+      "subtopics": []
+    },
+    {
+      "id": "19c7D-fWIJ3vYFT6h8ZfN",
+      "title": "Communication",
+      "subtopics": [
+        {
+          "id": "dOMvz__EQjO-3p-Nzm-7P",
+          "title": "Provider",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uYHy2yhtTm6fQkKpYx3lU",
+          "title": "changeDetection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RcNHEh6kmbBK1PICbhAwr",
+          "title": "Standalone",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "doHDoAgp7T59KGSXPpQzZ",
+          "title": "viewProvider",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ctigvSYeFa77y3v7m11gk",
+          "title": "Encapsulation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cDN0PGo-zkcLmttxCiAI-",
+          "title": "Selector",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4XJKEmSrQfPxggHlAP30w",
+          "title": "Styles",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ghbrJhuGvscnNGCtVLh5_",
+          "title": "Imports",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Szgr8dnZNi-z5i6raIJzW",
+          "title": "Metadata",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TDyFjKrIZJnCjEZsojPNQ",
+          "title": "Parent-Child Interaction",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v0XaLNZ-YrRqP-xv8wS43",
+          "title": "ViewChild",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oQl9etjoHiU2JgxieUOEH",
+          "title": "ContentChild",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "b_kdNS9PDupcUftslkf9i",
+      "title": "Modules",
+      "subtopics": [
+        {
+          "id": "BCq5sgWQLiw0f7u7ZSAd2",
+          "title": "Module Architecture",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9YhTXybJw2gszlqFeBtW3",
+          "title": "Creating Modules",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "w_BazXvINFyxDCHmlznfy",
+          "title": "Feature Modules",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bLERvEERmNI5AgxtEYokZ",
+          "title": "Lazy Loading Modules",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5b590c7s-2XJ0rgdCYxLa",
+          "title": "Dependencies",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6fhe9xAi_RSVfa-KKbcbV",
+      "title": "Templates",
+      "subtopics": [
+        {
+          "id": "xk3v8p6vf8ntGj5c-IU4U",
+          "title": "Structural Directives",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xvwby0FTdIolRrV2j88fY",
+          "title": "Attribute Directives",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "WH5wlyOtrqFHBJx7RFJwS",
+      "title": "Understand Binding",
+      "subtopics": [
+        {
+          "id": "XHpfHRIlFh19FJIE07u7i",
+          "title": "Interpolation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "t2YOeMONlcnKBrVAo0JDc",
+          "title": "Template Statements",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5vZkiH7HDwONIABLfNJ06",
+          "title": "Data Binding",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TJOZfHtsLfwA0CZ2bd1b2",
+          "title": "Property Binding",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FgsSyM6To7irpbivtOLEE",
+          "title": "Attribute Binding",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bKnpirSvex4oE4lAjiSSV",
+          "title": "Event Binding",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2UH79nCjgtY1Qz1YjUJYL",
+          "title": "Two-way Binding",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "VsC7UmE_AumsBP8fC6to1",
+      "title": "Template Syntax",
+      "subtopics": [
+        {
+          "id": "nCpfj_35ZvW-NTygg06XZ",
+          "title": "Component Lifecycle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tC5ETtOuuUcybj1jI4CuG",
+          "title": "Dynamic Components",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U1Zy2T-2ki9pDkXn9hn-I",
+          "title": "@if",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ORdPDad4HWJAfcZuS-7yM",
+          "title": "@else",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ys5untkSppGMFK-VsfuRt",
+          "title": "@else if",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2kYS9w1UzQFZ1zhf01m9L",
+          "title": "@for",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nZuim4Fjq6jYOXcRTAEay",
+          "title": "@switch",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cHC2MH50CbUSMRZV4QGJI",
+          "title": "@case",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "h4MMn0_qUN3YXEdMUJOyd",
+          "title": "@default",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AwOM0ucg6W7TohdUd7KWT",
+          "title": "@let",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ONy-0olujU_FGZM7Wvfr2",
+          "title": "@defer",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "j99WQxuTzGeBBVoReDp_y",
+      "title": "Pipes",
+      "subtopics": [
+        {
+          "id": "_-mTs_FMeob-ZGK-bb3j-",
+          "title": "Change Detection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "i2taHzQ5KLHjkkpbH4Ytd",
+          "title": "Common Pipes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nZxZnzbQg9dz-SI65UHq9",
+          "title": "Pipes Precedence",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BOYXGfULJRiP-XOo_lNX3",
+          "title": "Custom Pipes",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "kGzlumFdZFxTRZ3HnCGFO",
+      "title": "Directives",
+      "subtopics": [
+        {
+          "id": "7GUvTMVzfdVEDBOz-tHUT",
+          "title": "Custom Directives",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dbAS-hN1hoCsNJhkxXcGq",
+          "title": "Configuration",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "a74v78SvGtWduZpXs7wSq",
+      "title": "Routing",
+      "subtopics": [
+        {
+          "id": "ewbDdPYv2SJl_jW3RVHQs",
+          "title": "Lazy Loading",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1ZwdEL0Gx30Vv_Av3ZTGG",
+          "title": "Router Outlets",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8lFyuSx4MUcYRY2L8bZrq",
+          "title": "Router Links",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "CpsoIVoCKaZnM_-BbXbCh",
+      "title": "Services  & Remote Data",
+      "subtopics": [
+        {
+          "id": "8u9uHCRt9RU57erBy79PP",
+          "title": "Dependency Injection",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VzvB_bads057YtG4ST4a2",
+          "title": "Control Flow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VsU6713jeIjAOEZnF6gWx",
+          "title": "@Input & @Output",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nyDry6ZWyEUuTq4pw-lU3",
+          "title": "Template Ref Vars",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Q36LQds8k_cSjijvXyWOM",
+      "title": "Forms",
+      "subtopics": [
+        {
+          "id": "1d3Y4HVnqom8UOok-7EEf",
+          "title": "Reactive Forms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XC_K1Wahl2ySqOXoym4YU",
+          "title": "Typed Forms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uDx4lPavwsJFBMzdQ70CS",
+          "title": "Template-driven Forms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CpufN6DAOj5UNab9vnH0k",
+          "title": "Dynamic Forms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kxRtLsB3y_th8j-HjmJgK",
+          "title": "Custom Validators",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m5dgKgUR3ZqI9sBAzToev",
+          "title": "Control Value Accessor",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "8UY0HAvjY7bdbFpt-MM1u",
+      "title": "HTTP Client",
+      "subtopics": [
+        {
+          "id": "AKPhbg10xXjccO7UBh5eJ",
+          "title": "Setting Up the Client",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HjGAv3aV-p4ijYJ8XYIw3",
+          "title": "Making Requests",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "lfp7PIjwITU5gBITQdirD",
+      "title": "RxJS Basics",
+      "subtopics": [
+        {
+          "id": "krXA6ua7E3m4IIpFkgQZe",
+          "title": "Observable Pattern",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YF_sG292HqawIX0siWhrv",
+          "title": "Router Events",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PmC4zeaLpa5LoL4FhYXcG",
+          "title": "Guards",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "u1TG8i145o0RKhOR_5epf",
+      "title": "Signals",
+      "subtopics": [
+        {
+          "id": "b06Y5YrqBbHhWkK6Ws_1c",
+          "title": "Observable Lifecycle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "e1ZmmxPZuogCNgtbPPWmd",
+          "title": "RxJS vs Promises",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ihsjIcF0tkhjs56458teE",
+          "title": "Operators",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nxUbl0eu3LsSL-Z8X6nP5",
+          "title": "Filtering",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bJbbayFQ9WSJT9-qy0H5l",
+          "title": "Rate Limiting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kdMJHljMzGA3oRlh8Zvos",
+          "title": "Transformation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KAdtebWvgvMifIwd52yc4",
+          "title": "RxJS Interop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LcJyAfv9hjyUNXUVyPRP4",
+          "title": "Inputs as Signals",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Mqe_s-nwBqAL6X7OGRHEN",
+      "title": "State Management",
+      "subtopics": [
+        {
+          "id": "xG7iSVOGcbxJbNv3xbNfc",
+          "title": "Writing Interceptors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "N9ZCPgFnFIUv4jMv1w5qK",
+          "title": "NGXS",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "m4WBnx_9h01Jl6Q1sxi4Y",
+      "title": "Zones",
+      "subtopics": [
+        {
+          "id": "1x5pT607aKE-S-NCWB810",
+          "title": "Zoneless Applications",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "EbJib-XfZFF9bpCtL3aBs",
+      "title": "Developer Tools",
+      "subtopics": [
+        {
+          "id": "T3MmS3bvMMgCUbOk3ktU7",
+          "title": "DevTools",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4YSk6I63Ew--zoXC3xmrC",
+          "title": "Angular CLI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FVH0lnbIZ2m5EfF2EJ2DW",
+          "title": "Local Setup",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1fVi9AK6aLjt5QgAFbnGX",
+          "title": "Deployment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yhNGhduk__ow8VTLc6inZ",
+          "title": "End-to-End Testing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Uvr0pRk_fOzwRwqn0dQ6N",
+          "title": "Schematics",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ax-s_xw3FO3Ocv-AnLbQD",
+          "title": "Build Environments",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TeWEy9I-hU6SH02Sy2S2S",
+          "title": "CLI Builders",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jfHaS8TqE4tcAo59K8Nkn",
+      "title": "SSR",
+      "subtopics": [
+        {
+          "id": "9HS9C3yq9EUcUy0ZUZk_H",
+          "title": "Queries as Signals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IeU6ClS_yp6BYKdkQOJVf",
+          "title": "Model Inputs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ir94IdkF1tVAA8ZTD9r0N",
+          "title": "NgRx",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "b-0yQ74zHtAxI9aRLBohc",
+      "title": "SSG",
+      "subtopics": [
+        {
+          "id": "kauQofxCmpktXPcnzid17",
+          "title": "AnalogJS",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ql7SyxrRmjpiXJ9hQeWPq",
+          "title": "Language Service",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cl89U8atD6gw5rMGUm4Ix",
+          "title": "Libraries",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "mm6c7GLQEwoQdAHdAYzGh",
+      "title": "Security",
+      "subtopics": [
+        {
+          "id": "MwtM1UAIfj4FJ-Y4CKDsP",
+          "title": "AoT Compilation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YHV5oFwLwphXf1wJTDZuG",
+          "title": "Using Libraries",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "A1mYMg7cbcj6p_VkDf-Tz",
+          "title": "Creating Libraries",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "umUX4Hxk7srHlFR_Un-u7",
+          "title": "Cross-site Scripting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cgI9oeUHufA-ky_W1zENe",
+          "title": "Sanitization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XoYSuv1salCCHoI1cJkxv",
+          "title": "Trusting Safe Values",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5h7U0spwEUhB-hbjSlaeB",
+          "title": "Enforce Trusted Types",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xH3RHPhsaqD9zIMms5OmX",
+          "title": "HTTP Vulnerabilities",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Z1DZBbFI4oU6-KQg3wqMm",
+          "title": "Cross-site Request Forgery",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m2aw8vb4rz4IjshpoMyNx",
+          "title": "HttpClient CSRF",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "VNG9DdXlS6R1OJ6Lrn4Lt",
+      "title": "Accessibility",
+      "subtopics": [
+        {
+          "id": "0FvH7KPs9ag02QkD1HEJ-",
+          "title": "Attributes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CZ1YRyai8Ds-ry4A8jVbr",
+          "title": "UI Components",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0s-QhN5aZh2F3tLJFKEyR",
+          "title": "Containers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8i_JD1P4gIhY1rdldwLC2",
+          "title": "Routing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5-RCB8AiDbkdIFYNXKWge",
+          "title": "Link Identification",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IgUHqfVhiGpwxT9tY8O88",
+          "title": "Combination",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "STEHxJpwBZxFdQl0zUKxo",
+      "title": "Performance",
+      "subtopics": [
+        {
+          "id": "ni00edsphJd7uBLCn7-Vw",
+          "title": "XSRF protection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zd7YJGlcMFNFbsKUiW_XC",
+          "title": "Cross-site Script Inclusion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CYjsXIOWtP5DJmYS-qR-s",
+          "title": "Deferrable Views",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1WIKjn3nxYDMIhBL17aYQ",
+          "title": "Image Optimization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pRSR5PEbkJXAJ1LPyK-EE",
+          "title": "Zone Pollution",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yxUtSBzJPRcS-IuPsyp-W",
+          "title": "Slow Computations",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "lLa-OnHV6GzkNFZu29BIT",
+      "title": "Testing",
+      "subtopics": [
+        {
+          "id": "NY_MfBNgNmloiRGcIvfJ1",
+          "title": "Hydration",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HU1eTYB321C93qh_U7ioF",
+          "title": "Testing Services",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rH13NBFG02hnn5eABSNCY",
+          "title": "Testing Pipes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4xt0m5jkUqB4Z-krcFBuL",
+          "title": "Testing Requests",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TGRZBizDy83JKg_MhnRdX",
+          "title": "Services with Dependencies",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cXVy1lx2XqY_j8gxz-y60",
+          "title": "Component Bindings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SGqb5k6OmWit8PA6ZT3js",
+          "title": "Testing Directives",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f5v74Uw54LsB4FgdN6eCd",
+          "title": "Debugging Tests",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0dYWO_Zvh9J5_6cRjRjvI",
+          "title": "Component Templates",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bqA2bxPcZrqQ-6QE-YDK1",
+          "title": "Code Coverage",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Xxyx3uzy5TpNhgR1IysMN",
+      "title": "Internationalization",
+      "subtopics": [
+        {
+          "id": "9ISvaaJ815_cr_KW9vQhT",
+          "title": "Multiple Locales",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "W8OwpEw00xn0GxidlJjdc",
+          "title": "Localize Package",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dVKl3Z2Rnf6IB064v19Mi",
+          "title": "Locales by ID",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jL5amGV1BAX_V5cyTIH7d",
+          "title": "Translation Files",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Iv2d4sgODqMPzA9gH6RAw",
+          "title": "Transitions & Triggers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Unjknmb4b2LY-nUVvvF7_",
+          "title": "Complex Sequences",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "rYJq59Q0YdfK6n3x740Em",
+      "title": "Animation",
+      "subtopics": [
+        {
+          "id": "x91jWP81oCTeVEwzX8FbK",
+          "title": "Route Transitions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "M1CU2Yq6dLp4yOuGV0fhF",
+          "title": "Reusable Animations",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

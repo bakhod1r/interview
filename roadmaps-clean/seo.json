@@ -1,0 +1,1146 @@
+{
+  "slug": "seo",
+  "title": "SEO Roadmap",
+  "description": "Step-by-step guide to becoming an SEO expert in @currentYear@",
+  "url": "https://roadmap.sh/seo",
+  "groups": [
+    "New Roadmaps",
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-09-24T10:56:35.877Z",
+  "relatedRoadmaps": [
+    "frontend",
+    "html",
+    "css",
+    "javascript",
+    "system-design",
+    "ai-engineer"
+  ],
+  "topicCount": 51,
+  "subtopicCount": 165,
+  "topics": [
+    {
+      "id": "ae1c-S4JTU3NdBhXLa3Dq",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "pectMOVUWqkyoIF_xhdo0",
+          "title": "What is SEO",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-LOrBTuP1uvdDyGAaYoMW",
+          "title": "What is GEO",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "piJTqOMCBsHPCAq_FAxhy",
+          "title": "What is AEO",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fVUfQYb8BP_hFMmd1S2-J",
+          "title": "Search Intent",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hwKZmfYFiIu6plbiXtJRI",
+          "title": "Semantic Search ",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "OapKwz8bSH74O6NmP95Oc",
+      "title": "Website Architecture",
+      "subtopics": [
+        {
+          "id": "sq0ScczfbtjP-50goDqJv",
+          "title": "Site Hierarchy & Depth",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "py4DdYxCQuZ50VxoCu5o6",
+          "title": "Machine-Readable Content",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ED0d7WR_cHqRSxQlQGuzV",
+          "title": "Internal Linking",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nKUO2T03h5hoMkmPK7S15",
+          "title": "Tracking Volatility",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "pB_fkc0wStWZ4MxCWFtmO",
+      "title": "Rendering & JavaScript SEO",
+      "subtopics": [
+        {
+          "id": "UI3c2c9k1-xkBzGXH8GvF",
+          "title": "Canonicalization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2l_5knaWysxinhMV1z6LK",
+          "title": "Pagination",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3jNWEYI-jBk2xIPFICP-5",
+          "title": "Faceted Navigation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hBI0amu0oW8ysTlpPCaOm",
+          "title": "URL Parameters",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DajReU0-DBUgYY0pCQsDL",
+          "title": "SSR vs CSR vs Hydration",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "vF-jde0y42JKX1jEPeSfl",
+          "title": "Screaming Frog",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wP4LP-audfrqSm-nUcEA9",
+          "title": "Sitebulb",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "u7LcT0Gbzc92r9H3MrkrE",
+          "title": "PerplexityBot",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "CRKDP0FkX-yQO6JrzUKJe",
+      "title": "Core Web Vitals",
+      "subtopics": [
+        {
+          "id": "5o806bMtqKVLdjQVFjnJz",
+          "title": "PageSpeed Insights",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "pWZev6b_aJErtcZUqNW1t",
+          "title": "Domain & Protocol Changes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "So5JL15BYlEeoYOt90dT_",
+          "title": "Redirect Mapping",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "gOmEWLX7u8vGGt_GN5Fkq",
+      "title": "Mobile Friendliness",
+      "subtopics": [
+        {
+          "id": "Md94gEyK4XEPAVHpfcnXK",
+          "title": "Post-Migration Monitoring",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "VWoW6gPHO0_x8Yu_vted1",
+      "title": "HTTPS & Security",
+      "subtopics": []
+    },
+    {
+      "id": "iDrvnpv1oyR3z03NS4vXs",
+      "title": "Keyword Research",
+      "subtopics": [
+        {
+          "id": "4tBuZz4ZPF7bjcYxRbB1E",
+          "title": "Semrush",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CIxeK5tsOKl-HP58X75cU",
+          "title": "Google Keyword Planner",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "gN7DO-nppNh5SIH8HaC--",
+          "title": "Volume, Difficulty & Potential",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8sGKm8N4zZr4hAR-IK7L6",
+          "title": "SERP Analysis",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QjR5TdmTfe-Mxu72Q8Pth",
+          "title": "Ahrefs",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "aT2nu8jFoZlGzo2NyfbYT",
+      "title": "Topic Clusters",
+      "subtopics": []
+    },
+    {
+      "id": "QbCABrmudmc7lib7-c1Hk",
+      "title": "Question Mining",
+      "subtopics": [
+        {
+          "id": "nyiOoaRP9kV6sJlS16MKy",
+          "title": "People Also Ask",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "f3Al3atzeQrMxUDlpR3cm",
+          "title": "Forums & Communities",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cGpIPYcKler0FcLwWFzVy",
+          "title": "AI Chat Prompts",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "TiBwbnFqTs7elNG7aKquc",
+      "title": "E-E-A-T",
+      "subtopics": []
+    },
+    {
+      "id": "FnpAlJME-POEfHUwVYoKm",
+      "title": "Information Gain",
+      "subtopics": []
+    },
+    {
+      "id": "3Y_pytcQ00dghMkRngjVP",
+      "title": "Primary Data & Visuals",
+      "subtopics": [
+        {
+          "id": "EOrD0tHg33UfosovD_YVo",
+          "title": "Original Research & Surveys",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QzVV0URU0R22FlMy0nK9j",
+          "title": "Proprietary Datasets",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "S73E2bFxeHDSX3EUgyFpm",
+          "title": "Case Studies & Benchmarks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tue9sBd0pi0xXW5pgFCrL",
+          "title": "Custom Charts & Images",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "zJ8O7yMGPBjcKSNafpsqy",
+      "title": "Entity SEO",
+      "subtopics": [
+        {
+          "id": "Qw2G2HO4e_f7JJxQl_ZYu",
+          "title": "Entities vs Keywords",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "vKRnx5RpTIIa1h9mRyMvy",
+          "title": "Attributes & Relationships",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1rsxMv9Ts_ajZcptgxuif",
+          "title": "Disambiguation & Salience",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "MkqtUw8fNLyC_o9wQkNmU",
+          "title": "Knowledge Graphs",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "QnPVD19vPlOe2oDAPJBs0",
+      "title": "Structured Data & Schema",
+      "subtopics": [
+        {
+          "id": "WX8UJ5DBPohLvkAID4C2d",
+          "title": "Article, FAQ & HowTo",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YQa3zt4Oib310DUo4IE2H",
+          "title": "Breadcrumb, Video & Review",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4VIEdEoCvyv_jiCHLv3pQ",
+          "title": "SameAs & Entity Linking",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BJzSXBexJ4z3U7jjAddio",
+          "title": "Org. & Person Schema",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hKRFdXC5UlbOIb1WIm9Ht",
+          "title": "Product & Place Schema",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BWDrPHuMTquQQEBG6hKkK",
+          "title": "Authors & Brands",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "XKYyTdQI6u-FJi98NfVkZ",
+      "title": "Structuring for AI Extraction",
+      "subtopics": [
+        {
+          "id": "eM_OYwGJafqCihcNWk3pO",
+          "title": "TL;DRs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "kCn5wBncvJPRxWBkVzJpF",
+          "title": "Data Tables",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3TMxMYJWMtz8TGOYC-9hm",
+          "title": "Direct Answers",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "FrhgWykWSI_vvIomt8FR4",
+      "title": "Featured Snippets",
+      "subtopics": []
+    },
+    {
+      "id": "FJtTzHUx-Rdrn23Zu2aRn",
+      "title": "AI Tools for Content",
+      "subtopics": [
+        {
+          "id": "qaCx0Gv5rwygp9S5yq2qy",
+          "title": "Surfer SEO",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ds_ta1eKe_8B9EQpWYJQj",
+          "title": "MarketMuse",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cuy0qni8CedAqJDj8B5fk",
+          "title": "Clearscope",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7MfjhPJvQQdrqIA_w0_h7",
+          "title": "Frase",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "z2AmnS18sISZOz3Tio4Ek",
+          "title": "Breadcrumb rich result",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "nWxHXguh1RL0u1pbkjmmO",
+      "title": "Link Building",
+      "subtopics": [
+        {
+          "id": "h9DqnyAY6xVRzXuEA6lPk",
+          "title": "ChatGPT Search",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ouEJFUJlZss_ScbsmiJ-X",
+          "title": "Page Authority",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "o2lp6Hy3spway32copi3B",
+          "title": "Trust Flow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m3vqrPei9SRSAmulW--lt",
+          "title": "Citation Flow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rnD7x5uSE0GPu8BB1DPeb",
+          "title": "Perplexity",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5dR-1rcdJXlmrejWTCKz8",
+          "title": "Copilot & Gemini",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ilvFr7TFoNjU28HifZjXP",
+          "title": "Chat-Based Search",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "CZETKyfPEaDwpaRgpwtHH",
+      "title": "Digital PR",
+      "subtopics": [
+        {
+          "id": "v-7GGDA_u-zX7cT2uLbtY",
+          "title": "Data-Driven PR",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "k_3-hC4Wh4dih0AZRv4kJ",
+          "title": "Nofollow, Sponsored, UGC",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "om_Cux4LPSBKpYVFR5UoE",
+      "title": "Influencer Outreach",
+      "subtopics": [
+        {
+          "id": "9s0rNSSUg7mR9-kY959GQ",
+          "title": "Ahrefs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qz9Ua1xx1fWSk1cNa0hz6",
+          "title": "BuzzStream",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oJiYitF6E8Crk02oO8lpx",
+          "title": "Majestic",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "J_Wwg2zo5m9JnlNILKlMi",
+          "title": "Pitchbox",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "J3s-xzTO5wSWCbnaJjUu2",
+      "title": "Entity Consistency",
+      "subtopics": [
+        {
+          "id": "vM0xCx0N0EUAPj1_3Dqij",
+          "title": "Author & Org. Consistency",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ByTSm8fByNX9GCddLiWmT",
+          "title": "Directories & Databases",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Pe5Brb9kz4rtaiRzQd7Yb",
+          "title": "Social Profiles",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "J80XvDDyo5ABz_lqp_fca",
+          "title": "Unlinked Brand Mentions",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Gki2ES-Dlt-1fnjLSeCTo",
+      "title": "Community Presence",
+      "subtopics": [
+        {
+          "id": "AZz6CxDYzofJbB6c39vrt",
+          "title": "Niche Forums",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Y1Kj_YxvlUsmTgtCKyMLZ",
+      "title": "Local Search",
+      "subtopics": [
+        {
+          "id": "GOKco0LlQAX-R5-mVL8ez",
+          "title": "Google Business Profile",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kgbcs19HRGumZrryRJoee",
+          "title": "NAP Consistency",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "vw2CXBOc-1wSt7Ug3xggb",
+      "title": "Google Search Console",
+      "subtopics": [
+        {
+          "id": "Spbaau8T4c-q32W8Udhse",
+          "title": "Local Pack & Maps",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tUkUve7WFI2WdhurkluQ4",
+          "title": "Multi-Location SEO",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Rdo3yAz-HlbuROXuRhGag",
+          "title": "GSC API & BigQuery Export",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "LGSCuqpHodPb7kBNdlJvh",
+      "title": "Visibility Metrics",
+      "subtopics": [
+        {
+          "id": "HCZYdrRDhVnGVPdEAu93Z",
+          "title": "Impressions, Clicks & CTR",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-6_QtaXh83VTAl2pyOp8f",
+          "title": "Position & Share of Search",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "dzrlgIG5H_AQvYm8n8ZcZ",
+          "title": "Branded vs Non-Branded",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "kqHyjxO7bBdFDLxdeMBJz",
+          "title": "Query & Topic Coverage",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bV3Z8yx6aT9AOcMAlHxb1",
+          "title": "BrightLocal",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Uy88UTJwwI6dOiFZFa9KS",
+          "title": "Whitespark",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hR1xBsfGsPJh--WG_01qp",
+      "title": "Rank Tracking",
+      "subtopics": [
+        {
+          "id": "8rYi-p6zBdQNk3Yy7GwbF",
+          "title": "AccuRanker",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Tzgf0ac-94aEw1tixeAd9",
+          "title": "Semrush",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "WCYl-zIKzpvkj7sPECTIe",
+      "title": "Traffic Analysis",
+      "subtopics": [
+        {
+          "id": "Ioi9F4GkFlSUY0xC7uHc_",
+          "title": "Google Analytics",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HYW6nWPHF83gFn-m-voGy",
+          "title": "Microsoft Clarity",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "N1NojTD0D3dNlayucPYdz",
+          "title": "Google Data Studio",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8VCaIubOffkDKjua7rNT8",
+          "title": "LLM Referral Traffic",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "0UrmD8ApQRXOzw7rtbPnp",
+      "title": "Zero-Click Attribution",
+      "subtopics": [
+        {
+          "id": "T7rsATMjOf6aCoTFCHDJ1",
+          "title": "Ahrefs Brand Radar",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "M3BNI1m3kelrtO5UZuunv",
+      "title": "AI Visibility Measurement",
+      "subtopics": [
+        {
+          "id": "cyqsRePa5SW0BioIcvCWC",
+          "title": "Prompt Coverage & Mention",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "l_ahLBx-CZfKJkSyoaKOs",
+          "title": "Citation Rate & Position",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YnC3M0IOQtfTUp6CHbNOF",
+          "title": "Competitive Answer Share",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sVtVGhxYk8MuQMmafrE8W",
+          "title": "Entity & Sentiment",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "g45K_0aau7_T-yiUXjP-T",
+          "title": "Profound",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2osiMJHPrm4zk_5rdLaGk",
+          "title": "Otterly",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WXVTvnH4sTTJOmhrX-0mO",
+          "title": "Peec",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "dXkUtFzVenPyT-mZqUhBl",
+      "title": "GEO & SEO Testing",
+      "subtopics": [
+        {
+          "id": "UTUQMeJf-hv9C_hBRFR3w",
+          "title": "Content & Schema A/B Tests",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AYQYbILBtsg_qnTLClenK",
+          "title": "Before/After Prompt Tests",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "9zeWrfAR_KvTwdmV6QCqd",
+          "title": "Competitor Benchmarking",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "3X0R92JbjN66pzS5T8s4o",
+      "title": "How Search Engines Work",
+      "subtopics": [
+        {
+          "id": "zoxmVRwdoKc0nIg0t_VXw",
+          "title": "Crawling, Indexing, Ranking",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xTU1zxxpefjIaU901IyP0",
+          "title": "Retrieval vs Ranking",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "p7VyhgqhmVfY9TA7DiXjD",
+          "title": "Personalization, Localization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "pov9Swqb9vqlrXG1SY0Mo",
+          "title": "Training Data vs Grounding",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xCgNhwbS_ELxEyRHD1enO",
+          "title": "Lexical vs Vector Search",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sre_s0dvpOP0DTM66a3hu",
+          "title": "Hybrid Search",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GYUiIQ38y7jaI7cBrNP9v",
+          "title": "SERP, Index, Crawl",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "B0OXVuuvU1bcIDwaDXRe1",
+      "title": "White, Black, Grey Hat SEO",
+      "subtopics": [
+        {
+          "id": "UtEv5RGFwA2NSzG6YR401",
+          "title": "Backlinks & Anchor Text",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "F7BXvp5JV35kyGyPerwNR",
+          "title": "Canonical",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4mauwocuV1IRSz83VMuTq",
+          "title": "Nofollow, Noindex",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "A5iHuWB9iK7jENaejMn3o",
+      "title": "Spam Policies",
+      "subtopics": [
+        {
+          "id": "kx_eVXmMdmdbIqXsFJcX1",
+          "title": "Link Schemes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GF-rRWhJfFMiUxDYZcsLZ",
+          "title": "Cloaking & Doorways",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "eSJRYXI5sTwHRerwByTy_",
+          "title": "Scaled Content Abuse",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IdKr-YfBD7LYDInKFXgoS",
+          "title": "Site Reputation Abuse",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QZU6uYsFE3eGqFJ3N1E__",
+          "title": "Expired Domain Abuse",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "vbolitnz-ciidYtkKLp3B",
+          "title": "Organic vs Paid vs Direct",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hORMww8U7HjGJRzvLKenk",
+      "title": "Manual Actions & Recovery",
+      "subtopics": []
+    },
+    {
+      "id": "QH9MT5UQHPyqQqacAq_2P",
+      "title": " Algorithm Updates",
+      "subtopics": [
+        {
+          "id": "tRvJ6JggIlq0ZxiUE-mug",
+          "title": "Core Updates",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Lw9Mkr55ST5P9kaw4dktV",
+          "title": "Folders & URL Structure",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SRj8TY7e1R2hp2szpWJWm",
+          "title": "Spam Updates",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SgoAl-jaZuJtze6Jz3uPA",
+          "title": "Helpful Content System",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "HyHeVY2JLg9jGedL53baF",
+      "title": "Crawling & Indexing",
+      "subtopics": [
+        {
+          "id": "oyuQGthzl0Ockg18I9dfs",
+          "title": "Crawl Budget",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hziiFSixtMn90_pcE3Yll",
+          "title": "Managing AI Crawlers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_q1cEm2MWfa-cqHrY2lA4",
+          "title": "Log File Analysis",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tpp7ms9jKv8eB2sSipr8u",
+          "title": "Controls & Pay-Per-Crawl",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "MiFLQuMkiZRQpSPSxdVKw",
+          "title": "Googlebot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9N11NVjIJAw6VcE1xV-L9",
+          "title": "Bingbot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9RINuReXqv2nFIyJe4kNe",
+          "title": "GPTBot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HLZuEmTuaj5ocOQBgnAiV",
+          "title": "ClaudeBot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TrD9JXQNgM-2EhjcshI03",
+          "title": "Google-Extended",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9AzcmD1QtLdAMINwEVwe2",
+          "title": "Index Coverage & Bloat",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Ho5HGnILJCvSD_j1RRkJb",
+      "title": "HTTP & Status Codes",
+      "subtopics": [
+        {
+          "id": "g0TlQo1a-Wk9-fi_te9yw",
+          "title": "Sitemaps",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8iODKk23z1DGYWIAj8yWk",
+          "title": "Robots.txt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "c5NiQ-rGyJZGj8iBWCV7Y",
+          "title": "Redirect Chains & Loops",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "iD-7DzOmcrNvpEn7iBsXP",
+      "title": "Site Migrations",
+      "subtopics": [
+        {
+          "id": "S6Br87lFC2GKENqfQe6vL",
+          "title": "Planning & Checklists",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "xYkwvk6d1FHylhfJ6p1fF",
+      "title": "On-Page SEO",
+      "subtopics": [
+        {
+          "id": "u2SdSqMRk4rg5FyGjxxr3",
+          "title": "Title Tags",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OR6UoSQTab3Fm7PMf3UwC",
+          "title": "Meta Descriptions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZU9aGr_7TSlblCIxO8sR4",
+          "title": "Heading Structure",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "amdcThrIxxlGPpEOQhpio",
+          "title": "URL Slugs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wndHjXzBeqVn8C6NVUw4S",
+          "title": "Internal Anchor Text",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "drbtWMhO-3e8mj8_-MmtX",
+          "title": "Keyword Placement",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "TZd2oPUXcE4YQ1TmuCsRJ",
+          "title": "Formatting & Readibility",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AwX5xoGq0LT_a0CVftIBE",
+          "title": "Image Optimization",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jeO2Xq-UVqxAXo-JYNd9X",
+      "title": " Competitor Gap Analysis",
+      "subtopics": []
+    },
+    {
+      "id": "SNuAwAEhzUY9HAHBiL84U",
+      "title": "Content Lifecicle",
+      "subtopics": [
+        {
+          "id": "HQHd1ll4hLHkuZaF4xdnL",
+          "title": "Content Freshness & Decay",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mTkbJ5hRGOP2cES4dXYdC",
+          "title": "Duplicate Content",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "FvPa3nXZnqaaDwzFkmt4i",
+          "title": "Content Consolidation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OrxxJbPQi1aylotUUn4J0",
+          "title": "Pruning & Deindexing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mGEBbOmi-hoX82wryjX_K",
+          "title": "Image & Video Packs",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "CBLoLYVTDjZCcnLWMJNH4",
+      "title": "How AI is Changing SEO",
+      "subtopics": [
+        {
+          "id": "nVLFIaDXF9XWNUPwIg5T2",
+          "title": "RAG",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2i-oswlxFVd3V0udqCoBG",
+          "title": "Embeddings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jJ-11e0sx1TMVmRoWGmwB",
+          "title": "Chunking",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "f5D7eTVr15SKpQz7h6VKg",
+      "title": "Citation Resources",
+      "subtopics": [
+        {
+          "id": "q45bD9nF_01Anr9ZFFzvz",
+          "title": "Dense Retrieval",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "MomZSADCVdYuKQToQtNnW",
+      "title": "Preferred Sources",
+      "subtopics": [
+        {
+          "id": "ujNGonXvVhH734HMGgFum",
+          "title": "Query Fan-Out ",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "uP6jREjhcYMgx-MTMaVt1",
+      "title": "Agentic Search",
+      "subtopics": [
+        {
+          "id": "-Rb6WSy_M2TWgqqqIYKlg",
+          "title": "How Agents Browse",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IIic3zZccZgk_DHliJZ1n",
+          "title": "MCP & Structured Access",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "edVzhSJjNZ42CmIGHfYs_",
+          "title": "AI Overviews",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "k8K7c-FNG-vcS_Zsh90nQ",
+          "title": "Google AI Mode",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_SCDSMXMaI8w1Fo-mgUjP",
+          "title": " Multi-Step AI Intent",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yFEpZM1At0nDiae9Hrs6M",
+          "title": "Domain Authority",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "G7WTJetPqB5z78l_J55Ex",
+      "title": "International SEO",
+      "subtopics": [
+        {
+          "id": "C4S9r5qswLomo4rK438yH",
+          "title": "Hreflang",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LY-W-QNZ7KYjQNY793t6K",
+          "title": "ccTLD, Subfolder, Subdomain",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QqdwMyZGFG9FMs38iAThJ",
+          "title": "Geo-Targeting & Localization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fRcmRMhFYfzjM_IGGihMX",
+          "title": "Local Citations",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ZgEuJltdiYtS3cKhfbqG-",
+      "title": "Video SEO",
+      "subtopics": [
+        {
+          "id": "xxAEhmPwcz9VuwW9B-Kuf",
+          "title": "Local Landing Pages",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "e7b9VrhpTCKAh_KfdnSOm",
+      "title": "E-commerce SEO",
+      "subtopics": []
+    },
+    {
+      "id": "JagmGhAgN1ec_VNNmZX2b",
+      "title": "News & Discovery SEO",
+      "subtopics": [
+        {
+          "id": "lQzpUYrz_KkOQ7YODiw0S",
+          "title": "Google Discover",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Id95-XXYGUWTFKSeJ00Ce",
+          "title": "Reviews & Velocity",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ydRGMTc1cAScUxMh05FEc",
+          "title": "Local Links",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "picU3n5cUGQj9tXGpNRNu",
+      "title": "SEO Audits",
+      "subtopics": []
+    },
+    {
+      "id": "otS3yfuDpmbuvda3WVDc4",
+      "title": "SERP Features",
+      "subtopics": [
+        {
+          "id": "-WuXxefNUDilXkptnd4Zi",
+          "title": "Sitelinks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-Iqdt27DI-BJ_rHXl2vUz",
+          "title": "Knowledge Panels",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

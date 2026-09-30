@@ -1,0 +1,265 @@
+{
+  "id": "p3",
+  "name": "Compliance, fraud, FX",
+  "domain": "fin",
+  "domainLabel": "Fintech & payments",
+  "topics": [
+    "Fintech"
+  ],
+  "questions": [
+    {
+      "id": 10006,
+      "code": "P7",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Valyuta konvertatsiyasi va yaxlitlashda to'g'ri yondashuv?",
+      "options": [
+        "Konvertatsiyani ko'rsatish paytida float bilan hisoblash",
+        "Kursni tranzaksiya paytida qotirib (rate id, vaqt bilan) saqlash; hisob-kitobni butun son (minor units) yoki decimal bilan; yaxlitlash qoidasi aniq belgilangan va har yozuvda farq (rounding difference) alohida hisobga olinadi",
+        "Har safar joriy kursni qayta olish",
+        "Yaxlitlashni mijozga qoldirish"
+      ],
+      "answer": 1,
+      "explanation": "Kurs saqlanmasa, keyin hisobot va reconciliation mos kelmaydi. Yaxlitlashda yo'qolgan tiyinlar ledger'da nolga yig'ilishi uchun 'rounding' hisobiga yoziladi. Valyutalarda minor unit soni har xil (JPY — 0, TND — 3) — 100 ga bo'lish universal emas: ISO 4217 ma'lumotiga tayaning."
+    },
+    {
+      "id": 10007,
+      "code": "P8",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "KYC/AML bo'yicha texnik talab qaysi?",
+      "options": [
+        "Faqat pasport rasmini saqlash",
+        "Shaxsni tasdiqlash oqimi, sanktsiya va PEP ro'yxatlari bo'yicha skrining (yangilanib turadigan), shubhali operatsiyalarni aniqlash qoidalari (velocity, structuring) va hisobot; hammasi audit izi bilan",
+        "Har tranzaksiyani qo'lda tekshirish",
+        "Faqat katta summalarni tekshirish"
+      ],
+      "answer": 1,
+      "explanation": "Texnik jihatdan: skrining — taxminiy moslik (fuzzy matching) va false positive bilan ishlash; operator uchun ko'rib chiqish navbati; qaror va sababni saqlash. Muhim: bloklash qarorlari biznes/compliance jamoasiniki, muhandis esa jarayonni va izni ta'minlaydi. Ma'lumotni saqlash muddati va maxfiyligi alohida talab."
+    },
+    {
+      "id": 10009,
+      "code": "P10",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "To'lov tizimida statuslarni qanday modellashtirasiz?",
+      "options": [
+        "Bitta boolean: to'landi/to'lanmadi",
+        "Aniq holat mashinasi (created → pending → authorized → captured → settled, hamda failed/refunded/disputed) va faqat ruxsat etilgan o'tishlar; har o'tish vaqti va sababi bilan yoziladi",
+        "Statusni provayderdan har safar so'rash",
+        "Faqat log yozish"
+      ],
+      "answer": 1,
+      "explanation": "Nega muhim: provayder hodisalari tartibsiz keladi, retry bor, ba'zi holatlar qaytmaydi (settled → pending bo'lmaydi). Holat mashinasi noto'g'ri o'tishni rad etadi va jimgina buzilishning oldini oladi. Qo'shimcha: 'noma'lum' holat ham bo'lishi kerak — timeout bo'lgan, hali aniqlanmagan to'lovlar uchun."
+    },
+    {
+      "id": 10010,
+      "code": "P11",
+      "level": "St",
+      "type": "open",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Fintech tizimida incident: 200 ta foydalanuvchidan ikki marta pul yechilgan. Qanday harakat qilasiz?",
+      "modelAnswer": [
+        "To'xtatish: aybdor oqimni (feature flag, worker) o'chirib, yangi zararni to'xtatish",
+        "Ta'sirni aniqlash: ledger'dan ikki marta yechilgan tranzaksiyalarni aniq ro'yxat qilish (idempotency key yoki bir xil summa/vaqt bo'yicha)",
+        "Mijozga qaytarish: avtomatik refund partiyasi, idempotent va tekshiriladigan; har qaytarish ledger'da alohida yozuv",
+        "Kommunikatsiya: mijozlarga xabar, qo'llab-quvvatlash jamoasiga skript, regulyator/bank talab qilsa xabar berish",
+        "Ildiz sabab: nega idempotentlik ishlamadi (retry, race, webhook takrori) — test bilan qaytalanmasligini isbotlash",
+        "Postmortem va guardrail: ikki marta yechishni aniqlaydigan monitoring va reconciliation alerti"
+      ],
+      "explanation": "Bu savolda texnik bilim emas, tartib va mas'uliyat baholanadi: avval zararni to'xtatish, keyin aniq hisob-kitob, keyin tuzatish va oldini olish. Pul bilan ishlashda 'keyin ko'ramiz' degan yondashuv yo'q."
+    },
+    {
+      "id": 10011,
+      "code": "P12",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Ledger ma'lumotlarini o'chirish/tuzatish talab qilindi (xato yozuv). To'g'ri yo'l?",
+      "options": [
+        "Yozuvni UPDATE qilib tuzatish",
+        "Hech qachon o'zgartirmaslik: teskari (reversal/compensating) yozuv qo'shiladi va izoh bilan bog'lanadi — tarix va audit izi buzilmaydi",
+        "Yozuvni DELETE qilish",
+        "Bazadan qo'lda tuzatish"
+      ],
+      "answer": 1,
+      "explanation": "Immutable ledger — moliyaviy audit va regulyator talabi. Har tuzatish o'z sababi, muallifi va vaqti bilan ko'rinadi. Texnik jihatdan: yozuvlar jadvaliga faqat INSERT huquqi (UPDATE/DELETE grant berilmaydi), o'chirish faqat saqlash muddati siyosati bo'yicha."
+    },
+    {
+      "id": 10012,
+      "code": "P13",
+      "level": "St",
+      "type": "open",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Kartadan to'lov qabul qiluvchi tizimda firibgarlikni (fraud) qanday kamaytirasiz?",
+      "modelAnswer": [
+        "Qoidalar qatlami: velocity (bir kartadan N urinish), summa chegaralari, geo/IP nomuvofiqligi, qora ro'yxatlar",
+        "Signal to'plash: qurilma barmoq izi, sessiya xulqi, tarixiy xatti-harakat",
+        "3-D Secure / SCA: risk yuqori bo'lsa qo'shimcha tasdiq so'rash (past riskda ishqalanishni oshirmaslik)",
+        "Model qatlami (keyinchalik): skoring, lekin tushuntiriladigan qoidalar bilan birga",
+        "O'lchovlar: fraud darajasi, chargeback foizi, false positive (yo'qotilgan haqiqiy mijoz) — muvozanat biznes qarori",
+        "Chargeback jarayoni: dalillarni yig'ish, muddatlar, avtomatik hujjat tayyorlash"
+      ],
+      "explanation": "Muhim fikr: fraudni nolga tushirish maqsad emas — konversiya bilan muvozanat. Chargeback foizi kritik ko'rsatkich: yuqori bo'lsa to'lov tizimlari jarimaga tortadi yoki xizmatdan chetlatadi."
+    },
+    {
+      "id": 30222,
+      "code": "SN223",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Valyuta konvertatsiyasida (FX) texnik jihatdan nimani to'g'ri qilish kerak?",
+      "options": [
+        "Kursni har chaqiruvda tashqi API'dan olish",
+        "Kurs snapshot'i sifatida saqlanadi (`rate`, `source`, `fetched_at`) va tranzaksiyaga biriktiriladi — keyin hisob-kitob qayta tiklanadi; yaxlitlash qoidasi (yo'nalish va aniqlik) aniq belgilanadi va konvertatsiya ikki tomonlama teng bo'lmasligi hisobga olinadi",
+        "Float bilan hisoblash",
+        "Kursni frontenddan olish"
+      ],
+      "answer": 1,
+      "explanation": "Eng ko'p uchraydigan xatolar: kursni saqlamaslik (hisobni qayta tekshirib bo'lmaydi), yaxlitlashda tiyinlarning yo'qolishi (jami mos kelmaydi — ledger invariantini buzadi), va A→B→A konvertatsiyada boshlang'ich summaga qaytmaslik. Yaxlitlash farqlari alohida 'rounding' hisobiga yozilishi kerak."
+    },
+    {
+      "id": 30223,
+      "code": "SN224",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Fraud (firibgarlik) tekshiruvini to'lov oqimiga qanday joylashtirasiz?",
+      "options": [
+        "Har to'lovni qo'lda tekshirish",
+        "Ikki bosqich: sinxron tez qoidalar (velocity limit, qora ro'yxat, geo/qurilma nomuvofiqligi) — qat'iy timeout bilan va fail-open/fail-close siyosati aniq; asinxron chuqur skoring (model) — natija bo'yicha ushlab qolish/qaytarish va qo'lda ko'rib chiqish navbati",
+        "Faqat model chiqargan skorga ishonish",
+        "To'lovdan keyin hech narsa tekshirmaslik"
+      ],
+      "answer": 1,
+      "explanation": "Muhim muhandislik qarorlari: fraud servisi yiqilsa to'lov to'xtaydimi yoki o'tadimi (biznes qarori, lekin oldindan yozilgan bo'lishi kerak), qoidalar deploy'siz o'zgarishi (konfiguratsiya), har qaror uchun audit va tushuntirish (regulyator talabi), va false positive narxi — haqiqiy mijozni bloklash ham zarar."
+    },
+    {
+      "id": 30372,
+      "code": "SN373",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Valyuta konvertatsiyasida (FX) texnik jihatdan nimani to'g'ri qilish kerak?",
+      "options": [
+        "Kursni har chaqiruvda tashqi API'dan olish",
+        "Kurs snapshot'i sifatida saqlanadi (`rate`, `source`, `fetched_at`) va tranzaksiyaga biriktiriladi — keyin hisob-kitob qayta tiklanadi; yaxlitlash qoidasi (yo'nalish va aniqlik) aniq belgilanadi va konvertatsiya ikki tomonlama teng bo'lmasligi hisobga olinadi",
+        "Float bilan hisoblash",
+        "Kursni frontenddan olish"
+      ],
+      "answer": 1,
+      "explanation": "Eng ko'p uchraydigan xatolar: kursni saqlamaslik (hisobni qayta tekshirib bo'lmaydi), yaxlitlashda tiyinlarning yo'qolishi (jami mos kelmaydi — ledger invariantini buzadi), va A→B→A konvertatsiyada boshlang'ich summaga qaytmaslik. Yaxlitlash farqlari alohida 'rounding' hisobiga yozilishi kerak."
+    },
+    {
+      "id": 30373,
+      "code": "SN374",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Fraud (firibgarlik) tekshiruvini to'lov oqimiga qanday joylashtirasiz?",
+      "options": [
+        "Har to'lovni qo'lda tekshirish",
+        "Ikki bosqich: sinxron tez qoidalar (velocity limit, qora ro'yxat, geo/qurilma nomuvofiqligi) — qat'iy timeout bilan va fail-open/fail-close siyosati aniq; asinxron chuqur skoring (model) — natija bo'yicha ushlab qolish/qaytarish va qo'lda ko'rib chiqish navbati",
+        "Faqat model chiqargan skorga ishonish",
+        "To'lovdan keyin hech narsa tekshirmaslik"
+      ],
+      "answer": 1,
+      "explanation": "Muhim muhandislik qarorlari: fraud servisi yiqilsa to'lov to'xtaydimi yoki o'tadimi (biznes qarori, lekin oldindan yozilgan bo'lishi kerak), qoidalar deploy'siz o'zgarishi (konfiguratsiya), har qaror uchun audit va tushuntirish (regulyator talabi), va false positive narxi — haqiqiy mijozni bloklash ham zarar."
+    },
+    {
+      "id": 30466,
+      "code": "SN467",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Fintechda ma'lumotni o'chirish talabi (GDPR 'right to erasure') va o'zgarmas ledger qanday yarashtiriladi?",
+      "options": [
+        "Ledger yozuvlarini o'chirish",
+        "Moliyaviy yozuvlar qonun bo'yicha saqlanadi (5-10 yil) — shaxsiy ma'lumot ledgerdan ajratiladi: ledgerda faqat hisob ID'lari, PII alohida servisda va o'chirilganda pseudonymize/crypto-shredding (kalitni yo'q qilish) qilinadi",
+        "Hech narsa o'chirilmaydi",
+        "Butun bazani o'chirish"
+      ],
+      "answer": 1,
+      "explanation": "Dizayn qoidasi: PII va tranzaksion yozuvni bir jadvalga aralashtirmaslik. Crypto-shredding — har sub'ekt ma'lumoti alohida kalit bilan shifrlanadi, o'chirish talabida kalit yo'q qilinadi va ma'lumot amalda tiklanmaydi. Bundan tashqari backup va log'lardagi PII ham siyosatga kiritilishi kerak (aks holda 'o'chirdim' deyish noto'g'ri)."
+    },
+    {
+      "id": 30467,
+      "code": "SN468",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Idempotency key'ning TTL'i va saqlash joyi qanday tanlanadi (to'lovda)?",
+      "options": [
+        "5 daqiqa keshda",
+        "Kamida mijoz retry oynasidan uzun (odatda 24 soat, pul operatsiyalarida ko'pincha kunlar); saqlash joyi — DB (unique constraint bilan), faqat kesh emas: kesh evict qilsa dublikat to'lov bo'ladi",
+        "Cheksiz xotirada",
+        "Key kerak emas"
+      ],
+      "answer": 1,
+      "explanation": "Kesh (Redis) tez, lekin eviction/failover'da kalit yo'qolishi mumkin — pul operatsiyasida bu ikki marta to'lash demakdir. Amaliy yechim: DB'da `unique(idempotency_key)` yozuv + javob snapshot'i, Redis esa oldindagi tez tekshiruv sifatida (ixtiyoriy). TTL tugagach kalit qayta ishlatilishi mumkinligini hisobga olib mijozga qoida hujjatlashtiriladi."
+    },
+    {
+      "id": 30516,
+      "code": "SN517",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "Audit log moliyaviy tizimda qanday talablarga javob berishi kerak?",
+      "options": [
+        "Oddiy log fayl",
+        "O'zgarmas (append-only, o'chirib/tahrir qilib bo'lmaydigan saqlash), kim-nima-qachon-qaysi qiymatdan qaysiga, korrelyatsiya ID bilan bog'langan, saqlash muddati siyosati, va kirish nazorati (audit log'ni o'qish ham audit qilinadi)",
+        "Faqat xatolarni yozish",
+        "Faqat DB triggerlari"
+      ],
+      "answer": 1,
+      "explanation": "Texnik implementatsiya: alohida jadval/oqim (ilova foydalanuvchisiga faqat `INSERT` huquqi), yoki WORM saqlash (S3 Object Lock); yozuvlar hash zanjiri bilan bog'lansa buzilganini aniqlash mumkin. Muhim: audit log biznes eventlari darajasida bo'lsin ('to'lov qaytarildi, sabab X'), SQL o'zgarishlari darajasida emas — aks holda o'qib bo'lmaydi."
+    },
+    {
+      "id": 30520,
+      "code": "SN521",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fintech",
+      "domain": "fin",
+      "section": "p3",
+      "question": "PII ma'lumotlarni saqlashda minimal texnik talablar?",
+      "options": [
+        "Faqat HTTPS",
+        "Shifrlash (at rest — KMS boshqaruvidagi kalit, in transit — TLS), maydon darajasida shifrlash yoki tokenizatsiya eng maxfiylari uchun, kirish nazorati va audit, ma'lumotni minimallashtirish (kerak bo'lmaganini yig'maslik), saqlash muddati va o'chirish jarayoni",
+        "Faqat parolni hash qilish",
+        "Faqat backup shifrlash"
+      ],
+      "answer": 1,
+      "explanation": "Ma'lumotni minimallashtirish eng arzon himoya: yig'ilmagan ma'lumot oqib ketmaydi. Amaliy qo'shimchalar: test/stage muhitlarida real PII ishlatmaslik (maskalangan ma'lumot generatsiyasi), log va analitikaga PII tushmasligi, va uchinchi tomon servislariga yuborilayotgan maydonlar ro'yxatini nazorat qilish (data processing agreement)."
+    }
+  ]
+}

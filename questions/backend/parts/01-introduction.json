@@ -1,0 +1,264 @@
+[
+  {
+    "topicId": "SiYUdtYMDImRPmV2_XPkH",
+    "topicTitle": "Introduction",
+    "questions": [
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-01",
+        "question": "Walk through everything that happens between typing https://example.com in a browser and seeing the page.",
+        "answer": "The browser checks HSTS/caches, then resolves example.com via the OS stub resolver to a recursive resolver, which walks root -> .com TLD -> authoritative nameservers to get an A/AAAA record. It opens a TCP connection to port 443 (or QUIC/UDP for HTTP/3), performs a TLS handshake to agree on keys and validate the certificate chain, then sends an HTTP request with Host, headers and cookies. The server (often behind a load balancer/reverse proxy) returns a status line, headers and HTML body; the browser parses HTML into the DOM, fetches subresources, builds CSSOM, runs JS, lays out and paints.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "How does the internet work?",
+        "followUps": ["Where can caching short-circuit this flow?", "What changes if the site is served over HTTP/3?"],
+        "tags": ["networking", "http", "dns", "tls"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-02",
+        "question": "What is the difference between TCP and UDP, and when would a backend service choose UDP?",
+        "answer": "TCP is connection-oriented: a three-way handshake (SYN, SYN-ACK, ACK), sequence numbers, acknowledgements, retransmission, ordering and congestion control. UDP is a thin datagram wrapper over IP: no handshake, no ordering, no retransmission, just ports and a checksum. Backends pick UDP where latency and loss tolerance beat reliability or where reliability is rebuilt in userspace: DNS queries, QUIC/HTTP/3, real-time audio/video (RTP), metrics shipping like StatsD, and gossip protocols.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "How does the internet work?",
+        "followUps": ["Why does QUIC rebuild reliability on top of UDP instead of using TCP?", "What is head-of-line blocking in TCP?"],
+        "tags": ["tcp", "udp", "networking", "protocols"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-03",
+        "question": "Explain the structure of an HTTP request and response, and what the status code classes mean.",
+        "answer": "A request is a method plus path and version (GET /users?page=2 HTTP/1.1), headers (Host, Authorization, Accept, Content-Type), and an optional body. A response is a status line (HTTP/1.1 200 OK), headers (Content-Type, Cache-Control, ETag, Set-Cookie) and a body. Classes: 1xx informational (100 Continue, 101 Switching Protocols), 2xx success (200, 201, 204), 3xx redirection (301 permanent, 302/307 temporary, 304 Not Modified), 4xx client error (400, 401, 403, 404, 409, 422, 429), 5xx server error (500, 502, 503, 504).",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "What is HTTP?",
+        "followUps": ["When do you return 401 vs 403?", "Why is 307 preferred over 302 for non-GET redirects?"],
+        "tags": ["http", "status-codes", "headers"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-04",
+        "question": "What are the practical differences between HTTP/1.1, HTTP/2 and HTTP/3?",
+        "answer": "HTTP/1.1 is textual, one in-flight request per connection (pipelining is effectively unusable), so browsers open ~6 connections per origin and suffer head-of-line blocking. HTTP/2 is binary and multiplexes many streams over one TCP connection with HPACK header compression, stream priorities and server push (now largely deprecated); a single lost TCP segment still stalls all streams because of TCP-level head-of-line blocking. HTTP/3 runs over QUIC on UDP with per-stream loss recovery (no cross-stream blocking), TLS 1.3 built in, 0-RTT resumption and connection migration across IP changes.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "What is HTTP?",
+        "followUps": ["Why did domain sharding become an anti-pattern under HTTP/2?", "How does a client discover HTTP/3 support (Alt-Svc, HTTPS RR)?"],
+        "tags": ["http2", "http3", "quic", "performance"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-05",
+        "question": "Describe the TLS 1.3 handshake and how it differs from TLS 1.2.",
+        "answer": "In TLS 1.3 the client sends ClientHello with supported cipher suites, key-share (an ECDHE public key, usually X25519) and SNI; the server replies with ServerHello + its key share, then encrypted Certificate, CertificateVerify and Finished, so the handshake completes in one round trip (1-RTT), or 0-RTT with a pre-shared key ticket. TLS 1.2 needed two round trips and allowed static RSA key exchange and weak ciphers like CBC-mode and RC4; TLS 1.3 removes them, mandates forward-secret (EC)DHE and AEAD ciphers (AES-GCM, ChaCha20-Poly1305). The certificate chain is validated against trusted roots, with hostname matching against SAN, plus expiry and revocation checks (OCSP stapling).",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "How does the internet work?",
+        "followUps": ["What is the replay risk of 0-RTT and how do you mitigate it?", "Why is SNI needed and what does ECH change?"],
+        "tags": ["tls", "security", "handshake", "https"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-06",
+        "question": "What is a domain name, and what is the relationship between a domain, a registrar and nameservers?",
+        "answer": "A domain name is a human-readable label in the DNS hierarchy, read right to left: root, TLD (.com), second-level (example), subdomains (api.example.com). You lease it from a registrar, which registers it with the TLD registry and publishes NS delegation records pointing at your authoritative nameservers (e.g. Route53, Cloudflare). Those nameservers hold the actual zone file with A/AAAA/CNAME/MX/TXT records, so changing the hosting provider means changing records in the zone, while changing DNS providers means updating NS records at the registrar.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "What is Domain Name?",
+        "followUps": ["What is the difference between a zone and a domain?", "Why does a registrar lock exist?"],
+        "tags": ["dns", "domains", "registrar"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-07",
+        "question": "Explain the common DNS record types and the full resolution path for api.example.com.",
+        "answer": "A maps a name to IPv4, AAAA to IPv6, CNAME aliases one name to another (not allowed at a zone apex), MX routes mail with priorities, TXT carries SPF/DKIM/domain verification, NS delegates a zone, SOA holds zone metadata and negative-caching TTL, SRV advertises service host/port, CAA restricts which CAs may issue certs, PTR does reverse lookup. Resolution: the stub resolver checks the OS/browser cache and /etc/hosts, asks the recursive resolver, which (on a cold cache) queries a root server for .com NS, then the .com TLD servers for example.com NS, then the authoritative server for api.example.com, caching each answer for its TTL. Providers use apex ALIAS/ANAME records to fake a CNAME at the root.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "DNS and how it works?",
+        "followUps": ["Why cannot you put a CNAME at example.com itself?", "How does negative caching (NXDOMAIN) TTL work?"],
+        "tags": ["dns", "records", "resolution"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-08",
+        "question": "You moved your API to a new IP and updated the A record, but part of your traffic still hits the old server hours later. Diagnose it.",
+        "answer": "Almost always TTL and cache layering: resolvers keep the old A record for the record's TTL, and some ISP resolvers and JVM clients cache beyond it (Java's networkaddress.cache.ttl historically was forever). Verify with dig +trace api.example.com and dig @ns1.yourdns.com api.example.com to confirm the authoritative answer is correct, then dig @8.8.8.8 to see cached values and the remaining TTL. The fix is procedural: lower the TTL to 60s a day before the cut, keep the old server accepting traffic (or proxying to the new one) until well past the old TTL, and only then decommission.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "DNS and how it works?",
+        "followUps": ["How would you make this migration safe with zero broken requests?", "Where else can stale resolution hide (connection pools, sidecars)?"],
+        "tags": ["dns", "ttl", "migration", "incident"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-09",
+        "question": "What are the hosting options for a backend application and how do you choose between shared hosting, VPS, containers/PaaS and serverless?",
+        "answer": "Hosting means where your process runs and who owns the layers below it: shared hosting gives you a directory on someone else's server (cheap, no root, no long-running processes), a VPS/dedicated box gives you full OS control with you owning patching and scaling, PaaS/containers (Heroku, Cloud Run, Kubernetes) let you ship an image while the platform handles restarts and horizontal scaling, and serverless (Lambda) bills per invocation with cold starts and execution time limits. Choose by traffic shape and ops budget: spiky or low-volume event work fits serverless, steady request traffic with predictable cost fits containers, and stateful or licence-bound workloads fit VMs. Static frontends belong on object storage plus a CDN, not on an app server.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "What is hosting?",
+        "followUps": ["What breaks when you scale a stateful app horizontally?", "How do cold starts affect a serverless API's p99?"],
+        "tags": ["hosting", "deployment", "serverless", "infrastructure"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-10",
+        "question": "Your service's p99 latency is high and metrics show thousands of TIME_WAIT sockets and constant new connections from an internal client. What is wrong and how do you fix it?",
+        "answer": "The client is not reusing connections: it sends Connection: close, or its HTTP library creates a new client per request, so every call pays a TCP handshake plus a TLS handshake and leaves sockets in TIME_WAIT for 2*MSL. Fix it at the source by using a shared, pooled HTTP client with keep-alive enabled and a sane max idle connections per host, and make sure the server's keepalive_timeout is longer than the client's idle timeout so the server does not close mid-request (which shows up as sporadic 502s). Verify with ss -s and ss -tan state time-wait, and confirm reuse via reduced handshake counts rather than by raising ephemeral port ranges, which only hides the problem.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "What is HTTP?",
+        "followUps": ["Why can a mismatched keep-alive timeout cause retriable 502s?", "How does HTTP/2 multiplexing change connection pool sizing?"],
+        "tags": ["keep-alive", "tcp", "performance", "http"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-11",
+        "question": "Describe how a browser turns an HTML response into pixels, and what the critical rendering path is.",
+        "answer": "The parser builds the DOM incrementally while the preload scanner fetches subresources early; CSS is render-blocking and builds the CSSOM, and a synchronous <script> without defer/async blocks parsing until it is fetched and executed. DOM + CSSOM combine into the render tree, then layout computes geometry, paint produces layers and compositing draws them on the GPU. The critical rendering path is the minimal set of resources needed for first render, so you shorten it by inlining critical CSS, deferring non-critical JS (defer/async/module), preconnecting to third-party origins and avoiding layout thrash from JS that reads geometry after writing styles.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Browsers and how they work?",
+        "followUps": ["What is the difference between reflow and repaint?", "How does font-display affect perceived load time?"],
+        "tags": ["browser", "rendering", "performance", "critical-path"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-12",
+        "question": "How do browsers isolate sites, and why does that matter for a backend engineer setting cookies?",
+        "answer": "Browsers enforce the same-origin policy: scheme + host + port define an origin, and script in one origin cannot read another origin's DOM or response bodies unless CORS permits it. Modern browsers also run each site in its own renderer process (site isolation) to blunt Spectre-style attacks. For cookies that means the backend must set Secure, HttpOnly and an explicit SameSite: SameSite=Lax blocks cookies on cross-site POSTs, SameSite=None requires Secure and is what a cross-origin SPA on a different domain needs, and HttpOnly keeps tokens out of reach of XSS.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Browsers and how they work?",
+        "followUps": ["Why is cookie Domain scoping not the same as origin?", "How does SameSite interact with CSRF defences?"],
+        "tags": ["browser", "security", "cookies", "same-origin"]
+      },
+      {
+        "id": "SiYUdtYMDImRPmV2_XPkH-13",
+        "question": "You are asked to design DNS and hosting for a global API that must survive a whole region going down. What do you put in place?",
+        "answer": "Run the API in at least two regions behind health-checked DNS (latency or geo routing with automatic failover) or an anycast global load balancer, and keep DNS TTLs low (30-60s) so failover is measured in seconds, accepting the extra query load. Add an Alias/A record per region, CAA records to pin certificate issuance, and terminate TLS at the edge with certificates automated via ACME so no region depends on a manual renewal. Because DNS failover cannot be faster than client caches, put a CDN/anycast layer in front for immediate rerouting and keep the data tier's failover story explicit (read replicas per region, a single writer or a consensus store), since flipping DNS does not make a database multi-master.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "What is hosting?",
+        "followUps": ["What are the trade-offs of anycast vs DNS-based failover?", "How do you avoid split-brain on the database during a region failover?"],
+        "tags": ["dns", "hosting", "high-availability", "architecture"]
+      }
+    ]
+  },
+  {
+    "topicId": "oyg5g4-cY5EBEUgVkjnL3",
+    "topicTitle": "Frontend Basics",
+    "questions": [
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-01",
+        "question": "What is the DOM, and how does it relate to the HTML a backend server sends?",
+        "answer": "The server sends HTML as text; the browser parses it into the DOM, an in-memory tree of nodes that JavaScript can read and mutate. The DOM is not the HTML source: the parser fixes malformed markup, and any JS mutation means the live DOM can diverge completely from what the server sent (which is why 'view source' and devtools Elements can differ). For a backend developer this matters for server-rendered templates, for HTML escaping (unescaped data becomes real DOM nodes, i.e. XSS), and for scrapers or tests that read raw HTML but miss JS-injected content.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["Why does escaping depend on the context (HTML body, attribute, URL, JS)?", "How would you test a page whose content only exists after JS runs?"],
+        "tags": ["html", "dom", "browser", "xss"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-02",
+        "question": "Explain how a browser-based frontend consumes a backend REST API, from fetch call to rendered data.",
+        "answer": "The frontend calls fetch('/api/orders', { headers: { Authorization: 'Bearer ...' }, credentials: 'include' }), which returns a promise resolving to a Response; you check response.ok (fetch does not reject on 4xx/5xx) and then await response.json(). The backend contract that matters is a stable JSON shape, correct Content-Type, meaningful status codes, and pagination/filtering via query params. The UI then has to model three states explicitly - loading, error and empty - so backend error responses should be machine-readable (a stable code field, not just a prose message) and consistent across endpoints.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["Why does fetch not throw on a 500?", "How would you design an error body the frontend can localise?"],
+        "tags": ["fetch", "rest", "api", "json"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-03",
+        "question": "What are the essential CSS concepts a backend developer should know to work on server-rendered templates?",
+        "answer": "Selectors and specificity (inline > id > class > element, with !important overriding), the cascade and inheritance, and the box model (content, padding, border, margin, and box-sizing: border-box). Layout is dominated by flexbox for one-dimensional rows/columns and grid for two-dimensional layouts, with position: relative/absolute/fixed/sticky for out-of-flow elements and z-index/stacking contexts for overlap. Media queries handle responsiveness, and in templates the practical rules are: keep class names stable because tests and CSS both depend on them, and never build layout out of inline styles generated server-side.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["What creates a new stacking context?", "When do you reach for grid instead of flexbox?"],
+        "tags": ["css", "layout", "frontend"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-04",
+        "question": "Explain the JavaScript event loop and why an API call does not block the UI.",
+        "answer": "JS runs single-threaded on a call stack; asynchronous work (network, timers) is handed to the host environment, and when it completes a callback is queued. The event loop drains the microtask queue (promise callbacks, queueMicrotask) fully after each task, then takes the next macrotask (setTimeout, I/O, events), so a fetch never blocks rendering but a long synchronous loop does - it freezes the frame. This is the same model as Node.js, which is why a CPU-heavy handler in Node stalls every other request and belongs in a worker thread or a separate job.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["Why does a promise chain run before a setTimeout(0)?", "How do you keep a CPU-bound task from blocking a Node HTTP server?"],
+        "tags": ["javascript", "event-loop", "async", "nodejs"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-05",
+        "question": "A frontend on https://app.example.com calls https://api.example.com and the browser reports 'No Access-Control-Allow-Origin header'. Explain what is happening and fix it.",
+        "answer": "Those are different origins, so the browser applies CORS: the request is sent (or preflighted) but the response is hidden from JS unless the server returns Access-Control-Allow-Origin matching the origin. The fix is on the API, not the frontend: return Access-Control-Allow-Origin: https://app.example.com, plus Access-Control-Allow-Methods/Headers, and Access-Control-Allow-Credentials: true if cookies are used - and note that with credentials the wildcard * is illegal. Also make sure the error handler and any proxy/gateway emit these headers too, otherwise 4xx/5xx responses look like CORS failures and mask the real bug.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "",
+        "followUps": ["Why does CORS not protect the server itself?", "What does Vary: Origin prevent when a CDN is in front?"],
+        "tags": ["cors", "browser", "api", "debugging"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-06",
+        "question": "When does a browser send a CORS preflight, and what makes a request 'simple'?",
+        "answer": "A request is simple if the method is GET, HEAD or POST, the headers are limited to CORS-safelisted ones, and Content-Type is application/x-www-form-urlencoded, multipart/form-data or text/plain. Anything else - PUT, DELETE, PATCH, a custom header like X-Request-Id, or Content-Type: application/json - triggers an OPTIONS preflight carrying Origin, Access-Control-Request-Method and Access-Control-Request-Headers, which the server must answer with matching Allow headers and ideally Access-Control-Max-Age so the result is cached (Chrome caps it at 2 hours). Preflights double latency on chatty APIs, so make sure the OPTIONS route is handled before auth middleware and never requires a token.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["Why must the preflight response be unauthenticated?", "How would you measure preflight overhead in production?"],
+        "tags": ["cors", "preflight", "http", "performance"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-07",
+        "question": "Compare SSR, CSR, SSG and hydration, and what each implies for the backend.",
+        "answer": "CSR ships a near-empty HTML shell plus a JS bundle that fetches JSON and renders in the browser: light on the server, bad first paint and weak SEO without prerendering. SSR renders HTML per request on the server, giving fast first contentful paint and crawlable markup at the cost of server CPU, per-request data fetching latency and a cache story you must design. SSG prerenders at build time and serves from a CDN (with ISR/revalidation for freshness), ideal for content that changes rarely. Hydration attaches JS event handlers to server-rendered HTML; if the server and client render different output you get hydration mismatch errors, and the backend must ensure the data used for SSR and the data returned to the client API are consistent.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["How does streaming SSR change TTFB?", "Which auth model works for SSR - cookies or bearer tokens in memory?"],
+        "tags": ["ssr", "csr", "ssg", "rendering"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-08",
+        "question": "The frontend team says your API is 'slow' but your server-side p99 is 40ms. How do you investigate?",
+        "answer": "Server time is only one segment: reproduce in the browser Network panel and split the waterfall into DNS, TCP, TLS, waiting (TTFB) and content download, and check whether an OPTIONS preflight, a redirect chain (http -> https -> www) or a cold CDN is adding round trips. Then look at the call pattern: a chatty UI doing N sequential requests (a list plus one detail call per row) turns 40ms into seconds regardless of server speed, and a missing Cache-Control/ETag means every navigation refetches. Fix the real cause - collapse N+1 client calls into one endpoint or add batching/expansion params, cut redirects, enable compression and caching - and confirm with real-user monitoring, not local timings.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "",
+        "followUps": ["How do ETag and If-None-Match reduce payload without losing freshness?", "When is it right to give the frontend a purpose-built aggregate endpoint (BFF)?"],
+        "tags": ["performance", "api", "debugging", "caching"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-09",
+        "question": "Where should a SPA store an access token, and what are the trade-offs?",
+        "answer": "localStorage is readable by any script on the page, so a single XSS exfiltrates the token; cookies with HttpOnly, Secure and SameSite cannot be read by JS but are attached automatically, which reintroduces CSRF risk on state-changing requests. The common answer is a short-lived access token held in memory plus a refresh token in an HttpOnly, Secure, SameSite=Strict/Lax cookie scoped to the refresh endpoint, with rotation and reuse detection. Whichever you choose, the backend must still enforce CSRF protection for cookie auth (SameSite plus a double-submit or synchronizer token) and keep token lifetimes short enough that revocation is meaningful.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "",
+        "followUps": ["Why does CORS not stop CSRF?", "How do you revoke a JWT before it expires?"],
+        "tags": ["auth", "security", "cookies", "spa"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-10",
+        "question": "What is the difference between defer, async and a plain script tag, and why does it matter for page speed?",
+        "answer": "A plain <script src> blocks HTML parsing until it is fetched and executed, so it delays first paint. async downloads in parallel and executes as soon as it arrives, interrupting parsing and running in unpredictable order - fine for independent third-party tags like analytics. defer downloads in parallel but executes in document order after parsing completes and before DOMContentLoaded, which is the right default for application code, as is type=\"module\" (deferred by default). For a server-rendered page the practical rule is: critical CSS inline in <head>, app JS deferred at the end, third-party scripts async and ideally behind consent.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": ["How do preload and preconnect hints fit in?", "What does a render-blocking stylesheet cost on a slow 3G connection?"],
+        "tags": ["javascript", "performance", "html", "loading"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-11",
+        "question": "A user reports that after deploying a new frontend build they still see the old broken UI, even after a refresh. What happened?",
+        "answer": "Stale caching of index.html or of a service worker: hashed asset bundles cache fine forever, but the HTML entry point must be served with Cache-Control: no-cache (or a very short max-age) so it is revalidated, otherwise the browser or CDN keeps pointing at deleted bundle hashes and you also see chunk-load errors. If a service worker is registered it can serve the whole shell from Cache Storage until it updates, so it needs a versioned cache name plus skipWaiting/clients.claim or an explicit update prompt. Fix: purge the CDN for the HTML, correct the cache headers per asset class, and keep old bundle files deployed for a grace period so in-flight sessions do not break mid-navigation.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "",
+        "followUps": ["Why keep old hashed chunks after a deploy?", "How would you invalidate a service worker cache safely?"],
+        "tags": ["caching", "deployment", "frontend", "service-worker"]
+      },
+      {
+        "id": "oyg5g4-cY5EBEUgVkjnL3-12",
+        "question": "Design the backend contract for a dashboard that must show live order status to thousands of concurrent users. Polling, SSE or WebSocket?",
+        "answer": "Short polling is simplest and cache-friendly but wastes requests and adds up to one interval of latency; Server-Sent Events give one-way server push over plain HTTP with automatic reconnect and Last-Event-ID resume, and work through most proxies; WebSockets give full duplex but need their own upgrade path, auth handshake, heartbeats and sticky routing or a shared pub/sub backplane. For a read-only dashboard SSE is the right default: one HTTP/2 stream per user, events pushed from a Redis/Kafka fan-out, with an initial REST snapshot plus incremental events so a reconnect does not require replaying everything. Whatever the transport, the contract needs event ids for resumption, a heartbeat to survive idle proxy timeouts, and a documented backpressure/drop policy.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "",
+        "followUps": ["How do you authenticate and authorise an SSE or WebSocket connection?", "What breaks when you run SSE behind HTTP/1.1 with a 6-connection-per-origin limit?"],
+        "tags": ["sse", "websocket", "realtime", "api-design"]
+      }
+    ]
+  }
+]

@@ -1,0 +1,547 @@
+{
+  "slug": "linux",
+  "title": "Linux Roadmap",
+  "description": "Step by step guide to learning Linux in @currentYear@",
+  "url": "https://roadmap.sh/linux",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-05-12T11:02:34.052Z",
+  "relatedRoadmaps": [
+    "devops",
+    "backend",
+    "docker",
+    "cyber-security"
+  ],
+  "topicCount": 16,
+  "subtopicCount": 86,
+  "topics": [
+    {
+      "id": "y7KjVfSI6CAduyHd4mBFT",
+      "title": "Navigation Basics",
+      "subtopics": [
+        {
+          "id": "qLeEEwBvlGt1fP5Qcreah",
+          "title": "Basic Commands",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "q-Ky0ietZGpyUcBQfh-BJ",
+          "title": "Moving Files / Directories",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "9oo2fxTM2_p0VYPBroqxa",
+          "title": "Creating & Deleting Files / Dirs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3fzuXKH7az_LVnmnoXB1p",
+          "title": "Directory Hierarchy Overview",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "HGmeYvRf7_XusZl_K4x9k",
+      "title": "Editing Files",
+      "subtopics": [
+        {
+          "id": "yqRwmcZThjQuqh2ao0dWK",
+          "title": "Nano",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XiZz7EFIey1XKS292GN4t",
+          "title": "Vim",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "8QBMyL8D5jPovxN8jyZW9",
+      "title": "Shell and Other Basics",
+      "subtopics": [
+        {
+          "id": "KaMSsQnJzNqGHg0Oia4uy",
+          "title": "Command Help",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "moGMHNR58wFlzhS7je1wc",
+          "title": "Command Path",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zwXEmpPYjA7_msS43z7I0",
+          "title": "Environment Variables",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JgoZzx4BfK7tmosgpZOsf",
+          "title": "Redirects",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NIBSZGE9PskVrluJpdom0",
+          "title": "Super User",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5658kdqJw-pIOyyhll80a",
+          "title": "paste",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "RsOTPZPZGTEIt1Lk41bQV",
+      "title": "Working with Files",
+      "subtopics": [
+        {
+          "id": "TnrT-cqMA8urew9nLv0Ns",
+          "title": "File Permissions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iD073xTmpzvQFfXwcwXcY",
+          "title": "Archiving and Compressing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "abKO6KuuIfl9ruVxBw6t_",
+          "title": "Copying and Renaming",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "KaXHG_EKxI5PUXmcvlJt6",
+          "title": "Soft Links / Hard Links",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "-B2Dvz7160Er0OBHzS6ro",
+      "title": "Text Processing",
+      "subtopics": [
+        {
+          "id": "t3fxSgCgtxuMtHjclPHA6",
+          "title": "stdout / stdin / stderr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Z5Mf_e5G24IkmxEHgYBe2",
+          "title": "cut",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1WRIy3xHtQfiQFZrprobP",
+          "title": "sort",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6xdkFk_GT93MigeTSSGCp",
+          "title": "head",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "O9Vci_WpUY-79AkA4HDx3",
+          "title": "tr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Yyk28H6TiteZEGv6Aps1h",
+          "title": "tail",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vfcCS1GoyKpU1rQaE8I5r",
+          "title": "join",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Pl9s2ti25hsSEljXJvBTj",
+          "title": "split",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v32PJl4fzIFTOirOm6G44",
+          "title": "pipe",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Bo9CdrGJej-QcNmw46k9t",
+          "title": "tee",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YSfGrmT795miIeIZrtC3D",
+          "title": "nl",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LIGOJwrXexnIcPyHVlhQ8",
+          "title": "wc",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TZuDVFS7DZFBgaSYYXoGe",
+          "title": "expand",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sKduFaX6xZaUUBdXRMKCL",
+          "title": "unexpand",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qnBbzphImflQbEbtFub9x",
+          "title": "uniq",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "umlhxidsvtZG9k40Ca0Ac",
+          "title": "grep",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QTmECqpRVMjNgQU70uCF8",
+          "title": "awk",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jSzfQf0MlnXtWHCc-HYvr",
+      "title": "Server Review",
+      "subtopics": [
+        {
+          "id": "19lTWqAvZFT2CDlhLlPSq",
+          "title": "Uptime and Load",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WwybfdKuP9ogCGpT7d3NU",
+          "title": "Authentication Logs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ewUuI_x-YhOQIYd3MTgJJ",
+          "title": "Services Running",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tx0nh6cbBjVxwNlyrBNYm",
+          "title": "Available Memory / Disk",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "h01Y6dW09ChidlM2HYoav",
+      "title": "Process Management",
+      "subtopics": [
+        {
+          "id": "mUKoiGUTpIaUgQNF3BND_",
+          "title": "Background / Foreground Processes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "lf3_CRyOI2ZXGzz5ff451",
+          "title": "Listing / Finding Processes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VkLWTvKnRXzvLGWza2v45",
+          "title": "Process Signals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0FLUI9r7znMqi6YKReLzD",
+          "title": "Killing Processes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5anSYRhaKIs3dCLWlvZfT",
+          "title": "Process Priorities",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Rib7h9lh_ndiXkwNbftz_",
+          "title": "Process Forking",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "g6n7f1Qi0BPr_BGvisWuz",
+      "title": "User Management",
+      "subtopics": [
+        {
+          "id": "R9TZfkgVUQNLnMpDhovJa",
+          "title": "Create / Delete / Update",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "h8wc8XEwWYHErna68w7Mg",
+          "title": "Users and Groups",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "F1sU3O1ouxTOvpidDfN3k",
+      "title": "Service Management (systemd)",
+      "subtopics": [
+        {
+          "id": "34UUrc8Yjc_8lvTL8itc3",
+          "title": "Creating New Services",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "FStz-bftQBK0M6zz2Bxl4",
+          "title": "Checking Service Logs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DuEfJNrm4Jfmp8-8Pggrf",
+          "title": "Starting / Stopping Services",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xk5Xgi797HlVjdZJRfwX1",
+          "title": "Checking Service Status",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "L6RMExeqi9501y-eCHDt1",
+          "title": "Managing Permissions",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "4eINX8jYMJxfYh7ZV47YI",
+      "title": "Package Management",
+      "subtopics": [
+        {
+          "id": "2oQiuQ2j02SCt9t5eV6hg",
+          "title": "Package Repositories",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Z23eJZjmWoeXQuezR9AhG",
+          "title": "Finding & Installing Packages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "48wAoAAlCNt3j5mBpKTWC",
+          "title": "Listing Installed Packages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xEHiB-egkkcBuZmgMoqHT",
+          "title": "Install / Remove / Upgrade Packages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eKyMZn30UxQeBZQ7FxFbF",
+          "title": "Snap",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Fn_uYKigJRgb7r_iYGVBr",
+      "title": "Disks and Filesystems",
+      "subtopics": [
+        {
+          "id": "AwQJYL60NNbA5_z7iLcM7",
+          "title": "Inodes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LFPhSHOhUqM98fUxMjQUw",
+          "title": "Filesystems",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AWosNs2nvDGV8r6WvgBI1",
+          "title": "Swap",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zmb5lK_EGMAChPoPvP9E0",
+          "title": "Mounts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4xBaZPk0eSsWG1vK3e2yW",
+          "title": "Adding Disks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "I3LNa1cM_zRkBy8wKdz3g",
+          "title": "LVM",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "DQEa8LrJ9TVW4ULBE4aHJ",
+      "title": "Booting Linux",
+      "subtopics": [
+        {
+          "id": "o5lSQFW-V_PqndGqo1mp3",
+          "title": "Boot Loaders",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ru7mpLQZKE1QxAdiA1sS3",
+          "title": "Logs",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Mb42VFjCzMZn_PovKIfKx",
+      "title": "Networking",
+      "subtopics": [
+        {
+          "id": "0pciSsiQqIGJh3x8465_s",
+          "title": "TCP/IP Stack",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Xszo9vXuwwXZo26seHehD",
+          "title": "Subnetting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4ees23q281J1DPVAc7iXd",
+          "title": "Ethernet & arp/rarp",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "D0yUzzaJsfhtdBWMtquAj",
+          "title": "IP Routing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "f5oQYhmjNM2_FD7Qe1zGK",
+          "title": "DNS Resolution",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "uk6UMuI8Uhf02TBAGVeLS",
+          "title": "SSH",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tVrbVcNEfc11FbEUoO2Dk",
+          "title": "File Transfer",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "X6Jw95kbyPgsDNRhvkQP9",
+          "title": "DHCP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "4tFZ1PLpz50bddf7zSFrW",
+      "title": "Shell Programming",
+      "subtopics": [
+        {
+          "id": "rOGnHbGIr3xPCFdpkqoeK",
+          "title": "Debugging",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bZ8Yj6QfBeDdh8hRM_aZs",
+          "title": "Netfilter",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-pW7R76yNIeGf7TQoX4QL",
+          "title": "Literals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JyxvZOb7iusOSUYSlniGl",
+          "title": "Variables",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WJT-yrMq8cEI87RHWA2jY",
+          "title": "Loops",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rQxfp7UWqN72iqewZhOdc",
+          "title": "Conditionals",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "bdQNcr1sj94aX_gjwf2Fa",
+      "title": "Troubleshooting",
+      "subtopics": [
+        {
+          "id": "BnB3Rirh4R7a7LW7-k-95",
+          "title": "traceroute",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yrxNYMluJ9OAQCKuM5W1u",
+          "title": "netstat",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ymf3u_sG1dyt8ZR_LbwqJ",
+          "title": "ICMP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "7seneb4TWts4v1_x8xlcZ",
+          "title": "Packet Analysis",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "3OpGaQhyNtk1n1MLp-tlb",
+      "title": "Containerization",
+      "subtopics": [
+        {
+          "id": "MfengY3ouz6sSOx3PXYf8",
+          "title": "Docker",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Uc36t92UAlILgM3_XxcMG",
+          "title": "ping",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QgfenmhMc18cU_JngQ1n0",
+          "title": "ulimits",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "23lsrUw8ux6ZP9JlDNNu2",
+          "title": "cgroups",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bVCwRoFsYb3HD8X4xuKOo",
+          "title": "Container Runtime",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

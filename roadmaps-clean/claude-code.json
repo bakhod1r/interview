@@ -1,0 +1,603 @@
+{
+  "slug": "claude-code",
+  "title": "Claude Code",
+  "description": "Step-by-Step guide to becoming a Claude Code expert in @currentYear@",
+  "url": "https://roadmap.sh/claude-code",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-09-10T10:53:24.782Z",
+  "relatedRoadmaps": [
+    "ai-engineer",
+    "ai-agents",
+    "prompt-engineering",
+    "vibe-coding"
+  ],
+  "topicCount": 19,
+  "subtopicCount": 94,
+  "topics": [
+    {
+      "id": "RqfeqVMhTSdC4w4GcsETP",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "SKkeuO_5B18AbxlNGeazN",
+          "title": "What is Vibe Coding?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LGxnQkrbwVu9z1PFB12P3",
+          "title": "What is a Coding Agent?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XApGUujmnvp2VYUyEj1Kc",
+          "title": "Setting up Claude",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "uOowDiCXVKyMFrZO1pnXv",
+          "title": "What is Agentic Loop?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3r-vFlVAEirxD1gaFOO4H",
+          "title": "Claude CLI",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "thR8GUbuAkEL4sb4m3llJ",
+      "title": "Ways to use Claude",
+      "subtopics": [
+        {
+          "id": "rIG8F-Rc-fMeXZ5n0UTwi",
+          "title": "Desktop App",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ONhEanq8I2RE-Jc_YY3Wa",
+          "title": "Editor Extensions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wLaM_NHs7-ANFhtjYiY-F",
+          "title": "Mobile (Channels)",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "e12uqC2SEzaMfmBbz7VZf",
+          "title": "Community Tools",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_Un0jTJaFs5Pdn1DFGl61",
+          "title": "Subscription",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "N6dDyEXIUJUA3-o1J9K_n",
+          "title": "API usage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rGtz0Nw4BgOrdm3WUmjwZ",
+          "title": "Common Usecases",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "29xiIXYlB0bjXKA794qap",
+      "title": "Using Claude Code",
+      "subtopics": [
+        {
+          "id": "T6PklJYVOrmcAgNcCFhKt",
+          "title": "CLAUDE.md",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iVa6piQwdPHIDkSRX8OSy",
+          "title": "Skills",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vB1d1mbiPJK3a1LbYZkH9",
+          "title": "Tools",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C5tCsAJQxq2d-fOrjjloB",
+          "title": "Context",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gcZCpCWHvIo5Ox0vVkdgV",
+          "title": "Modes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RHWW3QOFWRMqlaovGOLEO",
+          "title": "Models",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gpg2cfEUUKI5J9FMxn5QD",
+          "title": "Shift+Tab",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JeotqE91kV1n-YRoXN9gX",
+          "title": "Slash Commands (/)",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dD0TlpfC4GzYWINplekKw",
+          "title": "Ctrl+C",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2pu6b0Z5BQAz44Hx69Pzk",
+          "title": "Esc",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "R7YJyNd0taUVJvXDPHBn5",
+          "title": "Ctrl+R",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8xqKBvdDfTLeZXeGeqQZr",
+          "title": "Esc + Esc",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8Nd9CdGb1_Jl4YLBvew4z",
+          "title": "MCP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wd9T37TIM_1JU4o_2Fb0h",
+          "title": "Plugins",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qPH0w52-8MvzZdFdsNMap",
+          "title": "Hooks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wFxYfNu7LtzV72a224WTZ",
+          "title": "Subagents",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "8fXu3OX3xfwr3NTAIHU0z",
+      "title": "Manage Context",
+      "subtopics": [
+        {
+          "id": "SCbZprU9r8BIX4BoyjYPE",
+          "title": "Understand Claude Pricing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YjRDJcSK_h82DooDWY2k4",
+          "title": "Use /compact and /clear",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "__3S2Z00hK_g_GQJxv_21",
+          "title": "Be mindful of extensions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-P9o-aiDM7CDtLimppkjM",
+          "title": "Use subagents and hooks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cdO7pKphZq1qvCeynxGKo",
+          "title": "Thinking modes & Effort",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Dam_IG339RrYZXjXq3T8_",
+          "title": "Prompt Caching",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cMGYb_X1UK8sWI6brFj9S",
+          "title": "SessionStart",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "x5U0F5WWAqnNCC8f-qjr7",
+          "title": "SessionEnd",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FWf5hyCRo9UQ2QPalLVYn",
+          "title": "PreToolUse",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TBrr5EscwLZu7cOJoWbPy",
+          "title": "PostToolUse",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Zrqdx4Z8uAS5yhI65Xh6z",
+          "title": "UserPromptSubmit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v-gjhrW3oVZTe3EpUCjhY",
+          "title": "Stop",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "TCWd5vobMAhP7I97Q1rTq",
+      "title": "CLAUDE.md",
+      "subtopics": [
+        {
+          "id": "7ZD0nOke-7vqaibxBx24Y",
+          "title": "How to Structure",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ho_DTKqMZnx_nlxjWfrW2",
+          "title": "Locations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "I4i_fKzuBy5pTC0JXyEl-",
+          "title": "/help",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "N4YM2lqDcic5AiYgv0eRZ",
+          "title": "/clear",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MjZUaSJLSU5nDMgDJaWUh",
+          "title": "/exit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CPJulmusiWq3JQ6MmEJ0I",
+          "title": "/usage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vw9cc6_33nHnNPNyhLo_d",
+          "title": "/cost",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eLlCNxa6bqQW0JsHxIdOa",
+          "title": "/export",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "OJIfG7DRO4jgQEcberkNx",
+      "title": "Skills",
+      "subtopics": [
+        {
+          "id": "PS0GH8e9sW9N4s3UeHhjH",
+          "title": "/status",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-K5K7yT97VRC7u0IOzJyT",
+          "title": "/rewind",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IzHlnmGAqG1lpwuX1Oh4p",
+          "title": "/doctor",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3ZYaw7kTiErPiLVwMf3J8",
+          "title": "/plan",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6WsAQV_e_2XJKl2KlN2dl",
+          "title": "Creating Skills",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5uIBv9rk7Wzc_bXny0B27",
+          "title": "Skill Best Practices",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "EsbasCHDQOBZcBfHIrTbE",
+      "title": " Subagents",
+      "subtopics": [
+        {
+          "id": "HnrD1-Wc39ZRH5R6bptqX",
+          "title": "Creating Subagents",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6UHAXR4praMqGiEUgWAt8",
+          "title": "/context",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "65s0P7d39fFR2yhy4JKEZ",
+          "title": "/compact",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "l7ECu0Q5bW9_OgVH7Ih4S",
+          "title": "/memory",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oucDNnTIc8gv3dlEibDB2",
+          "title": "/init",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "svhWAC463Y9CUkFb524Fd",
+      "title": "Usage Best Practices",
+      "subtopics": [
+        {
+          "id": "2PKH3Ru9XgCz1MO75pDVr",
+          "title": "claude -p",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XlCA3rx2C7wx_EcTYtr9_",
+          "title": "claude -c",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FgQXBQ6oJ5sfW_ar0u6ez",
+          "title": "claude --add-dir",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0HKJlqhoSCMNKf1lRIEy1",
+          "title": "Resume",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cW0a112UVj2M3wBDA8UDj",
+          "title": "Rewind",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "801KNtjf61FTiLS1yrDSB",
+      "title": "Hooks",
+      "subtopics": [
+        {
+          "id": "nq8aLrgh7qNQnwZbS7d9Z",
+          "title": "Hook Events & Matchers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Gwsh4g1SxI2hJcS84p9it",
+          "title": "Hook Inputs & Outputs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UOSXh1o8bRY8Wcm6uYIgR",
+          "title": "/config",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8rKpgtmO92EUFAKlWVuO5",
+          "title": "/permissions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NMBBRdBWwCphjwQuFAp9W",
+          "title": "/model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sx2GRmZbQEYxeb05HpHQH",
+          "title": "/agents",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uC2PkMsCK-vaBo5Ygha2P",
+          "title": "Hook Types",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_iAIq8mwW0cIGbvrfmSJ5",
+      "title": "Claude Workflow",
+      "subtopics": [
+        {
+          "id": "rlj-GMcqgdKM5_7rs7yz9",
+          "title": "Manage Sessions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "y8VCGx-h97udP-dRzsSAI",
+          "title": "Permission Modes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Dutj1C19nrbonQ7OpqBnv",
+          "title": "Plan Mode",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "TWN08Vx7aBK-mvOSQuFfu",
+          "title": "Opus",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nDodLa7_UEeOmx6iM0Xp5",
+          "title": "Sonnet",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "y_euG-Rzj-OmCZhvMXegc",
+          "title": "Haiku",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lcnfnGocMZIWDQqrmdCWL",
+          "title": "claude",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zSpldCAVxYoRpHDIR2oVa",
+          "title": "claude \"query\"",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zUxO8udwPhYK6J_3wAs2Z",
+          "title": "claude -r",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PYjuzInrTOWebl-OyYfMa",
+          "title": "!",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "N6z45nuFeUqRB2f-8b_Ku",
+          "title": "\\",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "La3uarrUxC5oTszf4oaWr",
+          "title": "@",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "i3K2_8VcOGGSPdj1Jb4Im",
+      "title": "Output Styles",
+      "subtopics": []
+    },
+    {
+      "id": "xEu9-kBz5SbM3Mrrwu446",
+      "title": "Customize Status Line",
+      "subtopics": []
+    },
+    {
+      "id": "Tq83zphFUA1J8spMEyN8H",
+      "title": "Model Configuration",
+      "subtopics": [
+        {
+          "id": "aHi-EWuBbn1xvK5osHOUM",
+          "title": "Opusplan",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "ip2bq52qRah-7db6dORO8",
+      "title": "Scaling Claude",
+      "subtopics": [
+        {
+          "id": "FP6Lc-zqmP8yzBytuSsUc",
+          "title": "Headless mode",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wxkAkdKFTwbNJEfwA9tGl",
+          "title": "Git Worktrees",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fI90DtG5CoZbDyJUqLGoy",
+          "title": "Agent Team",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "WVrC8-nf8xn1jckCHO3h4",
+      "title": "Security Best Practices",
+      "subtopics": [
+        {
+          "id": "KgXvbrUuYyiBn52QCRoLl",
+          "title": "Claude Code Security",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "OBtJvLaEV3giUhvGFofKv",
+      "title": "Connecting Tools with MCP",
+      "subtopics": [
+        {
+          "id": "U22jPxfQWbu7-54OcsqkV",
+          "title": "Skills for MCP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "q26hZANRABWXI8bzE0ai2",
+          "title": "Tunnels",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "oV7YG_TnJ4ZyVVjqRwPkR",
+      "title": "Plugins",
+      "subtopics": [
+        {
+          "id": "qg6ZTF0LCz5zo5G1a3BEf",
+          "title": " Code Intelligence",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "DDEgVgkdu8PR4x8pHfD5Y",
+      "title": "Scheduling Jobs",
+      "subtopics": [
+        {
+          "id": "GhJI9_4w3RM0_BfWNXbim",
+          "title": "Channels",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "pIJ4J0QpqrnXxAX-ceZlJ",
+      "title": "Loops",
+      "subtopics": [
+        {
+          "id": "Lyl4h5cvdY1YVpzBo_LEB",
+          "title": "/mcp",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OTpU2G6mnbkFhthKAkxlM",
+          "title": "/hooks",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

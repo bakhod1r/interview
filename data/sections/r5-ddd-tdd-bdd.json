@@ -1,0 +1,307 @@
+{
+  "id": "r5",
+  "name": "DDD / TDD / BDD",
+  "domain": "arch",
+  "domainLabel": "Architecture & OOP",
+  "topics": [
+    "DDD",
+    "TDD",
+    "BDD",
+    "Testing"
+  ],
+  "questions": [
+    {
+      "id": 80,
+      "code": 81,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Test piramidasi nimani anglatadi?",
+      "options": [
+        "Ko'p E2E test, kam unit test",
+        "Ko'p tez unit test (asos), o'rtada integratsiya/kontrakt testlari, eng yuqorida kam sonli E2E test — chunki E2E sekin va mo'rt (flaky)",
+        "Faqat E2E yetarli",
+        "Testlar soni ahamiyatsiz"
+      ],
+      "answer": 1,
+      "explanation": "Mikroservislarda kontrakt testlari alohida muhim (Pact yoki OpenAPI/proto asosida): servislarni birga ko'tarmasdan moslikni tekshiradi. Flaky testlar — alohida muammo: ularni ajratib, sababini tuzatish kerak, aks holda jamoa CI natijasiga ishonmay qo'yadi."
+    },
+    {
+      "id": 5022,
+      "code": "V23",
+      "level": "J",
+      "type": "mcq",
+      "topic": "TDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "TDD sikli qanday?",
+      "options": [
+        "Kod yoz → test yoz → refactor",
+        "Red (yiqiladigan test yoz) → Green (o'tkazadigan eng sodda kodni yoz) → Refactor (testlar yashil turganda tozala)",
+        "Test yoz → deploy → tuzat",
+        "Faqat integratsiya testlari yozish"
+      ],
+      "answer": 1,
+      "explanation": "Maqsad — test yozish emas, dizaynni tashqaridan boshlash va har qadamda ishlaydigan kodga ega bo'lish. Qadamlar kichik bo'lishi shart. Test avval yozilganda kod tabiiy ravishda mock qilinadigan chegaralarga (interfeys) ega bo'ladi. Go'da: table'li testlar (table-driven), t.Run bilan subtest, testify ixtiyoriy."
+    },
+    {
+      "id": 5023,
+      "code": "V24",
+      "level": "M",
+      "type": "mcq",
+      "topic": "TDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Nimani mock qilish kerak?",
+      "options": [
+        "Hamma narsani — har bog'liqlikni",
+        "Tashqi chegaralarni: network chaqiruvlari, to'lov provayderi, soat/tasodif. DB va queue uchun ko'pincha real instance (testcontainers) yaxshiroq. O'z domain kodingizni mock qilish — testni implementatsiyaga bog'lab qo'yadi",
+        "Faqat DB ni",
+        "Hech narsani, doim real tizim"
+      ],
+      "answer": 1,
+      "explanation": "Ortiqcha mock alomati: refactor qilganda mantiq o'zgarmasa ham o'nlab test yiqiladi — testlar xulqni emas, ichki tuzilmani tekshiryapti. Amaliyot: domain sof funksiyalarda (mock kerak emas), adapterlar uchun kontrakt testlari, kritik oqim uchun testcontainers bilan integratsiya testi."
+    },
+    {
+      "id": 5024,
+      "code": "V25",
+      "level": "M",
+      "type": "open",
+      "topic": "BDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "BDD nima va TDD dan farqi nimada?",
+      "modelAnswer": [
+        "BDD — xulqni biznes tilida tasvirlash: Given (boshlang'ich holat) / When (harakat) / Then (kutilgan natija)",
+        "Asosiy qiymat — hujjat va umumiy til: PO, QA va dasturchi bir xil ssenariyni o'qiydi",
+        "TDD — dasturchi uchun dizayn texnikasi (unit level); BDD — xulq va qabul mezoni (feature level)",
+        "Ssenariylar birgalikda yoziladi (three amigos), keyin avtomatlashtiriladi (Cucumber, Go'da godog)",
+        "Xavf: Gherkin'ni texnik qadamlar bilan to'ldirib yuborish — u biznes tilida qolishi kerak"
+      ],
+      "explanation": "Vakansiyada TDD/BDD/DDD birga turibdi — javobda uchalasi bir-birini qanday to'ldirishini ayting: DDD — til va model, BDD — xulq mezoni, TDD — implementatsiya ritmi."
+    },
+    {
+      "id": 5025,
+      "code": "V26",
+      "level": "S",
+      "type": "mcq",
+      "topic": "DDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "DDD'da aggregate uchun asosiy qoida?",
+      "options": [
+        "Har table — alohida aggregate",
+        "Aggregate — konsistentlik chegarasi: invariantlar uning ichida saqlanadi, tashqaridan faqat root orqali kirasiz, boshqa aggregate'ga faqat ID bilan ishora qilinadi va bitta transaction'da bitta aggregate o'zgartiriladi",
+        "Aggregate'lar bir-birini to'g'ridan-to'g'ri o'zgartiradi",
+        "Aggregate — bu DTO"
+      ],
+      "answer": 1,
+      "explanation": "Bitta transaction'da bitta aggregate qoidasi lock contention va masshtabni hal qiladi; aggregate'lar orasidagi konsistentlik — domain event orqali eventual. Order aggregate ichida OrderLine'lar bo'ladi, lekin Customer — ID bilan. Aggregate kattalashsa — transaction og'irlashadi; kichik bo'lsa — invariantni saqlash qiyin.",
+      "source": "https://martinfowler.com/bliki/DDD_Aggregate.html"
+    },
+    {
+      "id": 5026,
+      "code": "V27",
+      "level": "S",
+      "type": "open",
+      "topic": "DDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Go loyihasini DDD/hexagonal (ports & adapters) uslubida qanday tashkil qilasiz?",
+      "modelAnswer": [
+        "domain: entity, value object, domain servis, domain event — tashqi kutubxonalarsiz (sql, http, kafka importi yo'q)",
+        "application (use case): transaction chegarasi, repository interfeyslari shu yerda e'lon qilinadi (port)",
+        "adapters/infrastructure: postgres repository, kafka producer/consumer, http handler (driven va driving adapterlar)",
+        "Bog'liqlik yo'nalishi faqat ichkariga: domain hech kimni bilmaydi; wire/konstruktorda ulanadi",
+        "Go amaliyoti: interfeys iste'molchi paketda, kichik interfeyslar; /internal ostida bounded context bo'yicha papkalar (order/, billing/)",
+        "Test: domain — sof unit test, adapter — testcontainers bilan integratsiya"
+      ],
+      "explanation": "Vakansiyada DDD alohida ko'rsatilgan — bu javob to'g'ridan-to'g'ri baholanadi. Kuchli signal: 'papka nomi emas, bog'liqlik yo'nalishi muhim' va ubiquitous language (kod nomlari biznes atamalari bilan bir xil)."
+    },
+    {
+      "id": 14020,
+      "code": "SR21",
+      "level": "S",
+      "type": "open",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Backend servis uchun test strategiyasini tuzing (senior darajada kutiladigan javob).",
+      "modelAnswer": [
+        "Unit: sof domain mantiq, tez va bog'liqliksiz — eng ko'p sonli qatlam",
+        "Integratsiya: real DB va broker bilan (testcontainers), migratsiyalar ham test qilinadi",
+        "Kontrakt: servislararo (Pact yoki OpenAPI/proto asosida) — servislarni birga ko'tarmasdan",
+        "E2E: kam sonli, eng muhim foydalanuvchi oqimlari; flaky bo'lsa darhol tuzatish yoki o'chirish",
+        "Nofunksional: yuk testi (p99 va to'yinish nuqtasi), xaos/nosozlik testlari, xavfsizlik skanlari",
+        "CI: -race, coverage o'sishini kuzatish (maqsad emas), test ma'lumotini tozalash va izolyatsiya"
+      ],
+      "explanation": "Kuchli javob testlarni 'ishonch narxi' nuqtai nazaridan tushuntiradi: qaysi xatoni qaysi qatlam ushlaydi va har qatlam qancha vaqt oladi."
+    },
+    {
+      "id": 14023,
+      "code": "SR24",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Go'da DB bilan ishlaydigan kodni qanday test qilasiz?",
+      "options": [
+        "Har narsani mock qilish",
+        "Repository interfeysini mock qilish — biznes mantiq uchun; DB bilan ishlashning o'zini esa real Postgres bilan (testcontainers yoki lokal instance) integratsiya testida: SQL, migratsiya va indekslar faqat shunda tekshiriladi",
+        "Faqat production'da tekshirish",
+        "sqlmock bilan hamma narsani qoplash"
+      ],
+      "answer": 1,
+      "explanation": "sqlmock SQL matnini solishtiradi — refactor'da sinadi va real xulqni tekshirmaydi (constraint, tip, tranzaksiya). Amaliy taqsimot: domain — unit test, repository — integratsiya testi, handler — httptest bilan. Har test o'z sxemasi yoki tranzaksiya rollback'i bilan izolyatsiya qilinadi."
+    },
+    {
+      "id": 14024,
+      "code": "SR25",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Go'da benchmark va fuzzing qachon ishlatiladi?",
+      "options": [
+        "Faqat kutubxona mualliflari uchun",
+        "Benchmark (go test -bench -benchmem) — optimizatsiyadan oldin va keyin o'lchash uchun; fuzzing (go test -fuzz) — parser, validator, kodlash/dekodlash kabi kirishga bog'liq kod uchun: kutilmagan panic va chegara holatlarini topadi",
+        "Benchmark kod to'g'riligini tekshiradi",
+        "Fuzzing faqat xavfsizlik jamoasi ishi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qoida: 'optimallashtirdim' degan har da'vo benchmark bilan isbotlanadi (benchstat bilan taqqoslash). Fuzzing Go 1.18 dan standart: topilgan har holat testdata'ga tushadi va regressiya testiga aylanadi.",
+      "source": "https://go.dev/doc/tutorial/fuzz"
+    },
+    {
+      "id": 30083,
+      "code": "SN84",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Integratsion testlarda DB uchun eng ishonchli yondashuv?",
+      "options": [
+        "Mock DB (sqlmock) hamma joyda",
+        "Haqiqiy DB (testcontainers/docker) + har test uchun izolyatsiya: transaksiyada bajarib rollback qilish yoki har testga alohida sxema/DB; migratsiyalar test boshida ishga tushiriladi",
+        "SQLite'ni PostgreSQL o'rniga",
+        "Umumiy stage DB'ga ulanish"
+      ],
+      "answer": 1,
+      "explanation": "sqlmock faqat chaqiruv satrini tekshiradi — SQL to'g'riligini, indeks, constraint, isolation xatti-harakatini ko'rsatmaydi. SQLite dialekt farqlari sabab yolg'on ishonch beradi. Parallel testlarda transaksiya-rollback eng tez (lekin commit xatti-harakati va trigger testida yaramaydi), aks holda sxema-per-test."
+    },
+    {
+      "id": 30084,
+      "code": "SN85",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Test yozildi, lekin refactor qilganda barcha test buziladi. Nima noto'g'ri?",
+      "options": [
+        "Refactor qilmaslik kerak",
+        "Testlar implementatsiyaga bog'langan (mock chaqiruvlar ketma-ketligi, ichki metodlar) — xatti-harakat (observable behaviour) emas; testlar public kontrakt orqali yozilishi kerak",
+        "Mock kam ishlatilgan",
+        "Test soni kam"
+      ],
+      "answer": 1,
+      "explanation": "Yaxshi test refactoring'da o'zgarmaydi, chunki u 'nima bo'lishi' ni tekshiradi, 'qanday qilinganini' emas. Over-mocking belgisi: test kodi `expect(repo.save).toHaveBeenCalledWith(...)` zanjiridan iborat. Almashtirish: fake/in-memory implementatsiya va natijani holat orqali tekshirish; mock faqat chetdagi tizimlarga (to'lov provayderi, email)."
+    },
+    {
+      "id": 30085,
+      "code": "SN86",
+      "level": "S",
+      "type": "mcq",
+      "topic": "DDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Aggregate chegarasini qanday belgilaysiz?",
+      "options": [
+        "Har jadval — bitta aggregate",
+        "Invariant chegarasi bo'yicha: bitta transaksiyada birgalikda izchil bo'lishi kerak bo'lgan minimal to'plam; aggregate'lar orasida bog'lanish ID bilan va izchillik eventual",
+        "Butun bounded context bitta aggregate",
+        "UI ekranlariga qarab"
+      ],
+      "answer": 1,
+      "explanation": "Aggregate katta bo'lsa konkurentlik azoblanadi (bitta buyurtma ustida qulflar) va yuklash qimmatlashadi; juda kichik bo'lsa invariantni ushlab bo'lmaydi. Amaliy test: 'bu qoida buzilishi mumkin emasmi, agar ikki obyekt alohida commit qilinsa?' — mumkin bo'lmasa bir aggregate. Optimistik qulflash (`version`) aggregate darajasida qo'llanadi."
+    },
+    {
+      "id": 30086,
+      "code": "SN87",
+      "level": "St",
+      "type": "open",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Flaky testlar jamoani sekinlashtirmoqda. Tizimli qanday hal qilasiz?",
+      "modelAnswer": [
+        "O'lchash: har test uchun muvaffaqiyat tarixi (CI'da natijalarni saqlash), top flaky ro'yxati — his-tuyg'u emas, ma'lumot",
+        "Darhol karantin: flaky test alohida suite'ga chiqariladi, asosiy pipeline'ni bloklamaydi, lekin egasi va muddati bo'ladi",
+        "Sabablar bo'yicha tuzatish: `sleep` o'rniga aniq kutish/kanal, umumiy holat va tartibga bog'liqlik (test izolyatsiyasi), vaqt/random — inject qilinadigan clock va seed, tashqi tarmoq — test double, parallel port/DB konflikti",
+        "Reproduksiya: testni `-count=100 -race` bilan aylantirish, CI'da resurs cheklovi ostida",
+        "Siyosat: 'retry qo'shib yashirish' taqiqlanadi (retry faqat vaqtinchalik va ko'rinadigan metrikada), flaky yopilmasa test o'chiriladi — yolg'on signal noldan yomon",
+        "Natija: main branch yashil bo'lishi ishonchli bo'ladi, deploy qo'rquvi kamayadi"
+      ],
+      "explanation": "Kutilayotgan fikr: flaky test — ishonch tizimidagi nosozlik, alohida bug emas. Shuning uchun javobda o'lchash, karantin, sabab tahlili va siyosat birga bo'lishi kerak."
+    },
+    {
+      "id": 30276,
+      "code": "SN277",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Test piramidasi senior darajada qanday qo'llanadi?",
+      "options": [
+        "Faqat e2e test yozish — ishonch ko'proq",
+        "Ko'p unit (tez, domain mantiqiga), o'rtacha integration (DB, broker bilan testcontainers), juda kam e2e (kritik biznes yo'li). Sabab: yuqoriga chiqqan sari test sekin, mo'rt va sababni ko'rsatmaydigan bo'ladi",
+        "Faqat unit test",
+        "Teng nisbatda"
+      ],
+      "answer": 1,
+      "explanation": "Qo'shimcha qatlam — contract testing (Pact yoki sxema tekshiruvi): mikroservislar orasidagi kontraktni e2e'siz tekshiradi. Signal: e2e ko'p bo'lsa CI sekin va flaky bo'ladi, jamoa testga ishonmay qo'yadi. Har qatlam nimani tekshiradi — aniq javob berilishi kerak (unit: qoida, integration: SQL/mapping, e2e: yo'l butunligi)."
+    },
+    {
+      "id": 30277,
+      "code": "SN278",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Konkurent kodni qanday test qilasiz?",
+      "options": [
+        "Bir necha marta qo'lda ishga tushirish",
+        "`go test -race` (CI'da majburiy), `-count=N` bilan takrorlash, sinxronizatsiya nuqtalarini test boshqaradigan qilib injektsiya (kanal/hook bilan), deterministik bo'lmagan `sleep`lardan voz kechish, va invariantni tekshiruvchi stress test (ko'p goroutine + yakuniy holat tekshiruvi)",
+        "Race detector sekin, ishlatmaslik",
+        "Faqat integration test"
+      ],
+      "answer": 1,
+      "explanation": "Race detector haqiqiy race'ni faqat u yuz berganda ko'radi — shuning uchun test ko'p iteratsiya va parallellik bilan bo'lishi kerak. Deterministik testlash uchun vaqt va tasodifni inject qilish (`Clock` interfeysi, seed), hamda `goleak` bilan goroutine qolmasligini tekshirish. Property-based test invariantlar uchun kuchli vosita."
+    },
+    {
+      "id": 30278,
+      "code": "SN279",
+      "level": "S",
+      "type": "mcq",
+      "topic": "TDD",
+      "domain": "arch",
+      "section": "r5",
+      "question": "Bug topildi. TDD bo'yicha to'g'ri ketma-ketlik?",
+      "options": [
+        "Darhol tuzatib deploy qilish",
+        "Avval bug'ni takrorlaydigan yiqiladigan test yozish (eng kichik miqyosda — domain darajasida bo'lsa ideal), keyin tuzatish, keyin test yashil bo'lishini ko'rish; test regressiya himoyasi sifatida qoladi",
+        "Faqat manual tekshirish",
+        "Test keyin yozilsa ham farqi yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Yiqiladigan testni avval yozish ikki narsani isbotlaydi: sababni to'g'ri tushunganingizni va tuzatish haqiqatan ishlaganini. Agar test yozilmasa, tuzatish 'ishlaganga o'xshadi' holatida qoladi. Qo'shimcha: bug'ning sinf darajasini o'ylab, shu turdagi barcha holatlarni qamrab oladigan test yozish (masalan chegara qiymatlari)."
+    }
+  ]
+}

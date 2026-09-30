@@ -1,0 +1,387 @@
+{
+  "id": "r1",
+  "name": "Microservices & boundaries",
+  "domain": "arch",
+  "domainLabel": "Architecture & OOP",
+  "topics": [
+    "Patterns",
+    "Microservices",
+    "Discovery",
+    "Mesh",
+    "Architecture",
+    "Strategy",
+    "Org"
+  ],
+  "questions": [
+    {
+      "id": 50,
+      "code": 51,
+      "level": "P",
+      "type": "open",
+      "topic": "Strategy",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Yangi mahsulot uchun DB tanlashda (PostgreSQL vs DynamoDB vs Cassandra vs ...) qaror freymvorkingiz qanday?",
+      "modelAnswer": [
+        "Access pattern'lardan boshlash: query'lar oldindan ma'lummi (key-value) yoki ad-hoc/relational?",
+        "Konsistentlik talablari: pul/inventar → kuchli transaction'lar",
+        "Masshtab realistik prognozi — ko'p kompaniyaga bitta yaxshi sozlangan Postgres yetadi",
+        "Jamoa tajribasi va operatsion narx (on-call, backup, tooling)",
+        "Vendor lock-in, narx modeli (DynamoDB — query bo'yicha), region talablari",
+        "Default: 'boring technology' — Postgres; boshqasiga o'tish uchun aniq sabab va ADR"
+      ],
+      "explanation": "Principal level'da texnologiya emas, qaror jarayoni baholanadi: trade-off'ni hujjatlash (ADR), qaytarish narxi, jamoaning innovation token'larini tejash."
+    },
+    {
+      "id": 53,
+      "code": 54,
+      "level": "P",
+      "type": "open",
+      "topic": "Org",
+      "domain": "arch",
+      "section": "r1",
+      "question": "200+ muhandisli tashkilotda DB sxema o'zgarishlari va ma'lumot egaligini qanday boshqarasiz?",
+      "modelAnswer": [
+        "Har table/sxemaning aniq egasi (servis/jamoa), boshqa jamoa to'g'ridan-to'g'ri kirmaydi — kontrakt orqali",
+        "Migratsiyalar CI'da avtomatik tekshiriladi: lint (xavfli ALTER, CONCURRENTLY'siz index, NOT NULL default), lock_timeout",
+        "Paved road: standart migratsiya tooling, shablon, runbook — to'g'ri yo'l eng oson yo'l bo'lsin",
+        "Katta xavfli o'zgarishlar uchun review (DB guild), lekin bottleneck bo'lmasligi kerak",
+        "Kuzatuv: sekin query'lar, bloat, index'lar bo'yicha jamoalarga dashboard",
+        "Incident'lardan keyin qoidani avtomatlashtirish"
+      ],
+      "explanation": "Principal signal: odamlar review'iga emas, avtomatik guardrail'larga tayanish va tashkiliy masshtab — markaziy DBA jamoasi bottleneck bo'lmasligi."
+    },
+    {
+      "id": 54,
+      "code": 55,
+      "level": "P",
+      "type": "mcq",
+      "topic": "Architecture",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Event sourcing'ning production'dagi eng katta uzoq muddatli narxi odatda nima?",
+      "options": [
+        "Diskda joy ko'p ketadi",
+        "Event sxemasi evolyutsiyasi (versiyalash/upcasting), projection'larni qayta qurish va eventual consistency murakkabligi",
+        "Yozish sekin",
+        "SQL ishlatib bo'lmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Eventlar o'zgarmas — 3 yil oldingi event formatini ham abadiy qo'llash kerak. Read model'lar kechikadi, qayta qurish soatlab ketishi mumkin. Shuning uchun ES faqat audit/tarix biznes qiymat bo'lgan bounded context'ga — butun tizimga emas."
+    },
+    {
+      "id": 59,
+      "code": 60,
+      "level": "P",
+      "type": "open",
+      "topic": "Strategy",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Managed DB (RDS/Aurora/Cloud SQL) vs self-hosted (Kubernetes/VM'da Postgres) — qanday qaror qilasiz?",
+      "modelAnswer": [
+        "Managed: backup, failover, patching tayyor — jamoa mahsulotga fokus",
+        "Narx: katta masshtabda managed 2–3x qimmat bo'lishi mumkin, lekin DBA/SRE maoshi bilan solishtirish kerak (TCO)",
+        "Nazorat: extension'lar, superuser, versiya, tuning chegaralari",
+        "Compliance/on-prem talablar",
+        "Qaror qaytarilishi: chiqish (egress, migratsiya) narxi",
+        "Odatda: managed bilan boshlash; aniq masshtab/narx signali bo'lganda qayta ko'rib chiqish"
+      ],
+      "explanation": "Principal javob TCO va jamoa imkoniyatlariga asoslanadi, 'arzonroq' degan birgina metrikaga emas."
+    },
+    {
+      "id": 1018,
+      "code": "B19",
+      "level": "St",
+      "type": "open",
+      "topic": "Microservices",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Saga: orchestration va choreography farqi, qachon qaysi biri?",
+      "modelAnswer": [
+        "Saga — distributed transaction o'rniga lokal transaction'lar ketma-ketligi + compensating action'lar",
+        "Choreography: servislar eventlarga reaksiya qiladi — kam coupling, lekin oqim ko'rinmaydi, siklik bog'liqlik xavfi",
+        "Orchestration: markaziy koordinator (Temporal, Step Functions) — oqim aniq, monitoring oson, orkestrator — qo'shimcha komponent",
+        "Compensation idempotent bo'lishi shart; ba'zi amallarni qaytarib bo'lmaydi (email) — oxiriga qo'yish",
+        "Oddiy 2–3 qadam — choreography; murakkab biznes oqim — orchestration"
+      ],
+      "explanation": "Staff signal: 'izolatsiya yo'q' kamchiligini aytish — saga o'rtasida boshqalar oraliq holatni ko'radi (semantic lock, pending status bilan yechiladi)."
+    },
+    {
+      "id": 1023,
+      "code": "B24",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Microservices",
+      "domain": "arch",
+      "section": "r1",
+      "question": "API gateway'ga qaysi mas'uliyat <b>tegishli emas</b>?",
+      "options": [
+        "Autentifikatsiya, rate limiting",
+        "Routing, TLS termination",
+        "Biznes logika (masalan order narxini hisoblash)",
+        "Request/response logging, metrikalar"
+      ],
+      "answer": 2,
+      "explanation": "Gateway — cross-cutting concerns uchun. Biznes logika gateway'ga tushsa u 'yangi monolit' va bottleneck bo'ladi. BFF (backend for frontend) — client'ga moslashtirish uchun alohida qatlam."
+    },
+    {
+      "id": 1024,
+      "code": "B25",
+      "level": "P",
+      "type": "open",
+      "topic": "Microservices",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Monolit vs mikroservislar: yangi kompaniya yoki mavjud monolit uchun qanday qaror qilasiz?",
+      "modelAnswer": [
+        "Mikroservislar — tashkiliy masshtab muammosini hal qiladi (Conway qonuni), texnik emas",
+        "Narx: distributed tizim murakkabligi, network, observability, deploy infratuzilmasi",
+        "Boshlash: modular monolit — aniq modul chegaralari, keyinroq ajratish oson",
+        "Ajratish signallari: mustaqil deploy kerak, turlicha masshtab, jamoalar bir-birini bloklaydi",
+        "Ajratish tartibi: eng mustaqil, aniq bounded context'dan; strangler fig"
+      ],
+      "explanation": "Principal javob: 'bu arxitektura emas, tashkiliy qaror' va teskari yo'l (mikroservislardan qayta birlashtirish) holatlarini ham tan olish."
+    },
+    {
+      "id": 1027,
+      "code": "B28",
+      "level": "P",
+      "type": "open",
+      "topic": "Microservices",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Multi-tenant SaaS'da tenant izolatsiyasini (security va 'noisy neighbor') qanday ta'minlaysiz?",
+      "modelAnswer": [
+        "Modellar: shared DB + tenant_id; schema per tenant; DB per tenant — narx va izolatsiya trade-off",
+        "Ma'lumot izolatsiyasi: har query'da tenant konteksti majburiy (Postgres RLS, ORM default scope), testlar",
+        "Noisy neighbor: tenant bo'yicha rate limit, kvota, alohida queue/worker pool",
+        "Katta enterprise mijozlar uchun dedicated tier (cell architecture)",
+        "Observability tenant bo'yicha: narx va yuk attributsiyasi"
+      ],
+      "explanation": "Principal signal: bitta model hammaga emas — tier'lar va cell-based arxitektura; va security'ni kod review'ga emas, RLS kabi tizimli mexanizmga yuklash."
+    },
+    {
+      "id": 2000,
+      "code": "I1",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Patterns",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Mikroservis arxitekturasining monolitdan asosiy farqi?",
+      "options": [
+        "Kod hajmi kichikroq",
+        "Har servis mustaqil deploy qilinadi, o'z ma'lumot bazasiga ega va network orqali muloqot qiladi",
+        "Faqat bulutda ishlaydi",
+        "DB kerak emas"
+      ],
+      "answer": 1,
+      "explanation": "Asosiy mezon — mustaqil deploy. Agar 5 ta 'servis'ni birga deploy qilish kerak bo'lsa, bu distributed monolit: mikroservis narxini to'laysiz, foydasini olmaysiz. Umumiy DB ham shu belgi. Foyda: jamoalar mustaqil ishlaydi, alohida masshtab. Narx: network failure'lari, tracing, deploy infratuzilmasi."
+    },
+    {
+      "id": 2001,
+      "code": "I2",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Discovery",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Servis boshqa servisning manzilini qanday topadi (service discovery)?",
+      "options": [
+        "Manzillar konfiguratsiya faylida qo'lda yoziladi",
+        "Registry (Consul, etcd) yoki platforma DNS'i orqali: Kubernetes'da Service nomi (orders.default.svc) barqaror virtual IP beradi, podlar almashsa ham nom o'zgarmaydi",
+        "Har safar butun network'ni skanerlaydi",
+        "Faqat IP bo'yicha"
+      ],
+      "answer": 1,
+      "explanation": "Client-side discovery: client registry'dan ro'yxat olib, o'zi balanslaydi (Eureka+Ribbon). Server-side: LB/Service orqali (Kubernetes). Podlar o'ladi va yangi IP oladi — shuning uchun qat'iy IP yozish ishlamaydi. DNS cache'i va TTL — tipik tuzoq (JVM'da DNS cache abadiy bo'lishi mumkin)."
+    },
+    {
+      "id": 2002,
+      "code": "I3",
+      "level": "M",
+      "type": "open",
+      "topic": "Patterns",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Servis chegarasini (qaysi kod qaysi servisga tegishli) qanday aniqlaysiz?",
+      "modelAnswer": [
+        "Bounded context bo'yicha — biznes qobiliyati, texnik qatlam emas ('order' servisi, 'database' servisi emas)",
+        "Ma'lumot egaligi: bitta table'ni ikki servis yozmaydi",
+        "Birga o'zgaradigan kod birga tursin (bitta feature 3 servisga deploy talab qilsa — chegara noto'g'ri)",
+        "Jamoa strukturasi (Conway qonuni) va mustaqil ishlash imkoni",
+        "Masshtab va SLA farqi: og'ir yuk yoki boshqa ishonchlilik talabi ajratishga sabab",
+        "Shubha bo'lsa — kattaroq servis: ajratish birlashtirishdan oson"
+      ],
+      "explanation": "Middle/Senior signal: 'birga o'zgaradigan narsa birga tursin' mezoni. Yomon chegara alomati: har release'da 4 ta servisni muvofiqlashtirish, servislar orasida chatty (juda ko'p) chaqiruvlar."
+    },
+    {
+      "id": 2003,
+      "code": "I4",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Mesh",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Service mesh (Istio, Linkerd) nima beradi?",
+      "options": [
+        "Ilova kodini tezlashtiradi",
+        "Sidecar proxy orqali kodga tegmasdan: mTLS, retry/timeout, circuit breaking, trafik bo'lish (canary), va avtomatik metrika/tracing",
+        "DB replikatsiyasini boshqaradi",
+        "CI/CD pipeline"
+      ],
+      "answer": 1,
+      "explanation": "Bu imkoniyatlarni kutubxona bilan ham olish mumkin (Resilience4j), lekin har til uchun alohida. Mesh — infratuzilma qatlamida, tilga bog'liq emas. Narxi: har podda qo'shimcha proxy (latency, memory), murakkab debugging, control plane. Kichik tizimda ortiqcha — 10+ servis va ko'p tilli muhitda ma'noga ega."
+    },
+    {
+      "id": 2004,
+      "code": "I5",
+      "level": "S",
+      "type": "open",
+      "topic": "Patterns",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Servislar orasida umumiy kod (shared library) ishlatish kerakmi?",
+      "modelAnswer": [
+        "Texnik kutubxonalar (logging, tracing, HTTP client) — ha, versiyalangan paket sifatida",
+        "Biznes logika va domain modeli — yo'q: umumiy kutubxona servislarni bir-biriga bog'lab qo'yadi, har o'zgarishda hammasini yangilash kerak",
+        "DTO/kontraktlar: generatsiya qilingan client (OpenAPI, protobuf) — maqbul, lekin versiyalash bilan",
+        "Ba'zi takrorlanish mikroservisda normal — coupling'dan arzonroq",
+        "Majburiy yangilanish talab qilmaslik: eski versiyani qo'llab turish"
+      ],
+      "explanation": "Senior signal: DRY'ni mikroservis chegarasidan o'tkazmaslik. 'Shared domain library' — distributed monolitga olib boradigan eng tez yo'l."
+    },
+    {
+      "id": 2005,
+      "code": "I6",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Patterns",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Strangler fig pattern nima?",
+      "options": [
+        "Eski tizimni o'chirib, yangisini bir kunda yoqish",
+        "Eski tizim oldiga proxy qo'yib, funksiyani bo'lak-bo'lak yangi servisga ko'chirish; trafik asta-sekin o'tadi, eski tizim bo'shab qolgach o'chiriladi",
+        "Ikki tizimni doim parallel ishlatish",
+        "Ma'lumotni faqat o'qish rejimiga o'tkazish"
+      ],
+      "answer": 1,
+      "explanation": "'Big bang rewrite' deyarli doim kechikadi va biznes yangi featurelarsiz qoladi. Strangler: har qadam alohida qiymat beradi va rollback qilinadi. Kerakli elementlar: routing qatlami (proxy/gateway), ma'lumot sinxronizatsiyasi (CDC yoki dual write), va o'chirish rejasi — aks holda ikki tizim abadiy qoladi."
+    },
+    {
+      "id": 14014,
+      "code": "SR15",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Microservices",
+      "domain": "arch",
+      "section": "r1",
+      "question": "API gateway, BFF va service mesh o'rtasidagi farq?",
+      "options": [
+        "Uchalasi bir xil ishni qiladi",
+        "Gateway — tashqi kirish nuqtasi (auth, rate limit, routing). BFF — har client turi (mobil, web) uchun moslashtirilgan agregatsiya qatlami. Mesh — servislararo (east-west) trafik uchun sidecar: mTLS, retry, kuzatuv",
+        "BFF — bu gateway'ning yangi nomi",
+        "Mesh tashqi trafikni boshqaradi"
+      ],
+      "answer": 1,
+      "explanation": "Tanlovda xato: hamma narsani gateway'ga solish (biznes logika) yoki kichik tizimga mesh o'rnatish. BFF foydali bo'ladigan holat: mobil client kam so'rov bilan ko'p ma'lumot olishi kerak — lekin har BFF alohida qo'llab-quvvatlanadigan kod."
+    },
+    {
+      "id": 30217,
+      "code": "SN218",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Microservices",
+      "domain": "arch",
+      "section": "r1",
+      "question": "'Distributed monolith' belgilari qaysilar?",
+      "options": [
+        "Ko'p servis bo'lishi",
+        "Servislar birgalikda deploy qilinishi shart, bitta DB/jadvalni bo'lishishi, har o'zgarish bir necha repo'ni talab qilishi, sinxron chaqiruv zanjirlari va umumiy kutubxonada biznes mantiqi — ya'ni mustaqillik yo'q, lekin tarmoq narxi bor",
+        "Har servisda alohida DB",
+        "Event ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "Bu eng qimmat holat: monolitning bog'liqligi + taqsimlangan tizimning murakkabligi. Test: 'shu servisni boshqalarni deploy qilmasdan chiqara olamanmi?' va 'kontrakt o'zgarmasa boshqalar buziladimi?'. Tuzatish yo'li ko'pincha chegaralarni qayta chizish (ma'lumot egaligi bo'yicha) yoki ortiqcha servislarni qayta birlashtirish."
+    },
+    {
+      "id": 30218,
+      "code": "SN219",
+      "level": "St",
+      "type": "open",
+      "topic": "Architecture",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Yangi jamoa uchun servis shabloni (template) tuzyapsiz. Nima bo'lishi kerak?",
+      "modelAnswer": [
+        "Struktura: `cmd/`, `internal/domain|application|adapters`, migratsiyalar, `Makefile` — qatlam chegaralari import linter bilan majburlangan",
+        "Kuzatuv standart holda: strukturaviy log (trace_id bilan), Prometheus metrikalari (RED: rate/errors/duration), OTel tracing, `/healthz` va `/readyz` (dependency semantikasi to'g'ri)",
+        "Ishonchlilik primitivlari: HTTP client timeout va retry/breaker bilan o'ralgan, DB pool sozlamalari, graceful shutdown, panic recovery",
+        "Konfiguratsiya: env orqali, validatsiya ishga tushishda (fail fast), sirlar secret manager'dan",
+        "CI: lint (`golangci-lint`), `go test -race`, `govulncheck`, migratsiya tekshiruvi, konteyner qurilishi (distroless, nonroot), SBOM",
+        "Deploy: Helm/Kustomize bazasi, resurs requests/limits, `GOMEMLIMIT`/`automaxprocs`, HPA, PDB, topologySpread",
+        "Hujjat: README (qanday ishga tushirish, kim ega), ADR papkasi, runbook shabloni, alert va SLO bazasi",
+        "Maqsad: yangi servis birinchi kunida productionga chiqishga tayyor — 'platforma sifatida standart', har jamoa o'zi ixtiro qilmaydi"
+      ],
+      "explanation": "Staff darajadagi savol: javob kod strukturasidan boshlanmasligi kerak, balki 'productionda ishlash uchun nima majburiy' ro'yxatidan. Shablonning qiymati — takrorlanuvchi qarorlarni bir marta to'g'ri qilib qotirish."
+    },
+    {
+      "id": 30367,
+      "code": "SN368",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Microservices",
+      "domain": "arch",
+      "section": "r1",
+      "question": "'Distributed monolith' belgilari qaysilar?",
+      "options": [
+        "Ko'p servis bo'lishi",
+        "Servislar birgalikda deploy qilinishi shart, bitta DB/jadvalni bo'lishishi, har o'zgarish bir necha repo'ni talab qilishi, sinxron chaqiruv zanjirlari va umumiy kutubxonada biznes mantiqi — ya'ni mustaqillik yo'q, lekin tarmoq narxi bor",
+        "Har servisda alohida DB",
+        "Event ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "Bu eng qimmat holat: monolitning bog'liqligi + taqsimlangan tizimning murakkabligi. Test: 'shu servisni boshqalarni deploy qilmasdan chiqara olamanmi?' va 'kontrakt o'zgarmasa boshqalar buziladimi?'. Tuzatish yo'li ko'pincha chegaralarni qayta chizish (ma'lumot egaligi bo'yicha) yoki ortiqcha servislarni qayta birlashtirish."
+    },
+    {
+      "id": 30368,
+      "code": "SN369",
+      "level": "St",
+      "type": "open",
+      "topic": "Architecture",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Yangi jamoa uchun servis shabloni (template) tuzyapsiz. Nima bo'lishi kerak?",
+      "modelAnswer": [
+        "Struktura: `cmd/`, `internal/domain|application|adapters`, migratsiyalar, `Makefile` — qatlam chegaralari import linter bilan majburlangan",
+        "Kuzatuv standart holda: strukturaviy log (trace_id bilan), Prometheus metrikalari (RED: rate/errors/duration), OTel tracing, `/healthz` va `/readyz` (dependency semantikasi to'g'ri)",
+        "Ishonchlilik primitivlari: HTTP client timeout va retry/breaker bilan o'ralgan, DB pool sozlamalari, graceful shutdown, panic recovery",
+        "Konfiguratsiya: env orqali, validatsiya ishga tushishda (fail fast), sirlar secret manager'dan",
+        "CI: lint (`golangci-lint`), `go test -race`, `govulncheck`, migratsiya tekshiruvi, konteyner qurilishi (distroless, nonroot), SBOM",
+        "Deploy: Helm/Kustomize bazasi, resurs requests/limits, `GOMEMLIMIT`/`automaxprocs`, HPA, PDB, topologySpread",
+        "Hujjat: README (qanday ishga tushirish, kim ega), ADR papkasi, runbook shabloni, alert va SLO bazasi",
+        "Maqsad: yangi servis birinchi kunida productionga chiqishga tayyor — 'platforma sifatida standart', har jamoa o'zi ixtiro qilmaydi"
+      ],
+      "explanation": "Staff darajadagi savol: javob kod strukturasidan boshlanmasligi kerak, balki 'productionda ishlash uchun nima majburiy' ro'yxatidan. Shablonning qiymati — takrorlanuvchi qarorlarni bir marta to'g'ri qilib qotirish."
+    },
+    {
+      "id": 30475,
+      "code": "SN476",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Patterns",
+      "domain": "arch",
+      "section": "r1",
+      "question": "Strangler fig migratsiyasida trafikni qanday bosqichma-bosqich ko'chirasiz?",
+      "options": [
+        "Bir kunda hammasini",
+        "Proxy/gateway orqasida yo'l bo'yicha ko'chirish: avval o'qish endpoint'lari 1% → 50% → 100% (shadow/dual-read bilan natijalarni solishtirish), keyin yozuv (dual-write yoki yangi tizim yagona yozuvchi), har bosqichda rollback imkoniyati va metrikalar taqqoslanadi",
+        "Faqat yangi funksiyalarni yangi tizimda",
+        "DNS almashtirish"
+      ],
+      "answer": 1,
+      "explanation": "Kritik detal — ma'lumot: dual-write nomuvofiqlik keltiradi, shuning uchun ko'pincha bitta yozuvchi + CDC bilan ikkinchisini to'ldirish afzal. Shadow read (ikkalasini chaqirib natijani solishtirish, eskisini qaytarish) farqlarni productionda xavfsiz topadi. Har bosqich uchun 'muvaffaqiyat mezoni' oldindan yoziladi."
+    }
+  ]
+}

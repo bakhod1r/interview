@@ -1,0 +1,475 @@
+{
+  "slug": "html",
+  "title": "HTML",
+  "description": "Step by step guide to learning HTML in @currentYear@",
+  "url": "https://roadmap.sh/html",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-02-26T08:54:20.306Z",
+  "relatedRoadmaps": [
+    "frontend",
+    "javascript",
+    "typescript",
+    "nodejs",
+    "react",
+    "css"
+  ],
+  "topicCount": 15,
+  "subtopicCount": 73,
+  "topics": [
+    {
+      "id": "JkLec2vSBMFAUc1Dzra-L",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "4gst44L8-ps9YFMHzucfN",
+          "title": "What are markup languages?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Xy15NSxlS0QXYNzEvgocK",
+          "title": "Frontend Development",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "0CHn_ubTBRWgrYGy0moZh",
+      "title": "How the web works",
+      "subtopics": [
+        {
+          "id": "nXRjahYSDqfEqY26yfLEt",
+          "title": "What is HTTP?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "oRjacb1OqAlsP-YB16Nuy",
+          "title": "Domain names",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "t9KmPbRh6pkfouPi1mBqJ",
+          "title": "Hosting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0Q41Bm_TZqsC7X-MH8uFe",
+          "title": "DNS",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4gvPprSH7hRS4gtXNMcCF",
+          "title": "Browsers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6vGbvRsmQgOpRh8JJ3RF_",
+          "title": "What is SEO?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "nOIijMH-3TvcO1KL6qzwf",
+          "title": "Tags and Attributes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qXcn_AGcGWjT8GgjaW5WN",
+          "title": "Case Insensitivity",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b83npHc-R9M03hEGzA9Ha",
+          "title": "HTML",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fX71CXA26cUxY5WX_zABi",
+          "title": "CSS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "F-9uI39S9oYVGA8hi7aZI",
+          "title": "JavaScript",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "MjGfRzhVZRxu545TbJ1AJ",
+      "title": "Basic Tags",
+      "subtopics": [
+        {
+          "id": "VscH3rVqpX29vaKmdCMop",
+          "title": "!DOCTYPE",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fP2cPskF9KzppZUhfyB8U",
+          "title": "html",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ufgy4-kC2drCov4MqEhjy",
+          "title": "head",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-ME4w8Bm5krSH14Yno4E5",
+          "title": "HTML Comments",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IUsaaRxiuOn3y9uYbpsJ0",
+          "title": "Whitespaces",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SS7JmTrySRmRlzInvRJxw",
+          "title": "title",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ego3XwBDgqlXOj6jSNvpy",
+          "title": "HTML Entities",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ksKI4TDz4_9IcmNORczWo",
+      "title": "Textual Tags",
+      "subtopics": [
+        {
+          "id": "AmIRWclu6IYViWHXnGA8U",
+          "title": "h1 to h6",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "czmIvZYONFDxB2UNpT8U1",
+          "title": "p",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cBKw3jiAvdXVwUryV1aJl",
+          "title": "br",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-2BvwJsqa5K8Tb8oSDUC8",
+          "title": "pre",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "9S2IUUWVv_Q7ZfD7VqfhH",
+          "title": "mark",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "o1rSXBsjhD-sN0FdOK_dm",
+          "title": "sup",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wmAps9IeAvOxcqBqgUAXN",
+          "title": "Links",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "efddQv5AZqvGmIyuYuCr7",
+          "title": "b / strong",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9EGwQalXfVGpVcMpTeD4V",
+          "title": "i / em",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Bdu0_AcAADs7YiCaHte1g",
+          "title": "hr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JU8Ff3DSCn_db0K7-P-Op",
+          "title": "sub",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PikSDs0EZ93RauZc_GDEw",
+          "title": "id",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Wu3oW_gnjKTYV8QJHdNxi",
+      "title": "Grouping text",
+      "subtopics": [
+        {
+          "id": "93tSk4RwWfkfOyaA7I9Gn",
+          "title": "body",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ceAHMWQeaqURKWy628QBH",
+          "title": "meta",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ihP3FIRMr8iQTdOja_CxV",
+          "title": "div",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f7-umBvAzDZxHtHgJMCj6",
+          "title": "span",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "xgw2ux-2Poml1fjWxjFsu",
+      "title": "Standard attributes",
+      "subtopics": [
+        {
+          "id": "7iDMmYQ-2Q6hrrFnUgRuP",
+          "title": "Data Attributes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GpaI2IDHDOZjyT3AZMbYD",
+          "title": "style",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "R0mDuO5V5NJI8Yupc_i8i",
+          "title": "class",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "YHoag7UR40OeIVUjfhQg_",
+      "title": "Accessibility",
+      "subtopics": []
+    },
+    {
+      "id": "yEl77JIN5-ixN5Ay247qp",
+      "title": "Basics of SEO",
+      "subtopics": []
+    },
+    {
+      "id": "oHbzYpFInyr5aKCe-NWkC",
+      "title": "Lists and Types",
+      "subtopics": [
+        {
+          "id": "ePOzN3Sh5tCYlAbsweWU0",
+          "title": "Ordered lists",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "pEcxDj3dSgAwxydwKWU7d",
+          "title": "Definition lists",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LKn40uz56vYrPnLG3I-CY",
+          "title": "Unordered lists",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wDBnbKni0SamOqNhnp87B",
+          "title": "Nested lists",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3P9p18a9EjbjjMtzpoVRN",
+      "title": "Table Tag",
+      "subtopics": [
+        {
+          "id": "znqYy9Tgfpe-qakjRr7KU",
+          "title": "Priority Hints",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "UevJNi2HHNzpCAx7Icd0k",
+      "title": "Embedding Media",
+      "subtopics": [
+        {
+          "id": "mWc4HuNQACXGpJjEPa79j",
+          "title": "Video",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "94HB2gvHgcEIeFQTlbVDu",
+          "title": "Images",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "W0pWVr4cdxSan9Ceu5t7i",
+          "title": "iframe",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "f5O_U9dt0b73ZhLrWWz2L",
+          "title": "img vs figure",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "k8FZPxFcDPVnXBONWUhME",
+          "title": "Audio",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9FAlTHlRj_DVjbpuiGRzD",
+          "title": "CSP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "P_wR4dwto2NKrvTRbdBIX",
+      "title": "Using Forms",
+      "subtopics": [
+        {
+          "id": "9R5WYPxlChmz6bevJUwsT",
+          "title": "Labels and Inputs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-UlDLjC8VsrKB9yexMtlr",
+          "title": "File Uploads",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6NvYDlYYLZzf4IHXu0dWs",
+          "title": "Form Validation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HxgDw9gh1vHiMIMyZW8H2",
+          "title": "Limitations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "v3Uf4LTfCbyasNJ-2Vfj9",
+          "title": "del",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Hx8mfbfkvRrBqLypE_NL3",
+          "title": "s",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "G_hZBbIGOLn1-sh1jROL3",
+          "title": "ins",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "aJTXstcrsINdov7yrH8cE",
+      "title": "Semantic Markup",
+      "subtopics": [
+        {
+          "id": "PE_WoH4nbGAJSJT14Qli0",
+          "title": "cite",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jfC0Og9340AK7b3Fhp4WI",
+          "title": "dfn",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aeovzlUV4oWwZCMcAoRVC",
+          "title": "abbr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PGKWhfXEd3Iv0AIhL7y4_",
+          "title": "address",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "51NlCt5pvWNfa70WaE2M4",
+      "title": "Styling Basics",
+      "subtopics": [
+        {
+          "id": "ievbuvgPKo261hM-9F117",
+          "title": "Inline CSS",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "B-Bv4aY_tGgWakyT8TgEe",
+          "title": "blockquote",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Xprekf2SY1fevcR2P5gRw",
+          "title": "q",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0AF0Xs2nWVZav9t5Eh9NX",
+          "title": "header",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "99wo0cNHe0sU63_aDBrxY",
+          "title": "article",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4uKQubirOgXz9ZvfR9cWa",
+          "title": "nav",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VahoGEC6I3jX1916MsmUY",
+          "title": "aside",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "InNY2DPYlnZaeBG9X_sMI",
+          "title": "main",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rjE1yjFZ6KBWXgXDRIZc1",
+          "title": "footer",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1WvHjkclwT-LUGdeuygzV",
+          "title": "section",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PhC4amuHcgxujOJisNsIr",
+          "title": "External CSS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1uhThwxjHgXPu_i1__1eE",
+          "title": "Internal CSS",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5Ze6iqSnZLpQWnhUSGQOE",
+      "title": "Including JavaScript",
+      "subtopics": []
+    }
+  ]
+}

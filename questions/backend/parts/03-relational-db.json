@@ -1,0 +1,284 @@
+[
+  {
+    "topicId": "r45b461NxLN6wBODJ5CNP",
+    "topicTitle": "Relational Databases",
+    "questions": [
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-01",
+        "question": "What does ACID stand for, and which component does a UNIQUE constraint enforce?",
+        "answer": "Atomicity (a transaction applies fully or not at all, implemented via WAL/undo logs and ROLLBACK), Consistency (the database moves between states that satisfy all declared constraints), Isolation (concurrent transactions do not observe each other's intermediate state), Durability (a COMMIT survives a crash because the WAL record is fsync'd first). A UNIQUE constraint enforces the C: the engine rejects the write with SQLSTATE 23505 in PostgreSQL rather than allowing a duplicate to land.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "PostgreSQL",
+        "followUps": ["Which ACID letter is weakened when you set synchronous_commit = off?", "How does a deferred constraint change when C is checked?"],
+        "tags": ["acid", "constraints", "wal"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-02",
+        "question": "Name the four SQL isolation levels and the anomaly each one still permits.",
+        "answer": "READ UNCOMMITTED permits dirty reads, non-repeatable reads, and phantoms (PostgreSQL silently upgrades it to READ COMMITTED). READ COMMITTED blocks dirty reads but permits non-repeatable reads and phantoms because each statement takes a fresh snapshot. REPEATABLE READ blocks non-repeatable reads; standard SQL still permits phantoms, though PostgreSQL's snapshot-based implementation also prevents them while still allowing write skew. SERIALIZABLE permits none; PostgreSQL implements it with SSI predicate locking and aborts offenders with SQLSTATE 40001.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "PostgreSQL",
+        "followUps": ["What is write skew and why does REPEATABLE READ allow it?", "Why must application code retry on 40001?"],
+        "tags": ["isolation-levels", "anomalies", "serializable"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-03",
+        "question": "Explain MVCC versus two-phase locking, and the concrete operational cost MVCC imposes in PostgreSQL.",
+        "answer": "Under MVCC each write creates a new row version stamped with xmin/xmax, so readers never block writers and writers never block readers; under strict two-phase locking (classic SQL Server default with READ COMMITTED, no RCSI) readers take shared locks and can block writers outright. MVCC's cost is garbage: dead tuples must be reclaimed by VACUUM, and a long-running transaction or an idle replication slot holds back the xmin horizon so vacuum cannot remove them, causing table and index bloat. Unchecked, this ends in transaction-ID wraparound protection forcing an aggressive autovacuum freeze.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "PostgreSQL",
+        "followUps": ["How do you find the oldest xmin holder?", "What does SQL Server's READ_COMMITTED_SNAPSHOT change?"],
+        "tags": ["mvcc", "locking", "vacuum", "bloat"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-04",
+        "question": "Two customers book the last seat on a flight at the same moment and both succeed. How do you fix it with SQL?",
+        "answer": "The read of remaining seats and the write are two separate statements, so under READ COMMITTED both transactions read 1 and both decrement. Fix it by taking a row lock at read time: SELECT seats FROM flights WHERE id = $1 FOR UPDATE, which serialises the two transactions on that row so the second one re-reads 0 after the first commits. Alternatives: do it in one atomic statement (UPDATE flights SET seats = seats - 1 WHERE id = $1 AND seats > 0 and check the affected row count), add a CHECK (seats >= 0) constraint as a backstop, or run SERIALIZABLE with a retry loop.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "PostgreSQL",
+        "followUps": ["When would you use FOR UPDATE SKIP LOCKED instead?", "Why is optimistic locking with a version column sometimes better here?"],
+        "tags": ["select-for-update", "double-booking", "row-locks"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-05",
+        "question": "Your logs show recurring 'deadlock detected' errors during a batch update job. How do you diagnose and eliminate them?",
+        "answer": "PostgreSQL's deadlock detector fires after deadlock_timeout (1s default), kills one transaction with SQLSTATE 40P01, and logs both statements; set log_lock_waits = on and read the DETAIL section to see which two processes waited on which rows. Almost always the cause is inconsistent lock ordering, so fix it by making every transaction touch rows in a deterministic order (e.g. ORDER BY id in the batch, or sort the ID list in the application before updating). Complementary mitigations: shorten transactions so lock windows barely overlap, batch smaller, and always wrap the write in a bounded retry on 40001/40P01 since deadlocks can never be fully designed away.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "PostgreSQL",
+        "followUps": ["Why can two UPDATEs on the same two rows deadlock but never two SELECT FOR SHARE?", "How does SQL Server pick a deadlock victim?"],
+        "tags": ["deadlock", "lock-ordering", "retry"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-06",
+        "question": "Walk through reading an EXPLAIN (ANALYZE, BUFFERS) plan. Which numbers tell you something is wrong?",
+        "answer": "Read the tree bottom-up and inner-to-outer; each node shows estimated cost/rows versus actual time/rows and loops, and actual time is cumulative including children. The main red flags are a large gap between estimated and actual rows (stale statistics, correlated predicates, or a bad function estimate -- fix with ANALYZE, extended statistics, or raising default_statistics_target), a Seq Scan filtering away most rows when a selective index exists, a Nested Loop whose inner side runs with a huge loops count, and 'Sort Method: external merge Disk: NNNkB' meaning work_mem is too small. BUFFERS tells you whether the cost was cache hits or real reads, and 'Rows Removed by Filter' shows work wasted per row.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "PostgreSQL",
+        "followUps": ["Why should you multiply actual time by loops on an inner node?", "When is a Seq Scan actually the right plan?"],
+        "tags": ["explain-analyze", "query-plan", "statistics"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-07",
+        "question": "Compare a plain B-tree index, a partial index, and a covering index. Give a case for each.",
+        "answer": "A B-tree index on (status) supports equality, range, and ORDER BY on that column but still requires a heap fetch for the other columns. A partial index, CREATE INDEX ON jobs (created_at) WHERE status = 'pending', indexes only the rows you query, so for a queue where 0.1% of rows are pending it is orders of magnitude smaller, cheaper to maintain, and stays in cache. A covering index, CREATE INDEX ON orders (customer_id) INCLUDE (total, created_at), lets PostgreSQL answer from the index alone via an Index Only Scan -- but only when the visibility map is current, so it depends on recent VACUUM.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "PostgreSQL",
+        "followUps": ["Why does column order matter in a composite B-tree?", "When does an Index Only Scan still hit the heap?"],
+        "tags": ["indexes", "partial-index", "covering-index"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-08",
+        "question": "Describe the expand-contract pattern for renaming a column with zero downtime.",
+        "answer": "Expand: add the new column (nullable, no default rewrite), deploy code that dual-writes to both old and new, and backfill the historical rows. Migrate: once the backfill is verified equal, deploy code that reads from the new column while still writing both. Contract: stop writing the old column, then drop it in a later release. Every step must be backward compatible with the previous deploy, because during a rolling deploy both versions of the app run against the same schema at once -- that is the whole reason a single ALTER ... RENAME COLUMN cannot be used.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "Migrations",
+        "followUps": ["How do you verify the backfill before switching reads?", "How does this interact with a rollback of the app deploy?"],
+        "tags": ["expand-contract", "zero-downtime", "migrations"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-09",
+        "question": "You must backfill a new column on a 400-million-row table in production. What is your strategy?",
+        "answer": "Never run a single UPDATE over the whole table: it holds a transaction open for hours, bloats the table with dead tuples, blocks vacuum, and can never be interrupted safely. Instead batch by primary key range (e.g. 10k rows per transaction, driven by a loop that records the last processed ID so it is resumable), commit each batch, and sleep briefly between batches to let replication lag and autovacuum keep up. Run it out of band from the deploy, monitor replica lag and dead tuple counts, and make it idempotent with a WHERE new_col IS NULL guard so a restart is safe.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Migrations",
+        "followUps": ["Why is batching by OFFSET a bad idea here?", "How do you keep new rows correct while the backfill runs?"],
+        "tags": ["backfill", "batching", "replication-lag"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-10",
+        "question": "A migration adding an index took the site down for ten minutes even though it 'only added an index'. What happened and how do you avoid it?",
+        "answer": "A plain CREATE INDEX takes a SHARE lock that blocks all writes to the table for the duration of the build. Worse, any DDL requiring ACCESS EXCLUSIVE queues behind current queries and then blocks every new query behind itself, so one long-running SELECT turns a fast ALTER into a full outage. Use CREATE INDEX CONCURRENTLY (which cannot run inside a transaction block and can leave an INVALID index needing cleanup), and always set a short lock_timeout (e.g. SET lock_timeout = '3s') before DDL so the migration fails fast instead of forming a lock queue. In PostgreSQL 11+ ADD COLUMN with a non-volatile DEFAULT is metadata-only, but adding a NOT NULL or a foreign key still needs validation -- do it as NOT VALID then VALIDATE CONSTRAINT.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Migrations",
+        "followUps": ["What does an INVALID index from a failed CONCURRENTLY build require?", "How do you inspect the lock queue during an incident?"],
+        "tags": ["ddl-locks", "create-index-concurrently", "lock-timeout"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-11",
+        "question": "When would you pick SQLite over PostgreSQL, and what are its hard limits?",
+        "answer": "SQLite is an embedded, single-file, zero-configuration engine -- ideal for mobile/desktop apps, CLI tools, test fixtures, edge caches, and read-heavy single-node services where avoiding a network hop matters. Its limits: it is not a client-server database, so there is no network access control or connection concurrency beyond the file; in WAL mode you get many concurrent readers but still exactly one writer at a time, so write-heavy multi-process workloads serialise and hit SQLITE_BUSY. It also has dynamic typing (type affinity, so a text value can land in an INTEGER column), no native ALTER TABLE DROP COLUMN until 3.35, and no built-in replication.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "SQLite",
+        "followUps": ["What does PRAGMA journal_mode = WAL change?", "How do you handle SQLITE_BUSY correctly?"],
+        "tags": ["sqlite", "embedded", "wal-mode"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-12",
+        "question": "What differences between Oracle, MS SQL Server, MariaDB/MySQL, and PostgreSQL actually bite you when porting an application?",
+        "answer": "Default isolation and concurrency: Oracle and PostgreSQL are MVCC with readers never blocking; SQL Server defaults to locking READ COMMITTED unless READ_COMMITTED_SNAPSHOT is enabled; MySQL/InnoDB defaults to REPEATABLE READ with gap locks. Identity and paging: Oracle uses sequences/IDENTITY and historically ROWNUM, SQL Server uses IDENTITY with OFFSET ... FETCH NEXT and TOP, MySQL uses AUTO_INCREMENT with LIMIT n OFFSET m. Semantics differ too -- Oracle treats the empty string as NULL, MySQL does case-insensitive string comparison under the common _ci collations and silently truncates in non-strict mode, and DDL is transactional in PostgreSQL and SQL Server but implicitly commits in MySQL and Oracle, which breaks 'rollback the failed migration'.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Oracle",
+        "followUps": ["Why is non-transactional DDL in MySQL dangerous for migration tools?", "What is a gap lock and when does it deadlock?"],
+        "tags": ["oracle", "mssql", "mariadb", "portability"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-13",
+        "question": "Your app has 500 worker processes each holding a pool of 20 connections and PostgreSQL starts rejecting connections. What is wrong and how do you fix it?",
+        "answer": "That is 10,000 requested connections against a max_connections typically set near 100-500; each PostgreSQL backend is a separate OS process with its own memory and a per-connection work_mem allocation, so even reaching the limit would thrash the scheduler. Put PgBouncer in front in transaction pooling mode, so a client connection is mapped to a server connection only for the duration of a transaction -- a few hundred app connections then multiplex onto 20-50 real backends. The catch: transaction mode breaks session-scoped features (session-level prepared statements without protocol support, advisory locks held across statements, LISTEN/NOTIFY, SET on the session, temp tables), so those need session mode or rework.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "PostgreSQL",
+        "followUps": ["How do you size the PgBouncer pool relative to CPU cores?", "Why does pool size larger than the disk/CPU capacity reduce throughput?"],
+        "tags": ["connection-pooling", "pgbouncer", "max-connections"]
+      },
+      {
+        "id": "r45b461NxLN6wBODJ5CNP-14",
+        "question": "How should migrations be run in a CI/CD pipeline, and how do you handle a migration that must be rolled back?",
+        "answer": "Migrations live in version control as ordered, immutable files with a checksum, applied by a tool (Flyway, Liquibase, Alembic, golang-migrate) that records applied versions in a tracking table and takes an advisory lock so two deploying instances cannot run them concurrently. Run them as a separate step before the app rollout, never lazily on app boot from N replicas. For rollback, prefer forward-only: because schema changes are expand-contract and backward compatible, rolling back the app code alone is safe and you ship a new corrective migration -- down migrations that drop a column are destructive and cannot recover already-deleted data.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "Migrations",
+        "followUps": ["Why must an applied migration file never be edited?", "How do you test a migration against production-scale data?"],
+        "tags": ["ci-cd", "migration-tooling", "rollback"]
+      }
+    ]
+  },
+  {
+    "topicId": "LJt27onEOeIBomiEMTyKd",
+    "topicTitle": "More about Databases",
+    "questions": [
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-01",
+        "question": "What does BEGIN / COMMIT / ROLLBACK actually guarantee, and what happens if the client crashes mid-transaction?",
+        "answer": "Everything between BEGIN and COMMIT is applied atomically: either every statement's effect is durable or none is. On COMMIT the WAL record is flushed to disk before the server acknowledges, which is what makes it durable. If the client crashes or the connection drops before COMMIT, the server eventually notices the broken socket (or the transaction hits idle_in_transaction_session_timeout) and rolls the transaction back, so no partial effect survives -- but until it does, the open transaction keeps holding locks and pinning the vacuum horizon.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Transactions",
+        "followUps": ["What is a SAVEPOINT used for?", "Why set idle_in_transaction_session_timeout?"],
+        "tags": ["transactions", "commit", "durability"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-02",
+        "question": "Why is it a mistake to call an external payment API in the middle of a database transaction?",
+        "answer": "The transaction holds its locks and its snapshot for the entire network round trip, so a slow or hung third party turns into lock contention and vacuum-blocking table bloat across the whole system. Worse, the two are not atomic: the payment can succeed while the COMMIT fails, or the COMMIT can succeed while the app crashes before recording the charge, leaving an inconsistency no ROLLBACK can undo. The standard fix is the transactional outbox: commit the local state change plus an outbox row in one transaction, then a separate worker reads the outbox and makes the external call with an idempotency key, retrying safely.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Transactions",
+        "followUps": ["How does an idempotency key make the retry safe?", "What is dual-write inconsistency?"],
+        "tags": ["transactions", "outbox", "idempotency"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-03",
+        "question": "What is the N+1 query problem? Show it with a concrete example.",
+        "answer": "You run 1 query to fetch a list, then 1 more query per row to fetch a relation: fetching 100 posts then accessing post.author inside the loop issues 100 extra SELECTs, so latency is 101 round trips instead of 1-2. Each query may be fast in isolation (0.5 ms), which is why it hides in local dev with 10 rows and explodes in production with 5,000. The tell is a flat profile of thousands of identical queries differing only in the WHERE id = ? parameter.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "N+1 Problem",
+        "followUps": ["Why does lazy loading in an ORM cause this by default?", "Why is it worse across a network than on localhost?"],
+        "tags": ["n-plus-one", "orm", "lazy-loading"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-04",
+        "question": "An endpoint that returns 50 orders takes 4 seconds and the database CPU is idle. How do you confirm and fix an N+1?",
+        "answer": "Confirm it with evidence: enable SQL logging or APM tracing for one request and count queries -- log_min_duration_statement = 0 on a staging box, or pg_stat_statements ordered by calls, will show one statement executed ~50 times. Fix depends on shape: use an eager-loading JOIN or IN-batch (Rails includes, Django select_related/prefetch_related, SQLAlchemy selectinload, Hibernate JOIN FETCH) to collapse it to 1-2 queries; in GraphQL, where the resolver tree cannot know the batch up front, use DataLoader to coalesce per-field calls within a tick into a single WHERE id IN (...). Then add a regression guard: a test asserting the query count for that endpoint.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "N+1 Problem",
+        "followUps": ["When does a JOIN make things worse than two queries?", "How does DataLoader's per-request cache avoid leaking stale data?"],
+        "tags": ["n-plus-one", "dataloader", "eager-loading", "pg-stat-statements"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-05",
+        "question": "Eager loading via a single JOIN versus two separate queries with IN -- when is each better?",
+        "answer": "A single JOIN is one round trip but multiplies rows: joining posts to their comments returns every post's columns repeated once per comment, so a wide parent row with 100 children ships ~100x the parent bytes (the 'cartesian explosion' behind Hibernate's MultipleBagFetchException). Two queries -- SELECT posts, then SELECT comments WHERE post_id IN (...) -- transfer each row exactly once and let the app stitch them in a hash map, at the cost of a second round trip. Rule of thumb: JOIN for to-one relations and narrow parents, batched IN (selectinload / prefetch_related) for to-many, and never nest two to-many JOINs in one query.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "N+1 Problem",
+        "followUps": ["How does this interact with LIMIT on the parent?", "What breaks if you paginate a one-to-many JOIN?"],
+        "tags": ["joins", "eager-loading", "cartesian-product"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-06",
+        "question": "Explain a server-side cursor and when you would use one instead of fetching everything.",
+        "answer": "DECLARE c CURSOR FOR SELECT ... keeps the result set on the server and hands the client rows in chunks via FETCH, so the client's memory stays bounded no matter how many rows match -- essential for exporting 50M rows without OOM. It must live inside a transaction (unless declared WITH HOLD), which means it pins a snapshot and blocks vacuum for as long as it is open, so a cursor held for hours is an operational hazard. Drivers expose it as a named cursor (psycopg2 conn.cursor(name=...)) or stream mode (JDBC setFetchSize with autocommit off); without a name, libpq buffers the entire result in client memory first.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Cursor",
+        "followUps": ["What does WITH HOLD cost you?", "Why does JDBC ignore setFetchSize under autocommit?"],
+        "tags": ["cursor", "streaming", "memory"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-07",
+        "question": "A paginated export using LIMIT 1000 OFFSET n gets slower with each page and occasionally skips records. Explain both problems.",
+        "answer": "OFFSET n makes the database produce and discard the first n rows, so page 10,000 costs O(n) -- the classic quadratic export. The skipping is worse: each page is a separate snapshot, so a row inserted or deleted before your current offset shifts the whole window and rows slide across the page boundary unseen. Replace it with keyset (seek) pagination: WHERE (created_at, id) > ($1, $2) ORDER BY created_at, id LIMIT 1000 with an index on that exact tuple, which is O(log n) per page and stable; for a one-shot consistent export, a server-side cursor inside a single REPEATABLE READ transaction is the alternative.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Cursor",
+        "followUps": ["Why must the keyset ORDER BY include a unique tiebreaker?", "How do you give the client a resumable page token?"],
+        "tags": ["pagination", "keyset-pagination", "limit-offset"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-08",
+        "question": "What is a RAG pipeline, and which parts of it are a database problem rather than a model problem?",
+        "answer": "Retrieval-Augmented Generation: chunk the source documents, embed each chunk into a vector, store vectors plus metadata, then at query time embed the user's question, retrieve the top-k nearest chunks, and put them into the model's prompt as context. The database owns chunking granularity and overlap, the vector index and its recall/latency trade-off, metadata filtering (tenant, ACL, document version), and freshness -- re-embedding when a source document changes. Retrieval quality, not the LLM, is where most RAG systems fail: if the right chunk is not in the top-k, no model can answer correctly.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "RAGs",
+        "followUps": ["How do you evaluate retrieval separately from generation?", "Why must the same embedding model be used for indexing and querying?"],
+        "tags": ["rag", "embeddings", "retrieval"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-09",
+        "question": "How do you implement vector search in PostgreSQL with pgvector, and how do you choose the index?",
+        "answer": "CREATE EXTENSION vector, store a column of type vector(1536), and query with an ordering operator matching your metric -- <=> for cosine, <-> for L2, <#> for inner product -- as in ORDER BY embedding <=> $1 LIMIT 10. Two index types: IVFFlat partitions vectors into lists and is fast to build but needs data present before building and recall tuned by probes; HNSW builds a graph, is slower and more memory-hungry to build but gives better recall/latency and works on an initially empty table, tuned by m, ef_construction, and ef_search at query time. Both are approximate, so the index must use the same operator class as the query operator or PostgreSQL will silently fall back to an exact sequential scan.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "RAGs",
+        "followUps": ["Why does a highly selective metadata filter hurt ANN recall?", "How would you verify recall against an exact scan?"],
+        "tags": ["pgvector", "hnsw", "ivfflat", "ann"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-10",
+        "question": "Your RAG assistant returns confident but wrong answers for questions whose answer is definitely in the corpus. How do you debug it?",
+        "answer": "Split the pipeline before blaming the model: log the retrieved chunks for the failing questions and check whether the correct chunk was in the top-k at all. If it was not retrieved, the problem is retrieval -- chunks too large or split mid-sentence, a mismatch between question phrasing and document wording (add hybrid search combining BM25/tsvector with vector similarity, plus a cross-encoder reranker), or an ANN index whose ef_search/probes is too low. If it was retrieved but the answer is still wrong, it is a prompting problem: raise k, order the context so the strongest chunk is last, and instruct the model to answer only from the provided context and say so when it cannot. Also check staleness -- embeddings generated before the document was updated.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "RAGs",
+        "followUps": ["Why does hybrid search beat pure vector search on exact identifiers?", "How do you build a golden set to measure recall@k?"],
+        "tags": ["rag", "hybrid-search", "reranking", "debugging"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-11",
+        "question": "A nightly job streams 20M rows to build a report and the process is OOM-killed. Walk through the fix.",
+        "answer": "The default driver behaviour buffers the entire result set in client memory before the first row is returned, so the fix is to stream: use a named/server-side cursor (psycopg2 cursor(name='export'), JDBC setFetchSize(1000) with autocommit disabled) so rows arrive in bounded batches, and make sure the application code does not then accumulate them in a list. Keep the batch fetch size in the 1k-10k range -- too small adds round trips, too large recreates the memory problem. If the transaction would stay open for hours, prefer keyset pagination over an ID range instead, so each chunk is its own short transaction and vacuum is not blocked.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Cursor",
+        "followUps": ["How do you keep the report consistent if data changes mid-export?", "What monitoring would have caught this before the OOM?"],
+        "tags": ["cursor", "streaming", "oom", "batch-jobs"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-12",
+        "question": "You need to transfer money between two accounts. Write the transaction and name every failure mode you must handle.",
+        "answer": "BEGIN; lock both rows in a fixed order (SELECT ... FROM accounts WHERE id IN ($from,$to) ORDER BY id FOR UPDATE) to prevent deadlock; verify the source balance; UPDATE both rows; COMMIT. Failure modes: deadlock from inconsistent lock ordering (SQLSTATE 40P01), serialization failure under SERIALIZABLE (40001) requiring an application retry, a lost update if you read outside the lock, overdraft if the balance check is not inside the same locked transaction (back it with CHECK (balance >= 0)), and a duplicate transfer if the client retries after a timeout with no idempotency key -- the COMMIT may have succeeded even though the response never arrived.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Transactions",
+        "followUps": ["Why does an ambiguous COMMIT outcome require an idempotency key?", "How would you implement this as an append-only ledger instead?"],
+        "tags": ["transactions", "row-locks", "deadlock", "idempotency"]
+      },
+      {
+        "id": "LJt27onEOeIBomiEMTyKd-13",
+        "question": "What are the trade-offs of long transactions in an MVCC database, and how do you detect one in production?",
+        "answer": "A long transaction holds its snapshot, so VACUUM cannot remove any row version newer than its xmin: tables and indexes bloat, sequential scans read dead pages, and plans degrade system-wide even though the offending query itself looks harmless. It also holds every lock it has taken until COMMIT, so DDL and competing writers queue behind it. Detect it with SELECT pid, state, now() - xact_start AS dur, query FROM pg_stat_activity WHERE state <> 'idle' ORDER BY xact_start, watch for state = 'idle in transaction', and set idle_in_transaction_session_timeout plus statement_timeout as guardrails; also check pg_replication_slots, since an abandoned slot pins the horizon the same way.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Transactions",
+        "followUps": ["Why does an abandoned replication slot cause the same bloat?", "What is the risk of setting statement_timeout globally?"],
+        "tags": ["long-transactions", "mvcc", "bloat", "pg-stat-activity"]
+      }
+    ]
+  }
+]

@@ -1,0 +1,653 @@
+{
+  "id": "g3",
+  "name": "Memory, performance, testing",
+  "domain": "go",
+  "domainLabel": "Go",
+  "topics": [
+    "Memory",
+    "Performance",
+    "Testing",
+    "Tracing"
+  ],
+  "questions": [
+    {
+      "id": 3013,
+      "code": "G14",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Katta slice'dan kichik bo'lak olib saqlansa (<code>small := big[:10]</code>) nima bo'ladi?",
+      "options": [
+        "Faqat 10 element memory'da qoladi",
+        "Butun asosiy massiv memory'da qoladi — slice header unga ishora qiladi, GC tozalay olmaydi; nusxa olish kerak: slices.Clone(big[:10]) yoki copy",
+        "GC avtomatik qisqartiradi",
+        "panic bo'ladi"
+      ],
+      "answer": 1,
+      "explanation": "Xuddi shunday: katta stringdan kichik substring (Go'da string bo'lagi ham asosiy baytlarga ishora qiladi). Fayl o'qib bir necha bayt saqlab qolish — 'memory sizishi' ko'rinishidagi klassik holat. Yechim — aniq nusxa olish."
+    },
+    {
+      "id": 3015,
+      "code": "G16",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Escape analysis nima qiladi?",
+      "options": [
+        "Kompilyatsiya xatolarini topadi",
+        "Kompilyator qiymat funksiyadan tashqariga 'qochadimi' (pointer qaytariladimi, interfeysga solinadimi, goroutine ushlaydimi) degan savolni hal qiladi: qochmasa — stack (arzon), qochsa — heap (GC yuki)",
+        "Memory'ni shifrlaydi",
+        "Goroutine'larni rejalashtiradi"
+      ],
+      "answer": 1,
+      "explanation": "Ko'rish: go build -gcflags='-m'. Amaliy natija: kichik struct'ni pointer bilan qaytarish har doim ham tez emas — heap allokatsiyasi va GC yuki qo'shiladi. Optimallashtirishdan oldin o'lchang: go test -bench -benchmem, keyin pprof. 'Aytganicha emas, o'lchanganicha' — Go'da muhim tamoyil."
+    },
+    {
+      "id": 3017,
+      "code": "G18",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Konteynerda (Kubernetes, CPU limit 1) Go ilovasi kutilganidan sekin va throttle bo'lyapti. Ehtimoliy sabab?",
+      "options": [
+        "Go konteynerda ishlamaydi",
+        "GOMAXPROCS host'dagi yadro soniga (masalan 64) qarab o'rnatiladi, cgroup CPU limitiga emas — ortiqcha parallellik context switch va CFS throttlingga olib keladi. Yechim: GOMAXPROCS ni limitga moslash (uber-go/automaxprocs yoki aniq qiymat)",
+        "GC ni o'chirish kerak",
+        "Konteynerga ko'proq memory berish kerak"
+      ],
+      "answer": 1,
+      "explanation": "Go 1.25 dan runtime cgroup CPU limitini hisobga oladigan bo'ldi, lekin eski versiyalarda automaxprocs standart yechim. Memory tomonida o'xshash muammo: GOMEMLIMIT (Go 1.19+) qo'yilmasa, GC konteyner limitini bilmay OOMKill'ga olib kelishi mumkin.",
+      "source": "https://github.com/uber-go/automaxprocs"
+    },
+    {
+      "id": 3018,
+      "code": "G19",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go'da poyga holatlarini (race condition) qanday topasiz?",
+      "options": [
+        "Ko'z bilan kod o'qib",
+        "go test -race (yoki go run -race) — race detector ishlash vaqtida bir vaqtda sinxronizatsiyasiz kirishni aniqlaydi; CI'da doimiy ishlatish kerak",
+        "go vet bilan",
+        "Faqat production'da ko'rinadi"
+      ],
+      "answer": 1,
+      "explanation": "Race detector faqat haqiqatan bajarilgan kod yo'llarini ko'radi — shuning uchun parallel testlar va realga yaqin stsenariylar muhim. Narxi: ~2–10x sekin, ko'proq memory — shuning uchun prod'da emas, CI va yuk testlarida. Topilgan har race — real bug, 'kamdan-kam bo'ladi' degan bahona yo'q.",
+      "source": "https://go.dev/doc/articles/race_detector"
+    },
+    {
+      "id": 13012,
+      "code": "K13",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go scheduler (GMP modeli) qanday ishlaydi?",
+      "options": [
+        "Har goroutine'ga bitta OS thread",
+        "G (goroutine) — bajarilish birligi, M (machine) — OS thread, P (processor) — bajarilish konteksti va lokal navbat; P soni GOMAXPROCS ga teng. Goroutine bloklansa M almashtiriladi, bo'sh P boshqa P navbatidan ish 'o'g'irlaydi' (work stealing)",
+        "Goroutine'lar navbat bilan bitta yadroda ishlaydi",
+        "Scheduler faqat kompilyatsiyada ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natijalar: bloklovchi syscall (fayl, cgo) M ni band qiladi va runtime yangi M yaratadi; tarmoq I/O esa netpoller orqali bloklamaydi. Go 1.14 dan preemption bor — cheksiz sikl endi boshqa goroutine'larni ochlikka qo'ymaydi. Konteynerda GOMAXPROCS ni CPU limitiga moslash muhim."
+    },
+    {
+      "id": 13013,
+      "code": "K14",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go GC haqida qaysi to'g'ri?",
+      "options": [
+        "Reference counting ishlatadi",
+        "Concurrent, uch rangli (tri-color) mark & sweep: ilova bilan parallel ishlaydi, pauzalar odatda submillisekund; write barrier yordamida aniqlik saqlanadi. Tezligi GOGC (va Go 1.19+ GOMEMLIMIT) bilan boshqariladi",
+        "Ilova to'liq to'xtaydi (stop-the-world butun sikl davomida)",
+        "Xotirani siqadi (compaction)"
+      ],
+      "answer": 1,
+      "explanation": "Go GC compaction qilmaydi va generational emas — shuning uchun asosiy optimizatsiya yo'li allokatsiya tezligini kamaytirish: buferlarni qayta ishlatish (sync.Pool), pointer kam bo'lgan strukturalar, slice'ni oldindan make bilan sig'im berib yaratish. GOGC=100 default: heap ikki barobar o'sganda yig'ishtiradi.",
+      "source": "https://tip.golang.org/doc/gc-guide"
+    },
+    {
+      "id": 13019,
+      "code": "K20",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go'da string haqida qaysi to'g'ri?",
+      "options": [
+        "String o'zgartirilishi mumkin",
+        "String o'zgarmas (immutable) — bayt ko'rinishi va uzunlikdan iborat; []byte(s) va string(b) konvertatsiyasi odatda NUSXA oladi (allokatsiya). Ko'p qo'shish (s += x) siklda qimmat — strings.Builder ishlatiladi",
+        "String har doim nusxasiz konvertatsiya qilinadi",
+        "String UTF-32 da saqlanadi"
+      ],
+      "answer": 1,
+      "explanation": "Kompilyator ba'zi holatlarda nusxani optimallashtiradi (masalan map[string(b)] qidiruvi), lekin bunga tayanmang. Substring esa nusxa olmaydi — asosiy baytlarni ushlab turadi, bu katta matnda xotira sizishiga olib keladi. Profil qilganda strings.Builder va oldindan Grow bilan sig'im berish sezilarli yutuq beradi."
+    },
+    {
+      "id": 13020,
+      "code": "K21",
+      "level": "S",
+      "type": "code",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Ikkala struct ham bir xil maydonlarga ega. Xotirada farqi bormi?",
+      "snippet": "type A struct { a bool; b int64; c bool }   // ?\ntype B struct { b int64; a bool; c bool }   // ?",
+      "options": [
+        "Farqi yo'q, ikkalasi 10 bayt",
+        "Bor: hizalash (alignment) tufayli A odatda 24 bayt, B esa 16 bayt — maydonlarni kattadan kichikka tartiblash padding'ni kamaytiradi",
+        "A kichikroq",
+        "Go padding qo'shmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Tekshirish: unsafe.Sizeof(A{}) va fieldalignment linteri (go vet -vettool). Millionlab yozuv saqlanadigan strukturalarda bu sezilarli xotira tejaydi; oddiy servis kodida esa o'qilishi muhimroq — ustuvorlikni o'lchovga qarab tanlang."
+    },
+    {
+      "id": 15000,
+      "code": "GS1",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "<code>sync.Pool</code> ni qachon ishlatish to'g'ri?",
+      "options": [
+        "Har qanday obyektni qayta ishlatish uchun, xotirani tejash maqsadida",
+        "Qisqa umrli, tez-tez yaratiladigan bir xil obyektlar uchun (masalan bufer, encoder): allokatsiya va GC bosimini kamaytiradi. Pool'dagi obyektlar GC paytida tozalanishi mumkin — kafolat yo'q, shuning uchun ulanish yoki holat saqlaydigan resurs uchun mos emas",
+        "Ulanishlar pool'i sifatida",
+        "Global kesh sifatida"
+      ],
+      "answer": 1,
+      "explanation": "Majburiy qoida: pool'dan olingan obyektni ishlatishdan oldin tozalash (buf.Reset()) — aks holda oldingi ma'lumot sizib chiqadi (xavfsizlik bug'i). Katta va turli o'lchamdagi buferlarni bitta pool'da saqlash xotirani ushlab qolishi mumkin. Foydani benchmark bilan isbotlang: ko'p holatda oddiy allokatsiya yetarlicha tez.",
+      "source": "https://pkg.go.dev/sync#Pool"
+    },
+    {
+      "id": 15006,
+      "code": "GS7",
+      "level": "S",
+      "type": "code",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Production HTTP serverida bu kodning xavfi nima?",
+      "snippet": "srv := &http.Server{Addr: \":8080\", Handler: mux}\nlog.Fatal(srv.ListenAndServe())",
+      "options": [
+        "Xavf yo'q",
+        "Timeout'lar qo'yilmagan: sekin yoki yomon niyatli client ulanishni cheksiz ushlab turishi mumkin (slowloris), fayl deskriptorlari va xotira tugaydi. Kamida ReadHeaderTimeout, ReadTimeout, WriteTimeout, IdleTimeout va MaxHeaderBytes qo'yiladi",
+        "Faqat TLS kerak",
+        "log.Fatal noto'g'ri"
+      ],
+      "answer": 1,
+      "explanation": "Go'ning default http.Server'ida timeout YO'Q — bu ataylab, lekin production uchun xavfli. Qo'shimcha: har handler'da context deadline, http.MaxBytesReader bilan body hajmini cheklash, va graceful shutdown. LB ortida bo'lsa IdleTimeout LB idle timeout'idan katta bo'lsin.",
+      "source": "https://pkg.go.dev/net/http#Server"
+    },
+    {
+      "id": 15007,
+      "code": "GS8",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "<code>http.Client</code> bilan ishlashda senior darajadagi to'g'ri yondashuv?",
+      "options": [
+        "Har so'rovda yangi http.Client yaratish",
+        "Bitta umumiy Client (Transport bilan) — ulanishlar qayta ishlatiladi; Client.Timeout yoki so'rov context'i bilan deadline; Transport'da MaxIdleConnsPerHost va MaxConnsPerHost sozlanadi; resp.Body doim yopiladi",
+        "http.Get yetarli, sozlash shart emas",
+        "Timeout'ni cheksiz qoldirish"
+      ],
+      "answer": 1,
+      "explanation": "http.DefaultClient timeout'siz — osilib qolish manbai. Retry qo'shsangiz: faqat idempotent so'rovlar, exponential backoff + jitter, umumiy deadline va retry budget. Yuqori yukda MaxConnsPerHost bilan tashqi servisni bosib qo'ymaslik ham muhim."
+    },
+    {
+      "id": 15008,
+      "code": "GS9",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "100 MB lik JSON javobni qanday qayta ishlaysiz?",
+      "options": [
+        "io.ReadAll bilan o'qib, json.Unmarshal qilish",
+        "json.Decoder bilan oqim sifatida (Decode ketma-ket, massiv elementlari uchun Token/More) — butun ma'lumot xotiraga yuklanmaydi; kirish hajmini ham cheklash kerak",
+        "Faqat ko'proq xotira berish",
+        "Base64 ga o'girish"
+      ],
+      "answer": 1,
+      "explanation": "ReadAll + Unmarshal ikki marta xotira oladi (xom bayt + struktura) va bitta katta so'rov pod'ni OOM qilishi mumkin. Server tomonda: http.MaxBytesReader bilan limit va 413 qaytarish. Juda katta ma'lumot uchun NDJSON (qatorma-qator) formati oqim ishlovini yanada soddalashtiradi."
+    },
+    {
+      "id": 15013,
+      "code": "GS14",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "CPU profil muammoni ko'rsatmadi, lekin so'rovlar sekin. Qaysi vositaga murojaat qilasiz?",
+      "options": [
+        "Yana CPU profil olish",
+        "runtime/trace (go tool trace) — goroutine'lar qachon va nega kutayotganini ko'rsatadi: scheduler kechikishi, tarmoq kutishi, syscall, GC; qo'shimcha /debug/pprof/block va mutex profillari",
+        "Loglarni ko'paytirish",
+        "Xotira profili"
+      ],
+      "answer": 1,
+      "explanation": "Qoida: CPU profil — 'nima hisoblayapti', trace/block/mutex — 'nima kutyapti'. Sekin so'rovlarning ko'p qismi kutish (DB, lock, navbat) bo'ladi. Block va mutex profillari default o'chiq — runtime.SetBlockProfileRate va SetMutexProfileFraction bilan yoqiladi (kichik qiymat bilan).",
+      "source": "https://go.dev/blog/execution-traces-2024"
+    },
+    {
+      "id": 15014,
+      "code": "GS15",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Profile-guided optimization (PGO) nima beradi?",
+      "options": [
+        "Kodni avtomatik qayta yozadi",
+        "Production'dan olingan CPU profilni (default.pgo) build'ga berasiz — kompilyator issiq yo'llarni agressivroq inline qiladi va devirtualizatsiya qiladi; odatda bir necha foiz CPU yutug'i",
+        "Xotirani ikki barobar kamaytiradi",
+        "Faqat testda ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Go 1.21 dan barqaror. Amaliy jarayon: prod'dan vakillik qiladigan profil yig'ish → repo'ga qo'yish → muntazam yangilab turish (eskirgan profil foyda bermaydi). Katta masshtabda bu sezilarli xarajat tejaydi, lekin avval algoritmik va I/O optimizatsiyalarini qiling.",
+      "source": "https://go.dev/doc/pgo"
+    },
+    {
+      "id": 15018,
+      "code": "GS19",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "<code>t.Parallel()</code> bilan bog'liq eng ko'p uchraydigan xato?",
+      "options": [
+        "Parallel testlar umuman ishlatilmaydi",
+        "Umumiy holatni (global o'zgaruvchi, bitta DB sxemasi, bir xil port yoki fayl) bo'lishish — testlar bir-birini buzadi va flaky bo'ladi; har parallel test o'z izolyatsiyasiga (alohida sxema/tranzaksiya, t.TempDir, tasodifiy port) ega bo'lishi kerak",
+        "Parallel testlar sekinroq",
+        "t.Cleanup ishlamaydi"
+      ],
+      "answer": 1,
+      "explanation": "Qo'shimcha nozik nuqta: t.Parallel() chaqirilgan subtest ota test tanasi tugagach ishga tushadi — shuning uchun ota testdagi defer bilan tozalash erta bo'ladi; t.Cleanup ishlating. Go 1.22 dan sikl o'zgaruvchisi har iteratsiyada yangi, shuning uchun eski 'tt := tt' hiylasi endi shart emas."
+    },
+    {
+      "id": 15019,
+      "code": "GS20",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Katta natijalarni (JSON javob, generatsiya qilingan kod) qanday test qilasiz?",
+      "options": [
+        "Kutilgan natijani kodga yozib qo'yish",
+        "Golden file (testdata/ ichida) + -update bayrog'i bilan yangilash: farq diff sifatida ko'rinadi va katta natijalarni qo'lda yozish shart emas. Fayl repo'da versiyalanadi va o'zgarish review'da ko'rinadi",
+        "Natijani tekshirmaslik",
+        "Faqat uzunligini solishtirish"
+      ],
+      "answer": 1,
+      "explanation": "Ehtiyot bo'lish kerak: golden fayllarni o'ylamasdan -update bilan yangilab yuborish — bug'ni tasdiqlab qo'yish demak. Shuning uchun diff review'da diqqat bilan ko'riladi. Barqaror bo'lishi uchun natijadagi vaqt, UUID va tartibni normalizatsiya qiling."
+    },
+    {
+      "id": 15020,
+      "code": "GS21",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tracing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go servisini OpenTelemetry bilan qanday instrumentatsiya qilasiz?",
+      "options": [
+        "Har funksiyaga log qo'yish",
+        "otel SDK: HTTP/gRPC va DB uchun tayyor instrumentatsiya (otelhttp, otelgrpc, otelsql) + biznes muhim joylarda qo'lda span; context orqali trace propagatsiyasi; sampling va exporter (OTLP)",
+        "Faqat metrikalar yetarli",
+        "Tracing Go'da qo'llab-quvvatlanmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Muhim tafsilotlar: span'larga kam kardinallikdagi atributlar (user_id — atribut sifatida ehtiyotkorlik bilan), log'ga trace_id qo'shish (slog bilan), va async ish uchun kontekstni qo'lda uzatish. Sampling: xatolar va sekin so'rovlarni doim saqlash (tail-based) — eng qimmatli signal o'sha."
+    },
+    {
+      "id": 15021,
+      "code": "GS22",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "cgo chaqiruvi haqida qaysi to'g'ri?",
+      "options": [
+        "Oddiy funksiya chaqiruvi kabi arzon",
+        "Har cgo chaqiruvi qo'shimcha xarajatga ega (stack almashinuvi, scheduler bilan muvofiqlashtirish) va bloklovchi C kodi OS threadni band qiladi; shuningdek cross-compilation va statik build murakkablashadi",
+        "cgo Go'da mavjud emas",
+        "cgo tezroq ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy maslahat: issiq siklda cgo chaqiruvini takrorlamang — ishni C tomonida batch qilib bajaring. Ko'p holatda sof Go alternativasi (masalan pure-Go drayver) afzal: CGO_ENABLED=0 bilan statik, kichik va portativ binar chiqadi (distroless/scratch image uchun ideal)."
+    },
+    {
+      "id": 18024,
+      "code": "GR25",
+      "level": "M",
+      "type": "code",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Table-driven test'da subtest nima beradi?",
+      "snippet": "for _, tc := range cases {\n    t.Run(tc.name, func(t *testing.T){\n        got := F(tc.in)\n        if got != tc.want { t.Errorf(\"F(%v) = %v, want %v\", tc.in, got, tc.want) }\n    })\n}",
+      "options": [
+        "Har case alohida nom bilan ishlaydi: yiqilganda qaysi case ekani ko'rinadi, `-run 'TestF/holat_x'` bilan bittasini ishga tushirish va t.Parallel() qo'yish mumkin",
+        "Faqat chiroyli chiqish",
+        "Testni tezlashtiradi",
+        "Subtest'lar ketma-ket ishlamaydi"
+      ],
+      "answer": 0,
+      "explanation": "Xabar formati muhim: got/want tartibida va kirish bilan. t.Fatalf — davom etish mantiqsiz bo'lganda (nil pointer bo'ladi), t.Errorf — qolgan tekshiruvlar foydali bo'lsa. Tozalash uchun t.Cleanup (defer'dan ko'ra ishonchliroq, subtest'lar bilan to'g'ri ishlaydi). t.Helper() yordamchi funksiyada qator raqamini to'g'ri ko'rsatadi."
+    },
+    {
+      "id": 18025,
+      "code": "GR26",
+      "level": "S",
+      "type": "code",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "HTTP handler'ni qanday test qilasan?",
+      "snippet": "req := httptest.NewRequest(\"GET\", \"/users/42\", nil)\nw := httptest.NewRecorder()\nmux.ServeHTTP(w, req)\nres := w.Result()",
+      "options": [
+        "httptest.NewRecorder bilan handler'ni tarmoqsiz chaqirish; tashqi HTTP bog'liqlik uchun httptest.NewServer bilan soxta server ko'tarish",
+        "Haqiqiy portda server ishga tushirish shart",
+        "Faqat integration test bilan mumkin",
+        "net/http test'ni qo'llab-quvvatlamaydi"
+      ],
+      "answer": 0,
+      "explanation": "NewRequest — server tomonidagi so'rov yasaydi (RemoteAddr va Host to'ldirilgan). Router'ning o'zini (mux) chaqirish muhim — aks holda path parametrlari ishlamaydi. Tashqi API uchun httptest.NewServer(handler) real URL beradi va client konfiguratsiyasini ham test qiladi (timeout, retry). DB uchun esa testcontainers bilan haqiqiy Postgres — sqlmock SQL matnini qotirib qo'yadi."
+    },
+    {
+      "id": 18026,
+      "code": "GR27",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Benchmark'da eng ko'p uchraydigan xato?",
+      "options": [
+        "Natijani ishlatmaslik — kompilyator hisoblashni optimizatsiya qilib tashlaydi; paket darajasidagi o'zgaruvchiga yozish yoki Go 1.24 da `for b.Loop()` ishlatish kerak",
+        "b.N ni qo'lda o'rnatish",
+        "-benchmem qo'shish",
+        "Bir marta ishga tushirish yetarli"
+      ],
+      "answer": 0,
+      "explanation": "Klassik shakl: var sink T; ... sink = result. Yana: og'ir tayyorgarlikdan keyin b.ResetTimer(); har iteratsiyada allokatsiyani ko'rish uchun -benchmem; shovqinni kamaytirish uchun -count=10 va benchstat bilan statistik taqqoslash. Go 1.24 dagi `for b.Loop()` hisoblagichni ham, optimizatsiyaga qarshi himoyani ham o'zi bajaradi.",
+      "source": "https://pkg.go.dev/testing#B.Loop"
+    },
+    {
+      "id": 19014,
+      "code": "RT15",
+      "level": "P",
+      "type": "code",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Bu kod nega sekin va qanday tuzatiladi?",
+      "snippet": "var s string\nfor _, w := range words {\n    s += w + \" \"\n}",
+      "options": [
+        "Har `+=` yangi string allokatsiya qiladi (string o'zgarmas) — O(n²) nusxa; strings.Builder (Grow bilan) yoki strings.Join ishlatiladi",
+        "String o'zgaruvchan, muammo yo'q",
+        "bytes.Buffer ishlamaydi",
+        "Faqat juda uzun string'larda muammo"
+      ],
+      "answer": 0,
+      "explanation": "strings.Builder ichkarida []byte o'stiradi va oxirida unsafe orqali nusxasiz string qaytaradi. Kutilayotgan hajm ma'lum bo'lsa b.Grow(n) bilan qayta allokatsiyani yo'q qiling. Bilingan uzunlikdagi qo'shishlar uchun strings.Join eng sodda va tez. Xuddi shu qoida slice uchun: make([]T, 0, n) bilan cap'ni oldindan bering."
+    },
+    {
+      "id": 19015,
+      "code": "RT16",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "`unsafe.String` / `unsafe.Slice` (Go 1.20) nimaga kerak?",
+      "options": [
+        "[]byte va string o'rtasida NUSXASIZ konvertatsiya — lekin natija asl baytlar o'zgarmasligiga bog'liq; string o'zgarmas deb qabul qilinadi, shuning uchun bufer keyin o'zgartirilsa xatti-harakat buziladi",
+        "Xavfsiz konvertatsiya, cheklovsiz ishlatiladi",
+        "GC'ni o'chiradi",
+        "Faqat testlarda ishlatiladi"
+      ],
+      "answer": 0,
+      "explanation": "Oddiy string(b) va []byte(s) nusxa oladi — bu xavfsiz va odatda to'g'ri tanlov. Nusxasiz variant faqat o'lchangan hot path'da (masalan parser, kalit qidirish) va bufer hayoti aniq nazorat qilinganda oqlanadi. Xatolik alomati: keyinroq 'string o'z-o'zidan o'zgardi' kabi tushunarsiz buglar."
+    },
+    {
+      "id": 19016,
+      "code": "RT17",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "CPU profilda hech narsa ko'rinmayapti, lekin latency yuqori. Qaysi profillarni ochasan?",
+      "options": [
+        "block (channel/mutex kutishi) va mutex (contention) profillari — ular default o'chiq: runtime.SetBlockProfileRate va SetMutexProfileFraction bilan yoqiladi; hamda goroutine profili va execution trace",
+        "Faqat heap profil yetarli",
+        "CPU profilni uzunroq olish",
+        "Profil kerak emas, log yozish yetarli"
+      ],
+      "answer": 0,
+      "explanation": "CPU profil faqat ISHLAYOTGAN vaqtni ko'rsatadi; kutish (I/O, lock, navbat) unda yo'q. Blok profil kutish sabablarini, `go tool trace` esa vaqt o'qi bo'ylab goroutine holatlarini, GC va scheduler hodisalarini beradi — tail latency tahlili uchun eng kuchli vosita. Production'da rate'larni past qo'ying (sampling narxi bor).",
+      "source": "https://go.dev/blog/execution-traces-2024"
+    },
+    {
+      "id": 19017,
+      "code": "RT18",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "pprof label nima beradi?",
+      "options": [
+        "pprof.Do bilan CPU profil namunalariga kontekst (endpoint, tenant, job turi) biriktiriladi — profilni shu o'lchov bo'yicha filtrlab, qaysi so'rov turi CPU yeyayotganini ko'rish mumkin",
+        "Metrikalarga teg qo'yadi",
+        "Log'ga teg qo'shadi",
+        "Trace ID generatsiya qiladi"
+      ],
+      "answer": 0,
+      "explanation": "Ko'p tenant yoki ko'p endpoint'li servisda oddiy profil hammasini aralashtiradi. pprof.Do(ctx, pprof.Labels(\"endpoint\", name), func(ctx){...}) bilan o'ralgan kod namunalari yorliqlanadi; label goroutine'lar bo'ylab meros bo'ladi. Eslatma: label'lar CPU va goroutine profillarida ishlaydi, heap profilida emas.",
+      "source": "https://pkg.go.dev/runtime/pprof#Do"
+    },
+    {
+      "id": 19021,
+      "code": "RT22",
+      "level": "P",
+      "type": "open",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Servisning allokatsiya tezligi juda yuqori. Qanday kamaytirasan?",
+      "modelAnswer": "1) O'lchash: `go test -bench -benchmem` va production'dan heap profil (alloc_space — kim ko'p allokatsiya qilyapti; inuse_space — kim ushlab turibdi). 2) Eng tez-tez uchraydigan sabablar: slice/map cap oldindan berilmagan (make([]T,0,n), Grow); string konkatenatsiyasi; interface'ga boxing (fmt, log, any); har so'rovda katta bufer; json.Marshal ichida vaqtinchalik baytlar; kichik struct'ga pointer (escape). 3) Vositalar: -gcflags='-m' bilan escape sabablarini ko'rish; sync.Pool faqat o'lchangan hot path'da va Reset bilan; json uchun streaming Encoder yoki tezroq kodlovchi. 4) Sozlash: GOGC/GOMEMLIMIT — allokatsiyani kamaytirmaydi, faqat GC chastotasini o'zgartiradi. 5) Har o'zgarishdan keyin benchstat bilan taqqoslash va p99 latency'ga qarash — mikro-optimizatsiya ba'zan hech narsa bermaydi.",
+      "explanation": "Go'da GC narxi asosan allokatsiya TEZLIGIGA proporsional: kamroq allokatsiya — kamroq mark assist va kamroq CPU. Shuning uchun optimizatsiya tartibi: avval algoritm va I/O, keyin allokatsiya, oxirida GC sozlash."
+    },
+    {
+      "id": 30176,
+      "code": "SN177",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Profil olindi: `runtime.mallocgc` va GC vaqti yuqori. Birinchi qadam?",
+      "options": [
+        "`GOGC=off`",
+        "`go tool pprof -alloc_objects`/`-alloc_space` bilan eng ko'p ajratuvchi joyni topish: ko'pincha `[]byte`/string konversiyalari, slice/map oldindan hajm berilmagan (`make(..., n)`), interface boxing, va log formatlash — shuni kamaytirish GC bosimini tushiradi",
+        "Xotirani oshirish",
+        "Barcha joyda `sync.Pool`"
+      ],
+      "answer": 1,
+      "explanation": "Go'da GC tuning emas, allocation kamaytirish asosiy vosita. Tipik g'alabalar: `strings.Builder`, `make([]T, 0, n)`, `bytes.Buffer` qayta ishlatish, kichik struct'larni pointer emas value bilan uzatish (escape analysis), `fmt.Sprintf` o'rniga `strconv`. `GOGC` oshirish CPU'ni xotiraga almashtiradi — `GOMEMLIMIT` bilan birga qaraladi."
+    },
+    {
+      "id": 30177,
+      "code": "SN178",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Benchmark natijasi har ishga tushirishda 30% farq qiladi. Nima qilinadi?",
+      "options": [
+        "O'rtacha olib davom etish",
+        "Shovqinni kamaytirish: `-benchtime`/`-count` bilan bir necha o'lchov va `benchstat` orqali statistik solishtirish, CPU chastotasi/thermal va boshqa jarayonlarni nazarda tutish, `b.ReportAllocs()` va `b.ResetTimer()` to'g'ri qo'yilishi",
+        "Natijani e'tiborsiz qoldirish",
+        "`-race` bilan o'lchash"
+      ],
+      "answer": 1,
+      "explanation": "Bitta o'lchov hech narsa isbotlamaydi. Standart oqim: `go test -bench=X -count=10 > old.txt`, o'zgarishdan keyin `new.txt`, keyin `benchstat old.txt new.txt` — u p-value va farq foizini beradi. `-race` bilan o'lchash noto'g'ri (2-10x sekin). Kompilyator optimizatsiyasi natijani yo'q qilmasligi uchun natija global o'zgaruvchiga yoziladi."
+    },
+    {
+      "id": 30178,
+      "code": "SN179",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Escape analysis nima va nega muhim?",
+      "options": [
+        "GC algoritmi",
+        "Kompilyator o'zgaruvchi funksiyadan tashqariga 'qochadimi' deb aniqlaydi: qochmasa stack'da (arzon, GC'siz), qochsa heap'da ajratiladi. `go build -gcflags='-m'` bilan ko'riladi",
+        "Xotira siqish",
+        "Goroutine rejalashtirish"
+      ],
+      "answer": 1,
+      "explanation": "Tipik qochish sabablari: pointer qaytarish, interface'ga solish, closure'da ushlash, `fmt.Println`ga uzatish (interface{}), slice hajmi kompilyatsiya vaqtida noma'lum. Amaliy natija: kichik struct'ni value bilan uzatish ko'pincha pointer'dan tez, chunki heap ajratmasi va GC yuki bo'lmaydi."
+    },
+    {
+      "id": 30326,
+      "code": "SN327",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Profil olindi: `runtime.mallocgc` va GC vaqti yuqori. Birinchi qadam?",
+      "options": [
+        "`GOGC=off`",
+        "`go tool pprof -alloc_objects`/`-alloc_space` bilan eng ko'p ajratuvchi joyni topish: ko'pincha `[]byte`/string konversiyalari, slice/map oldindan hajm berilmagan (`make(..., n)`), interface boxing, va log formatlash — shuni kamaytirish GC bosimini tushiradi",
+        "Xotirani oshirish",
+        "Barcha joyda `sync.Pool`"
+      ],
+      "answer": 1,
+      "explanation": "Go'da GC tuning emas, allocation kamaytirish asosiy vosita. Tipik g'alabalar: `strings.Builder`, `make([]T, 0, n)`, `bytes.Buffer` qayta ishlatish, kichik struct'larni pointer emas value bilan uzatish (escape analysis), `fmt.Sprintf` o'rniga `strconv`. `GOGC` oshirish CPU'ni xotiraga almashtiradi — `GOMEMLIMIT` bilan birga qaraladi."
+    },
+    {
+      "id": 30327,
+      "code": "SN328",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Benchmark natijasi har ishga tushirishda 30% farq qiladi. Nima qilinadi?",
+      "options": [
+        "O'rtacha olib davom etish",
+        "Shovqinni kamaytirish: `-benchtime`/`-count` bilan bir necha o'lchov va `benchstat` orqali statistik solishtirish, CPU chastotasi/thermal va boshqa jarayonlarni nazarda tutish, `b.ReportAllocs()` va `b.ResetTimer()` to'g'ri qo'yilishi",
+        "Natijani e'tiborsiz qoldirish",
+        "`-race` bilan o'lchash"
+      ],
+      "answer": 1,
+      "explanation": "Bitta o'lchov hech narsa isbotlamaydi. Standart oqim: `go test -bench=X -count=10 > old.txt`, o'zgarishdan keyin `new.txt`, keyin `benchstat old.txt new.txt` — u p-value va farq foizini beradi. `-race` bilan o'lchash noto'g'ri (2-10x sekin). Kompilyator optimizatsiyasi natijani yo'q qilmasligi uchun natija global o'zgaruvchiga yoziladi."
+    },
+    {
+      "id": 30328,
+      "code": "SN329",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Escape analysis nima va nega muhim?",
+      "options": [
+        "GC algoritmi",
+        "Kompilyator o'zgaruvchi funksiyadan tashqariga 'qochadimi' deb aniqlaydi: qochmasa stack'da (arzon, GC'siz), qochsa heap'da ajratiladi. `go build -gcflags='-m'` bilan ko'riladi",
+        "Xotira siqish",
+        "Goroutine rejalashtirish"
+      ],
+      "answer": 1,
+      "explanation": "Tipik qochish sabablari: pointer qaytarish, interface'ga solish, closure'da ushlash, `fmt.Println`ga uzatish (interface{}), slice hajmi kompilyatsiya vaqtida noma'lum. Amaliy natija: kichik struct'ni value bilan uzatish ko'pincha pointer'dan tez, chunki heap ajratmasi va GC yuki bo'lmaydi."
+    },
+    {
+      "id": 30409,
+      "code": "SN410",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "False sharing nima va Go'da qanday paydo bo'ladi?",
+      "options": [
+        "Ikki goroutine bir o'zgaruvchini o'zgartirishi",
+        "Turli yadrolardagi goroutine'lar bir xil kesh qatoriga (64 bayt) tushgan alohida o'zgaruvchilarni yozadi — kesh qatori yadrolar orasida sakraydi (cache line ping-pong) va ishlash keskin tushadi; yechim — padding yoki per-P/shardlangan hisoblagich",
+        "GC muammosi",
+        "Mutex ushlab qolish"
+      ],
+      "answer": 1,
+      "explanation": "Tipik misol: `counters := make([]int64, numWorkers)` va har worker o'z indeksini atomik oshiradi — massiv elementlari bitta kesh qatorida. Yechim: har elementni 64 baytga to'ldirish (`struct { v int64; _ [56]byte }`) yoki umuman mahalliy hisoblab oxirida yig'ish. Benchmark bilan o'lchanmasa bu muammo ko'rinmaydi."
+    },
+    {
+      "id": 30410,
+      "code": "SN411",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Tracing",
+      "domain": "go",
+      "section": "g3",
+      "question": "`go tool trace` pprof'dan qanday farq qiladi va qachon kerak?",
+      "options": [
+        "Farqi yo'q",
+        "pprof — statistik namuna (qayerda vaqt ketyapti); trace — hodisalar vaqt chizig'i: goroutine holatlari, scheduler kechikishi, GC bosqichlari, syscall va network bloklanishlari. Latency spike'ning sababi 'kutish' bo'lsa trace kerak, CPU bo'lsa pprof",
+        "trace faqat testda",
+        "pprof ishlatilmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Trace javob beradigan savollar: goroutine ishga tayyor bo'lgach qancha kutdi (scheduler latency), GC assist ilovadan qancha vaqt o'g'irladi, qaysi bloklanish zanjiri p99 ni ko'targan. Narxi — overhead va katta fayl, shuning uchun qisqa oyna (1-5 sekund) olinadi. Go 1.21+ da flight recorder bilan incident paytidagi oxirgi bir necha sekundni saqlash mumkin."
+    },
+    {
+      "id": 30411,
+      "code": "SN412",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "`GOGC` va `GOMEMLIMIT` bilan ham RSS tushmayapti. Sabab?",
+      "options": [
+        "Leak bor, boshqa sabab yo'q",
+        "Go xotirani OS'ga qaytarishi kechikadi (`MADV_FREE`/`MADV_DONTNEED` xatti-harakati va `scavenger` sekin ishlaydi) — `runtime/metrics`da `HeapReleased` ko'rinadi; RSS yuqori bo'lsa ham xotira qayta ishlatilishi mumkin",
+        "GC o'chirilgan",
+        "Konteyner cheklovi"
+      ],
+      "answer": 1,
+      "explanation": "Ikki holatni ajratish kerak: haqiqiy leak (`HeapInuse` o'sib boradi) va OS'ga qaytarilmagan bo'sh xotira (`HeapIdle` katta, `HeapReleased` past). Linux'da `MADV_FREE` bilan sahifalar bosim bo'lmaguncha hisobda qoladi — bu normal. Konteyner limitiga yaqin bo'lsa `GOMEMLIMIT` GC'ni agressivlashtiradi va scavenger'ni ishga soladi."
+    }
+  ]
+}

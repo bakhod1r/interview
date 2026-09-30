@@ -1,0 +1,649 @@
+{
+  "slug": "frontend",
+  "title": "Frontend Developer",
+  "description": "Step by step guide to becoming a modern frontend developer in @currentYear@",
+  "url": "https://roadmap.sh/frontend",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-07-15T11:43:37.362Z",
+  "relatedRoadmaps": [
+    "full-stack",
+    "javascript",
+    "nodejs",
+    "react",
+    "angular",
+    "vue",
+    "design-system"
+  ],
+  "topicCount": 37,
+  "subtopicCount": 83,
+  "topics": [
+    {
+      "id": "VlNNwIEDWqQXtqkHWJYzC",
+      "title": "Internet",
+      "subtopics": [
+        {
+          "id": "yCnn-NfSxIybUQ2iTuUGq",
+          "title": "How does the internet work?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "R12sArWVpbIs_PHxBqVaR",
+          "title": "What is HTTP?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZhSuu2VArnzPDp6dPQQSC",
+          "title": "What is Domain Name?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aqMaEY8gkKMikiqleV5EP",
+          "title": "What is hosting?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hkxw9jPGYphmjhTjw8766",
+          "title": "DNS and how it works?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "P82WFaTPgQEPNp5IIuZ1Y",
+          "title": "Browsers and how they work?",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "yWG2VUkaF5IJVVut6AiSy",
+      "title": "HTML",
+      "subtopics": []
+    },
+    {
+      "id": "ZhJhf1M2OphYbEmduFq-9",
+      "title": "CSS",
+      "subtopics": []
+    },
+    {
+      "id": "ODcfFEorkfJNupoQygM53",
+      "title": "JavaScript",
+      "subtopics": [
+        {
+          "id": "SLxA5qJFp_28TRzr1BjxZ",
+          "title": "pnpm",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ib_FHinhrw8VuSet-xMF7",
+          "title": "npm",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "MXnFhZlNB1zTsBFDyni9H",
+      "title": "VCS Hosting",
+      "subtopics": [
+        {
+          "id": "qmTVMJDsEhNIkiwE_UTYu",
+          "title": "GitHub",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zIoSJMX3cuzCgDYHjgbEh",
+          "title": "GitLab",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "j2H1qGosbveayviOCVkUs",
+          "title": "Bun",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "NIY7c4TQEEHx0hATu-k5C",
+      "title": "Version Control ",
+      "subtopics": [
+        {
+          "id": "R_I4SGYqLk5zze5I1zS_E",
+          "title": "Git",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "IqvS1V-98cxko3e9sBQgP",
+      "title": "Package Managers",
+      "subtopics": []
+    },
+    {
+      "id": "eXezX7CVNyC1RuyU_I4yP",
+      "title": "Learn a Framework",
+      "subtopics": []
+    },
+    {
+      "id": "XDTD8el6OwuQ55wC-X4iV",
+      "title": "CSS Frameworks",
+      "subtopics": [
+        {
+          "id": "eghnfG4p7i-EDWfp3CQXC",
+          "title": "Tailwind",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yrq3nOwFREzl-9EKnpU-e",
+          "title": "yarn",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "9VcGfDBBD8YcKatj4VcH1",
+      "title": "Linters & Formatters",
+      "subtopics": [
+        {
+          "id": "UvCVChB6NZ_yUg0RdIJ2o",
+          "title": "Biome",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zbkpu_gvQ4mgCiZKzS1xv",
+          "title": "Prettier",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NFjsI712_qP0IOmjuqXar",
+          "title": "ESLint",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0TMdly8yiqnNR8sx36iqc",
+          "title": "Code Reviews",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hkSc_1x09m7-7BO7WzlDT",
+      "title": "Module Bundlers",
+      "subtopics": [
+        {
+          "id": "0Awx3zEI5_gYEIrD7IVX6",
+          "title": "Vite",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "g5itUjgRXd9vs9ujHezFl",
+          "title": "Jest",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "igg4_hb3XE3vuvY8ufV-4",
+      "title": "Testing",
+      "subtopics": [
+        {
+          "id": "hVQ89f6G0LXEgHIOKHDYq",
+          "title": "Vitest",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "jramLk8FGuaEH4YpHIyZT",
+          "title": "Playwright",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DaynCz5RR26gjT6N6gTDL",
+          "title": "Cypress",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "q7NpwqQXUp4wt2to-yFiP",
+          "title": "Docs Generation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EYT2rTLZ8tUW2u8DOnAWF",
+          "title": "Refactoring",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "U5mD5FmVx7VWeKxDpQxB5",
+      "title": "Auth Strategies",
+      "subtopics": []
+    },
+    {
+      "id": "RDWbG3Iui6IPgp0shvXtg",
+      "title": "Web Security",
+      "subtopics": [
+        {
+          "id": "JanR7I_lNnUCXhCMGLdn-",
+          "title": "OWASP Risks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AfH2zCbqzw0Nisg1yyISS",
+          "title": "CORS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uum7vOhOUR38vLuGZy8Oa",
+          "title": "HTTPS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rmcm0CZbtNVC9LZ14-H6h",
+          "title": "CSP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ruoFa3M4bUE3Dg6GXSiUI",
+      "title": "Web Components",
+      "subtopics": [
+        {
+          "id": "Hk8AVonOd693_y1sykPqd",
+          "title": "HTML Templates",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VxiQPgcYDFAT6WgSRWpIA",
+          "title": "Custom Elements",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-SpsNeOZBkQfDA-rwzgPg",
+          "title": "Shadow DOM",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "NQ95TJCe3E1IwEuBa__D6",
+      "title": "Type Checkers",
+      "subtopics": []
+    },
+    {
+      "id": "Cxspmb14_0i1tfw-ZLxEu",
+      "title": "SSR",
+      "subtopics": [
+        {
+          "id": "V70884VcuXkfrfHyLGtUg",
+          "title": "Next.js",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hE-DbpBpYrfB8tmBEjTnG",
+          "title": "Rolldown",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3TE_iYvbklXK0be-5f2M7",
+      "title": "Vue.js",
+      "subtopics": [
+        {
+          "id": "OL8I6nOZ8hGGWmtxg_Mv8",
+          "title": "Svelte",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "k6rp6Ua9qUEW_DA_fOg5u",
+          "title": "Angular",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "SGDf_rbfmFSHlxI-Czzlz",
+      "title": "React",
+      "subtopics": [
+        {
+          "id": "zNFYAJaSq0YZXL5Rpx1NX",
+          "title": "Next.js",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wA2fSYsbBYU02VJXAvUz8",
+          "title": "Astro",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "P4st_telfCwKLSAU2WsQP",
+      "title": "SvelteKit",
+      "subtopics": [
+        {
+          "id": "KJRkrFZIihCUBrOf579EU",
+          "title": "react-router",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BBsXxkbbEG-gnbM1xXKrj",
+          "title": "Nuxt.js",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "L7AllJfKvClaam3y-u6DP",
+      "title": "GraphQL",
+      "subtopics": [
+        {
+          "id": "5eUbDdOTOfaOhUlZAmmXW",
+          "title": "Apollo",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0moPO23ol33WsjVXSpTGf",
+          "title": "Relay Modern",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "n0q32YhWEIAUwbGXexoqV",
+      "title": "SSG",
+      "subtopics": [
+        {
+          "id": "iUxXq7beg55y76dkwhM13",
+          "title": "Astro",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CMrss8E2W0eA6DVEqtPjT",
+          "title": "Vuepress",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XWJxV42Dpu2D3xDK10Pn3",
+          "title": "Nuxt.js",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "io0RHJWIcVxDhcYkV9d38",
+          "title": "Eleventy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f9zlP6lGhfe6HBHVYiySu",
+          "title": "Tanstack Start",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "PoM77O2OtxPELxfrW1wtl",
+      "title": "PWAs",
+      "subtopics": []
+    },
+    {
+      "id": "VOGKiG2EZVfCBAaa7Df0W",
+      "title": "Mobile Apps",
+      "subtopics": [
+        {
+          "id": "dsTegXTyupjS8iU6I7Xiv",
+          "title": "React Native",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "dIQXjFEUAJAGxxfAYceHU",
+          "title": "Flutter",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Pxyk3nBlWbgmMjsA93E70",
+          "title": "Ionic",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "KMA7NkxFbPoUDtFnGBFnj",
+      "title": "Desktop Apps",
+      "subtopics": [
+        {
+          "id": "mQHpSyMR4Rra4mqAslgiS",
+          "title": "Electron",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GJctl0tVXe4B70s35RkLT",
+          "title": "Tauri",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2MRvAK9G9RGM_auWytcKh",
+          "title": "Flutter",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "A1ZUy16cVRYqmHxoCtUb0",
+      "title": "Deployment",
+      "subtopics": [
+        {
+          "id": "vpzh9bNXCxgdDFQLsot2_",
+          "title": "GitHub Pages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kPJ0jZo5AbOzvZgv0zwp0",
+          "title": "Vercel",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_Uh-UFNe2wP2TV0x2lKY_",
+          "title": "Cloudflare",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "o8GstE5gxcGByh-D7lwqT",
+          "title": "Netlify",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PJRsqg5Vx9gQTodxaeZfz",
+          "title": "Railway",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wfGz8pshGQARZ7qStGoSD",
+          "title": "Render",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6d8cjWZ4BuUjwT0seiuzJ",
+      "title": "Performance",
+      "subtopics": [
+        {
+          "id": "JWU9jc12_ewaIKt3qWLcp",
+          "title": "DevTools Usage",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "dz7_QXoO7X0WmS5xuAhhJ",
+          "title": "Lighthouse",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "66ya3WdtlkjQyBTc3Lein",
+          "title": "Service Workers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "FyNXhHq1VIASNq-LI7JIu",
+          "title": "Streamed Responses",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tWDmeXItfQDxB8Jij_V4L",
+          "title": "Cache-Control",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "ap4h4v5Sr4jBH3GwWSH8x",
+      "title": "Design Systems",
+      "subtopics": []
+    },
+    {
+      "id": "3HgiMfqihjWceSxd6ei8s",
+      "title": "Web APIs",
+      "subtopics": []
+    },
+    {
+      "id": "e-k6EhoxYG9h0x6vWOrDh",
+      "title": "Accessibility",
+      "subtopics": []
+    },
+    {
+      "id": "UTupdqjOyLh7-56_0SXJ8",
+      "title": "Learn the Basics",
+      "subtopics": [
+        {
+          "id": "yKNdBbahm_h81xdMDT-qx",
+          "title": "How LLMs work",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-bHFIiXnoUQSov64WI9yo",
+          "title": "Angular",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ERAdwL1G9M1bnx-fOm5ZA",
+          "title": "Vue.js",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tG5v3O4lNIFc2uCnacPak",
+          "title": "React",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZR-qZ2Lcbu3FtqaMd3wM4",
+          "title": "Svelte",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DxOSKnqAjZOPP-dq_U7oP",
+          "title": "Solid JS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IZKl6PxbvgNkryAkdy3-p",
+          "title": "AI vs Traditional Coding",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Nx7mjvYgqLpmJ0_iSx5of",
+          "title": "Applications",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ipcNHz8KbfpE57kNP15hP",
+      "title": "AI Assisted Coding",
+      "subtopics": [
+        {
+          "id": "CKlkVK_7GZ7xzIUHJqZr8",
+          "title": "Cursor",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "E7-LveK7jO2npxVTLUDfw",
+          "title": "Antigravity",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "RcC1fVuePQZ59AsJfeTdR",
+          "title": "Claude Code",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HQrxxDxKN8gizvXRU5psW",
+          "title": "Copilot",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Gv_g4gK6pZK6l_0xAn34X",
+      "title": "Prompting Techniques",
+      "subtopics": []
+    },
+    {
+      "id": "MdYPIf_9ezbIp6Dm5Fyme",
+      "title": "Implementing AI",
+      "subtopics": [
+        {
+          "id": "Bic4PHhz-YqzPWRimJO83",
+          "title": "Gemini",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-ye5ZtYFDoYGpj-UJaBP8",
+          "title": "OpenAI",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Lw2nR7x8PYgq1P5CxPAxi",
+          "title": "Anthropic",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NS-hwaWa5ebSmNNRoxFDp",
+          "title": "Parcel",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "e4j6u0e_WqK1vfrUwJJ4M",
+      "title": "Agents",
+      "subtopics": []
+    },
+    {
+      "id": "XFy2gj7DmXeaCoc6MZo_j",
+      "title": "MCP",
+      "subtopics": [
+        {
+          "id": "4W7UXfdKIUsm1bUrjdTVT",
+          "title": "esbuild",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "h26uS3muFCabe6ekElZcI",
+          "title": "SWC",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "xL8d-uHMpJKwUvT8z-Jia",
+      "title": "Skills",
+      "subtopics": [
+        {
+          "id": "sCjErk7rfWAUvhl8Kfm3n",
+          "title": "Rollup",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

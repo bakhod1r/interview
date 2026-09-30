@@ -1,0 +1,605 @@
+{
+  "slug": "software-architect",
+  "title": "Software Architect",
+  "description": "Step by step guide to becoming a Software Architect in @currentYear@",
+  "url": "https://roadmap.sh/software-architect",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-01-06T16:31:52.878Z",
+  "relatedRoadmaps": [
+    "backend",
+    "software-design-architecture",
+    "python",
+    "golang",
+    "java",
+    "devops"
+  ],
+  "topicCount": 18,
+  "subtopicCount": 95,
+  "topics": [
+    {
+      "id": "4zicbh7Wg2lmKSRhb6E-L",
+      "title": "Understand the Basics",
+      "subtopics": [
+        {
+          "id": "EGG99VA-PEdWdVxNDLtG_",
+          "title": "What is Software Architecture",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "eG38hT0rotYJ3G-t9df9R",
+          "title": "What is a Software Architect",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2sR4KULvAUUoOtopvsEBs",
+          "title": "Levels of Architecture",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Lqe47l4j-C4OwkbkwPYry",
+          "title": "Application Architecture",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "rUxbG2S2nJuA1YVY6sjiX",
+      "title": "Responsibilities",
+      "subtopics": [
+        {
+          "id": "uGs-9xE3DMJxKhenltbFK",
+          "title": "Solution Architecture",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "lBtlDFPEQvQ_xtLtehU0S",
+      "title": "Important Skills to Learn",
+      "subtopics": [
+        {
+          "id": "77KvWCA1oHSGgDKBTwjv7",
+          "title": "How to Code",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5D-kbQ520k1D3fCtD01T7",
+          "title": "Documentation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fBd2m8tMJmhuNSaakrpg4",
+          "title": "Design & Architecture",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MSDo0nPk_ghRYkZS4MAQ_",
+          "title": "Decision Making",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lrtgF1RTaS4TCKww0aY6C",
+          "title": "Simplifying Things",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ac49sOlQKblYK4FZuFHDR",
+          "title": "Communication",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m0ZYdqPFDoHOPo18wKyvV",
+          "title": "Estimate and Evaluate",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "otHQ6ye1xgkI1qb4tEHVF",
+          "title": "Balance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LSWlk9A3b6hco9Il_elao",
+          "title": "Consult & Coach",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hFx3mLqh5omNxqI9lfaAQ",
+      "title": "Technical Skills",
+      "subtopics": [
+        {
+          "id": "PyTuVs08_z4EhLwhTYzFu",
+          "title": "GitHub",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "uoDtVFThaV6OMK2wXGfP5",
+      "title": "Programming Languages",
+      "subtopics": [
+        {
+          "id": "D1IXOBUrrXf5bXhVu9cmI",
+          "title": ".NET Framework Based",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "vlW07sc-FQnxPMjDMn8_F",
+          "title": "Enterprise Architecture",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "a5DB_hsD4bAf8BtHNFNPo",
+          "title": "Java / Kotlin / Scala / Swift",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "j2Ph2QcKwmKlbaMHz1l_i",
+          "title": "Python",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U_Hmzfjjs1jVtu2CZ0TlG",
+          "title": "Ruby",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nKlM9k4qAh4wBFXqM-2kC",
+          "title": "Go",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bhP5gMpRVebSFpCeHVXBj",
+          "title": "JavaScript / TypeScript",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_U0VoTkqM1d6NR13p5azS",
+      "title": "Patterns & Design Principles",
+      "subtopics": [
+        {
+          "id": "jj5otph6mEYiR-oU5WVtT",
+          "title": "MVC, MVP, MVVM",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "AMDLJ_Bup-AY1chl_taV3",
+          "title": "OOP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RsnN5bt8OhSMjSFmVgw-X",
+          "title": "CQRS, Eventual Consistency",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AoWO2BIKG5X4JWir6kh5r",
+          "title": "Actors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bbKEEk7dvfFZBBJaIjm0j",
+          "title": "ACID, CAP Theorem",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QNG-KP01WQnq8o1-In1-n",
+          "title": "SOLID",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DnP66pjK3b8tCtYr05n2G",
+          "title": "TDD",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "diu8MyHxZuZSdhavYVj1T",
+      "title": "Tools",
+      "subtopics": [
+        {
+          "id": "ZEzYb-i55hBe9kK3bla94",
+          "title": "Git",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CYnUg_okOcRrD7fSllxLW",
+          "title": "Slack",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "a6joS9WXg-rbw29_KfBd9",
+          "title": "Trello",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3bpd0iZTd3G-H8A7yrExY",
+          "title": "Atlassian Tools",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "SuMhTyaBS9vwASxAt39DH",
+      "title": "Tools",
+      "subtopics": []
+    },
+    {
+      "id": "OaLmlfkZid7hKqJ9G8oNV",
+      "title": "Architecture",
+      "subtopics": [
+        {
+          "id": "b6lCGw82qKpUmsxe1r1f5",
+          "title": "Microservices",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IIelzs8XYMPnXabFKRI51",
+          "title": "DDD",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FAXKxl3fWUFShYmoCsInZ",
+          "title": "Serverless",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mka_DwiboH5sGFhXhk6ez",
+          "title": "Client / Server",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "IzFTn5-tQuF_Z0cG_w6CW",
+      "title": "Security",
+      "subtopics": [
+        {
+          "id": "7tBAD0ox9hTK4D483GTRo",
+          "title": "Hashing Algorithms",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OpL2EqvHbUmFgnpuhtZPr",
+          "title": "PKI",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "KiwFXB6yd0go30zAFMTJt",
+          "title": "Auth Strategies",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YW6j3Sg511dXToTcwSnOS",
+          "title": "Marketing Skills",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KhqUK-7jdClu9M2Pq7x--",
+          "title": "OWASP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "YCJYRA3b-YSm8vKmGUFk5",
+      "title": "Working with Data",
+      "subtopics": [
+        {
+          "id": "57liQPaPyVpE-mdLnsbi0",
+          "title": "NoSQL Databases",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "n5AcBt_u8qtTe3PP9svPZ",
+          "title": "SQL Databases",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JUFE4OQhnXOt1J_MG-Sjf",
+          "title": "ETL, Datawarehouses",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "92GG4IRZ3FijumC94aL-T",
+          "title": "Hadoop, Spark, MapReduce",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Ocn7-ctpnl71ZCZ_uV-uD",
+      "title": "APIs & Integrations",
+      "subtopics": [
+        {
+          "id": "priDGksAvJ05YzakkTFtM",
+          "title": "gRPC",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "a0baFv7hVWZGvS5VLh5ig",
+          "title": "Apache Spark",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "I_VjjmMK52_tS8qjQUspN",
+          "title": "Hadoop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "B5YtP8C1A0jB3MOdg0c_q",
+          "title": "Datawarehouse Principles",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fELnBA0eOoE-d9rSmDJ8l",
+          "title": "ESB, SOAP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sp3FdPT4F9YnTGvlE_vyq",
+          "title": "GraphQL",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "j9Y2YbBKi3clO_sZ2L_hQ",
+      "title": "Web, Mobile",
+      "subtopics": [
+        {
+          "id": "C0g_kQFlte5siHMHwlHQb",
+          "title": "Reactive Programming",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6FDGecsHbqY-cm32yTZJa",
+          "title": "Functional Programming",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mCiYCbKIOVU34qil_q7Hg",
+          "title": "React, Vue, Angular",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ulwgDCQi_BYx5lmll7pzU",
+          "title": "SPA, SSR, SSG",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "vpko5Kyf6BZ5MHpxXOKaf",
+          "title": "Microfrontends",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "s0RvufK2PLMXtlsn2KAUN",
+          "title": "W3C and WHATWG",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "05hLO2_A8Tr6cLJGFRhOh",
+          "title": "Layered",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "j7OP6RD_IAU6HsyiGaynx",
+          "title": "Distributed Systems",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6uvmMgvOwGyuLC5TOhjFu",
+          "title": "Service Oriented",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hjlkxYZS7Zf9En3IUS-Wm",
+      "title": "Frameworks",
+      "subtopics": [
+        {
+          "id": "LQlzVxUxM3haWRwbhYHKY",
+          "title": "BABOK",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ss43xwK1ydEToj6XmmCt7",
+          "title": "REST",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wFu9VO48EYbIQrsM8YUCj",
+          "title": "IAF",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "UyIwiIiKaa6LTQaqzbCam",
+      "title": "Management",
+      "subtopics": [
+        {
+          "id": "hRug9yJKYacB9X_2cUalR",
+          "title": "PMI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Rq1Wi-cHjS54SYo-Btp-e",
+          "title": "ITIL",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SJ5lrlvyXgtAwOx4wvT2W",
+          "title": "Prince2",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7rudOREGG-TTkCosU0hNw",
+          "title": "RUP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qwpsGRFgzAYstM7bJA2ZJ",
+          "title": "LeSS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Bg7ru1q1j6pNB43HGxnHT",
+          "title": "SaFE",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "O7H6dt3Z7EKohxfJzwbPM",
+          "title": "Kanban",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PKqwKvoffm0unwcFwpojk",
+          "title": "Scrum",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7fL9lSu4BD1wRjnZy9tM9",
+          "title": "XP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "cBWJ6Duw99tSKr7U6OW3A",
+      "title": "Networks",
+      "subtopics": [
+        {
+          "id": "Mt5W1IvuHevNXVRlh7z26",
+          "title": "OSI",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8FTKnAKNL9LnZBrw9YXqK",
+          "title": "UML",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5TDTU22Fla2mRr6JeOcaY",
+          "title": "TOGAF",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UCCT7-E_QUKPg3jAsjobx",
+          "title": "TCP/IP Model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Nq6o6Ty8VyNRsvg-UWp7D",
+          "title": "HTTP, HTTPS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6_EOmU5GYGDGzmNoLY8cB",
+          "title": "Proxies",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "EdJhuNhMSWjeVxGW-RZtL",
+      "title": "Operations Knowledge",
+      "subtopics": [
+        {
+          "id": "igf9yp1lRdAlN5gyQ8HHC",
+          "title": "Infrastructure as Code",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "C0rKd5Rr27Z1_GleoEZxF",
+          "title": "Cloud Providers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WoXoVwkSqXTP5U8HtyJOL",
+          "title": "Serverless Concepts",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XnvlRrOhdoMsiGwGEhBro",
+          "title": "Linux / Unix",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OErbfM-H3laFm47GCHNPI",
+          "title": "Service Mesh",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "isavRe4ANVn77ZX6gNSLH",
+          "title": "CI / CD",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "l3oeo65FyV5HHvw5n_1wa",
+          "title": "Containers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CxceVdaNCyKDhs0huDtcL",
+          "title": "Cloud Design Patterns",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DwNda95-fE7LWnDA6u1LU",
+          "title": "BPM, BPEL",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4NVdEbmpQVHpBc7582S6E",
+          "title": "Messaging Queues",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "8yALyPVUZPtd7LX3GrO1e",
+      "title": "Enterprise Software",
+      "subtopics": [
+        {
+          "id": "gdtI0H_PzzTj_aFQn_NeA",
+          "title": "MS Dynamics",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "TxWAznp1tUtZ1MvThf9M1",
+          "title": "SAP ERP, HANA, Business Objects",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5EVecZmvor09LjD7WR_Y9",
+          "title": "IBM BPM",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mOXyzdNn8W-9R99ffcnor",
+          "title": "Salesforce",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Hqk_GGsFi14SI5fgPSoGV",
+          "title": "Firewalls",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YfYviOXqGVp9C6DuhqBrn",
+          "title": "EMC DMS",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

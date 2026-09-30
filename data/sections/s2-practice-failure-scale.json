@@ -1,0 +1,411 @@
+{
+  "id": "s2",
+  "name": "Practice: failure & scale",
+  "domain": "dist",
+  "domainLabel": "Distributed systems",
+  "topics": [
+    "Failure",
+    "Fundamentals",
+    "Distributed"
+  ],
+  "questions": [
+    {
+      "id": 39,
+      "code": 40,
+      "level": "S",
+      "type": "mcq",
+      "topic": "Distributed",
+      "domain": "dist",
+      "section": "s2",
+      "question": "CAP teoremasiga ko'ra network partition paytida tizim nimani tanlashi kerak?",
+      "options": [
+        "Consistency va Availability ikkalasini",
+        "Consistency yoki Availability — biri qurbon qilinadi",
+        "Partition tolerance'ni o'chirish",
+        "Latency va throughput"
+      ],
+      "answer": 1,
+      "explanation": "P ixtiyoriy emas — network baribir bo'linadi. CP: ozchilik tomon query'larni rad etadi (etcd, ZooKeeper). AP: har ikki tomon javob beradi, keyin konfliktni hal qiladi (Cassandra, Dynamo). Ko'proq nozik model — PACELC: partition bo'lmaganda ham Latency vs Consistency tanlovi bor."
+    },
+    {
+      "id": 51,
+      "code": 52,
+      "level": "P",
+      "type": "open",
+      "topic": "Distributed",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Global active-active multi-region DB arxitekturasi: qaysi muammolar yuzaga keladi va qanday hal qilasiz?",
+      "modelAnswer": [
+        "Yozish konfliktlari: LWW (soat drift xavfi), CRDT, yoki ma'lumotni region/user bo'yicha 'home region'ga bog'lash (konfliktdan qochish)",
+        "Kuchli konsistentlik kerak bo'lsa — konsensus (Spanner, CockroachDB), lekin cross-region yozish latency 100ms+",
+        "Data residency (GDPR, mahalliy qonunlar) — ma'lumot qayerda saqlanishi majburiy",
+        "Failover va split-brain, regionlararo trafik narxi",
+        "Ko'p hollarda active-passive yoki 'active-active o'qish, bitta regionda yozish' yetarli — murakkablikni asoslash"
+      ],
+      "explanation": "Eng kuchli javob: 'active-active kerakmi?' degan savolni biznes SLA orqali tekshirish. Konfliktlarni hal qilishdan ko'ra ularning oldini olish (partitioning by home region) arzonroq."
+    },
+    {
+      "id": 52,
+      "code": 53,
+      "level": "P",
+      "type": "mcq",
+      "topic": "Distributed",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Google Spanner global external consistency'ga (linearizable commit tartibi) qanday erishadi?",
+      "options": [
+        "Hamma yozishlar bitta global lider orqali",
+        "TrueTime (GPS/atom soatlar, noaniqlik oralig'i) + commit wait — noaniqlik tugaguncha kutish",
+        "Vector clock",
+        "Eventual consistency bilan"
+      ],
+      "answer": 1,
+      "explanation": "TrueTime [earliest, latest] oralig'ini beradi; commit timestamp tanlangach, oraliq o'tguncha kutiladi — shuning uchun keyingi transaction kattaroq timestamp oladi. Har shard ichida Paxos. CockroachDB aniq soatlarsiz HLC va uncertainty restart'lardan foydalanadi — kafolati biroz zaifroq."
+    },
+    {
+      "id": 56,
+      "code": 57,
+      "level": "P",
+      "type": "mcq",
+      "topic": "Distributed",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Linearizability va serializability farqi?",
+      "options": [
+        "Bir xil narsa",
+        "Serializability — ko'p obyektli transaction'lar qandaydir ketma-ket tartibga ekvivalent; linearizability — bitta obyekt operatsiyalari real vaqt tartibiga mos (recency kafolati)",
+        "Linearizability faqat SQL DB'larda",
+        "Serializability real vaqt tartibini kafolatlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Serializability real vaqt haqida hech narsa demaydi — transaction eskirgan snapshot'da ham serializable bo'lishi mumkin. Ikkalasi birga — strict serializability (Spanner). Principal level'da bu terminlarni aralashtirmaslik muhim."
+    },
+    {
+      "id": 7000,
+      "code": "D1",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "'Fallacies of distributed computing' (taqsimlangan tizimlar haqidagi noto'g'ri farazlar) nimani ogohlantiradi?",
+      "options": [
+        "Network har doim ishonchli deb hisoblash mumkin",
+        "Ishlab chiquvchilar odatda noto'g'ri faraz qiladi: network ishonchli, latency nol, bandlik cheksiz, network xavfsiz, topologiya o'zgarmaydi, bitta administrator bor, transport narxi nol, network bir jinsli — har biri real tizimda buziladi",
+        "Network hech qachon ishlamaydi",
+        "Bu faqat eski tizimlarga tegishli"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natija: har network chaqiruvi uchta natijaga ega bo'lishi mumkin — success, xato va NOMA'LUM (timeout). Uchinchisi eng qiyin: query bajarilgan bo'lishi ham, bajarilmagan bo'lishi ham mumkin. Shuning uchun idempotentlik, deadline va retry siyosati — arxitekturaning bir qismi.",
+      "source": "https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing"
+    },
+    {
+      "id": 7001,
+      "code": "D2",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Failure",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Node'dan javob kelmayapti. Uni 'o'lgan' deb hisoblash mumkinmi?",
+      "options": [
+        "Ha, javob yo'q — demak o'lgan",
+        "Yo'q: asinxron network'da sekin node va o'lgan node'ni ishonchli ajratib bo'lmaydi — javob kechikayotgan, network bo'lingan yoki node GC pauzasida bo'lishi mumkin. Shuning uchun timeout — taxmin, fakt emas",
+        "Faqat ping bilan aniqlanadi",
+        "Har doim aniq bilish mumkin"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun failover xavfli: eski leader aslida tirik bo'lib, yozishda davom etishi mumkin (split-brain). Himoya: lease (muddatli egalik) + fencing token — resurs eski tokenli query'ni rad etadi. Heartbeat timeout'ini tanlash — tez aniqlash va noto'g'ri failover orasidagi muvozanat."
+    },
+    {
+      "id": 7004,
+      "code": "D5",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Failure",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Split-brain nima va undan qanday himoyalanasiz?",
+      "options": [
+        "Ma'lumot bazasi buzilishi",
+        "Network bo'linganda ikki node ham o'zini leader deb hisoblab, ikkalasi ham yozishni qabul qiladi — ma'lumot ikkiga ajraladi. Himoya: ko'pchilik (quorum) talabi, lease va fencing token, STONITH",
+        "Disk to'lishi",
+        "Sekin query'lar"
+      ],
+      "answer": 1,
+      "explanation": "Fencing token — eng amaliy himoya: har yangi leaderga o'suvchi raqam beriladi; storage eski raqamli query'ni rad etadi. Faqat TTL'ga tayanish yetarli emas — GC pauzasi yoki VM to'xtashi TTL'dan uzoq bo'lishi mumkin."
+    },
+    {
+      "id": 7008,
+      "code": "D9",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Gossip protokoli nima uchun ishlatiladi?",
+      "options": [
+        "Ma'lumotni shifrlash uchun",
+        "Node'lar tasodifiy tanlangan qo'shnilar bilan holat ma'lumotini almashadi — klaster a'zoligi va failure haqidagi xabar markaziy koordinatorsiz, epidemik tarzda tarqaladi (Cassandra, Consul, Redis Cluster)",
+        "Xabar queue'i sifatida",
+        "Faqat monitoring uchun"
+      ],
+      "answer": 1,
+      "explanation": "Afzalligi: markazlashmagan, katta klasterda yaxshi masshtablanadi, qisman nosozlikka chidamli. Kamchiligi: ma'lumot darhol emas, ehtimollik bilan tarqaladi (eventual). Konsensus o'rnini bosmaydi — a'zolik va sog'liq ma'lumoti uchun, qat'iy kelishuv uchun emas."
+    },
+    {
+      "id": 7010,
+      "code": "D11",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Mikroservislar orasida 'exactly-once' yetkazib berish mumkinmi?",
+      "options": [
+        "Ha, Kafka buni to'liq hal qilgan",
+        "Network level'ida yo'q (ikki general muammosi): amalda at-least-once yetkazish + iste'molchi tomonda idempotentlik = 'effectively once'. Kafka transaction'lari faqat Kafka ichidagi oqim uchun",
+        "Ha, TCP buni kafolatlaydi",
+        "Yo'q, faqat at-most-once mumkin"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy retsept: har xabarga barqaror ID, iste'molchida dedup table'i yoki unique constraint, tashqi side effect uchun idempotency key. Bu savolga 'exactly-once yo'q, effectively-once bor' deb javob berish senior/staff signal."
+    },
+    {
+      "id": 7011,
+      "code": "D12",
+      "level": "St",
+      "type": "open",
+      "topic": "Failure",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Gray failure (qisman failure) nima va uni qanday aniqlaysiz?",
+      "modelAnswer": [
+        "Servis 'tirik' ko'rinadi (health check yashil), lekin amalda sekin yoki query'larning bir qismini yiqitmoqda",
+        "Sabablar: disk sekinlashuvi, bitta AZ'da network muammosi, GC pauzalari, issiq shard, bog'liqlik sekinligi",
+        "Aniqlash: sun'iy health check emas, real foydalanuvchi query'lari metrikasi (SLI), p99 va xato foizi; client tomonidan ko'rinadigan metrikalar",
+        "Node/AZ/shard bo'yicha kesimlar — 'o'rtacha yaxshi, lekin bitta instance yomon' holatini ko'rish",
+        "Chora: outlier detection bilan yomon instance'ni trafikdan chiqarish, circuit breaker, hedged request",
+        "Xaos testlari: sekinlik va paket yo'qotishni ataylab kiritib, tizim xulqini tekshirish"
+      ],
+      "explanation": "Staff signal: 'ishlayapti/ishlamayapti' ikkilik modelidan voz kechish. Eng yomon failure — to'liq o'lim emas, yarim tirik holat: retry'lar ko'payadi va yuk zanjir bo'ylab tarqaladi."
+    },
+    {
+      "id": 7012,
+      "code": "D13",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Failure",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Cell-based (hujayrali) arxitektura nimani hal qiladi?",
+      "options": [
+        "Deploy tezligini",
+        "Blast radius'ni cheklaydi: tizim mustaqil 'hujayralar'ga bo'linadi (har biri to'liq stack va o'z resurslari), foydalanuvchilar hujayralarga taqsimlanadi — failure yoki yomon deploy faqat bitta hujayrani ushlaydi",
+        "Ma'lumotni shifrlaydi",
+        "Narxni ikki barobar kamaytiradi"
+      ],
+      "answer": 1,
+      "explanation": "Bu AWS va boshqa yirik provayderlarda keng qo'llanadigan yondashuv. Bog'liq amaliyotlar: shuffle sharding (foydalanuvchilarni tasodifiy kombinatsiyalarga joylash), hujayra bo'yicha bosqichli deploy (birinchi bitta hujayraga), hujayra ichida umumiy bog'liqliklarni minimallashtirish. Narxi: operatsion murakkablik va resurs takrorlanishi."
+    },
+    {
+      "id": 30131,
+      "code": "SN132",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Distributed",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Ikki generallar / FLP natijasi amaliy nimani anglatadi?",
+      "options": [
+        "Tarmoq har doim ishonchsiz, hech narsa qilib bo'lmaydi",
+        "Asinxron tizimda bitta node yiqilishi mumkin bo'lsa, kafolatlangan (har doim tugaydigan) konsensus algoritmi yo'q — shuning uchun amaliyotda timeout/failure detector bilan 'deyarli har doim tugaydigan' algoritmlar (Raft/Paxos) ishlatiladi",
+        "Konsensus imkonsiz, DB ishlatmaslik kerak",
+        "Faqat sinxron tarmoqda ma'lumot saqlanadi"
+      ],
+      "answer": 1,
+      "explanation": "FLP nazariy chegarani ko'rsatadi: determinizm + asinxronlik + bitta crash = kafolatlangan tugash yo'q. Raft bu chegarani randomized timeout bilan chetlab o'tadi: liveness ehtimollik bilan, safety esa har doim. Amaliy xulosa — leader saylanish paytida qisqa to'xtalish normal hodisa, uni tizim dizaynida hisobga olish kerak."
+    },
+    {
+      "id": 30132,
+      "code": "SN133",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Failure",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Servis 'yarim o'lik' (sekin javob beradi, lekin health check o'tadi). Bu nima uchun eng xavfli holat?",
+      "options": [
+        "Xavfli emas, LB hal qiladi",
+        "Gray failure: LB trafik yuborishda davom etadi, timeoutlar to'planadi, upstream'da resurs tugaydi — to'liq yiqilishdan ko'ra yomon. Yechim: latency asosidagi health (deep check), outlier detection va tez chiqarib tashlash",
+        "Faqat log'lar to'ladi",
+        "Avtomatik tuzaladi"
+      ],
+      "answer": 1,
+      "explanation": "Yiqilgan node darhol chiqariladi, sekin node esa zaharlashda davom etadi. Choralar: health check haqiqiy ishni tekshirsin (DB ping bilan, lekin dependency yiqilganda hammani o'chirib qo'ymaydigan darajada ehtiyotkor), Envoy outlier detection (xato/latency bo'yicha ejection), client-side breaker, va p99 bo'yicha alert (o'rtacha emas)."
+    },
+    {
+      "id": 30133,
+      "code": "SN134",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Failure",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Retry'lar bilan bog'liq 'metastable failure' (tiklanmaydigan holat) nima?",
+      "options": [
+        "Oddiy overload",
+        "Yuk tushgandan keyin ham tizim tiklanmaydi: navbatdagi va retry'dagi ishlar o'zini o'zi oziqlantiradi (kesh sovigan, navbat to'la) — trafikni sun'iy kamaytirish yoki navbatni tozalash kerak bo'ladi",
+        "Disk to'lishi",
+        "DNS muammosi"
+      ],
+      "answer": 1,
+      "explanation": "Klassik ko'rinish: incident'dan keyin trafik normallashdi, lekin servis hali ham 100% xato beradi — chunki sovuq kesh bilan har so'rov qimmat, retry'lar yukni ushlab turadi. Chiqish yo'li: load shedding (navbatni tashlash), trafikni bosqichma-bosqich kiritish (ramp up), kesh warm-up, va retry'ni vaqtincha o'chirish."
+    },
+    {
+      "id": 30134,
+      "code": "SN135",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Distributed",
+      "domain": "dist",
+      "section": "s2",
+      "question": "'Split brain'ni oldini olish uchun fencing token nimaga kerak?",
+      "options": [
+        "Faqat log uchun",
+        "Qulf/leader egasi har yozuvda monoton o'suvchi token ko'rsatadi; saqlash qatlami eski (kichik) tokenli yozuvni rad etadi — GC pauzadan keyin 'uyqudan uyg'ongan' eski leader ma'lumotni buzmaydi",
+        "Tarmoqni tezlashtiradi",
+        "Qulfni uzaytiradi"
+      ],
+      "answer": 1,
+      "explanation": "Faqat TTL'ga tayanish yetmaydi: jarayon uzoq GC pauza yoki VM to'xtashidan keyin o'zini hali leader deb hisoblab yozishga urinadi. Fencing tokenni ZooKeeper/etcd (yoki DB sequence) beradi va storage tekshiradi. Bu Redlock kabi qulf sxemalarining asosiy tanqid nuqtasi."
+    },
+    {
+      "id": 30135,
+      "code": "SN136",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "PACELC nima qo'shadi CAP'ga?",
+      "options": [
+        "Hech narsa, sinonim",
+        "Partition bo'lmaganda ham (Else) tanlov bor: Latency yoki Consistency. Ya'ni normal ish rejimida ham sinxron replikatsiya latency'ni oshiradi — tizimlar PC/EC (masalan spanner) yoki PA/EL (Dynamo) sifatida tavsiflanadi",
+        "CAP'ni bekor qiladi",
+        "Faqat NoSQL uchun"
+      ],
+      "answer": 1,
+      "explanation": "CAP faqat partition holatini tasvirlaydi — bu kundalik qarorlarga kam yordam beradi. PACELC amaliyroq: sizning tizim har yozuvda kvorum kutadimi (izchillik, katta latency) yoki mahalliy commit qilib keyin tarqatadimi (tez, lekin konflikt/stale). Dizayn suhbatida shu almashinuvni aniq aytish kuchli signal."
+    },
+    {
+      "id": 30206,
+      "code": "SN207",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Amdahl qonuni tizim dizaynida nimani aytadi?",
+      "options": [
+        "Ko'p node har doim chiziqli tezlashtiradi",
+        "Tezlashish ketma-ket (parallellashmaydigan) qism bilan cheklangan: 5% sinxron qism bo'lsa, cheksiz parallelizm ham 20x dan oshira olmaydi — shuning uchun umumiy qulf, yagona koordinator yoki bitta DB yozuv nuqtasi miqyoslashning asosiy chegarasi",
+        "Faqat CPU uchun",
+        "Xotira haqida"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy tarjimasi: 'yana pod qo'shamiz' ishlamaydigan holatlar — barcha yozuvlar bitta primary'ga borsa, global qulf bo'lsa, yoki har so'rov markazlashgan hisoblagichni yangilasa. Shuning uchun dizaynda sharding va kontention nuqtalarini yo'q qilish birinchi o'rinda turadi (Universal Scalability Law bundan ham qattiqroq: koordinatsiya o'sishi bilan throughput tushib ketishi mumkin)."
+    },
+    {
+      "id": 30207,
+      "code": "SN208",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Idempotent, kommutativ va assotsiativ operatsiyalar taqsimlangan tizimda nega qadrli?",
+      "options": [
+        "Faqat matematik chiroylilik",
+        "Ular retry, tartib buzilishi va parallel birlashtirishga bardosh beradi: idempotent — takroriy yetkazib berish xavfsiz, kommutativ/assotsiativ — xabarlar tartibsiz kelsa ham natija bir xil (CRDT va agregatlar shunga tayanadi)",
+        "Faqat funksional tillarda",
+        "Faqat testda"
+      ],
+      "answer": 1,
+      "explanation": "Shu sabab 'set'ga qo'shish' yoki 'maksimum olish' taqsimlangan tizimda 'qiymatni o'rnatish' yoki 'hisoblagichni oshirish (LWW bilan)' dan xavfsizroq. Amaliy natija: hodisalarni shunday loyihalash kerakki, ularning qo'llanishi tartibga va takrorga sezgir bo'lmasin — shunda at-least-once yetkazib berish yetarli bo'ladi."
+    },
+    {
+      "id": 30356,
+      "code": "SN357",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Amdahl qonuni tizim dizaynida nimani aytadi?",
+      "options": [
+        "Ko'p node har doim chiziqli tezlashtiradi",
+        "Tezlashish ketma-ket (parallellashmaydigan) qism bilan cheklangan: 5% sinxron qism bo'lsa, cheksiz parallelizm ham 20x dan oshira olmaydi — shuning uchun umumiy qulf, yagona koordinator yoki bitta DB yozuv nuqtasi miqyoslashning asosiy chegarasi",
+        "Faqat CPU uchun",
+        "Xotira haqida"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy tarjimasi: 'yana pod qo'shamiz' ishlamaydigan holatlar — barcha yozuvlar bitta primary'ga borsa, global qulf bo'lsa, yoki har so'rov markazlashgan hisoblagichni yangilasa. Shuning uchun dizaynda sharding va kontention nuqtalarini yo'q qilish birinchi o'rinda turadi (Universal Scalability Law bundan ham qattiqroq: koordinatsiya o'sishi bilan throughput tushib ketishi mumkin)."
+    },
+    {
+      "id": 30357,
+      "code": "SN358",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Fundamentals",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Idempotent, kommutativ va assotsiativ operatsiyalar taqsimlangan tizimda nega qadrli?",
+      "options": [
+        "Faqat matematik chiroylilik",
+        "Ular retry, tartib buzilishi va parallel birlashtirishga bardosh beradi: idempotent — takroriy yetkazib berish xavfsiz, kommutativ/assotsiativ — xabarlar tartibsiz kelsa ham natija bir xil (CRDT va agregatlar shunga tayanadi)",
+        "Faqat funksional tillarda",
+        "Faqat testda"
+      ],
+      "answer": 1,
+      "explanation": "Shu sabab 'set'ga qo'shish' yoki 'maksimum olish' taqsimlangan tizimda 'qiymatni o'rnatish' yoki 'hisoblagichni oshirish (LWW bilan)' dan xavfsizroq. Amaliy natija: hodisalarni shunday loyihalash kerakki, ularning qo'llanishi tartibga va takrorga sezgir bo'lmasin — shunda at-least-once yetkazib berish yetarli bo'ladi."
+    },
+    {
+      "id": 30455,
+      "code": "SN456",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Distributed",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Consistent hashing va rendezvous (HRW) hashing farqi?",
+      "options": [
+        "Bir xil algoritm",
+        "Consistent hashing: ring + virtual node'lar, O(log N) qidiruv, taqsimot virtual node soniga bog'liq; rendezvous: har kalit uchun barcha node bilan `hash(key,node)` hisoblab maksimalini tanlaydi — O(N) lekin oddiy, teng taqsimot va node qo'shilganda minimal ko'chish, hamda vaznlarni tabiiy qo'llaydi",
+        "Rendezvous eskirgan",
+        "Consistent hashing faqat Redis'da"
+      ],
+      "answer": 1,
+      "explanation": "Node soni kichik bo'lsa (o'nlab) rendezvous amalda qulayroq: virtual node sozlash kerak emas va taqsimot tekis. Juda ko'p node bo'lsa consistent hashing ring (yoki jump consistent hash) tezroq. Ikkisining ham asosiy maqsadi bir xil: node o'zgarganda kalitlarning faqat 1/N ulushi ko'chsin."
+    },
+    {
+      "id": 30456,
+      "code": "SN457",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Failure",
+      "domain": "dist",
+      "section": "s2",
+      "question": "Tail latency bilan kurashishda 'hedged request' nima va xavfi nimada?",
+      "options": [
+        "Har so'rovni ikki marta yuborish",
+        "p95 dan keyin javob kelmasa ikkinchi nusxaga takroriy so'rov yuborish va birinchi kelgan javobni olish — p99 ni keskin yaxshilaydi; xavfi: yuk oshadi (shuning uchun faqat kichik ulushga, budjet bilan) va so'rov idempotent bo'lishi shart",
+        "Retry bilan bir xil",
+        "Faqat o'qishda mumkin emas"
+      ],
+      "answer": 1,
+      "explanation": "Google'ning 'The Tail at Scale' ishidan: hedging ~5% qo'shimcha yuk bilan p99 ni bir necha barobar yaxshilaydi. Shartlar: idempotentlik, hedge budjeti (umumiy trafikning foizi), va tizim to'yingan bo'lsa hedging'ni o'chirish (aks holda o'zi vaziyatni yomonlashtiradi). Yaqin variant — request cancellation: birinchi javob kelgach ikkinchisini bekor qilish."
+    }
+  ]
+}

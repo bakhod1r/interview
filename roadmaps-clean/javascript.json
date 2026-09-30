@@ -1,0 +1,671 @@
+{
+  "slug": "javascript",
+  "title": "JavaScript Roadmap",
+  "description": "Step by step guide to learn JavaScript in @currentYear@",
+  "url": "https://roadmap.sh/javascript",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-04-06T09:20:34.848Z",
+  "relatedRoadmaps": [
+    "nodejs",
+    "typescript",
+    "frontend",
+    "backend",
+    "react",
+    "angular",
+    "vue"
+  ],
+  "topicCount": 20,
+  "subtopicCount": 106,
+  "topics": [
+    {
+      "id": "6khAD6mzZ9S96JJuC5_j6",
+      "title": "Introduction to JavaScript",
+      "subtopics": [
+        {
+          "id": "UBB-8hUcwo4Mfd0cmEcdA",
+          "title": "What is JavaScript",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "l-GKzcsBNA0r6Jax8hwnP",
+          "title": "History of JavaScript",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "SFPsWnVpZBAw3_re7op4h",
+          "title": "JavaScript Versions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "uXsWIUUxtc4H_iRx3uZv0",
+          "title": "How to run JavaScript",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JSjeM8qnBg4onXq9mn5gB",
+          "title": "var",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kDRa9G3pMp0Cb0mqYUawM",
+          "title": "let",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "q85z6x1Lc-yLWepwtIT2_",
+          "title": "const",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "kvActjpU4FUJdrmuFoFEe",
+      "title": "All about Variables",
+      "subtopics": [
+        {
+          "id": "7iMJuaB7yKlSIbT4dBe5L",
+          "title": "Variable Scopes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HfieG3v3wnmpZDfNwEJvZ",
+          "title": "Variable Naming Rules",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Lb5jLF91WO5V5CWpifciW",
+          "title": "Hoisting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BqbAWt--Guqex-rrb4ZUv",
+          "title": "Variable Declarations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "uqEzHYx13Y2EpvTTRzykn",
+          "title": "Block",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YMT7O6lrMSMtNo0EnmsnQ",
+          "title": "Function",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0I6dJE0ygXPGjeRAe8AtT",
+          "title": "Object Prototype",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Xge6eru1hRGobnOEHLZqv",
+          "title": "Prototypal Inheritance",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "-jbPPuEXacBR0d0CWPHgd",
+      "title": "Data Types",
+      "subtopics": [
+        {
+          "id": "xe8HZ8Mt1fK8yJMcDPYHJ",
+          "title": "Object",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "RRACLQ6-aopkxImIp3Toc",
+          "title": "typeof operator",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "D95ndkkwmT5X_HqboEn6E",
+          "title": "Built-in Objects",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1RcwBHU3jzx0YxxUGZic4",
+          "title": "string",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZLs0NKM0lrnOy5ATDhlk0",
+          "title": "undefined",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GZ_SXsWmP7AsXRTc4WUMw",
+          "title": "number",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6lUF0neW1piiP1RsaVxEX",
+          "title": "bigint",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b1HvkoWA2t4kt8mS6FySm",
+          "title": "boolean",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CxyNyFMuTLS3owtRMgClD",
+          "title": "null",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "R6ICrk6vjoBxx5nRGo4Jg",
+          "title": "Symbol",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "XPmBieVCXvL3WbWkYRoKr",
+      "title": "Type Casting",
+      "subtopics": [
+        {
+          "id": "_Bo2YZqZ_gY35SLPML4T6",
+          "title": "Type Conversion vs Coercion",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "pP42K_eH4RCdUdUS8BJlP",
+          "title": "Implicit Type Casting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1xhjrRN-Rfekei2JwwU7Y",
+          "title": "Explicit Type Casting",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "ADarwihuI2nBq1C3U7-Zr",
+      "title": "Data Structures",
+      "subtopics": [
+        {
+          "id": "rhJrrqkRqy2Qw_he4SPGz",
+          "title": "Keyed Collections",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "lBOGoHZrmnIRatvryDwTm",
+          "title": "Indexed Collections",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Xc0jL4rafpI-ixIaAxo9O",
+          "title": "Map",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6icsjC4aisDgPWasVuCOt",
+          "title": "Weak Map",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sciU68E13mcfL577y6Vim",
+          "title": "Set",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DSFzj61N9ojz29mjExhVa",
+          "title": "Weak Set",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8X1mdQ3NDBVOZZWBbAFRE",
+          "title": "Typed Arrays",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NZedBxG9B9TRVOf2QE2yL",
+          "title": "Arrays",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "oC4o6GLEES_nUgCJu9Q6I",
+          "title": "Global",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JwLGAuSOTyZ5BHSqeBDU6",
+          "title": "Structured Data",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bFNvtHp97OzKnPJgr7WaH",
+          "title": "JSON",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2M211rcaPSWbZ-sPoSEVR",
+          "title": "for",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "23Xa6q5VvRVlzc6Dx8vST",
+      "title": "Equality Comparisons",
+      "subtopics": [
+        {
+          "id": "RonBj1htt6jnBt3W7zoTA",
+          "title": "==",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lJwcc6JoUIQoiQ6FkV2KW",
+          "title": "===",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ATma3bLKdmWY_WTsPIKxh",
+          "title": "Object.is",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PLallt_T33W6bUEn0Hc3W",
+          "title": "isLooselyEqual",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pcILon_Jjm2_XS10iUJ0E",
+          "title": "isStrictlyEqual",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "YD-2l_amfqqqCdtc_Zdzo",
+      "title": "Loops and Iterations",
+      "subtopics": [
+        {
+          "id": "57lO_3uxJaWsFXS-0J1AK",
+          "title": "do...while",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9-MpHmzK_IiCi6IcvAlGM",
+          "title": "while",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cq3vvFZoNnAAZJ6oEBUwb",
+          "title": "for...in loop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FBz6h_AmTJBXoBN-a38a5",
+          "title": "for...of loop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4oHFzn7R7xLxfuLpsJjr-",
+          "title": "break / continue",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ndbDXAx6bL4lZmpXv16Y_",
+          "title": "if...else",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "H_QlcUlavKKfcNK8CYAvb",
+          "title": "Switch",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3tckJ2Sci7z-sNx9jx9eF",
+      "title": "Control Flow",
+      "subtopics": [
+        {
+          "id": "ttCsd2_H2SuRivCjGv1OX",
+          "title": "Conditional Statements",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "34TKGxV9YziOWMh9rT_KE",
+          "title": "Exceptional Handling",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ReGIniyLYl5hGExchrJd2",
+          "title": "throw statement",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "rbjEZe5vxCJ8reI1oZ-jf",
+          "title": "try/catch/finally",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-z-4VTaC3tOThqChgyoMs",
+          "title": "Error Objects",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8X8mRl-puL0Lp43dO5mha",
+          "title": "Default Params",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-_6q0bIjQrvAaCWrVkASO",
+          "title": "Rest",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_6vZa43gWjxO2OcD1iCCQ",
+      "title": "Expressions & Operators",
+      "subtopics": [
+        {
+          "id": "640mk-m5mB90Mme-7jcXV",
+          "title": "Conditional Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6_8EwyZY2jBkZr7xnfRY3",
+          "title": "Comma Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "k9rSR-YQ8B_iRcXNm2btP",
+          "title": "Unary Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IvBtUzIGnkgGXrJjqmjf4",
+          "title": "Assignment Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-v4_V4UuoZSgUk2sqOCim",
+          "title": "Comparison Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0PK1NwlgkNe2Vf-We4uLH",
+          "title": "Arithmetic Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ghjNJW67Wj5L5QK46xwL-",
+          "title": "Bitwise Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bo4SvzU4BrPl3c99zW7Y5",
+          "title": "Logical Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "udoz0DZi7f-vm30dSnYKu",
+          "title": "BigInt Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "c38b6t5f17Zg2O2yg3eFP",
+          "title": "String Operators",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fL3B2hkTgMb0oEwMiWJtK",
+          "title": "SameValueZero",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nfMrC0eoXZl72H4o3VFEP",
+          "title": "SameValue",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "k8bJH9qydZm8I9rhH7rXw",
+      "title": "Functions",
+      "subtopics": [
+        {
+          "id": "R1D4fsZliHv7wIo8Tj-kp",
+          "title": "Function Parameters",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fr0NChxMXLpJizyMhXcXS",
+          "title": "Arrow Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YZlCoPvZuX5MmpLOTj5d4",
+          "title": "IIFEs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QLC7bW-qHskLH2HOA-Sko",
+          "title": "arguments object",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ISNzEYtrWe2v0R7Xfl5k-",
+          "title": "Scope & Function Stack",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "s8wUJivWmetysJ8bt9FBC",
+          "title": "Built-in Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "YJGhhFuWmFvhRKOg6nwON",
+          "title": "Recursion",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "q7b5iMJ1Lfka5A-K-YcaN",
+          "title": "Lexical Scoping",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "itS6B12I8I1KNCPvc0KCQ",
+          "title": "Closures",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Xw8lb0xCWKmNs4KZfhBUy",
+      "title": "Strict Mode",
+      "subtopics": []
+    },
+    {
+      "id": "fm2CuL1IZp3hnrLrPUX7U",
+      "title": "Using (this) keyword",
+      "subtopics": [
+        {
+          "id": "3E5MuxPvEJU-dwgTrbQAR",
+          "title": "in a method",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "azsXq6Y5iCvQDgTWZpWQ3",
+          "title": "in a function",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qps2Mdm-lwa4Wr0IxKm0C",
+          "title": "using it alone",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JVbEBtVrTTFnTF3_yUIAC",
+          "title": "in event handlers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "P0190rTm2wLQmCzWOKour",
+          "title": "in arrow functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EAN6DCiCfSq04R4vKgZ0q",
+          "title": "Function Borrowing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "p2NhSwPYMtRiPRHjPaqmX",
+          "title": "Explicit Binding",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "sFOqx6_7poVIVuXhJVY0E",
+      "title": "Asynchronous JavaScript",
+      "subtopics": [
+        {
+          "id": "D8oGY7pdviRByaz6c9sU6",
+          "title": "Callbacks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yXSF5gGST7l2X-4z1g0d_",
+          "title": "Promises",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Dn872mgexmxoLtbkIgIgz",
+          "title": "async/await",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_bs5NNHVdHLWGBmpYwHMi",
+          "title": "Event Loop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wXypuqEmFLIubx-QQvDIr",
+          "title": "setTimeout",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jaC3XXudd7OBKwwCpoPFf",
+          "title": "setInterval",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PJSdqvh5OBwPCNpn3q_S5",
+          "title": "Callback Hell",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "q6vciQb_Jk-Up16Pk5NeE",
+      "title": "Working with APIs",
+      "subtopics": [
+        {
+          "id": "kL5rfWxXe4J44ENru1uJS",
+          "title": "Fetch",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LiuhBE7dIlkoWkthSoCsa",
+          "title": "XMLHTTPRequest",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "F_Lrj0F7UXriqJ0mhwxCy",
+      "title": "Classes",
+      "subtopics": []
+    },
+    {
+      "id": "TZ8XGdykSJjKBjX6Nivwo",
+      "title": "Iterators and Generators",
+      "subtopics": [
+        {
+          "id": "gsyY3Oa3Jf0W5K_lyqBYO",
+          "title": "call",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-BtF34cEzI6J8sZCDRlRE",
+          "title": "apply",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dbercnxXVTJXMpYSDNGb2",
+          "title": "bind",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hLnJlwnECFbVMeFpH0M5Q",
+      "title": "Modules in JavaScript",
+      "subtopics": [
+        {
+          "id": "jLNmYeo20Mbu4WRvVgvwU",
+          "title": "ESM",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4EXeGkOpfAViB9Uo4zL6O",
+          "title": "CommonJS",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "MatU4SthAAhByJ40XdZQn",
+      "title": "Memory Management",
+      "subtopics": [
+        {
+          "id": "ZR2WfH1cerA-V_kaPwRvm",
+          "title": "Memory Lifecycle",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "KKyX8N4lTgN0w-Khm6Ztq",
+          "title": "Garbage Collection",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "bhuGtcyqPFKu-900aESYz",
+      "title": "DOM APIs",
+      "subtopics": []
+    },
+    {
+      "id": "rc5WzBBOm2cus-rQl8EOE",
+      "title": "Using Browser DevTools",
+      "subtopics": [
+        {
+          "id": "dhEtcgv7G9fNV-AUNJdWk",
+          "title": "Debugging Issues",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BA_ArmZMnVMaL_zl3W3Pt",
+          "title": "Debugging Memory Leaks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ECxISKUAU7js_JsfSHzud",
+          "title": "Debugging Performance",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,604 @@
+{
+  "slug": "nodejs",
+  "title": "Node.js Developer",
+  "description": "Step by step guide to becoming a modern Node.js developer in @currentYear@",
+  "url": "https://roadmap.sh/nodejs",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-01-06T16:31:52.243Z",
+  "relatedRoadmaps": [
+    "javascript",
+    "backend",
+    "docker",
+    "typescript",
+    "system-design",
+    "frontend"
+  ],
+  "topicCount": 18,
+  "subtopicCount": 95,
+  "topics": [
+    {
+      "id": "KDd40JOAvZ8O1mfhTYB3K",
+      "title": "Introduction to Node.js",
+      "subtopics": [
+        {
+          "id": "Mp056kNnwsRWeEXuhGPy-",
+          "title": "What is Node.js?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ex8FOKrUlbu4MuEq2czyW",
+          "title": "Why use Node.js?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Vrcv5px-3fqmyJnQv3WBK",
+          "title": "History of Node.js",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ebVb0anYmbD1Y9ZTFXKFp",
+          "title": "Node.js vs Browser",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "uPJqdMQQJRkTMMhNORDeH",
+          "title": "Running Node.js Code",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "mbGFT6S7mL3bHHEZv0_s2",
+      "title": "Modules",
+      "subtopics": [
+        {
+          "id": "mhjswf17nhq075NTYV5gE",
+          "title": "CommonJS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mKccfWOhC1Aj4VnaOqryA",
+          "title": "ESM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EEnmOcDKPZzY_O1NwP_5j",
+          "title": "Creating & Importing",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jQJ9aOKtg-O-GhWk5OgCK",
+      "title": "npm",
+      "subtopics": [
+        {
+          "id": "l24OMkPAEDnEDAVAMrMuG",
+          "title": "Global Installation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oYeux7PbveYaVwXRzAg5x",
+          "title": "Local Installation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bYBz12FUiJ1qLgdQSGyGK",
+          "title": "Updating Packages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "64pgc7rcgboFcNYuOlX8e",
+          "title": "Running Scripts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WvxCGVKLvTUVEHeOcUQPg",
+          "title": "npm workspaces",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dOlzIXBfAPmbY542lNOe6",
+          "title": "Semantic Versioning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YdpJ-DUo8Q5ATRmF4s4YS",
+          "title": "npx",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QcOqhuKWOUUUBSiu5Oelv",
+          "title": "Promises",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "a26qNCyMcT5GsVzxeNCLk",
+          "title": "async/await",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "t_kfKdNSKVBPYQ9zF9VqQ",
+      "title": "Error Handling",
+      "subtopics": [
+        {
+          "id": "PEGHvFT2Eg-1OyfhxYu22",
+          "title": "[global] keyword",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Wg7KSpAPxjeFMxC6PBnHO",
+          "title": "JavaScript Errors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "05YY-AhLKzn4Ypr4eow5E",
+          "title": "System Errors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wQ4i6_a1EFk9HHc6Sll-3",
+          "title": "User Specified Errors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "do-tdCUfDtiZHBg4ZO3dC",
+          "title": "Assertion Errors",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "uE7fvHSTSdebMf5RsNyaY",
+      "title": "Async Programming",
+      "subtopics": [
+        {
+          "id": "uzOmaTZrHhBxx5plb345Z",
+          "title": "Uncaught Exceptions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3MpxV23lNpuKg0--e_9m7",
+          "title": "Handling Async Errors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wIieXdFtoZWJ-ht8qqWbp",
+          "title": "Callstack / Stack Trace",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GwInWcbQn18PnzKGXzmln",
+          "title": "Callbacks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "W2Dbj4Y78Bgdx7og5xkrg",
+          "title": "setTimeout",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "T5I-mFKK6bKzXrzkECI0P",
+          "title": "setInterval",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bgEHTBYzRDJqZ6gLqLbsz",
+          "title": "Event Emitter",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b679H8gEBuvrHQ8ik7e96",
+          "title": "Event Loop",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "wEK77A6MPQBCBUSJKMiaY",
+      "title": "Working with Files",
+      "subtopics": [
+        {
+          "id": "QT2QE2FLkyUDpwMKYkFQL",
+          "title": "process.cwd()",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Blzb-fdQZMu6Xq5JDJW0_",
+          "title": "path module",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "b1r1X3XCoPSayQjDBcy54",
+          "title": "fs module",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XEGTeGWw05xWYOfUo3POE",
+          "title": "Using Debugger",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1AaGG660rvZlNYMOA35qO",
+          "title": "__dirname",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "P2gdwx1qCxvg1Ppfw0aqQ",
+          "title": "__filename",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CWH0ZsxJ8beLvwMYJyH52",
+          "title": "glob",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HYTw74rrd7kkOemCxfT9I",
+          "title": "globby",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zDmWGRrgwq3Gjfkyk6crK",
+          "title": "fs-extra",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "een1zhvgN_33Cu6OiWtyX",
+          "title": "chokidar",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1vq_KcYR_pkfp1MtXaL75",
+          "title": "Express.js",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sjc1YDtbzXyLQH711_3nj",
+          "title": "http module",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7u2WMxjLx3mMtn0cha4M7",
+          "title": "jsonwebtoken",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mIyv6S9a5dCHkk-JhhjKV",
+          "title": "passport.js",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Ce-dP-OXu0mEm30rzp2hW",
+      "title": "Command Line Apps",
+      "subtopics": [
+        {
+          "id": "XteNExIZN3_g95_dPCopY",
+          "title": "Exitting / Exit Codes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Uh9hmEy7o1EJLg4E--ku2",
+          "title": "Creating Packages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YvTPpoIiSqjDYi0Q10kWh",
+          "title": "setImmediate",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ATu9-29yJWcDOik5FTOgf",
+          "title": "process.nextTick",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fE9C7Resn4EcL-hYHbsaZ",
+          "title": "dotenv package",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wthXp2YGg3eTMbxsek77C",
+          "title": "process.env",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "betuntelnEMSHdatO6VPl",
+          "title": "process.stdin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xgsKrUdfB0g0DMQCLK3aY",
+          "title": "prompts package",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WFJJtIqVoBIhK10XY-d7l",
+          "title": "Inquirer Package",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "N2vR1_NyDn4rYLXJzxWBZ",
+          "title": "stdout / stderr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "V4OWIC1cnw8EFyu26Y_dA",
+          "title": "chalk package",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "fFVCb6aZWRHdNDFt5C09R",
+      "title": "Building & Consuming APIs",
+      "subtopics": [
+        {
+          "id": "PHLdJylzNZDJBGi8FFsfO",
+          "title": "figlet package",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iW9je5Pq7bjxWZDERv_p5",
+          "title": "cli-progress",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "swp4wBgA7z-sd64VDkMrw",
+      "title": "Monitor Changes (Dev)",
+      "subtopics": [
+        {
+          "id": "812bVEzxwTsYzLG_PmLqN",
+          "title": "--watch",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2Ym2jMvov0lZ79aJFaw29",
+          "title": "nodemon",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "lT2DDRtbFfEjb_cmsQx8i",
+          "title": "process.argv",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BxxLQUI7JcQgF6TK3L5uU",
+          "title": "commander",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "J0ErCAZT5B97ZMogU2JHd",
+      "title": "Template Engines",
+      "subtopics": [
+        {
+          "id": "O67e2qyhxP5joR5LGyZ2N",
+          "title": "pug",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "L-_N7OxxuHCXsdWYBgZGu",
+          "title": "ejs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "f2DyjBIglAZ6NoHaRnlzt",
+          "title": "marko",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NDf-o-WECK02mVnZ8IFxy",
+          "title": "Mongoose",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5l-lZ8gwVLqqAF_n99vIO",
+      "title": "Working with Databases",
+      "subtopics": [
+        {
+          "id": "3Qxtf8n6gJYdnRsuqa52Q",
+          "title": "Prisma",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5WqLm53CHDT5uBoMH-iPl",
+          "title": "Native Drivers",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "90NIFfbWjTbyKZKwyJlfI",
+      "title": "Testing",
+      "subtopics": [
+        {
+          "id": "qjToBaMenW3SDtEfoCbQ6",
+          "title": "Vitest",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "oSLpy31XEcA2nRq9ks_LJ",
+          "title": "node:test",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3Fh3-V1kCZtlUTvEoloIO",
+          "title": "Cypress",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ix-g9pgJjEI04bSfROvlq",
+          "title": "Playwright",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WkU_rI4i-UmNSxb5F9TI-",
+          "title": "fastify",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tGD8XLHnfspfv8CbguGwV",
+          "title": "NestJS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Xa-lA1wbZ9JZ_XpXfhhw5",
+          "title": "Hono",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BOLiZg8YDKADMwP01U5ph",
+          "title": "axios",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-_2letLUta5Ymc5eEOKhn",
+          "title": "ky",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "B_3rTGQxJneMREXoi2gQn",
+          "title": "fetch",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6stiDKubT6XVAOGiJ6wsx",
+          "title": "got package",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5xrbKv2stKPJRv7Vzf9nM",
+          "title": "Jest",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "b7ZAEqo0ZU6TNf18Bo0mI",
+      "title": "Logging",
+      "subtopics": [
+        {
+          "id": "Oe9cQCz2lwSaot7miZOta",
+          "title": "Winston",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CTHFGgtXFpke4aPhh5vRY",
+          "title": "Morgan",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "af7n-J7VvbdpZh9lwA773",
+      "title": "Keep app Running",
+      "subtopics": [
+        {
+          "id": "7WAuMMyelUbgwEHtnMmJv",
+          "title": "pm2 ",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HDDnt79_PCB5JU-KnHKUh",
+          "title": "Knex",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JXQF9H4_N0rM7ZDKcCZNn",
+          "title": "Drizzle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rk5FtAPDi1TpvWd0yBbtl",
+          "title": "TypeORM",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "KzUmXkwrmU_ssVBjSHAiY",
+      "title": "Threads",
+      "subtopics": [
+        {
+          "id": "lzPrWD3pxQmpbqgYPL-zW",
+          "title": "Child Process",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fOm-ktIaLqrmA0zln0Bga",
+          "title": "Sequelize",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "O7Cy2g_GPxKU6vPfEmNyi",
+          "title": "Prisma",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KpC-QYKalUp7VUvnMKBoW",
+          "title": "Native Drivers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PkQ_sQ0YFPCZGx4BRgG0t",
+          "title": "Cluster",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bH2Iv3BX0ZiWD3lOmC_m_",
+          "title": "Worker Threads",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "WrnjjUDXQwwMXQjmgK72U",
+      "title": "Streams",
+      "subtopics": []
+    },
+    {
+      "id": "ZLNUuDKhJ03Kw7xMVc7IR",
+      "title": "Debugging",
+      "subtopics": [
+        {
+          "id": "oU9I7KBZoTSXXFmYscEIq",
+          "title": "Memory Leaks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DcmGcVlEHL4IV7yPMDpVa",
+          "title": "node --inspect",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CvkjlOpT34lOHgzQHL40s",
+          "title": "Using APM",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "SJ01N7vMZkNiIuMYQhdpj",
+          "title": "Garbage Collection",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "M62lAWBOrTe99TfpFOQ-Y",
+      "title": "Common Built-in Modules",
+      "subtopics": []
+    }
+  ]
+}

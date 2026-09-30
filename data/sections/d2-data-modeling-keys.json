@@ -1,0 +1,265 @@
+{
+  "id": "d2",
+  "name": "Data modeling & keys",
+  "domain": "db",
+  "domainLabel": "PostgreSQL & SQL",
+  "topics": [
+    "Keys",
+    "Design",
+    "Types"
+  ],
+  "questions": [
+    {
+      "id": 0,
+      "code": 1,
+      "level": "J",
+      "type": "mcq",
+      "topic": "Keys",
+      "domain": "db",
+      "section": "d2",
+      "question": "PRIMARY KEY va UNIQUE constraint o'rtasidagi asosiy farq?",
+      "options": [
+        "Farqi yo'q, ikkalasi ham bir xil",
+        "PRIMARY KEY NULL qabul qilmaydi va table'da faqat bitta bo'ladi; UNIQUE bir nechta bo'lishi va (ko'p DBda) NULL qabul qilishi mumkin",
+        "UNIQUE index yaratmaydi, PRIMARY KEY yaratadi",
+        "PRIMARY KEY faqat integer bo'lishi mumkin"
+      ],
+      "answer": 1,
+      "explanation": "PRIMARY KEY = UNIQUE + NOT NULL, table'da bittagina. UNIQUE constraint bir nechta bo'lishi mumkin va Postgres/MySQLda bir nechta NULL qiymatga ruxsat beradi (NULL ≠ NULL). Ikkalasi ham ostida unique index yaratadi. PK har qanday tipda bo'lishi mumkin (uuid, text, composite)."
+    },
+    {
+      "id": 5,
+      "code": 6,
+      "level": "J",
+      "type": "open",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Normalizatsiya nima? 1NF, 2NF, 3NF ni misol bilan tushuntiring.",
+      "modelAnswer": [
+        "1NF: har katakda atomar qiymat, takrorlanuvchi guruh yo'q (phones='1,2,3' — yomon)",
+        "2NF: 1NF + composite key bo'lsa, har non-key column butun keyga bog'liq (qisman bog'liqlik yo'q)",
+        "3NF: 2NF + tranzitiv bog'liqlik yo'q (orders.customer_city — customer orqali bog'liq, alohida table'ga)",
+        "Maqsad: takrorlanishni va update/insert/delete anomaliyalarini kamaytirish",
+        "Trade-off: ko'p JOIN; o'qish og'ir tizimlarda ongli denormalizatsiya qilinadi"
+      ],
+      "explanation": "Intervyuchi ta'rifni emas, anomaliyani tushunishingizni tekshiradi: bitta faktni ikki joyda saqlasangiz, bittasini yangilab ikkinchisini unutasiz. Qisqa formula: 'key'ga, butun key'ga va faqat key'ga bog'liq'."
+    },
+    {
+      "id": 10,
+      "code": 11,
+      "level": "J",
+      "type": "mcq",
+      "topic": "Keys",
+      "domain": "db",
+      "section": "d2",
+      "question": "FOREIGN KEY asosan nima uchun kerak?",
+      "options": [
+        "Qidiruvni tezlashtirish uchun",
+        "Referential integrity: bola table'dagi qiymat ota table'da mavjud bo'lishini kafolatlash",
+        "Ma'lumotni shifrlash uchun",
+        "Table'ni shard qilish uchun"
+      ],
+      "answer": 1,
+      "explanation": "FK mavjud bo'lmagan user_id bilan order yaratishga yo'l qo'ymaydi, ON DELETE CASCADE/RESTRICT/SET NULL xulqini beradi. Diqqat: Postgres FK column'ga avtomatik index yaratmaydi — bola table'dagi FK column'ga index qo'yish kerak, aks holda ota row'ni o'chirishda seq scan va lock muammosi."
+    },
+    {
+      "id": 26,
+      "code": 27,
+      "level": "M",
+      "type": "mcq",
+      "topic": "Types",
+      "domain": "db",
+      "section": "d2",
+      "question": "PostgreSQLda <code>VARCHAR(255)</code> va <code>TEXT</code> performance farqi?",
+      "options": [
+        "VARCHAR ancha tez",
+        "TEXT ancha tez",
+        "Amalda farq yo'q — ikkalasi bir xil saqlanadi; VARCHAR(n) faqat uzunlik tekshiruvi qo'shadi",
+        "TEXT index qilinmaydi"
+      ],
+      "answer": 2,
+      "explanation": "Postgresda ikkalasi ham varlena. 255 — MySQL odati. Uzunlik chekloviga ehtiyoj bo'lsa CHECK (length(x) <= n) ham ishlaydi va o'zgartirish osonroq. CHAR(n) esa padding qiladi — deyarli hech qachon kerak emas."
+    },
+    {
+      "id": 27,
+      "code": 28,
+      "level": "M",
+      "type": "open",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Soft delete (deleted_at column'i) — afzalliklari va kamchiliklari?",
+      "modelAnswer": [
+        "+ Qayta tiklash, audit, tarix saqlanadi",
+        "− Har query'ga WHERE deleted_at IS NULL — unutish xavfi (data leak)",
+        "− UNIQUE constraint buziladi: o'chirilgan email bilan qayta ro'yxatdan o'tish → partial unique index WHERE deleted_at IS NULL",
+        "− FK/cascade ishlamaydi, table shishadi",
+        "Alternativ: archive table'ga ko'chirish yoki event/audit log; GDPR 'unutilish huquqi' — haqiqiy o'chirish kerak"
+      ],
+      "explanation": "Middle/Senior farqi: kamchiliklarni aniq nomlash (unique index, GDPR). Yaxshi javob: 'default bo'yicha qilmayman, biznes talab bo'lsa partial index + view/ORM default scope bilan'."
+    },
+    {
+      "id": 58,
+      "code": 59,
+      "level": "P",
+      "type": "mcq",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Denormalizatsiya qachon eng asosli?",
+      "options": [
+        "Har doim — JOIN sekin",
+        "O'qish yozishdan ancha ko'p, JOIN o'lchangan bottleneck, va nusxani sinxron saqlash mexanizmi aniq (trigger, event, materialized view)",
+        "Hech qachon",
+        "Faqat NoSQL'da"
+      ],
+      "answer": 1,
+      "explanation": "Denormalizatsiya — konsistentlik narxiga performance sotib olish. Asosiy savol: 'nusxa eskirsa kim, qanday tuzatadi?'. Birinchi qadam — materialized view yoki read model; qo'lda nusxa oxirgi chora."
+    },
+    {
+      "id": 13009,
+      "code": "K10",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "SQL va NoSQL tanlovida asosiy mezon?",
+      "options": [
+        "NoSQL yangi, shuning uchun yaxshiroq",
+        "Access pattern va konsistentlik talabi: murakkab JOIN, ad-hoc so'rov, tranzaksiya — SQL; oldindan ma'lum kalit bo'yicha juda katta masshtab, moslashuvchan hujjat yoki vaqt qatorlari — NoSQL. Jamoa tajribasi va operatsion narx ham mezon",
+        "NoSQL sxema talab qilmaydi, shuning uchun tezroq",
+        "SQL masshtablanmaydi"
+      ],
+      "answer": 1,
+      "explanation": "'NoSQL sxemasiz' — noto'g'ri tushuncha: sxema ilovaga ko'chadi. Bugungi Postgres JSONB bilan hujjat modelini ham beradi, shuning uchun ko'p holatda bitta relatsion DB yetadi. Intervyuda kuchli javob: konkret access pattern'larni sanab, shunga qarab tanlash."
+    },
+    {
+      "id": 30047,
+      "code": "SN48",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Yuqori yozuv tezligidagi jadval uchun primary key sifatida qaysi tanlov yaxshiroq?",
+      "options": [
+        "Random UUIDv4 har doim",
+        "Monoton (ULID/UUIDv7 yoki bigint identity) — B-tree'da ketma-ket insert, kamroq page split va WAL; taqsimlangan tizimda global unikallik kerak bo'lsa UUIDv7",
+        "MD5(hash)",
+        "Kompozit tabiiy kalit"
+      ],
+      "answer": 1,
+      "explanation": "UUIDv4 tasodifiy bo'lgani uchun insert butun indeks bo'ylab tarqaladi: page split, kesh miss, WAL full-page write ko'payadi, indeks shishadi. UUIDv7/ULID vaqt prefiksi bilan lokal insert beradi. Bigint eng ixcham, lekin taxmin qilinadi (tashqi ID sifatida chiqarilmaydi) va shardlashda koordinatsiya talab qiladi."
+    },
+    {
+      "id": 30048,
+      "code": "SN49",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Ko'p tenant'li SaaS'da ma'lumot izolyatsiyasi uchun tanlovlar va o'zaro almashinuvi?",
+      "options": [
+        "Faqat alohida DB to'g'ri",
+        "Umumiy jadval + `tenant_id` (RLS bilan) — arzon, oson migratsiya, lekin noisy neighbour va xato filtrida leak; sxema/DB per tenant — kuchli izolyatsiya, lekin migratsiya va ulanish poolini boshqarish qimmat",
+        "Har tenantga alohida ustun",
+        "tenant_id'ni faqat app'da saqlash"
+      ],
+      "answer": 1,
+      "explanation": "Qaror mezoni: tenant soni (10k mayda → umumiy jadval), compliance/rezidentlik talabi (alohida DB), yirik tenantlar (hybrid: kattalarga alohida). Umumiy modelda RLS + majburiy repository filtri, `(tenant_id, ...)` kompozit indeks va per-tenant kvota kerak. Hybrid eng ko'p uchraydigan yetuk yechim."
+    },
+    {
+      "id": 30049,
+      "code": "SN50",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Types",
+      "domain": "db",
+      "section": "d2",
+      "question": "Pul miqdorini saqlash uchun to'g'ri tur?",
+      "options": [
+        "`float8` — tez",
+        "`numeric(19,4)` yoki eng kichik birlikdagi `bigint` (tiyin/cent) + valyuta kodi alohida ustunda",
+        "`money` turi",
+        "`text`"
+      ],
+      "answer": 1,
+      "explanation": "Float ikkilik kasr — 0.1+0.2 ≠ 0.3, hisob-kitob va solishtirishda xato to'planadi. `numeric` aniq, lekin sekinroq; `bigint` minor unit bilan tez va aniq (lekin bo'lish/foizda yaxlitlash siyosati aniq bo'lishi kerak). PostgreSQL `money` locale'ga bog'liq — ishlatilmaydi. Valyuta har doim miqdor bilan birga (multi-currency'da jamlash mumkin emas)."
+    },
+    {
+      "id": 30050,
+      "code": "SN51",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "'Soft delete' (`deleted_at`) joriy qilindi va muammolar boshlandi. Eng jiddiy ta'sirlar?",
+      "options": [
+        "Faqat disk hajmi",
+        "Har query'da filtr esdan chiqadi (leak), unique constraint buziladi (o'chirilgan yozuv emailni band qiladi), indekslar shishadi, FK va agregatlar noto'g'ri sanaydi",
+        "Hech qanday ta'siri yo'q",
+        "Faqat migratsiya sekinlashadi"
+      ],
+      "answer": 1,
+      "explanation": "Choralar: `WHERE deleted_at IS NULL` ni view yoki repository'da markazlashtirish, partial unique index (`UNIQUE (email) WHERE deleted_at IS NULL`), partial indekslar, va davriy arxivlash (alohida jadval/partition). Agar talab 'audit' bo'lsa — event log/history jadvali ko'pincha soft delete'dan to'g'riroq model."
+    },
+    {
+      "id": 30436,
+      "code": "SN437",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Enum qiymatlarini qanday saqlash yaxshi?",
+      "options": [
+        "PostgreSQL `ENUM` turi har doim",
+        "Kichik, kamdan-kam o'zgaradigan to'plam uchun `text` + `CHECK` yoki reference jadval (FK bilan) moslashuvchan: yangi qiymat qo'shish oson, tarjima/metadata qo'shiladi; `ENUM` ixcham lekin qiymat o'chirish/tartib o'zgartirish og'riqli (ALTER TYPE cheklovlari)",
+        "`int` kod eng yaxshi",
+        "`jsonb`da saqlash"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy tanlov: holat mashinasi qiymatlari (`created/paid/shipped`) — `text` + `CHECK` (o'qilishi oson, migratsiya yengil) yoki reference jadval; `int` kod joyni tejaydi lekin ma'lumot bazasini qo'lda o'qishni qiyinlashtiradi va kod bilan moslikni qo'lda saqlash kerak. Har uch holatda ham ilova tomonda aniq tur (Go'da `type Status string` + validatsiya) bo'lishi kerak."
+    },
+    {
+      "id": 30527,
+      "code": "SN528",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Keys",
+      "domain": "db",
+      "section": "d2",
+      "question": "Tabiiy kalit (email, INN) va sun'iy kalit (surrogate) tanlovi?",
+      "options": [
+        "Tabiiy kalit har doim yaxshi",
+        "Surrogate PK (bigint/UUID) — barqaror, o'zgarmaydi, FK'lar ixcham; tabiiy kalit esa unique constraint sifatida qo'yiladi. Sabab: tabiiy qiymatlar o'zgaradi (email almashadi, INN formati o'zgaradi) va PK o'zgarishi barcha FK'ga tarqaladi",
+        "Surrogate keraksiz",
+        "Kompozit tabiiy kalit eng yaxshi"
+      ],
+      "answer": 1,
+      "explanation": "Qo'shimcha nuqta: tashqi API'da surrogate ID ni oshkor qilish ham qaror talab qiladi (ketma-ket bigint enumeration beradi) — public ID sifatida UUID/ULID yoki hashid ishlatiladi. Kompozit tabiiy kalitlar esa join va indekslarni og'irlashtiradi, ayniqsa uch-to'rt ustunli bo'lsa."
+    },
+    {
+      "id": 30528,
+      "code": "SN529",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Ko'p-ko'pga (many-to-many) bog'lanishda qo'shimcha atributlar paydo bo'ldi. Nima qilinadi?",
+      "options": [
+        "Massiv ustun qo'shish",
+        "Bog'lovchi jadval mustaqil entity'ga aylanadi (masalan `enrollment` — `student_id`, `course_id`, `enrolled_at`, `status`): o'z ID'si, o'z hayot sikli va o'z qoidalari bo'ladi; domenda ham u tushuncha sifatida nomlanadi",
+        "`jsonb`ga solish",
+        "Ikki jadvalga nusxalash"
+      ],
+      "answer": 1,
+      "explanation": "Bu DDD'dagi muhim signal: bog'lanishning o'zi biznes tushunchasi bo'lib chiqadi ('ro'yxatdan o'tish', 'a'zolik', 'tayinlash') va u haqida hodisalar bo'ladi (bekor qilindi, uzaytirildi). Texnik tomondan ham qulay: unique constraint (`student_id, course_id`), tarix va status shu jadvalda tabiiy joylashadi."
+    }
+  ]
+}

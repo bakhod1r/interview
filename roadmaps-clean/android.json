@@ -1,0 +1,601 @@
+{
+  "slug": "android",
+  "title": "Android Developer",
+  "description": "Step by step guide to becoming an Android developer in @currentYear@",
+  "url": "https://roadmap.sh/android",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-07-24T08:58:13.999Z",
+  "relatedRoadmaps": [
+    "react-native",
+    "flutter",
+    "java",
+    "spring-boot",
+    "rust"
+  ],
+  "topicCount": 15,
+  "subtopicCount": 98,
+  "topics": [
+    {
+      "id": "Suws-7f_6Z1ChpfcnxX2M",
+      "title": "Pick a Language",
+      "subtopics": [
+        {
+          "id": "qIzUv8-GgQnkqChEdgD50",
+          "title": "Kotlin",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "HlUUGj3dOZ68t4gIjerXh",
+      "title": "The Fundamentals",
+      "subtopics": [
+        {
+          "id": "ZRGsokU313Ky-anWbWK6q",
+          "title": "Development IDE",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "jl1FsQ5-WGKeFyaILNt_p",
+          "title": "Basics of Kotlin",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "j69erqfosSZMDlmKcnnn0",
+          "title": "Basics of OOP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cNeT1dJDfgn0ndPzSxhSL",
+          "title": "Data Structures and Algorithms",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "FVxNjbDBxgf6vkZWw1Awt",
+          "title": "What is and how to use Gradle?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5m_7DvInF8C_4Ml1xVI6L",
+          "title": "Create a Basic Hello World App",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hv_9imIQpthxEaMLXEUHI",
+          "title": "Intent",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FVg438cVBBzqJFkGWVbQM",
+          "title": "Activity LifeCycle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gGdz3j33x0gfrFDp_rw8Z",
+          "title": "Implicit Intents",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TmIeCF3xVCe5Sy3ITmM31",
+          "title": "Explicit Intents",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b-sfh6NoS-APqaNKm5L5S",
+          "title": "Intent Filters",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tFuAToid1Fkmu96BDtW7K",
+          "title": "Broadcast Receiver",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nkcdjrswv0WCzUs48BAt9",
+          "title": "Content Provider",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PcHmU1c9hqKyzSjwlRPHk",
+          "title": "Services",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5s1CqsYCOXjNroDHaGKGa",
+      "title": "Version Control",
+      "subtopics": [
+        {
+          "id": "H-2eb8fLwz8IKYXbeSVKK",
+          "title": "GitHub",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5LFZdUiFYYU_1sYsouyan",
+          "title": "Bitbucket",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Q47BtQphp59NkkZoeNXmP",
+          "title": "GitLab",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "rqSZ2ATeHbOdIQE9Jlb0B",
+          "title": "Git",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "RBABbkzD_uNFwEO-hssZO",
+          "title": "Java",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5Li8J5iR_ZuyIlxX0LYei",
+      "title": "App Components",
+      "subtopics": [
+        {
+          "id": "nwuVlPmzwJ17mtVQ8Hi9w",
+          "title": "Activity",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "oUjetA2eduvQIeLcQlLcu",
+          "title": "State Changes",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "jePGzTejFe4ryA5qFFmjl",
+      "title": "Design & Architecture",
+      "subtopics": [
+        {
+          "id": "boMz0HZlMAsLdCZlpUo-H",
+          "title": "TextField",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pEBpXv3Jf1AzBNHlvVrG8",
+          "title": "Icon",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Xn1VQ-xOT67ZfJJTM4r1p",
+          "title": "Dialog",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "o5rzmnaQeiSh9ocvfJPpK",
+          "title": "Navigation Components",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "0fNQWRxst8xRstIfPaPO6",
+      "title": "Storage",
+      "subtopics": [
+        {
+          "id": "PKql1HY0PLMfp50FRELXL",
+          "title": "Shared Preferences",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GWq3s1iTxQOp1BstHscJ9",
+          "title": "DataStore",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Bfg4So5RlI09zFNcburJd",
+          "title": "Room Database",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "A4kdaj6AFueUgPI7hwKi5",
+          "title": "File System",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Bz-BkfzsDHAbAw3HD7WCd",
+          "title": "MVI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pSU-NZtjBh-u0WKTYfjk_",
+          "title": "MVVM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aF_xFIqTjQbENtC7pkXvJ",
+          "title": "MVP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "w1A6wPKSd3Yh2luuHV-aE",
+          "title": "MVC",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Yb6aKJMMCxU1QVltWg3Dr",
+      "title": "Network",
+      "subtopics": [
+        {
+          "id": "ZF5XgO7I_J9928bD3CVXo",
+          "title": "Repository Pattern",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "784fiIdKrQDlIm3VIiJQN",
+          "title": "Builder Pattern",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "cFYZ2C7yNnY6NHKUNP2Z4",
+      "title": "Asynchronism",
+      "subtopics": [
+        {
+          "id": "Dp2DOX10u2xJUjB8Okhzh",
+          "title": "Box",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U8iMGGOd2EgPxSuwSG39Z",
+          "title": "Scaffold",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yE0qAQZiEC9R8WvCdskpr",
+          "title": "Column / Row",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3fFNMhQIuuh-NRzSXYpXO",
+          "title": "Constraint",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xIvplWfe-uDr9iHjPT1Mx",
+          "title": "RecycleView",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Mtx0bY0drmaTw8sCM5YTl",
+          "title": "Image",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "A4rtNULX_MoV93IH1Lgqw",
+          "title": "ImageView",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EzLjX4iRT7AxkAOsJYnSU",
+          "title": "Card",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "amTxz7mS98lkhOrNMJXG_",
+          "title": "TabRow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "i_cKmTnGAYw8xpHwZHjAd",
+          "title": "Coroutines",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BeGrA5BDBMZP1Jy7n-wl-",
+          "title": "Threads",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zXsNEyRbb8UpEOAUv6FpY",
+          "title": "RxJava",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4h37WBpYxRRyw9oH8ge7o",
+          "title": "RxKotlin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Xv0es_z64vh-QzivMeAT3",
+          "title": "Authentication",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xB4evbD07n1VrHOIpowV4",
+          "title": "Crashlytics",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1Tz-Shj_Tuz2U8llEAcLr",
+          "title": "Remote Config",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mMKN4a8lqo38M0iL1Qwhy",
+          "title": "Lazy Column / Row",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qNzC8sQqQaDnG1oy1jiO0",
+          "title": "ConstraintLayout",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pHxtpvd7U8CbIW6yebcVX",
+          "title": "Animations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UAerxLQ1ZB6N6LS1IhfNk",
+          "title": "NavHost",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8axL6Fa5fm1xWPP07MUbD",
+          "title": "remember / State",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lEdmnJhs-WN-A6glX2DeA",
+          "title": "ViewModel state",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XTMhA-rYiXP7aVFk2nDLY",
+          "title": "Side effects",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ZEdn2yy-IwHN3kOYr2ZbC",
+      "title": "Common Services",
+      "subtopics": [
+        {
+          "id": "e3vHFaFFMV7kI9q6yf5e9",
+          "title": "Cloud Messaging",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3EEfKAd-ppIQpdQSEhbA1",
+          "title": "FireStore",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D4ZXQOKJkyFYNZIy-MJ9Y",
+          "title": "Google Admob",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m5rumeynEbS8T27pelr0-",
+          "title": "Google Play Services",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S5FVF9rMgVSSDKXJW2GYb",
+          "title": "Google Maps",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-ONSC-ImGSELbamKmjIlH",
+          "title": "Espresso",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gvGAwjk_nhEgxzZ_c3f6b",
+          "title": "JUnit",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "77F9F3oI5CPgwgM_hxWfa",
+      "title": "Linting",
+      "subtopics": [
+        {
+          "id": "OAb_JD64uGm2tPoue7w6t",
+          "title": "WorkManager",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zMbXQH17Q52opdbitPzj7",
+          "title": "Ktlint",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RUvuCp_JK5MQQT13SSHUV",
+          "title": "Detekt",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6KbSUAoT_jTudFoIbwMpA",
+      "title": "Debugging",
+      "subtopics": [
+        {
+          "id": "ACUJlDDR0jqEohsFzWEoQ",
+          "title": "Jetpack Benchmark",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qtXM9K7wyjOFuEMlZrB3C",
+          "title": "Dependency Injection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CK7Ce632fdTgxeFsRUVvd",
+          "title": "Dagger",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UMqZ-jmXKDXKuu8bzqDH_",
+          "title": "Koin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ooo_k2k_vUBR_jQ7Ke6Et",
+          "title": "Hilt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3i4g9ZWgLxKb2UMgRJi4Q",
+          "title": "Leak Canary",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7RKN1FNtRE_BE6QeAQrKb",
+          "title": "Chucker",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ZOQm5OlzCA-h_yxywwDrW",
+      "title": "Testing",
+      "subtopics": []
+    },
+    {
+      "id": "kc6buUsLAeZeUb4Tk0apM",
+      "title": "Distribution",
+      "subtopics": [
+        {
+          "id": "HgRdgi2Hu4C8YLG5PXfoo",
+          "title": "Google Playstore",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "T7q_quNaIAuGi96OdnDT1",
+          "title": "Firebase Distribution",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_FSlD_qTz5Xo0x3pB6sZI",
+          "title": "Signed APK",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "4_e76QafrB419S2INOeKd",
+      "title": "Interface & Navigation",
+      "subtopics": [
+        {
+          "id": "60Vm-77rseUqpMiFvp-dA",
+          "title": "Jetpack Compose",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xV475jHTlLuHtpHZeXb7P",
+          "title": "App Shortcuts",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-O-G9bg36ut8NnZcdOaop",
+          "title": "Tasks & Backstack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "znvZp24L-PcQwkSObtixs",
+          "title": "TextView",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2iDJrxjXOt7o2fPp2HfRl",
+          "title": "Fragments",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WhfzFOUpm0DFEj7Oeq21R",
+          "title": "Button",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BVgO9n7tGlVdiS72-hFSd",
+          "title": "Text",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Z4Tbd5ClnqCXGPGG09F-G",
+          "title": "BottomSheet",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mhxUDPHI-6NHwOxsdVn65",
+          "title": "Drawer",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "j5qmSMOdhpGZo1XOUVx1k",
+      "title": "Security",
+      "subtopics": [
+        {
+          "id": "DeOxj6RzQBYfEWV-M1Ybm",
+          "title": "Factory Pattern",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "N_auRfGKkeIIc-qiHLkR_",
+          "title": "Observer Pattern",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "W-WTIiQml8dLK6i_V69JK",
+          "title": "Flow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xk0vnWr7uESdzYRxwFjoK",
+          "title": "RxJava",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7rbsp1o5bzIJP11BRIoeG",
+          "title": "RxKotlin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TiokceMGU9caqiR0lbFYL",
+          "title": "LiveData",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dDMRYiqrKyOBnRRQc8zsp",
+          "title": "Retro",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5pVuwOItAhUxxJX8ysAsn",
+          "title": "OkHttp",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ww0fTbdXwVr-QIOClU7ng",
+          "title": "Apollo-Android",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VFOD4JrV8kZ2583G3oT95",
+          "title": "Timber",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

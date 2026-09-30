@@ -1,0 +1,265 @@
+{
+  "slug": "prompt-engineering",
+  "title": "Prompt Engineering Roadmap",
+  "description": "Step by step guide to learning Prompt Engineering in @currentYear@",
+  "url": "https://roadmap.sh/prompt-engineering",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-04-29T07:36:03.435Z",
+  "relatedRoadmaps": [
+    "ai-engineer",
+    "ai-agents",
+    "ai-data-scientist",
+    "data-analyst",
+    "mlops",
+    "claude-code",
+    "vibe-coding"
+  ],
+  "topicCount": 7,
+  "subtopicCount": 40,
+  "topics": [
+    {
+      "id": "jrH1qE6EnFXL4fTyYU8gR",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "74JxgfJ_1qmVNZ_QRp9Ne",
+          "title": "LLMs and how they work?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "i4ijY3T5gLgNz0XqRipXe",
+          "title": "What is a Prompt?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "43drPbTwPqJQPyzwYUdBT",
+          "title": "What is Prompt Engineering?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "pamV5Z8DRKk2ioZbg6QVK",
+          "title": "LLM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NPcaSEteeEA5g22wQ7nL_",
+          "title": "Tokens",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b-Xtkv6rt8QgzJXSShOX-",
+          "title": "Context Window",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "JgigM7HvmNOuKnp60v1Ce",
+      "title": "Sampling Parameters",
+      "subtopics": [
+        {
+          "id": "SWDa3Su3VS815WQbvvNsa",
+          "title": "Hallucination",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yfsjW1eze8mWT0iHxv078",
+          "title": "Model Weights / Parameters",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ke5GT163k_ek9SzbcbBGE",
+          "title": "Fine-Tuning vs Prompt Engg.",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gxydtFKmnXNY9I5kpTwjP",
+          "title": "RAG",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Pw5LWA9vNRY0N2M0FW16f",
+          "title": "Agents",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6W_ONYREbXHwPigoDx1cW",
+          "title": "Prompt Injection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sj1CMZzZp8kF-LuHcd_UU",
+          "title": "AI vs AGI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iMwg-I76-Tg5dhu8DGO6U",
+          "title": "Temperature",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FF8ai1v5GDzxXLQhpwuPj",
+          "title": "Top-K",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-G1U1jDN5st1fTUtQmMl1",
+          "title": "Top-P",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "wSf7Zr8ZYBuKWX0GQX6J3",
+      "title": "Output Control",
+      "subtopics": [
+        {
+          "id": "Yb5cQiV2ETxPbBYCLOpt2",
+          "title": "OpenAI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "o-6UKLZ6oCRbAKgRjH2uI",
+          "title": "Google",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "V8pDOwrRKKcHBTd4qlSsH",
+          "title": "Anthropic",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Td2YzDFT4LPGDw8JMmQSQ",
+          "title": "Meta",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3wshuH7_DXgbhxsLzzI4D",
+          "title": "xAI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vK9Gf8dGu2UvvJJhhuHG9",
+          "title": "Max Tokens",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "g8ylIg4Zh567u-E3yVVY4",
+      "title": "Repetition Penalties",
+      "subtopics": [
+        {
+          "id": "v3CylRlojeltcwnE76j8Q",
+          "title": "Stop Sequences",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YIVNjkmTOY61VmL0md9Pj",
+          "title": "Frequency Penalty",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WpO8V5caudySVehOcuDvK",
+          "title": "Presence Penalty",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "j-PWO-ZmF9Oi9A5bwMRto",
+      "title": "Structured Outputs",
+      "subtopics": [
+        {
+          "id": "GRerL9UXN73TwpCW2eTIE",
+          "title": "Zero-Shot Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Iufv_LsgUNls-Alx_Btlh",
+          "title": "One-Shot / Few-Shot Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fWo39-hehRgwmx7CF36mM",
+          "title": "System Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XHWKGaSRBYT4MsCHwV-iR",
+          "title": "Role Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5TNK1KcSzh9GTKiEJnM-y",
+          "title": "Contextual Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2MboHh8ugkoH8dSd9d4Mk",
+          "title": "Step-back Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "weRaJxEplhKDyFWSMeoyI",
+          "title": "Chain of Thought (CoT) Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1EzqCoplXPiHjp9Z-vqn-",
+          "title": "Self-Consistency Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ob9D0W9B9145Da64nbi1M",
+          "title": "Tree of Thoughts (ToT) Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8Ks6txRSUfMK7VotSQ4sC",
+          "title": "ReAct Prompting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VjuUq6nEz3Wyx5NJWNaxr",
+          "title": "Prompt Tuning",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "diHNCiuKHeMVgvJ4OMwVh",
+      "title": "Automatic Prompt Engineering",
+      "subtopics": []
+    },
+    {
+      "id": "Wvu9Q_kNhH1_JlOgxAjP6",
+      "title": "AI Red Teaming",
+      "subtopics": [
+        {
+          "id": "0H2keZYD8iTNyBgmNVhto",
+          "title": "Prompt Debiasing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HOqWHqAkxLX8f2ImSmZE7",
+          "title": "Prompt Ensembling",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CvV3GIvQhsTvE-TQjTpIQ",
+          "title": "LLM Self Evaluation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "P5nDyQbME53DOEfSkcY6I",
+          "title": "Calibrating LLMs",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

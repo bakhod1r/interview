@@ -1,0 +1,173 @@
+{
+  "id": "t10",
+  "name": "Redis & cache gotchas",
+  "domain": "tricky",
+  "domainLabel": "Edge cases & gotchas",
+  "topics": [
+    "Redis gotcha"
+  ],
+  "questions": [
+    {
+      "id": 17010,
+      "code": "E48",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "Production Redis'da `KEYS user:*` chaqirilsa nima bo'ladi?",
+      "options": [
+        "Redis bir threadli — KEYS butun keyspace'ni skanerlaydi va shu vaqt davomida barcha komandalar bloklanadi; SCAN kursorli variantini ishlatish kerak",
+        "Tez ishlaydi, index bor",
+        "Faqat xotira sarflaydi",
+        "Avtomatik SCAN'ga aylanadi"
+      ],
+      "answer": 0,
+      "explanation": "KEYS O(N) va bloklovchi — millionlab kalitda sekundlab pauza, timeout to'lqini. SCAN kursor bilan porsiyalab yuradi (kafolat: skanerlash davomida mavjud bo'lgan kalit albatta qaytariladi, dublikat bo'lishi mumkin). Xuddi shunday xavfli: FLUSHALL, katta kolleksiyada SMEMBERS/HGETALL, DEL bilan katta obyektni o'chirish (UNLINK — asinxron variant)."
+    },
+    {
+      "id": 17011,
+      "code": "E49",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "Redis'ni cache sifatida ishlatyapsiz. maxmemory-policy `noeviction` bo'lsa nima bo'ladi?",
+      "options": [
+        "Xotira to'lganda yozuv komandalar OOM xatosi bilan rad etiladi — cache o'rniga uzilish; cache uchun allkeys-lru yoki allkeys-lfu kerak",
+        "Eng eski kalitlar o'chadi",
+        "Redis avtomatik disk'ga yozadi",
+        "Hech narsa o'zgarmaydi"
+      ],
+      "answer": 0,
+      "explanation": "noeviction — default va durable store uchun to'g'ri; cache uchun xato. volatile-* siyosatlari faqat TTL qo'yilgan kalitlarni o'chiradi — TTL'siz kalitlar to'plansa baribir OOM bo'ladi. Amaliyot: cache instansiyasi va durable (queue, session) instansiyasini ajratish, chunki bitta siyosat ikkalasiga to'g'ri kelmaydi."
+    },
+    {
+      "id": 17012,
+      "code": "E50",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "Cache-aside'da eng keng tarqalgan mos kelmaslik (inconsistency) manbai?",
+      "options": [
+        "Yozuvdan keyin cache'ni yangilash (write) o'rniga o'chirish (invalidate) kerak; parallel o'qish-yozishda eski qiymat cache'ga qaytib yozilib qolishi mumkin",
+        "TTL juda qisqa",
+        "Redis sekin",
+        "JSON serializatsiya"
+      ],
+      "answer": 0,
+      "explanation": "Klassik race: A o'qiydi (miss, DB'dan eski qiymat oladi), B yozadi va cache'ni o'chiradi, keyin A eski qiymatni cache'ga yozadi — eskilik TTL tugaguncha qoladi. Yumshatish: yozuvda invalidate + qisqa TTL; muhim joyda 'delete after commit' va ikkinchi kechiktirilgan delete (delayed double delete); yoki versiyalangan kalit (kalitga entity versiyasini qo'shish) bilan eski yozuv umuman ustidan yozmaydi."
+    },
+    {
+      "id": 17013,
+      "code": "E51",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "`INCR` bilan rate limiter yozdingiz. Qaysi bug tipik?",
+      "options": [
+        "INCR va EXPIRE alohida yuborilsa, EXPIRE'gacha crash bo'lsa kalit abadiy qoladi va foydalanuvchi butunlay bloklanadi; ikkalasini Lua script yoki SET NX EX bilan atomik qilish kerak",
+        "INCR atomik emas",
+        "Redis'da counter ishlamaydi",
+        "EXPIRE kerak emas"
+      ],
+      "answer": 0,
+      "explanation": "Yana bir kamchilik: fixed window counter chegarada ikki barobar trafikka ruxsat beradi (oynaning oxiri va boshi). Aniqroq: sliding window log (ZSET, xotira qimmat) yoki sliding window counter, yoki token bucket (Lua script bilan atomik). Redis 7 da funksiyalar (FUNCTION) skriptlarni saqlashning zamonaviy yo'li."
+    },
+    {
+      "id": 30100,
+      "code": "SN101",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "`SETEX lock ...` bilan qo'lda distributed lock yozildi. Qaysi xato eng xavfli?",
+      "options": [
+        "TTL juda uzun",
+        "Qulfni boshqa egasi o'chirib yuborishi: `DEL` qilishdan oldin qiymat (unique token) tekshirilmaydi — TTL tugagach ish davom etayotgan bo'lsa, boshqa jarayon qulfni oladi va birinchi jarayon uni o'chiradi",
+        "Redis sekin",
+        "Kalit nomi uzun"
+      ],
+      "answer": 1,
+      "explanation": "To'g'ri naqsh: `SET key <random-token> NX PX <ttl>`, bo'shatish Lua skript bilan atomik (`if redis.call('get',KEYS[1])==ARGV[1] then del end`). Yana ikki nuqta: TTL ishdan uzun bo'lishi yoki fencing token bilan himoya (qulf tugaganidan keyingi yozuvni rad etish), va Redis failover'da qulf kafolatlanmasligi — pul operatsiyasida qulfga emas, DB constraint'ga tayaniladi."
+    },
+    {
+      "id": 30101,
+      "code": "SN102",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "Kesh uchun `KEYS user:*` ishlatilgan. Nima bo'ladi?",
+      "options": [
+        "Hech narsa, tez ishlaydi",
+        "Redis bitta oqimli — `KEYS` butun keyspace'ni skanerlaydi va butun serverni bloklaydi; `SCAN` (kursor) yoki to'g'ri ma'lumot strukturasi (set/hash bilan indeks) ishlatiladi",
+        "Faqat ozgina sekinlashadi",
+        "Replica'da muammo yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Millionlab kalitda `KEYS` yuzlab millisekund-sekundlarga barcha mijozni to'xtatadi — latency spike va timeout to'lqini. Xuddi shu xavf: katta `HGETALL`, `SMEMBERS`, `DEL` bitta katta kalitga (`UNLINK` afzal), va `FLUSHALL`. Monitoringda `slowlog` va `latency doctor` shu holatni ko'rsatadi."
+    },
+    {
+      "id": 30102,
+      "code": "SN103",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "Kesh TTL bir vaqtda tugab, DB yiqildi. Bu qanday nomlanadi va nima qilinadi?",
+      "options": [
+        "Cache penetration — validatsiya qo'shiladi",
+        "Cache stampede/avalanche: TTL'ga jitter, single-flight (bir kalit uchun bitta yangilash, qolganlar kutadi), eski qiymatni `stale-while-revalidate` bilan berish, va kritik kalitlarni oldindan warm qilish",
+        "Faqat kesh hajmini oshirish",
+        "Redis'ni o'chirish"
+      ],
+      "answer": 1,
+      "explanation": "Uch alohida naqsh farqlanadi: stampede (bir kalit muddati tugab, minglab parallel qayta hisoblash), avalanche (ko'p kalit bir vaqtda), penetration (mavjud bo'lmagan kalitga so'rovlar — negative caching yoki bloom filter). Go'da single-flight uchun `golang.org/x/sync/singleflight`."
+    },
+    {
+      "id": 30492,
+      "code": "SN493",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "Redis'da `INCR` bilan rate limit yozildi, lekin limit ba'zan oshib ketadi. Nega?",
+      "options": [
+        "Redis atomik emas",
+        "`INCR` atomik, lekin `INCR` + `EXPIRE` ikki komanda — birinchi bajarilib ikkinchisi yiqilsa kalit muddatsiz qoladi yoki har so'rovda TTL yangilanib oyna cho'ziladi; Lua skript yoki `SET key 0 EX n NX` + `INCR` naqshi bilan atomik qilinadi",
+        "TTL ishlamaydi",
+        "Faqat Cluster'da"
+      ],
+      "answer": 1,
+      "explanation": "Ikkinchi sabab — fixed window chegarasi: oyna chetida ketma-ket ikki oynada limitgacha so'rov o'tib, amalda 2x burst bo'ladi. Aniqroq variant: sliding window interpolatsiyasi yoki token bucket, ikkalasi ham bitta Lua skriptda atomik bajariladi."
+    },
+    {
+      "id": 30493,
+      "code": "SN494",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Redis gotcha",
+      "domain": "tricky",
+      "section": "t10",
+      "question": "Redis kesh 'thundering herd'dan himoyalandi, lekin deploy'dan keyin DB baribir yiqildi. Ehtimolli sabab?",
+      "options": [
+        "Kesh ishlamadi",
+        "Sovuq kesh: yangi instansiyalar (yoki kesh versiya prefiksi o'zgargani uchun) hammasi bir vaqtda miss bo'ladi — single-flight bir kalit uchun ishlaydi, lekin million turli kalit bir vaqtda kelsa DB baribir to'yinadi. Chora: bosqichli rollout, kesh warm-up, va DB'ga kiruvchi konkurentlikni cheklash (bulkhead)",
+        "Redis o'chib qolgan",
+        "TTL uzun"
+      ],
+      "answer": 1,
+      "explanation": "Shu sabab kesh versiyasini o'zgartirish (`v2:`) — bu deploy emas, incident xavfi bo'lgan operatsiya: bosqichma-bosqich (dual-read: yangi kalit yo'q bo'lsa eskisidan o'qish) qilinadi. DB tomonida esa konkurentlik limiti oxirgi himoya bo'lib qoladi."
+    }
+  ]
+}

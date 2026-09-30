@@ -1,0 +1,1152 @@
+[
+  {
+    "topicId": "2f0ZO6GJElfZ2Eis28Hzg",
+    "topicTitle": "Pick a Backend Language",
+    "questions": [
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-01",
+        "question": "What actually drives the choice of a backend language on a real project?",
+        "answer": "Rarely raw benchmark speed. The drivers are: the concurrency model versus the workload shape (many idle connections versus CPU-bound work), library and driver maturity for your datastores and cloud, hiring and the existing team's depth, operational story (single static binary versus a runtime plus dependency tree), and latency predictability (GC pauses matter for p99 in trading or ad bidding, not for an admin CRUD service). Pick the language the team can operate at 3am; a 20% throughput difference is usually cheaper to solve with one more instance than with a rewrite.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "When would raw performance genuinely be the deciding factor?",
+          "How do you evaluate ecosystem maturity concretely?"
+        ],
+        "tags": [
+          "language-choice",
+          "trade-offs"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-02",
+        "question": "Explain Go's concurrency model: goroutines, channels, and the scheduler.",
+        "answer": "Goroutines are lightweight user-space threads (a few KB of growable stack) multiplexed by the Go runtime onto OS threads via the G-M-P scheduler: G = goroutine, M = OS thread, P = logical processor (GOMAXPROCS of them). Blocking syscalls detach the M so the P can keep running other goroutines. Channels are typed, optionally buffered queues that both pass data and synchronize; `select` waits on several. Idiom is 'share memory by communicating', but sync.Mutex/atomic are still correct and often faster for simple shared counters. Cost: goroutine leaks when nobody reads a channel or no context cancellation exists.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Go",
+        "followUps": [
+          "How do you detect a goroutine leak in production?",
+          "When is a mutex better than a channel?"
+        ],
+        "tags": [
+          "go",
+          "concurrency",
+          "scheduler"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-03",
+        "question": "A Go service's p99 latency spikes every few minutes while CPU stays moderate. How do you investigate?",
+        "answer": "Start with runtime metrics: GC pause and frequency (`GODEBUG=gctrace=1`, or the go_gc_duration and go_memstats series), goroutine count, and scheduler latency. Repeating spikes usually mean either GC pressure from high allocation rate (fix with fewer allocations, sync.Pool, pre-sized slices, or raising GOGC/GOMEMLIMIT) or lock contention/serialization on a shared resource. Confirm with `pprof`: heap and allocs profiles for allocation churn, mutex and block profiles for contention, and a trace (`runtime/trace`) to see whether goroutines are waiting on the scheduler, network, or syscalls. Also rule out non-Go causes: connection pool exhaustion, downstream timeouts, and cron-like batch jobs on the same box.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Go",
+        "followUps": [
+          "What does GOMEMLIMIT change versus GOGC?",
+          "How do you cut allocations in a hot JSON path?"
+        ],
+        "tags": [
+          "go",
+          "gc",
+          "profiling",
+          "latency"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-04",
+        "question": "What problem do Rust's ownership and borrow checker solve, and what do they cost?",
+        "answer": "Every value has one owner; references are either one mutable borrow or many immutable borrows, checked at compile time with lifetimes. That eliminates use-after-free, double-free, and data races in safe code without a garbage collector, so there are no GC pauses and memory use is predictable. The cost is real: a steeper learning curve, fights with the borrow checker when data is genuinely shared (answer: Rc/Arc, RefCell/Mutex, arenas, or indices instead of references), longer compile times, and slower feature velocity for ordinary CRUD work. `unsafe` blocks opt out of the checks and are where soundness bugs concentrate.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Rust",
+        "followUps": [
+          "When would you reach for Arc<Mutex<T>>?",
+          "What does `unsafe` actually allow?"
+        ],
+        "tags": [
+          "rust",
+          "memory-safety",
+          "ownership"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-05",
+        "question": "You need an image-processing service handling 5k requests/second with hard p99 targets. Rust, Go, or Node? Justify it.",
+        "answer": "This is CPU-bound with tight tail-latency requirements, so the argument favors Rust: no GC pauses, SIMD-friendly image crates, and predictable memory. Go is a reasonable second — good enough throughput, much faster to build and hire for, with GC pauses now sub-millisecond but allocation-sensitive. Node is the weakest fit: image work blocks the single event loop, so you would need worker_threads or native addons, which forfeits Node's main advantage. A common real answer is a hybrid: keep the existing Node/Go API layer and push only the decode/resize hot path into a Rust service or native module, so you pay the Rust learning cost only where it earns its keep.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Rust",
+        "followUps": [
+          "How would you benchmark this before committing?",
+          "What operational costs does adding a second language bring?"
+        ],
+        "tags": [
+          "rust",
+          "go",
+          "nodejs",
+          "cpu-bound",
+          "language-choice"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-06",
+        "question": "What does 'blocking the event loop' mean in Node.js, and how do you find and fix it?",
+        "answer": "Node runs JavaScript on one thread; the event loop dispatches callbacks between I/O phases. Any synchronous CPU work — a tight loop, JSON.parse of a 50MB payload, bcrypt with a high cost factor, sync fs calls, a catastrophic regex — stalls every other in-flight request for its whole duration, so latency rises across the board even at low CPU per request. Detect it with event-loop lag metrics (perf_hooks monitorEventLoopDelay), `--prof`/clinic flame graphs, or async_hooks-based tracing. Fix by moving work to worker_threads, a child process, or a queue; streaming instead of buffering; using the async variants of crypto/fs; and capping payload size and regex complexity.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "JavaScript",
+        "followUps": [
+          "Where does libuv's thread pool help and where doesn't it?",
+          "What event-loop lag threshold would you alert on?"
+        ],
+        "tags": [
+          "nodejs",
+          "event-loop",
+          "latency"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-07",
+        "question": "How does async/await in C# differ from Node's model?",
+        "answer": "Both are non-blocking, but C# async/await runs on a multi-threaded pool: an awaited continuation may resume on a different thread, so shared state needs real synchronization, while Node's single-threaded loop does not. C# Tasks are hot (already started) and awaiting one does not create a thread; the compiler rewrites the method into a state machine. Classic pitfalls: `.Result`/`.Wait()` blocking a pool thread and deadlocking where a SynchronizationContext exists, async-void methods swallowing exceptions, and thread-pool starvation when sync-over-async is used under load. Use ConfigureAwait(false) in libraries and keep the whole call chain async.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "C#",
+        "followUps": [
+          "What is thread-pool starvation and how do you spot it?",
+          "Why does ConfigureAwait(false) matter less in ASP.NET Core?"
+        ],
+        "tags": [
+          "csharp",
+          "async",
+          "concurrency"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-08",
+        "question": "What is Ruby's GVL, and what does it mean for scaling a Rails app?",
+        "answer": "CRuby's Global VM Lock lets only one thread execute Ruby bytecode at a time, though the lock is released around blocking I/O. So threads help I/O-bound work (database and HTTP waits) but give no CPU parallelism. You scale Rails by processes: Puma in clustered mode with several workers each running a few threads, sized against available memory and database connections (workers x threads must not exceed the pool). Copy-on-write after fork keeps memory sane. CPU-heavy work goes to background jobs (Sidekiq) or another language; JRuby/TruffleRuby remove the GVL if you need real thread parallelism.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Ruby",
+        "followUps": [
+          "How do you size Puma workers and threads?",
+          "Why can adding threads make a Rails app slower?"
+        ],
+        "tags": [
+          "ruby",
+          "gvl",
+          "scaling",
+          "puma"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-09",
+        "question": "Compare garbage collection with manual/compile-time memory management from an operations point of view.",
+        "answer": "GC (Go, Java, C#, Node, Ruby) trades throughput and memory headroom for safety and speed of development: you get pauses or background CPU cost, heap sizing knobs, and tail latency sensitive to allocation rate. Manual or ownership-based management (C, C++, Rust) gives predictable latency and a smaller footprint, with the risk of leaks and, outside Rust, memory-corruption bugs. Operationally, GC runtimes need heap limits set against the container limit (or the OOM killer wins), while Rust/C++ services need attention to fragmentation and allocator choice (jemalloc/mimalloc). Neither removes the need to measure: most 'GC problems' are really allocation-rate problems in application code.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "Why does a container memory limit require a runtime heap limit too?",
+          "How do you find the allocation hot path in your stack?"
+        ],
+        "tags": [
+          "memory",
+          "gc",
+          "operations"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-10",
+        "question": "Your team of five Rails developers is asked to build a new high-throughput ingestion service. Do you introduce Go?",
+        "answer": "Default to no unless the workload genuinely breaks Ruby. First measure: if the bottleneck is I/O and the database, more Puma workers plus Sidekiq and batching may be enough, and staying in one language keeps deploys, libraries, and on-call simple. Introduce Go only with a concrete threshold (e.g. sustained 20k events/second at a per-event CPU cost Ruby cannot meet), and then scope it to one narrow, well-bounded service with a clear contract, plus a second owner so it is not one person's pet. Budget the hidden costs explicitly: a second CI pipeline, base images, observability wiring, dependency policy, and code review capacity.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Ruby",
+        "followUps": [
+          "What evidence would change your answer to yes?",
+          "How do you avoid a one-person language silo?"
+        ],
+        "tags": [
+          "language-choice",
+          "team",
+          "polyglot"
+        ]
+      },
+      {
+        "id": "2f0ZO6GJElfZ2Eis28Hzg-11",
+        "question": "What is a static-binary deployment and why do backend teams like it?",
+        "answer": "Go and Rust compile to a single self-contained executable, so the container image can be `FROM scratch` or distroless with just the binary and CA certificates: images of a few MB, no runtime or package manager inside, a much smaller CVE surface, and fast cold start. Compare with Node, Python, or Ruby images that ship an interpreter plus a dependency tree, where a `node_modules` or gem mismatch between build and run is a live failure mode. Trade-offs: cross-compilation and CGO/glibc-versus-musl issues, no hot patching of source in place, and larger binaries when debug symbols are kept.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Go",
+        "followUps": [
+          "What breaks when you move a CGO binary to Alpine?",
+          "Why include CA certificates in a scratch image?"
+        ],
+        "tags": [
+          "deployment",
+          "containers",
+          "go",
+          "rust"
+        ]
+      }
+    ]
+  },
+  {
+    "topicId": "ezdqQW9wTUw93F6kjOzku",
+    "topicTitle": "Version Control Systems",
+    "questions": [
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-01",
+        "question": "What is the difference between `git merge` and `git rebase`, and when do you use each?",
+        "answer": "Merge creates a new commit with two parents, preserving the true history including the branch point; rebase replays your commits onto a new base, producing linear history but new commit SHAs. Convention: rebase your own unpushed feature branch onto the updated main to keep history readable and avoid noisy merge commits; merge (often squash-merge) when integrating that branch into the shared branch. Never rebase a branch others have pulled from — their history diverges and they must recover manually. `git pull --rebase` avoids merge commits on every sync.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Git",
+        "followUps": [
+          "What is the danger of force-pushing a shared branch?",
+          "When is a merge commit more useful than linear history?"
+        ],
+        "tags": [
+          "git",
+          "merge",
+          "rebase"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-02",
+        "question": "You need to clean up a 12-commit branch before review. Walk through interactive rebase.",
+        "answer": "`git rebase -i origin/main` opens a todo list of the 12 commits. Use `reword` to fix messages, `squash`/`fixup` to fold 'wip' and 'fix typo' commits into their logical parent, `edit` to stop and amend a commit's content, `drop` to remove one, and reorder lines to group related changes. If a step conflicts, resolve, `git add`, then `git rebase --continue`; `--abort` returns to the original state at any point. `git commit --fixup=<sha>` plus `git rebase -i --autosquash` automates the common case. Aim for commits that each build and pass tests on their own.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Git",
+        "followUps": [
+          "How does --autosquash help?",
+          "Why should each commit build independently?"
+        ],
+        "tags": [
+          "git",
+          "rebase",
+          "history"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-03",
+        "question": "A bug appeared somewhere in the last 300 commits. How do you find the offending commit?",
+        "answer": "Use `git bisect`: `git bisect start`, `git bisect bad` on the broken commit, `git bisect good <known-good-sha>`, then git checks out the midpoint and you mark each as good or bad — about 8-9 steps for 300 commits because it is a binary search. Automate it with `git bisect run ./test.sh`, where the script exits 0 for good, non-zero for bad, and 125 to skip an unbuildable commit. Finish with `git bisect reset`. This is why small, independently buildable commits matter: bisect is useless across giant squashed merges.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Git",
+        "followUps": [
+          "What do you do when the midpoint commit does not build?",
+          "How does squash-merging every PR affect bisect?"
+        ],
+        "tags": [
+          "git",
+          "bisect",
+          "debugging"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-04",
+        "question": "A colleague ran `git reset --hard` and lost a day of committed work. Can you recover it?",
+        "answer": "Yes, if the work was committed. `git reflog` (or `git reflog show <branch>`) lists where HEAD and branch tips pointed recently, including before the reset; find the lost SHA and `git checkout -b recovery <sha>` or `git reset --hard <sha>`. For commits unreachable from any ref, `git fsck --lost-found` lists dangling commits. Reflog entries expire (90 days for reachable, 30 for unreachable by default) and are local only. Uncommitted working-tree changes wiped by `--hard` are genuinely gone — that is the case reflog cannot save, which is the argument for committing early and often.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Git",
+        "followUps": [
+          "What does `git stash` protect that reflog does not?",
+          "How long do reflog entries survive?"
+        ],
+        "tags": [
+          "git",
+          "reflog",
+          "recovery"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-05",
+        "question": "A hotfix landed on main and must go to the release branch without the rest of main. How?",
+        "answer": "`git cherry-pick <sha>` onto the release branch, which applies that commit's diff as a new commit with a new SHA. For a range use `git cherry-pick A..B`, and `-x` to record the original SHA in the message for traceability. Caveats: the same change now exists as two commits, so later merges can conflict or double-apply (`git cherry` and patch-id matching help git notice); cherry-picking a merge commit needs `-m 1`. The cleaner pattern is to branch the fix from the oldest affected release branch and merge it forward into the newer branches and main.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Git",
+        "followUps": [
+          "Why is merge-forward preferred over repeated cherry-picks?",
+          "What does `-x` give you during an incident review?"
+        ],
+        "tags": [
+          "git",
+          "cherry-pick",
+          "release"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-06",
+        "question": "How do you resolve a non-trivial merge conflict safely?",
+        "answer": "Read the conflict markers to understand both intents rather than picking a side blindly; `git log --merge -p <file>` and `git diff --base/--ours/--theirs` show how each side got there. Turn on `merge.conflictstyle=zdiff3` to see the common ancestor, which makes intent obvious. `git checkout --ours/--theirs <file>` is only correct for whole-file cases like lockfiles (usually regenerate instead). After resolving, `git add`, then run the tests — a syntactically clean merge can still be semantically broken when both sides renamed or moved logic. `git rerere` replays repeated resolutions during long rebases.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Git",
+        "followUps": [
+          "Why is a compiling merge not necessarily a correct one?",
+          "When does rerere pay off?"
+        ],
+        "tags": [
+          "git",
+          "conflicts",
+          "merge"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-07",
+        "question": "Compare trunk-based development with GitFlow.",
+        "answer": "Trunk-based: everyone commits to main behind short-lived branches (hours to a day), merged continuously, with unfinished work hidden behind feature flags and releases cut from main or from a short-lived release branch. It requires strong CI and flag hygiene but minimizes merge pain and matches continuous deployment. GitFlow: long-lived develop, release, and hotfix branches with a fixed promotion path. It suits versioned or on-premise software with parallel supported versions, but on a web service it produces large, long-lived divergences, painful merges, and slow feedback. Most SaaS teams should default to trunk-based.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Git",
+        "followUps": [
+          "What must be in place before trunk-based works?",
+          "Where does GitFlow still earn its complexity?"
+        ],
+        "tags": [
+          "git",
+          "branching",
+          "workflow"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-08",
+        "question": "What are the trade-offs of a monorepo versus many repositories?",
+        "answer": "Monorepo: one atomic commit can change an API and all its callers, one dependency version set, easy large-scale refactoring, and shared tooling. Costs: CI must be selective (affected-target builds via Bazel/Nx/Turborepo) or every push runs everything, clones get big (needs sparse-checkout, partial clone, shallow history, or Git LFS), and ownership needs CODEOWNERS because everyone can touch everything. Polyrepo: independent release cadence and clear ownership, but cross-repo changes become multi-PR dances with version pinning, and drift between shared libraries is the normal failure mode.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Git",
+        "followUps": [
+          "How do you keep monorepo CI times flat as the repo grows?",
+          "How do you coordinate a breaking change across repos?"
+        ],
+        "tags": [
+          "git",
+          "monorepo",
+          "tooling"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-09",
+        "question": "What are signed commits and tags, and what threat do they address?",
+        "answer": "GPG, SSH, or S/MIME signatures bind a commit or tag to a key holder, so a reviewer or CI can verify authorship (`git verify-commit`, `git log --show-signature`). The threat is trivial identity spoofing: `user.name` and `user.email` are free-text, so anyone can author a commit as your CTO, and a compromised token can push such commits. Enforcement lives in the host — require signed commits on protected branches and pin allowed keys. Note signatures prove who created the object, not that the code is good, and rewriting history (rebase) drops signatures unless re-signed.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Git",
+        "followUps": [
+          "Why are signed tags especially useful for releases?",
+          "What does signing not protect against?"
+        ],
+        "tags": [
+          "git",
+          "security",
+          "signing",
+          "supply-chain"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-10",
+        "question": "A production secret was committed three weeks ago and pushed. What do you do?",
+        "answer": "Security first: treat the secret as compromised and rotate it immediately — it has been in every clone, fork, CI cache, and possibly in scanning bots' hands. Revoke the old credential and verify no access remains. Only then clean history, with `git filter-repo` (or BFG) to strip the blob, followed by a coordinated force-push, invalidating and re-cloning all forks and caches, and asking the host to garbage-collect and purge the object (on GitHub, support must expire cached views/PR refs). Prevent recurrence: pre-commit secret scanning, push protection on the host, and secrets loaded from a manager or environment, never from the repo.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Git",
+        "followUps": [
+          "Why is history rewriting insufficient on its own?",
+          "Which controls stop this before the push?"
+        ],
+        "tags": [
+          "git",
+          "secrets",
+          "incident",
+          "security"
+        ]
+      },
+      {
+        "id": "ezdqQW9wTUw93F6kjOzku-11",
+        "question": "What does `git worktree` give you over stashing or cloning again?",
+        "answer": "`git worktree add ../hotfix release-2.3` checks out another branch into a second directory sharing one object database and one reflog. You keep your current build artifacts, node_modules, and dirty state intact while working elsewhere, without a second full clone's disk cost or the risk of forgetting a stash. Useful for urgent hotfixes, running long tests on one branch while coding on another, and reviewing a PR locally. Rules: a branch can be checked out in only one worktree, and `git worktree prune`/`remove` cleans up stale entries.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Git",
+        "followUps": [
+          "Why can two worktrees not check out the same branch?",
+          "Where does stash still fit?"
+        ],
+        "tags": [
+          "git",
+          "worktree",
+          "workflow"
+        ]
+      }
+    ]
+  },
+  {
+    "topicId": "NvUcSDWBhzJZ31nzT4UlE",
+    "topicTitle": "Repo Hosting Services",
+    "questions": [
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-01",
+        "question": "What does a repo hosting service add on top of plain git?",
+        "answer": "Git itself only versions content. The host adds the collaboration and control plane: pull/merge requests with review threads, protected branches and required status checks, identity and fine-grained permissions, issue tracking, CI runners, artifact and container registries, release and tag management, dependency and secret scanning, audit logs, and webhooks/APIs for automation. Practically, that is where your merge policy is enforced — policy that lives only in a README is not enforced at all.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "GitHub",
+        "followUps": [
+          "Which of these would you configure on day one of a new repo?",
+          "What breaks if policy is documented but not enforced?"
+        ],
+        "tags": [
+          "github",
+          "gitlab",
+          "collaboration"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-02",
+        "question": "How would you configure branch protection for `main` on a production service?",
+        "answer": "Require a pull request (no direct pushes), at least one approving review with stale approvals dismissed on new commits, and review from CODEOWNERS for sensitive paths. Require status checks to pass and the branch to be up to date with main (or use a merge queue to avoid semantic conflicts). Block force-push and branch deletion, require conversation resolution, and require signed commits. Apply the rules to administrators too — an exemption for admins is the hole every incident walks through. Limit who can bypass, and log it.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "GitHub",
+        "followUps": [
+          "Why does 'include administrators' matter?",
+          "What problem does a merge queue solve that required-up-to-date does not?"
+        ],
+        "tags": [
+          "github",
+          "branch-protection",
+          "governance"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-03",
+        "question": "Two PRs each pass CI on their own, but main breaks after both merge. What is happening and what fixes it?",
+        "answer": "A semantic conflict: the two branches do not conflict textually, but one renames a function or changes a contract the other relies on, and neither was tested against the other's final state. Requiring 'branch up to date before merge' forces serial rebases and becomes a bottleneck at scale. The proper fix is a merge queue (GitHub merge queue, GitLab merge trains): the host builds the prospective combined result and merges only if that passes, batching several PRs and bisecting the batch on failure. Add integration/contract tests so the break is caught, not just the build.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "GitHub",
+        "followUps": [
+          "How does a merge queue handle one bad PR in a batch?",
+          "What test layer would have caught this?"
+        ],
+        "tags": [
+          "ci",
+          "merge-queue",
+          "github"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-04",
+        "question": "What is CODEOWNERS and how does it change review flow?",
+        "answer": "A file (`.github/CODEOWNERS` or `CODEOWNERS`) mapping path globs to users or teams; the host auto-requests review from the matching owners and, with 'require review from Code Owners' enabled, blocks merge until they approve. Later matching rules win, so order matters. Use it for genuinely sensitive surfaces — migrations, auth, payment code, CI config, infrastructure — not for every directory, or it becomes a review-latency tax and people route around it. Keep owners as teams, never individuals, so vacations do not block delivery.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "GitHub",
+        "followUps": [
+          "Why teams instead of individuals?",
+          "What is the cost of over-applying CODEOWNERS?"
+        ],
+        "tags": [
+          "github",
+          "code-review",
+          "ownership"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-05",
+        "question": "Compare hosted and self-hosted CI runners, and say when you need self-hosted.",
+        "answer": "Hosted runners are ephemeral, patched by the provider, and need no capacity management, but are limited in CPU/RAM, have no private-network access, and bill per minute. Self-hosted runners give access to internal databases and VPC resources, bigger machines, GPUs or specific architectures, warm caches, and cheaper sustained throughput — at the price of patching, autoscaling, and isolation. Security is the key constraint: never run untrusted fork PRs on a persistent self-hosted runner, because the job can read the disk, caches, and any cloud instance credentials. Use ephemeral, single-job runners with narrowly scoped IAM roles.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "GitLab",
+        "followUps": [
+          "Why are fork PRs dangerous on persistent runners?",
+          "How do you scope cloud credentials for a runner?"
+        ],
+        "tags": [
+          "ci",
+          "runners",
+          "security",
+          "gitlab"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-06",
+        "question": "How do you handle secrets in CI pipelines?",
+        "answer": "Store them in the host's encrypted secret store scoped as narrowly as possible (environment-level, with required reviewers for production), never in the repo or in plain pipeline variables. Prefer short-lived credentials over static keys: OIDC federation from GitHub Actions or GitLab CI to AWS/GCP/Azure issues a token per job with a specific role, so there is nothing long-lived to steal. Do not expose secrets to workflows triggered by forks, mask them in logs, avoid passing them as command-line arguments (visible in process lists), and rotate on any suspicion. Audit which jobs read which secret.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "GitHub",
+        "followUps": [
+          "Why is OIDC federation better than a stored access key?",
+          "How can a secret still leak from a masked log?"
+        ],
+        "tags": [
+          "ci",
+          "secrets",
+          "oidc",
+          "security"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-07",
+        "question": "What do dependency scanning and secret scanning give you, and what are their limits?",
+        "answer": "Dependency scanning (Dependabot, Renovate, GitLab Dependency Scanning) compares your lockfile against advisory databases and opens upgrade PRs; it catches known CVEs in direct and transitive dependencies and, with auto-merge for patch bumps, keeps drift low. Secret scanning matches known credential patterns in commits and, with push protection, blocks the push before the secret lands. Limits: advisories lag disclosure, reachability is usually not analyzed so most alerts are not exploitable in your code paths, custom or high-entropy secrets are missed, and neither tool stops a malicious new package version. Pair them with lockfile pinning, provenance/SBOM checks, and a triage policy so alerts do not become noise.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "GitHub",
+        "followUps": [
+          "How do you prioritize among 200 open dependency alerts?",
+          "What is a reachability analysis and why does it matter?"
+        ],
+        "tags": [
+          "security",
+          "dependencies",
+          "scanning",
+          "supply-chain"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-08",
+        "question": "How do GitHub Actions and GitLab CI differ structurally?",
+        "answer": "GitHub Actions is event-driven: many workflow files under `.github/workflows`, each triggered by events (push, pull_request, schedule, workflow_dispatch, repository_dispatch), composed from reusable marketplace actions and reusable workflows, with jobs on separate runners needing explicit artifacts to share state. GitLab CI is pipeline-centric: one `.gitlab-ci.yml` with ordered stages, jobs with `needs` for a DAG, built-in environments, review apps, merge trains, and a container registry in the same product. Both support matrices and caching; the real decision usually follows where your code, permissions, and compliance already live rather than feature lists.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "GitLab",
+        "followUps": [
+          "When would you reach for a reusable workflow versus a composite action?",
+          "What does `needs` change about pipeline duration?"
+        ],
+        "tags": [
+          "ci",
+          "github-actions",
+          "gitlab-ci"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-09",
+        "question": "A third-party GitHub Action you use is compromised. What is the blast radius and how do you limit it beforehand?",
+        "answer": "An action runs arbitrary code in your job, so it can read repository contents, any secret exposed to that job, the runner's filesystem and caches, and cloud credentials reachable from it, then exfiltrate over the network or push malicious commits. Limit it in advance: pin actions to a full commit SHA rather than a mutable tag, vendor or mirror critical actions, set `permissions:` to the minimum GITHUB_TOKEN scopes per job, avoid `pull_request_target` with checkout of untrusted code, split jobs so secrets are only present where needed, and use short-lived OIDC credentials. Review third-party actions like dependencies and keep an allowlist.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "GitHub",
+        "followUps": [
+          "Why is pinning to a tag insufficient?",
+          "Why is `pull_request_target` a common foot-gun?"
+        ],
+        "tags": [
+          "ci",
+          "supply-chain",
+          "security",
+          "github-actions"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-10",
+        "question": "How should pull requests be sized and described to get useful review?",
+        "answer": "Keep them small — roughly under 400 changed lines, ideally one logical change — because review defect-detection drops sharply beyond that and big PRs get rubber-stamped. Separate mechanical changes (renames, formatting, dependency bumps) into their own commits or PRs so reviewers can skip them. The description should state the why, the approach, what was explicitly not done, how it was tested, and the rollback/migration story. Link the issue, add screenshots or sample requests/responses for API and UI changes, and self-review the diff first to catch debug leftovers.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "GitHub",
+        "followUps": [
+          "How do you split a large feature into reviewable PRs?",
+          "What belongs in a PR template?"
+        ],
+        "tags": [
+          "code-review",
+          "pull-requests",
+          "process"
+        ]
+      },
+      {
+        "id": "NvUcSDWBhzJZ31nzT4UlE-11",
+        "question": "How do you make repository configuration reproducible across dozens of repos?",
+        "answer": "Treat it as infrastructure as code: manage repos, branch protection/rulesets, teams, permissions, webhooks, and secrets with Terraform (github/gitlab providers) or the host's API, reviewed through PRs like any other change. Use organization-level rulesets and required workflows so policy is not re-implemented per repo, repository templates for new services, and shared reusable workflows for CI. Run a periodic drift check that reports repos deviating from policy (missing protection, admin bypass enabled, stale deploy keys). This also gives you an audit trail of who loosened a control and when.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "GitHub",
+        "followUps": [
+          "How do you detect and report policy drift?",
+          "Where do org-level rulesets beat per-repo settings?"
+        ],
+        "tags": [
+          "governance",
+          "iac",
+          "github",
+          "scale"
+        ]
+      }
+    ]
+  },
+  {
+    "topicId": "fA3yi9puMbTFmbPpo6OjN",
+    "topicTitle": "AI Assisted Coding",
+    "questions": [
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-01",
+        "question": "Where does an AI coding assistant reliably help a backend developer, and where does it not?",
+        "answer": "It helps most where the answer is well-specified and verifiable: boilerplate and glue, test scaffolding, migrations from a schema, parsing/serialization code, unfamiliar API usage, regexes and SQL you can immediately run, code explanations, and first-draft docs. It is weakest where correctness depends on context the model cannot see or verify: concurrency and locking, security-sensitive logic, performance work that needs measurement, cross-service contracts, and anything depending on internal conventions or production behavior. Practical rule: use it where a test or a run can prove the output, and be sceptical where the failure mode is silent.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "Which categories of bug does generated code most often introduce?",
+          "How would you measure whether it actually speeds your team up?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "productivity",
+          "limits"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-02",
+        "question": "What is a hallucinated API, and how do you catch it before it reaches review?",
+        "answer": "The model emits a plausible but nonexistent function, parameter, config key, or library — for example a method that existed in an older major version, or a flag invented to fit the request. Catch it mechanically rather than by reading: compile or type-check, run the code, and let the linter flag unresolved symbols; verify the identifier against the installed version's documentation or source (not memory), and confirm the package itself exists and is the one you mean. Hallucinated package names are also a supply-chain risk — attackers publish them (slopsquatting), so never install a dependency just because generated code imported it.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "",
+        "followUps": [
+          "Why is a passing type-check not sufficient for a semantic hallucination?",
+          "What is slopsquatting and how do you defend against it?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "hallucination",
+          "supply-chain"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-03",
+        "question": "How do you review AI-generated code differently from human-written code?",
+        "answer": "Assume confident-looking but unverified code. Check first that the problem being solved is the right one, since the model optimizes for a plausible answer to the prompt, not the requirement. Then look for the characteristic failure patterns: missing error handling and edge cases, ignored cancellation/timeouts, silent swallowing of exceptions, off-by-one and empty-collection cases, missing input validation, subtly wrong SQL (N+1, unindexed predicate, missing transaction), invented APIs, duplicated logic that already exists in the codebase, and tests that assert the implementation rather than the behavior. Run it, read the diff line by line, and never merge code you could not have written and cannot explain.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "Why is 'tests pass' weak evidence when the tests were also generated?",
+          "Who is accountable for a bug in generated code?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "code-review",
+          "quality"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-04",
+        "question": "What are the legal and confidentiality risks of AI-assisted coding, and how do you manage them?",
+        "answer": "Two distinct risks. Outbound: source code, credentials, customer data, or personal data leaving your boundary in prompts — manage with an approved vendor and data-processing terms, zero-retention or no-training settings, secret scanning before sending, exclusion rules for sensitive paths (.env, key material), and a policy people actually know. Inbound: generated code may reproduce licensed code, creating copyleft or attribution obligations, and provenance is unclear. Manage with license scanning of the codebase, a policy that generated code is treated as your own contribution and reviewed and tested as such, and awareness of the vendor's indemnity terms. Both belong in a written internal policy, not in individual judgement.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "Which repository paths would you exclude from assistant context?",
+          "How would you detect license-incompatible code entering the repo?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "licensing",
+          "privacy",
+          "policy"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-05",
+        "question": "What does 'context management' mean when working with a coding assistant, and why does it matter?",
+        "answer": "The model can only reason over what is in its context window, so results are dominated by what you put there and what you leave out. Practically: give the actual interface definitions, schema, and error messages rather than describing them; include the one or two files that set conventions; state constraints (language version, library, style, performance budget) explicitly; and remove irrelevant files, because noise degrades output and costs tokens. Long sessions drift — restate the goal, or start a fresh session for a new task. Repo-level instruction files (conventions, architecture, commands) are how you make this repeatable rather than per-prompt effort.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "What belongs in a repo-level instructions file?",
+          "Why can adding more files make output worse?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "context",
+          "prompting"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-06",
+        "question": "An assistant produces a 900-line refactor across 15 files that compiles and passes tests. Do you merge it?",
+        "answer": "Not as one PR. You cannot review 900 lines across 15 files effectively, and 'tests pass' only proves the existing tests still hold — which is precisely the weak evidence if the refactor changed behavior the tests do not cover. Ask for it in reviewable slices: mechanical moves and renames separately from behavioral change, one module at a time, each independently deployable. Verify coverage over the touched paths before trusting green CI, run the service and exercise the real flows, and check that the refactor did not quietly change error handling, transaction boundaries, or public contracts. If it cannot be split, that is a signal the change is too coupled to land at once.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "",
+        "followUps": [
+          "How would you verify behavior preservation beyond the existing tests?",
+          "What would make you accept a large generated change?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "refactoring",
+          "code-review",
+          "risk"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-07",
+        "question": "When should you not use an AI assistant on a task?",
+        "answer": "When you cannot verify the result, when the cost of a subtle error is high and detection is slow, or when learning is the point. Concretely: security-critical logic (auth, crypto, access control) without expert review; incident response where you need certainty about the running system rather than plausible narrative; anything requiring data you must not send to a third party; performance work that must be driven by measurements; and decisions about architecture or domain rules that require organizational context. Also avoid it as a substitute for reading the documentation of a system you will own for years.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "",
+        "followUps": [
+          "How can it still help safely during an incident?",
+          "Where does it hurt a junior developer's growth?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "limits",
+          "risk"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-08",
+        "question": "Your team's velocity looks flat after adopting an assistant, while everyone reports feeling faster. How do you evaluate it honestly?",
+        "answer": "Separate perception from outcome and measure the whole pipeline, not typing speed. Track delivery metrics over a period long enough to be meaningful: lead time from first commit to production, deployment frequency, change failure rate, and mean time to restore, plus review throughput and PR size. Faster generation often shifts the bottleneck to review and testing, or trades throughput for more rework and post-release defects, so watch revert rate, hotfix count, and bug escape rate. Run it as a comparison (before/after or team-vs-team) with confounders named, and ask where people stopped verifying. Being 'faster' while change failure rate rises is not an improvement.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "",
+        "followUps": [
+          "Which metric would first reveal quality erosion?",
+          "How do you avoid Goodharting these metrics?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "metrics",
+          "dora",
+          "process"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-09",
+        "question": "What guardrails let an agentic assistant run commands in a repository safely?",
+        "answer": "Constrain blast radius rather than trusting intent. Run it in an isolated workspace — a container, VM, or git worktree — with no production credentials and no write access to shared infrastructure; use read-only or dev-only database copies. Require explicit approval for irreversible or outward-facing actions: force-push, dependency installs, migrations, deploys, network calls, deleting files. Keep changes on a branch behind normal PR review and CI; never let the agent bypass branch protection or push to main. Log every command it ran so the diff is auditable, and cap cost and runtime so a loop cannot run unbounded.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "",
+        "followUps": [
+          "Which actions would you always gate behind human approval?",
+          "Why is a separate worktree or container worth the setup?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "agents",
+          "safety",
+          "sandboxing"
+        ]
+      },
+      {
+        "id": "fA3yi9puMbTFmbPpo6OjN-10",
+        "question": "How do you use an assistant to write tests without ending up with worthless tests?",
+        "answer": "Give it the behavior contract, not the implementation, or it will assert what the code already does — including the bug. Write or specify the cases yourself (happy path, boundary, empty, error, concurrency) and let it fill in mechanics and fixtures. Verify the tests actually discriminate: make them fail deliberately by mutating the implementation, or use mutation testing; a test that passes against a broken implementation is noise. Reject over-mocked tests that assert call sequences rather than outcomes, and keep test naming and structure to your existing conventions so the suite stays readable.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "",
+        "followUps": [
+          "Why does generating tests from implementation lock in bugs?",
+          "How does mutation testing validate a generated suite?"
+        ],
+        "tags": [
+          "ai-assisted",
+          "testing",
+          "quality"
+        ]
+      }
+    ]
+  },
+  {
+    "topicId": "Nx7mjvYgqLpmJ0_iSx5of",
+    "topicTitle": "Applications",
+    "questions": [
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-01",
+        "question": "What does a genuinely useful code review comment look like?",
+        "answer": "It states the problem, the consequence, and a concrete alternative, and it is about the code, not the author: 'this query runs inside the loop, so a 100-item request becomes 100 round trips — fetch the ids once and batch with WHERE id IN (...)'. Distinguish severity explicitly: blocking correctness or security issues, versus 'nit:' style preferences, versus 'question:' where you are asking, not asserting. Praise what is genuinely good so the signal is not only negative, and prefer a suggestion the author can apply over an abstract principle. If a thread exceeds two round trips, move it to a call.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Code Reviews",
+        "followUps": [
+          "How do you label nits so they do not block a merge?",
+          "What do you do when a review thread stalls in disagreement?"
+        ],
+        "tags": [
+          "code-review",
+          "communication"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-02",
+        "question": "What do you actually look for when reviewing a backend pull request, in priority order?",
+        "answer": "First, is this the right change for the requirement, and does the design fit the existing architecture — a correct implementation of the wrong thing is the expensive mistake. Then correctness and edge cases; security (authorization on the new endpoint, input validation, injection, data exposure in responses and logs); data layer concerns (transaction boundaries, index for the new predicate, N+1, migration safety and backward compatibility during rollout); failure behavior (timeouts, retries, idempotency); observability (does a failure here produce a usable log or metric); test quality; and only last naming, structure, and style — most of which a formatter and linter should enforce so humans do not spend review capacity on it.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Code Reviews",
+        "followUps": [
+          "Which of these can be automated away entirely?",
+          "How does review focus change for a migration-only PR?"
+        ],
+        "tags": [
+          "code-review",
+          "checklist",
+          "backend"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-03",
+        "question": "Reviews in your team take three days and PRs are averaging 1,200 lines. How do you fix the pipeline?",
+        "answer": "Attack size and latency together, because large PRs cause slow reviews and slow reviews cause authors to batch more work. Set a soft size limit and teach splitting (interface first, then implementation, then callers; mechanical changes separate; feature flags to land incomplete work safely). Make review an explicit expectation with a target response time (e.g. first response within four hours) rather than leftover time, and use round-robin or load-based reviewer assignment so it does not all land on one senior. Move style and obvious defects to automation — formatter, linter, static analysis, required checks — and reserve human review for design, correctness, and security. Measure PR size, time-to-first-review, and time-to-merge to confirm the change worked.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Code Reviews",
+        "followUps": [
+          "How do feature flags enable smaller PRs?",
+          "Which metric tells you reviewers are overloaded?"
+        ],
+        "tags": [
+          "code-review",
+          "process",
+          "metrics"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-04",
+        "question": "How do you review a database migration differently from application code?",
+        "answer": "Migrations are the changes that cannot simply be rolled back with a redeploy, so review for deployment order and reversibility. Check it is expand-contract: add nullable columns or new tables first, deploy code that writes both, backfill in batches, switch reads, and only drop the old column in a later release. Check locking behavior on the target engine — adding a NOT NULL column with a default, changing a type, or creating an index without CONCURRENTLY can lock a large table and take the service down. Check the backfill is batched with bounded transactions and is restartable, that the down migration exists and is safe, and that the new query predicate has a supporting index.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Code Reviews",
+        "followUps": [
+          "Why must the code tolerate both schema versions?",
+          "Which migration operations would you never run in one transaction?"
+        ],
+        "tags": [
+          "code-review",
+          "migrations",
+          "database",
+          "deployment"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-05",
+        "question": "Which documentation should be generated from code, and which must be written by hand?",
+        "answer": "Generate what is mechanically derivable and goes stale instantly otherwise: API reference from the OpenAPI/protobuf/GraphQL schema, client SDKs from that same schema, type and docstring references, database schema diagrams, configuration and environment-variable tables, changelogs from conventional commits, and architecture dependency graphs. Write by hand what encodes intent and cannot be derived: why the system is shaped this way (ADRs), onboarding and getting-started guides, runbooks, domain glossaries, and worked examples of common tasks. Generated docs answer 'what are the fields'; handwritten docs answer 'what should I do and why'.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Documentation Generation",
+        "followUps": [
+          "How do you keep generated docs from drifting from the deployed version?",
+          "What makes a good ADR?"
+        ],
+        "tags": [
+          "documentation",
+          "openapi",
+          "adr"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-06",
+        "question": "Your API docs are perpetually out of date. How do you fix that structurally?",
+        "answer": "Make the schema the single source of truth and enforce it in CI. Either spec-first (the OpenAPI document is reviewed, the server validates requests against it, and handlers are generated or checked from it) or code-first with annotations that generate the spec — but in both cases a CI job regenerates the spec and fails the build if the committed artifact differs, so drift cannot merge. Publish docs automatically on deploy from the deployed commit, run contract tests and example requests against a live instance so wrong examples break the build, and add a lint step (Spectral) for descriptions, error shapes, and naming. Documentation that is not verified by a pipeline will always drift.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Documentation Generation",
+        "followUps": [
+          "What are the trade-offs of spec-first versus code-first?",
+          "How do contract tests keep examples honest?"
+        ],
+        "tags": [
+          "documentation",
+          "openapi",
+          "ci",
+          "contract-testing"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-07",
+        "question": "What is the definition of refactoring, and what makes a refactor safe?",
+        "answer": "Refactoring changes the internal structure of code without changing its observable behavior. Safety comes from three things: characterization tests that pin current behavior before you touch anything (including the odd behavior you might not intend to keep), small reversible steps that keep the system green after each one, and automated tooling (IDE rename, extract method) over hand-editing. Never mix refactoring with behavior change in the same commit — when something breaks you must be able to tell which one caused it. Where tests are missing, add them first at the boundary you are about to change, or use a parallel-run/comparison harness against the old path.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Refactoring",
+        "followUps": [
+          "What is a characterization test?",
+          "Why separate refactoring commits from feature commits?"
+        ],
+        "tags": [
+          "refactoring",
+          "testing",
+          "safety"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-08",
+        "question": "You must refactor a 3,000-line service class with no tests, in production, handling money. How do you proceed?",
+        "answer": "Do not start by editing it. First establish a safety net: add characterization tests at the class boundary capturing current outputs for real recorded inputs, including the edge cases found in the data; add logging or metrics around the paths you will change. Then carve out behavior incrementally with the sprout/wrap technique — new logic in new tested units called from the old class, or a facade in front of it — rather than a rewrite. Use the strangler-fig approach for larger seams, and for money paths run the new implementation in shadow mode alongside the old, comparing results without acting on them, until discrepancies are zero. Ship small, keep every step deployable and revertible behind a flag, and never refactor and change pricing logic in the same release.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Refactoring",
+        "followUps": [
+          "What is shadow/parallel running and what does it cost?",
+          "When is a rewrite actually the right call?"
+        ],
+        "tags": [
+          "refactoring",
+          "legacy",
+          "risk",
+          "strangler-fig"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-09",
+        "question": "How do you justify refactoring work to a product owner who wants features?",
+        "answer": "Frame it in delivery terms, not aesthetics: name the specific cost the current structure imposes — lead time on changes in this module, the recurring class of production incidents it causes, onboarding time, or the features that are effectively blocked. Bring evidence: incident and hotfix counts by area, cycle time for changes touching that code, and the concrete upcoming roadmap item it obstructs. Propose it scoped and incremental — a bounded piece attached to the feature that needs it, with a defined outcome and a stopping point — rather than an open-ended 'cleanup quarter', which is where trust in refactoring gets destroyed. Agree a small standing allocation so it does not require re-negotiation every time.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Refactoring",
+        "followUps": [
+          "Which evidence is most persuasive in practice?",
+          "Why do big-bang cleanup projects usually fail politically?"
+        ],
+        "tags": [
+          "refactoring",
+          "communication",
+          "prioritization"
+        ]
+      },
+      {
+        "id": "Nx7mjvYgqLpmJ0_iSx5of-10",
+        "question": "Which code smells most reliably signal a needed refactor in backend code?",
+        "answer": "The ones tied to change cost: a class or module that every feature must touch (shotgun surgery / god object), duplicated business rules that drift out of sync, long parameter lists and boolean flags controlling behavior, deeply nested conditionals encoding domain rules that belong in the domain layer, primitive obsession where money or ids are raw strings and floats, feature envy where a service reaches into another object's data, and business logic leaking into controllers or ORM models. A practical prioritizer is churn multiplied by complexity — refactor the files that are both complicated and changed constantly, and ignore the ugly module nobody has edited in two years.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Refactoring",
+        "followUps": [
+          "Why is churn x complexity a better signal than complexity alone?",
+          "Why is money-as-float a correctness bug, not a style issue?"
+        ],
+        "tags": [
+          "refactoring",
+          "code-smells",
+          "prioritization"
+        ]
+      }
+    ]
+  },
+  {
+    "topicId": "iatQ3RCxESHt1CwN3PSfx",
+    "topicTitle": "Integration Patterns",
+    "questions": [
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-01",
+        "question": "Why stream a model response to the client instead of returning it in one response?",
+        "answer": "Generation takes seconds to minutes, so a single response means the user stares at a spinner and you hold a request open long enough to hit proxy and load-balancer timeouts. Streaming tokens as they are produced cuts time-to-first-byte to a few hundred milliseconds, makes the wait tolerable, and lets the user cancel early — which also saves output tokens and money. It also avoids buffering a large payload in memory. The cost is complexity: partial output must be handled, errors can occur mid-stream after a 200 status, and every hop (nginx, CDN, API gateway) must not buffer the body.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Streaming",
+        "followUps": [
+          "How do you report an error that happens after streaming has started?",
+          "Which nginx settings break streaming?"
+        ],
+        "tags": [
+          "streaming",
+          "sse",
+          "latency",
+          "llm"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-02",
+        "question": "Design token streaming from your backend to a browser over SSE. What are the mechanics?",
+        "answer": "Respond with `Content-Type: text/event-stream`, `Cache-Control: no-cache`, `Connection: keep-alive`, and `X-Accel-Buffering: no` for nginx, then write `data: {json}\\n\\n` frames as chunks arrive and flush after each, ending with a sentinel event such as `data: [DONE]`. Send a comment heartbeat (`: ping\\n\\n`) every 15-30 seconds so idle-connection timeouts and proxies do not drop the stream. Include an incrementing `id:` so the browser's EventSource can resume with `Last-Event-ID` after a reconnect, and propagate client disconnect (request context cancellation) upstream to stop generating and stop billing. SSE is one-directional, text-only, and limited by per-domain connection limits on HTTP/1.1, so use HTTP/2 or a POST-based fetch stream when those bite.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Streaming",
+        "followUps": [
+          "Why is SSE often preferred to WebSocket here?",
+          "How do you stop generation when the client disappears?"
+        ],
+        "tags": [
+          "sse",
+          "streaming",
+          "http",
+          "nginx"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-03",
+        "question": "Your streaming endpoint works locally but clients receive the whole response at once in production. Diagnose it.",
+        "answer": "Something between the application and the browser is buffering. Check in order: nginx `proxy_buffering on` (disable for that location or set `X-Accel-Buffering: no`), gzip/compression middleware that buffers to compress, an API gateway or CDN that does not support streaming responses, and application-level response buffering or a framework wrapper that collects the body. Also verify your handler actually flushes per chunk rather than relying on the writer's internal buffer, and that no middleware (logging, error wrapper) reads the body. Confirm the hop-by-hop behavior with `curl -N` directly against each layer to find where chunking stops.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Streaming",
+        "followUps": [
+          "Why does gzip interact badly with streaming?",
+          "How do you test each hop in isolation?"
+        ],
+        "tags": [
+          "streaming",
+          "nginx",
+          "debugging",
+          "proxy"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-04",
+        "question": "What are structured outputs, and how do they differ from asking a model for JSON in the prompt?",
+        "answer": "Structured outputs constrain generation to a supplied JSON Schema (constrained decoding / grammar-based sampling) so the result is guaranteed parseable and schema-conformant; prompting for JSON only makes it likely, and you will eventually get prose preamble, markdown fences, trailing commas, or a truncated object. Structured outputs remove the parsing class of failure entirely, but not semantic error — the model can still return a well-typed wrong value, a hallucinated enum member that you must therefore express as an enum, or plausible nulls. Design the schema tightly (enums instead of free strings, required fields, no additional properties) and still validate business invariants after parsing.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Structured Outputs",
+        "followUps": [
+          "Which validation must still happen after a schema-valid parse?",
+          "How does a tight enum reduce hallucination?"
+        ],
+        "tags": [
+          "structured-outputs",
+          "json-schema",
+          "llm"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-05",
+        "question": "How do you build a reliable extraction endpoint where the model must return a schema-conformant object?",
+        "answer": "Validate every response against the schema at the boundary (Pydantic, zod, JSON Schema) and treat validation failure as a retryable error: retry with the validation error fed back as context, with a small bounded number of attempts, exponential backoff and jitter, and a dead-letter path that stores the raw output for inspection rather than silently returning a default. Keep the schema and prompt versioned together so you can attribute quality changes, log input, raw output, and validation result for offline evaluation, and set a max-tokens ceiling high enough that truncation is not the cause of malformed output. For anything consequential, add business-rule checks and a confidence or 'unknown' branch rather than forcing the model to guess.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Structured Outputs",
+        "followUps": [
+          "Why cap retries rather than loop until valid?",
+          "How does an explicit 'unknown' option improve accuracy?"
+        ],
+        "tags": [
+          "structured-outputs",
+          "validation",
+          "retry",
+          "reliability"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-06",
+        "question": "What is function/tool calling, and who executes the function?",
+        "answer": "You describe available functions to the model as a name, description, and JSON Schema of parameters; the model returns a structured request to call one with arguments instead of prose. Your backend executes it — the model has no access to anything — then returns the result, and the model continues with that context, possibly calling more tools. Consequences: the model's output is untrusted input to your code, so arguments must be validated and authorized exactly like an external API request; execution must be idempotent or guarded because the loop may retry; and each turn costs tokens, so tool count and result size directly drive latency and cost.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Function Calling",
+        "followUps": [
+          "Why treat tool arguments as untrusted input?",
+          "What limits how many tools you should expose at once?"
+        ],
+        "tags": [
+          "function-calling",
+          "tools",
+          "llm",
+          "security"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-07",
+        "question": "How do you design a good tool interface for a model?",
+        "answer": "Design it like an API for a capable but context-poor consumer. Few, coarse-grained, task-shaped tools beat many fine-grained ones (`search_orders(customer_id, status, date_range)` rather than five overlapping getters), because selection accuracy falls as the tool list grows. Names and descriptions must state when to use it and when not to, parameters should be enums and typed values rather than free strings, and required fields must be genuinely required. Return compact, structured results with only the fields needed — full database rows blow up the context — and return actionable error messages the model can recover from ('customer_id not found, call search_customers first') rather than a stack trace. Make reads cheap and writes explicitly confirmable.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Function Calling",
+        "followUps": [
+          "Why do too many tools degrade selection accuracy?",
+          "How should a tool report a recoverable error?"
+        ],
+        "tags": [
+          "function-calling",
+          "api-design",
+          "tools"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-08",
+        "question": "A tool-calling agent loops, calling the same tool 40 times, and your bill spikes. What controls do you add?",
+        "answer": "Bound the loop structurally rather than hoping for better prompting: a maximum number of tool-call iterations per request, a total token and wall-clock budget enforced by the orchestration layer, and detection of repeated identical calls (hash the tool name plus arguments) that breaks the loop and returns a clear failure. Add per-tool timeouts and per-user rate limits and cost quotas, cache identical read-only tool results within a request, and log the full call trace so you can see where reasoning went in circles. Alert on cost per request and on the iteration-count distribution, not just on the monthly total — by the time the invoice shows it, the incident is a week old.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Function Calling",
+        "followUps": [
+          "What is the right behavior when the iteration cap is hit?",
+          "Which signal detects this in minutes rather than days?"
+        ],
+        "tags": [
+          "function-calling",
+          "cost-control",
+          "reliability",
+          "observability"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-09",
+        "question": "How do you handle timeouts, retries, and idempotency when calling a slow external model API?",
+        "answer": "Set an explicit timeout well above p99 generation time but bounded, and derive it from a request-level deadline propagated through the call chain so a slow upstream cannot exceed the client's own budget. Retry only on transient conditions — 429, 5xx, connection errors — with exponential backoff plus jitter and a small attempt cap, honoring Retry-After; never blind-retry a timeout on a non-idempotent operation. Attach an idempotency key so a retried request that actually succeeded upstream does not double-charge or double-write, and record the request state before calling. Protect the rest of the system with a circuit breaker, a bulkhead (separate connection pool and concurrency limit), and a degraded fallback such as a cached or non-model response.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "",
+        "followUps": [
+          "Why is retrying a timeout riskier than retrying a 503?",
+          "What does the bulkhead protect here?"
+        ],
+        "tags": [
+          "timeouts",
+          "retry",
+          "idempotency",
+          "circuit-breaker"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-10",
+        "question": "A user request needs a 90-second model job. How do you expose that through your HTTP API?",
+        "answer": "Do not hold a synchronous request open for 90 seconds — proxies, load balancers, and mobile networks will cut it, and retries will duplicate the work. Use the asynchronous job pattern: POST creates the job, returns `202 Accepted` with a job id and a status URL (Location header), and the work runs on a queue with a worker; the client polls `GET /jobs/{id}` or subscribes via SSE/WebSocket for completion, or you call a webhook with a signed payload. Accept an idempotency key on the POST so a retried submit returns the existing job instead of starting a second one, persist job state with timestamps and failure reason, expose progress if available, and support cancellation so abandoned work stops burning tokens.",
+        "difficulty": "middle",
+        "type": "design",
+        "subtopic": "",
+        "followUps": [
+          "When would you choose a webhook over polling?",
+          "How do you make job submission idempotent?"
+        ],
+        "tags": [
+          "async",
+          "long-running",
+          "api-design",
+          "queues"
+        ]
+      },
+      {
+        "id": "iatQ3RCxESHt1CwN3PSfx-11",
+        "question": "What is prompt injection, and what does it mean for a backend exposing tools to a model?",
+        "answer": "Untrusted content that the model reads — a user message, a fetched web page, a support ticket, a document, a database field — contains instructions that redirect the model's behavior, for example telling it to call the delete tool or to include another tenant's data in its answer. Because the model cannot reliably distinguish data from instructions, the defense must be outside the model: authorize every tool call against the end user's own permissions rather than a service-wide credential, keep high-impact actions behind explicit human confirmation, allowlist outbound network destinations to prevent exfiltration, validate and constrain tool arguments, and never let model output become a privileged command or raw SQL. Treat all model output as untrusted input to the next system.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Function Calling",
+        "followUps": [
+          "Why is prompt-level 'ignore malicious instructions' not a control?",
+          "How does per-user authorization on tools limit the damage?"
+        ],
+        "tags": [
+          "security",
+          "prompt-injection",
+          "function-calling",
+          "authorization"
+        ]
+      }
+    ]
+  }
+]

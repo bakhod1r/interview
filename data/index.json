@@ -1,0 +1,434 @@
+{
+  "generatedAt": "2026-09-24",
+  "total": 1187,
+  "levels": {
+    "J": "Junior",
+    "M": "Middle",
+    "S": "Senior",
+    "St": "Staff",
+    "P": "Principal"
+  },
+  "types": {
+    "mcq": "Multiple choice",
+    "code": "Code",
+    "sql": "Write SQL",
+    "open": "Open"
+  },
+  "domains": {
+    "go": "Go",
+    "db": "PostgreSQL & SQL",
+    "nosql": "Redis, Mongo, Elastic",
+    "msg": "Kafka & messaging",
+    "api": "API, HTTP, security",
+    "infra": "Infrastructure & DevOps",
+    "arch": "Architecture & OOP",
+    "dist": "Distributed systems",
+    "sys": "System design",
+    "alg": "Algorithms",
+    "soft": "Behavioral",
+    "tricky": "Edge cases & gotchas",
+    "sec": "Security",
+    "fin": "Fintech & payments"
+  },
+  "sections": [
+    {
+      "id": "g1",
+      "name": "Language basics",
+      "domain": "go",
+      "count": 51,
+      "file": "sections/g1-language-basics.json"
+    },
+    {
+      "id": "g2",
+      "name": "Concurrency",
+      "domain": "go",
+      "count": 47,
+      "file": "sections/g2-concurrency.json"
+    },
+    {
+      "id": "g7",
+      "name": "Runtime internals",
+      "domain": "go",
+      "count": 25,
+      "file": "sections/g7-runtime-internals.json"
+    },
+    {
+      "id": "g5",
+      "name": "Tooling, modules, build",
+      "domain": "go",
+      "count": 16,
+      "file": "sections/g5-tooling-modules-build.json"
+    },
+    {
+      "id": "g6",
+      "name": "Stdlib & web",
+      "domain": "go",
+      "count": 18,
+      "file": "sections/g6-stdlib-web.json"
+    },
+    {
+      "id": "g3",
+      "name": "Memory, performance, testing",
+      "domain": "go",
+      "count": 35,
+      "file": "sections/g3-memory-performance-testing.json"
+    },
+    {
+      "id": "g4",
+      "name": "Production cases (Go)",
+      "domain": "go",
+      "count": 23,
+      "file": "sections/g4-production-cases-go.json"
+    },
+    {
+      "id": "d1",
+      "name": "SQL basics",
+      "domain": "db",
+      "count": 24,
+      "file": "sections/d1-sql-basics.json"
+    },
+    {
+      "id": "d2",
+      "name": "Data modeling & keys",
+      "domain": "db",
+      "count": 14,
+      "file": "sections/d2-data-modeling-keys.json"
+    },
+    {
+      "id": "d3",
+      "name": "Indexes & query planning",
+      "domain": "db",
+      "count": 37,
+      "file": "sections/d3-indexes-query-planning.json"
+    },
+    {
+      "id": "d4",
+      "name": "Transactions & isolation",
+      "domain": "db",
+      "count": 49,
+      "file": "sections/d4-transactions-isolation.json"
+    },
+    {
+      "id": "d5",
+      "name": "Operations, scaling, Go+DB",
+      "domain": "db",
+      "count": 42,
+      "file": "sections/d5-operations-scaling-go-db.json"
+    },
+    {
+      "id": "n1",
+      "name": "Redis & caching",
+      "domain": "nosql",
+      "count": 32,
+      "file": "sections/n1-redis-caching.json"
+    },
+    {
+      "id": "n2",
+      "name": "MongoDB",
+      "domain": "nosql",
+      "count": 16,
+      "file": "sections/n2-mongodb.json"
+    },
+    {
+      "id": "n3",
+      "name": "Elasticsearch",
+      "domain": "nosql",
+      "count": 13,
+      "file": "sections/n3-elasticsearch.json"
+    },
+    {
+      "id": "m1",
+      "name": "Kafka",
+      "domain": "msg",
+      "count": 20,
+      "file": "sections/m1-kafka.json"
+    },
+    {
+      "id": "m2",
+      "name": "RabbitMQ & queues",
+      "domain": "msg",
+      "count": 17,
+      "file": "sections/m2-rabbitmq-queues.json"
+    },
+    {
+      "id": "m3",
+      "name": "Event-driven & integration",
+      "domain": "msg",
+      "count": 13,
+      "file": "sections/m3-event-driven-integration.json"
+    },
+    {
+      "id": "a1",
+      "name": "HTTP & REST",
+      "domain": "api",
+      "count": 29,
+      "file": "sections/a1-http-rest.json"
+    },
+    {
+      "id": "a2",
+      "name": "gRPC",
+      "domain": "api",
+      "count": 13,
+      "file": "sections/a2-grpc.json"
+    },
+    {
+      "id": "a3",
+      "name": "Realtime",
+      "domain": "api",
+      "count": 14,
+      "file": "sections/a3-realtime.json"
+    },
+    {
+      "id": "a4",
+      "name": "Auth & security",
+      "domain": "api",
+      "count": 17,
+      "file": "sections/a4-auth-security.json"
+    },
+    {
+      "id": "a5",
+      "name": "Resilience",
+      "domain": "api",
+      "count": 14,
+      "file": "sections/a5-resilience.json"
+    },
+    {
+      "id": "i1",
+      "name": "Containers & Kubernetes",
+      "domain": "infra",
+      "count": 17,
+      "file": "sections/i1-containers-kubernetes.json"
+    },
+    {
+      "id": "i2",
+      "name": "CI/CD & deploy",
+      "domain": "infra",
+      "count": 15,
+      "file": "sections/i2-ci-cd-deploy.json"
+    },
+    {
+      "id": "i3",
+      "name": "Observability & SRE",
+      "domain": "infra",
+      "count": 18,
+      "file": "sections/i3-observability-sre.json"
+    },
+    {
+      "id": "i4",
+      "name": "Networking & protocols",
+      "domain": "infra",
+      "count": 20,
+      "file": "sections/i4-networking-protocols.json"
+    },
+    {
+      "id": "i5",
+      "name": "Cloud, OS, operations",
+      "domain": "infra",
+      "count": 24,
+      "file": "sections/i5-cloud-os-operations.json"
+    },
+    {
+      "id": "r1",
+      "name": "Microservices & boundaries",
+      "domain": "arch",
+      "count": 20,
+      "file": "sections/r1-microservices-boundaries.json"
+    },
+    {
+      "id": "r2",
+      "name": "OOP & SOLID",
+      "domain": "arch",
+      "count": 14,
+      "file": "sections/r2-oop-solid.json"
+    },
+    {
+      "id": "r3",
+      "name": "Design patterns",
+      "domain": "arch",
+      "count": 12,
+      "file": "sections/r3-design-patterns.json"
+    },
+    {
+      "id": "r4",
+      "name": "Clean code & architecture",
+      "domain": "arch",
+      "count": 16,
+      "file": "sections/r4-clean-code-architecture.json"
+    },
+    {
+      "id": "r5",
+      "name": "DDD / TDD / BDD",
+      "domain": "arch",
+      "count": 16,
+      "file": "sections/r5-ddd-tdd-bdd.json"
+    },
+    {
+      "id": "r6",
+      "name": "Domain: e-commerce & billing",
+      "domain": "arch",
+      "count": 10,
+      "file": "sections/r6-domain-e-commerce-billing.json"
+    },
+    {
+      "id": "s1",
+      "name": "Theory: consensus & consistency",
+      "domain": "dist",
+      "count": 15,
+      "file": "sections/s1-theory-consensus-consistency.json"
+    },
+    {
+      "id": "s2",
+      "name": "Practice: failure & scale",
+      "domain": "dist",
+      "count": 22,
+      "file": "sections/s2-practice-failure-scale.json"
+    },
+    {
+      "id": "y1",
+      "name": "System design basics",
+      "domain": "sys",
+      "count": 27,
+      "file": "sections/y1-system-design-basics.json"
+    },
+    {
+      "id": "y2",
+      "name": "Case studies",
+      "domain": "sys",
+      "count": 50,
+      "file": "sections/y2-case-studies.json"
+    },
+    {
+      "id": "z1",
+      "name": "Algorithm patterns",
+      "domain": "alg",
+      "count": 59,
+      "file": "sections/z1-algorithm-patterns.json"
+    },
+    {
+      "id": "b1",
+      "name": "Behavioral & teamwork",
+      "domain": "soft",
+      "count": 14,
+      "file": "sections/b1-behavioral-teamwork.json"
+    },
+    {
+      "id": "t1",
+      "name": "Go gotchas",
+      "domain": "tricky",
+      "count": 28,
+      "file": "sections/t1-go-gotchas.json"
+    },
+    {
+      "id": "t2",
+      "name": "SQL gotchas",
+      "domain": "tricky",
+      "count": 23,
+      "file": "sections/t2-sql-gotchas.json"
+    },
+    {
+      "id": "t3",
+      "name": "System & infra gotchas",
+      "domain": "tricky",
+      "count": 13,
+      "file": "sections/t3-system-infra-gotchas.json"
+    },
+    {
+      "id": "t4",
+      "name": "Concurrency gotchas",
+      "domain": "tricky",
+      "count": 13,
+      "file": "sections/t4-concurrency-gotchas.json"
+    },
+    {
+      "id": "t5",
+      "name": "Time, date, encoding gotchas",
+      "domain": "tricky",
+      "count": 13,
+      "file": "sections/t5-time-date-encoding-gotchas.json"
+    },
+    {
+      "id": "t6",
+      "name": "API & HTTP gotchas",
+      "domain": "tricky",
+      "count": 13,
+      "file": "sections/t6-api-http-gotchas.json"
+    },
+    {
+      "id": "t7",
+      "name": "Distributed gotchas",
+      "domain": "tricky",
+      "count": 13,
+      "file": "sections/t7-distributed-gotchas.json"
+    },
+    {
+      "id": "t8",
+      "name": "Memory & GC gotchas",
+      "domain": "tricky",
+      "count": 12,
+      "file": "sections/t8-memory-gc-gotchas.json"
+    },
+    {
+      "id": "t9",
+      "name": "Kafka & queue gotchas",
+      "domain": "tricky",
+      "count": 13,
+      "file": "sections/t9-kafka-queue-gotchas.json"
+    },
+    {
+      "id": "t10",
+      "name": "Redis & cache gotchas",
+      "domain": "tricky",
+      "count": 9,
+      "file": "sections/t10-redis-cache-gotchas.json"
+    },
+    {
+      "id": "t11",
+      "name": "Docker & Kubernetes gotchas",
+      "domain": "tricky",
+      "count": 10,
+      "file": "sections/t11-docker-kubernetes-gotchas.json"
+    },
+    {
+      "id": "t12",
+      "name": "Security gotchas",
+      "domain": "tricky",
+      "count": 9,
+      "file": "sections/t12-security-gotchas.json"
+    },
+    {
+      "id": "t13",
+      "name": "Network & latency gotchas",
+      "domain": "tricky",
+      "count": 9,
+      "file": "sections/t13-network-latency-gotchas.json"
+    },
+    {
+      "id": "x1",
+      "name": "Application security",
+      "domain": "sec",
+      "count": 24,
+      "file": "sections/x1-application-security.json"
+    },
+    {
+      "id": "p1",
+      "name": "Payments & PSP",
+      "domain": "fin",
+      "count": 12,
+      "file": "sections/p1-payments-psp.json"
+    },
+    {
+      "id": "p2",
+      "name": "Ledger & accounting",
+      "domain": "fin",
+      "count": 11,
+      "file": "sections/p2-ledger-accounting.json"
+    },
+    {
+      "id": "p3",
+      "name": "Compliance, fraud, FX",
+      "domain": "fin",
+      "count": 14,
+      "file": "sections/p3-compliance-fraud-fx.json"
+    }
+  ]
+}

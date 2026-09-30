@@ -1,0 +1,573 @@
+{
+  "slug": "openclaw",
+  "title": "OpenClaw",
+  "description": "Learn to deploy and get the most out of OpenClaw",
+  "url": "https://roadmap.sh/openclaw",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-09-10T11:04:25.517Z",
+  "relatedRoadmaps": [
+    "vibe-coding",
+    "claude-code",
+    "ai-engineer",
+    "ai-agents"
+  ],
+  "topicCount": 19,
+  "subtopicCount": 88,
+  "topics": [
+    {
+      "id": "6VS0lRVk60w49FvRiCRWK",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "4u53an-SHGNCAh87GTd7C",
+          "title": "OpenClaw vs Claude Code",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EzEJOUOwLlVfA4q5NXC88",
+          "title": "Use cases",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "w8Vwf1Ak_gNdvgXOgU1Fo",
+          "title": "Gateway",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "EggP8_uXPbgQeNKQFP4JJ",
+      "title": "How OpenClaw Works",
+      "subtopics": []
+    },
+    {
+      "id": "u9hCwPYZucGkb_zChmpzj",
+      "title": "Setting up OpenClaw",
+      "subtopics": []
+    },
+    {
+      "id": "WeEz693z_j7kIL39uFyHF",
+      "title": "Usage Best Practices",
+      "subtopics": [
+        {
+          "id": "qAL663Fl50skXD_zd1I7c",
+          "title": "doctor --deep",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Phj_imdYA3Fr4HTcfyidD",
+          "title": "doctor",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wGp4nsoZNTbM4wgAmrqjj",
+          "title": "Adding Daemon",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7Nvwyi3YFerTpDKkA0Uzo",
+          "title": "Other Workspace Files",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U1W-s3E2Iu74sFyf4U-vQ",
+          "title": "memory/YYYY-MM-DD.md",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WblCEWQzvYDzVdn3XEIa8",
+          "title": "onboard",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "7_QUsiC57I4xcaySZYAoc",
+      "title": "Skills",
+      "subtopics": [
+        {
+          "id": "GUlO2ZchQ4EFcvDWpVQVV",
+          "title": "channels login",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7pTIsu7dh8ue2Aju270Ec",
+          "title": "channels add --channel",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BczmS7SR1jk9FJqlQmqVb",
+          "title": "channels remove --channel",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "fSHA8tY7RmDbD8zn3DDhu",
+      "title": " Multi-Agents",
+      "subtopics": [
+        {
+          "id": "_tmV2qJyrkBBZdCL_xWh1",
+          "title": "Routing Rules",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OJb7PnYnN2RW4fqLV-vnl",
+          "title": "models auth setup-token",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0NpspxLPvMqvmeIq8hdd1",
+          "title": "cron list",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lHePFHLUR1BKK9mC0HWLU",
+          "title": "cron add",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D79q0eP_HbXBGWgDB6XgW",
+          "title": "/status",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5ah4uCTo83YTFtn3kkH-l",
+          "title": "/new",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-sFXMyN-4VvXdJCaU8qiK",
+          "title": "/model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kotkvs1mJRlHaEZA5NyDp",
+          "title": "/context",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nNM3q26rXk3_HoxyOYxcV",
+          "title": "/compact",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Bz_gfPslArn4PH1clLiWl",
+          "title": "memory index --all",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eEXTZXgd2F51OAQQ6jELC",
+          "title": "memory search \"<query>\"",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jQwU2VQFmjyWQHn5PpViF",
+          "title": "/help",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BJ3iFyZjmakxbeh4IsXkw",
+          "title": "/reset",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jhDkMmSD6bMZoTNOjZUnr",
+          "title": "/stop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f8WQ8qOiCFpW3sTJbIc2D",
+          "title": "backup create",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1qsX8SiXVlpVrOXZE-5mg",
+          "title": "/usage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xBl2Xgvbi6f_zwl4uPJhu",
+          "title": "/think",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RZ2afehxi2PlKAFp9WY_3",
+          "title": "/fast",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "M6sqVDIh4d4lYNefJqKX5",
+          "title": "/reasoning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v4nwaFwHjh2UQ8rsBiTOo",
+          "title": "/allowlist",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "T8qUFenL-CKPWnwOEe8lS",
+          "title": "/config",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kPrB8vWCQkXdiEm42TVel",
+          "title": "/mcp",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MeNsZrMsNU_xZR9hmLkQz",
+          "title": "/plugins",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "QbcsFFPpZt7k_R_70jLxe",
+      "title": "Plugins",
+      "subtopics": [
+        {
+          "id": "reIkqx-GGIq31cv2cHXbZ",
+          "title": "Installing Plugins",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "l4jRfrWA0ATEsywdoZQyv",
+          "title": "Creating Plugins",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "gN2oNDE7FXPyBh_5ZOu_Z",
+          "title": "Security Risks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "rjTLUR9vhsyqmHV4xRPyv",
+          "title": "channels status --probe",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "uX7uZBFzUyVJ4aKjyjBHq",
+      "title": "Automating Tasks",
+      "subtopics": [
+        {
+          "id": "bH9ebjEofXA3mwnmqRzW1",
+          "title": "gateway",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zqeuYyqd5pMPQLFfPnskC",
+          "title": "security audit",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "KJ_Y5N8D-FWZIz52ajcO8",
+      "title": "Hooks",
+      "subtopics": [
+        {
+          "id": "ouy9TRfFrXcsTKh_E2qjq",
+          "title": "iMessage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gFGGZE4AUBm8PxKHrF8_g",
+          "title": "Telegram",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4XYMS1wQa3ZwWCQNBnwpd",
+          "title": "Slack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "y6qWd-k0SiMhLFexkyQb5",
+          "title": "WhatsApp",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ghi0M5P_JMm7D_JhIwJXC",
+          "title": "Discord",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0a08Q6vTfqbG94tcJYxN2",
+          "title": "Signal",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yxty1gRUtcy-GoPFV4ybO",
+          "title": "Hook Structure",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "F0jyMHHjeAbftNw2BjrUi",
+      "title": "Webhooks",
+      "subtopics": [
+        {
+          "id": "HnF_CCNL3pssicFlGNta3",
+          "title": "Event Types",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "XCpfUKOalyeNAx6Z5DPVG",
+      "title": "Heartbeats",
+      "subtopics": [
+        {
+          "id": "abWTw0gTCO4R3VygeDqsL",
+          "title": "Securing Webhooks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D8VJRcsVLzwCLSZX5TkoR",
+          "title": "Interval & Active Hours",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3v3VJETUQ1x1eKWUo8jhf",
+      "title": "Cron Jobs",
+      "subtopics": [
+        {
+          "id": "rEUJIhqOUyLORy6cnlAAj",
+          "title": "Installing from ClawHub",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xRDXMh4n8LghBX5TH0LIu",
+          "title": "Creating Skills",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9wAYWJQBiWy_RF2AfQsqn",
+          "title": "Security Risks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aezBZ3XK1cXgMn1QTvBMs",
+          "title": "Managing & Disabling Jobs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eXo_Wxhg-i7v6lx12NqAu",
+          "title": "HEARTBEAT.md",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "vFjddVdOJvkTDptambYt0",
+      "title": "MCP",
+      "subtopics": [
+        {
+          "id": "YS-u4nfgmr9pOq_NLrdCA",
+          "title": "models list | set | status",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ce3e7IMiN-n3wX9PvJXoW",
+          "title": "models auth add",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "02A7y4sZ-qg3-dx1wmxwj",
+      "title": "Local Machine",
+      "subtopics": [
+        {
+          "id": "3bSTQ3nt5GdvKOder9J5R",
+          "title": "Anthropic",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Le0uptRoIlwTZ7crU3rMQ",
+          "title": "Gemini",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "NhAOeGOqfUjkXth5DntKA",
+          "title": "Why and Why not?",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "y29FvjAzA1KhzlC49XPfh",
+          "title": "Security Best Practices",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "bnyEeJVvaysPBkIevTCBa",
+      "title": "VPS/Cloud",
+      "subtopics": [
+        {
+          "id": "v2fsulkH_nGktwcdk8QWR",
+          "title": "Why and Why not?",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qDidhG0fztZ38BSMv76YI",
+          "title": "Security Best Practices",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "y8n10TL6_mWldqclw1Dcz",
+      "title": "Dedicated Hardware",
+      "subtopics": [
+        {
+          "id": "7bgIwJ5S-b6DXdLe-pWlI",
+          "title": "Context Window",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "c9fsU9OeThY79MYbpzbA0",
+          "title": "Memory System",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-K12VwV2QQiQNjjjr-ENW",
+          "title": "Channels",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "H4EXzyftWkvdFlMfU7ydG",
+          "title": "Skills",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qzVRzcGnImdqVDw0W-Z7H",
+          "title": "Proactive Core",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "i5pSML-UG6dqXETubMEs6",
+          "title": "Agents",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oaXblhElJYZoLT4OS-7TQ",
+          "title": "Agent Loop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CE3p60gkIzzHBh69kKiIw",
+          "title": "Raspberry Pi",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oEAIlEf0PqO8TWl-w2NUC",
+          "title": "Mac Mini",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "htT_HpzKKNXSbxhWf4dCJ",
+          "title": "Why and Why not?",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "2JiT8CS9PSVSfIeao29hq",
+      "title": "Installation",
+      "subtopics": [
+        {
+          "id": "nVzj2P826S2LjUCpdYGVo",
+          "title": "Docker",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HgvUjBAWLLmT_QBYeSyli",
+          "title": "Pick a Provider",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "sI6wvGO8kZN8M_RIjQ7FN",
+      "title": "Onboarding",
+      "subtopics": [
+        {
+          "id": "B4SyJwbv0HnI34BW81Ong",
+          "title": "Auth & Model Providers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MbZFK1Q6ndoaDMsrf15Xi",
+          "title": "Adding First Channel",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wp7wX-xbOKG5Aemo-rl4g",
+          "title": "Workspace Settings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vLQ7hJJS3yXgbi0b-RAlb",
+          "title": "OpenAI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2qAGs1j1MDaoQFCDpF37Z",
+          "title": "Ollama",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nU3pnqImGhRO3QwK4CLeM",
+          "title": "Gateway Settings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HebyE2mjSdCLBEbiJAbsC",
+          "title": "MEMORY.md",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4CT2VNLkpdqeartj2z0lt",
+          "title": "AGENTS.md",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "M1zIUsUO6qKhIXzxE9sho",
+          "title": "SOUL.md",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S7qSTFNATTfamM6XMnm-O",
+          "title": "USER.md",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "4XsdBdveBxrTIg3WdzzOO",
+      "title": "Sessions",
+      "subtopics": [
+        {
+          "id": "bmvpZKVx3YgUBEC3WfrWA",
+          "title": "channels list",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZCY_hUhVIMLPoXnRXVpkN",
+          "title": "gateway start | stop | restart ",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

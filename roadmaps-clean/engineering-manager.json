@@ -1,0 +1,688 @@
+{
+  "slug": "engineering-manager",
+  "title": "Engineering Manager",
+  "description": "Everything you need to know to become an Engineering Manager in @currentYear@",
+  "url": "https://roadmap.sh/engineering-manager",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-02-26T08:48:55.643Z",
+  "relatedRoadmaps": [
+    "backend",
+    "software-architect",
+    "system-design",
+    "software-design-architecture",
+    "product-manager"
+  ],
+  "topicCount": 1,
+  "subtopicCount": 132,
+  "topics": [
+    {
+      "id": "_hYN0gEi9BL24nptEtXWU",
+      "title": "What is Engineering Management?",
+      "subtopics": [
+        {
+          "id": "oKbeLp4YB8rI1Q3vi0EnG",
+          "title": "EM vs Tech Lead vs IC",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aSZ2uVCmpAdEPjJt6VKG4",
+          "title": "People",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "p9ecMvHCqjmvxf67di7pY",
+          "title": "Product",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iZFn0FaRdrGv_-_8zii_-",
+          "title": "Process",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FtWNnOE3zObmjS-Og26M3",
+          "title": "Architectural Decision-Making",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pduPcv2QPpVmVvDdK4CPi",
+          "title": "System Monitoring & Performance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EyoVFmqOJbH1sAPHLISFt",
+          "title": "Scaling Infrastructure",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fBENrXdMhoGYgL_d96tgo",
+          "title": "Software Engineering Background",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iX4HPgoiEbc_gze1A01n4",
+          "title": "System Design and Architecture",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EY6Hk5wPd9Y_VA1UROk44",
+          "title": "Technical Debt and Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_2xnTKt5yi__jj_WgcLa7",
+          "title": "Technical Documentation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "40yK6XzI8lSxdiAXxtF75",
+          "title": "Code Review Best Practices",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ikCJ8Ybu2AD1w5VuPNVAO",
+          "title": "Technical Roadmapping",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "H0aav5qKDNiNegJOGP2rx",
+          "title": "Build vs Buy Evaluation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "d7zMBhMFgY9MwmKC9CVVh",
+          "title": "Technical Risk Assessment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gAEmpSMvNyjmTa5q9oZSg",
+          "title": "CI/CD Implementation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bpJPDbifPwS4ScOoATlEI",
+          "title": "Development / Release Workflow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C2YsaZ32An_UXV8lB7opm",
+          "title": "Technical Standards Setting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sQCLhk__jvbityuuLlxiW",
+          "title": "Security  Best Practices",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "q5SJyM1d8cQzzAcR-kotB",
+          "title": "Testing Strategies",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "o1xPrfg8iNWQpD12xsbQJ",
+          "title": "Incident Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3na5mBIPl5f6mjEzkgD_C",
+          "title": "Hiring and Recruitment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tPDmXXjvFI_8-MTo_dEUw",
+          "title": "Team Structure and Design",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eJzYnoB6sArLjXRm51cM4",
+          "title": "Performance Evaluations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0ULnfq0ZFJXgoLbKM1gxC",
+          "title": "Mentoring and Coaching",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fhFSR_N4ZDTHINEinubHG",
+          "title": "Career Development Planning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bx2SMhR58ud45se5dK7qS",
+          "title": "Delegation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QA5CR5f0geC_RQc_SOK-N",
+          "title": "Conflict Resolution",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Az9GgkLFoat2t_sYRUBv5",
+          "title": "Feedback Delivery",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U_oOnDXkCE387r9olvMZB",
+          "title": "Team Motivation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7PBmYoSmIgZT21a2Ip3_S",
+          "title": "Trust / Influence Building",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b3qoH_LuW-Gz4N8WdGnZs",
+          "title": "One-on-One Meetings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "e0ZuiCoS8sJ0XB1lNiz7_",
+          "title": "Team Meetings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gqKEgKjEu5sOf5Gl-HS-j",
+          "title": "Status Reporting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TVqVlJqegLZRSkwNoHbBf",
+          "title": "Stakeholder Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZyNbSBd8plAZ5lt5OEUYu",
+          "title": "Cross-functional Collaboration",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4v5yLKYVcMh0s7SQuf__C",
+          "title": "Resource Allocation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7BcToTqL78QmG4qb43X5Q",
+          "title": "Sprint Planning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-Qc6E3gkUUonfzifYqeJJ",
+          "title": "Release Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mgw6M8I9qy1EoJpJV-gy1",
+          "title": "Risk Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hH-UDVFlgKoMJcI1ssDFv",
+          "title": "Dependency management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "n9gvPHn4c1U-l6v-W9v6r",
+          "title": "Agile methodologies",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SuT6q5lMMSyVkadlQp7iU",
+          "title": "Project Tracking",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PXobPGPgCX3_55w4UtxT9",
+          "title": "Milestone Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C-lJJSjT8Cxw_UT3ocFsO",
+          "title": "Scope Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QWO5QFS7kXwfu3aa8IiRt",
+          "title": "Timeline Estimation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Wd8FCEaGZBTvsD-k4t0r4",
+          "title": "KPI Definition",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "idd92ZTBVUzptBl5jRdc3",
+          "title": "Velocity Tracking",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZWWsuFm_G4kvvl_cv8l_t",
+          "title": "Quality Metrics",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KPDHk7tl_BnIj_obnq3Kl",
+          "title": "Team Health Metrics",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "g9WWa50V8ZbhIJgBRx0Nd",
+          "title": "Project Postmortems",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nC5dfGlxbLoXUAp2u-6Gl",
+          "title": "Product strategy alignment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vhOHvfF_lfQrrOK6sGLTY",
+          "title": "Business Case Development",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XinUWPahOdufmLYcEwMj_",
+          "title": "ROI analysis",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "P2gIOt-i0sQEOMBo-XjZO",
+          "title": "Market awareness",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "76GjwwEYaEX_kh02OSpdr",
+          "title": "Competitive Analysis",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oqjr26B27SHSYVQ4IFnA1",
+          "title": "Budget Planning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iwwxnSVvCmZ57stXwzk8G",
+          "title": "Resource forecasting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rbhZJZtRV1ZZ5QaYW77ry",
+          "title": "Cost Optimization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Imgt669vbUT_Iec2o4Gvt",
+          "title": "Vendor Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KA0y6KdVTjJFeX3frHUNo",
+          "title": "Company Culture",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tt02qGHSn4fPbpboZ1Ni_",
+          "title": "Change management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mjMRNhPkeb4lEZXBb8Iot",
+          "title": "Organization structure",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Zoz01JcNU69gr95IcWhYM",
+          "title": "Politics navigation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Hb_rZe4k37Rr0enSh7woV",
+          "title": "Cross-department collaboration",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "h7gEQNbGiabDA1q1Bk_IB",
+          "title": "Emotional Intelligence",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZuZuzwy-Frsn_PFJZVuAQ",
+          "title": "Defining and Enforcing Values",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8Nro6PTkEkNugYBjQfJ6O",
+          "title": "Team Traditions and Rituals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Vb3A4a-UpGTAEs-dVI66s",
+          "title": "Recognition programs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LE3ykySYFL23KvuwxeBaR",
+          "title": "Social connections",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6iM0n4faMNhk4mezS9AcG",
+          "title": "Inclusive environment creation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "njqjYPMQK3nGYtqHzUylo",
+          "title": "Innovation fostering",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aeD-kBZEr1NHFtAD8yHI_",
+          "title": "Learning culture development",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "74-7hDXaBVXYo6LJdgac_",
+          "title": "Knowledge sharing practices",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Cq0OFaWqSRathZO-bxBrP",
+          "title": "Technical excellence mindset",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fYkKo8D35AHd8agr3YrIP",
+          "title": "Blameless Post-mortems",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "g9FvFKC715tZL2ZGlPl3N",
+          "title": "Bias Recognition / Mitigation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Xaeb67Nqdi0kwvehQUYeJ",
+          "title": "Emergency protocols",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LQ3YfAgJ4UaDgtnN-cMht",
+          "title": "War Room Management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "irEwTIubCjORnlH27QpEo",
+          "title": "Stakeholder Communication",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8zyK34SwHry2lrWchw0KZ",
+          "title": "Post-incident analysis",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2fHcb1dAnf34APCAAlwnR",
+          "title": "Service Recovery",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2RwpGPegD2GyiiV6SVbbM",
+          "title": "Contingency planning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KOTzJ8e7mc0wmF46vrj3I",
+          "title": "Disaster recovery",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v6N7BH0B55gX0oNXb55D7",
+          "title": "Business continuity",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FNp4-RgPvfC76pJKjX56a",
+          "title": "Security incident handling",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kQG_wk66-51dA4Ly9ivjM",
+          "title": "Production issues management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mIUx8zAHWyPWPGvxuTK4y",
+          "title": "Burnout prevention",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nnoVA8W70hrNDxN3XQCVL",
+          "title": "Critical situation leadership",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FwK-B7jRbBXVnuY9JxI1w",
+          "title": "Emergency staffing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QFhhOgwz_bgZgOfKFg5XA",
+          "title": "Stress management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tmY4Ktu6luFg5wKylJW76",
+          "title": "Work-life balance during crises",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5MM1ccB1pmQcd3Uyjmbr7",
+          "title": "Board presentations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CHothgVl8ulFthwS7uKqK",
+          "title": "Executive summaries",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uBrsV_EocAkRWEqJYjoZn",
+          "title": "Strategic proposals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pLUOU2AmAJ9aJAmIlVD7D",
+          "title": "Budget requests",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QssXmeifoI3dtu-eXp8PK",
+          "title": "Vision alignment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QEViLNgG4Uv9Q9PWig0u3",
+          "title": "Customer feedback integration",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "V5s2i-L2tsZFNxMLN_e_U",
+          "title": "Technical customer support",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "A-Aa7VdDAYfaMUZD_cWwP",
+          "title": "Customer success alignment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2QwMcO27H3ygtLlWVplxr",
+          "title": "Feature prioritization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tCT2syTMyEHCspDLXxk6R",
+          "title": "Technical partnerships",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WYoqfmk5ejB2UOiYXh4Zi",
+          "title": "Vendor relationships",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xMN575nnnQJeHe2oJYw17",
+          "title": "Technology partnerships",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f3P0fF4UzgVQZuMVTVmP1",
+          "title": "Integration management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ukmMMWacekcejEiEKCLzh",
+          "title": "API strategy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Jctp5tPCK_vY35_bh7QFk",
+          "title": "External collaboration",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QUxpEK8smXRBs2gMdDInB",
+          "title": "Legacy System Retirement",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gHhNi32MSBmqk-oKOy-uj",
+          "title": "Architecture documentation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Kwy9O1z2hpeE0Sb3qtxEg",
+          "title": "Process documentation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dTjp_rEl1ITZjvELqVtfv",
+          "title": "Decision records",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HUQ_-vU2pdBPyF0mBocHz",
+          "title": "Lessons Learned",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4-MCXFOkMGcN369OPG-vw",
+          "title": "Best Practices",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "g6K9fxWdRQT5h_u4Y_bkq",
+          "title": "Mentoring Programs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7t9jmv3_lRCEG5y5DA8bF",
+          "title": "Knowledge bases",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S8-nwYKlG7YHL2dWwR303",
+          "title": "Brown Bags",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2LO0iWf-y3l4rA1n_oG1g",
+          "title": "Tech Talks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QMAIEkVFHrrP6lUWvd0S8",
+          "title": "Migration planning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9mNLfntu1TPjcX3RoUeMq",
+          "title": "Legacy system retirement",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jerPoyfCcwZbNuE_cl1hq",
+          "title": "Technology adoption",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f-52wRfPRrA9iniOMYQB7",
+          "title": "Tool transitions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ev9ZKygqETctLMSt1GAFU",
+          "title": "Process changes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1__zRE1iu1FDX9ynpWSBS",
+          "title": "Change strategy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oGmtkOGVgA4huGJqkBEfj",
+          "title": "Impact assessment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "34uOnta7dKOyZL0et_RC8",
+          "title": "Stakeholder management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Mxi4g_PzT0oYc3NgR0UVg",
+          "title": "Communication planning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vfp6VmWnhpre_eDORg7ht",
+          "title": "Resistance management",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5_CE3p5jMA1uEqFNfp7Kh",
+          "title": "Reorganizations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ph0U4l2alVJ8lUJ96q7co",
+          "title": "Team mergers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FayHWdUHHYFFBwnXx37Gk",
+          "title": "Role transitions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eIlW4mZKNQfBsTDmZf7ex",
+          "title": "Responsibility shifts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "y7YHIz7OI4sNfC_nhfLcu",
+          "title": "Culture evolution",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

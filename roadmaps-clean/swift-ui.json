@@ -1,0 +1,827 @@
+{
+  "slug": "swift-ui",
+  "title": "Swift & Swift UI",
+  "description": "Step by step guide to learning Swift and Swift UI in @currentYear@",
+  "url": "https://roadmap.sh/swift-ui",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-02-26T08:29:09.161Z",
+  "relatedRoadmaps": [
+    "ios",
+    "react-native",
+    "flutter"
+  ],
+  "topicCount": 45,
+  "subtopicCount": 111,
+  "topics": [
+    {
+      "id": "4EBdMshXiAylkgoG9FqlB",
+      "title": "Operators",
+      "subtopics": [
+        {
+          "id": "Q44dJaEA7aHG_ClMwO9Wv",
+          "title": "Arithmetic",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ND7oiPW66fhJVZuhNqAnj",
+          "title": "Logical",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "03HZvlAne_Uq7uyuP4kdc",
+          "title": "Comparison",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cCi3MutPRV-L1rrW5McQH",
+          "title": "Nil-Coalescing",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "7XtwAhFQH7uNlvvtE9-qX",
+      "title": "if / else",
+      "subtopics": []
+    },
+    {
+      "id": "hODKmqbFLKIulHgXqhh6B",
+      "title": "switch / case",
+      "subtopics": []
+    },
+    {
+      "id": "N_9K-sVmpCMD_Ug_3qX7h",
+      "title": "Loops",
+      "subtopics": [
+        {
+          "id": "PVSWiOw5jJf5GFqFA-ld9",
+          "title": "for",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FdHaF5ZM3WjRD_yCOZCXx",
+          "title": "while",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RCpClnQ3bwce4vLpG9zCa",
+          "title": "repeat..while",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "62FM5cEvtDZwHvL9uOjhz",
+      "title": "Error Handling",
+      "subtopics": [
+        {
+          "id": "09Ue-KMoTFypYKThhJMw9",
+          "title": "propagating",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Yvc5PFi1CZQcf8qVnaF7q",
+          "title": "Type Casting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "B1mbKaKaxvT82PPKQoMm5",
+          "title": "Memory Safety",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "E0nBPRzPkzx9BKaCfweSb",
+          "title": "throwing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AWAf49r8RNMkYPOayx2LC",
+          "title": "catching",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "MXlCVXs2fEyV_UmV-w8hB",
+      "title": "Basic Functions",
+      "subtopics": [
+        {
+          "id": "llXPXjYS801GhnNPdsApZ",
+          "title": "Strings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "s7sdqYwqbXaF6Wli79l8e",
+          "title": "Tuples",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "FaWFpl-nZlU7Qo_824-NE",
+      "title": "Parameters ",
+      "subtopics": []
+    },
+    {
+      "id": "AWhYlhCzP0V3rvYVDeb6A",
+      "title": "Return Types",
+      "subtopics": []
+    },
+    {
+      "id": "1j6Lz3AjJeNulzsSN0fsu",
+      "title": "Function Types",
+      "subtopics": []
+    },
+    {
+      "id": "tSBt4WCd-v96Ux-INWdj1",
+      "title": "Nested Functions",
+      "subtopics": []
+    },
+    {
+      "id": "gD9JTNSkjxcwnpyzmxrZM",
+      "title": "Closures",
+      "subtopics": []
+    },
+    {
+      "id": "BURfkXkKdPf1yMTB9neh9",
+      "title": "Enumerations",
+      "subtopics": [
+        {
+          "id": "z84nzijt2F7zR4prl1Juh",
+          "title": "continue & break",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_uO1_qHfBkN6YQ02zEFdW",
+      "title": "Generics",
+      "subtopics": [
+        {
+          "id": "r-jFJSdOVbCVLosImofac",
+          "title": "Stored",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "n1n7-fTnzS2QaEM0L7IZL",
+          "title": "Observers",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "SRZfkrqxU2UxFif4v4t3o",
+      "title": "Access Control",
+      "subtopics": [
+        {
+          "id": "-u2enh8vI9ynjTv1H8nVL",
+          "title": "@EnvironmentObject",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "HBd_J1jUMW-a0Z_Hk9BSL",
+      "title": "ARC",
+      "subtopics": []
+    },
+    {
+      "id": "f0Nvu2IcZsCJXkK1kMfwa",
+      "title": "Result Builders",
+      "subtopics": []
+    },
+    {
+      "id": "YNfVAMdAK9vI0bUkvdVyc",
+      "title": "Swift Package Manager",
+      "subtopics": [
+        {
+          "id": "ygVGffnYXG6j6JzM5q9mO",
+          "title": "Plugins",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NGyvq-w9rGEqjkxoWYoqA",
+          "title": "Using Packages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "03OPOqR5K4H-oy2KBx744",
+          "title": "Creating Packages",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "dajwi7gUyB3Jyyl2QbazS",
+      "title": "Swift Package Index",
+      "subtopics": [
+        {
+          "id": "v6FKxFW0SMaH_hXCIAnyA",
+          "title": "swift-log",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "gYcrVzB740nrRn3Tan6Gt",
+      "title": "Server Frameworks",
+      "subtopics": [
+        {
+          "id": "htRKwjBD1NkKZZG5Cd9bx",
+          "title": "MongoKitten",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4CN0ACAfdHtFjL_arnQvi",
+          "title": "Vapor",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5nwb4xOiJ4odx1NXXRflI",
+          "title": "Hummingbird",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "NCwJq7Rv2H4m5_oxIWinV",
+      "title": "Networking Libraries",
+      "subtopics": [
+        {
+          "id": "47Sc0VzbRMKYb-3ivhNG3",
+          "title": "Alamofire",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "gKW619QYNxtSoeld_jNs7",
+          "title": "Moya",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vpV45shc5onmenUP_tIpb",
+          "title": "swift-nio",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "H3-EwjQukBJJL1agH-giQ",
+      "title": "Testing",
+      "subtopics": [
+        {
+          "id": "moORQvblmG3x7kaAXHPat",
+          "title": "XCTest",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EBvuWsdwRLiMe5feESXgZ",
+          "title": "Swift Testing",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "O5libf2fha4pyKxQDCQka",
+      "title": "Logging & Debugging",
+      "subtopics": [
+        {
+          "id": "LrMTrEV-oQVFUro2k6mpT",
+          "title": "XCode debugging",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ORk-aG_KxdVcyRwFyZFp1",
+          "title": "SwiftUI inspector",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XgF8ecga95g7wapmPrk0w",
+          "title": "CocoaLumberjack",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "vVcCHY2iq2f-qdIDBWJ5O",
+      "title": "Static Linux SDK",
+      "subtopics": [
+        {
+          "id": "VT6nRTnNsEKLWrKsghKFR",
+          "title": "Swift Charts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ewhk18ChvKJM9U_ziZ8Iq",
+          "title": "Swift Playgrounds",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "M3ctRye03DqCwivmdnQ4u",
+      "title": "SDKs for Wasm",
+      "subtopics": []
+    },
+    {
+      "id": "CYnuCu6jRa6ExrSBwQF_a",
+      "title": "Swift for Server Apps",
+      "subtopics": []
+    },
+    {
+      "id": "jRbmmPKkJ2xHbUL18A8oe",
+      "title": "What is SwiftUI",
+      "subtopics": [
+        {
+          "id": "rx9ZSMBFErvFfZgSZo_u2",
+          "title": "UIKit vs SwiftUI",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "0kwf3brDiHhnsQ45708M0",
+      "title": "Views",
+      "subtopics": [
+        {
+          "id": "61lcF5utl8qO-MxpWPMnU",
+          "title": "font",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "thS85PP8famziViKq49Tq",
+      "title": "Structures & Classes",
+      "subtopics": [
+        {
+          "id": "P1IUtZi9_41zPn4nar6Ov",
+          "title": "Inheritance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8fpk7cpMluKMGOiOLGxLW",
+          "title": "Methods",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DsGqB_mLppVESbQeczWh4",
+          "title": "Initialization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lYQNVpMqaVOSMI18uEnJZ",
+          "title": "Properties",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3CcmKsX4Yuej9MrAXh-4P",
+          "title": "Optional Chaining",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ABT037yTlXpAenBK9Mknt",
+          "title": "Subscripts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WcxA4zrP084D0x-NtfHgP",
+          "title": "Extensions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RI0iYd7ZI7L3yk4Wf2JES",
+          "title": "Text",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-COipcnjNA-BV5PnYj_o-",
+          "title": "Image",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aZVvq-jhpvsQxZvhuB9xf",
+          "title": "Computed",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5cHzfAOmFxR_gB9LvwLYj",
+          "title": "Wrappers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8oJVx9Y-NAW2fXtnHfMXB",
+          "title": "HStack",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "0onr5oXzArGN5Oqc4K2rp",
+      "title": "Trailing Closures",
+      "subtopics": []
+    },
+    {
+      "id": "ZXmYD2gwgdkve12GpdP7Y",
+      "title": "Protocols",
+      "subtopics": []
+    },
+    {
+      "id": "GlLHFLypw3eTMs7h43Lys",
+      "title": "Macros",
+      "subtopics": [
+        {
+          "id": "jEWHNFLdcrvLQEOXr3ll6",
+          "title": "Unstructured Concurrency",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ofDokn4mAgUSL-pOy-MVb",
+      "title": "IDEs",
+      "subtopics": [
+        {
+          "id": "MMdjsS4ltdP7E4ih7URdd",
+          "title": "DocC",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "48dieYUTz5fSXipndwKce",
+          "title": "Xcode",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "50KaK9mRCVf8zOwHPiW4w",
+          "title": "VSCode",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1EsTqJ17eoz-zznnrNwvW",
+          "title": "Emacs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IuQG4c_0KpNlTds7W7Gzn",
+          "title": "Neovim",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "nkXaoMWBSSYxELuA9lJD8",
+      "title": "Data Flow",
+      "subtopics": [
+        {
+          "id": "UJEyJwuTiLeea6q0H9tIW",
+          "title": "@State",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eZI02ZYjGUACbpM0T7_LR",
+          "title": "@ObservedObject",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pKVxtzPgA_88wyGF3dK-7",
+          "title": "@StateObject",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "k7mMeSXQjY0fygLJj7Gr-",
+          "title": "@Binding",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Ui6hCqvVwf61wXBOxYG6Q",
+      "title": "Animations",
+      "subtopics": [
+        {
+          "id": "3-3r9psIaF-dQSjIFCsKS",
+          "title": "Implicit animations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "jYpugTP_5rF26pn0kUKhG",
+          "title": "Explicit animations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "hZYzZntkSsx89c4jesxEo",
+          "title": "Transitions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "gktNK5eNvTJ3vqmPdHYCC",
+          "title": "Animatable Protocol",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BceTgMv9rsRu4j5M7JQRk",
+          "title": "Button",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZR0b32xTb0WbqZeoojyIg",
+          "title": "List",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hZswz-G-20SU__1b0s6eq",
+          "title": "Form",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GZN34c2OGkMFO_fM-XQou",
+          "title": "clipShape",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TQQ8b8y3KYNeASrki0YMy",
+          "title": "padding",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QK0trIIACmUHEuoLEBKs4",
+          "title": "background",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_iTFfnpZBy3GLVsidUAzk",
+          "title": "VStack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_suK9choLayT05wAZ3UCz",
+          "title": "ZStack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "elOwuO5ktRapvuX2UTmPK",
+          "title": "Grid",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9y9HLynnw9d0349CbByvF",
+          "title": "GeometryReader",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kh8PovQUi61HDBeHD2G4x",
+          "title": "NavigationStack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "W5HvjGbPFFmrIdzwg_WvM",
+          "title": "NavigationPath",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AE6CX6Gp7GtK0YAfdI_gb",
+          "title": "TabView",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6EpvayoacyBX8wXPJ_CZ5",
+          "title": "NavigationLink",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KHtizt-en2bWHDNmBmIqp",
+          "title": "ViewBuilder",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3g4AN-pIHAMJ5PKwE4SlY",
+      "title": "User Interaction",
+      "subtopics": [
+        {
+          "id": "MEe088TqkeHxF7q0hiAUM",
+          "title": "UI Controls",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xSl3mD95BbIhpf41d3QVV",
+          "title": "Gestures",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yRVNTN2eJEtT5uX4jrRS6",
+          "title": "Localization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iZlsMU1NtEPkosxNxNZWq",
+          "title": "Drag & Drop",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-u5-uN2x0uuvkLieoq7Nr",
+          "title": "Accessibility",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "60_LHnRY7FVwLziq7VBkz",
+          "title": "Asynchronous Functions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xu2GOHaW721Gi0b1ua3Kh",
+          "title": "Asynchronous Sequences",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D9muzTnim2h7VSWmLeCFW",
+          "title": "Tasks & Task Groups",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "J8Aq24_1yHj4UowvK0AkH",
+          "title": "Core Data",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "R7ILNzMmAKQXwTyrvFaul",
+      "title": "Data persistance",
+      "subtopics": [
+        {
+          "id": "OC5GZ2fy4FaV0Nq7dykRh",
+          "title": "UserDefaults, AppStorage",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sZeSwx_Rb0H81oA7KUw9m",
+          "title": "Actors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GWh98EbRBe2xGEAYrCA30",
+          "title": "Strict Concurrency Checking",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "t2S_cttRJLpC__YTf1nAa",
+          "title": "CloudKit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tB8bNFuB0NetMLQVDd2hj",
+          "title": "Databases",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IUKUp_QQ2BcESvVS8VhVh",
+          "title": "FileManager",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wwVfkhkibsFvIP_amh2Y9",
+          "title": "Firabase",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RvR35apiPT5L4xD2PUKAO",
+          "title": "Realm",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ie_fUA2ZuqmtY7gX14rjo",
+          "title": "GRDB",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gaQqVwxVK7_sYTHCCRBvc",
+          "title": "SwiftUI with Async/Await",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QPBuLcgz4GNd94bJsv6LU",
+          "title": "SwiftData",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "UCv-FDzB1O-zRH700Im8i",
+      "title": "App Architecture",
+      "subtopics": [
+        {
+          "id": "l-E5ZN3xarJ69o26-yvAn",
+          "title": "MVVM",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "jmr8IaAd2391FlqyOuFP8",
+          "title": "Clean Architecture",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7XjAReXi1WWOFRVfBVoN0",
+          "title": "Dependency Injection",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "FfREh4vs6KqWEUQ44pDmA",
+      "title": "App lifecycle",
+      "subtopics": []
+    },
+    {
+      "id": "vnbgQBHdyv0tE-y7ngAOV",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "oPz8e_X_LaiowAZYavVgY",
+          "title": "Swift vs Objective-C",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "25OMS3jP0rtZXc697FENP",
+          "title": "Why use Swift?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zvELiSGcoLpRyphJuFME9",
+          "title": "What is Swift?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mkKOv4UX94r8ijD_FPJ0f",
+          "title": "Where Swift is used?",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "l8BWjmxhHaO0uDmFFFBoI",
+      "title": "Installing Swift",
+      "subtopics": [
+        {
+          "id": "FndEtBUVfWAYs01gFLKG_",
+          "title": "Type Safety",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8nk8GhZH3t-rq6g47rspD",
+          "title": "Type Inference",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "fdMCoxX_YjtgUReIGh1nn",
+      "title": "Constants & Variables",
+      "subtopics": []
+    },
+    {
+      "id": "pNyGRFQbPH2tLc-mrsGLU",
+      "title": "Comments",
+      "subtopics": []
+    },
+    {
+      "id": "E-kALuBRAX3C06SfcD1Sk",
+      "title": "Type Annotations",
+      "subtopics": []
+    },
+    {
+      "id": "rGThKnBd0EXyx8Fh6QoX6",
+      "title": "Semicolons",
+      "subtopics": [
+        {
+          "id": "Kih96pA1xsogmvrmbIFX6",
+          "title": "Integers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2fA97do5FFkT6ggC0ThZa",
+          "title": "Floats & Doubles",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xn2iNnrxx-jhIMLpfU5Mi",
+          "title": "Booleans",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pPXG2vtWu_vgGymawe5-u",
+          "title": "Optionals & nil",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "2RkpY7Oq_Z-6YY4hZuc7q",
+      "title": "Print & String Interpolation",
+      "subtopics": []
+    }
+  ]
+}

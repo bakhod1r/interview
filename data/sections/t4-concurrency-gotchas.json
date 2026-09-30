@@ -1,0 +1,249 @@
+{
+  "id": "t4",
+  "name": "Concurrency gotchas",
+  "domain": "tricky",
+  "domainLabel": "Edge cases & gotchas",
+  "topics": [
+    "Concurrency gotcha"
+  ],
+  "questions": [
+    {
+      "id": 16008,
+      "code": "E9",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu kod nima qiladi?",
+      "snippet": "ch := make(chan int)\nvar wg sync.WaitGroup\nfor i := 0; i < 3; i++ {\n    wg.Add(1)\n    go func(){ defer wg.Done(); ch <- i }()\n}\nwg.Wait()\nclose(ch)\nfor v := range ch { fmt.Println(v) }",
+      "options": [
+        "Deadlock — unbuffered channel'ga yozayotgan goroutine'lar o'quvchi yo'qligi uchun bloklanadi, wg.Wait() hech qachon qaytmaydi",
+        "3 ta qiymat chop etadi",
+        "panic: send on closed channel",
+        "Tasodifiy tartibda ishlaydi"
+      ],
+      "answer": 0,
+      "explanation": "Klassik tuzoq: consumer producer'dan KEYIN turibdi. To'g'ri shakl — close'ni alohida goroutine'ga olish: go func(){ wg.Wait(); close(ch) }(), keyin asosiy goroutine'da range ch. Buffered channel (make(chan int,3)) ham bu holatda ishlaydi, lekin miqdor oldindan ma'lum bo'lgandagina."
+    },
+    {
+      "id": 16009,
+      "code": "E10",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu WaitGroup ishlatilishida nima xato?",
+      "snippet": "for _, u := range urls {\n    go func(u string){\n        wg.Add(1)\n        defer wg.Done()\n        fetch(u)\n    }(u)\n}\nwg.Wait()",
+      "options": [
+        "wg.Add goroutine ICHIDA — Wait() goroutine'lar boshlanishidan oldin 0 ko'rib darhol qaytishi mumkin",
+        "defer wg.Done() noto'g'ri",
+        "u ni uzatish kerak emas",
+        "Hech qanday xato yo'q"
+      ],
+      "answer": 0,
+      "explanation": "Add har doim goroutine'ni ishga tushirishdan OLDIN, chaqiruvchi goroutine'da bajariladi. Aks holda race: Wait() counter hali oshmasidan qaytadi va natijalar yo'qoladi. Go 1.25+ da `wg.Go(func(){...})` shu naqshni o'zi to'g'ri bajaradi."
+    },
+    {
+      "id": 16010,
+      "code": "E11",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Nil channel'ga yozish yoki undan o'qish nima qiladi?",
+      "options": [
+        "Abadiy bloklanadi (panic emas) — select ichida case'ni 'o'chirish' uchun ishlatiladi",
+        "panic beradi",
+        "Darhol nol qiymat qaytaradi",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 0,
+      "explanation": "nil channel operatsiyalari hech qachon tayyor bo'lmaydi. Bu xususiyat foydali: select loop'da tugagan manba channel'ini `ch = nil` qilib qo'ysangiz, o'sha case boshqa tanlanmaydi va busy loop (yopilgan channel doim tayyor) yo'qoladi. Yopilgan channel'dan o'qish esa aksincha — darhol nol qiymat va ok=false."
+    },
+    {
+      "id": 16011,
+      "code": "E12",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu kod nega xato?",
+      "snippet": "for i := range items {\n    go func(){ results[i] = work(items[i]) }()\n}",
+      "options": [
+        "Go 1.22+ da i har iteratsiyada yangi — lekin baribir results'ga parallel yozish sinxronizatsiyasiz; bu yerda har goroutine boshqa indeksga yozgani uchun xavfsiz, wg yo'qligi asosiy bug",
+        "Go 1.21 va oldin i ulashilgan bo'lgani uchun hamma goroutine oxirgi indeksni ko'radi",
+        "Hech qanday xato yo'q",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 1,
+      "explanation": "Go 1.22 gacha loop o'zgaruvchisi iteratsiyalar orasida ulashilar edi — barcha goroutine'lar oxirgi qiymatni ko'rardi. 1.22 dan boshlab har iteratsiyada yangi o'zgaruvchi (`loopvar` o'zgarishi, go.mod'dagi `go 1.22` yo'nalishi bilan yoqiladi). Baribir bu kodda kutish yo'q — asosiy funksiya goroutine'lar tugashini kutmaydi. Turli indekslarga yozish o'z-o'zidan data race emas.",
+      "source": "https://go.dev/blog/loopvar-preview"
+    },
+    {
+      "id": 16012,
+      "code": "E13",
+      "level": "P",
+      "type": "mcq",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "`-race` detektori nimani kafolatlaydi?",
+      "options": [
+        "Faqat ISHGA TUSHGAN kodda yuz bergan race'ni topadi — test qamrovi past bo'lsa race'ni ko'rmaydi; false positive bermaydi",
+        "Barcha mumkin bo'lgan race'larni statik topadi",
+        "Deadlock'ni ham topadi",
+        "Ishlash tezligiga ta'sir qilmaydi"
+      ],
+      "answer": 0,
+      "explanation": "ThreadSanitizer dinamik: haqiqatda bajarilgan xotira kirishlarini happens-before bo'yicha tekshiradi. Topganida — haqiqiy bug (false positive yo'q), topmaganida — kafolat yo'q. Narxi: ~2-20x sekin, 5-10x xotira. Amaliyot: CI'da `go test -race ./...` va integration testlarni race bilan yuritish.",
+      "source": "https://go.dev/doc/articles/race_detector"
+    },
+    {
+      "id": 16013,
+      "code": "E14",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu kod nima bilan tugaydi?",
+      "snippet": "var once sync.Once\nfunc get() *DB {\n    once.Do(func(){ db = connect() })\n    return db\n}\n// connect() panic qilsa nima bo'ladi?",
+      "options": [
+        "once 'bajarildi' deb belgilanadi — keyingi chaqiruvlar Do'ni qayta ishga tushirmaydi va db nil qoladi",
+        "Keyingi chaqiruvda qayta urinadi",
+        "Butun dastur to'xtaydi va tiklanmaydi",
+        "Do hech qachon tugamaydi"
+      ],
+      "answer": 0,
+      "explanation": "sync.Once funksiya panic bilan tugasa ham bajarilgan hisoblanadi (Do defer orqali belgilaydi). Shuning uchun Once ichida panic qiladigan initsializatsiya qilmang: xatoni qaytaring va saqlang (`var initErr error`), keyin har chaqiruvda qaytaring, yoki retry kerak bo'lsa Once o'rniga mutex+flag ishlating."
+    },
+    {
+      "id": 16014,
+      "code": "E15",
+      "level": "P",
+      "type": "open",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Production'da goroutine soni asta-sekin o'sib bormoqda (pprof goroutine profili 50k ko'rsatyapti), lekin RPS o'zgarmagan. Qanday tekshirasan?",
+      "modelAnswer": "1) `curl /debug/pprof/goroutine?debug=2` — stack'lar bo'yicha guruhlash, qaysi qatorda 'chan receive'/'chan send'/'select' da turgani ko'rinadi. 2) Eng ko'p uchraydigan stack'ni topish — odatda: context'siz HTTP chaqiruv, javob kutayotgan goroutine; yoki hech kim o'qimaydigan channel'ga yozish; yoki timer/ticker Stop qilinmagan. 3) Tekshirish ro'yxati: har http.Client'da Timeout yoki req context; time.Ticker uchun defer t.Stop(); worker'lar uchun ctx.Done() tanlovi; resp.Body.Close(). 4) Reproduktsiya: load test + goroutine count metrikasi (runtime.NumGoroutine() gauge). 5) Alert: goroutine soni RPS'ga proporsional bo'lmay o'ssa ogohlantirish.",
+      "explanation": "Goroutine leak — Go'dagi eng keng tarqalgan production muammosi. Asosiy sabab: goroutine hech qachon tayyor bo'lmaydigan operatsiyada bloklangan. Har goroutine kamida 8 KB stack — 50k ta ~400 MB+ va GC bosimi. Profil turi: goroutine profili (block/mutex emas) — u bloklangan goroutine stack'larini aynan ko'rsatadi."
+    },
+    {
+      "id": 30152,
+      "code": "SN153",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu kodda qanday bug bor?",
+      "snippet": "var wg sync.WaitGroup\nfor _, u := range urls {\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        fetch(u)\n    }()\n}\nwg.Wait()",
+      "options": [
+        "`wg.Add` noto'g'ri joyda",
+        "Go 1.22'gacha loop o'zgaruvchisi barcha goroutine'lar uchun umumiy bo'lgan — hammasi oxirgi `u`ni oladi; 1.22+ da har iteratsiyada yangi o'zgaruvchi, lekin kod eski versiyalarda va linter'siz xavfli",
+        "`wg.Wait` deadlock",
+        "`fetch` nil"
+      ],
+      "answer": 1,
+      "explanation": "Go 1.22 loop semantikasini o'zgartirdi (har iteratsiya yangi o'zgaruvchi), shuning uchun yangi kodda bug yo'q. Lekin: `go.mod` da eski `go` direktivasi bo'lsa eski xatti-harakat saqlanadi. Ishonchli uslub — argument sifatida uzatish (`go func(u string){...}(u)`), va parallelizmni cheklash (semaphore/errgroup `SetLimit`), aks holda 10k URL 10k goroutine va tashqi servisni o'ldirish."
+    },
+    {
+      "id": 30153,
+      "code": "SN154",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu kod nega deadlock beradi?",
+      "snippet": "ch := make(chan int)   // unbuffered\nch <- 1\nfmt.Println(<-ch)",
+      "options": [
+        "Kanal yopilmagan",
+        "Buferlanmagan kanalda yuborish o'quvchi bo'lguncha bloklanadi — bir goroutine ichida o'zi kutadi: `fatal error: all goroutines are asleep - deadlock!`",
+        "`make` xato",
+        "Kanal turi mos emas"
+      ],
+      "answer": 1,
+      "explanation": "Unbuffered kanal — sinxronlash nuqtasi: yuborish va qabul qilish bir vaqtda bo'lishi kerak. Yechim: o'qishni alohida goroutine'da qilish yoki `make(chan int, 1)`. Kattaroq amaliy xulosa: kanal bilan ishlashda 'kim yopadi, kim o'qiydi' shartnomasi oldindan aniq bo'lishi kerak — aks holda yopilgan kanalga yozish (panic) yoki abadiy kutish paydo bo'ladi."
+    },
+    {
+      "id": 30154,
+      "code": "SN155",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "`sync.Mutex`ni struct bilan nusxalash nima qiladi?",
+      "options": [
+        "Hech narsa",
+        "Qulf holati nusxalanadi — ikki nusxa bir-birini himoya qilmaydi, race paydo bo'ladi (`go vet` copylocks bilan ogohlantiradi); shuning uchun mutexli struct pointer bilan uzatiladi",
+        "Kompilyatsiya xatosi",
+        "Deadlock kafolatlangan"
+      ],
+      "answer": 1,
+      "explanation": "Klassik ko'rinish: metod `func (s Store) Add()` (value receiver) — har chaqiruvda mutex nusxasi qulflanadi va hech kimni to'xtatmaydi. `go vet` bu holatni topadi, CI'da majburiy bo'lishi kerak. Xuddi shu qoida `sync.WaitGroup`, `sync.Once`, `atomic.Value` uchun ham amal qiladi."
+    },
+    {
+      "id": 30302,
+      "code": "SN303",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu kodda qanday bug bor?",
+      "snippet": "var wg sync.WaitGroup\nfor _, u := range urls {\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        fetch(u)\n    }()\n}\nwg.Wait()",
+      "options": [
+        "`wg.Add` noto'g'ri joyda",
+        "Go 1.22'gacha loop o'zgaruvchisi barcha goroutine'lar uchun umumiy bo'lgan — hammasi oxirgi `u`ni oladi; 1.22+ da har iteratsiyada yangi o'zgaruvchi, lekin kod eski versiyalarda va linter'siz xavfli",
+        "`wg.Wait` deadlock",
+        "`fetch` nil"
+      ],
+      "answer": 1,
+      "explanation": "Go 1.22 loop semantikasini o'zgartirdi (har iteratsiya yangi o'zgaruvchi), shuning uchun yangi kodda bug yo'q. Lekin: `go.mod` da eski `go` direktivasi bo'lsa eski xatti-harakat saqlanadi. Ishonchli uslub — argument sifatida uzatish (`go func(u string){...}(u)`), va parallelizmni cheklash (semaphore/errgroup `SetLimit`), aks holda 10k URL 10k goroutine va tashqi servisni o'ldirish."
+    },
+    {
+      "id": 30303,
+      "code": "SN304",
+      "level": "S",
+      "type": "code",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "Bu kod nega deadlock beradi?",
+      "snippet": "ch := make(chan int)   // unbuffered\nch <- 1\nfmt.Println(<-ch)",
+      "options": [
+        "Kanal yopilmagan",
+        "Buferlanmagan kanalda yuborish o'quvchi bo'lguncha bloklanadi — bir goroutine ichida o'zi kutadi: `fatal error: all goroutines are asleep - deadlock!`",
+        "`make` xato",
+        "Kanal turi mos emas"
+      ],
+      "answer": 1,
+      "explanation": "Unbuffered kanal — sinxronlash nuqtasi: yuborish va qabul qilish bir vaqtda bo'lishi kerak. Yechim: o'qishni alohida goroutine'da qilish yoki `make(chan int, 1)`. Kattaroq amaliy xulosa: kanal bilan ishlashda 'kim yopadi, kim o'qiydi' shartnomasi oldindan aniq bo'lishi kerak — aks holda yopilgan kanalga yozish (panic) yoki abadiy kutish paydo bo'ladi."
+    },
+    {
+      "id": 30304,
+      "code": "SN305",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Concurrency gotcha",
+      "domain": "tricky",
+      "section": "t4",
+      "question": "`sync.Mutex`ni struct bilan nusxalash nima qiladi?",
+      "options": [
+        "Hech narsa",
+        "Qulf holati nusxalanadi — ikki nusxa bir-birini himoya qilmaydi, race paydo bo'ladi (`go vet` copylocks bilan ogohlantiradi); shuning uchun mutexli struct pointer bilan uzatiladi",
+        "Kompilyatsiya xatosi",
+        "Deadlock kafolatlangan"
+      ],
+      "answer": 1,
+      "explanation": "Klassik ko'rinish: metod `func (s Store) Add()` (value receiver) — har chaqiruvda mutex nusxasi qulflanadi va hech kimni to'xtatmaydi. `go vet` bu holatni topadi, CI'da majburiy bo'lishi kerak. Xuddi shu qoida `sync.WaitGroup`, `sync.Once`, `atomic.Value` uchun ham amal qiladi."
+    }
+  ]
+}

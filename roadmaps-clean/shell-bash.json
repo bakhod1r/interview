@@ -1,0 +1,916 @@
+{
+  "slug": "shell-bash",
+  "title": "Shell / Bash",
+  "description": "Learn to master Shell and Bash in @currentYear@",
+  "url": "https://roadmap.sh/shell-bash",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-05-12T10:59:14.861Z",
+  "relatedRoadmaps": [
+    "backend",
+    "full-stack",
+    "devops",
+    "system-design",
+    "nodejs"
+  ],
+  "topicCount": 30,
+  "subtopicCount": 144,
+  "topics": [
+    {
+      "id": "lzzQWCFqpOnN2J_3Jck_3",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "86QR-PVqgvvyvJvgTIer-",
+          "title": "CLI vs GUI",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LloORF-pz-sbfuzNj1WjG",
+          "title": "What is scripting?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "GdSViKr5r3uHxzihSjdYV",
+          "title": "What is Bash?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BP7hfSSD13DM2np0zaGBB",
+          "title": "dash",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m-sOOaGyhQg3bgmWsXtOH",
+          "title": "zsh",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "IYlYUnQh2iZrdpyUsMxg0",
+      "title": "Popular Shells",
+      "subtopics": [
+        {
+          "id": "EqgAG1t05RuiAO1TXRq4Y",
+          "title": "bash",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LjkmfTYWMrOKLSqtpyKGk",
+          "title": "fish",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BnblV98Tul3QlyA1nIB63",
+          "title": "ksh",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "y4mIT9yer85CrU_KlRxGk",
+          "title": "PowerShell",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "C7HE5jpaSIUqm6L8b9orY",
+          "title": "cmd",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SHD2pc0D5QjDpEwzsFWz-",
+          "title": "tcsh",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6SR4c75dEKoFxZ88sDtfi",
+      "title": "Setting Up Bash",
+      "subtopics": []
+    },
+    {
+      "id": "DUUstDjzKKAXN1IXzbqjt",
+      "title": "Files & Directories",
+      "subtopics": [
+        {
+          "id": "ng5ySgj1HQmD_gfQ4TSPI",
+          "title": "pwd",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gCPCTm96RrFeNM_Ok4TAY",
+          "title": "cp",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "k45FWrNrRuIp6HEN3ysTd",
+          "title": "echo",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zN32jR8SNm5P1txqQsyCv",
+          "title": "mv",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Zom0OpBLi153i8hkoYLj5",
+          "title": "cat",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fssn0pz6ooqG-EE8rZl-L",
+          "title": "touch",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pAb3O3Isca9u6yK5mqWQ2",
+          "title": "find",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uS5HS_4a-lk3AtXaMyAlp",
+          "title": "rm",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Kn_EQciiD_Fjj308aF_j0",
+          "title": "ls",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9A6SE89by-1I2HmpGarLj",
+          "title": "cd",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pwP3U4zz9Jtpnp2ZRgajh",
+          "title": "mkdir",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cqZP-2xfil-1Zq3TD7qiN",
+          "title": "rmdir",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QnC0gCoBj_559CgaTQgr4",
+          "title": "Navigate between dirs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qG71FX6DwRm1rdtjtN78u",
+          "title": "?",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "X6aVYPapBn-EC9Dw6LMDB",
+          "title": "*",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "zxdwDMOVAoP8IgUqrggKq",
+      "title": "File Permissions",
+      "subtopics": [
+        {
+          "id": "M27BJ6fgVdaBxyWE-OdNl",
+          "title": "rwx",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qrqPo-pgzupCK0IxlGn7S",
+          "title": "chmod",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "w95b7f3-7Q8qtTpyJih6B",
+          "title": "chown",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zaXwK7xPsrULce1yJwhB_",
+          "title": "chgrp",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "HESaq3OyuouEqjpZITYUd",
+      "title": "Tab Completion",
+      "subtopics": []
+    },
+    {
+      "id": "LlxpR2LiAr9uKMXEXTk0H",
+      "title": "Bash Alias",
+      "subtopics": []
+    },
+    {
+      "id": "tu3NFc76-j6VVysFdk8Kd",
+      "title": "Repeat Commands",
+      "subtopics": []
+    },
+    {
+      "id": "4yRwCKzvCctFpMD2mYiky",
+      "title": "Help Commands",
+      "subtopics": []
+    },
+    {
+      "id": "Ydqpp_YYujdHyYraNEt4h",
+      "title": "Stop Execution",
+      "subtopics": [
+        {
+          "id": "ZqAwAme_yvasmYHEZID1G",
+          "title": "grep",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EU-UAaRVY2s_PLZHJWf9z",
+          "title": "cut, paste",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mg5f-DAezgwmwflmncSsO",
+          "title": "wc",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "reLvp_PnKqpyWWtnuICPj",
+      "title": "Redirects & Pipelines",
+      "subtopics": [
+        {
+          "id": "3VulHH-Y-VdMRM6VBVWar",
+          "title": "stdin, stdout, stderr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YyCvxYgFzobwF_vMQXunZ",
+          "title": "Pipes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MpSnq-W8z4QA8-oU_tbRC",
+          "title": "Output redirection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BuOM-A5110MPv8325EQnM",
+          "title": "Command substitution",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Chfv9Fyy-Mk2zpOrYNbjV",
+          "title": "Input redirection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uk7TEHUqTIjmH4MJToxPe",
+          "title": "Process substitution",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zu0hsOt8GVlARhbepjQ1A",
+          "title": "Error redirection",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "WbZu0zM2d56LiGauOp8ub",
+      "title": "Basic Editor Ops.",
+      "subtopics": [
+        {
+          "id": "kW_sjWK-rtGokfL_OByhM",
+          "title": "less, more",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WSxairrSGlV0LEps2xeIC",
+          "title": "head, tail",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ud8fTxgvvbhCyyAxJA6lc",
+          "title": "find",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rtzApgTlDTfC_rdCnU6xx",
+          "title": "join, split",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YJblaz_GKC5sH7ntFe5ls",
+          "title": "tr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4XfvvrFQoV0X7dfaKYFlv",
+          "title": "sed",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "P9pwqBvPDhcvVIj8fNhGX",
+          "title": "sort",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4pygQshD_WdP0i6xq3Kc8",
+          "title": "uniq",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TZEmlwTGBWAZ6w8jZ-p8U",
+          "title": "nl",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Jh1gVJvhe-H22VB4hnbuU",
+          "title": "awk",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Pr8XdVGYBIuCyRW4w45sa",
+          "title": "[...]",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mYg9d8e0_XjtXBqBYtaaL",
+          "title": "{...}",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "it421LC-vLFNmTcWxrsX6",
+      "title": "Text Editors",
+      "subtopics": [
+        {
+          "id": "NtjrVcEHf8wuh771U2AMI",
+          "title": "Nano",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AiDr7sOJkSN6p346jcDpJ",
+          "title": "Emacs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jPAHVLBC87n4TIyiAZJue",
+          "title": "Vim",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QZXUYcr1vvbvxRmPSsK53",
+          "title": "Vi",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "nMFXyeZ8I5jAPfs16Jixn",
+      "title": "Bash Script Anatomy",
+      "subtopics": []
+    },
+    {
+      "id": "dj3KiBtPjRK2DF5HeuoYZ",
+      "title": "Running Shell Scripts",
+      "subtopics": [
+        {
+          "id": "9xn7KfHZYPseAixtw_dtG",
+          "title": "Direct Execution",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aZ7WGLUZyejFRbfWtSyhB",
+          "title": "Running with Bash",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZBYzPltaUePoOldJ6zRj8",
+          "title": "Running with Source",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1mBAGIrg4ohvJcJ-y8Kbl",
+          "title": "Environment vs Shell vars.",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4leZS9_-GAbx5ycMQosOX",
+          "title": "Create, Print, Modify",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "PS9R8AX-_dgeqYL2Y67Ff",
+      "title": "String Manipulation",
+      "subtopics": [
+        {
+          "id": "sBI1aCY7XmXBwqTrokt9F",
+          "title": "String length",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aYQlgbgFt250MW1nLYvFK",
+          "title": "Pattern replacement",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6TonvFzr_nmoFsATwuZK7",
+          "title": "Substring extraction",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oI019HqH9UO_tQRe2xebi",
+          "title": "let",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GXF6SSkYtVyGYB_LFSIpe",
+          "title": "awk",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "n0sesqABTmbGYmcqlpH4b",
+      "title": "Input/Output",
+      "subtopics": [
+        {
+          "id": "D0VV5UpW2X4mMghpp2fdo",
+          "title": "Here strings",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "o2vQXl9WDOO4NAsLjYv_4",
+          "title": "Read user input",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WOoTpi1vAZpktjtQgG9GK",
+          "title": "Here documents",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XCCuDzGE-5LPhHEPGvVMj",
+          "title": "printf formatting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LHoR6krZTuJW5BGiKf_AT",
+          "title": "Arithmetic expansion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VOYYJUqKqkTRaxqUip8yr",
+          "title": "expr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "B2g_optsVEtw-5vRYIpgb",
+          "title": "bc",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "sYzelzBxQUcz5bK1HVWam",
+      "title": "Comments",
+      "subtopics": [
+        {
+          "id": "DiYuY3M3eD1WKO5w16Swa",
+          "title": "$1, $2, $3",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pgZIDDxAP9mOtEI0HL3l-",
+          "title": "$0",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "vM0Y4fao-pNjNjWYCJve3",
+      "title": "Bash Data Types",
+      "subtopics": [
+        {
+          "id": "YM7wA4MgeailSoXR_03Qx",
+          "title": "Associative Arrays",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Sz2F519WqEhkKZE0NBveH",
+          "title": "Strings",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4WFWrrcvLgU8Fz8RjQ4lf",
+          "title": "Arrays ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "a5cz3ZGg-JQKzdJdihCtO",
+          "title": "Numeric",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Co0k7A7MyQoELnPwPU10m",
+      "title": "Bash Operators",
+      "subtopics": [
+        {
+          "id": "60ika3rjs42VIk-3AcOdq",
+          "title": "Arithmetic",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ivcDgpa1kMPxcOt1OCjba",
+          "title": "Variable Scopes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9-PPCJDdGh5SWKT4jT6Zs",
+          "title": "Variables best practices",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_BzADQXji4lVY620U4cZa",
+          "title": "Special variables ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XUDkgfURAsI_A3v3EPZA_",
+          "title": "Comparison ",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "BCkD0b9unC1lfjUThU3hX",
+      "title": "Script Arguments",
+      "subtopics": [
+        {
+          "id": "2Fh0NFuNxuc-wU3VXv8Zj",
+          "title": "$* ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hoRtqMV7B23bBJFI-RWRB",
+          "title": "$#",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VLzMSaoVA46PTLHwZtDUx",
+          "title": "$@ ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "u_kpVb3V8Xp-0fex_5-yG",
+          "title": "shift",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "fG4D7iuiCDlV1PFwMfAdM",
+      "title": "Exit Codes",
+      "subtopics": [
+        {
+          "id": "tRwO9DC_ZUD4g5iSVC40u",
+          "title": "Logical",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PuV5XtaeKgb9vdFIKta5M",
+          "title": "File test ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ryZ2MI4blZCwfuNC_TeUe",
+          "title": "String operators",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JB_FThjpxO-7G01XrKDPi",
+          "title": "exit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hxjqlxolS_ahtro4T0EKG",
+          "title": "$?",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wKMq5G8cmqo3JnHG4Z-c1",
+          "title": "Success vs failure ",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "tEaYnBeI5tO8NT-a1PG3B",
+      "title": "Conditionals",
+      "subtopics": [
+        {
+          "id": "fz9XJLGkMPpq6TRJn3Hsh",
+          "title": "if",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SSSVVAve99X8FZX9vtHlo",
+          "title": "case",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "1rIFm5ROQ8b1rsWeD9h4x",
+      "title": "Loops",
+      "subtopics": [
+        {
+          "id": "Wl39zpLh6alsMkn0YZ9-N",
+          "title": "break, continue",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zE7sS5VNUbEbt1y2iSvEi",
+          "title": "for",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "51xww3YG_O8O7y8CUum83",
+          "title": "until",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yX-SskrRyFAUFpyIYG7BU",
+          "title": "while",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8Q1FCxKYYl-HnMGkwdK6h",
+          "title": "set -x",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_UDEyH6hECoOoXcbcXTLy",
+          "title": "bash -n",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "r_G62Mx-S8wBcxduFbPMh",
+          "title": "shellcheck",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "W7NlQoj0EDxvuMVj4MKXc",
+      "title": "Regular Expressions",
+      "subtopics": [
+        {
+          "id": "qNsNJrqwsGtumOM2STB8u",
+          "title": "Basic regex syntax",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "6IzuWNaMVjjyQV-KLqRlX",
+          "title": "Extended regex",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "aNpvGNnV0q-7emxJVJow2",
+      "title": "Error Handling",
+      "subtopics": [
+        {
+          "id": "I-N9SM8ZVcOTVQs8_vtJm",
+          "title": "set -e ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OOskpOLWFe1rN0XMuabAS",
+          "title": "set -o",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HrzalKXWVmqD-8SfdQJVu",
+          "title": "set -u ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Qs5jcx6d643cJDdhkPPxD",
+          "title": "Error logging",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "c0F44DSG7eVcqwaOfk2Z-",
+          "title": "trap",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZWMGvUxnohv6-dzsaSHuB",
+          "title": "curl",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eVbx1WsfeHcVaFs-vXpwF",
+          "title": "ssh",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mImvR0TfLjDqj_Td4G7Gy",
+          "title": "rsync",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "q-41zNMAJ-BYwrz_fZP60",
+          "title": "ifconfig, ip",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ZTJrnx12KSrcyUfd0RfPu",
+      "title": "Process Management",
+      "subtopics": [
+        {
+          "id": "7-4WglSAbhBZUpP8HS6xY",
+          "title": "nohup",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sn7RlXc5dgD1gqDGikco-",
+          "title": "jobs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Qs07iAbFbJk97xHpo10dO",
+          "title": "disown",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ey38pCn0vlhZXLrJChtIW",
+          "title": "fg, bg",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Oc80VSBDYTHkGOV4Jqo19",
+          "title": "Process substitution",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gOdW5k4fRu9P-3D3ze8aA",
+          "title": "ps",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8Ll6sByPqMnjVms5J1ns5",
+          "title": "free",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "M2afRR6yY8iq85_MnfGKV",
+          "title": "top, htop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rmSSz2ka9e1nQwx18Ofy8",
+          "title": "df, du",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D-sgMFB-IhNw41hNJsSF6",
+          "title": "ping",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "F5w3pYH5Z58NAJ81p5q8n",
+          "title": "wget",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PzRwOkhukRE1cTHXOXUTu",
+          "title": "scp",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "fR3sok0EJTGHELbPO6MAW",
+      "title": "Debugging",
+      "subtopics": [
+        {
+          "id": "6hXvAV0R7FlJ8UkQzRzMZ",
+          "title": "Bash Debug",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Kwr37_gNDhkwSkg49bg35",
+      "title": "Package Management",
+      "subtopics": [
+        {
+          "id": "R57tdCBI0rLmzWEuJeBTW",
+          "title": "uptime",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lwul2wUhhCnXxKO6-ysX2",
+          "title": "iostat, vmstat",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bX48eoEWdUFeL2rYXuzG5",
+          "title": "netstat, ss",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "d8jGE833q0Wf6gB3DZil4",
+          "title": "brew",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nfyh2co43xfR9DJbNnM_Y",
+          "title": "apt",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iE263510iTgm3OEeB9b77",
+          "title": "dnf",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_p6LP0uvp9QpBISr1t4KX",
+          "title": "yum",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ESjj2b8Hk0Irj4E2Gmj6w",
+          "title": "tar",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b8ph0RGUpVWrgEQ05Wvgy",
+          "title": "gzip, gunzip",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hOtzJ9tH4OcB2uI2T_si5",
+          "title": "zip, unzip",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qedrcO4QA2ZxV24l0Q6Or",
+          "title": "bzip2, xz",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QGDwieDblgpS6U0n_Ivt8",
+          "title": "cron, crontab",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Wny7lCxP2M1FaoUYDD7Gf",
+          "title": "at",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ResodrV_p7zK1dJbqT0us",
+          "title": "systemd timers",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "peZDR615PgGw7TQalyG_2",
+      "title": "Functions",
+      "subtopics": [
+        {
+          "id": "X4-kdfaVimq5VP_gPTWR0",
+          "title": "Recursive Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cBJbM6nl0Dy9Ru5hruzpK",
+          "title": "Case conversion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lil5vo78g474F1yomar9y",
+          "title": "Function Scopes",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

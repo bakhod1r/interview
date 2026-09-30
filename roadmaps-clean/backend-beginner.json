@@ -1,0 +1,154 @@
+{
+  "slug": "backend-beginner",
+  "title": "Backend Beginner",
+  "description": "Step by step guide to becoming a backend developer in @currentYear@",
+  "url": "https://roadmap.sh/backend-beginner",
+  "groups": [
+    "Absolute Beginners"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-03-04T16:32:38.311Z",
+  "relatedRoadmaps": [],
+  "topicCount": 8,
+  "subtopicCount": 18,
+  "topics": [
+    {
+      "id": "EwvLPSI6AlZ4TnNIJTZA4",
+      "title": "Learn about APIs",
+      "subtopics": [
+        {
+          "id": "lfNFDZZNdrB0lbEaMtU71",
+          "title": "REST",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sNceS4MpSIjRkWhNDmrFg",
+          "title": "JSON APIs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "PY9G7KQy8bF6eIdr1ydHf",
+          "title": "Authentication",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "2f0ZO6GJElfZ2Eis28Hzg",
+      "title": "Pick a Language",
+      "subtopics": [
+        {
+          "id": "8-lO-v6jCYYoklEJXULxN",
+          "title": "JavaScript",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BdXbcz4-ar3XOX0wIKzBp",
+          "title": "Go",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "J_sVHsD72Yzyqb9KCIvAY",
+          "title": "Python",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "ezdqQW9wTUw93F6kjOzku",
+      "title": "Version Control Systems",
+      "subtopics": [
+        {
+          "id": "_I1E__wCIVrhjMk6IMieE",
+          "title": "Git",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "NvUcSDWBhzJZ31nzT4UlE",
+      "title": "Repo hosting services",
+      "subtopics": [
+        {
+          "id": "ptD8EVqwFUYr4W5A_tABY",
+          "title": "Github",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "r45b461NxLN6wBODJ5CNP",
+      "title": "Relational Databases",
+      "subtopics": [
+        {
+          "id": "FihTrMO56kj9jT8O_pO2T",
+          "title": "PostgreSQL",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "LJt27onEOeIBomiEMTyKd",
+      "title": "More about Databases",
+      "subtopics": [
+        {
+          "id": "Z7jp_Juj5PffSxV7UZcBb",
+          "title": "ORMs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qSAdfaGUfn8mtmDjHJi3z",
+          "title": "ACID",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "rq_y_OBMD9AH_4aoecvAi",
+          "title": "Transactions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bQnOAu863hsHdyNMNyJop",
+          "title": "N+1 Problem",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "ELj8af7Mi38kUbaPJfCUR",
+      "title": "Caching",
+      "subtopics": [
+        {
+          "id": "g8GjkJAhvnSxXTZks0V1g",
+          "title": "Redis",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UxS_mzVUjLigEwKrXnEeB",
+          "title": "JWT",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "STQQbPa7PE3gbjMdL6P-t",
+      "title": "Testing",
+      "subtopics": [
+        {
+          "id": "3OYm6b9f6WOrKi4KTOZYK",
+          "title": "Unit Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "381Kw1IMRv7CJp-Uf--qd",
+          "title": "Integration Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NAGisfq2CgeK3SsuRjnMw",
+          "title": "Functional Testing",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

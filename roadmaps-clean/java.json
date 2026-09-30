@@ -1,0 +1,477 @@
+{
+  "slug": "java",
+  "title": "Java Developer",
+  "description": "Step by step guide to becoming a Java developer in @currentYear@",
+  "url": "https://roadmap.sh/java",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-01-27T13:57:35.172Z",
+  "relatedRoadmaps": [
+    "backend",
+    "spring-boot",
+    "devops",
+    "golang",
+    "javascript"
+  ],
+  "topicCount": 20,
+  "subtopicCount": 68,
+  "topics": [
+    {
+      "id": "2TGq1y2QthnxxN-FfToSe",
+      "title": "Learn the Basics",
+      "subtopics": [
+        {
+          "id": "OlbQNB6YXZjO1J7D0lZU1",
+          "title": "Basic Syntax",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5g9mmi01WeZ4aDqNzwx_V",
+          "title": "Data Types",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VBNcAO0STaZJ1iV9A7utv",
+          "title": "Variables and Scopes",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yNDbk6r5wFqBi25xmIRF_",
+          "title": "Type Casting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "5khApwg1FZ-0qorsLyH-F",
+          "title": "Arrays ",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sG_3ZQIE1-FQXQkk-OduQ",
+          "title": "Conditionals",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JHUhVEjWFXTn6-wKcKevg",
+          "title": "Loops",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ziD_XwzJSFQP_3iLjq9pA",
+          "title": "Math Operations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aEaBobzFWv0mJHGAbgxKY",
+          "title": "Strings and Methods",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "QgWalJLIb6Fw0HhN1wb02",
+          "title": "Lifecycle of a Program",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DZ4BX4NYeCQbjGSj56lng",
+          "title": "Basics of OOP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3qowgj1pas1X7oRric9eU",
+          "title": "Object Lifecycle",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "c--y6GcKj9am0CBdu_Hnt",
+      "title": "Annotations",
+      "subtopics": [
+        {
+          "id": "y-i56f1P_mMdvyBr7J4XE",
+          "title": "Method Overloading / Overriding",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "00_q6I95eO-PUUrKpPFY8",
+      "title": "Lambda Expressions",
+      "subtopics": [
+        {
+          "id": "qdA6bK9ZkP8p0_NH_wMuj",
+          "title": "Abstraction",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PXpPEmCEBUKRjwP3B5LzJ",
+          "title": "Inheritance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6wTRN2PYC6zM_Txkekx53",
+          "title": "Interfaces",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iH9wSsOK4a77pS7U0Yu5z",
+          "title": "Encapsulation",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "kdxy8Zssnc5lJjdmjUyMc",
+      "title": "Modules",
+      "subtopics": [
+        {
+          "id": "Kjdj862xnz8fqDYE3HKhC",
+          "title": "Static vs Dynamic Binding",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "l9fxK8K9fcUqR7hs5TkWU",
+      "title": "Optionals",
+      "subtopics": []
+    },
+    {
+      "id": "g9P3548F38tYGjevBc42w",
+      "title": "Exception Handling",
+      "subtopics": []
+    },
+    {
+      "id": "_W84u4UXMSY0zvy6RJvFi",
+      "title": "Web Frameworks",
+      "subtopics": [
+        {
+          "id": "kN-mXxqUPNJNsJGQ0U_7J",
+          "title": "Play Framework",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xoryfi4SpJlkz-PV05ql6",
+          "title": "Spring (Spring Boot)",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "w-kcKPh8U0P_jtT90_1Xy",
+          "title": "Quarkus",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OrkJa48HIDmrLOgCBpimA",
+          "title": "Javalin",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "81N1cZLue_Ii0uD5CV6kZ",
+      "title": "Build Tools",
+      "subtopics": [
+        {
+          "id": "6FMj9tMAQPii_1kLtHJLk",
+          "title": "Bazel",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "rmDIm5dqtdlNfPhvpqS7-",
+          "title": "Gradle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1Mk_zXxCCcUoX-gFxtlnf",
+          "title": "Functional Composition",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WHxAwfdKHQSOg0TLX05EG",
+          "title": "Stream API",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hY1-sEpTmpaj1PregdkFf",
+          "title": "JUnit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XU2C8bF9ICej8LS7ZGTTv",
+          "title": "TestNG",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gB4XUR9nCdF1-dOEwGcHi",
+          "title": "REST Assured",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U2BqOY49HaII6mKQB3SVt",
+          "title": "JMeter",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UFDy19TNkykRsKv4vRsVJ",
+          "title": "Cucumber-JVM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mLM1HJf6_pxrUDOmb45ew",
+          "title": "Mocking > Mockito",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "zItXmuluDtl6HkTYQ7qMh",
+      "title": "Dependency Injection",
+      "subtopics": [
+        {
+          "id": "a-EQiBUlSgdZba1mW36op",
+          "title": "Array vs ArrayList",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eKtdDtiJygKQ4PuEylFQY",
+          "title": "Map",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "M0ybgK1JCycXhZ1dEpCFo",
+      "title": "I/O Operations",
+      "subtopics": [
+        {
+          "id": "DWO2-EPIUeKK5aQGiTuKc",
+          "title": "Dequeue",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-17LFO72I8RKjJRMXct9k",
+          "title": "Iterator",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "NowpzyPVFcX082j5YS5i8",
+      "title": "File Operations",
+      "subtopics": [
+        {
+          "id": "eL4pc6SaNiKP48PzN7mNe",
+          "title": "Generic Collections",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "X2rJ3BY1ytFKsbJqJETFu",
+          "title": "EBean",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9UbRG752qxJdUwmqEAjN3",
+          "title": "JDBC",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "shqS9-hg__mkOtnnl_I4l",
+      "title": "Concurrency",
+      "subtopics": [
+        {
+          "id": "u_YysD7Bpnq-xkFX5yJGz",
+          "title": "Threads",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3r0Er9XZHovIZz3gNyj4A",
+          "title": "Pass by Value / Pass by Reference",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XjkNd5WJ9yxW48dwHQNkZ",
+          "title": "Set",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ThoWhXb4vUvNfE70_wMfa",
+          "title": "Queue",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DzfE_9WLAp-BrG3C1-MwU",
+          "title": "Stack",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VdL_fAHxmRbuF0J627beA",
+          "title": "Maven",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vJSq1GJLIMQ6IIB8CMK8g",
+          "title": "Virtual Threads",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wEc7pSVU5G2c6Zqmtb_1k",
+          "title": "Java Memory Model",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U4Wx3MH3LgJLa0n9Ne0Br",
+          "title": "volatile keyword",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_wV2VQq6MIY1rVHjK8pfu",
+      "title": "Cryptography",
+      "subtopics": [
+        {
+          "id": "LenPrQwxFsE1UVbXO_dE7",
+          "title": "Classes and Objects",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xTwJYcA6ldgaw3yGmbDEd",
+          "title": "Attributes and Methods",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KYndNwfQcwRCf3zCXOwd_",
+          "title": "Access Specifiers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZcNxO6qIXIg7RaWYnZj2e",
+          "title": "Static Keyword",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zDBW20W2XMCtNTG3emJ_A",
+          "title": "Nested Classes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ax2ouIZgN1DpPzKDy4fwp",
+          "title": "Method Chaining",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ey1f8IsdAlDv1O3E_tNog",
+          "title": "Enums",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ajuc_rHObqMQBXLqRIuxh",
+          "title": "Final Keyword",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VqLV7kolfRFnvOuJAvzlg",
+          "title": "Record",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "60POZOjwHSdKYL6rfkyEy",
+          "title": "Packages",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dg_UpaO8TzIN7w_QZ1n-6",
+          "title": "Initializer Block",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "9h20XVRli7TDq0QIJwX2U",
+      "title": "Date and Time",
+      "subtopics": []
+    },
+    {
+      "id": "JeMG0gU8IVRBZgczjXmPi",
+      "title": "Networking",
+      "subtopics": []
+    },
+    {
+      "id": "C7rB3jkshHFN7TkHRJPlz",
+      "title": "Regular Expressions",
+      "subtopics": [
+        {
+          "id": "dz6bCmB4dgA7VVZ448cN6",
+          "title": "High Order Functions",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SityDdjhhNZ9CO3Tg0VI9",
+          "title": "Functional Interfaces",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "fV-gW51jhna2__Ln2HIIh",
+      "title": "Database Access",
+      "subtopics": [
+        {
+          "id": "WzWOxBUKKg6LeuBmVesc2",
+          "title": "Spring Data JPA",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UEiDzzodyEu5O1xFAFDly",
+          "title": "Hibernate",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "d9F5Wt8onY125DLuzNULg",
+      "title": "Logging Frameworks",
+      "subtopics": [
+        {
+          "id": "okC1uMdyfIJAhX_R9Npsw",
+          "title": "Logback",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sFaNj_1MviaTc6UIfjXl6",
+          "title": "Log4j2",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LGlZHKqyQ-aWtHnhklhgn",
+          "title": "SLF4J",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Fn7aAaGbwYsAp4xLuuFud",
+          "title": "TinyLog",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "LgpsnXV0CTvTspjnsd0Rd",
+      "title": "Testing",
+      "subtopics": []
+    },
+    {
+      "id": "vRZAtylN3zfHIv3SidYkA",
+      "title": "Documentation",
+      "subtopics": [
+        {
+          "id": "d3Tsc7KPhtjS0eC4Zbq8B",
+          "title": "Javadoc",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

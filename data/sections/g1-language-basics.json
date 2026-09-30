@@ -1,0 +1,965 @@
+{
+  "id": "g1",
+  "name": "Language basics",
+  "domain": "go",
+  "domainLabel": "Go",
+  "topics": [
+    "Basics",
+    "Interfaces",
+    "Errors",
+    "Methods"
+  ],
+  "questions": [
+    {
+      "id": 3000,
+      "code": "G1",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da array va slice farqi?",
+      "options": [
+        "Bir xil",
+        "Array — uzunligi tipning bir qismi ([3]int va [4]int — turli tiplar), qiymat sifatida nusxalanadi. Slice — array ustidagi ko'rinish: {pointer, len, cap} strukturasi, nusxalanganda ham bir xil massivga ishora qiladi",
+        "Slice o'zgarmas",
+        "Array faqat funksiya ichida ishlatiladi"
+      ],
+      "answer": 1,
+      "explanation": "Slice'ni funksiyaga bersangiz, struct nusxalanadi, lekin ichidagi pointer bir xil — elementni o'zgartirsangiz chaqiruvchida ham ko'rinadi. append esa cap yetmasa yangi massiv yaratadi va bog'liqlik uziladi — shuning uchun append natijasini doim qaytarib o'zlashtirish kerak: s = append(s, x).",
+      "source": "https://go.dev/blog/slices-intro"
+    },
+    {
+      "id": 3001,
+      "code": "G2",
+      "level": "J",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Nima chop etiladi?",
+      "snippet": "a := []int{1, 2, 3}\nb := a[:2]\nb = append(b, 99)\nfmt.Println(a, b)",
+      "options": [
+        "[1 2 3] [1 2 99]",
+        "[1 2 99] [1 2 99]",
+        "[1 2 3] [1 2 3 99]",
+        "panic"
+      ],
+      "answer": 1,
+      "explanation": "b ning len=2, cap=3 — a bilan bir xil massivni bo'lishadi. append cap ichida joy topgani uchun yangi massiv yaratmaydi, a[2] ni 99 ga yozadi. Shuning uchun a = [1 2 99]. Buning oldini olish: b := a[:2:2] (cap ni cheklash, 'full slice expression') yoki nusxa olish (slices.Clone). Bu Go'dagi eng ko'p uchraydigan nozik xatolardan biri.",
+      "source": "https://go.dev/blog/slices"
+    },
+    {
+      "id": 3002,
+      "code": "G3",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "<code>make</code> va <code>new</code> farqi?",
+      "options": [
+        "Bir xil",
+        "make — faqat slice, map va channel uchun: ularni initsializatsiya qilib, tayyor qiymat qaytaradi. new(T) — nol qiymatli T uchun memory ajratib, *T pointer qaytaradi",
+        "new faqat struct uchun",
+        "make pointer qaytaradi"
+      ],
+      "answer": 1,
+      "explanation": "var m map[string]int (yoki new(map...)) — nil map: o'qish mumkin, yozish panic beradi ('assignment to entry in nil map'). m := make(map[string]int) — ishlaydi. Slice uchun nil slice (var s []int) foydalanish mumkin: append nil slice'ga ishlaydi, len=0 va JSON'da null bo'ladi."
+    },
+    {
+      "id": 3003,
+      "code": "G4",
+      "level": "M",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go 1.22 va undan yuqori versiyada nima chop etiladi?",
+      "snippet": "var fns []func()\nfor i := 0; i < 3; i++ {\n    fns = append(fns, func() { fmt.Print(i, \" \") })\n}\nfor _, f := range fns { f() }",
+      "options": [
+        "0 1 2",
+        "3 3 3",
+        "0 0 0",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 0,
+      "explanation": "Go 1.22 dan boshlab sikl o'zgaruvchisi har iteratsiyada yangi yaratiladi — closure'lar 0, 1, 2 ni ko'radi. Go 1.21 va undan oldin bitta o'zgaruvchi bo'lgan va natija '3 3 3' edi; buning uchun i := i deb nusxa olish yoki parametr sifatida uzatish kerak edi. Intervyuda ikkala xulqni ham va qaysi versiyadan o'zgarganini bilish kuchli signal. Eslatma: xulq modul go.mod dagi 'go' versiyasiga bog'liq.",
+      "source": "https://go.dev/blog/loopvar-preview"
+    },
+    {
+      "id": 3004,
+      "code": "G5",
+      "level": "M",
+      "type": "code",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "Nima chop etiladi?",
+      "snippet": "type MyErr struct{}\nfunc (e *MyErr) Error() string { return \"boom\" }\n\nfunc do() error {\n    var p *MyErr = nil\n    return p            // nil pointer, lekin error interfeysi ichida\n}\n\nfunc main() {\n    if err := do(); err != nil {\n        fmt.Println(\"xato bor:\", err == nil)\n    } else {\n        fmt.Println(\"xato yo'q\")\n    }\n}",
+      "options": [
+        "xato yo'q",
+        "xato bor: false",
+        "panic",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 1,
+      "explanation": "Interfeys qiymati ikki qismdan iborat: (tip, qiymat). Bu yerda tip = *MyErr, qiymat = nil — shuning uchun interfeys nil EMAS. 'typed nil' muammosi. To'g'ri yozish: funksiya xato yo'q bo'lsa aniq 'return nil' qilsin, konkret pointer tipini error sifatida qaytarmasin. go vet va staticcheck buni ba'zan ushlaydi.",
+      "source": "https://go.dev/doc/faq#nil_error"
+    },
+    {
+      "id": 3005,
+      "code": "G6",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "<code>defer</code> haqida qaysi to'g'ri?",
+      "options": [
+        "defer funksiya oxirida argumentlarni hisoblaydi",
+        "defer chaqirilgan paytda argumentlar darhol hisoblanadi, chaqiruvning o'zi funksiya qaytishida LIFO (oxirgi kiritilgan birinchi) tartibda bajariladi",
+        "defer panic bo'lsa bajarilmaydi",
+        "defer sikl ichida ishlamaydi"
+      ],
+      "answer": 1,
+      "explanation": "i := 0; defer fmt.Println(i); i++ → 0 chop etadi. defer panic paytida ham bajariladi (recover shuning uchun ishlaydi). Tuzoq: sikl ichida defer f.Close() — fayllar funksiya tugagunchaishlamaydi yopilmaydi; sikl tanasini alohida funksiyaga chiqaring. Yana: defer named return qiymatini o'zgartira oladi."
+    },
+    {
+      "id": 3014,
+      "code": "G15",
+      "level": "S",
+      "type": "open",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da xatolarni qanday boshqarasiz: wrapping, sentinel, custom tiplar?",
+      "modelAnswer": [
+        "Xato — oddiy qiymat: tekshirib, kontekst qo'shib yuqoriga uzatiladi",
+        "Wrapping: fmt.Errorf(\"user yuklab bo'lmadi: %w\", err) — zanjir saqlanadi",
+        "Tekshirish: errors.Is(err, ErrNotFound) — sentinel uchun; errors.As(err, &myErr) — tipga ko'ra ma'lumot olish uchun",
+        "Sentinel xatolar paket API'sining bir qismi — o'ylab e'lon qilinadi (var ErrNotFound = errors.New(...))",
+        "Xato matnini string sifatida solishtirmaslik; har qatlamda bir marta loglash (pastda log + yuqorida log = takror)",
+        "panic faqat dastur mantig'i buzilganda; kutilgan holatlar uchun emas"
+      ],
+      "explanation": "Senior signal: %w va %v farqi (%w zanjirni saqlaydi va errors.Is ishlaydi), va xatoni qayerda log qilish qarori (odatda eng yuqori qatlamda, qolganida kontekst qo'shib uzatish).",
+      "source": "https://go.dev/blog/go1.13-errors"
+    },
+    {
+      "id": 3019,
+      "code": "G20",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da interfeys qanday amalga oshiriladi (implement qilinadi)?",
+      "options": [
+        "implements key so'zi bilan",
+        "Implicit: tip interfeysdagi metodlarga ega bo'lsa, uni avtomatik qanoatlantiradi — e'lon qilish shart emas",
+        "Faqat embedding orqali",
+        "Faqat pointer tiplar uchun"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun interfeys iste'molchi (consumer) tomonida e'lon qilinadi, ishlab chiqaruvchi paketda emas — 'accept interfaces, return structs'. Kichik interfeyslar afzal (io.Reader — bitta metod). Nozik nuqta: metod pointer receiver bilan bo'lsa, faqat *T interfeysni qanoatlantiradi, T emas.",
+      "source": "https://go.dev/doc/effective_go#interfaces"
+    },
+    {
+      "id": 11006,
+      "code": "M7",
+      "level": "M",
+      "type": "code",
+      "topic": "Methods",
+      "domain": "go",
+      "section": "g1",
+      "question": "Nima chop etiladi?",
+      "snippet": "type C struct{ n int }\nfunc (c C) IncVal()  { c.n++ }\nfunc (c *C) IncPtr() { c.n++ }\n\nc := C{}\nc.IncVal(); c.IncVal(); c.IncPtr()\nfmt.Println(c.n)",
+      "options": [
+        "3",
+        "1 — value receiver nusxa ustida ishlaydi (o'zgarish yo'qoladi), faqat pointer receiver asl qiymatni o'zgartiradi",
+        "0",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 1,
+      "explanation": "c.IncPtr() yozilishi mumkin, chunki c — manzillanadigan (addressable) o'zgaruvchi va Go uni avtomatik (&c).IncPtr() ga aylantiradi. Lekin map elementida (m[\"k\"].IncPtr()) bu ishlamaydi — manzil olib bo'lmaydi, kompilyatsiya xatosi. Qoida: tipni o'zgartiradigan yoki katta struct metodlari — pointer receiver."
+    },
+    {
+      "id": 11007,
+      "code": "M8",
+      "level": "M",
+      "type": "code",
+      "topic": "Methods",
+      "domain": "go",
+      "section": "g1",
+      "question": "Embedding bilan nima bo'ladi?",
+      "snippet": "type Base struct{ ID int }\nfunc (b Base) Describe() string { return \"base\" }\n\ntype User struct {\n    Base\n    Name string\n}\nu := User{Base{7}, \"Ali\"}\nfmt.Println(u.ID, u.Describe())",
+      "options": [
+        "Kompilyatsiya xatosi",
+        "7 base — embed qilingan tipning maydon va metodlari tashqi tipga ko'tariladi (promotion), lekin bu meros emas: Base metodida User haqida hech qanday ma'lumot yo'q",
+        "0 base",
+        "7 user"
+      ],
+      "answer": 1,
+      "explanation": "Farqi muhim: agar User ham Describe() yozsa, u Base'nikini soya qiladi (override emas — shunchaki nomi ustun). Base ichidan User metodini chaqirib bo'lmaydi (virtual chaqiruv yo'q) — shuning uchun 'template method' pattern Go'da interfeys va kompozitsiya bilan quriladi. Embed qilingan interfeys esa metodlarni delegatsiya qiladi.",
+      "source": "https://go.dev/doc/effective_go#embedding"
+    },
+    {
+      "id": 11008,
+      "code": "M9",
+      "level": "S",
+      "type": "code",
+      "topic": "Methods",
+      "domain": "go",
+      "section": "g1",
+      "question": "Bu kod nima qiladi?",
+      "snippet": "type T struct{ n int }\nfunc (t *T) Show() { if t == nil { fmt.Println(\"nil T\"); return }; fmt.Println(t.n) }\n\nvar p *T\np.Show()",
+      "options": [
+        "panic: nil pointer dereference",
+        "'nil T' chop etadi — nil pointer ustida metod chaqirish mumkin, receiver shunchaki nil bo'ladi; panic faqat nil maydonga murojaat qilinganda chiqadi",
+        "Kompilyatsiya xatosi",
+        "Hech narsa"
+      ],
+      "answer": 1,
+      "explanation": "Bu amalda ishlatiladi: masalan nil *log.Logger yoki bo'sh daraxt tuguni uchun metodlar. Lekin ehtiyot bo'ling: interfeys ichidagi nil pointer 'typed nil' muammosini beradi (err != nil bo'lib chiqadi). Value receiver'li metodni nil pointer ustida chaqirish esa panic beradi — chunki dereference kerak."
+    },
+    {
+      "id": 11009,
+      "code": "M10",
+      "level": "S",
+      "type": "code",
+      "topic": "Methods",
+      "domain": "go",
+      "section": "g1",
+      "question": "Bu kodning muammosi nima?",
+      "snippet": "type Money struct{ Cents int64 }\nfunc (m Money) String() string {\n    return fmt.Sprintf(\"%v so'm\", m)\n}",
+      "options": [
+        "Muammo yo'q",
+        "Cheksiz rekursiya va stack overflow: %v Stringer'ni chaqiradi, u yana %v ni chaqiradi. Tuzatish: maydonni chop etish — fmt.Sprintf(\"%d so'm\", m.Cents)",
+        "Kompilyatsiya xatosi",
+        "Money pointer bo'lishi kerak"
+      ],
+      "answer": 1,
+      "explanation": "Klassik tuzoq. Xuddi shu Error() metodida ham bo'ladi. Xavfsiz yo'l: formatda aniq maydonlarni ishlatish yoki tipni almashtirish (type alias T2 T; fmt.Sprintf(\"%v\", T2(m))). Eslatma: String() value receiver bilan bo'lsa, %v ham value, ham pointer uchun ishlaydi; pointer receiver bo'lsa — faqat pointer uchun."
+    },
+    {
+      "id": 11010,
+      "code": "M11",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Methods",
+      "domain": "go",
+      "section": "g1",
+      "question": "Method value va method expression farqi?",
+      "options": [
+        "Bir xil",
+        "Method value — <code>f := u.Describe</code>: receiver qiymati shu paytda qotib qoladi (bind bo'ladi). Method expression — <code>f := User.Describe</code>: receiver birinchi argumentga aylanadi, f(u) deb chaqiriladi",
+        "Method value kompilyatsiya bo'lmaydi",
+        "Faqat interfeyslarda ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Nozik nuqta: method value receiver nusxasini o'sha lahzada oladi — keyin u o'zgarsa, chaqiruv eski qiymatni ko'radi (pointer receiver bo'lsa manzil bog'lanadi). Bu callback va defer bilan birga kutilmagan natija beradi: defer u.Describe() argumentlarni darhol hisoblaydi."
+    },
+    {
+      "id": 13014,
+      "code": "K15",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go generics (type parameters) qachon ishlatiladi?",
+      "options": [
+        "Har joyda, interfeys o'rniga",
+        "Bir xil mantiq turli tiplar uchun takrorlanganda (Map/Filter, to'plam, kesh, min/max): tip xavfsizligi saqlanadi va any + type assertion kerak bo'lmaydi. Xulq tipga qarab o'zgarishi kerak bo'lsa — interfeys to'g'ri tanlov",
+        "Generics Go'da yo'q",
+        "Generics faqat struct uchun"
+      ],
+      "answer": 1,
+      "explanation": "Cheklovlar (constraints) bilan ishlaydi: any, comparable, yoki o'z interfeysingiz (~int | ~float64). Kamchiliklari: kod o'qilishi murakkablashadi, ba'zi hollarda performance yutuq bermaydi. Go jamoasining maslahati: avval oddiy kod yozing, takrorlanish haqiqatan og'riq bo'lganda generics kiriting.",
+      "source": "https://go.dev/blog/intro-generics"
+    },
+    {
+      "id": 13015,
+      "code": "K16",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Reflection (reflect paketi) haqida to'g'ri gap?",
+      "options": [
+        "Har joyda ishlatish kerak — moslashuvchan",
+        "Kuchli, lekin qimmat va kompilyatsiya tekshiruvidan chetda: tiplar xatosi ishlash vaqtida chiqadi. Asosan kutubxonalarda ishlatiladi (JSON marshalling, ORM, validatsiya); ilova kodida iloji boricha kamroq",
+        "Reflection kompilyatsiyada bajariladi",
+        "Reflection generics bilan almashtirilgan"
+      ],
+      "answer": 1,
+      "explanation": "Alternativalar: interfeys bilan polimorfizm, kod generatsiyasi (go generate, sqlc, easyjson), generics. Agar reflect ishlatsangiz — natijani keshlang (masalan struct maydonlari ma'lumotini bir marta hisoblab). Reflection ko'p ishlatilgan joy odatda profil natijasida yuqorida turadi."
+    },
+    {
+      "id": 13017,
+      "code": "K18",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Paket initsializatsiyasi va <code>init()</code> tartibi qanday?",
+      "options": [
+        "init() main'dan keyin ishlaydi",
+        "Avval import qilingan paketlar (bog'liqlik tartibida), har paket ichida o'zgaruvchilar bog'liqligi bo'yicha, keyin init() funksiyalari (bir faylda tartib bo'yicha, fayllar odatda nom tartibida), eng oxirida main()",
+        "Faqat bitta init() bo'lishi mumkin",
+        "init() ni qo'lda chaqirish kerak"
+      ],
+      "answer": 1,
+      "explanation": "Nima uchun ehtiyot bo'lish kerak: init() da xatoni qaytarib bo'lmaydi (faqat panic), test uchun almashtirib bo'lmaydi, va tartibga bog'liq nozik buglar paydo bo'ladi. Amaliy maslahat: init() ni faqat registratsiya (masalan drayver ro'yxatga olish) uchun ishlating, ulanish va konfiguratsiya main'da aniq qilinsin."
+    },
+    {
+      "id": 13018,
+      "code": "K19",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "<code>panic</code> va <code>recover</code> qachon ishlatiladi?",
+      "options": [
+        "Har xato uchun panic qilish qulay",
+        "panic — dastur mantig'i buzilgan, davom etish ma'nosiz bo'lgan holatlar uchun (nil dereference, imkonsiz holat). Kutiladigan xatolar error bilan qaytariladi. recover — faqat chegarada (HTTP middleware, worker sikli) dasturni tirik saqlash uchun",
+        "recover har joyda chaqirilishi kerak",
+        "panic goroutine'ni to'xtatadi, dastur ishlayveradi"
+      ],
+      "answer": 1,
+      "explanation": "recover faqat defer ichida va o'sha goroutine'da ishlaydi. Middleware'da recover qilinganda: stack trace bilan loglash, 500 qaytarish va alert. Kutubxona yozayotgan bo'lsangiz panic'ni tashqariga chiqarmang — error ga aylantiring."
+    },
+    {
+      "id": 13021,
+      "code": "K22",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Interfeys qiymati ichkarida qanday saqlanadi?",
+      "options": [
+        "Faqat qiymat nusxasi",
+        "Ikki so'zli struktura: tip ma'lumoti (itab — metod jadvali bilan) va ma'lumotga pointer. Shuning uchun nil bo'lmagan tip + nil qiymat = nil bo'lmagan interfeys (typed nil), va interfeys orqali chaqiruv dinamik (inline qilish qiyinroq)",
+        "Interfeys metodlarni nusxalaydi",
+        "Interfeys har doim heap'da"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natijalar: qiymatni interfeysga solish ko'pincha heap allokatsiya beradi (escape analysis); issiq sikllarda konkret tip bilan ishlash tezroq. Lekin avval o'lchang — ko'p hollarda farq sezilmaydi va interfeys kodni soddalashtiradi."
+    },
+    {
+      "id": 14025,
+      "code": "SR26",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da mock va fake farqi — qaysi biri afzal?",
+      "options": [
+        "Mock har doim afzal",
+        "Fake — soddalashtirilgan real implementatsiya (masalan xotiradagi repository): testni xulq bo'yicha tekshiradi va refactor'ga chidamli. Mock — chaqiruvlarni tekshiradi: implementatsiyaga bog'lanib qoladi. Ko'p holatda fake afzal, mock — faqat o'zaro ta'sir muhim bo'lganda (masalan email yuborildimi)",
+        "Fake sekin ishlaydi",
+        "Go'da mock yozib bo'lmaydi"
+      ],
+      "answer": 1,
+      "explanation": "Go'da kichik interfeyslar tufayli fake yozish arzon. Kod generatsiyasi (mockgen) ham bor, lekin har o'zgarishda qayta generatsiya va mo'rt testlar narxini hisobga oling. Testni 'nima qildi' emas, 'qanday natija berdi' bo'yicha yozish — asosiy tamoyil."
+    },
+    {
+      "id": 14026,
+      "code": "SR27",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da bog'liqliklarni ulash (dependency injection) qanday qilinadi?",
+      "options": [
+        "Framework majburiy (Spring kabi)",
+        "Odatda qo'lda: konstruktorlarga interfeys uzatiladi, hamma narsa main'da ulanadi; katta loyihada wire (kompilyatsiya vaqtida generatsiya) yoki fx ishlatilishi mumkin. Global o'zgaruvchilar va init() — tavsiya etilmaydi",
+        "Reflection bilan avtomatik",
+        "Har paket o'z bog'liqligini o'zi yaratadi"
+      ],
+      "answer": 1,
+      "explanation": "Nima uchun qo'lda DI Go'da qulay: bog'liqlik grafi kodda ko'rinadi, kompilyator tekshiradi, testda almashtirish oson. Runtime DI konteynerlari xatoni ishga tushirish vaqtiga suradi — Go falsafasiga zid."
+    },
+    {
+      "id": 14027,
+      "code": "SR28",
+      "level": "S",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "JSON'da <code>null</code> va maydonning umuman yo'qligini qanday ajratasiz?",
+      "snippet": "type Patch struct {\n    Name *string `json:\"name\"`   // ?\n    Age  int     `json:\"age\"`\n}",
+      "options": [
+        "Farqi yo'q",
+        "Pointer (*string) bilan: maydon yo'q bo'lsa nil, null kelsa ham nil — to'liq ajratish uchun json.RawMessage yoki maxsus tip (Optional[T]) va UnmarshalJSON kerak; Age int esa 0 va 'yo'q' ni ajrata olmaydi",
+        "Faqat map[string]any bilan mumkin",
+        "omitempty buni hal qiladi"
+      ],
+      "explanation": "Bu PATCH endpoint'larida real muammo: 'maydonni o'zgartirma' va 'maydonni tozalab qo'y' farqlanishi kerak. Yechimlar: pointer + alohida 'fields' ro'yxati, JSON Merge Patch semantikasi, yoki har maydon uchun Optional[T] tipi (Set bool bilan)."
+    },
+    {
+      "id": 15005,
+      "code": "GS6",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go 1.20+ da bir nechta xatoni birga qaytarish uchun nima ishlatiladi?",
+      "options": [
+        "Faqat birinchi xatoni qaytarish",
+        "errors.Join(err1, err2, ...) — birlashtirilgan xato; errors.Is/As zanjirning har bo'lagida ishlaydi. fmt.Errorf ham bir nechta %w ni qo'llaydi",
+        "Xatolarni string sifatida qo'shish",
+        "panic qilish"
+      ],
+      "answer": 1,
+      "explanation": "Qachon foydali: validatsiya (hamma maydon xatolarini birga qaytarish), parallel ishlar natijasi (errgroup faqat birinchisini qaytaradi — qolganini o'zingiz yig'asiz), va defer'da Close xatosini asosiy xatoga qo'shish. Foydalanuvchiga ko'rsatishda esa xatolarni tuzilgan (structured) holda qaytarish afzal.",
+      "source": "https://pkg.go.dev/errors#Join"
+    },
+    {
+      "id": 15009,
+      "code": "GS10",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "<code>io.Reader</code> va <code>io.Writer</code> nega Go'da shunchalik muhim?",
+      "options": [
+        "Faqat fayllar uchun",
+        "Ular universal kompozitsiya nuqtasi: fayl, tarmoq, bufer, siqish, shifrlash — hammasi bir xil interfeys orqali ulanadi (io.Copy, io.TeeReader, gzip.NewReader). Ma'lumotni xotiraga to'liq yuklamasdan oqim bilan ishlash imkonini beradi",
+        "Ular eskirgan",
+        "Faqat kichik ma'lumot uchun"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy misol: fayl → gzip → hash → HTTP body zanjiri bitta o'tishda, qo'shimcha xotirasiz. Shuning uchun funksiya imzosida []byte o'rniga io.Reader qabul qilish ko'pincha yaxshiroq dizayn. io.Copy ichkarida buferni qayta ishlatadi va imkon bo'lsa optimallashtirilgan yo'ldan foydalanadi."
+    },
+    {
+      "id": 15010,
+      "code": "GS11",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "<code>go:embed</code> nima uchun kerak?",
+      "options": [
+        "Kodni siqish uchun",
+        "Statik fayllarni (shablon, migratsiya, konfiguratsiya, frontend build) binarniki ichiga joylash — deploy bitta fayl bo'ladi va ishga tushirishda fayl yo'li muammosi yo'qoladi",
+        "Kutubxona ulash uchun",
+        "Faqat test uchun"
+      ],
+      "answer": 1,
+      "explanation": "Misol: //go:embed migrations/*.sql + embed.FS. Cheklovlar: fayllar paket ichida bo'lishi kerak, yashirin fayllar default kirmaydi, va binar hajmi oshadi. Migratsiya fayllarini embed qilish — deploy xatolarini kamaytiradigan amaliy naqsh."
+    },
+    {
+      "id": 15011,
+      "code": "GS12",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go modullarida versiya tanlash qanday ishlaydi (MVS)?",
+      "options": [
+        "Har doim eng so'nggi versiya olinadi",
+        "Minimal Version Selection: har bog'liqlik uchun talab qilingan MINIMAL versiyalarning eng kattasi tanlanadi — natija takrorlanadigan (reproducible) va o'z-o'zidan yangilanmaydi; yangilash aniq buyruq bilan (go get -u)",
+        "Tasodifiy tanlanadi",
+        "Faqat go.sum belgilaydi"
+      ],
+      "answer": 1,
+      "explanation": "Shuning uchun go.mod da versiyani ko'tarish — ongli qaror. go.sum checksum'larni saqlaydi (ta'minot zanjiri himoyasi). v2+ modullar uchun import yo'lida /v2 suffiksi shart. replace — lokal ishlash yoki fork uchun, lekin kutubxona go.mod'idagi replace iste'molchilarga o'tmaydi.",
+      "source": "https://research.swtch.com/vgo-mvs"
+    },
+    {
+      "id": 15012,
+      "code": "GS13",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Bir nechta modul ustida birga ishlash uchun (monorepo) nima ishlatiladi?",
+      "options": [
+        "Har safar replace yozish va commit qilish",
+        "go.work (workspace, Go 1.18+): lokal modullarni birga ulaydi, go.mod'ga replace yozish shart emas va u commit qilinmaydi",
+        "Modullarni birlashtirish",
+        "Vendor papka"
+      ],
+      "answer": 1,
+      "explanation": "go.work odatda git'ga qo'shilmaydi (har dasturchining o'z muhiti). CI esa go.work'siz, aniq versiyalar bilan quradi — shuning uchun lokalda ishlagan narsa CI'da sinmasligi uchun bog'liqlik versiyalari to'g'ri yangilanishi kerak."
+    },
+    {
+      "id": 15015,
+      "code": "GS16",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go 1.22 dan <code>net/http</code> marshrutlashda nima o'zgardi?",
+      "options": [
+        "Hech narsa, framework kerak",
+        "ServeMux endi metod va yo'l shablonlarini qo'llaydi: mux.HandleFunc(\"GET /items/{id}\", h) va r.PathValue(\"id\") — ko'p holatda tashqi router kerak emas",
+        "Faqat GET qo'llaniladi",
+        "Regexp marshrutlash qo'shildi"
+      ],
+      "answer": 1,
+      "explanation": "Shablonlar: {id}, {path...} (qolgan yo'l), aniqlik bo'yicha ustunlik qoidalari bor. Tashqi router hali ham foydali bo'lishi mumkin (middleware guruhlari, ko'p imkoniyat), lekin oddiy servis uchun standart kutubxona yetadi — bog'liqlik kamayadi.",
+      "source": "https://go.dev/blog/routing-enhancements"
+    },
+    {
+      "id": 15016,
+      "code": "GS17",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go 1.23 dagi iteratorlar (range-over-func) nima?",
+      "options": [
+        "Yangi sikl sintaksisi, faqat slice uchun",
+        "Funksiya ham range ichida ishlatilishi mumkin: iter.Seq[V] va iter.Seq2[K,V] — o'z ma'lumot tuzilmangiz yoki sahifalangan API ustidan standart usulda iteratsiya yozish imkonini beradi (masalan slices.All, maps.Keys)",
+        "Generics o'rnini bosadi",
+        "Goroutine bilan ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy foyda: kursorli API yoki daraxt bo'ylab yurishni oddiy for-range bilan ifodalash, oraliq slice yaratmasdan. Diqqat: iterator funksiyasi ichida resurs ochilsa (fayl, rows), uni yopish mas'uliyatini aniq belgilang — yield false qaytarsa sikl erta tugaydi.",
+      "source": "https://go.dev/blog/range-functions"
+    },
+    {
+      "id": 15017,
+      "code": "GS18",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go 1.21+ dagi <code>slices</code> va <code>maps</code> paketlari nima beradi?",
+      "options": [
+        "Hech qanday yangilik, qo'lda yozish kerak",
+        "Generic yordamchilar: slices.Contains, Index, Sort, SortFunc, BinarySearch, Clone, Equal; maps.Keys/Values (Go 1.23 dan iterator sifatida). Bu takroriy qo'l kodini va xatolarni kamaytiradi",
+        "Faqat int uchun ishlaydi",
+        "Uchinchi tomon paketi"
+      ],
+      "answer": 1,
+      "explanation": "Eslatma: slices.Sort — barqaror emas (SortStableFunc alohida), va slices.Clone sayoz nusxa qiladi. maps.Keys natijasi tartibsiz — kerak bo'lsa saralang: slices.Sorted(maps.Keys(m))."
+    },
+    {
+      "id": 15023,
+      "code": "GS24",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Interfeyslarni loyihalashda Go uslubi qanday?",
+      "options": [
+        "Har struct uchun oldindan interfeys yozish",
+        "Kichik interfeyslar, iste'molchi paketda e'lon qilinadi va faqat kerak bo'lganda ('accept interfaces, return structs'). Oldindan 'kelajak uchun' interfeys yozish — ortiqcha mavhumlik (interface pollution)",
+        "Interfeyslar faqat testda",
+        "Katta interfeyslar afzal"
+      ],
+      "answer": 1,
+      "explanation": "Intervyuda kuchli javob sabab bilan: interfeysni implementatsiya paketida e'lon qilsangiz, iste'molchi keraksiz metodlarga bog'lanadi va mock yozish og'irlashadi. Go'da implicit satisfaction shuni qulay qiladi: kerakli metodlarni sanab, o'zingizga kerakli minimal interfeysni yozasiz."
+    },
+    {
+      "id": 18000,
+      "code": "GR1",
+      "level": "J",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "`iota` nima beradi?",
+      "snippet": "type Level int\nconst (\n    Debug Level = iota\n    Info\n    Warn\n    _\n    Fatal\n)\nfmt.Println(Info, Fatal)",
+      "options": [
+        "1 4",
+        "1 3",
+        "0 4",
+        "Kompilyatsiya xatosi"
+      ],
+      "answer": 0,
+      "explanation": "iota const blokida 0 dan boshlab har QATORDA oshadi (ifoda takrorlanadi). `_` ham qatorni sarflaydi, shuning uchun Fatal=4. Bitmask uchun tipik shakl: 1 << iota. Maslahat: shunday enum uchun `stringer` generatsiya qiling (go:generate stringer -type=Level), aks holda log'da raqam chiqadi."
+    },
+    {
+      "id": 18001,
+      "code": "GR2",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da zero value nima?",
+      "options": [
+        "Har tip e'lon qilinganda aniq default oladi: 0, \"\", false, nil (pointer/slice/map/chan/func/interface); struct — maydonlari zero",
+        "Initsializatsiya qilinmagan o'zgaruvchi tasodifiy qiymatga ega",
+        "nil — faqat pointer uchun",
+        "Kompilyator initsializatsiyani majburlaydi"
+      ],
+      "answer": 0,
+      "explanation": "Zero value dizayn printsipi: tip 'zero value bilan ishlatishga tayyor' bo'lishi kerak. Masalan sync.Mutex, bytes.Buffer, sync.WaitGroup e'lon qilinishi bilan ishlaydi. Ammo map bundan mustasno — nil map'ga yozish panic; shuning uchun make() kerak."
+    },
+    {
+      "id": 18002,
+      "code": "GR3",
+      "level": "M",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Nima chop etiladi?",
+      "snippet": "x := 1\nif x := 2; x > 1 {\n    fmt.Println(x)\n}\nfmt.Println(x)",
+      "options": [
+        "2 1 — if ichidagi `:=` yangi scope'da shadow qiladi",
+        "2 2",
+        "1 1",
+        "Kompilyatsiya xatosi: x qayta e'lon qilingan"
+      ],
+      "answer": 0,
+      "explanation": "Variable shadowing — eng qiyin topiladigan buglardan biri, ayniqsa `err` bilan: if ... { data, err := f() } ichidagi err tashqaridagisini yopadi va xato jimgina yo'qoladi. Tekshirish: `go vet -vettool=shadow` yoki golangci-lint'dagi govet shadow tekshiruvi."
+    },
+    {
+      "id": 18003,
+      "code": "GR4",
+      "level": "J",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Comma-ok idiomi nimaga kerak?",
+      "snippet": "m := map[string]int{\"a\": 0}\nv, ok := m[\"a\"]\n_, ok2 := m[\"b\"]",
+      "options": [
+        "v=0 ok=true, ok2=false — kalit yo'qligi bilan qiymati 0 ekanini ajratish uchun",
+        "ok har doim true",
+        "Faqat channel uchun ishlaydi",
+        "Xato qaytaradi"
+      ],
+      "answer": 0,
+      "explanation": "Comma-ok uch joyda: map o'qish (kalit bormi), channel o'qish (v, ok := <-ch; ok=false — yopilgan va bo'sh), type assertion (v, ok := i.(T) — ok=false bo'lsa panic bo'lmaydi). Ularsiz variant panic beradi yoki noaniqlik qoldiradi."
+    },
+    {
+      "id": 18004,
+      "code": "GR5",
+      "level": "M",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Variadic funksiyaga slice qanday uzatiladi?",
+      "snippet": "func sum(nums ...int) int { ... }\ns := []int{1,2,3}\n// A: sum(s)   B: sum(s...)",
+      "options": [
+        "B to'g'ri — `s...` slice'ni argumentlarga yoyadi; funksiya ichida nums o'sha backing array'ni ulashadi, o'zgartirsa asl slice o'zgaradi",
+        "A to'g'ri",
+        "Ikkalasi ham ishlaydi",
+        "Variadic faqat interface{} bilan ishlaydi"
+      ],
+      "answer": 0,
+      "explanation": "Muhim nuans: sum(s...) nusxa yaratmaydi — nums va s bir massivni ko'rsatadi. Funksiya elementlarni o'zgartirsa yoki sort qilsa, chaqiruvchining slice'i ham o'zgaradi. Kerak bo'lsa slices.Clone qiling. Argumentsiz chaqiruvda nums — nil slice."
+    },
+    {
+      "id": 18005,
+      "code": "GR6",
+      "level": "M",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Closure nima qaytaradi?",
+      "snippet": "func counter() func() int {\n    i := 0\n    return func() int { i++; return i }\n}\nc := counter()\nfmt.Println(c(), c())",
+      "options": [
+        "1 2 — closure i ni havola bo'yicha ushlaydi, u heap'ga escape qiladi",
+        "1 1",
+        "0 1",
+        "panic"
+      ],
+      "answer": 0,
+      "explanation": "Closure tashqi o'zgaruvchini NUSXA emas, havola bilan ushlaydi va u funksiya yashaganicha tirik qoladi (escape analysis heap'ga ko'chiradi). Ogohlantirish: Go'da chap-o'ngdan baholash tartibi kafolatlangan emas — fmt.Println(c(), c()) argumentlari chapdan o'ngga baholanadi, lekin bunday kodga tayanmaslik yaxshi. Goroutine ichida closure bilan ulashilgan o'zgaruvchi — data race manbai."
+    },
+    {
+      "id": 18006,
+      "code": "GR7",
+      "level": "M",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Struct embedding nima qiladi?",
+      "snippet": "type Base struct{ ID int }\nfunc (b Base) Describe() string { return \"base\" }\ntype User struct {\n    Base\n    Name string\n}\nu := User{}\n_ = u.ID\n_ = u.Describe()",
+      "options": [
+        "Promotion: Base maydon va metodlari User'da to'g'ridan-to'g'ri ko'rinadi — bu kompozitsiya, meros emas",
+        "Bu klassik meros (inheritance)",
+        "Kompilyatsiya xatosi",
+        "Faqat maydonlar promote bo'ladi, metodlar emas"
+      ],
+      "answer": 0,
+      "explanation": "Embedding — kompozitsiya + avtomatik delegatsiya. Muhim farq merosdan: virtual dispatch yo'q — Base metodining ichidan chaqirilgan metod User'da override qilingan versiyani ko'rmaydi (ozgina 'Base' o'zini biladi). Nom to'qnashsa tashqi (sayoz) daraja g'olib bo'ladi; bir xil chuqurlikda ikkita bir xil nom — ambiguity, kompilyatsiya xatosi."
+    },
+    {
+      "id": 18007,
+      "code": "GR8",
+      "level": "M",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Struct tag qanday ta'sir qiladi?",
+      "snippet": "type U struct {\n    Name  string `json:\"name\" db:\"user_name\"`\n    Email string `json:\"-\"`\n    Age   int    `json:\"age,omitempty\"`\n}",
+      "options": [
+        "Tag — reflection orqali o'qiladigan metadata: Email marshal bo'lmaydi, Age 0 bo'lsa tushib qoladi, db tegi sqlx/pgx uchun",
+        "Tag kompilyatorga ta'sir qiladi",
+        "Tag faqat hujjat",
+        "Tag'siz JSON ishlamaydi"
+      ],
+      "answer": 0,
+      "explanation": "Tag — oddiy string, kompilyator tekshirmaydi (xato yozsangiz jimgina ishlamaydi — `go vet` structtag buni topadi). omitempty semantikasi: 0, \"\", false, nil, bo'sh slice/map tushadi — 'qiymat berilmagan' bilan 'nol berilgan' ni ajratish uchun pointer ishlating. Go 1.24 da omitzero qo'shildi (faqat zero struct uchun)."
+    },
+    {
+      "id": 18008,
+      "code": "GR9",
+      "level": "M",
+      "type": "code",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Type switch qanday yoziladi va nima uchun kerak?",
+      "snippet": "switch v := i.(type) {\ncase string:\n    fmt.Println(len(v))\ncase error:\n    fmt.Println(v.Error())\ndefault:\n}",
+      "options": [
+        "Interfeys ichidagi dinamik tipni tekshirish; har case'da v o'sha tipga ega bo'ladi",
+        "Kompilyatsiya vaqtida ishlaydi",
+        "Faqat error uchun",
+        "v har doim interface{} bo'lib qoladi"
+      ],
+      "answer": 0,
+      "explanation": "Type assertion — v, ok := i.(T), ok'siz varianti mos kelmasa panic beradi. Type switch — ko'p variant uchun. Ammo ko'p type switch odatda dizayn hidi: interfeysga metod qo'shish yoki visitor/sealed interface (faqat shu paketda implement qilinadigan unexported metod) bilan almashtirish yaxshiroq. errors.As esa zanjir bo'ylab tekshiradi — oddiy assertion wrap qilingan xatoni topmaydi."
+    },
+    {
+      "id": 18009,
+      "code": "GR10",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "`any` va `interface{}` farqi?",
+      "options": [
+        "Hech qanday farq yo'q — Go 1.18 dan `any` interface{} uchun alias; `any` o'qishga qulayroq",
+        "any generiklarda boshqa ma'no beradi",
+        "any faqat generic funksiyalarda ishlaydi",
+        "any tipni tekshiradi"
+      ],
+      "answer": 0,
+      "explanation": "Alias, ya'ni bir xil tip. Lekin dizayn maslahati o'zgarmagan: 'empty interface says nothing' — any qaytaruvchi API tip xavfsizligini yo'qotadi. Generiklar aynan shu uchun paydo bo'ldi. Runtime'da any qiymat interface header (tip + pointer) — allokatsiya va dinamik dispatch narxi bor."
+    },
+    {
+      "id": 18010,
+      "code": "GR11",
+      "level": "S",
+      "type": "code",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Bu generic funksiyada constraint nima qiladi?",
+      "snippet": "type Number interface{ ~int | ~int64 | ~float64 }\nfunc Sum[T Number](xs []T) T {\n    var s T\n    for _, x := range xs { s += x }\n    return s\n}",
+      "options": [
+        "~int — asosiy tipi int bo'lgan barcha tiplar (masalan type Celsius int) ham mos keladi; ~siz faqat aynan int",
+        "~ hech narsa o'zgartirmaydi",
+        "Bu interfeys oddiy metod to'plami",
+        "Faqat int qabul qiladi"
+      ],
+      "answer": 0,
+      "explanation": "Constraint — tip to'plami. `~T` — 'underlying type T bo'lgan har qanday tip'. Tip inferensiyasi tufayli Sum(xs) deb chaqirish yetarli, [int] yozish shart emas. Amaliy qoida: generic faqat haqiqiy takrorlanish bo'lsa — xUzoq constraint ierarxiyasi kodni o'qishni qiyinlashtiradi; golang.org/x/exp/constraints o'rniga endi standart `cmp.Ordered` bor.",
+      "source": "https://go.dev/blog/intro-generics"
+    },
+    {
+      "id": 18011,
+      "code": "GR12",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "`errors.Is` va `errors.As` farqi?",
+      "options": [
+        "Is — zanjirda MA'LUM qiymatga (sentinel, masalan sql.ErrNoRows) tengligini tekshiradi; As — zanjirda ma'lum TIPni topib, unga o'zlashtiradi",
+        "Ikkalasi bir xil",
+        "Is faqat string solishtiradi",
+        "As faqat panic bilan ishlaydi"
+      ],
+      "answer": 0,
+      "explanation": "Ikkalasi ham %w bilan o'ralgan zanjirni Unwrap qilib yuradi. `err == sql.ErrNoRows` wrap qilingan xatoda ishlamaydi — shuning uchun doim errors.Is. Maxsus xato tipi (masalan *ValidationError, kod va maydonlar bilan) uchun errors.As. Sentinel'lar API kontrakti — ularni e'lon qilsangiz, keyin o'zgartirish breaking change."
+    },
+    {
+      "id": 18012,
+      "code": "GR13",
+      "level": "M",
+      "type": "code",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "`panic` va `recover` qachon o'rinli?",
+      "snippet": "func safe() (err error) {\n    defer func() {\n        if r := recover(); r != nil {\n            err = fmt.Errorf(\"panic: %v\", r)\n        }\n    }()\n    return risky()\n}",
+      "options": [
+        "recover faqat defer ichida ishlaydi; server chegarasida (HTTP middleware, worker loop) butun jarayon o'lmasligi uchun ishlatiladi, oddiy xato oqimi uchun emas",
+        "panic — Go'da odatiy xato qaytarish usuli",
+        "recover istalgan joyda ishlaydi",
+        "panic'dan keyin defer'lar ishlamaydi"
+      ],
+      "answer": 0,
+      "explanation": "Qoida: xato — qaytariladigan qiymat; panic — dasturchi xatosi yoki tiklab bo'lmaydigan holat. Muhim: recover BOSHQA goroutine'dagi panic'ni ushlay olmaydi — har goroutine o'zida himoyalanishi kerak, aks holda jarayon o'ladi. http.Server o'z handler'larida panic'ni ushlaydi, lekin sizning worker goroutine'laringizda emas."
+    },
+    {
+      "id": 30173,
+      "code": "SN174",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "Xatolarni qanday o'rash va tekshirish idiomatik?",
+      "options": [
+        "`fmt.Errorf(\"%v\", err)` va matn bo'yicha `strings.Contains`",
+        "`fmt.Errorf(\"context: %w\", err)` bilan o'rash, `errors.Is` (sentinel) va `errors.As` (tur/maydonlar) bilan tekshirish; API chegarasida ichki xatoni o'z turiga o'girish",
+        "Har joyda panic",
+        "Xatoni log qilib nil qaytarish"
+      ],
+      "answer": 1,
+      "explanation": "`%v` zanjirni uzadi — `errors.Is` ishlamaydi. Matn bo'yicha tekshirish esa kutubxona xabari o'zgarganda jim buziladi. Qatlamlar bo'yicha qoida: pastda `%w` bilan kontekst qo'shiladi, yuqorida (HTTP handler) `errors.As` bilan domain xatosi aniqlanib status kodga o'giriladi. `errors.Join` bir nechta xatoni birlashtiradi."
+    },
+    {
+      "id": 30174,
+      "code": "SN175",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da interfeys qayerda e'lon qilinishi kerak?",
+      "options": [
+        "Implementatsiya paketida, barcha metodlar bilan",
+        "Iste'molchi paketida va minimal (kerakli metodlargina) — 'accept interfaces, return structs'; katta interfeys mock va bog'liqlikni ko'paytiradi",
+        "`internal/interfaces` paketida markazlashgan",
+        "Farqi yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Iste'molchi tomonda e'lon qilinsa: paket o'ziga kerakli minimal shartnomani belgilaydi, test uchun mock oson, va implementatsiya paketi hech kimga bog'lanmaydi. `io.Reader` — bu falsafaning namunasi. Konstruktor esa konkret turni qaytaradi, shunda iste'molchi kerakli qismini o'zi abstraktlaydi."
+    },
+    {
+      "id": 30175,
+      "code": "SN176",
+      "level": "S",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Bu kod nima chiqaradi?",
+      "snippet": "s := []int{1, 2, 3}\nmodify(s)\nfmt.Println(s)\n\nfunc modify(x []int) {\n    x[0] = 100\n    x = append(x, 4)\n    x[1] = 200\n}",
+      "options": [
+        "`[100 200 3]`",
+        "`[100 2 3]` — `x[0]` umumiy massivga yozadi, `append` esa cap yetmagani uchun yangi massiv yaratadi va keyingi o'zgarishlar asl slice'ga tegmaydi",
+        "`[1 2 3]`",
+        "`[100 200 3 4]`"
+      ],
+      "answer": 1,
+      "explanation": "Slice qiymat bo'yicha uzatiladi, lekin backing array umumiy — shuning uchun `x[0]=100` ko'rinadi. `append` cap oshganda yangi massivga ko'chiradi, shundan keyin funksiya ichidagi slice mustaqil bo'ladi. Shu chalkashlik sababli slice'ni o'zgartiradigan funksiyalar natijani qaytarishi kerak (`func modify(x []int) []int`)."
+    },
+    {
+      "id": 30323,
+      "code": "SN324",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "Xatolarni qanday o'rash va tekshirish idiomatik?",
+      "options": [
+        "`fmt.Errorf(\"%v\", err)` va matn bo'yicha `strings.Contains`",
+        "`fmt.Errorf(\"context: %w\", err)` bilan o'rash, `errors.Is` (sentinel) va `errors.As` (tur/maydonlar) bilan tekshirish; API chegarasida ichki xatoni o'z turiga o'girish",
+        "Har joyda panic",
+        "Xatoni log qilib nil qaytarish"
+      ],
+      "answer": 1,
+      "explanation": "`%v` zanjirni uzadi — `errors.Is` ishlamaydi. Matn bo'yicha tekshirish esa kutubxona xabari o'zgarganda jim buziladi. Qatlamlar bo'yicha qoida: pastda `%w` bilan kontekst qo'shiladi, yuqorida (HTTP handler) `errors.As` bilan domain xatosi aniqlanib status kodga o'giriladi. `errors.Join` bir nechta xatoni birlashtiradi."
+    },
+    {
+      "id": 30324,
+      "code": "SN325",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go'da interfeys qayerda e'lon qilinishi kerak?",
+      "options": [
+        "Implementatsiya paketida, barcha metodlar bilan",
+        "Iste'molchi paketida va minimal (kerakli metodlargina) — 'accept interfaces, return structs'; katta interfeys mock va bog'liqlikni ko'paytiradi",
+        "`internal/interfaces` paketida markazlashgan",
+        "Farqi yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Iste'molchi tomonda e'lon qilinsa: paket o'ziga kerakli minimal shartnomani belgilaydi, test uchun mock oson, va implementatsiya paketi hech kimga bog'lanmaydi. `io.Reader` — bu falsafaning namunasi. Konstruktor esa konkret turni qaytaradi, shunda iste'molchi kerakli qismini o'zi abstraktlaydi."
+    },
+    {
+      "id": 30325,
+      "code": "SN326",
+      "level": "S",
+      "type": "code",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Bu kod nima chiqaradi?",
+      "snippet": "s := []int{1, 2, 3}\nmodify(s)\nfmt.Println(s)\n\nfunc modify(x []int) {\n    x[0] = 100\n    x = append(x, 4)\n    x[1] = 200\n}",
+      "options": [
+        "`[100 200 3]`",
+        "`[100 2 3]` — `x[0]` umumiy massivga yozadi, `append` esa cap yetmagani uchun yangi massiv yaratadi va keyingi o'zgarishlar asl slice'ga tegmaydi",
+        "`[1 2 3]`",
+        "`[100 200 3 4]`"
+      ],
+      "answer": 1,
+      "explanation": "Slice qiymat bo'yicha uzatiladi, lekin backing array umumiy — shuning uchun `x[0]=100` ko'rinadi. `append` cap oshganda yangi massivga ko'chiradi, shundan keyin funksiya ichidagi slice mustaqil bo'ladi. Shu chalkashlik sababli slice'ni o'zgartiradigan funksiyalar natijani qaytarishi kerak (`func modify(x []int) []int`)."
+    },
+    {
+      "id": 30416,
+      "code": "SN417",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Interfaces",
+      "domain": "go",
+      "section": "g1",
+      "question": "Interface metod chaqiruvi konkret tur chaqiruvidan qanchalik qimmat?",
+      "options": [
+        "Bir xil",
+        "Interface chaqiruvi itab orqali bilvosita (dynamic dispatch) — inline qilinmaydi va kesh miss ehtimoli bor; issiq tsiklda sezilarli bo'lishi mumkin, lekin odatda I/O va allocation oldida ahamiyatsiz. Profil ko'rsatmasa optimizatsiya qilinmaydi",
+        "10 barobar sekin",
+        "Interface tezroq"
+      ],
+      "answer": 1,
+      "explanation": "Muhimrog'i — interface'ga solish (boxing) allocation keltirishi mumkin: kichik qiymat interface'ga o'ralganda heap'ga qochadi. Shuning uchun issiq yo'lda `fmt.Sprintf`, `any` argumentlar va log chaqiruvlari GC bosimini oshiradi. Go 1.21+ PGO (profile-guided optimization) ba'zi interface chaqiruvlarini devirtualizatsiya qiladi."
+    },
+    {
+      "id": 30417,
+      "code": "SN418",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "Panic/recover qachon o'rinli?",
+      "options": [
+        "Xatolarni qaytarish o'rniga har joyda",
+        "Chegaralarda: HTTP server middleware'ida recover bilan bitta so'rovni yiqitib, jarayonni saqlash; ishga tushishda (`MustCompile`) dasturchi xatosi uchun; kutubxona ichida panic'ni tashqi API chegarasida `error`ga aylantirish. Oddiy biznes xatolarida ishlatilmaydi",
+        "Hech qachon",
+        "Faqat testda"
+      ],
+      "answer": 1,
+      "explanation": "Nozik joy: `recover` faqat shu goroutine'da ishlaydi — `go func()` ichida panic bo'lsa butun jarayon yiqiladi (shu sabab har spawn qilingan goroutine'da recovery wrapper bo'lishi kerak). Ikkinchi nuqta: recover'dan keyin holat noaniq bo'lishi mumkin, shuning uchun so'rovni bekor qilish to'g'ri, ishni davom ettirish emas."
+    }
+  ]
+}

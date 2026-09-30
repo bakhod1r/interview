@@ -1,0 +1,672 @@
+{
+  "slug": "blockchain",
+  "title": "Blockchain Developer",
+  "description": "Step by step guide to becoming a blockchain developer in @currentYear@.",
+  "url": "https://roadmap.sh/blockchain",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-01-06T16:31:52.106Z",
+  "relatedRoadmaps": [
+    "computer-science",
+    "linux",
+    "software-architect",
+    "frontend",
+    "backend",
+    "nodejs"
+  ],
+  "topicCount": 14,
+  "subtopicCount": 113,
+  "topics": [
+    {
+      "id": "MvpHHpbS-EksUfuOKILOq",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "edO8iEehsZtYavlsEKhOy",
+          "title": "What is Blockchain",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Nc9AH6L7EqeQxh0m6Hddz",
+          "title": "Why it matters?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WD2JH4X4tEE4J0W0XFQ_4",
+          "title": "Applications and Uses",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Atv-4Q7edtvfySs_XhgEq",
+          "title": "Blockchain Structure",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9z0Fqn1qqN8eo6s7_kwcb",
+          "title": "Basic Blockchain Operations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "H9jvIlxX6P-C_cgPfZop4",
+          "title": "Decentralization",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "zvUCR0KeigEi9beqFpwny",
+          "title": "Storage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nuq_juiBSecI7PwERR_4R",
+          "title": "Blockchain Networks",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "bA4V_9AbV3uQi3qrtLWk0",
+      "title": "Understanding Blockchain",
+      "subtopics": [
+        {
+          "id": "B7niNXMOTbHn_1ixKQ8ri",
+          "title": "Mining & Incentive Models",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "E9HR_voxQ2a2tvWUuva_p",
+          "title": "Decentralization vs Trust",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "L08v-78UsEhcg-mZtMVuk",
+          "title": "Blockchain Forking",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "EQgb4LqXnyq3gOX7Fb85s",
+      "title": "Types of Blockchains",
+      "subtopics": [
+        {
+          "id": "s1QqQc0We5yQaNF3Ogt4k",
+          "title": "Cryptocurrencies",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FSThY0R1OAZCIL98W3AMj",
+          "title": "Cryptowallets",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JYHK95Xr0R1MVCda1Epl6",
+          "title": "Solana",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tSJyp46rkJcOtDqVpJX1s",
+          "title": "EVM-Based",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JLXIbP-y8C2YktIk3R12m",
+          "title": "Ethereum",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JNilHFQnnVDOz-Gz6eNo5",
+          "title": "Polygon",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "sJj-6wG5KjjzYYia_eo63",
+          "title": "BNB Chain",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UQ9AejYV6_Sk6ZJkXYWf7",
+          "title": "Gnosis Chain",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "txQ9U1wcnZkQVh6B49krk",
+          "title": "Avalanche",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "trcGwYcFW5LQUUrAcbUf_",
+          "title": "Fantom",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VVbvueVMJKLUoJYhbJB1z",
+          "title": "Moonbeam / Moonriver",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YC385OLECWjpZjVeWKksO",
+          "title": "Everscale",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5MGtl00EEZdSnJdrNYPJ7",
+          "title": "Gosh",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4tAyunbYVwlbzybuVq7fr",
+          "title": "TON",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3HCpgWWPIkhK3gPRJuJQf",
+          "title": "Venom",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "miBEG3x_foKYxwfX4Tr4f",
+          "title": "TVM-Based",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "i_Dw3kUZ7qKPG-tk-sFPf",
+          "title": "L2 Blockchains",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "A_yVDg-6b42ynmh71jk1V",
+          "title": "Arbitrum",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hlcavpstLnXkJcjccQUL8",
+          "title": "TVM-Based",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C-SpX4Rzk5Um2F_X5ZdBr",
+          "title": "UTXO-Based",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tmI1PrE4fInrGB3-jMrFW",
+          "title": "Bitcoin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IzBZnvl8lqVKsog-IGwtV",
+          "title": "Cardano",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ixTIn2Uhs-i5-UPt9jKAa",
+          "title": "Base",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "sK8G-41D3EfYNSLFJ3XYf",
+      "title": "Oracles",
+      "subtopics": [
+        {
+          "id": "JbgBwG6KmeTdyle9U6WAv",
+          "title": "Hybrid Smart Contracts",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "omQOhNfMO09pBc7oy76Wo",
+          "title": "Chainlink",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "CzfsAQIk3zIsDaDAorG9K",
+          "title": "Oracle Networks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "e_I-4Q6_qIW09Hcn-pgKm",
+          "title": "Cryptography & Hashing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nNPa6jKRUaitmHwBip_LE",
+          "title": "Blockchain Interoperability",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Bj3T_4lfr0Yianuwr3pDN",
+          "title": "BFT",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-bul5ZMIcZf8RNd4kV54s",
+          "title": "PoH",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WNPNoDZ57M2QHEIIU-Bpa",
+          "title": "PoS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XbO1CKYZ6OVqVjtrcHKq2",
+          "title": "PoW",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_BkpK9qgp9up8nXNH7q4m",
+          "title": "Consensus Protocols",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "BV6lEwCAKaYxSPWD0LV_d",
+      "title": "Smart Contracts",
+      "subtopics": [
+        {
+          "id": "chaIKoE1uE8rpZLkDSfV-",
+          "title": "Solidity",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jgHa_LeCac0pl6dSADizF",
+          "title": "Vyper",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Larbhjzi-MnPQKH1Pzn2R",
+          "title": "Rust",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IXs4nUzy_A5vBjI_44kaT",
+          "title": "Unit Tests",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lXukWXEatsF87EWFSYyOO",
+          "title": "Remix",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "l110d4NqTQt9lfEoxqXMX",
+          "title": "Hardhat",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Q64AbQlvYPiqJl8BtoJj9",
+          "title": "Brownie",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Vl9XHtc22HnqaCnF9yJv9",
+          "title": "Truffle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "F1EUAxODBJ3GEoh7cqM-K",
+          "title": "Foundry",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-dIX_3qo97B418_BmJ5wP",
+          "title": "Environmental Considerations",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "snQA5_4H2dDkT1pENgaYD",
+      "title": "Security",
+      "subtopics": [
+        {
+          "id": "UOF7Ep97i1l3Own6YEWlq",
+          "title": "Practices",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EK5TqRRn15ExsGc4gfMLu",
+          "title": "Optimism",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "QNfnbUGkT3N-pj5epnHcM",
+          "title": "Integration Tests",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4V-dj9x9hSAAGCxpBWsbE",
+          "title": "Code Coverage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7goaYnedUlfgfl5qApoO2",
+          "title": "Deployment",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "H3jNM_0sJrB7ZbYzrVhF7",
+          "title": "Monitoring",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OotJnHgm622NQJc2WRI7c",
+          "title": "Upgrades",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bjUuL7WALETzgFxL6-ivU",
+          "title": "ERC Tokens",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SM8Wt3iNM_nncLj69KCuy",
+          "title": "Crypto Wallets",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S68IUKs0k_FFHEH97xxs7",
+          "title": "Crypto Faucets",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tvk1Wh04BcFbAAwYWMx27",
+          "title": "Decentralized Storage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wypJdjTW4jHm9FCqv7Lhb",
+          "title": "Fuzz Testing & Static Analysis",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GxD-KybtmkwT3wqDzIfHp",
+          "title": "Common Threat Vectors",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qox-x_q-Q7aWcNFWD7RkT",
+          "title": "OpenZeppelin",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gpS5CckcQZX3TMFQ2jtIL",
+          "title": "Git",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ib9STGxQa8yeoB-GFeGDE",
+          "title": "Starknet",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "J4ev2h5cipcwh3OcuBdMU",
+          "title": "VS Code",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "oczIhxMB7WOhcAocIa2Ew",
+      "title": "dApps",
+      "subtopics": [
+        {
+          "id": "-7Bq2ktD0nt7of9liuCDL",
+          "title": "Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cW3_Ki9Bx7fYluDLKKKgl",
+          "title": "Deployment",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XvVpnlYhT_yOsvjAvwZpr",
+          "title": "Maintenance",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "B6GGTUbzEaIz5yu32WrAq",
+          "title": "Architecture",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "PBTrg9ivOpw9uNTVisIpx",
+          "title": "Security",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "f60P5RNNdgCbrhDDzkY25",
+          "title": "Source of Randomness Attacks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YA3-7EZBRW-T-8HuVI7lk",
+          "title": "Slither",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "twR3UdzUNSztjpwbAUT4F",
+          "title": "Diligent Fuzzing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U4H62lVac8wIgxNJ3N3ga",
+          "title": "Echidna",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GOgeaQoRvqg-7mAfL_A8t",
+          "title": "GitHub",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CWqwv4asouS-dssAwIdxv",
+          "title": "GitLab",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TMPB62h9LGIA0pMmjfUun",
+          "title": "Bitbucket",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "aATSuiqPG-yctr3ChEBa_",
+      "title": "Applicability",
+      "subtopics": [
+        {
+          "id": "1AhombZUkZN6Ra5fysSpg",
+          "title": "Defi",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RsoOgixZlyQU6h7nIaY9J",
+          "title": "DAOs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "e4OHLOfa_AqEShpMQe6Dx",
+          "title": "NFTs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vTGSDThkDDHvCanNlgP07",
+          "title": "Payments",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uMXcKCUoUN8-Hq_IOBRCp",
+          "title": "Insurance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RFgetmTvKvpV2PG6Vfev7",
+          "title": "Moralis",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "dDPhMNPpl3rZh3EgXy13P",
+      "title": "Node as a Service",
+      "subtopics": [
+        {
+          "id": "lOoubzXNILBk18jGsc-JX",
+          "title": "Alchemy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hJmNuEMHaMSM0QQlABFRS",
+          "title": "Infura",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pJhR9OQo8YFQmAZXQbikJ",
+          "title": "Pokt Network",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FGih8w9We52PHpBnnGO6H",
+          "title": "Quicknode",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "E4uuJZFZz-M1vlpZmdJTO",
+          "title": "Substrate",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "NK02dunI3i6C6z7krENCC",
+      "title": "Supporting Languages",
+      "subtopics": [
+        {
+          "id": "fF06XiQV4CPEJnt_ESOvv",
+          "title": "JavaScript",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jxlQ1ibcCv6ZlcEvobZ_G",
+          "title": "Go",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "YR-U2njkUrEMO0JxCU1PH",
+      "title": "Frontend Frameworks",
+      "subtopics": [
+        {
+          "id": "0DUYS40_-BTpk2rLQ1a0e",
+          "title": "React",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ke97bMHGfb-8hB_xSwMbk",
+          "title": "Vue",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "vZiDpX9pEB9gfueSKZiQL",
+      "title": "Client Libraries",
+      "subtopics": [
+        {
+          "id": "pVG7bGqVGCeSBlZxRNHJs",
+          "title": "Python",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "i-ltfXPTCu3WaBo-xaN05",
+          "title": "ethers.js",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jwuMeo9TwaQviGIMO13Jf",
+          "title": "web3.js",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "CoYEwHNNmrQ0i0sSQTcB7",
+      "title": "Client Nodes",
+      "subtopics": [
+        {
+          "id": "UY_vAsixTyocvo8zvAF4b",
+          "title": "Angular",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DBRaXtwvdq2UGE8rVCmI1",
+          "title": "Geth",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Gnnp5qrFmuSVtaq31rvMX",
+          "title": "Besu",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xtYwg0WAcE8Ea9VgC2RSc",
+          "title": "Nethermind",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "bTdRKEiIUmu1pnp8UbJK9",
+      "title": "Building for Scale",
+      "subtopics": [
+        {
+          "id": "5T5c3SrFfMZLEKAzxJ-_S",
+          "title": "State & Payment Channels",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ti6-LSK52dTCLVdxArp9q",
+          "title": "Optimistic Rollups & Fraud Proofs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PykoX4j5Q3eJWIpUoczjM",
+          "title": " Zk Rollups & Zero Knowledge Proof",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "chmxDwNVOefp98IbjEgNl",
+          "title": "Validium",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dMesiPUPBegYQ7hgeMMJK",
+          "title": "Plasma",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lSQA3CfQBugEBhAh2yxro",
+          "title": "Sidechains",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9uz6LBQwYpOid61LrK5dl",
+          "title": "Ethereum 2.0",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1bUD9-vFo-tsHiB1a06tO",
+          "title": "On-Chain Scaling",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

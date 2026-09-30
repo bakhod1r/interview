@@ -1,0 +1,1063 @@
+{
+  "slug": "bi-analyst",
+  "title": "BI Analyst",
+  "description": "Learn to become a Business Intelligence Analyst in @currentYear@",
+  "url": "https://roadmap.sh/bi-analyst",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-09-04T07:05:19.320Z",
+  "relatedRoadmaps": [
+    "data-analyst",
+    "sql",
+    "python",
+    "ai-data-scientist"
+  ],
+  "topicCount": 59,
+  "subtopicCount": 141,
+  "topics": [
+    {
+      "id": "PxOEfMSQYA2jy3zrMZXjZ",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "jVXwlHRGgVpcoWCYzSB5W",
+          "title": "What is BI?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NX-YaB_FVjoHYsR6z9QIL",
+          "title": "Why BI Matters?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JFNCITtE1YtcYmLfGfF5T",
+          "title": "BI Analyst vs Other Roles",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Q-GmBJiRdBS_xLeOjef2R",
+          "title": "Responsibilities",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cxTriSZvrmXP4axKynIZW",
+          "title": "Finance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "s-wUPMaagyRupT2RdfHks",
+          "title": "Marketing",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "c0ywBrs9u7MciWAXSgVVg",
+      "title": "Metrics and KPIs",
+      "subtopics": [
+        {
+          "id": "6l_tHC1R5zgABHMc_G6RD",
+          "title": "Unsupervised Learning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KFONHuJNnCuSOH7-8Ndvm",
+          "title": "Reinforcement Learning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_uLtsnyNNNRcz5A29Zpjl",
+          "title": "Algorithmic Bias",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "LjeipkY01Hlkp22kmlAMh",
+      "title": "Types of BI Operations",
+      "subtopics": [
+        {
+          "id": "GN6SnI7RXIeW8JeD-qORW",
+          "title": "Operational BI",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "jJukG4XxfFcID_VlQKqe-",
+          "title": "Tactical BI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3BxbkrBp8veZj38zdwN8s",
+          "title": "Strategic BI",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "e3SdmNpVcvy3k_-JIO6OK",
+      "title": "Stakeholder Identification",
+      "subtopics": []
+    },
+    {
+      "id": "PkzUqwT21Owk_TfepFPDm",
+      "title": "Key Business Functions",
+      "subtopics": [
+        {
+          "id": "dJZqe47kzRqYIG-4AZTlz",
+          "title": "Operations",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KeGCHoJRHp-mBX-P5to4Y",
+          "title": "HR",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "3DVF8zo-_WM_9GTuzQFO8",
+      "title": "Types of Data Analysis",
+      "subtopics": [
+        {
+          "id": "NnbtaO2MiqsHeJ-ds0Q5m",
+          "title": "Prescriptive Analysis",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4zpVE3R0lLyWpHePdBVpl",
+          "title": "Predictive Analysis",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "m5aC9aNy9mwLXz0xXBp40",
+          "title": "Diagnostic Analysis",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "vTW3jSZ1bvc0OrP_bl22t",
+          "title": "Descriptive Analysis",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "HM1w6JJquaV6Vq4mjxM7p",
+      "title": "Variables and Data Types",
+      "subtopics": [
+        {
+          "id": "YSxvg2HrfGoGtpkwY0kGc",
+          "title": "Discrete vs Continuous",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iRgtog5A13CTNDxnbGN9x",
+          "title": "Skills",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yXz6MkU3-HnlkmRmYh-Ev",
+          "title": "Categorical vs Numerical",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "xc1hm_XTyiMUVtWiTKXWG",
+      "title": "Descriptive Statistics",
+      "subtopics": []
+    },
+    {
+      "id": "ASHk2LOjlhwpwpWSRs_Bi",
+      "title": "Correlation Analysis",
+      "subtopics": [
+        {
+          "id": "JXYmXAYuA-zxrkl4PRLQd",
+          "title": "Correlation vs Causation",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "7DNtRMBZ_F0K1FQk-UCM4",
+      "title": "Inferential Statistics",
+      "subtopics": []
+    },
+    {
+      "id": "kb216tShKrRPWv7mE9sVa",
+      "title": "Analog vs Digital Data",
+      "subtopics": []
+    },
+    {
+      "id": "H1s1PQj8CHQ_VBQIy1VtJ",
+      "title": "Types of data",
+      "subtopics": [
+        {
+          "id": "jnIn3_2fI2k97oALPZkt7",
+          "title": "Structured",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qHcRrxenhogymMQ6EPiMa",
+          "title": "Semistructured",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DJKXgelIxuahxJiqvwP6I",
+          "title": "Unstructured",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "g5j_mbjx2yZUIK5lfN3eT",
+      "title": "What is Data?",
+      "subtopics": []
+    },
+    {
+      "id": "VUgxDDkoxkOcLxqpTDXzt",
+      "title": "Data Sources",
+      "subtopics": [
+        {
+          "id": "g44bQY90HOeI_dZ8gK2Uj",
+          "title": "Databases",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xQLsuJ3uohVzOxGfFLyFw",
+          "title": "Web",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1cC6LKxcncaKg4Jm53pUy",
+          "title": "Mobile Apps",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WXk0-vebMUQC25he2lmbh",
+          "title": "Cloud",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xQDGmVwUkrmGdviOdG8Hu",
+          "title": "APIs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GrwdQldCWu2zWAaNj6LFk",
+          "title": "IoT",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "GsZWvJPNzN6XLDp2G1db4",
+      "title": "Data Formats",
+      "subtopics": [
+        {
+          "id": "k80q5FPNiIUdxn5A8R3Hu",
+          "title": "Other formats",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ytgK7van84j5DsfD0JyZ3",
+          "title": "XML",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LcLfC6BiOxJAkk2p424wL",
+          "title": "CSV",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "s8LZgRwrlm1V4meGM7gj0",
+      "title": "SQL Fundamentals",
+      "subtopics": [
+        {
+          "id": "TuBJ2yUz1c5KMRGVHdvU5",
+          "title": "Basic Queries",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-gbb16Wl--Rjx5aoM0krL",
+          "title": "Advanced Queries",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1toMuRZResgse1AtwEck6",
+          "title": "Window Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "y9Fnjnbiqt7WkrhjPITpW",
+          "title": "Performance",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "gJBaVERU3prru-qRksxN4",
+      "title": "Popular Databases",
+      "subtopics": [
+        {
+          "id": "Dh62zxyyUHh0galD472p8",
+          "title": "Excel",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "p21d2mEUnTQgWhKFTGS9F",
+          "title": "JSON",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nhl9FM79femgqENNR0HbE",
+          "title": "PostgreSQL",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uoQS4g-c6QndacUeiaWrq",
+          "title": "Oracle",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eqnAEp2VT7FD2VDy5WVDP",
+          "title": "MySQL",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lrksz861rE5m2XzOQPwgh",
+          "title": "SQLite",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ETT9eATuyLHQe2jPqaF5I",
+      "title": "Exploratory Data Analysis (EDA)",
+      "subtopics": [
+        {
+          "id": "_iV_5O5Rq07P9qRGrraTM",
+          "title": "SQL",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9BWyA0b4WrmQetSMph_mY",
+          "title": "Excel",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hrkMVMYWCedRxhNd2N9wE",
+      "title": "Data Transformation Techniques",
+      "subtopics": [
+        {
+          "id": "ZAhjB_ghHukD4RPAtNDxh",
+          "title": "dplyr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "25f76eB9-vy3Usta-Pbsi",
+          "title": "Pandas",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "sltVKaKKjmzu17jDv9OFF",
+      "title": "Visualization Fundamentals",
+      "subtopics": []
+    },
+    {
+      "id": "kpRqKLtAd3IO3nbs8Yxrh",
+      "title": "BI Platforms",
+      "subtopics": [
+        {
+          "id": "BVDaFmDat48nN3hj5NE71",
+          "title": "Lineplot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hCSZo7jT9arBLUbtCVFfD",
+          "title": "Scatterplot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7_5PBCrsukv81mm7yTpDf",
+          "title": "Map",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GoMIAQwusbT7fqJ-VnCrq",
+          "title": "Qlik",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "WzPj94lYxQCjFx5YW4X9x",
+          "title": "Tableau",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f4MDT1RUfaICAWzyG2E6T",
+          "title": "Looker",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "KSxjcWV6C325kZITzAhWs",
+      "title": "Programming Languages",
+      "subtopics": [
+        {
+          "id": "OqHNW0PzIRsw7IBgh5U5Q",
+          "title": "CLV",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "xftv5BiyoVrFjpSN0tjsw",
+      "title": "Finance",
+      "subtopics": [
+        {
+          "id": "1T2PyytlmndHreWgueD55",
+          "title": "Financial Performance",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aJLGan5dkMefvkspFlcYo",
+          "title": "Fraud Detection",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "j-GXKpMnsVuUUUdRxAXLe",
+          "title": "Compliance Reporting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "JHGV0V78GXubiSY9P3nTw",
+          "title": "Risk Analytics",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "7LbhfkmS7oFoSF1k5ZR1U",
+      "title": "Retail & E-commerce",
+      "subtopics": [
+        {
+          "id": "7jrzQogTOc6lHXfpYLCsx",
+          "title": "Supply Chain Analytics",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0qRm81lJX_Eb6aJkJMjeL",
+          "title": "Marketing Campaigns",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LkbB0rpS3Du2K7_ogoc34",
+          "title": "Inventory Optimization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "VPu8vn7-baZQ5ORJ6ViW0",
+          "title": "Sales Performance",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "VpGVezYr9O6puhAF12PN2",
+      "title": "Healthcare",
+      "subtopics": [
+        {
+          "id": "ku3m0ZmNg23F0Z5CEb4JI",
+          "title": "Hospital Efficiency",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "omvGuhou7_63k-Fwcc7Mu",
+          "title": "Compliance Reporting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Cydlrtg_FClBUkjezqGie",
+          "title": "Public Health",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LI09SvvUUCQxLZZee_j0n",
+          "title": "Patient management",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "zEGmDHaFa-F81tWqa3i9E",
+      "title": "Manufacturing",
+      "subtopics": [
+        {
+          "id": "L50rpcgGjsQU3S0zRn6xh",
+          "title": "Production Efficiency",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Xe9zK8xhkkr4fsh3HOzAY",
+          "title": "Quality Control",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-hNguvT6SQCqAgVpoQByr",
+          "title": "Supply chain optimization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yimCxOdNtyGcbd6ZxHsBQ",
+          "title": "Predictive Maintenance",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "qKlo90-Cy8t_off5Qv8-6",
+      "title": "A/B Testing",
+      "subtopics": []
+    },
+    {
+      "id": "R2zg0Ql-RsnIkV5Gmc1vN",
+      "title": "Cohort Analysis",
+      "subtopics": []
+    },
+    {
+      "id": "yseEaLsEzIcqJ0YIoGujl",
+      "title": "Time Series Analysis",
+      "subtopics": [
+        {
+          "id": "ExHCSUDxDBwsJtTelvxjP",
+          "title": "Forecasting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "On6kznZxLTCpBPskdZtgT",
+          "title": "Trends",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "moWrEfuKE06QwbznsH3V-",
+          "title": "Seasonality",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ZGazuCNruu09bd7C-aSFC",
+      "title": "Basic Machine Learning",
+      "subtopics": [
+        {
+          "id": "eZN_ty8VDX9mi5KtCWTFL",
+          "title": "Supervised Learning",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "F21ypKzpziLCXkiKG1S5Z",
+      "title": "Data Lineage",
+      "subtopics": []
+    },
+    {
+      "id": "fuxGZx3WGjP2TzzVV29ux",
+      "title": "Privacy",
+      "subtopics": [
+        {
+          "id": "5x4NfuP6dAgjISlB-esIW",
+          "title": "Data Mart",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CWf_vL78f8-mSUQbPnU8e",
+          "title": "GDPR",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IwnXDA-f3FHK4EEeFuToC",
+          "title": "CCPA",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-KzusmyDQ1NgqOADpqmEX",
+          "title": "dbt",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "9aNVqEyygNGeicdce5X8b",
+      "title": "Bias Recognition",
+      "subtopics": [
+        {
+          "id": "5MUwKGfSTKlam8KCG0A1U",
+          "title": "Mitigation Strategies",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Vb06K0D2vWAlSe95QJrth",
+      "title": "Ethical Data Use",
+      "subtopics": []
+    },
+    {
+      "id": "Zxuvc9F3bINLTdfbsx_S_",
+      "title": "Data Architectures",
+      "subtopics": [
+        {
+          "id": "iqpVtvoebAaoB_Dj9-gdw",
+          "title": "Data Lake",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wJiKBbTMLhIzelUtKn7jl",
+          "title": "Data Warehouse",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zGU6DyEm6xEYf1_73cbjL",
+          "title": "Cloud BI Ecosystem",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "iYe42G31fhkAO0MBaHutF",
+      "title": "Star vs Snowflake Schema",
+      "subtopics": []
+    },
+    {
+      "id": "Prfa0LUmgxcp52IEObFom",
+      "title": "Normalization vs Denormalization",
+      "subtopics": []
+    },
+    {
+      "id": "hcbS18cpVxd55hVlUeLLT",
+      "title": "Fact vs Dimension Tables",
+      "subtopics": []
+    },
+    {
+      "id": "fFzCnLfZ_vSbhQjdAKLlJ",
+      "title": "Calculated Fields & Measures",
+      "subtopics": []
+    },
+    {
+      "id": "Dk31XtS7wWRzO31sdsEDo",
+      "title": "Data Modeling for BI",
+      "subtopics": [
+        {
+          "id": "BiyrAHB34evej_0cnDzOa",
+          "title": "Accesibility",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uP8MWZqM9Z0i3eDF4Ldxv",
+          "title": "Interpretability",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "M1H3Fh09v8udCJIPSJPic",
+          "title": "Accuracy",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4U66ZrBZqg7-ckOTmxAQj",
+          "title": "Coherence",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "lAK9QVs97hL3ysjz2blp8",
+      "title": "ETL Tools",
+      "subtopics": [
+        {
+          "id": "qnUHw2f2VmTPU3-NMnoLl",
+          "title": "Airflow",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Du4GD-6pxbWYl4uSJRnOE",
+      "title": "ETL basics",
+      "subtopics": []
+    },
+    {
+      "id": "UIdwl_KLELI8xL2VxYJmX",
+      "title": "Building Your Portfolio",
+      "subtopics": [
+        {
+          "id": "qvPTiDbsY5ol_K-BNLmzk",
+          "title": "Dashboard Design",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yvSf7sGEd7QiaVoetalHc",
+          "title": "Data Pipeline Design",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "3xDVJwdl3uu5EcjlZ1ytA",
+          "title": "End-to-end Analytics Project",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "tUxwKTml2Go8zR9tR3cjn",
+      "title": "Professional Development",
+      "subtopics": []
+    },
+    {
+      "id": "Q98GaitxocEha4zZ9d254",
+      "title": "Networking",
+      "subtopics": [
+        {
+          "id": "YovS5Dbcr6g_8PMr8jp5t",
+          "title": "Open-Source Projects",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UDF8wyYT8127wfFHcq37P",
+          "title": "Conferences & Webinars",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aTGsJj7Ntv5BWIzjaqvu_",
+          "title": "BI Competitions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "X8U-NQD0rYqFr_xgDWL2s",
+          "title": "BI Communities",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "TojDB4o0i2rs7Qcb10k1r",
+      "title": "Job Preparation",
+      "subtopics": [
+        {
+          "id": "4XM5ikPiHVehEtT4AB-Ea",
+          "title": "Interview preparation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qsCWo1CmR4mvy7E7qlPv5",
+          "title": "Portfolio presentation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "k3F9Tdqo3XYgMLOKGjpxA",
+          "title": "Salary negotiation strategies",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "m9EwcekZ_l0XHiKeQ8emr",
+          "title": "Resume optimization",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "F-fC2JWOuEeDbOHH1O6EB",
+      "title": "Central Tendency",
+      "subtopics": [
+        {
+          "id": "DQtznxvW5x4s-zGLpUpNY",
+          "title": "Mode",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "S4XEOd2-PHIHOiiGgKVLJ",
+          "title": "Mean",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mfLRVcxvAjqmSG-KBpJ4J",
+          "title": "Median",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "1D98k1HNCaaiaI20euVwA",
+      "title": "Dispersion",
+      "subtopics": [
+        {
+          "id": "jll2iRbjdx7iiNwY13KYD",
+          "title": "Range",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZmSwDn0sP7HvLKYVzRwPJ",
+          "title": "Variance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vqtzg9bydAqHMwZhPHo1a",
+          "title": "STD",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LEHK7ohKIzKhlGebd0k_j",
+          "title": "IQR",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "JSqwWsfojjZTe8ynmA7fc",
+      "title": "Distribution",
+      "subtopics": [
+        {
+          "id": "X0DBG0mEWk25PEbLHhs7v",
+          "title": "Skewness",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jvU1iu2M_y1IH62oUpAeU",
+          "title": "Kurtosis",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "6xfQic8dMwUsMQa7VtS8_",
+      "title": "Hypothesis Testing",
+      "subtopics": [
+        {
+          "id": "xgP3zIiSEr9dtYcCQikPb",
+          "title": "Confidence Intervals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7VDxA9bQ1P1fym4eQVKkN",
+          "title": "Population & Sample",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "01k_mfsp0eW6TX9yp8PDE",
+          "title": "Statistical tests",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rkEdx_mZBoDjMhiluJl7O",
+          "title": "p-value",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SosOXxErMn0t2KCoHoxvS",
+          "title": "Types of Errors",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "m9ejACzRBJza0v-fpdfkn",
+      "title": "Regression Analysis",
+      "subtopics": [
+        {
+          "id": "_QyIZ2_vH3e3yic5NTuak",
+          "title": "Beyond Linear Regression",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4-fpZx8p5iSNI3n4Qtacl",
+          "title": "Linear Regression",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "Vo7LJ_W-DBvxvVrnz33BM",
+      "title": "Data Cleaning",
+      "subtopics": [
+        {
+          "id": "TCYG6vmFqq1zAPNQWoOH8",
+          "title": "Standardisation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "xjgqmJmetKpWXSWZHPwaL",
+          "title": "Duplicates",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fhreEuoT8ZBRwJqbSGrEZ",
+          "title": "Missing Values",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "OqolfBQRQvwg6PI_t8Mrt",
+          "title": "Outliers",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "GVgfPajmSqIgFZ6u2I1tK",
+      "title": "Chart Categories",
+      "subtopics": [
+        {
+          "id": "SNkYi2VZsCRG31v63v8_x",
+          "title": "Heatmap",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "wqLcUFVsLa_l9yQIee9MG",
+          "title": "Histogram",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "BUizLtQ7vpdyBRjS8KyIl",
+          "title": "Barplot",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "eKBORkRU6HCH-D4GWHyKR",
+      "title": "Visualization Best Practices",
+      "subtopics": [
+        {
+          "id": "wtEzdO_ZNu9jHJrFS3CrG",
+          "title": "Accessibility",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EDQjtoTd01ftwXxYkV9it",
+          "title": "Design principles",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qGVDuU9RA9Y5g5vlPd-xq",
+          "title": "Misleading charts",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "7t0WfLLqrD5VJQwIAmXMo",
+          "title": "Mobile-responsiveness",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "SJGEkoTSPK2ck4IvaK6Gz",
+          "title": "Color theory",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "LLK3_hudKDX5d-fd98vlx",
+      "title": "Excel",
+      "subtopics": [
+        {
+          "id": "_KYKLd-RNhVy-Sn1A-G5j",
+          "title": "Cloud Computing Basics",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D94743lQ1fAerVSpJWXfP",
+          "title": "Cloud data warehouses",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Z4pAe4FpnCkUJt8RuOhC6",
+          "title": "Providers: AWS, GCP, Azure",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "TBcLXYtKs7_j_h_m2pAyh",
+      "title": "Communication & Storytelling",
+      "subtopics": [
+        {
+          "id": "Slg3fXGPTa-Z4sdZY86XK",
+          "title": "Writing Executive Summaries",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "t_J0MZTMWMnrImGHjXYov",
+          "title": "Storytelling Framework",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KXhNou5nlekbSTfLYPs_8",
+          "title": "Dashboard Design",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9G-pI5NsRCq4p0FLfaMR_",
+          "title": "Presentation Design",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "mi88uLdJBXaxJ2yVOSqqo",
+      "title": "Soft Skills",
+      "subtopics": [
+        {
+          "id": "r8NoX426-ngu6ZQZe06oK",
+          "title": "Project Management",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "vDQF2oaybSewNu3EMs6zG",
+          "title": "Change Management",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "r-m88g8xrUnuEpV2lHJfN",
+          "title": "Stakeholder Management",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "NFKiPXrkjRre1yUZc27gl",
+          "title": "Critical Thinking",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OmhvVSTtzH5sxOIZRVYfQ",
+          "title": "Business Acumen",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "bGCMAgaenZ0t3WeO5joyP",
+      "title": "Data Quality",
+      "subtopics": [
+        {
+          "id": "UhcniUDKmi7KNuXlolf5O",
+          "title": "Relevance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5USjYdAVJs0gSXxE1j8Xu",
+          "title": "Timeliness",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "hqpFbDhAvyT9_4hcoSLhC",
+      "title": "Certifications",
+      "subtopics": []
+    }
+  ]
+}

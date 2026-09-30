@@ -1,0 +1,459 @@
+{
+  "slug": "technical-writer",
+  "title": "Technical Writer",
+  "description": "Roadmap for anyone looking for a career in technical writing in @currentYear@",
+  "url": "https://roadmap.sh/technical-writer",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-09-22T12:43:19.084Z",
+  "relatedRoadmaps": [
+    "devrel",
+    "engineering-manager",
+    "git-github"
+  ],
+  "topicCount": 21,
+  "subtopicCount": 63,
+  "topics": [
+    {
+      "id": "HlUUGj3dOZ68t4gIjerXh",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "ZRGsokU313Ky-anWbWK6q",
+          "title": "Who is a Technical Writer?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "jl1FsQ5-WGKeFyaILNt_p",
+          "title": "What is Technical Writing?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "j69erqfosSZMDlmKcnnn0",
+          "title": "Role of Technical Writers inOrganizations",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cNeT1dJDfgn0ndPzSxhSL",
+          "title": "Forms of Technical Writing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "FVxNjbDBxgf6vkZWw1Awt",
+          "title": "Growth as a Technical Writer",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "8rjUZ9NZPGwVRGmk6Dlyb",
+      "title": "Required Skills",
+      "subtopics": [
+        {
+          "id": "7-3tqRUpntoQP4nK_nul5",
+          "title": "Written Communication Proficiency",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DubLTESNn3wvEH_bKQZbP",
+          "title": "Technology Expertise",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kNIiAJrvrNoOAllUbRtUB",
+          "title": "Language Proficiency",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_5xFbl2BHx0f2u9HmSVS8",
+      "title": "Tooling",
+      "subtopics": [
+        {
+          "id": "jC3ZrpskBqzxiV6SKf4Uf",
+          "title": "Publishing Tools",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cSZbTOB0FPPOlGzy-MkSi",
+          "title": "Plagiarism Checker",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ffJyulu9GPB_TDqjeJYyV",
+          "title": "Git / Version Control",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0XWiraeoicNBbaGYQnNZr",
+          "title": "Research Tools",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "sdoFe4A3y_-Zp3mlrJ5r8",
+          "title": "Blogging Platforms",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "yYLsG2LuPaNUuhXSVev_0",
+      "title": "Best Practices",
+      "subtopics": [
+        {
+          "id": "27muFD1Ld1gF6hhIh22sG",
+          "title": "Story Telling",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "lxSSjgtqJk-PtRp4hARDw",
+          "title": "Subtle Selling",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ezz2e4lYLD_bdNNwvsV_y",
+          "title": "Content Structure",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "a1ChwDwztjZBi79y38AGa",
+          "title": "Call to Actions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8qSL2esjsA3YYuB4d7B9z",
+          "title": "References",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WmOvQYlnedX0QgC5Adeen",
+          "title": "Crafting Great Titles",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "7FGMPztd6ouvqemcGhIol",
+          "title": "Content Objectives & Intent",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UuV51vM2JT_LFFXORSwru",
+          "title": "User Persona",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "cnEVPsqZqs9ZdyqmOuLGA",
+          "title": "Writing Style Guides",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "d9mTdwqx6QWKYO5PA_rDH",
+          "title": "Product Content",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "O-dZEkmU0tP3dUIUPM6YJ",
+      "title": "Content Research",
+      "subtopics": [
+        {
+          "id": "SX4vL_JEHrwqHdThyqKKO",
+          "title": "Topic Score",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Am_ocP3r0HM45LYfMcQxM",
+          "title": "Editing Tools",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TJ1iuzQ9u_WbrllRQkgm_",
+          "title": "Markdown",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FD-8LQ_g2_O_i2Qwp-Gpv",
+          "title": "SEO Tools",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JtFLW5WwH5Ixmnb0qikia",
+          "title": "Keyword Volume",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "xV8mox1WnSbl2jAGqQpeg",
+      "title": "Types of Technical Content",
+      "subtopics": [
+        {
+          "id": "C-eVVtF6Yabp2a6XvMeh_",
+          "title": "How-to Guides",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UFuMiHtWq1M8dS8547lOp",
+          "title": "General Product Prose",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "e8oNoXw1KLY4jDzojIXyk",
+      "title": "Developer Docs",
+      "subtopics": [
+        {
+          "id": "FgyBWRtE34VNqBt_5QhAf",
+          "title": "User Goals",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2pNW7wDGih_m73lhGZRg6",
+          "title": "Developer Journey",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jYhfx6RETFgDulyNqdTBy",
+          "title": "Docs Structure",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "z5_73Q7dWbBd4m_OrdZlH",
+      "title": "API Reference",
+      "subtopics": [
+        {
+          "id": "QMehC1tmWPVWaTsiV9sFC",
+          "title": "Communities & Forums",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IZqyEqkrBoEfLBwIQwJl6",
+          "title": "Search Trends",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xFMsHYYxC0hLueY9xxART",
+          "title": "Support Request Evaluation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iBBeZopD8SNo7sWTohMim",
+          "title": "Docs Generation Tools",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "co-35BsWMrD6PXohpFqba",
+          "title": "API Definitions",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "e_bsYrZ0eQqduURg2ybX4",
+      "title": "Help Content",
+      "subtopics": [
+        {
+          "id": "8fJcJi96Ige6z2PBuTquC",
+          "title": "Troubleshooting",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7w1SjK-LV9SBZJ673eAUd",
+          "title": "Developer Support",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "How-4Re1NhxPLDoshUM-G",
+          "title": "Platform Support",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "mJ1s5-SGd_tj8y0LLZxYg",
+      "title": "Technical Content Marketing",
+      "subtopics": [
+        {
+          "id": "O1apL6I_g9DQl8VbL3X4W",
+          "title": "ICP & Buyer Persona",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EhhKxYPtoLztZXBXl3ZGl",
+          "title": "Buyer Journey & Content Funnel",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eAioe6b7w8pV2Dvawl_fw",
+          "title": "Short-tail Keywords",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2LAvq7W11WMIubSprlK_l",
+          "title": "Long-Tail Keywords",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "-IBL9S4DelIi07w_fmrX3",
+      "title": "Content SEO",
+      "subtopics": [
+        {
+          "id": "UphVii3y4T_PkRMqFJ4r_",
+          "title": "Backlinking",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IA6TuXmOZr_-Y3HLHqxp0",
+          "title": "SEO Keywords",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qpOfqbgLy5TzlNQEyt6DG",
+          "title": "Link Shorteners / Tracking",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "hlhBgI3SvU3tMtNaHtu8k",
+          "title": "Platform Tracking and Metrics",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5dnZe0oCIzb5qGwgI6pwH",
+      "title": "Top-funnel Content",
+      "subtopics": [
+        {
+          "id": "wBDjGa2PgdmeXxHnILFjY",
+          "title": "Pillar Content",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "7S2lymeBZSMBZSsmei7us",
+          "title": "Awareness Blog Posts",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Q2KD70IKwBXAH3UQgeZpp",
+      "title": "Mid-funnel Content",
+      "subtopics": [
+        {
+          "id": "XDX2QxMUkUok2fcS3tFki",
+          "title": "Generic Gated Content",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Xa7yBWcbP2aPs4u0C4cLJ",
+          "title": "White-papers",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "vo1udIIRpxNZCpA3g32F3",
+      "title": "Bottom-funnel Content",
+      "subtopics": [
+        {
+          "id": "2wjRA_pQ9cCG9Ww994FEM",
+          "title": "Comparative Posts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "K459CcDrcPMJCimIcCzM6",
+          "title": "Tutorials",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "-GZXLc9RjY6eWkKC1K_Rg",
+      "title": "Release Notes / Product Announcements",
+      "subtopics": [
+        {
+          "id": "5zQpravkqwafvwXVOuNPX",
+          "title": "eBook",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "W44q1iEj7RKM55-9jabMJ",
+      "title": "Customer Case-Studies",
+      "subtopics": []
+    },
+    {
+      "id": "pgrKfp1trcIxhDdvLk95g",
+      "title": "Frequently Asked Questions",
+      "subtopics": [
+        {
+          "id": "AarJ887P-SFRnKaOOv9yw",
+          "title": "OpenGraph Data",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "tAFenZA0MFhMPE5cevNuD",
+      "title": "Technical Website Copy",
+      "subtopics": []
+    },
+    {
+      "id": "XyFEYDJvJpGZ7qSdoSZeI",
+      "title": "Content Optimization",
+      "subtopics": [
+        {
+          "id": "HoNQSWy82ybT0YmejCzRb",
+          "title": "Research Reports",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "TbSBCITdLswhVB82fErTP",
+      "title": "Content Analysis",
+      "subtopics": [
+        {
+          "id": "JgdrXG7MX1gGuNG9uyubA",
+          "title": "Content Aging & Timelines",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "UiXn-CnPcLWAflKJzaJ2a",
+          "title": "Conversion Tracking",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "mrqBxsNRl1CQEKtuYSy9F",
+      "title": "Content Distribution",
+      "subtopics": [
+        {
+          "id": "NIxIhMEOxrUR8nbjbF_Fp",
+          "title": "Canonical Link",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "m9-DqsQfeukmhjhIfCph-",
+          "title": "Content Distribution Channels",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_cAGbAswDhOqpoiiikPbD",
+          "title": "Content Distribution Amplification Strategies",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

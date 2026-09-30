@@ -1,0 +1,1033 @@
+{
+  "slug": "network-engineer",
+  "title": "Network Engineer",
+  "description": "Step-by-Step guide to learn Network Engineering in @currentYear@",
+  "url": "https://roadmap.sh/network-engineer",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-08-18T12:08:26.227Z",
+  "relatedRoadmaps": [
+    "devops-beginner",
+    "terraform",
+    "mlops",
+    "linux",
+    "shell-bash",
+    "cyber-security",
+    "system-design"
+  ],
+  "topicCount": 29,
+  "subtopicCount": 167,
+  "topics": [
+    {
+      "id": "_OZl6uYkb61iQ_Wb0Q70Q",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "k51wR5lAwf7qI-p4jb8ih",
+          "title": "How does the Internet Work?",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8QCl0RNdxtpva4AxJUKMT",
+          "title": "Client",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "klp3FKanVxF2EudcTw4py",
+          "title": "Host",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "JHvS4yZ7z8XyimBXmNG4r",
+          "title": "Frame",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "u1nJXjWZekrzyiDvri6-O",
+          "title": "Latency",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "huzbiZu77aeCBVU40C429",
+          "title": "Server",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "rlUkMwML31YWfLSYLPdaL",
+          "title": "Package",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dmzQXBY3u5dZ9OtXLSE11",
+          "title": "Bandwidth",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BBS99mZfQqfXDEnBlZy1B",
+          "title": "Throughput",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9q3EjoReSztEf3wffNDIs",
+          "title": "Protocol",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jvMvCRqstz3Z7cKYv6MZX",
+          "title": "Socket",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "TJZ9vsSxQlotKCWQ2HHfS",
+          "title": "Port",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FwwaKfxW5j5r4_lN6_G8Z",
+          "title": "IP Address",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lbAgU5lR1O7L_5mCbNz_D",
+          "title": "CCNP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fSf714jdEpuR9s5-w9wgC",
+          "title": "Cloud Certifications",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "0BPBSnyYnEAScnqZ8q5ZX",
+      "title": "What are Networks?",
+      "subtopics": [
+        {
+          "id": "6Wfv3THDhldz_9M6Hv1Gr",
+          "title": "LAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "usgE8mpRUSLMRv7d0kXy3",
+          "title": "MAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fLXIQLKecjWUvjIWUaF9r",
+          "title": "PAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b2HXcIkkjJB8WhHbrVesk",
+          "title": "VPN ",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DjlBAH42q4wSa5PUFSbB5",
+          "title": "Transmission Media Types",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1xOaztV7JJaXK9B6Wa4YQ",
+          "title": "WAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D_zZAYVkxB_SLTCuhqkZY",
+          "title": "WLAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9tkaAhzPhiiGUoL2LqbPb",
+          "title": "SAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GQNvSg3w5UUtpre_9_Pjl",
+          "title": "Cloud",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "15Q1VPROHgjfaJkTLOfly",
+          "title": "Client-Server Network",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6zxS5esVlRNIDrQuZBaHz",
+          "title": "Mac Address",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FuIjDNBlT5SSf9lCG_e3e",
+          "title": "ARP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4RGbNOfMPDbBcvUFWTTCV",
+          "title": "CompTIA Network+",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "4RD22UZATfL8dc71YkJwQ",
+          "title": "CCNA",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "AxeDcKK3cUtEojtHQPBw7",
+          "title": "CompTIA Security+",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Wqc3KD1ttRWQplt1oPpTf",
+          "title": "TCP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "m6yljj_Ukb1y6ECzzGZhh",
+          "title": "UDP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bc9NFPvpeHAWfSD15zXyZ",
+          "title": "ICMP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "JL4oU_MaY-4QRWKQjMBZb",
+      "title": "TCP/IP Model",
+      "subtopics": [
+        {
+          "id": "x6gwBUjdcBwqjrSa_WNkp",
+          "title": "Network Access",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "TMBH_Y5fPYCIcjhISUojv",
+          "title": "Internet",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "r6i0Wob3RNJrGdEnsZcQ-",
+          "title": "Transport",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "bnYi5Bwth3f_nOpRDywXc",
+          "title": "Application",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "q6dPa3Nqjw8cmZApzpcZK",
+          "title": "Session",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "U3sXE8skdwBwCcYQuKyzk",
+          "title": "Presentation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IVpbjVpRESZvx8k2Mik5B",
+          "title": "Application",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "rbm4cELHUgaL_Gl9uuLq1",
+      "title": "Routing",
+      "subtopics": [
+        {
+          "id": "koRzHVPTKTNmTt8dC-h3m",
+          "title": "RIP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "uH-ufJAMyoqDlx7RzYsnX",
+          "title": "MPLS",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "n3fdYKpMFSkcasrqokPO8",
+          "title": "Static vs Dynamic Routing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Z9B1TI61zhm7Vp-yur0pD",
+          "title": "Default Gateway",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OZICDRrSq-KJNAGTlmwr7",
+          "title": "OSPF",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tgLkAZB5G4XZj_2QS9mnZ",
+          "title": "EIGRP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gCdUfkMlZwamhOpM5aUqr",
+          "title": "BGP ",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "d93bl-7gSB8lu43BQlqvY",
+      "title": "Subnetting",
+      "subtopics": [
+        {
+          "id": "KpifvB6Yn9u32TRBX9hMs",
+          "title": "Subnet Masks",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "y43H6qnMn4qUTjInlGR04",
+          "title": "CIDR",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "zX1S1ZXm8vTcyXhRvYZGv",
+          "title": "Supernetting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "tXjRU0HJ2d9RWxuOQ79wH",
+          "title": "VLSM",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "QiTR_A2pALS4UD7cOndjR",
+      "title": "Firewalls",
+      "subtopics": [
+        {
+          "id": "wNwT9OgpslH4YG9BZvQIK",
+          "title": "Packet Filtering",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jjdqsmXHNt78cgVDr_gC_",
+          "title": "Stateful Inspection",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "iSXa4nyLa6AQDhFRPz87x",
+      "title": "Network Attacks",
+      "subtopics": [
+        {
+          "id": "Absx6bmAk6xq8KDGC5e70",
+          "title": "DoS & DDoS",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "i7aEMN40vQesQbJENQ6gV",
+          "title": "Next-Generation",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "oxORoWnDRfGLor3BV76Wo",
+      "title": "Encryption Basics",
+      "subtopics": [
+        {
+          "id": "55_hR5xJzermyLb3lyAvO",
+          "title": "Proxy",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "gqRtzgYUs87I7en2MCPSw",
+      "title": "IDS / IPS",
+      "subtopics": [
+        {
+          "id": "bolfExgkr0i8jEbw-GF3O",
+          "title": "Circuit Level Gateway",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "qW27P1HWMCtVkLgVHmU7z",
+      "title": "Zero Trust Architecture",
+      "subtopics": [
+        {
+          "id": "h0E993-5ONxubc4NZEXjP",
+          "title": "ping",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Do6-cQ3nXGjGSmGgDJ_eA",
+          "title": "nslookup",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "WHYQSWWe4mKUl7OC9thyF",
+      "title": "Tunneling & VPNs",
+      "subtopics": [
+        {
+          "id": "GqTT8HjC8yHboiCwsT7Pt",
+          "title": "MLPS VPN",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "D4M9Yh2g5S4g7QNteA32Q",
+          "title": "GRE/IPSec Tunnels",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "LesiUZyQTRgQErALy5W-v",
+          "title": "IPSec vs SSL VPN",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "e0mUmniS-GT8DccJq95VB",
+          "title": "Site-to-Site vs Remote Access",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Cahf4Y8A0W-EHeeU4dTej",
+          "title": "WiFi Standards",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "PHqTXlkAaRPhmRod52aP3",
+      "title": "Observability",
+      "subtopics": [
+        {
+          "id": "KqxGa5MoKuprDLF9OY988",
+          "title": "SNMP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_uu_DSfe2EPCyJYB_it0q",
+          "title": "Prometheus",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SjOHln4ZN7PaBZG223q-3",
+          "title": "Grafana",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RHve_fAltcV5ITmpBaChV",
+          "title": "Datadog",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "KFHcpdrwn70xEK4AWMQhS",
+          "title": "Dynatrace",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "2b4Bbs-I8k62zOF97Z_uZ",
+      "title": "Network Devices",
+      "subtopics": [
+        {
+          "id": "p9J57XYINH7TYgjw9G-r8",
+          "title": "Hub",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "s_y5I8OZAsmFqj3zier2B",
+          "title": "Routers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XPOTGRx3lpaHHNlzlMTPq",
+          "title": "Access Points",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4iXennqlVoVVKcV1vCUmP",
+          "title": "Switches",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "5aZe1jNCH2cM-8ZCYeI-e",
+          "title": "Modems",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DaJDqRCvGNekZ-e6aDVZj",
+          "title": "Peer-to-Peer Network",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_st-ChGja7h83_MOwtiF2",
+          "title": "HTTP / HTTPS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZtMTMBQkOWoM-su3V-T8Z",
+          "title": "SSL / TLS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yf85bJUO52dfE4G5wjSm9",
+          "title": "FTP / SFTP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D-4ZVP3RqLuNDzXamRlv3",
+          "title": "SSH",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "b4bKowbNbUcMscWrrT_-k",
+          "title": "NTP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "GhurQiBhFWlYQ7slPP8QU",
+          "title": "SNTP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yL4HVbX33i2wAj-k92X48",
+          "title": "DHCP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CxC1hOOue_2aNHs1KdkAV",
+          "title": "SMTP / IMAP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "plhYS2KebLyhuudwhEWHZ",
+          "title": "DNS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oZ5AGn6I10EYwMaiLwQcQ",
+          "title": "WebSocket",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "pt6RO3SEStG9TJOWpt_8D",
+      "title": "OSI Model",
+      "subtopics": [
+        {
+          "id": "_lqxrKkanbNDimmzcdM1I",
+          "title": "Physical",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Llr9kp0Oyyj2uZ9qNHCVL",
+          "title": "Transport",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wWaxMK7-hGSAZbp7RHrnH",
+          "title": "Data Link",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "20DK-6sEsl8uy6JJoVgE1",
+          "title": "Network",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ltBgGfY9KOS87dPUs476I",
+          "title": "Cloudflare",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cjUzC-pYTZCSNKeY3fFro",
+          "title": "Google",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "laCGHS68FdPDeBpC172vo",
+          "title": "OpenDNS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "kSUBDvguhusW8qaCK5bbL",
+          "title": "Quad9",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "2Ajvxz7ErF9tFKi6TuwI_",
+      "title": "IP Addressing",
+      "subtopics": [
+        {
+          "id": "wzYaf1wtbo2RQ8JSRawFM",
+          "title": "IPv4 vs IPv6",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "DJVkJUV6Sx2Ez6t6yCOm7",
+          "title": "Public vs Private Addresses",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "eXoOjsMKNi90_sRdBc_nY",
+          "title": "IP vs MAC vs ARP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8aKWoGDQobyc53A2ByJXo",
+          "title": "NAT vs PAT",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4xKfS5faxHqJ1JV2jWu9B",
+          "title": "NAT64",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "TLfYI5HUUJBj1MNywlT3Z",
+      "title": "Switching",
+      "subtopics": [
+        {
+          "id": "DM50xKwBoRZa0_JdQi07v",
+          "title": "STP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "h4_EMwTv7j_06MsBhURvg",
+          "title": "Link Aggregation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Yoj06pntnFzv2NDlr6seC",
+          "title": "MAC Address Tables",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "x0bAdjSBNfZ4gm1CwnPBK",
+          "title": "VLANs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vplU66XdAm84SWTcS092H",
+          "title": "SD-WAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dwqMxvPbs-s2c6sgoPz-s",
+          "title": "VRFs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Q6BKksLt1FrJQb0hv_KPn",
+          "title": "VXLAN",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "RCUgWXsit4Jcma9UNBd2c",
+      "title": "Wireless Networking",
+      "subtopics": [
+        {
+          "id": "x1B9MVsG_C-CejgLAeTzA",
+          "title": "Access Points",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VdAObqd1uue--xbej2M-f",
+          "title": "Bluetooth",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nBXPiMyDKkFtD25ReqUEF",
+          "title": "Mobile Networks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "6zZBlSrGxYnkPgBWe48L6",
+          "title": "Roaming & Band Steering",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "n47x3D1lYmL8SR676_7Uu",
+          "title": "Channel Planning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dw2yqbXJdfcPutP_oi_Sk",
+          "title": "Controllers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_KcUvubLvgG0s9pbxiDko",
+          "title": "AP Placement & Coverage",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "85ZCXmzs67irYQ-Fqnxra",
+          "title": "NFC",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "29J7P_SMDppcBiJJ-WGOr",
+          "title": "Zigbee & Z-Wave",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ZYgCKyGUoxocad6iJw8x5",
+      "title": "Network Simulators",
+      "subtopics": [
+        {
+          "id": "cX0ZrSVpL8Xu0P8JaANyl",
+          "title": "Cisco Packet Tracer",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "rwwp_CinwcRXtJ_jv0rs7",
+          "title": "GNS3",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "lK4h4bGgtUgH2QHEYomGN",
+          "title": "EVE-NG",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "MVuNY7zJkimjXMMeXbVTa",
+      "title": "ACLs",
+      "subtopics": [
+        {
+          "id": "xmkSedJJIDwrys8HzDD-j",
+          "title": "Web Application",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "no6c8-vVBQSoe1ruutOxj",
+      "title": "High Availability",
+      "subtopics": [
+        {
+          "id": "pAnal6NJxnCxnNPDFEQ83",
+          "title": "HSRP",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "R5dmATbOlYEFce7rQImiw",
+          "title": "Load Balancer",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "uQz1QLVkQtwf8ZeXexEQ1",
+          "title": "Round Robin",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_J0L4Ir0pxXPVeW7x68dv",
+          "title": "WPA vs WPS",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XqCdBCL2E8XSCVlwrOohL",
+          "title": "VRRP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pF3nA9VU7t32cgyrejntj",
+          "title": "GLBP",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "E4ryTk563my0yfOhXvGwg",
+      "title": "Traffic Management",
+      "subtopics": [
+        {
+          "id": "1AWSj4RYLouXC4eJvg2N9",
+          "title": "QoS (Quality of Service)",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "OoeM99CKlStR1qzyCv1GZ",
+          "title": "Traffic shaping",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IOu0hW9FZsLYe-KIaZZ4s",
+          "title": "Packet prioritization",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1Os97-x1qqdLJyKAjICiV",
+          "title": "Least Connections",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PcFSE-h39-bLmrVcc1ae7",
+          "title": "Failover",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "vG_95IDrk5lOnCQub2XkD",
+      "title": "Troubleshooting",
+      "subtopics": [
+        {
+          "id": "aorLjhyk7VjFTWgV19uRf",
+          "title": "Common Networks Issues",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "WjhKYOnKJx3HSbDxtwAS0",
+          "title": "Methdologies",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "lzGbPjMP5mkCZsNpYM2yK",
+          "title": "netstat",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Qcy3RjC0Queb5MxaLUMHp",
+          "title": "speedtest",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gvMthdnaTxXOUKx4rAl6S",
+          "title": "traceroute / tracert",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XZlgkympmXpmToDYel1sx",
+          "title": "ipconfig / ifconfig",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "LDI6dH-AlVtfRvaXImSAU",
+      "title": "Network Automation",
+      "subtopics": [
+        {
+          "id": "a1nC8vNJod_e0RrGjTeBd",
+          "title": "Terraform",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "nbOAx9ljA8eZEYRpnvpOW",
+          "title": "Ansible",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Ly43qxaO0RsKSy-_VuIBx",
+          "title": "Wireshark",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dwtbPxxNGQtoStpEd_ydY",
+          "title": "Nmap ",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "pKqBMC1Ck7h58e7cJDWPT",
+      "title": "Infrastructure as Code",
+      "subtopics": [
+        {
+          "id": "sKbTs6q8CBF6_BTDu6xpy",
+          "title": "NetFlow / sFlow",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5o_VRIz7dZ7Pm3FsAW7We",
+      "title": "Linux for Networking",
+      "subtopics": [
+        {
+          "id": "m8opRjj1rNgQqoN3rTkbI",
+          "title": "Shell & Scripting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "A-zwe2FsXS7QfGymbb3GI",
+          "title": "Static vs Dynamic NAT",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "1k6V7nlZHU7b6IuVT-kPa",
+          "title": "PAT/NAT Overload",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "36jbOEEyvUP-gxTB_Di_a",
+      "title": "Packet Analysis",
+      "subtopics": [
+        {
+          "id": "MThbykuwPtbDeskypaD7I",
+          "title": "Wireless Security",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uEQVBbo3E7eBCyl_XVTuU",
+          "title": "Hotspot and Tethering",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HkPONvRMHU5b3OwCvfMXM",
+          "title": "Wireless Site Surveys",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "oPwP-9QV1xs6W00Gohfrl",
+          "title": "LoRaWAN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Vg-JGhGZLrYtZCdA-u5s4",
+          "title": "Satellite",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "5ye5erjT8jOhptU_ZFY9E",
+      "title": "Cloud Networking Basics",
+      "subtopics": [
+        {
+          "id": "YuiWVG6IB5tXBmQfZVM9m",
+          "title": "AWS",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ureyf-ZuLYApXDMh_772m",
+          "title": "Azure",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "u2EeL1CasEoOTO7sORiRG",
+          "title": "GCP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "q-J08VY4H4y-XfDgpF1ap",
+          "title": "Cloud Network Types",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-5_aMu3RtOBr0Vav9-Fyx",
+          "title": "Virtual Networks",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "PQyKcqw8-NIxE3_MAr58j",
+      "title": "APIs for Networking",
+      "subtopics": [
+        {
+          "id": "UJTUgFFNTr-UdtwcUoOp-",
+          "title": "Python for Networking",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "XmFsOi61Atcwx3G3EJVzC",
+          "title": "YANG",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4QMijqUnLobtmoJVPno1A",
+          "title": "Cloud Routing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "i5ojP4on5Iz2MgeFc0050",
+          "title": "Load Balancing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XoEA6plSo5DSw2GKO05Vv",
+          "title": "Cloud VPN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XVBia0Me-Nllgi56PW3W0",
+          "title": "Security Groups",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qhjlKPJPOHElfTyxGy0EZ",
+          "title": "NETCONF",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_5MtpKVNmBZI7phdwzvIX",
+          "title": "Netmiko",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "C-fB6MVaegHPXPxsV3ZEh",
+          "title": "NAPALM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "f6yRhyIy0tNx09oqUXH0u",
+          "title": "RESTCONF",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "NP6dgisuDN583hVH7iUuC",
+      "title": "Network Design Principles",
+      "subtopics": [
+        {
+          "id": "t37pYpV51yTHI4InGYLOL",
+          "title": "Two-Tier",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ThgTXZ7Q1jubAdS-UL8je",
+          "title": "Three-Tier ",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "HPEtXVRezN0b0EAjx2wrF",
+          "title": "Spine-Leaf",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "yaxDHcIbupKmE51O8q3Q9",
+          "title": "Design Best Practices",
+          "linkedBy": "edge"
+        }
+      ]
+    }
+  ]
+}

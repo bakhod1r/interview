@@ -1,0 +1,449 @@
+{
+  "id": "i5",
+  "name": "Cloud, OS, operations",
+  "domain": "infra",
+  "domainLabel": "Infrastructure & DevOps",
+  "topics": [
+    "AWS",
+    "Cloud",
+    "OS",
+    "Ops"
+  ],
+  "questions": [
+    {
+      "id": 81,
+      "code": 82,
+      "level": "M",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Process va thread farqi (backend nuqtai nazaridan)?",
+      "options": [
+        "Farqi yo'q",
+        "Process — o'z memory maydoniga ega, izolyatsiya kuchli, aloqa IPC orqali. Thread — bitta process ichida, memory'ni bo'lishadi: almashinuv arzon, lekin umumiy holat uchun sinxronizatsiya kerak (race, deadlock)",
+        "Thread alohida memory oladi",
+        "Process har doim tezroq"
+      ],
+      "answer": 1,
+      "explanation": "Go'da bunga qo'shimcha qatlam bor: goroutine'lar runtime tomonidan OS threadlarga taqsimlanadi. Konteynerda resurs cheklovlari (cgroup) aynan process level'ida qo'llanadi. Nginx/Postgres kabi tizimlar turli modellarni tanlagan: Postgres — har connection'ga process, shuning uchun connection'lar qimmat."
+    },
+    {
+      "id": 82,
+      "code": 83,
+      "level": "M",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "UTF-8 haqida qaysi to'g'ri?",
+      "options": [
+        "Har belgi 1 bayt",
+        "O'zgaruvchan uzunlikdagi kodlash: ASCII 1 bayt, boshqa belgilar 2–4 bayt. Shuning uchun 'uzunlik' bayt, rune (kod nuqtasi) yoki foydalanuvchi ko'radigan grafема bo'lishi mumkin — ular teng emas",
+        "Har belgi 2 bayt",
+        "UTF-8 faqat ingliz tili uchun"
+      ],
+      "answer": 1,
+      "explanation": "Go'da: len(s) — baytlar soni, []rune(s) — kod nuqtalari, emoji yoki diakritik belgilar esa bir necha kod nuqtasidan iborat bo'lishi mumkin. Amaliy oqibatlar: DB'da VARCHAR(n) uzunligi (Postgres'da belgi bo'yicha), string kesish (yarim belgi qolmasin), qidiruvda normalizatsiya (NFC) va katta-kichik harf qoidalari tilga bog'liq."
+    },
+    {
+      "id": 1017,
+      "code": "B18",
+      "level": "S",
+      "type": "open",
+      "topic": "Ops",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Kubernetes'da servisni deploy qilganda query'lar yo'qolmasligi uchun graceful shutdown qanday qilinadi?",
+      "modelAnswer": [
+        "SIGTERM kelganda yangi query'larni qabul qilishni to'xtatish (readiness → fail)",
+        "Endpoint'dan chiqarilishini kutish — qisqa preStop sleep",
+        "Joriy query'larni tugatish (deadline bilan), keyin DB/queue connection'larini yopish",
+        "Queue consumer: yangi xabar olmaslik, joriyni ack qilib chiqish",
+        "terminationGracePeriodSeconds shutdown vaqtidan katta bo'lishi"
+      ],
+      "explanation": "Ko'p jamoa buni unutadi va har deployda 502 lar. Readiness va liveness probe farqini ham aytish kerak: liveness faqat 'jarayon osilib qoldi' uchun."
+    },
+    {
+      "id": 2029,
+      "code": "I30",
+      "level": "St",
+      "type": "open",
+      "topic": "Cloud",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Infratuzilmani qanday boshqarasiz: IaC, muhitlar va falokatdan tiklanish?",
+      "modelAnswer": [
+        "Hamma infratuzilma kodda (Terraform/Pulumi), qo'lda o'zgartirish yo'q — drift detection va CI'da plan/apply review",
+        "State fayli xavfsiz (remote backend, lock); modul va muhit bo'yicha ajratish, prod alohida akkaunt/loyiha",
+        "Muhitlar bir xil shablondan — dev/stage/prod farqi faqat parametrda",
+        "Multi-AZ default; multi-region — RTO/RPO talab qilsa (narx va murakkablik)",
+        "DR: backup + tiklashni muntazam mashq qilish (game day), runbook, xaos testlari",
+        "Eng kam huquq, audit log, xarajat teglari va byudjet alertlari"
+      ],
+      "explanation": "Staff/Principal signal: 'terraform bor' emas, jarayon — review, drift, tiklashni isbotlash. Tekshirilmagan DR rejasi — reja emas, taxmin."
+    },
+    {
+      "id": 5017,
+      "code": "V18",
+      "level": "M",
+      "type": "mcq",
+      "topic": "AWS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Foydalanuvchi katta fayl (video) yuklashi kerak. To'g'ri yondashuv?",
+      "options": [
+        "Fayl backend orqali o'tib S3'ga yoziladi",
+        "Backend pre-signed URL beradi, client to'g'ridan-to'g'ri S3'ga yuklaydi (katta fayl uchun multipart), yuklangach backend'ga xabar qilinadi yoki S3 event ishga tushadi",
+        "Faylni DB'da saqlash",
+        "EC2 diskida saqlash"
+      ],
+      "answer": 1,
+      "explanation": "Backend orqali o'tkazish — trafik narxi, memory va timeout muammosi. Pre-signed URL qisqa muddatli va cheklangan (metod, key, hajm shart bilan). Yuklangandan keyingi ishlov (thumbnail, virus scan) — S3 event → SQS/Lambda orqali asinxron.",
+      "source": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html"
+    },
+    {
+      "id": 5018,
+      "code": "V19",
+      "level": "M",
+      "type": "mcq",
+      "topic": "AWS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "SQS standard va FIFO queue farqi?",
+      "options": [
+        "FIFO tezroq",
+        "Standard — juda katta throughput, kamida bir marta yetkazish va tartib kafolatlanmagan. FIFO — guruh (MessageGroupId) ichida tartib va takrorlanmaslik (deduplication), lekin throughput cheklangan",
+        "Standard tartibni kafolatlaydi",
+        "FIFO'da dedup yo'q"
+      ],
+      "answer": 1,
+      "explanation": "Ko'p holatda standard + idempotent consumer yetarli va arzonroq. Visibility timeout — xabar olingach boshqalarga ko'rinmaydigan vaqt: ishlov shu vaqtdan uzoq bo'lsa, xabar ikkinchi marta ishlanadi (shuning uchun timeoutni ishlov vaqtiga moslash yoki heartbeat bilan uzaytirish). Zaharli xabarlar uchun redrive policy → DLQ."
+    },
+    {
+      "id": 5019,
+      "code": "V20",
+      "level": "S",
+      "type": "mcq",
+      "topic": "AWS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "EKS'dagi Go servisi S3'ga kirishi kerak. Eng xavfsiz usul?",
+      "options": [
+        "Access key va secret'ni env'ga yozish",
+        "IAM role: EKS uchun IRSA (service account'ga bog'langan rol) yoki EC2 instance profile — vaqtinchalik, avtomatik rotatsiyalanadigan credential; uzoq yashaydigan key yo'q",
+        "Key'larni ConfigMap'da saqlash",
+        "Root akkaunt key'ini ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "Uzoq muddatli access key — sizib chiqish xavfi va rotatsiya og'rig'i. IRSA'da SDK avtomatik STS orqali token oladi. Qo'shimcha: eng kam huquq (faqat kerakli bucket va prefiks), bucket policy, shifrlash (SSE-KMS), CloudTrail audit.",
+      "source": "https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html"
+    },
+    {
+      "id": 5020,
+      "code": "V21",
+      "level": "S",
+      "type": "mcq",
+      "topic": "AWS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "RDS'da Multi-AZ va read replica farqi?",
+      "options": [
+        "Bir xil narsa",
+        "Multi-AZ — standby nusxa, yozish/o'qish uchun ishlatilmaydi, faqat avtomatik failover (yuqori mavjudlik). Read replica — o'qish yukini taqsimlash uchun, asinxron (lag bor), avtomatik failover emas",
+        "Read replica yozishni ham qabul qiladi",
+        "Multi-AZ o'qishni tezlashtiradi"
+      ],
+      "answer": 1,
+      "explanation": "Ikkalasi turli muammoni yechadi: Multi-AZ — mavjudlik, read replica — masshtab. Replicadan o'qishda lag va read-your-writes muammosini hisobga olish kerak (kritik o'qishlar primary'dan). Aurora'da arxitektura boshqacha: umumiy storage, replicalar tez failover qila oladi."
+    },
+    {
+      "id": 5021,
+      "code": "V22",
+      "level": "St",
+      "type": "open",
+      "topic": "AWS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Go mikroservisini AWS'da ishga tushirish: ECS, EKS yoki Lambda? Qanday tanlaysiz?",
+      "modelAnswer": [
+        "Lambda: hodisaga asoslangan, notekis yuk, operatsiya minimal; kamchilik — cold start, 15 daqiqa limit, uzoq connection'lar (DB pool) muammosi (RDS Proxy kerak)",
+        "ECS Fargate: doimiy servis, serversiz konteyner, Kubernetes murakkabligisiz — ko'p jamoa uchun oltin o'rtalik",
+        "EKS: ko'p servis, murakkab network/mesh, ko'p jamoa va allaqachon Kubernetes ekspertizasi bo'lsa",
+        "Mezonlar: yuk profili, jamoa tajribasi, narx, migratsiya qilish osonligi, compliance",
+        "Go afzalligi: kichik image va tez start — har uchala variantda ham yaxshi ishlaydi"
+      ],
+      "explanation": "Staff signal: 'Kubernetes default emas' — operatsion narxni jamoa hajmi bilan solishtirish va qaytib chiqish (exit) narxini aytish."
+    },
+    {
+      "id": 30044,
+      "code": "SN45",
+      "level": "S",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Production podda latency spike. `top`da CPU past, lekin `iowait` yuqori. Keyingi qadam?",
+      "options": [
+        "Replicani oshirish",
+        "I/O bo'yicha chuqurlash: `iostat -x` (await, %util), sekin query/fsync, disk throttling (EBS burst credit tugashi), va app tomonda sinxron yozuvlar",
+        "GC tuning",
+        "Kodni Rust'ga yozish"
+      ],
+      "answer": 1,
+      "explanation": "iowait — protsessor bloklangan I/O kutib. Tekshirish zanjiri: qaysi qurilma (`iostat`), qaysi jarayon (`pidstat -d`, `biotop`), cloud disk limiti (IOPS/throughput kvota, gp2 burst), fayl tizimi/fsync namunasi (DB WAL, log yozish). Ko'p hollarda sabab — disk kvotasi yoki jurnal yozuvining sinxronligi, kod emas."
+    },
+    {
+      "id": 30045,
+      "code": "SN46",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Cloud",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Multi-AZ'da xarajat portladi. Ko'p uchraydigan yashirin sabab?",
+      "options": [
+        "S3 saqlash narxi",
+        "Cross-AZ data transfer: servislar va DB har xil AZ'da, har so'rov tarmoq to'lovi; topology-aware routing / AZ-local replica yo'q",
+        "EC2 instance turi",
+        "CloudWatch alert soni"
+      ],
+      "answer": 1,
+      "explanation": "Har GB cross-AZ trafik to'lanadi, chatty microservice arxitekturasida bu katta summa. Choralar: `topologyAwareHints`/zone-aware balansirovka, o'qishni AZ-local replicadan, kesh mahalliy, va batching (chatty chaqiruvlarni kamaytirish). Lekin ishonchlilik bilan muvozanat: AZ-local hamma joyda emas, faqat o'qishda."
+    },
+    {
+      "id": 30046,
+      "code": "SN47",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Incident: bitta AZ ishdan chiqdi. Servis yiqilmasligi uchun oldindan nima qilingan bo'lishi kerak?",
+      "options": [
+        "Faqat replicani ko'paytirish",
+        "Pod'lar AZ bo'ylab `topologySpreadConstraints` bilan tarqatilgan, DB multi-AZ failover (RTO/RPO o'lchangan), kvota boshqa AZ'da yuklamani ko'tarishga yetarli, va sog'liq tekshiruvi AZ'ni tez chiqaradi",
+        "DNS TTL 3600",
+        "Barcha podni bitta AZ'da ushlash (tarmoq arzon)"
+      ],
+      "answer": 1,
+      "explanation": "Ko'p jamoada nazariy multi-AZ bor, lekin: (a) pod'lar amalda bitta AZ'da yig'ilgan, (b) qolgan AZ'da headroom yo'q — cascading yiqilish, (c) failover qo'lda va sinovdan o'tmagan. Shuning uchun game day / chaos mashqi bilan tekshiriladi va kvota 'N-1 AZ' hisobiga rejalashtiriladi."
+    },
+    {
+      "id": 30200,
+      "code": "SN201",
+      "level": "S",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Jarayon va oqim (thread) farqi, va nega Go goroutine ikkisidan arzon?",
+      "options": [
+        "Farqi yo'q",
+        "Jarayon — alohida adres maydoni (izolyatsiya, qimmat almashinish), thread — umumiy adres maydoni lekin OS rejalashtiradi (~1-8 MB stack, kernel switch); goroutine — user-space'da rejalashtiriladigan yengil oqim (2 KB dan boshlanadigan o'suvchi stack), M:N modeli bilan bir necha OS thread ustida ishlaydi",
+        "Goroutine — jarayon",
+        "Thread har doim tezroq"
+      ],
+      "answer": 1,
+      "explanation": "Go runtime scheduler (G-M-P modeli) kanal yoki tarmoq kutishida goroutine'ni thread'dan yechib qo'yadi — kernel switch bo'lmaydi. Shu sabab 100k goroutine normal, 100k OS thread esa emas. Blokirovka qiluvchi syscall (fayl, cgo) bo'lsa runtime yangi thread ajratadi — bu joy sizib ketishi mumkin (`GOMAXPROCS`dan ko'p thread)."
+    },
+    {
+      "id": 30201,
+      "code": "SN202",
+      "level": "S",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Fayldan o'qishda `page cache` nimani o'zgartiradi?",
+      "options": [
+        "Hech narsa",
+        "Kernel o'qilgan bloklarni xotirada keshlaydi — takroriy o'qish diskka bormaydi; shuning uchun DB serverida bo'sh RAM 'behuda' emas, va `free` chiqishidagi `buff/cache` normal holat. Yozuvda esa `fsync` bo'lmaguncha ma'lumot faqat page cache'da (yo'qolishi mumkin)",
+        "Faqat yozuvni tezlashtiradi",
+        "Faqat SSD'da ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natijalar: PostgreSQL `shared_buffers` + OS page cache birga ishlaydi (shuning uchun shared_buffers RAM'ning 25% atrofida); `fsync`ni o'chirish tezlik beradi lekin crash'da ma'lumot yo'qoladi; konteynerda page cache cgroup memory hisobiga kiradi va OOM hisobida ko'rinishi mumkin."
+    },
+    {
+      "id": 30202,
+      "code": "SN203",
+      "level": "S",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "`fork` qilinganda xotira qanday nusxalanadi va bu nega muhim?",
+      "options": [
+        "To'liq nusxa olinadi",
+        "Copy-on-write: sahifalar umumiy qoladi, faqat yozilganda nusxalanadi — shuning uchun Redis `BGSAVE` paytida yozuv ko'p bo'lsa xotira ikki barobarga yaqin oshishi mumkin",
+        "Xotira umuman nusxalanmaydi",
+        "Faqat stack nusxalanadi"
+      ],
+      "answer": 1,
+      "explanation": "Redis persistence'dagi klassik incident: `fork` arzon ko'rinadi, lekin yozuv intensiv bo'lsa CoW sahifalari ko'payib OOM bo'ladi (shuning uchun `vm.overcommit_memory=1` tavsiya qilinadi va xotira zapasi qoldiriladi). Xuddi shu mexanizm konteyner image qatlamlari va `vfork`/`posix_spawn` optimizatsiyalarida ham asos."
+    },
+    {
+      "id": 30203,
+      "code": "SN204",
+      "level": "St",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Latency raqamlari (tartib bo'yicha): L1 kesh, RAM, SSD, bir DC ichida tarmoq, kontinentlar orasi?",
+      "options": [
+        "Hammasi mikrosekund atrofida",
+        "~1 ns L1, ~100 ns RAM, ~100 µs SSD o'qish, ~0.5 ms bir DC ichida round-trip, ~150 ms kontinentlar orasi — har bosqich taxminan 100-1000x farq qiladi",
+        "RAM va SSD teng",
+        "Tarmoq RAM'dan tez"
+      ],
+      "answer": 1,
+      "explanation": "Bu raqamlar dizayn qarorlarini boshqaradi: RAM'dan o'qish diskdan ~1000x tez (shuning uchun kesh), bir DC ichidagi chaqiruv RAM'dan ~5000x sekin (shuning uchun N+1 chaqiruv halokatli), cross-region esa har round-trip 150 ms (shuning uchun cross-region sinxron yozuv qabul qilinmaydi). Aniq raqam emas, kattalik tartibi muhim."
+    },
+    {
+      "id": 30268,
+      "code": "SN269",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Cloud",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Terraform'da state fayli nima uchun kritik va qanday boshqariladi?",
+      "options": [
+        "Oddiy log fayl",
+        "State real infratuzilma bilan konfiguratsiya orasidagi moslikni saqlaydi — yo'qolsa Terraform resurslarni 'yo'q' deb hisoblab qayta yaratadi. Shuning uchun remote backend (S3+DynamoDB lock yoki HCP), versiyalash, shifrlash va `plan`ni doimo ko'rib chiqish kerak",
+        "Lokal saqlash yetarli",
+        "State keraksiz"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qoidalar: state'ni hech qachon qo'lda tahrir qilmaslik (`terraform state mv/rm` komandalari bor), lock bilan parallel `apply`ni bloklash, muhitlarni alohida state'ga ajratish (blast radius), sirlar state'ga tushishini hisobga olish (shifrlash va kirish nazorati), va `import` bilan qo'lda yaratilgan resursni state'ga kiritish."
+    },
+    {
+      "id": 30269,
+      "code": "SN270",
+      "level": "S",
+      "type": "mcq",
+      "topic": "AWS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "IAM'da eng kam huquq (least privilege) amalda qanday ta'minlanadi?",
+      "options": [
+        "Har servisga AdministratorAccess",
+        "Rolga asoslangan kirish: workload'ga IAM Role (EC2 instance profile / EKS IRSA), statik kalit yo'q; policy resurs va shart bo'yicha cheklangan (`Resource` aniq ARN, `Condition` bilan), va Access Analyzer/CloudTrail bilan ortiqcha huquqlar kesiladi",
+        "Faqat MFA yoqish",
+        "IP allowlist"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy qadamlar: uzoq yashovchi access key'lardan voz kechish (rol + STS), har servisga alohida rol (umumiy rol bo'lsa blast radius katta), `iam:PassRole` va wildcard action'larni ehtiyot bilan berish, va CloudTrail'dan haqiqiy ishlatilgan huquqlar bo'yicha policy'ni qisqartirish. S3'da bucket policy + `BlockPublicAccess` majburiy."
+    },
+    {
+      "id": 30350,
+      "code": "SN351",
+      "level": "S",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Jarayon va oqim (thread) farqi, va nega Go goroutine ikkisidan arzon?",
+      "options": [
+        "Farqi yo'q",
+        "Jarayon — alohida adres maydoni (izolyatsiya, qimmat almashinish), thread — umumiy adres maydoni lekin OS rejalashtiradi (~1-8 MB stack, kernel switch); goroutine — user-space'da rejalashtiriladigan yengil oqim (2 KB dan boshlanadigan o'suvchi stack), M:N modeli bilan bir necha OS thread ustida ishlaydi",
+        "Goroutine — jarayon",
+        "Thread har doim tezroq"
+      ],
+      "answer": 1,
+      "explanation": "Go runtime scheduler (G-M-P modeli) kanal yoki tarmoq kutishida goroutine'ni thread'dan yechib qo'yadi — kernel switch bo'lmaydi. Shu sabab 100k goroutine normal, 100k OS thread esa emas. Blokirovka qiluvchi syscall (fayl, cgo) bo'lsa runtime yangi thread ajratadi — bu joy sizib ketishi mumkin (`GOMAXPROCS`dan ko'p thread)."
+    },
+    {
+      "id": 30351,
+      "code": "SN352",
+      "level": "S",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Fayldan o'qishda `page cache` nimani o'zgartiradi?",
+      "options": [
+        "Hech narsa",
+        "Kernel o'qilgan bloklarni xotirada keshlaydi — takroriy o'qish diskka bormaydi; shuning uchun DB serverida bo'sh RAM 'behuda' emas, va `free` chiqishidagi `buff/cache` normal holat. Yozuvda esa `fsync` bo'lmaguncha ma'lumot faqat page cache'da (yo'qolishi mumkin)",
+        "Faqat yozuvni tezlashtiradi",
+        "Faqat SSD'da ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natijalar: PostgreSQL `shared_buffers` + OS page cache birga ishlaydi (shuning uchun shared_buffers RAM'ning 25% atrofida); `fsync`ni o'chirish tezlik beradi lekin crash'da ma'lumot yo'qoladi; konteynerda page cache cgroup memory hisobiga kiradi va OOM hisobida ko'rinishi mumkin."
+    },
+    {
+      "id": 30352,
+      "code": "SN353",
+      "level": "S",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "`fork` qilinganda xotira qanday nusxalanadi va bu nega muhim?",
+      "options": [
+        "To'liq nusxa olinadi",
+        "Copy-on-write: sahifalar umumiy qoladi, faqat yozilganda nusxalanadi — shuning uchun Redis `BGSAVE` paytida yozuv ko'p bo'lsa xotira ikki barobarga yaqin oshishi mumkin",
+        "Xotira umuman nusxalanmaydi",
+        "Faqat stack nusxalanadi"
+      ],
+      "answer": 1,
+      "explanation": "Redis persistence'dagi klassik incident: `fork` arzon ko'rinadi, lekin yozuv intensiv bo'lsa CoW sahifalari ko'payib OOM bo'ladi (shuning uchun `vm.overcommit_memory=1` tavsiya qilinadi va xotira zapasi qoldiriladi). Xuddi shu mexanizm konteyner image qatlamlari va `vfork`/`posix_spawn` optimizatsiyalarida ham asos."
+    },
+    {
+      "id": 30353,
+      "code": "SN354",
+      "level": "St",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Latency raqamlari (tartib bo'yicha): L1 kesh, RAM, SSD, bir DC ichida tarmoq, kontinentlar orasi?",
+      "options": [
+        "Hammasi mikrosekund atrofida",
+        "~1 ns L1, ~100 ns RAM, ~100 µs SSD o'qish, ~0.5 ms bir DC ichida round-trip, ~150 ms kontinentlar orasi — har bosqich taxminan 100-1000x farq qiladi",
+        "RAM va SSD teng",
+        "Tarmoq RAM'dan tez"
+      ],
+      "answer": 1,
+      "explanation": "Bu raqamlar dizayn qarorlarini boshqaradi: RAM'dan o'qish diskdan ~1000x tez (shuning uchun kesh), bir DC ichidagi chaqiruv RAM'dan ~5000x sekin (shuning uchun N+1 chaqiruv halokatli), cross-region esa har round-trip 150 ms (shuning uchun cross-region sinxron yozuv qabul qilinmaydi). Aniq raqam emas, kattalik tartibi muhim."
+    },
+    {
+      "id": 30457,
+      "code": "SN458",
+      "level": "St",
+      "type": "mcq",
+      "topic": "OS",
+      "domain": "infra",
+      "section": "i5",
+      "question": "cgroup v2 memory limiti ilovaga qanday ta'sir qiladi?",
+      "options": [
+        "Faqat monitoring",
+        "`memory.max` ga yetilganda avval reclaim (page cache tozalash, swap agar bor bo'lsa), keyin OOM killer cgroup ichidagi jarayonni o'ldiradi. `memory.high` esa yumshoq chegara — throttling qiladi. Page cache ham hisobga kiradi, shuning uchun ko'p fayl o'qish limitga bosim beradi",
+        "Faqat RSS hisoblanadi",
+        "Limit yumshoq"
+      ],
+      "answer": 1,
+      "explanation": "Amaliy natijalar: Go'da `GOMEMLIMIT` ni `memory.max` dan past qo'yish OOMKill o'rniga GC bosimini beradi (jarayon tirik qoladi va diagnostika mumkin); katta fayl o'qiydigan jarayonlar page cache tufayli kutilmaganda o'ldirilishi mumkin; `memory.high` bilan jarayon sekinlashadi lekin o'lmaydi — bu ba'zan afzalroq."
+    },
+    {
+      "id": 30458,
+      "code": "SN459",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Ops",
+      "domain": "infra",
+      "section": "i5",
+      "question": "Konteynerda `PID 1` muammosi nima?",
+      "options": [
+        "Muammo yo'q",
+        "PID 1 signal ishlovchisi bo'lmasa `SIGTERM` e'tiborsiz qolishi mumkin (graceful shutdown ishlamaydi) va zombi jarayonlar yig'iladi; shell orqali ishga tushirilgan bo'lsa signal bolaga yetmaydi — `exec` yoki `tini`/`--init` ishlatiladi",
+        "Faqat Docker'da",
+        "Faqat root bilan"
+      ],
+      "answer": 1,
+      "explanation": "Ko'rinishi: deploy paytida podlar 30 sekund kutib SIGKILL bilan o'ladi, ochiq so'rovlar uziladi. Tuzatish: `ENTRYPOINT [\"/app/server\"]` (exec form, shell emas) yoki `CMD exec ...`; Go binarlari signalni o'zi ishlaydi (`signal.NotifyContext`), lekin shell wrapper bo'lsa signal yo'qoladi. Zombi jarayonlar uchun `--init`."
+    }
+  ]
+}

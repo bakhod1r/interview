@@ -1,0 +1,502 @@
+{
+  "slug": "typescript",
+  "title": "TypeScript",
+  "description": "Everything you need to learn about TypeScript in @currentYear@",
+  "url": "https://roadmap.sh/typescript",
+  "groups": [
+    "Skill Based Roadmaps"
+  ],
+  "type": "skill",
+  "updatedAt": "2026-01-06T16:31:52.381Z",
+  "relatedRoadmaps": [
+    "frontend",
+    "backend",
+    "javascript",
+    "nodejs",
+    "react"
+  ],
+  "topicCount": 15,
+  "subtopicCount": 78,
+  "topics": [
+    {
+      "id": "KDd40JOAvZ8O1mfhTYB3K",
+      "title": "Introduction to TypeScript",
+      "subtopics": [
+        {
+          "id": "dcLaEU_lb0z_QypL1ZhpX",
+          "title": "TS and JS Interoperability",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "MQWzN_kXxVJMOYbRXSGJc",
+          "title": "TypeScript vs JavaScript",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "dA8CNQOgJRDa0T7rmyS7f",
+          "title": "Installation and Configuration",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qdy4ZIY2EKgmPNdu_ndcg",
+          "title": "Running TypeScript",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Iv_t13PSVzet5VPKFtAp1",
+          "title": "tsc",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ZCM2_X4BiKh5FTCizrr-E",
+          "title": "ts-node",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_bZ71i36haWgHQTY0yMOx",
+          "title": "TS Playground",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "qcrGApxNzkGYxgcd7o45d",
+      "title": "TypeScript Types",
+      "subtopics": [
+        {
+          "id": "hfIHxa5i_5rEpjtzqEsic",
+          "title": "boolean",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "UH9d3cvGy_e67WFNFwCyf",
+          "title": "number",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "d8iV-IBZ6cSnH8Z5_HRmc",
+          "title": "string",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yLlQg7BF--ZwRHbXBWfOi",
+          "title": "void",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sa6IZtM4XJstultz-pbh0",
+          "title": "undefined",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "cjAwawhZLo1qVQ93XIdm2",
+          "title": "null",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mVKsM7R4Ivpdhnbwt1aRb",
+          "title": "Interface",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tTSITP1W1ymS-njbFb8Ts",
+          "title": "Class",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bfZIXHceDKDGQl-24kQpT",
+          "title": "Enum",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YbDuIo1BbZKEAZwmXlCdZ",
+          "title": "Array",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jq-GD0DLyzrEXQKUmt5kv",
+          "title": "Tuple",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vnqvm_WiaKqpdxrW4wRGa",
+          "title": "Object",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "pGFnTqi0-RSj0YRmNA5iy",
+          "title": "as const",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Ba0baUbomrW9td_K8U-5L",
+          "title": "as [type]",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "afTNr36VqeXoJpHxm2IoS",
+          "title": "as any",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "KUur-gfOBQodTS-irFet7",
+      "title": "Type Inference",
+      "subtopics": [
+        {
+          "id": "DmqrX56d9KnBcOSwlJR2q",
+          "title": "tsconfig.json",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RrExVb7l2gd0s_TlNdLeD",
+          "title": "Compiler Options",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "alMJCEyUZ90xz-2_g3YRj",
+      "title": "Type Compatibility",
+      "subtopics": [
+        {
+          "id": "5z5w3yv1HbOpMlzEd4Iot",
+          "title": "Union Types",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RWYXEZMODUrqwRWf_Lqi9",
+          "title": "Intersection Types",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "qefnsugcveizVq2TORRgn",
+      "title": "Combining Types",
+      "subtopics": [
+        {
+          "id": "M_3O21zjppgWptIT5dtu8",
+          "title": "Type Aliases",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "t1Tcesfq7bV2TkHcfD6lU",
+          "title": "keyof Operator",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "cFZsxpYHDxm7IWwergb3r",
+      "title": "Type Guards / Narrowing",
+      "subtopics": [
+        {
+          "id": "Wy2yIK5vgLjEcc9VjuQK5",
+          "title": "Equality",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EDOU5a7UK17yp3PdFBJMc",
+          "title": "instanceof",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ZiOcFZy85p7tLzUkyKDei",
+          "title": "typeof",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "Xonbxc7MvMEonKBvbkCAH",
+          "title": "Truthiness",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "1DOSAieOmWUNNsQQrqf2m",
+          "title": "Type Predicates",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "qOynVkDi1gFz0mxyJHjfJ",
+      "title": "TypeScript Functions",
+      "subtopics": [
+        {
+          "id": "9FIhHwDNzyKpb42NmSv3K",
+          "title": "Typing Functions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-0Zp6b8NjDyz9MAQE3HfS",
+          "title": "Function Overloading",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gBTem9Dp3IQLAkqGX4fOF",
+          "title": "Partial",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yjlxygHl8QONNUrdx-Q0A",
+          "title": "Omit",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DRdBmF5Dt_r09LoPOxOuq",
+          "title": "Record",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "IIAbAzXiVQm1JEi2MTMZN",
+          "title": "Extract",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "aH1DxiG5xrdNlKutJ_gTz",
+      "title": "TypeScript Interfaces",
+      "subtopics": [
+        {
+          "id": "TxkEpoOiuUm-fXJuFVKcH",
+          "title": "Types vs Interfaces",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "O-9WQqidujLIEOTcOfy4n",
+          "title": "Extending Interfaces",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "fY40W8prpgiNqRL50w7ub",
+          "title": "Interface Declaration",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "lvtTSHH9yBTCiLng8btnI",
+          "title": "Hybrid Types",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "O2TYbd9i_OQwQk2dKh-ly",
+          "title": "unknown",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yXiLegSlL7SveU8rBGj8U",
+          "title": "any",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "0pi9VTbngcAIswuu5LIYg",
+          "title": "never",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "mjaL5ocLnM8VQlhUxW6KU",
+          "title": "Non-null Assertion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "HD1UGOidp7JGKdW6CEdQ_",
+          "title": "satisfies keyword",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "ib0jfZzukYOZ42AdJqt_W",
+      "title": "Classes",
+      "subtopics": [
+        {
+          "id": "3XrKbK5Od2eoM0BLaS4kU",
+          "title": "Constructor Params",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "RJ7on8WoxrKcXrR3qY5Rs",
+          "title": "Access Modifiers",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tZFWeWHdOUJcCEtHfXH9p",
+          "title": "Abstract Classes",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "4gaKqNtGLFqpk9WVKZl0v",
+      "title": "Generics",
+      "subtopics": [
+        {
+          "id": "T2-VAVfntouJOoWHpHZ3n",
+          "title": "Generic Types",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0NXHAOUYGIwuPwlN7r_B3",
+          "title": "Generic Constraints",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "TRx3wvWnRdJJf5eL-GBG4",
+      "title": "Decorators",
+      "subtopics": [
+        {
+          "id": "oxzcYXxy2I7GI7nbvFYVa",
+          "title": "Constructor Overloading",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "8P0-vb9nlnmz7iC4UvyJZ",
+          "title": "Inheritance vs Polymorphism",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "aknqutxN2WDQ4RFcT-szM",
+          "title": "Method Overriding",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "EtVwQ4lnWi3IIFHGb2Qib",
+          "title": "Namespaces",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "LSwUHfalnk5MgHt21PANb",
+      "title": "Utility Types",
+      "subtopics": [
+        {
+          "id": "E88tHQvARkHURZwGaO02l",
+          "title": "Pick",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "IuO9-O_DQdDYuAbdGWdgb",
+          "title": "Readonly",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "0fvOXi9gJbEc7etqTggNE",
+          "title": "Exclude",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "aEhI_9mFWXRIZh1ZxTuzu",
+          "title": "Awaited",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "a7hl0iMZ-jcUACxqIYVqv",
+          "title": "Parameters",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "_BAZlBEzE7ddr315OeHvl",
+          "title": "NonNullable",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "On75JR_UkiIlha0_qaSeu",
+          "title": "ReturnType",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "izGAjNtrh3BzQt3KiZX0W",
+          "title": "InstanceType",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "2F7vOL__v9dLBohA263aj",
+      "title": "Advanced Types",
+      "subtopics": [
+        {
+          "id": "VQ-V9qIdKgnpSJg2UnpuB",
+          "title": "Mapped Types",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "ubGIhi-WLE0EopTYXzmPL",
+          "title": "Conditional Types",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "CWzGwvl6NwYCaLYSLIjqQ",
+          "title": "Literal Types",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "xP25nGw42VqdfZ_9pDMXd",
+          "title": "Template Literal Types",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "sE9lqkkqwnsVJxTJv37YZ",
+      "title": "TypeScript Modules",
+      "subtopics": [
+        {
+          "id": "JQwWeB1gkANSYfQmH69Bs",
+          "title": "Global Augmentation",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "k_5y77k8ZZ9_O2WpWXWTY",
+          "title": "Ambient Modules",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "egQWk1n3p8Pep83yIwCtI",
+          "title": "External Modules",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "16TT8R4N-9tCfWmPetqMP",
+          "title": "Namespace Augmentation",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "RqZaWGxxNRItBhVwWKysc",
+      "title": "Ecosystem",
+      "subtopics": [
+        {
+          "id": "fU8Vnw1DobM4iXl1Tq6EK",
+          "title": "Formatting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "8PcAPOrKisKRYPWamz4nV",
+          "title": "Linting",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "PCX3KcvMUW3mmQEepLTXp",
+          "title": "Useful Packages",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "I5uwfej5XMwR2N2gpBILh",
+          "title": "Build Tools",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "N8xBTJ74xv1E5hSLYZtze",
+          "title": "Recursive Types",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}

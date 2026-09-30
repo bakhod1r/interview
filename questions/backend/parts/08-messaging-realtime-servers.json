@@ -1,0 +1,400 @@
+[
+  {
+    "topicId": "nJ5FpFgGCRaALcWmAKBKT",
+    "topicTitle": "Message Brokers",
+    "questions": [
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-01",
+        "question": "What is the difference between a queue-based broker like RabbitMQ and a log-based broker like Kafka?",
+        "answer": "RabbitMQ is a smart broker with dumb consumers: a message is routed into a queue, delivered to one consumer, acked, and then deleted, so the broker tracks per-message state. Kafka is a dumb broker with smart consumers: producers append to an immutable partitioned log, messages stay for the whole retention period, and each consumer group just stores an offset pointer. That means Kafka supports replay and many independent readers of the same data, while RabbitMQ supports rich routing, per-message TTL, priorities and selective redelivery that a log cannot express.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Kafka",
+        "followUps": ["Which one would you pick for a task queue with 30-minute jobs?", "Why can't you easily do per-message retry with backoff in Kafka?"],
+        "tags": ["kafka", "rabbitmq", "queue", "log"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-02",
+        "question": "Explain RabbitMQ exchange types and how routing works.",
+        "answer": "Producers publish to an exchange with a routing key, never directly to a queue; bindings connect exchanges to queues. A direct exchange matches routing key exactly, fanout ignores the key and copies to every bound queue, topic matches patterns with * (one word) and # (zero or more words) such as order.*.created, and headers matches on header attributes instead of the key. A message that matches no binding is dropped silently unless the exchange has an alternate-exchange, or the publisher sets the mandatory flag and handles basic.return.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "RabbitMQ",
+        "followUps": ["How do you detect messages being silently dropped?", "When is a topic exchange better than several direct bindings?"],
+        "tags": ["rabbitmq", "exchange", "routing"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-03",
+        "question": "A RabbitMQ consumer processes messages fine but the queue keeps growing, and restarting the consumer causes thousands of messages to be reprocessed. What is going on?",
+        "answer": "Almost certainly the consumer subscribed with autoAck=false but never calls basic.ack, or it acks only after a long batch. Unacked messages count as delivered-but-outstanding, so they stay in the queue in the Unacked state and are requeued on channel close, which explains the reprocessing. Check the Unacked column in rabbitmqctl list_queues name messages_ready messages_unacknowledged; if unacked is large and stuck, fix the ack path and set a sane basic.qos prefetch so one consumer can't hold thousands of messages hostage.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "RabbitMQ",
+        "followUps": ["What prefetch value would you start with for 50ms jobs vs 30s jobs?", "What happens to unacked messages if the consumer process is SIGKILLed?"],
+        "tags": ["rabbitmq", "ack", "prefetch", "debugging"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-04",
+        "question": "How do you handle a poison message that fails every time it is consumed?",
+        "answer": "Never requeue it blindly with basic.nack(requeue=true) — that creates a hot loop that starves the queue. Instead count attempts (x-death header in RabbitMQ, or a custom attempt header), and after N failures reject with requeue=false so the queue's x-dead-letter-exchange routes it to a DLQ. A common pattern is a retry queue with per-message TTL that dead-letters back to the main queue for delayed retry with backoff, and a terminal DLQ that alerts a human. In Kafka the equivalent is a retry topic chain plus a dead-letter topic, because you cannot skip a single message without committing past it.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "RabbitMQ",
+        "followUps": ["How do you replay a DLQ safely after a fix?", "What metric tells you a poison loop is happening?"],
+        "tags": ["dlq", "poison-message", "retry", "rabbitmq"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-05",
+        "question": "What guarantees does Kafka give about message ordering?",
+        "answer": "Kafka guarantees ordering only within a single partition, not across a topic. Messages with the same key hash to the same partition, so ordering per entity (per user id, per order id) is preserved if you key by that entity. Ordering also breaks if you set max.in.flight.requests.per.connection > 1 with retries and without enable.idempotence=true, because a retried batch can land after a later one. Increasing partition count later rehashes keys, so historical and future messages for one key can end up in different partitions.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Kafka",
+        "followUps": ["How do you scale throughput when one key is extremely hot?", "Why is adding partitions a semi-breaking change?"],
+        "tags": ["kafka", "ordering", "partitions"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-06",
+        "question": "Explain Kafka consumer groups, offsets, and rebalancing.",
+        "answer": "Within a consumer group each partition is assigned to exactly one consumer, so group parallelism is capped by partition count; extra consumers sit idle. Each consumer commits an offset per partition to the __consumer_offsets topic, and on restart it resumes from the last committed offset. When a member joins, leaves, or misses max.poll.interval.ms / session.timeout.ms, the group rebalances and partitions are reassigned — with the eager protocol everyone stops consuming briefly, which is why cooperative-sticky assignment and static group membership (group.instance.id) are preferred to avoid stop-the-world pauses during deploys.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Kafka",
+        "followUps": ["Why does slow processing cause repeated rebalances?", "What does auto.offset.reset=earliest vs latest change on a brand new group?"],
+        "tags": ["kafka", "consumer-group", "offsets", "rebalance"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-07",
+        "question": "Compare at-most-once, at-least-once and exactly-once delivery, and how you make a consumer idempotent.",
+        "answer": "At-most-once commits the offset/ack before processing, so a crash loses messages; at-least-once processes then commits, so a crash replays and duplicates; exactly-once requires the read-process-write to be atomic. Kafka offers exactly-once-semantics for Kafka-to-Kafka flows via the idempotent producer plus transactions and isolation.level=read_committed, but the moment you write to an external database or call a payment API you are back to at-least-once end-to-end. The practical answer is at-least-once plus an idempotent consumer: derive a deterministic key from the message (event id, or entity id + version) and use INSERT ... ON CONFLICT DO NOTHING, a unique constraint on processed_events, or a conditional update guarded by a version number.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Kafka",
+        "followUps": ["How long do you keep processed-event ids around?", "Where does Kafka's exactly-once actually fail at the boundary?"],
+        "tags": ["delivery-semantics", "idempotency", "exactly-once", "kafka"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-08",
+        "question": "Consumer lag on one topic has grown to 40 million messages and is still climbing. Walk through your response.",
+        "answer": "First separate the causes: is production spiking, or is consumption slow? Look at per-partition lag (kafka-consumer-groups.sh --describe) — if lag is concentrated in a few partitions it is key skew or a stuck consumer, if it is uniform the group is simply under-provisioned. Check consumer-side metrics for processing time per record, downstream DB latency, and rebalance frequency, since a rebalance loop caused by max.poll.interval.ms timeouts halts progress entirely. Fixes in order: raise max.poll.records batching and use bulk writes downstream, add consumers up to the partition count, add partitions if already saturated, and if the backlog is stale or non-critical, shed load by seeking offsets forward after an explicit business decision.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Kafka",
+        "followUps": ["How do you verify retention won't delete the backlog before you catch up?", "When is seeking past a backlog acceptable?"],
+        "tags": ["kafka", "lag", "backlog", "operations"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-09",
+        "question": "What is the difference between Kafka's time-based retention and log compaction?",
+        "answer": "cleanup.policy=delete drops whole log segments once retention.ms or retention.bytes is exceeded, which suits event streams where old events lose value. cleanup.policy=compact keeps at least the latest value per key forever, so the topic becomes a replayable snapshot of current state — used for changelog and CDC topics, and for Kafka Streams state stores. Compaction is asynchronous, so duplicates of a key can exist until the cleaner runs, and a delete is expressed as a tombstone (null value) which is itself removed after delete.retention.ms. You can also set compact,delete to bound the size of a compacted topic.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Kafka",
+        "followUps": ["Why must compacted topics always have a non-null key?", "How does a consumer that misses a tombstone end up with stale state?"],
+        "tags": ["kafka", "retention", "compaction"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-10",
+        "question": "A service writes an order to Postgres and then publishes an OrderCreated event. Sometimes the DB row exists but no event was published. How do you fix it?",
+        "answer": "This is dual-write failure: the commit and the publish are not atomic, so a crash between them loses the event (and a publish-first design loses the row). Use the transactional outbox: in the same transaction that inserts the order, insert a row into an outbox table, then have a separate relay poll the outbox or tail the WAL via CDC (Debezium) and publish to the broker, marking rows sent. Delivery becomes at-least-once, so consumers must be idempotent on the event id, and ordering is preserved if the relay reads the outbox in id/sequence order and keys by aggregate id.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Kafka",
+        "followUps": ["Why is a two-phase commit between DB and broker usually rejected here?", "What does the outbox relay do if the broker is down for an hour?"],
+        "tags": ["outbox", "dual-write", "cdc", "reliability"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-11",
+        "question": "What are Server-Sent Events and when would you choose them over a message broker consumer in the browser?",
+        "answer": "SSE is a long-lived HTTP response with Content-Type: text/event-stream where the server pushes newline-delimited frames (data:, event:, id:, retry:) and the browser's EventSource reconnects automatically. It is one-directional server-to-client, text only, and runs over ordinary HTTP so proxies, auth cookies and HTTP/2 multiplexing work unchanged. Browsers cannot speak AMQP or the Kafka protocol, so the usual architecture is broker to backend, and backend fans out to browsers over SSE — SSE is the last hop, not a replacement for the broker.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Server Sent Events",
+        "followUps": ["What is the 6-connection-per-domain limit problem under HTTP/1.1?", "How does the server tell the client to back off reconnecting?"],
+        "tags": ["sse", "eventsource", "http"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-12",
+        "question": "Your SSE stream works locally but through nginx clients receive nothing for 60 seconds and then the connection drops. Diagnose.",
+        "answer": "Two classic causes. nginx is buffering the response, so frames are held until a buffer fills — fix with proxy_buffering off (or send the X-Accel-Buffering: no response header) and proxy_http_version 1.1. The drop at 60s is proxy_read_timeout, whose default is 60s: either raise it for the SSE location or, better, emit a heartbeat comment line (`: ping\\n\\n`) every 15-30s, which also keeps corporate proxies and load balancer idle timeouts from killing the stream. Also disable gzip on the stream location, since compression buffers, and confirm the app framework isn't buffering the response itself.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Server Sent Events",
+        "followUps": ["Why is a comment line a good heartbeat rather than a real event?", "How does the client resume after such a drop?"],
+        "tags": ["sse", "nginx", "buffering", "timeout", "debugging"]
+      },
+      {
+        "id": "nJ5FpFgGCRaALcWmAKBKT-13",
+        "question": "How does Last-Event-ID work and what must the server do to support resume?",
+        "answer": "If the server includes `id: <n>` in frames, EventSource remembers the last one and on automatic reconnect sends it in the Last-Event-ID request header (the retry: field sets the reconnect delay in ms). The server must read that header and replay everything after that id, which means it needs a bounded, ordered per-stream buffer — a Redis stream, a Kafka offset, or a DB sequence — not just in-memory state on one instance, or a reconnect that lands on another pod loses events. Define behaviour when the id is older than the buffer: send a resync/snapshot event rather than silently starting from now.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Server Sent Events",
+        "followUps": ["How do you keep ids monotonic across multiple producing instances?", "What's the memory cost of the replay buffer at 100k connections?"],
+        "tags": ["sse", "last-event-id", "resume", "reconnect"]
+      }
+    ]
+  },
+  {
+    "topicId": "5XGvep2qoti31bsyqNzrU",
+    "topicTitle": "Real-Time Data",
+    "questions": [
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-01",
+        "question": "Compare short polling, long polling, SSE and WebSockets, and say when each fits.",
+        "answer": "Short polling requests on a fixed interval — simplest, but wastes requests and adds up to one interval of latency. Long polling holds the request open until data exists or a timeout fires, then the client immediately re-requests — near push latency over plain HTTP, but a held connection per client and an awkward gap between responses. SSE is a single persistent HTTP response for server-to-client pushes with built-in auto-reconnect and Last-Event-ID resume — ideal for notifications, feeds, progress bars and LLM token streaming. WebSockets upgrade to a full-duplex binary-capable TCP channel — the right choice only when the client also sends frequent messages, as in chat, multiplayer, collaborative editing or trading.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Long / Short Polling",
+        "followUps": ["Which would you pick for a dashboard refreshed every 30s?", "Why is SSE often preferred over WebSocket for one-way streams?"],
+        "tags": ["polling", "sse", "websocket", "realtime"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-02",
+        "question": "How does the WebSocket handshake work?",
+        "answer": "The client sends a normal HTTP/1.1 GET with Connection: Upgrade, Upgrade: websocket, Sec-WebSocket-Version: 13 and a random base64 Sec-WebSocket-Key. The server replies 101 Switching Protocols with Sec-WebSocket-Accept = base64(SHA1(key + 258EAFA5-E914-47DA-95CA-C5AB0DC85B11)), after which the same TCP connection carries binary WebSocket frames instead of HTTP. ws:// is plain and wss:// runs over TLS; wss is effectively mandatory in production because intermediaries frequently mangle unencrypted upgrades.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "WebSockets",
+        "followUps": ["Why doesn't the browser send an Origin check for you?", "What does subprotocol negotiation via Sec-WebSocket-Protocol do?"],
+        "tags": ["websocket", "handshake", "http-upgrade"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-03",
+        "question": "You scale your WebSocket chat service from 1 to 6 pods and users stop receiving each other's messages. Why, and how do you fix it?",
+        "answer": "Each pod holds only its own connections in local memory, so a message published on pod A never reaches a recipient connected to pod C. Fix by making the fan-out external: publish every message to Redis Pub/Sub, NATS, or a Kafka topic, and have each pod forward to the local sockets subscribed to that room. Separately, the HTTP upgrade must reach a pod that then keeps the connection, so the load balancer needs sticky/consistent routing or at least session affinity for reconnect-with-resume, and you must raise the LB and ingress idle timeout above your heartbeat interval.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "WebSockets",
+        "followUps": ["Why is Redis Pub/Sub fire-and-forget a problem for message durability?", "How do you avoid fanning a room message to all 6 pods when only one has members?"],
+        "tags": ["websocket", "scaling", "pubsub", "sticky-sessions"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-04",
+        "question": "Why do WebSocket connections need heartbeats, and how should reconnect be implemented?",
+        "answer": "TCP will not tell you about a silently dead peer, and NATs, load balancers and mobile networks drop idle connections after 30-120 seconds, so the server sends protocol-level ping frames (or app-level pings) every ~30s and closes the socket if no pong arrives within a timeout. Clients must reconnect with exponential backoff plus jitter — without jitter a broker restart triggers a thundering herd where every client reconnects simultaneously. On reconnect, resume rather than restart: send the last received message id/sequence so the server replays the gap, and treat the connection as unreliable by making all message handling idempotent by message id.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "WebSockets",
+        "followUps": ["Why measure liveness from the server side too, not only the client?", "What backoff cap would you use for a 500k-client fleet?"],
+        "tags": ["websocket", "heartbeat", "reconnect", "backoff"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-05",
+        "question": "How do you authenticate and authorize a WebSocket connection?",
+        "answer": "The browser WebSocket API cannot set custom headers, so common options are a cookie sent with the handshake, a short-lived ticket token in the query string, or a first application-level auth message before any subscription is honoured. Validate at the handshake and reject with a 401/403 on the HTTP response rather than after the upgrade, and check the Origin header explicitly because WebSockets are not protected by the same-origin policy or CORS — that is the cross-site WebSocket hijacking (CSWSH) risk. Since the connection may live for hours, re-check authorization on sensitive actions and enforce a max session lifetime so a revoked token cannot keep streaming data.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "WebSockets",
+        "followUps": ["Why is a long-lived JWT in the URL risky?", "How do you kick a user whose permissions were just revoked?"],
+        "tags": ["websocket", "auth", "security", "cswsh"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-06",
+        "question": "Implement long polling correctly — what are the failure modes?",
+        "answer": "The server holds the request until an event arrives or a timeout (typically 25-30s, below any proxy read timeout) and returns a cursor the client sends back on the next request. Failure modes: without a cursor, events produced in the gap between the response and the next request are lost; blocking threads per connection exhausts a thread-per-request server, so it needs async/event-driven handling; and intermediate proxies with a 60s read timeout or aggressive buffering break it. Also return 204/empty on timeout rather than an error, so client retry logic doesn't treat a normal timeout as a failure and back off.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Long / Short Polling",
+        "followUps": ["What connection limits does HTTP/1.1 impose per origin?", "How does HTTP/2 change the cost of long polling?"],
+        "tags": ["long-polling", "cursor", "timeout"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-07",
+        "question": "A dashboard used by 20,000 users short-polls /api/stats every 2 seconds and the database is melting. How do you reduce load without losing freshness?",
+        "answer": "20k clients at 0.5 rps is 10k rps hitting the DB for data that changes far less often. Put a short TTL cache in front (Redis or nginx proxy_cache with a 1-2s TTL and proxy_cache_lock on to collapse the stampede), so the DB sees roughly one query per TTL regardless of client count. Add ETag/Last-Modified so unchanged responses return 304 with no body, jitter the client interval to break synchronized waves, and back off the interval when the tab is hidden via the Page Visibility API. If freshness truly matters, switch the endpoint to SSE and push only on change — that converts 10k rps into one broadcast per actual update.",
+        "difficulty": "middle",
+        "type": "scenario",
+        "subtopic": "Long / Short Polling",
+        "followUps": ["Why does a fixed interval create a synchronized thundering herd?", "What breaks if you cache per-user data at the edge?"],
+        "tags": ["short-polling", "caching", "etag", "thundering-herd"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-08",
+        "question": "What is Apache Solr and how does it differ from Elasticsearch?",
+        "answer": "Both are search engines built on Apache Lucene with inverted indexes, so core scoring (BM25), analyzers, tokenizers and near-real-time search behave similarly. Solr is older, uses ZooKeeper for SolrCloud coordination, favours an explicit schema (schema.xml / managed-schema) and has very strong faceting, and it is fully Apache-licensed. Elasticsearch has a JSON-first REST API, dynamic mapping by default, built-in coordination since 7.x, and a much larger observability ecosystem (Kibana, Beats, ingest pipelines) but ships under SSPL/Elastic License, which is why OpenSearch was forked. Practically: Solr suits schema-driven enterprise search with heavy faceting; Elasticsearch suits log/metric analytics and teams wanting the wider stack.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Solr",
+        "followUps": ["Why does Lucene make both near-real-time rather than real-time?", "What is a shard vs a replica in SolrCloud?"],
+        "tags": ["solr", "elasticsearch", "lucene", "search"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-09",
+        "question": "Documents are indexed into Solr but don't appear in search results for minutes. What do you check?",
+        "answer": "Lucene only exposes documents after a searcher reopens, so check the commit strategy: an update without commit is invisible, and a soft commit (openSearcher=true) is what makes documents visible while a hard commit flushes the transaction log to disk. If autoSoftCommit maxTime is set high (or missing) you get exactly this multi-minute lag; typical settings are autoSoftCommit around 1000ms and autoCommit around 15000ms with openSearcher=false. Also watch for commit-per-document from clients, which thrashes searcher warming and caches and makes latency worse, and check warmup queries and cache autowarmCount if the first queries after commit are slow.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Solr",
+        "followUps": ["Why is openSearcher=false used for the hard commit?", "What does committing on every document do to the filter cache?"],
+        "tags": ["solr", "commit", "near-real-time", "debugging"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-10",
+        "question": "Design real-time price updates for a trading UI showing 500 instruments, updating up to 50 times per second each.",
+        "answer": "Do not push every tick: 25k messages/s per client would saturate the browser. Conflate server-side by keeping the latest value per instrument and flushing a delta batch on a fixed tick (e.g. 10 Hz), sending only instruments the client has actually subscribed to and only fields that changed. Transport: WebSocket, because the client continuously changes its subscription set as it scrolls, and binary framing keeps payloads small. Fan-out comes from a broker topic per instrument group into the gateway layer, each gateway node holding the subscription map for its own sockets; on reconnect send a full snapshot plus a sequence number and then resume deltas, dropping any delta with a sequence gap and re-snapshotting.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "WebSockets",
+        "followUps": ["How do you handle a slow consumer whose send buffer fills up?", "Why is snapshot-plus-sequence better than replaying every delta?"],
+        "tags": ["websocket", "conflation", "fan-out", "design"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-11",
+        "question": "When is SSE a better choice than WebSocket for an LLM token stream or a notification feed?",
+        "answer": "When traffic is one-directional, SSE gives you automatic reconnect, Last-Event-ID resume and plain HTTP semantics for free — the same auth cookies, the same CDN, proxies and observability, and no separate upgrade path to secure. WebSocket would require you to hand-roll reconnect, resume and heartbeat logic and to make L7 proxies handle upgrades. SSE's real limits are that it is UTF-8 text only (binary needs base64), and that under HTTP/1.1 browsers cap ~6 connections per origin — HTTP/2 multiplexing removes that, so SSE is usually the right default for streaming responses and notifications.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "WebSockets",
+        "followUps": ["What does SSE cost the server in held connections vs polling?", "How would you send binary attachments alongside an SSE stream?"],
+        "tags": ["sse", "websocket", "streaming", "http2"]
+      },
+      {
+        "id": "5XGvep2qoti31bsyqNzrU-12",
+        "question": "How do you index data from your primary database into Solr or Elasticsearch without them drifting apart?",
+        "answer": "Treat the search index as a derived read model, never the source of truth. Push updates via CDC or a transactional outbox so an index write cannot be lost by a dual-write failure, key documents by primary key so indexing is idempotent, and include a monotonic version (updated_at or a sequence) using Solr's optimistic concurrency / Elasticsearch external versioning so an out-of-order update cannot overwrite a newer one. Run a periodic reconciliation job that compares counts and checksums per key range, and keep a documented full-reindex path (index to a new collection/alias, then swap the alias) because you will eventually change the schema or analyzers.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Solr",
+        "followUps": ["Why is alias swapping better than reindexing in place?", "How do you detect drift before users report wrong results?"],
+        "tags": ["solr", "indexing", "cdc", "reindex", "consistency"]
+      }
+    ]
+  },
+  {
+    "topicId": "fekyMpEnaGqjh1Cu4Nyc4",
+    "topicTitle": "Learn about Web Servers",
+    "questions": [
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-01",
+        "question": "What is the difference between a forward proxy and a reverse proxy?",
+        "answer": "A forward proxy sits in front of clients and acts on their behalf — corporate egress filtering, caching, or hiding the client's IP from the origin; the client is configured to use it. A reverse proxy sits in front of servers and acts on their behalf — the client thinks it is talking to the origin, and the proxy handles TLS termination, load balancing, caching, compression, rate limiting and routing to upstreams. nginx, Caddy, HAProxy and Envoy are typically deployed as reverse proxies; Squid is the classic forward proxy.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "Nginx",
+        "followUps": ["Where does a CDN fit in that picture?", "Which one does X-Forwarded-For exist for?"],
+        "tags": ["proxy", "reverse-proxy", "nginx"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-02",
+        "question": "Explain nginx's worker and event model and why it scales better than a thread-per-connection server.",
+        "answer": "nginx runs one master process (reads config, binds ports, spawns workers) and N worker processes, typically worker_processes auto to match CPU cores, each pinned to a core. Each worker is single-threaded and handles thousands of connections in a non-blocking event loop using epoll on Linux or kqueue on BSD, so memory per connection is a few KB rather than a whole thread stack. Capacity is roughly worker_processes × worker_connections, and since a proxied request uses one connection to the client and one to the upstream, effective client capacity is about half that. The trade-off: any blocking operation in a worker stalls every connection it holds, which is why disk I/O uses thread pools (aio threads) and why nginx doesn't embed application code.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Nginx",
+        "followUps": ["What does worker_rlimit_nofile need to be set to?", "Why is Apache's prefork MPM memory-hungry by comparison?"],
+        "tags": ["nginx", "epoll", "event-loop", "performance"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-03",
+        "question": "Users report intermittent 502 and 504 errors from nginx. How do you tell them apart and debug?",
+        "answer": "502 Bad Gateway means nginx reached the upstream but the response was invalid or the connection was refused/reset — the app crashed, the socket is wrong, or the worker died mid-request. 504 Gateway Timeout means nginx waited longer than proxy_read_timeout (default 60s) for the response, or proxy_connect_timeout (default 60s, capped by the OS) to establish it. Read error.log, which names the upstream and the exact reason (connect() failed, upstream prematurely closed connection), and add $upstream_addr, $upstream_status and $upstream_response_time to log_format so you can see which backend and how long. Common fixes: raise upstream keepalive and set proxy_http_version 1.1 with Connection \"\" to avoid churning connections, align nginx timeouts with the app's own timeouts, and increase the app's listen backlog or worker count if it is simply saturated.",
+        "difficulty": "middle",
+        "type": "debugging",
+        "subtopic": "Nginx",
+        "followUps": ["Why can a keepalive race cause sporadic 502s?", "Should you raise proxy_read_timeout or fix the slow endpoint?"],
+        "tags": ["nginx", "502", "504", "timeouts", "debugging"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-04",
+        "question": "How do upstream health checks work in nginx, and what is the difference between passive and active checks?",
+        "answer": "Open-source nginx does passive checks only: within an upstream block, max_fails (default 1) and fail_timeout (default 10s) mark a server unavailable after that many failed real requests, and it is retried after fail_timeout. proxy_next_upstream controls which conditions (error, timeout, http_502, http_503) cause a retry on another server, bounded by proxy_next_upstream_tries and _timeout. Active out-of-band probing (health_check with an interval and a match block) is an nginx Plus feature; on OSS you use a separate LB, HAProxy, or Envoy for that. Never put non-idempotent conditions like http_500 on POST retries without thinking, because proxy_next_upstream will replay the request.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Nginx",
+        "followUps": ["Why is passive checking slow to detect a dead node?", "How do you drain a node for deploy without dropping requests?"],
+        "tags": ["nginx", "health-check", "upstream", "load-balancing"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-05",
+        "question": "What does nginx proxy buffering do, and when should you turn it off?",
+        "answer": "With proxy_buffering on (the default), nginx reads the whole upstream response into proxy_buffers (spilling to disk past proxy_max_temp_file_size) and only then streams it to the client. That frees the application worker immediately, which matters hugely for slow clients — an app process isn't held hostage by a mobile user on 2G. Turn it off only for streaming responses: SSE, chunked progress output, large downloads generated on the fly, and WebSocket-adjacent endpoints, where buffering adds latency or breaks the stream entirely. The mirror setting is client_body_buffering for uploads, and client_max_body_size, whose 1m default is the usual cause of 413 on file uploads.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Nginx",
+        "followUps": ["What log line tells you buffers are spilling to disk?", "Why does slow-client protection matter for a thread-per-request app?"],
+        "tags": ["nginx", "buffering", "streaming", "413"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-06",
+        "question": "What is TLS termination and what are the trade-offs of terminating at the edge?",
+        "answer": "TLS termination means the proxy decrypts HTTPS and forwards plaintext HTTP to upstreams; it centralizes certificates, enables HTTP-level routing, caching and compression, and offloads handshake CPU from app servers. The cost is that traffic behind the proxy is unencrypted, which fails many compliance regimes, so you either re-encrypt (TLS passthrough or proxy_pass to https:// upstreams, i.e. TLS bridging) or run a service mesh with mTLS. When terminating, the app loses the client's identity, so the proxy must set X-Forwarded-For, X-Forwarded-Proto and Host, and the app must trust those headers only from the proxy's IP or an attacker can spoof them. Also enable HTTP/2 and OCSP stapling at the edge and keep session resumption on to cut handshake cost.",
+        "difficulty": "senior",
+        "type": "conceptual",
+        "subtopic": "Nginx",
+        "followUps": ["How does an app get tricked by a spoofed X-Forwarded-Proto?", "When is TLS passthrough required?"],
+        "tags": ["tls", "termination", "mtls", "x-forwarded-for"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-07",
+        "question": "How does Caddy's automatic HTTPS work, and when would you choose Caddy over nginx?",
+        "answer": "Caddy provisions and renews certificates automatically from Let's Encrypt/ZeroSSL using ACME — HTTP-01 or TLS-ALPN-01 by default, DNS-01 via a provider module for wildcards — simply because a site address in the Caddyfile is a public hostname; it redirects HTTP to HTTPS, staples OCSP and renews at ~2/3 of the certificate lifetime with no cron or certbot. It also stores certificates in a shared storage backend so a cluster does not hit rate limits. Choose Caddy when you want secure-by-default TLS with minimal config, an HTTP/3 default and a clean config language; choose nginx when you need its maturity, raw throughput at very high connection counts, or the huge ecosystem of existing modules and configuration knowledge.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Caddy",
+        "followUps": ["What happens on a rebuild if certificate storage isn't persisted?", "Why would you use the ACME staging endpoint first?"],
+        "tags": ["caddy", "acme", "lets-encrypt", "https"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-08",
+        "question": "Explain Apache's prefork, worker and event MPMs and which to use.",
+        "answer": "prefork spawns one single-threaded process per connection — highest memory per connection but process isolation, and the only safe choice for non-thread-safe modules like classic mod_php. worker is hybrid: several processes each with many threads, so far less memory per connection, but a thread is still occupied for the whole keep-alive period. event extends worker by handing idle keep-alive connections to a dedicated listener thread, so threads are only held while a request is actually being processed — the correct default for modern Apache. The usual modern deployment is event MPM plus PHP-FPM over proxy_fcgi, which decouples request handling from the application runtime entirely.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Apache",
+        "followUps": ["Why does mod_php force you back to prefork?", "What does MaxRequestWorkers actually cap?"],
+        "tags": ["apache", "mpm", "prefork", "event"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-09",
+        "question": "An Apache server under load shows most memory consumed and requests queuing, but CPU is only 30%. What is likely wrong?",
+        "answer": "Classic prefork MPM exhaustion: each connection is a full process at 20-80MB with modules loaded, so MaxRequestWorkers is reached long before CPU saturates and new connections sit in the listen backlog. Check `apachectl -V` for the MPM in use, server-status for busy vs idle workers, and per-process RSS. Fixes: move to the event MPM with PHP-FPM, strip unused loaded modules to shrink the process image, lower KeepAliveTimeout (5s, not the old 15s) so workers aren't parked on idle connections, and put static assets behind nginx or a CDN so Apache workers aren't spent serving files. Raising MaxRequestWorkers without more RAM just converts queuing into swapping, which is worse.",
+        "difficulty": "senior",
+        "type": "debugging",
+        "subtopic": "Apache",
+        "followUps": ["How do you compute a safe MaxRequestWorkers from RSS and RAM?", "Why is swapping worse than queuing here?"],
+        "tags": ["apache", "prefork", "memory", "capacity", "debugging"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-10",
+        "question": "How do you configure gzip and Brotli compression correctly at the edge?",
+        "answer": "Compress only text-like types (text/html, text/css, application/javascript, application/json, image/svg+xml) and never already-compressed formats — JPEG, PNG, WebP, MP4, zip — because re-compressing burns CPU for nothing. Set gzip_min_length around 1024 since tiny bodies can grow, keep gzip_comp_level moderate (4-6) because level 9 costs far more CPU for ~2% gain, and add gzip_vary on so caches key on Accept-Encoding. Brotli (ngx_brotli, built into Caddy) gives roughly 15-20% smaller text than gzip at similar speed and is preferred by browsers over HTTPS; the best pattern is precompressed static files (brotli_static/gzip_static at level 11) plus dynamic gzip for API responses. Disable compression on SSE and other streaming endpoints, and be aware of BREACH when compressing responses that mix secrets with reflected user input.",
+        "difficulty": "middle",
+        "type": "conceptual",
+        "subtopic": "Nginx",
+        "followUps": ["Why does a missing Vary header poison a shared cache?", "When is precompression clearly better than on-the-fly?"],
+        "tags": ["gzip", "brotli", "compression", "nginx", "caddy"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-11",
+        "question": "A login endpoint is being credential-stuffed. How do you rate limit at the edge in nginx?",
+        "answer": "Define a shared zone keyed by the real client IP — limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m; — and apply it in the login location with limit_req zone=login burst=5 nodelay, which uses a leaky bucket: burst allows a short spike and nodelay serves it immediately instead of queueing, returning 429 via limit_req_status 429 beyond that. Pair it with limit_conn to cap concurrent connections per IP. Key correctly: behind a CDN or LB, $binary_remote_addr is the proxy, so you need real_ip_header X-Forwarded-For with set_real_ip_from restricted to your trusted proxy CIDRs, otherwise the header is attacker-controlled. Edge rate limiting is necessary but not sufficient — distributed botnets rotate IPs, so also add per-account throttling, progressive delays and MFA in the application.",
+        "difficulty": "senior",
+        "type": "scenario",
+        "subtopic": "Nginx",
+        "followUps": ["What does burst without nodelay do to latency?", "How do you avoid blocking a whole office behind one NAT IP?"],
+        "tags": ["nginx", "rate-limiting", "429", "security", "real-ip"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-12",
+        "question": "What is Microsoft IIS and where does it still make sense?",
+        "answer": "IIS is the Windows web server, integrated with the OS: sites run in application pools, each pool a w3wp.exe worker process with its own identity, recycling rules and isolation, configured via applicationHost.config and per-site web.config with a modular pipeline. It makes sense for classic ASP.NET Framework applications, Windows/Active Directory integrated authentication (Kerberos/NTLM), and shops standardized on Windows Server tooling. For modern ASP.NET Core the runtime is Kestrel, with IIS acting as a reverse proxy via the ASP.NET Core Module — and many teams now put Kestrel behind nginx or a cloud load balancer on Linux instead, since .NET Core is cross-platform.",
+        "difficulty": "junior",
+        "type": "conceptual",
+        "subtopic": "MS IIS",
+        "followUps": ["What does application pool recycling protect you from?", "Why is Kestrel not exposed directly to the internet in older guidance?"],
+        "tags": ["iis", "windows", "aspnet", "kestrel"]
+      },
+      {
+        "id": "fekyMpEnaGqjh1Cu4Nyc4-13",
+        "question": "Your reverse proxy must serve a React SPA, a REST API, and a WebSocket endpoint on one domain. Sketch the nginx configuration decisions.",
+        "answer": "Three locations with different behaviour. Static: `location /` with try_files $uri /index.html so client-side routes resolve, long immutable Cache-Control for hashed assets and no-cache for index.html. API: `location /api/` with proxy_pass to the upstream, proxy_set_header Host/X-Real-IP/X-Forwarded-For/X-Forwarded-Proto, buffering on, and timeouts tuned to the slowest legitimate endpoint. WebSocket: `location /ws` with proxy_http_version 1.1, proxy_set_header Upgrade $http_upgrade and Connection \"upgrade\", proxy_read_timeout well above the heartbeat interval (e.g. 3600s), and buffering off. Add an upstream block with keepalive to reuse backend connections, gzip on text types only, and a shared TLS config at the server level with HTTP redirected to HTTPS.",
+        "difficulty": "senior",
+        "type": "design",
+        "subtopic": "Nginx",
+        "followUps": ["Why does the Upgrade header need the map trick when keepalive is on?", "How would the same setup look in a Caddyfile?"],
+        "tags": ["nginx", "spa", "websocket", "reverse-proxy", "config"]
+      }
+    ]
+  }
+]

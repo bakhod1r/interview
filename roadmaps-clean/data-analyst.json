@@ -1,0 +1,528 @@
+{
+  "slug": "data-analyst",
+  "title": "Data Analyst Roadmap",
+  "description": "Step by step guide to becoming an Data Analyst in @currentYear@",
+  "url": "https://roadmap.sh/data-analyst",
+  "groups": [
+    "Role Based Roadmaps"
+  ],
+  "type": "role",
+  "updatedAt": "2026-09-04T06:54:17.861Z",
+  "relatedRoadmaps": [
+    "sql",
+    "ai-data-scientist",
+    "postgresql-dba",
+    "python"
+  ],
+  "topicCount": 14,
+  "subtopicCount": 85,
+  "topics": [
+    {
+      "id": "3xp2fogAVmwXQhdzhZDWR",
+      "title": "Introduction",
+      "subtopics": [
+        {
+          "id": "yCnn-NfSxIybUQ2iTuUGq",
+          "title": "What is Data Analytics",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "R12sArWVpbIs_PHxBqVaR",
+          "title": "Key Concepts of Data",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "mDUSpexdq3ITV6qokwSJl",
+          "title": "Collection",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "nC7tViln4UyQFYP_-fyjB",
+          "title": "Cleanup",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XFnw4_dQYSzm96-srWa7X",
+          "title": "Exploration",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "jowh4CFLQiFzKaaElyCuQ",
+          "title": "Visualisation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "2pUq-7hu5EjGpowz98YoV",
+          "title": "Statistical Analysis",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "Lsapbmg-eMIYJAHpV97nO",
+      "title": "Types of Data Analytics",
+      "subtopics": [
+        {
+          "id": "hWDh0ooidbqZb000ENVok",
+          "title": "Descriptive Analytics",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "j7DA2J3speSaBsZAV4M0v",
+          "title": "Diagnostic Analytics",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "3WZORRCwme3HsaKew23Z5",
+          "title": "Predictive Analytics",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DFMR-0MbmVCCrJu0I9JWG",
+          "title": "Prescriptive Analytics",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "sgXIjVTbwdwdYoaxN3XBM",
+      "title": "Analysis / Reporting with Excel",
+      "subtopics": [
+        {
+          "id": "wME4MSldOWlMB54ekpReS",
+          "title": "IF",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "yBlJrNo9eO470dLp6OaQZ",
+          "title": "DATEDIF",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "9sIP-jpNjtA1JPCBjTf-H",
+          "title": "VLOOKUP / HLOOKUP",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "dke_pySrqYZZ7K3rprnIT",
+          "title": "REPLACE / SUBSTITUTE",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "YReKRRgE_2dWfGGdBQqbf",
+          "title": "UPPER / LOWER / PROPER",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SIiIfcy-jeiRoDlxw385V",
+          "title": "CONCAT",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "D5Q6o6ydr1j51kB0ASFPE",
+          "title": "TRIM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FDYunL9KJkR_tHEcUV2iC",
+          "title": "AVERAGE",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "uAdxP1ZkgzcU8JcWjvw6d",
+          "title": "COUNT",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "_FO80Cm2iAD_bThmnsEgp",
+          "title": "SUM",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "F3-cr5onkWqKKPRdxu8lV",
+          "title": "MIN / MAX",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "i2uEcaO4bJhcZ5ayRs2CQ",
+      "title": "Learn a Programming Lang.",
+      "subtopics": [
+        {
+          "id": "U55hwR0HRCIz2cveVR8FZ",
+          "title": "Machine Learning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Vk3JErqxpnPY44iyfkLMl",
+          "title": "Charting",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "M1QtGTLyygIjePoCfvjve",
+      "title": "Data Manipulation Libraries",
+      "subtopics": []
+    },
+    {
+      "id": "l1SnPc4EMqGdaIAhIQfrT",
+      "title": "Data Visualisation Libraries",
+      "subtopics": []
+    },
+    {
+      "id": "_sjXCLHHTbZromJYn6fnu",
+      "title": "Data Collection",
+      "subtopics": [
+        {
+          "id": "tYPeLCxbqvMFlTkCGjdHg",
+          "title": "Databases",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "iWOK0mRY-hAGxMnHYJ0tt",
+          "title": "CSV Files",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "4DFcXSSHxg5wv0uXLIRij",
+          "title": "APIs",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "qQ64ZhSlbbWu9pP8KTE67",
+          "title": "Web Scraping",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2DDJUFr0AJTVR2Whj8zub",
+          "title": "Pivot Tables",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "E6cpb6kvluJM8OGuDcFBT",
+      "title": "Data Cleanup",
+      "subtopics": [
+        {
+          "id": "Xltm7B-8TZ1-igLjVJXoR",
+          "title": "Removing Duplicates",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "X9WmfHOks82BIAzs6abqO",
+          "title": "Handling Missing Data",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "-rQ8h_6NFxEOhxXgo7LHo",
+          "title": "Finding Outliers",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "t_BRtEharsrOZxoyX0OzV",
+          "title": "Data Transformation",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "il6KQXVPGBza5libN38ib",
+      "title": "Descriptive Analysis",
+      "subtopics": [
+        {
+          "id": "mCUW07rx74_dUNi7OGVlj",
+          "title": "Visualizing Distributions",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "2ldO-_ZnIg364Eo8Jyfgr",
+          "title": "Dispersion",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Fyqg3MRcwY7g-Q3gjiqwK",
+          "title": "Distribution Shape",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "923KGEUG9ofBm7dYkkrxz",
+          "title": "Mean",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "qdXoikVh2xkJkOQNKcyvb",
+          "title": "Median",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fY8zVG2tVbmtx5OhY7hj-",
+          "title": "Mode",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tSxtyJhL5wjU0XJcjsJmm",
+          "title": "Range",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ict4JkoVM-AzPbp9bDztg",
+          "title": "Variance",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "MXIP8ekH4YtczODKM_G_l",
+          "title": "Standard Deviation",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "VfcCRRqwLxkYpIX0ZKNNX",
+          "title": "Skewness",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "PqGO8AU1zE2ZdtqrIrOkZ",
+          "title": "Kurtosis",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "BJTVa4ur_bJB7mMtD2-hQ",
+          "title": "Central Tendency",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "2g19zjEASJw2ve57hxpr0",
+      "title": "Data Visualisation",
+      "subtopics": [
+        {
+          "id": "TucngXKNptbeo3PtdJHX8",
+          "title": "Pandas",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v8TfY-b4W5ygOv7r-syHq",
+          "title": "Dplyr",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Sz2Y8HLbSmDjSKAJztDql",
+          "title": "Tableau",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "tvDdXwaRPsUSTqJGaLS3P",
+          "title": "Matplotlib",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "-cJb8gEBvdVFf7FlgG3Ud",
+          "title": "Seaborn",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "n3M49lgNPn28hm7kzki-a",
+          "title": "ggplot2",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "TeewVruErSsD4VLXcaDxp",
+      "title": "Statistical Analysis",
+      "subtopics": [
+        {
+          "id": "Xygwu0m5TeYT6S_8FKKXh",
+          "title": "Hypothesis Testing",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "murioZ0NdrTix_lqSGz-8",
+          "title": "Correlation Analysis",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "lTycWscyFPi-BtkNg9cdm",
+          "title": "Regression",
+          "linkedBy": "edge"
+        }
+      ]
+    },
+    {
+      "id": "f4GuzeokP9w_gwtOquP0g",
+      "title": "Machine Learning",
+      "subtopics": [
+        {
+          "id": "XdBwqLoYYiLJNlWPBEDUj",
+          "title": "Reinforcement Learning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FntL9E2yVAYwIrlANDNKE",
+          "title": "Unsupervised Learning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FIYCkGXofKMsXmsqHSMh9",
+          "title": "Supervised Learning",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vHDm_9Lh4EqvXNYSOBaqZ",
+          "title": "Decision Trees",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "7ikA373qH88HBx5irCgIH",
+          "title": "Model Evaluation Techniques",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "_aUQZWUhFRvNu0MZ8CPit",
+      "title": "Big Data Technologies",
+      "subtopics": [
+        {
+          "id": "m1IfG2sEedUxMXrv_B8GW",
+          "title": "Big Data Concepts",
+          "linkedBy": "edge"
+        },
+        {
+          "id": "EVk1H-QLtTlpG7lVEenDt",
+          "title": "Bar Charts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "v9T0DX56jFNhUz9nzubzS",
+          "title": "Line Chart",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "A5YQv7D4qRcskdZ64XldH",
+          "title": "Scatter Plot",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "muFy-C2agCX9vR_NU7UZF",
+          "title": "Funnel Charts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FEyBFZLaGJqTC-IUEcOVS",
+          "title": "Histograms",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "329BrtmXjXNLfi1SFfdeo",
+          "title": "Stacked Charts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "G8resQXEVEHCaQfDlt3nj",
+          "title": "Heatmap",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "K9xwm_Vpdup9ujYqlD9F3",
+          "title": "Pie Charts",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Fwwve0j-KDfc605IIgmil",
+          "title": "Parallel Processing",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "wECWIRMlWNoTxz5eKwaSf",
+          "title": "Hadoop",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "vaiigToDh4522rtWamuSM",
+          "title": "Spark",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "fqCAH4Enc4AAJHoSkk2Pe",
+          "title": "MPI",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "eAM9orCNwzqh34uvGBVm8",
+          "title": "MapReduce",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "iTmtpXe7dR4XKslgpsk2q",
+          "title": "Data Storage Solutions",
+          "linkedBy": "proximity"
+        }
+      ]
+    },
+    {
+      "id": "SiYUdtYMDImRPmV2_XPkH",
+      "title": "Deep Learning (Optional)",
+      "subtopics": [
+        {
+          "id": "zbUw5PyVsdccbgDTRHg7d",
+          "title": "Naive Byes",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "h2xF5bZeUByDgsAi4dga2",
+          "title": "K-Means Clustering",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "SStzU_iXSvI_9QWbvGNou",
+          "title": "KNN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "ofOQKAIu4rezWmgZeE-KT",
+          "title": "Logistic Regression",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "gGHsKcS92StK5FolzmVvm",
+          "title": "Neural Networks",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "XlCv2OirEfuBFa4ranyyE",
+          "title": "CNNs",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "Gocm98_tRg5BGxKcP-7zg",
+          "title": "RNN",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "FJ4Sx477FWxyDsQr0R8rl",
+          "title": "Tensorflow",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "LJSqfz6aYJbCe_bK8EWI1",
+          "title": "Pytorch",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "bHPJ6yOHtUq5EjJBSrJUE",
+          "title": "Image Recognition",
+          "linkedBy": "proximity"
+        },
+        {
+          "id": "DFv-eiYDicF4cA4jgVk9_",
+          "title": "Natural Language Processing",
+          "linkedBy": "proximity"
+        }
+      ]
+    }
+  ]
+}
