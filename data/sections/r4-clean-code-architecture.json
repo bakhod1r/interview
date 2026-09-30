@@ -266,42 +266,6 @@
       ],
       "answer": 1,
       "explanation": "Katta 'big bang' qayta yozish deyarli har doim muddatdan chiqadi va bir vaqtda ikki tizimni saqlashga olib keladi. Shadow run (ikkalasini ishlatib natijalarni solishtirish, faqat eskisining javobini qaytarish) — pul yoki hisob-kitobga tegishli modullarda eng xavfsiz usul. Har qadamda deploy qilinadigan holat saqlanadi."
-    },
-    {
-      "id": 30365,
-      "code": "SN366",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Clean code",
-      "domain": "arch",
-      "section": "r4",
-      "question": "Funksiya 200 qator. Uni bo'lishning to'g'ri mezoni nima?",
-      "options": [
-        "Har 20 qatorda yangi funksiya",
-        "Mavhumlik darajasi bo'yicha: bir funksiya bir darajadagi qarorlarni bajarsin, ajratilgan qism mustaqil nom oladigan ma'noga ega bo'lsin; sun'iy bo'lish (faqat qator soni uchun) o'qishni yomonlashtiradi",
-        "Uzunlik muhim emas",
-        "Faqat testlash uchun bo'lish"
-      ],
-      "answer": 1,
-      "explanation": "Yaxshi ajratish belgisi: yangi funksiyaga aniq nom topiladi va u 3-4 argumentdan ko'p talab qilmaydi. Yomon ajratish belgisi: `processPart2(a, b, c, d, e, f)` — holat argumentlar orqali sudralib yuradi. Amaliy yondashuv: avval nomlash (nima qilinadi), keyin chegara — shunda kod o'qilishi hikoya kabi bo'ladi."
-    },
-    {
-      "id": 30366,
-      "code": "SN367",
-      "level": "S",
-      "type": "mcq",
-      "topic": "ADR",
-      "domain": "arch",
-      "section": "r4",
-      "question": "ADR (Architecture Decision Record) nimani o'z ichiga olishi kerak?",
-      "options": [
-        "Faqat tanlangan texnologiya nomi",
-        "Kontekst (qanday muammo va cheklovlar), ko'rib chiqilgan variantlar va ularning almashinuvlari, qabul qilingan qaror va sabab, natijalar/oqibatlar, holat (taklif/qabul/bekor) va sana",
-        "UML diagramma",
-        "Kod namunasi"
-      ],
-      "answer": 1,
-      "explanation": "ADR'ning qiymati — 'nega' ni saqlash: 6 oydan keyin kelgan odam qarorni takrorlamasdan qayta ko'rib chiqa oladi. Eng ko'p tashlab ketiladigan qism — rad etilgan variantlar va ularning sababi. ADR qisqa (1 sahifa), repo ichida versiyalangan va o'zgarganda yangi ADR bilan bekor qilinadi (tahrir qilinmaydi)."
     }
   ]
 }

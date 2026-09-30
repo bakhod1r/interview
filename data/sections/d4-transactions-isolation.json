@@ -762,60 +762,6 @@
       "explanation": "Deadlock ko'pincha teskari tartibdan kelib chiqadi: A→B va B→A. Tartibni normallashtirish (`ORDER BY id` bilan `SELECT ... FOR UPDATE`) muammoni ildizdan yechadi. DB deadlock'ni aniqlab bittasini bekor qiladi, shuning uchun ilova `40P01`/`40001` da idempotent retry qilishi kerak — lekin retry sababni yashirmasligi uchun metrikada sanalishi lozim."
     },
     {
-      "id": 30360,
-      "code": "SN361",
-      "level": "S",
-      "type": "mcq",
-      "topic": "MVCC",
-      "domain": "db",
-      "section": "d4",
-      "question": "PostgreSQL MVCC'da uzoq ochiq tranzaksiya nega xavfli?",
-      "options": [
-        "Faqat qulf ushlaydi",
-        "Eski qator versiyalari (dead tuple) tozalanmaydi: `VACUUM` `xmin` horizontidan o'tolmaydi — jadval va indeks shishadi (bloat), query sekinlashadi, og'ir holatda transaction ID wraparound xavfi paydo bo'ladi",
-        "Xotira oshadi faqat",
-        "WAL to'xtaydi"
-      ],
-      "answer": 1,
-      "explanation": "Shu sabab `idle in transaction` sessiyalar kuzatiladi (`pg_stat_activity`) va `idle_in_transaction_session_timeout` qo'yiladi. Xuddi shu ta'sirni uzoq ishlayotgan replica query'lari (`hot_standby_feedback`) va to'xtagan replication slot'lar ham beradi. Amaliy qoida: tranzaksiya ichida tashqi HTTP chaqiruv yoki foydalanuvchi kutishi bo'lmasligi kerak."
-    },
-    {
-      "id": 30361,
-      "code": "SN362",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Isolation",
-      "domain": "db",
-      "section": "d4",
-      "question": "`REPEATABLE READ` (PostgreSQL) qanday anomaliyani yechmaydi?",
-      "options": [
-        "Hech qanday, hammasini yechadi",
-        "Write skew: ikki tranzaksiya bir-birining o'qigan ma'lumotiga tayanib turli qatorlarni o'zgartiradi (masalan 'kamida bitta shifokor navbatchi bo'lishi kerak' qoidasi ikki tomondan buziladi); buni `SERIALIZABLE` yoki aniq qulf (`SELECT ... FOR UPDATE`) yechadi",
-        "Dirty read",
-        "Lost update"
-      ],
-      "answer": 1,
-      "explanation": "PostgreSQL `REPEATABLE READ` snapshot izolyatsiyasi: dirty/non-repeatable read va phantom yo'q, lekin write skew qoladi. Yechimlar: `SERIALIZABLE` (SSI — konflikt bo'lsa `40001` bilan rollback, demak retry mantiqi kerak), yoki invariantni bitta qatorga jamlab qulflash, yoki DB constraint bilan ifodalash."
-    },
-    {
-      "id": 30362,
-      "code": "SN363",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Locking",
-      "domain": "db",
-      "section": "d4",
-      "question": "Deadlock'ni kamaytirish uchun eng samarali amaliyot?",
-      "options": [
-        "Retry qo'shish yetarli",
-        "Qulflarni har joyda bir xil tartibda olish (masalan ID bo'yicha o'sish), tranzaksiyani qisqa ushlash, kerakli minimal qatorni qulflash, va `lock_timeout` bilan uzoq kutishni kesish; ustiga `40P01` uchun retry",
-        "Izolyatsiyani pasaytirish",
-        "Indeksni o'chirish"
-      ],
-      "answer": 1,
-      "explanation": "Deadlock ko'pincha teskari tartibdan kelib chiqadi: A→B va B→A. Tartibni normallashtirish (`ORDER BY id` bilan `SELECT ... FOR UPDATE`) muammoni ildizdan yechadi. DB deadlock'ni aniqlab bittasini bekor qiladi, shuning uchun ilova `40P01`/`40001` da idempotent retry qilishi kerak — lekin retry sababni yashirmasligi uchun metrikada sanalishi lozim."
-    },
-    {
       "id": 30398,
       "code": "SN399",
       "level": "S",

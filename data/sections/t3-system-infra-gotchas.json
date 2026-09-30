@@ -2,7 +2,7 @@
   "id": "t3",
   "name": "System & infra gotchas",
   "domain": "sys",
-  "domainLabel": "System design",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "System gotcha"
   ],
@@ -174,60 +174,6 @@
     {
       "id": 30151,
       "code": "SN152",
-      "level": "St",
-      "type": "mcq",
-      "topic": "System gotcha",
-      "domain": "sys",
-      "section": "t3",
-      "question": "Servis xotirasi asta o'sadi, pprof heap'da hech narsa ko'rinmaydi. Qaysi variantni tekshirasiz?",
-      "options": [
-        "Faqat GOGC",
-        "Go heap tashqarisidagi o'sish: goroutine leak (stack), `mmap`/cgo ajratmalari, fayl deskriptorlari, yoki fragmentatsiya — `runtime.NumGoroutine()`, `/debug/pprof/goroutine`, RSS va `runtime.MemStats` (HeapSys vs HeapInuse) solishtiriladi",
-        "Faqat CPU profili",
-        "Disk"
-      ],
-      "answer": 1,
-      "explanation": "Heap profil faqat Go ajratmalarini ko'rsatadi. Tekshirish zanjiri: goroutine soni (eng ko'p uchraydigan sabab — bloklangan kanal yoki yopilmagan `resp.Body`), `HeapReleased`/RSS farqi (OS xotirani qaytarmagan), cgo yoki `mmap` ishlatadigan kutubxona, va bir marta katta ajratilgan buferlar (pool ichida ushlanib qolgan)."
-    },
-    {
-      "id": 30299,
-      "code": "SN300",
-      "level": "S",
-      "type": "mcq",
-      "topic": "System gotcha",
-      "domain": "sys",
-      "section": "t3",
-      "question": "Servis `context.Background()` bilan DB query qiladi (HTTP handler ichida). Nima yo'qoladi?",
-      "options": [
-        "Hech narsa",
-        "Cancellation: client ketganda yoki deadline o'tganda query to'xtamaydi — DB va goroutine bekorga ishlaydi, yuk ostida bu resurs tugashiga olib keladi",
-        "Tracing faqat",
-        "Metrikalar"
-      ],
-      "answer": 1,
-      "explanation": "`r.Context()` uzatilishi kerak: client uzilsa `ctx` bekor bo'ladi, `database/sql` query'ni cancel qiladi (PostgreSQL'da cancel request yuboriladi). `context.Background()` — faqat haqiqatan mustaqil fon ishi uchun, va u holda ham o'z deadline'i va shutdown'da to'xtash mexanizmi bo'lishi kerak."
-    },
-    {
-      "id": 30300,
-      "code": "SN301",
-      "level": "S",
-      "type": "mcq",
-      "topic": "System gotcha",
-      "domain": "sys",
-      "section": "t3",
-      "question": "Graceful shutdown yozilgan, lekin deploy paytida so'rovlar uziladi. Eng ko'p uchraydigan sabab?",
-      "options": [
-        "`http.Server.Shutdown` ishlamaydi",
-        "SIGTERM kelishi bilan darhol shutdown boshlanadi, lekin LB/endpoint ro'yxati hali yangilanmagan — `preStop` kutish (yoki readiness'ni avval false qilish) qo'shilmagan",
-        "Timeout kichik",
-        "Port band"
-      ],
-      "answer": 1,
-      "explanation": "Tartib muhim: (1) readiness false / preStop sleep — yangi trafik kelishi to'xtaydi, (2) `srv.Shutdown(ctx)` mavjud so'rovlarni tugatadi, (3) background workerlar `ctx` bilan to'xtaydi, (4) DB pool yopiladi. `terminationGracePeriodSeconds` shu jamiga yetishi kerak, aks holda SIGKILL keladi."
-    },
-    {
-      "id": 30301,
-      "code": "SN302",
       "level": "St",
       "type": "mcq",
       "topic": "System gotcha",

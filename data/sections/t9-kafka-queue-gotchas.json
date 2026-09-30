@@ -2,7 +2,7 @@
   "id": "t9",
   "name": "Kafka & queue gotchas",
   "domain": "msg",
-  "domainLabel": "Kafka & messaging",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Messaging gotcha"
   ],
@@ -130,60 +130,6 @@
     {
       "id": 30168,
       "code": "SN169",
-      "level": "St",
-      "type": "mcq",
-      "topic": "Messaging gotcha",
-      "domain": "msg",
-      "section": "t9",
-      "question": "Retry uchun xabar qayta navbatga qo'yiladi (`requeue=true`). Qanday tuzoq bor?",
-      "options": [
-        "Tuzoq yo'q",
-        "Xabar darhol boshiga qaytib cheksiz aylanadi (hot loop, CPU va broker yuki) — kechiktirilgan retry kerak: DLX + TTL bilan 'retry queue' yoki alohida delay navbatlari, va urinish sonini headerda hisoblash",
-        "Xabar o'chib ketadi",
-        "Tartib saqlanadi"
-      ],
-      "answer": 1,
-      "explanation": "RabbitMQ'da tabiiy 'delayed retry' yo'q, shuning uchun naqsh: asosiy navbat → nack → DLX → TTL'li retry navbati → qaytib asosiy navbatga. Urinish soni `x-death` yoki o'z headerida saqlanadi va N dan keyin DLQ'ga o'tadi. Kafka'da esa retry topic'lari (`topic.retry.5m`) shu maqsadda ishlatiladi."
-    },
-    {
-      "id": 30316,
-      "code": "SN317",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Messaging gotcha",
-      "domain": "msg",
-      "section": "t9",
-      "question": "Consumer xabarni oldi, DB'ga yozdi, keyin ack yuborishdan oldin yiqildi. Nima bo'ladi?",
-      "options": [
-        "Xabar yo'qoladi",
-        "Xabar qayta yetkaziladi va DB yozuvi ikkinchi marta bajariladi — shuning uchun handler idempotent bo'lishi shart (unique kalit yoki inbox jadval)",
-        "Broker o'zi dedupe qiladi",
-        "Tranzaksiya rollback bo'ladi"
-      ],
-      "answer": 1,
-      "explanation": "Ack va DB commit atomik emas — bu dual-write muammosining ikkinchi yuzi. Yechim: xabar ID'sini biznes tranzaksiyasi ichida `processed_messages` jadvaliga unique yozish (inbox pattern); ikkinchi urinishda konflikt bo'ladi va ish o'tkazib yuboriladi. Teskari tartib (avval ack, keyin yozish) esa ma'lumot yo'qotadi."
-    },
-    {
-      "id": 30317,
-      "code": "SN318",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Messaging gotcha",
-      "domain": "msg",
-      "section": "t9",
-      "question": "RabbitMQ'da `prefetch` (QoS) sozlanmagan. Natija?",
-      "options": [
-        "Hech narsa",
-        "Broker consumer'ga cheksiz xabar yuboradi: bitta consumer navbatni o'ziga tortadi, xotira to'ladi va yuk taqsimlanmaydi (sekin consumer boshqalarni kutishga majbur qilmaydi lekin o'zida ushlab qoladi)",
-        "Xabarlar yo'qoladi",
-        "Tartib buziladi"
-      ],
-      "answer": 1,
-      "explanation": "`basic.qos(prefetch=N)` — oqim nazorati: N ta ack qilinmagan xabardan ko'p berilmaydi. Kichik N (1-10) adolatli taqsimot va tez failover beradi, katta N throughputni oshiradi. Shu bilan birga `ack` qo'lda bo'lishi (`autoAck=false`) va xato bo'lganda `nack` + DLX (dead letter exchange) sozlanishi kerak."
-    },
-    {
-      "id": 30318,
-      "code": "SN319",
       "level": "St",
       "type": "mcq",
       "topic": "Messaging gotcha",

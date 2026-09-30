@@ -555,42 +555,6 @@
       "explanation": "Tekshirish tartibi: `EXPLAIN (ANALYZE, BUFFERS)` bilan kutilgan va haqiqiy qator sonini solishtirish (katta farq — statistika muammosi: `ANALYZE`, `default_statistics_target`, korrelyatsiyalangan ustunlar uchun `CREATE STATISTICS`). SSD'da `random_page_cost` 1.1 atrofida bo'lishi kerak (default 4 — HDD davridan qolgan)."
     },
     {
-      "id": 30358,
-      "code": "SN359",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Index",
-      "domain": "db",
-      "section": "d3",
-      "question": "B-tree indeks nima uchun hash indeksdan ko'proq ishlatiladi (DB'da)?",
-      "options": [
-        "Hash indeks tezroq emas",
-        "B-tree tartibni saqlaydi: diapazon (`>`, `BETWEEN`), `ORDER BY`, prefiks va `LIKE 'abc%'` ishlaydi, hamda balanslangan chuqurlik (3-4 daraja) bilan disk o'qishlari kam; hash faqat tenglik uchun",
-        "B-tree kam joy oladi",
-        "Hash indeks PostgreSQL'da yo'q"
-      ],
-      "answer": 1,
-      "explanation": "B-tree node'i disk sahifasi (8 KB) o'lchamida — bir o'qishda yuzlab kalit, shuning uchun milliard qatorda ham 3-4 sahifa o'qish yetadi. Hash indeks faqat `=` uchun va PostgreSQL'da ham bor, lekin ustunligi kam. Ma'lumot turiga qarab boshqa turlar: GIN (array/jsonb/full-text), GiST (geometriya), BRIN (katta, tabiiy tartiblangan jadval)."
-    },
-    {
-      "id": 30359,
-      "code": "SN360",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Planner",
-      "domain": "db",
-      "section": "d3",
-      "question": "Planner nega ba'zan indeksni tashlab Seq Scan tanlaydi?",
-      "options": [
-        "Bug",
-        "Tanlanuvchanlik (selectivity) past bo'lsa: jadvalning katta ulushi qaytadi va tasodifiy sahifa o'qishlar ketma-ket o'qishdan qimmat bo'ladi; shuningdek statistika eskirgan bo'lsa yoki `random_page_cost` noto'g'ri sozlangan bo'lsa qaror xato bo'lishi mumkin",
-        "Indeks buzilgan",
-        "Faqat kichik jadvalda"
-      ],
-      "answer": 1,
-      "explanation": "Tekshirish tartibi: `EXPLAIN (ANALYZE, BUFFERS)` bilan kutilgan va haqiqiy qator sonini solishtirish (katta farq — statistika muammosi: `ANALYZE`, `default_statistics_target`, korrelyatsiyalangan ustunlar uchun `CREATE STATISTICS`). SSD'da `random_page_cost` 1.1 atrofida bo'lishi kerak (default 4 — HDD davridan qolgan)."
-    },
-    {
       "id": 30396,
       "code": "SN397",
       "level": "S",

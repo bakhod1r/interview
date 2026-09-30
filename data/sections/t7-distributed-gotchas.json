@@ -2,7 +2,7 @@
   "id": "t7",
   "name": "Distributed gotchas",
   "domain": "dist",
-  "domainLabel": "Distributed systems",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Distributed gotcha"
   ],
@@ -131,60 +131,6 @@
     {
       "id": 30163,
       "code": "SN164",
-      "level": "St",
-      "type": "mcq",
-      "topic": "Distributed gotcha",
-      "domain": "dist",
-      "section": "t7",
-      "question": "Kesh va DB o'rtasida izchillik: `DB'ni yangilash → keshni yangilash` ketma-ketligi nega xavfli?",
-      "options": [
-        "Xavfli emas",
-        "Parallel oqimda eski qiymat keshga keyin yozilib qolishi mumkin (race) — natijada kesh jim ravishda eskirgan bo'lib qoladi; xavfsizroq: keshni o'chirish (invalidate), TTL bilan chegaralash, yoki versiyalangan yozuv",
-        "Kesh har doim to'g'ri",
-        "DB yozuvi yo'qoladi"
-      ],
-      "answer": 1,
-      "explanation": "Ssenariy: T1 DB'ga yangi qiymat yozdi, T2 eski qiymatni o'qib turgan edi va keshga yozdi — kesh eski. `DELETE`+TTL bu oynani ancha qisqartiradi; to'liqroq yechim — yozuvda versiya/timestamp bilan CAS (faqat yangiroq qiymat keshga tushadi) yoki keshni CDC/outbox eventidan yangilash."
-    },
-    {
-      "id": 30311,
-      "code": "SN312",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Distributed gotcha",
-      "domain": "dist",
-      "section": "t7",
-      "question": "Two-phase commit (2PC) mikroservislarda nega kamdan-kam ishlatiladi?",
-      "options": [
-        "Sekin bo'lgani uchun faqat",
-        "Koordinator yiqilsa qatnashchilar resurslarni qulflab noma'lum holatda qoladi (blocking protokol), availability barcha qatnashchilarning ko'paytmasiga teng bo'lib pasayadi, va ko'p servis/API 2PC'ni qo'llamaydi — shuning uchun saga + idempotentlik tanlanadi",
-        "Faqat eski texnologiya",
-        "Ma'lumot yo'qotadi"
-      ],
-      "answer": 1,
-      "explanation": "2PC atomiklikni beradi, lekin ishlash muddatida barcha qatnashchi tirik bo'lishini talab qiladi. Amalda tanlov: bir DB ichida — oddiy tranzaksiya; servislar orasida — saga/outbox bilan eventual izchillik va biznes darajasidagi compensation. Aytish kerak bo'lgan nuqta: 2PC noto'g'ri emas, shunchaki availability narxi yuqori."
-    },
-    {
-      "id": 30312,
-      "code": "SN313",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Distributed gotcha",
-      "domain": "dist",
-      "section": "t7",
-      "question": "Servis A, B, C zanjirida retry'lar bor. Nega 'retry amplification' xavfli?",
-      "options": [
-        "Xavfli emas",
-        "Har qatlam 3 marta urinsa 3×3×3 = 27 chaqiruv — sekinlashgan pastki servis butunlay yiqiladi; faqat eng chetdagi qatlam (yoki budjet bilan) retry qilishi kerak",
-        "Faqat log ko'payadi",
-        "Latency o'zgarmaydi"
-      ],
-      "answer": 1,
-      "explanation": "Qoida: retry bir joyda — foydalanuvchiga eng yaqin nuqtada yoki eng ichkarida, lekin barcha qatlamlarda emas. Qo'shimcha nazorat: retry budget (trafikning ~10%), `Retry-After` hurmat qilish, va serverdan 'retryable emas' signali (429/400 farqi). Incident'da birinchi choralardan biri — retry'ni vaqtincha o'chirish."
-    },
-    {
-      "id": 30313,
-      "code": "SN314",
       "level": "St",
       "type": "mcq",
       "topic": "Distributed gotcha",

@@ -430,42 +430,6 @@
       "explanation": "Yaxshi javob tartibli va o'lchovga tayanadi: 'nima to'yingan?' savolisiz har qanday optimizatsiya taxmin. Odatda eng katta g'alaba arzon qismda bo'ladi (bitta N+1 query yoki keshning yo'qligi), sharding esa oxirgi chora — chunki u operatsion murakkablikni keskin oshiradi."
     },
     {
-      "id": 30386,
-      "code": "SN387",
-      "level": "S",
-      "type": "mcq",
-      "topic": "System design",
-      "domain": "sys",
-      "section": "y1",
-      "question": "Dizayn suhbatida birinchi 5 daqiqada nima qilinishi kerak?",
-      "options": [
-        "Darhol arxitektura chizish",
-        "Talablarni aniqlashtirish: funksional (nima kerak, nima kerak emas), nofunksional (RPS, ma'lumot hajmi, latency maqsadi, izchillik talabi, SLA), keyin kattalik tartibida hisob-kitob — shundan keyingina komponentlar",
-        "Texnologiyalarni sanash",
-        "Ma'lumotlar bazasi tanlash"
-      ],
-      "answer": 1,
-      "explanation": "Intervyuerlar eng ko'p baholaydigan signal — noaniq talabni o'zi aniqlab, doirani cheklash (scoping). Hisob-kitob (QPS, hajm, band kenglik) keyingi barcha qarorlarni oqlaydi: 100 RPS uchun bitta PostgreSQL yetarli, 100k RPS uchun butunlay boshqa arxitektura. Texnologiya nomlari eng oxirida keladi."
-    },
-    {
-      "id": 30387,
-      "code": "SN388",
-      "level": "St",
-      "type": "mcq",
-      "topic": "System design",
-      "domain": "sys",
-      "section": "y1",
-      "question": "'Bu tizimni 10x yuklamaga qanday chidamli qilasiz?' savoliga javob strukturasi?",
-      "options": [
-        "Kubernetes replicani oshirish",
-        "Bo'g'izni aniqlash tartibi: o'lchash (qaysi resurs to'yingan) → arzon g'alabalar (kesh, N+1 yo'q qilish, batching, indeks) → gorizontal skale (stateless qatlam) → ma'lumot qatlami (read replica, partition, sharding) → arxitektura o'zgarishi (asinxron qilish, CQRS) — va har qadamda narx/murakkablik almashinuvi",
-        "Hammasini qayta yozish",
-        "Faqat DB'ni kattalashtirish"
-      ],
-      "answer": 1,
-      "explanation": "Yaxshi javob tartibli va o'lchovga tayanadi: 'nima to'yingan?' savolisiz har qanday optimizatsiya taxmin. Odatda eng katta g'alaba arzon qismda bo'ladi (bitta N+1 query yoki keshning yo'qligi), sharding esa oxirgi chora — chunki u operatsion murakkablikni keskin oshiradi."
-    },
-    {
       "id": 30531,
       "code": "SN532",
       "level": "S",

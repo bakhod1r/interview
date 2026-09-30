@@ -539,60 +539,6 @@
       ],
       "answer": 1,
       "explanation": "Amaliy natijalar: `used_memory` muddati o'tgan kalitlarni darhol qaytarmaydi (xotira rejasida hisobga olinadi); replicada kalitlar mustaqil o'chirilmaydi — master `DEL` yuboradi (shuning uchun eski versiyalarda replicadan o'qishda stale qiymat muammosi bo'lgan); ko'p kalit bir vaqtda expire bo'lsa active cycle CPU spike beradi — TTL'ga jitter shuning uchun ham kerak."
-    },
-    {
-      "id": 30374,
-      "code": "SN375",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Redis",
-      "domain": "nosql",
-      "section": "n1",
-      "question": "Redis'da eviction policy `noeviction` bo'lsa xotira tugaganda nima bo'ladi?",
-      "options": [
-        "Eng eski kalitlar o'chadi",
-        "Yozuv operatsiyalari xato qaytaradi (`OOM command not allowed`) — kesh sifatida ishlatilganda bu incident'ga olib keladi; kesh uchun `allkeys-lru`/`allkeys-lfu`, ma'lumot ombori sifatida esa `noeviction` + xotira nazorati to'g'ri",
-        "Redis qayta ishga tushadi",
-        "Diskka yoziladi"
-      ],
-      "answer": 1,
-      "explanation": "Qaror 'Redis nima vazifada' degan savoldan kelib chiqadi: kesh — yo'qotish mumkin, demak LRU/LFU; navbat yoki yagona holat ombori — yo'qotish mumkin emas, demak `noeviction`, `maxmemory` zapas bilan va alert. Ikkisini bir instansiyada aralashtirish klassik xato — kesh yozuvi muhim ma'lumotni evict qiladi."
-    },
-    {
-      "id": 30375,
-      "code": "SN376",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Cache",
-      "domain": "nosql",
-      "section": "n1",
-      "question": "Kesh kaliti dizaynida nimalarga e'tibor beriladi?",
-      "options": [
-        "Faqat qisqa bo'lishi",
-        "Versiya/sxema prefiksi (`v2:user:42`) — format o'zgarganda eski qiymatlarni bir zumda 'bekor qilish' imkonini beradi; tenant/locale kabi barcha kontekst kalitda bo'lishi (aks holda ma'lumot oqadi), va kalit kardinalligini nazorat qilish",
-        "Foydalanuvchi ID'sini qo'shmaslik",
-        "Kalitni hash qilish shart"
-      ],
-      "answer": 1,
-      "explanation": "Eng xavfli bug: kontekstni kalitga qo'shmaslik — bir tenant/til uchun keshlangan javob boshqasiga beriladi (ma'lumot oqishi). Versiyalash esa deploy paytida strukturasi o'zgargan qiymatlar bilan crash bo'lishini oldini oladi; alternativa — kesh qiymatida sxema versiyasini saqlab, mos kelmasa miss deb hisoblash."
-    },
-    {
-      "id": 30376,
-      "code": "SN377",
-      "level": "St",
-      "type": "mcq",
-      "topic": "Redis",
-      "domain": "nosql",
-      "section": "n1",
-      "question": "Redis'ni navbat (queue) sifatida ishlatish qachon to'g'ri, qachon yo'q?",
-      "options": [
-        "Har doim to'g'ri, Kafka keraksiz",
-        "Qisqa muddatli, yo'qotilishi mumkin bo'lgan ishlar uchun maqbul (`LPUSH`/`BRPOPLPUSH` yoki Streams consumer group bilan). Durability, uzun retention, qayta o'ynatish va ko'p consumer guruhi kerak bo'lsa — Kafka/RabbitMQ; Redis'da failover paytida ack qilinmagan ish yo'qolishi mumkin",
-        "Redis'da navbat yo'q",
-        "Faqat Streams bilan mumkin"
-      ],
-      "answer": 1,
-      "explanation": "Redis Streams (`XADD`/`XREADGROUP`/`XACK`) haqiqiy consumer group va pending list beradi — bu `LPUSH`/`RPOP` dan ancha ishonchli (ishlov berilayotgan xabar yo'qolmaydi). Lekin asinxron replikatsiya tufayli failover'da oxirgi yozuvlar yo'qolishi mumkin: pul yoki buyurtmaga tegishli ishni Redis navbatiga yolg'iz ishonib topshirmaslik kerak."
     }
   ]
 }

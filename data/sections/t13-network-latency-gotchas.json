@@ -2,7 +2,7 @@
   "id": "t13",
   "name": "Network & latency gotchas",
   "domain": "infra",
-  "domainLabel": "Infrastructure & DevOps",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Network gotcha"
   ],

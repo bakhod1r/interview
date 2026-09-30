@@ -2,7 +2,7 @@
   "id": "t4",
   "name": "Concurrency gotchas",
   "domain": "go",
-  "domainLabel": "Go",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Concurrency gotcha"
   ],
@@ -174,62 +174,6 @@
     {
       "id": 30154,
       "code": "SN155",
-      "level": "St",
-      "type": "mcq",
-      "topic": "Concurrency gotcha",
-      "domain": "go",
-      "section": "t4",
-      "question": "`sync.Mutex`ni struct bilan nusxalash nima qiladi?",
-      "options": [
-        "Hech narsa",
-        "Qulf holati nusxalanadi — ikki nusxa bir-birini himoya qilmaydi, race paydo bo'ladi (`go vet` copylocks bilan ogohlantiradi); shuning uchun mutexli struct pointer bilan uzatiladi",
-        "Kompilyatsiya xatosi",
-        "Deadlock kafolatlangan"
-      ],
-      "answer": 1,
-      "explanation": "Klassik ko'rinish: metod `func (s Store) Add()` (value receiver) — har chaqiruvda mutex nusxasi qulflanadi va hech kimni to'xtatmaydi. `go vet` bu holatni topadi, CI'da majburiy bo'lishi kerak. Xuddi shu qoida `sync.WaitGroup`, `sync.Once`, `atomic.Value` uchun ham amal qiladi."
-    },
-    {
-      "id": 30302,
-      "code": "SN303",
-      "level": "S",
-      "type": "code",
-      "topic": "Concurrency gotcha",
-      "domain": "go",
-      "section": "t4",
-      "question": "Bu kodda qanday bug bor?",
-      "snippet": "var wg sync.WaitGroup\nfor _, u := range urls {\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        fetch(u)\n    }()\n}\nwg.Wait()",
-      "options": [
-        "`wg.Add` noto'g'ri joyda",
-        "Go 1.22'gacha loop o'zgaruvchisi barcha goroutine'lar uchun umumiy bo'lgan — hammasi oxirgi `u`ni oladi; 1.22+ da har iteratsiyada yangi o'zgaruvchi, lekin kod eski versiyalarda va linter'siz xavfli",
-        "`wg.Wait` deadlock",
-        "`fetch` nil"
-      ],
-      "answer": 1,
-      "explanation": "Go 1.22 loop semantikasini o'zgartirdi (har iteratsiya yangi o'zgaruvchi), shuning uchun yangi kodda bug yo'q. Lekin: `go.mod` da eski `go` direktivasi bo'lsa eski xatti-harakat saqlanadi. Ishonchli uslub — argument sifatida uzatish (`go func(u string){...}(u)`), va parallelizmni cheklash (semaphore/errgroup `SetLimit`), aks holda 10k URL 10k goroutine va tashqi servisni o'ldirish."
-    },
-    {
-      "id": 30303,
-      "code": "SN304",
-      "level": "S",
-      "type": "code",
-      "topic": "Concurrency gotcha",
-      "domain": "go",
-      "section": "t4",
-      "question": "Bu kod nega deadlock beradi?",
-      "snippet": "ch := make(chan int)   // unbuffered\nch <- 1\nfmt.Println(<-ch)",
-      "options": [
-        "Kanal yopilmagan",
-        "Buferlanmagan kanalda yuborish o'quvchi bo'lguncha bloklanadi — bir goroutine ichida o'zi kutadi: `fatal error: all goroutines are asleep - deadlock!`",
-        "`make` xato",
-        "Kanal turi mos emas"
-      ],
-      "answer": 1,
-      "explanation": "Unbuffered kanal — sinxronlash nuqtasi: yuborish va qabul qilish bir vaqtda bo'lishi kerak. Yechim: o'qishni alohida goroutine'da qilish yoki `make(chan int, 1)`. Kattaroq amaliy xulosa: kanal bilan ishlashda 'kim yopadi, kim o'qiydi' shartnomasi oldindan aniq bo'lishi kerak — aks holda yopilgan kanalga yozish (panic) yoki abadiy kutish paydo bo'ladi."
-    },
-    {
-      "id": 30304,
-      "code": "SN305",
       "level": "St",
       "type": "mcq",
       "topic": "Concurrency gotcha",

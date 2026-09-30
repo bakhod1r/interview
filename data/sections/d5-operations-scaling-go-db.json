@@ -481,44 +481,6 @@
       "explanation": "Kutiladigan tartib: mitigation avval (cancel/timeout/trafikni kamaytirish), keyin sabab (`pg_stat_statements`, `EXPLAIN`), keyin profilaktika. 'Indeks qo'shaman' darhol aytilishi — diagnozsiz harakat belgisidir."
     },
     {
-      "id": 30379,
-      "code": "SN380",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Partitioning",
-      "domain": "db",
-      "section": "d5",
-      "question": "PostgreSQL'da vaqt bo'yicha partitionlash qanday foyda beradi?",
-      "options": [
-        "Query har doim tezlashadi",
-        "Eski ma'lumotni `DROP PARTITION` bilan bir zumda o'chirish (`DELETE` va vacuum yuki yo'q), partition pruning bilan skan hajmini kamaytirish, indekslarni kichik ushlash va `VACUUM`/`REINDEX` ni bo'laklab qilish",
-        "Faqat disk tejaydi",
-        "Indeks keraksiz bo'ladi"
-      ],
-      "answer": 1,
-      "explanation": "Eng katta amaliy foyda — retention: `DELETE FROM events WHERE created_at < ...` milliard qatorda soatlab ishlaydi va bloat qoldiradi, `DROP TABLE` esa millisekund. Shartlar: partition kaliti query'larda bo'lishi kerak (aks holda barcha partition skan qilinadi), unique constraint kalitni o'z ichiga olishi kerak, va partitionlarni oldindan yaratish avtomatlashtirilishi lozim (`pg_partman`)."
-    },
-    {
-      "id": 30380,
-      "code": "SN381",
-      "level": "St",
-      "type": "open",
-      "topic": "Ops",
-      "domain": "db",
-      "section": "d5",
-      "question": "Productionda PostgreSQL CPU 100%, ilova timeout beryapti. Qadam-baqadam nima qilasiz?",
-      "modelAnswer": [
-        "Birinchi: ta'sirni cheklash — `pg_stat_activity` dan eng og'ir/uzun query'larni topish, kerak bo'lsa `pg_cancel_backend` (avval cancel, keyin `pg_terminate_backend`)",
-        "Sabab toifalari: yangi deploy bilan kelgan query (plan o'zgardi), statistikaning eskirishi, indeks yo'qligi, lock kutish zanjiri (`pg_locks`, `pg_blocking_pids`), vacuum/autovacuum og'ir ishi, yoki trafik o'sishi",
-        "Tez choralar: eng qimmat query'ni bloklash/rate limit qilish, `statement_timeout` qo'yish, kesh qatlamini yoqish, read replica'ga o'qishni ko'chirish, ilova pool'ini kamaytirish (paradoks: kamroq ulanish — kamroq kontention)",
-        "`pg_stat_statements` bo'yicha total vaqt reytingi — real aybdor ko'pincha 'sekin' emas, 'juda tez-tez' query",
-        "Tuzatgandan keyin: `EXPLAIN (ANALYZE, BUFFERS)` bilan plan tekshirish, indeks qo'shish (`CONCURRENTLY`), `ANALYZE`, va zarur bo'lsa query'ni qayta yozish",
-        "Profilaktika: `pg_stat_statements` doimiy monitoringda, sekin query log, migratsiya va deploy'da plan regressiyasini tekshirish, `lock_timeout` standart sozlama sifatida",
-        "Aloqa: incident kanalida holat, ta'sir va ETA; postmortem bilan yopish"
-      ],
-      "explanation": "Kutiladigan tartib: mitigation avval (cancel/timeout/trafikni kamaytirish), keyin sabab (`pg_stat_statements`, `EXPLAIN`), keyin profilaktika. 'Indeks qo'shaman' darhol aytilishi — diagnozsiz harakat belgisidir."
-    },
-    {
       "id": 30388,
       "code": "SN389",
       "level": "S",

@@ -336,42 +336,6 @@
       "explanation": "Shu sabab 'set'ga qo'shish' yoki 'maksimum olish' taqsimlangan tizimda 'qiymatni o'rnatish' yoki 'hisoblagichni oshirish (LWW bilan)' dan xavfsizroq. Amaliy natija: hodisalarni shunday loyihalash kerakki, ularning qo'llanishi tartibga va takrorga sezgir bo'lmasin — shunda at-least-once yetkazib berish yetarli bo'ladi."
     },
     {
-      "id": 30356,
-      "code": "SN357",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Fundamentals",
-      "domain": "dist",
-      "section": "s2",
-      "question": "Amdahl qonuni tizim dizaynida nimani aytadi?",
-      "options": [
-        "Ko'p node har doim chiziqli tezlashtiradi",
-        "Tezlashish ketma-ket (parallellashmaydigan) qism bilan cheklangan: 5% sinxron qism bo'lsa, cheksiz parallelizm ham 20x dan oshira olmaydi — shuning uchun umumiy qulf, yagona koordinator yoki bitta DB yozuv nuqtasi miqyoslashning asosiy chegarasi",
-        "Faqat CPU uchun",
-        "Xotira haqida"
-      ],
-      "answer": 1,
-      "explanation": "Amaliy tarjimasi: 'yana pod qo'shamiz' ishlamaydigan holatlar — barcha yozuvlar bitta primary'ga borsa, global qulf bo'lsa, yoki har so'rov markazlashgan hisoblagichni yangilasa. Shuning uchun dizaynda sharding va kontention nuqtalarini yo'q qilish birinchi o'rinda turadi (Universal Scalability Law bundan ham qattiqroq: koordinatsiya o'sishi bilan throughput tushib ketishi mumkin)."
-    },
-    {
-      "id": 30357,
-      "code": "SN358",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Fundamentals",
-      "domain": "dist",
-      "section": "s2",
-      "question": "Idempotent, kommutativ va assotsiativ operatsiyalar taqsimlangan tizimda nega qadrli?",
-      "options": [
-        "Faqat matematik chiroylilik",
-        "Ular retry, tartib buzilishi va parallel birlashtirishga bardosh beradi: idempotent — takroriy yetkazib berish xavfsiz, kommutativ/assotsiativ — xabarlar tartibsiz kelsa ham natija bir xil (CRDT va agregatlar shunga tayanadi)",
-        "Faqat funksional tillarda",
-        "Faqat testda"
-      ],
-      "answer": 1,
-      "explanation": "Shu sabab 'set'ga qo'shish' yoki 'maksimum olish' taqsimlangan tizimda 'qiymatni o'rnatish' yoki 'hisoblagichni oshirish (LWW bilan)' dan xavfsizroq. Amaliy natija: hodisalarni shunday loyihalash kerakki, ularning qo'llanishi tartibga va takrorga sezgir bo'lmasin — shunda at-least-once yetkazib berish yetarli bo'ladi."
-    },
-    {
       "id": 30455,
       "code": "SN456",
       "level": "S",

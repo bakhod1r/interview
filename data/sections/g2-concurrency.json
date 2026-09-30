@@ -740,79 +740,6 @@
       "explanation": "Goroutine arzon, lekin har biri TCP ulanish, xotira buferi va downstream yukini keltiradi — 10k parallel so'rov tashqi servisni yoki o'z FD limitini o'ldiradi. N ni empirik tanlash kerak (latency × N ≈ throughput, Little's law). Qo'shimcha: natijalarni tartibli yig'ish uchun indeksli slice, kanalga yozishdan ko'ra oddiyroq."
     },
     {
-      "id": 30319,
-      "code": "SN320",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Context",
-      "domain": "go",
-      "section": "g2",
-      "question": "`ctx` bekor bo'lgach `errgroup`dagi qolgan goroutine'lar avtomatik to'xtaydimi?",
-      "options": [
-        "Ha, avtomatik",
-        "Yo'q — `errgroup.WithContext` faqat ctx'ni bekor qiladi; har goroutine o'zi `ctx.Done()`ni yoki ctx'ni qabul qiluvchi chaqiruvlarni (DB, HTTP) tekshirishi kerak, aks holda ish davom etadi",
-        "Faqat `SetLimit` bilan",
-        "Panic bo'ladi"
-      ],
-      "answer": 1,
-      "explanation": "Go'da cancellation kooperativ: hech kim goroutine'ni majburan to'xtata olmaydi. Shuning uchun uzun tsikllarda `select { case <-ctx.Done(): return ctx.Err(); default: }` yoki I/O chaqiruvlariga ctx uzatish kerak. `errgroup.Wait` birinchi xatoni qaytaradi, lekin qolganlarini kutadi — leak shu yerdan chiqadi."
-    },
-    {
-      "id": 30320,
-      "code": "SN321",
-      "level": "S",
-      "type": "code",
-      "topic": "Sync",
-      "domain": "go",
-      "section": "g2",
-      "question": "Bu kodda qanday xato bor?",
-      "snippet": "type Counter struct {\n    mu sync.RWMutex\n    m  map[string]int\n}\n\nfunc (c *Counter) Inc(k string) {\n    c.mu.RLock()\n    defer c.mu.RUnlock()\n    c.m[k]++\n}",
-      "options": [
-        "`RWMutex` o'rniga `Mutex` kerak emas, kod to'g'ri",
-        "`RLock` yozuvni himoya qilmaydi — bir necha goroutine bir vaqtda `RLock` oladi va map'ga yozadi: `concurrent map writes` panic yoki buzilgan sanoq",
-        "`defer` sekin",
-        "`map` nil"
-      ],
-      "answer": 1,
-      "explanation": "`RLock` faqat o'qishlar uchun va ular o'zaro bloklanmaydi. Yozuvda `Lock` kerak. Bu bug yuk ostida tasodifiy panic beradi va testda chiqmaydi — shuning uchun CI'da `go test -race` majburiy. Yuqori konkurentlikda `atomic.Int64` yoki shardlangan hisoblagich mutex'dan tez bo'ladi."
-    },
-    {
-      "id": 30321,
-      "code": "SN322",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Channels",
-      "domain": "go",
-      "section": "g2",
-      "question": "Worker pool'da natija kanali buferlanmagan va konsumer xato bo'lib chiqib ketdi. Nima bo'ladi?",
-      "options": [
-        "Hech narsa",
-        "Yozuvchi goroutine'lar abadiy bloklanadi — goroutine leak; shuning uchun yozish `select`da `ctx.Done()` bilan birga bo'lishi yoki konsumer kanalni oxirigacha drenaj qilishi kerak",
-        "Kanal avtomatik yopiladi",
-        "Xabarlar tashlanadi"
-      ],
-      "answer": 1,
-      "explanation": "Klassik leak: `results <- r` bloklangan, funksiya `return` qilmaydi, `wg.Wait()` ham abadiy kutadi. Naqsh: `select { case results <- r: case <-ctx.Done(): return }`. Qoida — kanalga yozish har doim bekor qilinishi mumkin bo'lgan operatsiya sifatida yozilsin; kanalni yopish esa faqat yozuvchi tomonning vazifasi."
-    },
-    {
-      "id": 30322,
-      "code": "SN323",
-      "level": "St",
-      "type": "mcq",
-      "topic": "Concurrency",
-      "domain": "go",
-      "section": "g2",
-      "question": "10k tashqi HTTP chaqiruvni parallel qilish kerak. To'g'ri yondashuv?",
-      "options": [
-        "10k goroutine bir vaqtda",
-        "Konkurentlikni cheklash: `errgroup` + `SetLimit(N)` yoki semaphore; N tashqi servis limitiga va o'z resursiga qarab tanlanadi, ustiga per-request timeout, retry budget va umumiy ctx deadline",
-        "`GOMAXPROCS`ni oshirish",
-        "Kanalsiz `sync.WaitGroup`"
-      ],
-      "answer": 1,
-      "explanation": "Goroutine arzon, lekin har biri TCP ulanish, xotira buferi va downstream yukini keltiradi — 10k parallel so'rov tashqi servisni yoki o'z FD limitini o'ldiradi. N ni empirik tanlash kerak (latency × N ≈ throughput, Little's law). Qo'shimcha: natijalarni tartibli yig'ish uchun indeksli slice, kanalga yozishdan ko'ra oddiyroq."
-    },
-    {
       "id": 30412,
       "code": "SN413",
       "level": "S",
@@ -883,6 +810,78 @@
       ],
       "answer": 1,
       "explanation": "Ikki qoida yetarli: (1) kanalni faqat unga yozuvchi yopadi, (2) har bloklanuvchi operatsiya `ctx.Done()` bilan birga `select`da. Aks holda erta chiqishda yozuvchilar abadiy bloklanadi (goroutine leak) yoki yopilgan kanalga yozib panic bo'ladi. Testda `goleak` bilan tekshiriladi."
+    },
+    {
+      "id": 30694,
+      "code": "GX94",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Sync",
+      "domain": "go",
+      "section": "g2",
+      "question": "Go memory model bo'yicha qaysi gap to'g'ri?",
+      "options": [
+        "Sinxronizatsiyasiz bir goroutine yozgan qiymatni boshqasi ko'rishi kafolatlanmaydi; happens-before faqat kanal send/receive, Mutex Unlock/Lock, sync.Once, atomic operatsiyalar orqali o'rnatiladi",
+        "Bir yadroli mashinada data race bo'lmaydi",
+        "int'ga yozish har doim atomik, shuning uchun sinxronizatsiya kerak emas",
+        "time.Sleep happens-before beradi"
+      ],
+      "answer": 0,
+      "explanation": "Go 1.19 memory model: race'siz dastur ketma-ket izchil (DRF-SC). Race bo'lsa kompilyator va CPU tartibni o'zgartirishi mumkin — `for !done {}` flag'i abadiy loop bo'lishi mumkin (qiymat registrda qoladi). `time.Sleep` sinxronizatsiya emas. `go test -race` race'larni runtime'da topadi — CI'da majburiy bo'lishi kerak."
+    },
+    {
+      "id": 30695,
+      "code": "GX95",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Sync",
+      "domain": "go",
+      "section": "g2",
+      "question": "`atomic.Int64` (Go 1.19+) eski `atomic.AddInt64(&x, 1)` dan nimasi bilan yaxshi?",
+      "options": [
+        "Tezroq ishlaydi",
+        "Tip darajasida himoya: maydonni tasodifan atomiksiz o'qish/yozish mumkin emas; 32-bit platformalarda 64-bit alignment avtomatik kafolatlanadi; noCopy bilan vet nusxalashni ushlaydi",
+        "Mutex'ni to'liq almashtiradi",
+        "Faqat 64-bit tizimlarda ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Eski API'da `x++` va `atomic.AddInt64(&x,1)` aralashib ketishi oson — bu race. 32-bit ARM/386 da int64 8-baytga tekislanmagan bo'lsa atomic panic berardi. `atomic.Pointer[T]` konfiguratsiyani lock'siz almashtirish (copy-on-write) uchun qulay. Bir nechta maydonni birga o'zgartirish kerak bo'lsa — atomic emas, Mutex."
+    },
+    {
+      "id": 30696,
+      "code": "GX96",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Sync",
+      "domain": "go",
+      "section": "g2",
+      "question": "Juda ko'p o'qiladigan, kamdan-kam yangilanadigan konfiguratsiya uchun eng yaxshi pattern?",
+      "options": [
+        "sync.RWMutex har doim eng tez",
+        "Global o'zgaruvchi, sinxronizatsiyasiz",
+        "atomic.Pointer[Config]: o'quvchilar Load() qiladi (lock yo'q), yozuvchi yangi Config nusxasini yaratib Store() qiladi; Config yaratilgandan keyin o'zgartirilmaydi (immutable)",
+        "Har o'qishda kanal orqali so'rash"
+      ],
+      "answer": 2,
+      "explanation": "RWMutex ko'p yadroda RLock'dagi umumiy counter tufayli cache-line contention beradi — o'quvchilar ko'p bo'lsa sekinlashadi. atomic.Pointer bilan o'qish deyarli bepul. Shart: Store'dan keyin eski obyektni hech kim o'zgartirmasligi (aks holda race). sync.Map faqat kalitlar to'plami asosan o'sib boradigan yoki goroutine'lar alohida kalitlar bilan ishlaydigan holatlar uchun."
+    },
+    {
+      "id": 30697,
+      "code": "GX97",
+      "level": "S",
+      "type": "code",
+      "topic": "Sync",
+      "domain": "go",
+      "section": "g2",
+      "question": "Bu kod qanday ishlaydi?\n\n```go\ntype Stats struct {\n    hits   atomic.Int64\n    misses atomic.Int64\n}\n// 64 ta goroutine to'xtovsiz hits.Add(1) va misses.Add(1) qiladi\n```\n\nProfil `atomic.Add` da ko'p vaqt ko'rsatyapti. Sabab?",
+      "options": [
+        "atomic noto'g'ri ishlatilgan",
+        "Go'da atomic sekin, Mutex yaxshiroq",
+        "GC bosimi",
+        "False sharing: ikkala counter bitta 64-baytlik cache line'da — har yadro yozganda boshqalarning keshi bekor bo'ladi; yechim — padding yoki har yadroga/shard'ga alohida counter, keyin yig'ish"
+      ],
+      "answer": 3,
+      "explanation": "Tekshirish: benchmark'da `_ [56]byte` padding qo'shib farqni ko'rish. Yuqori yozuvli counterlar uchun sharding (masalan GOMAXPROCS ta slot, har birini cache line'ga tekislab) — o'qishda yig'iladi. Prometheus client ham ichida shunga o'xshash yondashuvdan foydalanadi."
     }
   ]
 }

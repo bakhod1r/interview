@@ -373,60 +373,6 @@
       "explanation": "Amaliy usul: maxfiy turlar uchun maxsus tip (`type Token string` + `func (t Token) String() string { return \"[REDACTED]\" }`) — tasodifiy `%v` bilan chiqib ketmaydi. Shuningdek xato matnlariga query parametrlari va URL'dagi tokenlar tushishini tekshirish, retention siyosati va log'larga kirish nazorati (GDPR talablari)."
     },
     {
-      "id": 30369,
-      "code": "SN370",
-      "level": "S",
-      "type": "mcq",
-      "topic": "AppSec",
-      "domain": "sec",
-      "section": "x1",
-      "question": "Fayl yuklash funksiyasi bor. Xavfsizlik nazorati ro'yxati?",
-      "options": [
-        "Kengaytmani tekshirish yetarli",
-        "Hajm va tur cheklovi (mazmun bo'yicha sniffing, kengaytmaga ishonmaslik), fayl nomini normalizatsiya (path traversal), alohida domen/bucket'da saqlash va `Content-Disposition: attachment` bilan berish, `X-Content-Type-Options: nosniff`, antivirus/sandbox skan, imzolangan URL bilan kirish",
-        "Faqat hajmni cheklash",
-        "Faqat autentifikatsiya"
-      ],
-      "answer": 1,
-      "explanation": "Eng xavfli ssenariylar: SVG/HTML yuklab XSS (shuning uchun alohida domen yoki attachment), `../../etc/passwd` bilan traversal, ZIP bomb (dekompressiya limiti), va rasm parseridagi zaifliklar. Fayl app serveridan emas, obyekt saqlashdan imzolangan URL bilan berilishi kerak — bu ham xavfsizlik, ham miqyos jihatidan to'g'ri."
-    },
-    {
-      "id": 30370,
-      "code": "SN371",
-      "level": "S",
-      "type": "mcq",
-      "topic": "AppSec",
-      "domain": "sec",
-      "section": "x1",
-      "question": "Parol tiklash (reset) oqimini xavfsiz qanday quriladi?",
-      "options": [
-        "Email'ga parolni yuborish",
-        "Bir martalik, tasodifiy (128+ bit) token — DB'da hash holida, qisqa TTL (15-60 daqiqa), ishlatilgach bekor qilinadi; javob har doim bir xil ('agar email mavjud bo'lsa yuborildi'), rate limit, tiklashdan keyin barcha sessiyalar bekor qilinadi",
-        "Xavfsizlik savoli bilan",
-        "Token'ni URL'da `user_id` bilan birga yuborish yetarli"
-      ],
-      "answer": 1,
-      "explanation": "Detallar muhim: token DB'da ochiq saqlansa DB leak'da hisoblar egallanadi (shuning uchun hash); javob farq qilsa foydalanuvchi mavjudligi oshkor bo'ladi (enumeration); sessiyalar bekor qilinmasa hujumchi kirishda qoladi. Bundan tashqari email o'zgartirishda eski manzilga ogohlantirish yuborilishi kerak."
-    },
-    {
-      "id": 30371,
-      "code": "SN372",
-      "level": "St",
-      "type": "mcq",
-      "topic": "AppSec",
-      "domain": "sec",
-      "section": "x1",
-      "question": "Ichki admin panel faqat VPN orqasida. Bu yetarlimi?",
-      "options": [
-        "Ha, ichki tarmoq ishonchli",
-        "Yo'q — zero trust: autentifikatsiya va avtorizatsiya har so'rovda, MFA, harakatlar audit log'i, kritik amallarga ikki kishi tasdig'i (four-eyes), va eng kam huquq; VPN faqat qo'shimcha qatlam",
-        "Faqat IP allowlist yetarli",
-        "Faqat HTTPS yetarli"
-      ],
-      "answer": 1,
-      "explanation": "VPN kompromis bo'lgan ishchi noutbuki yoki ichki hujumchini to'xtatmaydi, shuningdek SSRF orqali ichki panelga so'rov yuborilishi mumkin. Admin harakatlari (mablag' o'zgartirish, foydalanuvchi ma'lumoti ko'rish) audit qilinishi va PII ko'rish sababini so'rashi kerak — bu compliance talabi ham."
-    },
-    {
       "id": 30476,
       "code": "SN477",
       "level": "St",

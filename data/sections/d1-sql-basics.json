@@ -342,42 +342,6 @@
       "explanation": "Amaliy naqshlar: `ON CONFLICT (tenant_id, email) DO UPDATE SET ... WHERE excluded.updated_at > t.updated_at` — kechikkan yozuv yangi qiymatni buzmaydi (last-write-wins'ni vaqt bilan boshqarish). Idempotentlik uchun ko'pincha `DO NOTHING` + keyin `SELECT` yetarli, va bu deadlock ehtimolini kamaytiradi."
     },
     {
-      "id": 30381,
-      "code": "SN382",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Window",
-      "domain": "db",
-      "section": "d1",
-      "question": "Har foydalanuvchining oxirgi buyurtmasini olish uchun eng samarali usul (PostgreSQL)?",
-      "options": [
-        "`GROUP BY user_id` bilan `MAX(created_at)` va keyin qayta JOIN",
-        "`DISTINCT ON (user_id) ... ORDER BY user_id, created_at DESC` (PostgreSQL-specific, index bilan juda tez) yoki window funksiya `ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY created_at DESC) = 1`; ko'p foydalanuvchi uchun `LATERAL` bilan index skip scan naqshi",
-        "Korrelyatsiyalangan subquery har doim",
-        "Barchasini olib app'da filtrlash"
-      ],
-      "answer": 1,
-      "explanation": "`(user_id, created_at DESC)` indeksi bo'lsa `DISTINCT ON` har guruhdan faqat birinchi qatorni o'qiydi. `MAX` + JOIN ikki marta skan qiladi va teng timestamp'larda dublikat beradi. Juda ko'p guruh bo'lsa `LATERAL` bilan 'loose index scan' (har user uchun LIMIT 1) eng tez variant bo'ladi."
-    },
-    {
-      "id": 30382,
-      "code": "SN383",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Upsert",
-      "domain": "db",
-      "section": "d1",
-      "question": "`INSERT ... ON CONFLICT DO UPDATE` da qanday nozik xatarlar bor?",
-      "options": [
-        "Xatar yo'q",
-        "Unique indeks aynan konflikt maqsadiga mos bo'lishi kerak (aks holda xato yoki kutilmagan yozuv), yuqori konkurentlikda deadlock/`tuple concurrently updated` bo'lishi mumkin, va `EXCLUDED` bilan yozilgan qiymat eski qiymatni shartsiz bosib ketishi (yaxshisi `WHERE` sharti bilan)",
-        "Faqat sekin ishlaydi",
-        "Faqat PostgreSQL 9'da"
-      ],
-      "answer": 1,
-      "explanation": "Amaliy naqshlar: `ON CONFLICT (tenant_id, email) DO UPDATE SET ... WHERE excluded.updated_at > t.updated_at` — kechikkan yozuv yangi qiymatni buzmaydi (last-write-wins'ni vaqt bilan boshqarish). Idempotentlik uchun ko'pincha `DO NOTHING` + keyin `SELECT` yetarli, va bu deadlock ehtimolini kamaytiradi."
-    },
-    {
       "id": 30399,
       "code": "SN400",
       "level": "S",

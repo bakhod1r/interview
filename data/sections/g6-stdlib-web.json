@@ -275,42 +275,6 @@
       "explanation": "`ReadAll` + `Unmarshal` ikki nusxa (bayt + struct) va katta payloadda OOM xavfi. Decoder oqimda ishlaydi. Nozik nuqta: Decoder bir necha JSON qiymatini ketma-ket o'qiy oladi (NDJSON uchun qulay), lekin bitta obyekt kutilganda ortiqcha ma'lumotni tekshirish kerak. Eng tez variant kerak bo'lsa kod generatsiyasi (easyjson) yoki `jsoniter` o'lchanadi."
     },
     {
-      "id": 30332,
-      "code": "SN333",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Stdlib",
-      "domain": "go",
-      "section": "g6",
-      "question": "`http.Server` productionda qanday sozlanadi?",
-      "options": [
-        "Default sozlamalar yetarli",
-        "`ReadHeaderTimeout`, `ReadTimeout`, `WriteTimeout`, `IdleTimeout` va `MaxHeaderBytes` aniq qo'yiladi (Slowloris va osilib qolgan ulanishlarga qarshi), `Handler`ga panic recovery va request ID middleware, `Shutdown` bilan graceful to'xtash",
-        "Faqat `ReadTimeout`",
-        "Faqat `Handler`"
-      ],
-      "answer": 1,
-      "explanation": "`http.Server{}` default timeout'lari yo'q: sekin client ulanishni cheksiz ushlab turadi va FD tugaydi. `ReadHeaderTimeout` eng muhimi (header o'qishni cheklaydi). Body hajmini `http.MaxBytesReader` bilan cheklash ham kerak — aks holda katta payload xotirani yeydi."
-    },
-    {
-      "id": 30333,
-      "code": "SN334",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Stdlib",
-      "domain": "go",
-      "section": "g6",
-      "question": "`encoding/json` bilan katta javobni o'qishda qaysi yondashuv samarali?",
-      "options": [
-        "Har doim `io.ReadAll` + `Unmarshal`",
-        "Oqim bilan: `json.NewDecoder(r).Decode(&v)` — butun javobni xotiraga yig'maydi; juda katta massivda `Decoder.Token()` bilan element-element o'qish, va `MaxBytesReader` bilan hajm cheklovi",
-        "`Unmarshal` har doim tezroq",
-        "`json.RawMessage` ishlatmaslik"
-      ],
-      "answer": 1,
-      "explanation": "`ReadAll` + `Unmarshal` ikki nusxa (bayt + struct) va katta payloadda OOM xavfi. Decoder oqimda ishlaydi. Nozik nuqta: Decoder bir necha JSON qiymatini ketma-ket o'qiy oladi (NDJSON uchun qulay), lekin bitta obyekt kutilganda ortiqcha ma'lumotni tekshirish kerak. Eng tez variant kerak bo'lsa kod generatsiyasi (easyjson) yoki `jsoniter` o'lchanadi."
-    },
-    {
       "id": 30418,
       "code": "SN419",
       "level": "S",

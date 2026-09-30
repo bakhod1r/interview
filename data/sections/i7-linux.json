@@ -2,7 +2,6 @@
   "id": "i7",
   "name": "Linux",
   "domain": "infra",
-  "domainLabel": "Infrastructure & DevOps",
   "topics": [
     "Linux"
   ],

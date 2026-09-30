@@ -2,7 +2,7 @@
   "id": "t5",
   "name": "Time, date, encoding gotchas",
   "domain": "go",
-  "domainLabel": "Go",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Time gotcha"
   ],
@@ -135,60 +135,6 @@
     {
       "id": 30157,
       "code": "SN158",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Time gotcha",
-      "domain": "go",
-      "section": "t5",
-      "question": "'Har oyning 31-kuni' obunasini hisoblashda qanday edge case bor?",
-      "options": [
-        "Yo'q",
-        "Fevralda 31-kun yo'q — siyosat aniq belgilanishi kerak (oyning oxirgi kuni yoki 1-mart); shuningdek DST kunida mahalliy 02:30 mavjud bo'lmasligi va ikki marta bo'lishi mumkin",
-        "Faqat yillik hisobda",
-        "Faqat ma'lumot bazasida"
-      ],
-      "answer": 1,
-      "explanation": "Go'da `AddDate(0, 1, 0)` 31-yanvarga qo'shilsa 3-mart chiqadi (kun oshib ketadi) — bu odatda biznes kutganidan boshqa. Shuning uchun davriy hisob-kitob 'anchor day' + oy oxiri bilan clamp qilib yoziladi va testlarda fevral, kabisa yil, DST kunlari alohida holat sifatida bo'ladi."
-    },
-    {
-      "id": 30305,
-      "code": "SN306",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Time gotcha",
-      "domain": "go",
-      "section": "t5",
-      "question": "Kunlik hisobot `WHERE created_at >= current_date` bilan yozilgan, lekin natijalar 5 soatga surilgan. Sabab?",
-      "options": [
-        "Server sekin",
-        "`timestamp without time zone` vs `timestamptz` va sessiya `TimeZone` sozlamasi aralashgan — UTC'da saqlanib mahalliy vaqt bilan solishtirilgan yoki teskarisi",
-        "Indeks yo'q",
-        "DST"
-      ],
-      "answer": 1,
-      "explanation": "Qoida: hamma joyda `timestamptz` (UTC'da saqlanadi, chiqishda konvertatsiya) va biznes 'kun' chegarasi aniq vaqt zonasida hisoblanadi: `created_at >= (date_trunc('day', now() AT TIME ZONE 'Asia/Tashkent')) AT TIME ZONE 'Asia/Tashkent'`. Hisobot talabini 'kimning kuni' deb aniqlash — mahsulot qarori, texnik emas."
-    },
-    {
-      "id": 30306,
-      "code": "SN307",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Time gotcha",
-      "domain": "go",
-      "section": "t5",
-      "question": "Go'da ikki vaqt orasidagi o'tgan muddatni o'lchash uchun nima ishlatiladi?",
-      "options": [
-        "`time.Now().Sub(start)` — lekin `start` boshqa mashinadan kelgan bo'lsa ham to'g'ri",
-        "`time.Since(start)` bir jarayon ichida monoton soatni ishlatadi; lekin vaqt DB/tarmoqdan kelib serializatsiya qilinsa monoton komponent yo'qoladi va NTP tuzatishlari natijani buzadi",
-        "`time.Unix()` har doim",
-        "Faqat `time.Sleep`"
-      ],
-      "answer": 1,
-      "explanation": "Go `time.Time` ichida wall clock va monoton o'qish ikkalasini saqlaydi; `Sub`/`Since` monotondan foydalanadi. Ammo `t.Round(0)`, JSON marshal yoki DB'ga yozib qaytarish monoton qismni o'chiradi — shundan keyin o'lchov NTP sakrashiga bog'liq bo'ladi, hatto manfiy davomiylik chiqishi mumkin."
-    },
-    {
-      "id": 30307,
-      "code": "SN308",
       "level": "S",
       "type": "mcq",
       "topic": "Time gotcha",

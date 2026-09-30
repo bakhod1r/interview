@@ -466,6 +466,80 @@
       ],
       "answer": 1,
       "explanation": "Shuning uchun unbuffered kanal 'sinxronlash nuqtasi' deyiladi va happens-before beradi. Ishlash nuqtai nazaridan: kanal har operatsiyada `hchan` mutexini oladi — juda yuqori chastotali hisoblagich uchun kanal `atomic`dan sekinroq. Select esa bir necha kanalga navbatga turadi va tasodifiy tanlaydi (starvationni oldini olish uchun)."
+    },
+    {
+      "id": 30703,
+      "code": "GX103",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "cgo chaqiruvining narxi va xavflari?",
+      "options": [
+        "cgo bepul",
+        "Har chaqiruv ~tens of ns (oddiy Go chaqiruvdan ko'p marta qimmat), C kodi bloklansa OS thread band bo'ladi; cross-compile qiyinlashadi, statik build yo'qoladi, C xotirasini GC ko'rmaydi (qo'lda free), Go pointer'larini C'da saqlash qoidalari qat'iy",
+        "cgo bilan GC C xotirasini ham tozalaydi",
+        "cgo faqat Windows'da ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Mayda funksiyalarni loop ichida cgo orqali chaqirish — anti-pattern; ishni batch qilish kerak. pprof C kodini yaxshi ko'rmaydi. Imkon bo'lsa sof Go alternativ (masalan modernc.org/sqlite, pgx). 'cgo is not Go' — Rob Pike."
+    },
+    {
+      "id": 30704,
+      "code": "GX104",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go scheduler'ning GMP modeli haqida to'g'ri gap?",
+      "options": [
+        "Har goroutine alohida OS thread",
+        "GOMAXPROCS goroutine sonini cheklaydi",
+        "G — goroutine, M — OS thread, P — ishga tushirish konteksti (GOMAXPROCS ta, local run queue bilan); bo'sh P boshqasidan work-stealing qiladi; syscall'da bloklangan M dan P ajratilib boshqa M ga beriladi; Go 1.14+ asinxron preemption uzun loop'larni ham to'xtata oladi",
+        "Goroutine'lar faqat kanal operatsiyasida almashadi"
+      ],
+      "answer": 2,
+      "explanation": "Tarmoq I/O netpoller (epoll/kqueue) orqali — goroutine park qilinadi, thread band bo'lmaydi. Fayl I/O va cgo esa thread'ni band qiladi — ko'p parallel fayl operatsiyasi thread sonini oshiradi (limit 10000, `debug.SetMaxThreads`). `GODEBUG=schedtrace=1000` scheduler holatini ko'rsatadi."
+    },
+    {
+      "id": 30705,
+      "code": "GX105",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go 1.23 `unique` va Go 1.24 `weak` paketlari nima uchun?",
+      "options": [
+        "Ikkalasi ham unsafe'ning o'rnini bosadi",
+        "unique — UUID generatori",
+        "weak — zaif shifrlash",
+        "unique.Make — qiymatlarni intern qilib Handle qaytaradi: bir xil qiymat bitta nusxada saqlanadi, Handle solishtirish pointer solishtirishdek arzon; weak.Pointer — obyektni GC'dan ushlab turmaydigan ko'rsatkich, keshlar va kanonik xaritalar uchun"
+      ],
+      "answer": 3,
+      "explanation": "Takrorlanuvchi satrlar ko'p bo'lgan holatlar (masalan millionlab log label'lari, IP manzillari — net/netip ichida ishlatiladi) xotirani keskin kamaytiradi. weak bilan kesh qurilganda obyekt faqat keshda qolsa GC uni yig'adi. Go 1.24 da runtime.AddCleanup SetFinalizer'ning xavfsizroq o'rnini bosadi."
+    },
+    {
+      "id": 30706,
+      "code": "GX106",
+      "level": "St",
+      "type": "open",
+      "topic": "Runtime",
+      "domain": "go",
+      "section": "g7",
+      "question": "Go GC qanday ishlaydi va latency-sezgir servisda uni qanday sozlaysiz?",
+      "modelAnswer": [
+        "Concurrent, non-generational, non-moving tri-color mark-and-sweep; write barrier mark paytida yoqiladi; STW fazalari odatda < 1ms",
+        "Pacer: GOGC (default 100) — keyingi GC tirik heap 2x bo'lganda; GOMEMLIMIT — soft umumiy limit",
+        "Mark assist: tez allocation qilayotgan goroutine'lar GC ishiga majburan jalb qilinadi — bu latency cho'qqilari manbai",
+        "Diagnostika: GODEBUG=gctrace=1, runtime/metrics, pprof alloc profili, trace'da GC fazalari",
+        "Kamaytirish: allocation'ni qisqartirish (escape analysis, oldindan ajratilgan slice, sync.Pool, []byte qayta ishlatish), pointer'siz tuzilmalar (GC skanerlamaydi)",
+        "Sozlash: konteyner limitiga GOMEMLIMIT, xotira yetarli bo'lsa GOGC ni oshirish (CPU ↔ xotira savdosi)",
+        "Go 1.25 eksperimental Green Tea GC — kichik obyektlarda mark samaradorligi"
+      ],
+      "explanation": "Senior signal: GC pacer va GOGC/GOMEMLIMIT munosabatini tushunish, 'GC'ni o'chiramiz' emas, allocation'ni kamaytirishdan boshlash."
     }
   ]
 }

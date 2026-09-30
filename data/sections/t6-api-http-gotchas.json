@@ -2,7 +2,7 @@
   "id": "t6",
   "name": "API & HTTP gotchas",
   "domain": "api",
-  "domainLabel": "API, HTTP, security",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "API gotcha"
   ],
@@ -132,60 +132,6 @@
     {
       "id": 30160,
       "code": "SN161",
-      "level": "S",
-      "type": "mcq",
-      "topic": "API gotcha",
-      "domain": "api",
-      "section": "t6",
-      "question": "Go'da `json.Unmarshal` bilan validatsiya qilinmagan payload qanday xatarga olib keladi?",
-      "options": [
-        "Faqat xato qaytadi",
-        "Mass assignment: kutilmagan maydonlar (`is_admin`, `balance`) struct'ga tushadi va keyin DB'ga yoziladi; yechim — alohida DTO (faqat ruxsat etilgan maydonlar), `DisallowUnknownFields`, va domain darajasidagi validatsiya",
-        "Panic",
-        "Xotira oshadi faqat"
-      ],
-      "answer": 1,
-      "explanation": "ORM entity'sini to'g'ridan-to'g'ri request body'ga bind qilish — OWASP API ro'yxatidagi klassik zaiflik. To'g'ri qatlamlar: request DTO → validatsiya → domain obyektiga aniq maydonlar bilan o'girish. Bonus: `DisallowUnknownFields` client xatolarini erta ko'rsatadi, lekin forward compatibility'ni cheklaydi — public API'da ehtiyotkorlik bilan."
-    },
-    {
-      "id": 30308,
-      "code": "SN309",
-      "level": "S",
-      "type": "mcq",
-      "topic": "API gotcha",
-      "domain": "api",
-      "section": "t6",
-      "question": "JSON'da `PATCH` bilan maydonni `null` ga o'rnatish va maydonni yubormaslikni qanday ajratasiz (Go)?",
-      "options": [
-        "Ajratish kerak emas",
-        "Pointer (`*string`) yoki `json.RawMessage`/maxsus `Optional[T]` tur — `nil` pointer 'yuborilmagan', `pointer to nil`/mavjud kalit 'null ga o'rnat' degani; yoki JSON Merge Patch semantikasini aniq hujjatlashtirish",
-        "`omitempty` hal qiladi",
-        "Har doim to'liq PUT ishlatish"
-      ],
-      "answer": 1,
-      "explanation": "Oddiy struct bilan `\"\"` va 'yubormadi' farqlanmaydi — natijada PATCH tasodifan maydonni tozalaydi. Amaliy yechimlar: pointerlar, `map[string]json.RawMessage` bilan mavjud kalitlar to'plamini olish, yoki JSON Patch (RFC 6902) ishlatish. `omitempty` faqat serializatsiyaga ta'sir qiladi, deserializatsiyaga emas."
-    },
-    {
-      "id": 30309,
-      "code": "SN310",
-      "level": "S",
-      "type": "mcq",
-      "topic": "API gotcha",
-      "domain": "api",
-      "section": "t6",
-      "question": "Go'da JSON'ga katta `int64` ID yuborilgan, frontendda qiymat buzildi. Nega?",
-      "options": [
-        "Go bug'i",
-        "JavaScript `Number` — IEEE 754 double: 2^53 dan katta butun sonlar aniqligini yo'qotadi; ID'lar string sifatida yuborilishi kerak",
-        "JSON `int64`ni qo'llamaydi",
-        "Encoding muammosi"
-      ],
-      "answer": 1,
-      "explanation": "Snowflake uslubidagi 64-bit ID'lar aynan shu chegaradan oshadi va oxirgi raqamlar o'zgaradi — jim bug (noto'g'ri yozuv ochiladi). Shuning uchun API kontraktida ID string (`\"id\": \"7231...\"`), yoki `json:\",string\"` tegi. Xuddi shu muammo pul miqdorini float bilan yuborishda ham chiqadi."
-    },
-    {
-      "id": 30310,
-      "code": "SN311",
       "level": "S",
       "type": "mcq",
       "topic": "API gotcha",

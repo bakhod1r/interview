@@ -2,7 +2,7 @@
   "id": "t11",
   "name": "Docker & Kubernetes gotchas",
   "domain": "infra",
-  "domainLabel": "Infrastructure & DevOps",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Infra gotcha"
   ],

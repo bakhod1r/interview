@@ -876,69 +876,6 @@
       "explanation": "Bu keys 'vaqt kam' cheklovi bilan boshqacha javob talab qiladi: arxitektura qayta qurilmaydi — o'lchash, arzon optimizatsiya, oldindan skale va degradatsiya rejasi. Degradatsiya va prioritetni aytish eng kuchli signal."
     },
     {
-      "id": 30383,
-      "code": "SN384",
-      "level": "St",
-      "type": "open",
-      "topic": "Case",
-      "domain": "sys",
-      "section": "y2",
-      "question": "To'lov gateway'i loyihalang: 500 TPS, bir necha PSP, pul yo'qolmasin.",
-      "modelAnswer": [
-        "Kontrakt: har to'lov `payment_intent` sifatida boshlanadi (mahalliy ID, idempotency key mijozdan) — holat mashinasi: `created → authorized → captured → settled`, yoki `failed/canceled/refunded`",
-        "Yozuv yo'li: DB tranzaksiyasida intent + outbox eventi; PSP chaqiruvi tranzaksiyadan tashqarida (tashqi chaqiruv hech qachon ochiq tranzaksiya ichida bo'lmaydi)",
-        "PSP routing: har PSP uchun adapter (anti-corruption layer), yo'naltirish qoidalari (valyuta, karta turi, narx, muvaffaqiyat darajasi), va bitta PSP yiqilsa fallback — lekin fallback dublikat to'lov keltirmasligi uchun avval holat aniqlanadi",
-        "Noma'lum holat: timeout bo'lsa retry aynan shu idempotency key bilan yoki status so'rovi; hal bo'lmasa `pending` va reconciliation navbatiga",
-        "Webhook: imzo tekshirish, idempotent qabul, kechikkan/tartibsiz eventlarni versiya bo'yicha qo'llash; webhook yagona manba emas — davriy pull ham bor",
-        "Ledger: har pul harakati double-entry yozuv; hisobotlar ledger'dan, `status` ustunidan emas",
-        "Xavfsizlik/compliance: PAN tizimga kirmaydi (tokenizatsiya), PCI doirasi minimal, audit log o'zgarmas, sirlar KMS'da",
-        "Kuzatuv: PSP bo'yicha muvaffaqiyat darajasi va latency, `pending` yoshi, reconciliation ochiq farqi, dublikat to'lov alerti (eng muhim biznes alerti)",
-        "Miqyos: 500 TPS DB uchun katta emas, lekin hot hisob qatorlari (merchant balansi) uchun yozuvni agregatlash/sharding kerak bo'lishi mumkin"
-      ],
-      "explanation": "Bu keysda intervyuer texnik miqyosni emas, pul bilan ishlash intizomini tekshiradi: idempotentlik, noma'lum holatni boshqarish, outbox, ledger va reconciliation. Har birini nomlash va sababini aytish kutiladi."
-    },
-    {
-      "id": 30384,
-      "code": "SN385",
-      "level": "St",
-      "type": "open",
-      "topic": "Case",
-      "domain": "sys",
-      "section": "y2",
-      "question": "Ko'p tenant'li SaaS analitika servisi: mijoz dashboardlari, kunlik 5 mlrd hodisa.",
-      "modelAnswer": [
-        "Ingest: SDK → gateway (validatsiya, tenant aniqlash, rate limit) → Kafka; hodisa sxemasi versiyalangan (schema registry), noto'g'ri hodisalar DLQ'ga",
-        "Saqlash: kolonkali ombor (ClickHouse) — `(tenant_id, event_date, event_name)` bo'yicha partition va tartiblash kaliti; xom hodisa + oldindan agregatlangan jadvallar (materialized view) birga",
-        "O'qish: dashboard query'lari agregat jadvaldan (sekundlar emas, millisekundlar), ad-hoc query'lar xom ma'lumotdan lekin kvota bilan (vaqt/skan hajmi limiti, aks holda bitta mijoz klasterni band qiladi)",
-        "Tenant izolyatsiyasi: query kvotasi, alohida query pool, va kritik mijozlar uchun ajratilgan klaster (noisy neighbour muammosi bu yerda asosiy xatar)",
-        "Aniqlik/narx: taxminiy aniqlik yetarli bo'lgan joyda HyperLogLog (unique count) va sampling — xarajatni bir necha barobar kamaytiradi",
-        "Retention va narx: xom ma'lumot 30-90 kun, agregatlar yillar; sovuq ma'lumot obyekt saqlashda (S3) va kamdan-kam so'raladi",
-        "Kechikkan hodisalar: mobil qurilma offline bo'lib 3 kundan keyin yuboradi — agregatlarni qayta hisoblash oynasi (late arrival window) va idempotent qayta yozish kerak",
-        "Kuzatuv: ingest lag, dropped events, query p95 tenant bo'yicha, xarajat/tenant (unit economics)"
-      ],
-      "explanation": "Farqlovchi detallar: oldindan agregatlash, tenant kvotalari (noisy neighbour), kechikkan hodisalarni qayta hisoblash, va HyperLogLog bilan aniqlikni narxga almashtirish. 'PostgreSQL'da `GROUP BY` qilaman' javobi bu hajmda ishlamaydi."
-    },
-    {
-      "id": 30385,
-      "code": "SN386",
-      "level": "S",
-      "type": "open",
-      "topic": "Case",
-      "domain": "sys",
-      "section": "y2",
-      "question": "Hujjat ustida real-time birgalikda ishlash (Google Docs uslubida) — asosiy qarorlar?",
-      "modelAnswer": [
-        "Konflikt modeli: OT (operational transformation) yoki CRDT. CRDT — markazsiz, birlashtirish matematik kafolatlangan, lekin metadata o'sadi (tombstone); OT — ixchamroq lekin markaziy server va murakkab transformatsiyalar talab qiladi",
-        "Transport: WebSocket bilan kichik operatsiyalar (insert/delete pozitsiya bilan), har client uchun versiya/vektor; offline'dan keyin qayta birlashtirish ishlashi kerak",
-        "Kursorlar va presence: alohida yengil kanal, tez-tez lekin ishonchsiz (yo'qolsa muammo emas)",
-        "Doimiylik: operatsiyalar jurnali (append-only) + davriy snapshot — yuklashda snapshot + keyingi operatsiyalar qo'llanadi; bu event sourcing'ning tabiiy qo'llanishi",
-        "Tarix va undo: jurnal bo'yicha versiyalar, foydalanuvchi bo'yicha undo (o'z operatsiyalarini teskari qilish — CRDT'da nozik masala)",
-        "Miqyos: bitta hujjat = bitta koordinator (shard by document) — shu bilan tartib va konflikt hal qilish arzon bo'ladi; hujjatlar bo'ylab esa gorizontal",
-        "Ruxsat: har operatsiyada tekshirish (faqat ochilishda emas), havola bilan bo'lishish modeli, va audit"
-      ],
-      "explanation": "Kutilayotgan asosiy qaror — OT va CRDT o'rtasidagi tanlov va uning sababi, hamda 'bitta hujjat bitta koordinatorda' shardlash g'oyasi. Snapshot + operatsiya jurnali esa yuklash tezligini hal qiladi."
-    },
-    {
       "id": 30480,
       "code": "SN481",
       "level": "St",

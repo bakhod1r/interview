@@ -239,60 +239,6 @@
       "explanation": "`go.sum` modul mazmunini qotirib qo'yadi — tasodifiy o'zgarishni aniqlaydi. `govulncheck` esa faqat haqiqatda chaqirilgan zaif funksiyalarni ko'rsatadi (shovqin kam). Qo'shimcha amaliyot: minimal bog'liqlik siyosati, `replace` direktivalarini productionda qoldirmaslik, va build reproducibility uchun `-trimpath` bilan qurish."
     },
     {
-      "id": 30270,
-      "code": "SN271",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Tooling",
-      "domain": "go",
-      "section": "g5",
-      "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
-      "options": [
-        "`git reset --hard` va force push",
-        "`git revert <sha>` — yangi commit bilan o'zgarishni bekor qiladi, tarix saqlanadi va boshqa ishlovchilar buzilmaydi; merge commit uchun `-m 1`. `reset --hard` + force push umumiy branch'da boshqalarning ishini yo'qotadi",
-        "`git rebase -i` bilan commit'ni o'chirish",
-        "Faqat yangi fix yozish"
-      ],
-      "answer": 1,
-      "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
-    },
-    {
-      "id": 30271,
-      "code": "SN272",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Tooling",
-      "domain": "go",
-      "section": "g5",
-      "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
-      "options": [
-        "Qo'lda har commit'ni tekshirish",
-        "`git bisect` — binary search bilan log2(N) qadamda topadi; `git bisect run ./test.sh` bilan avtomatlashtiriladi (test skript exit kodi bilan yaxshi/yomon aniqlanadi)",
-        "`git log --grep`",
-        "`git blame` yetarli"
-      ],
-      "answer": 1,
-      "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
-    },
-    {
-      "id": 30334,
-      "code": "SN335",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Tooling",
-      "domain": "go",
-      "section": "g5",
-      "question": "Bog'liqlik zanjiri xavfsizligi uchun Go'da nima ishlatiladi?",
-      "options": [
-        "Faqat `go get -u`",
-        "`go.sum` (hash tekshiruvi) + `GOFLAGS=-mod=readonly`, `go mod verify`, `govulncheck` CI'da, va yangilanishlarni nazorat bilan (Dependabot/Renovate) qilish; `GOPRIVATE`/proxy bilan ichki modullar",
-        "`vendor` papkasi yetarli",
-        "Hech narsa kerak emas"
-      ],
-      "answer": 1,
-      "explanation": "`go.sum` modul mazmunini qotirib qo'yadi — tasodifiy o'zgarishni aniqlaydi. `govulncheck` esa faqat haqiqatda chaqirilgan zaif funksiyalarni ko'rsatadi (shovqin kam). Qo'shimcha amaliyot: minimal bog'liqlik siyosati, `replace` direktivalarini productionda qoldirmaslik, va build reproducibility uchun `-trimpath` bilan qurish."
-    },
-    {
       "id": 30601,
       "code": "GX1",
       "level": "M",

@@ -327,45 +327,6 @@
       "explanation": "Staff darajadagi savol: javob kod strukturasidan boshlanmasligi kerak, balki 'productionda ishlash uchun nima majburiy' ro'yxatidan. Shablonning qiymati — takrorlanuvchi qarorlarni bir marta to'g'ri qilib qotirish."
     },
     {
-      "id": 30367,
-      "code": "SN368",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Microservices",
-      "domain": "arch",
-      "section": "r1",
-      "question": "'Distributed monolith' belgilari qaysilar?",
-      "options": [
-        "Ko'p servis bo'lishi",
-        "Servislar birgalikda deploy qilinishi shart, bitta DB/jadvalni bo'lishishi, har o'zgarish bir necha repo'ni talab qilishi, sinxron chaqiruv zanjirlari va umumiy kutubxonada biznes mantiqi — ya'ni mustaqillik yo'q, lekin tarmoq narxi bor",
-        "Har servisda alohida DB",
-        "Event ishlatish"
-      ],
-      "answer": 1,
-      "explanation": "Bu eng qimmat holat: monolitning bog'liqligi + taqsimlangan tizimning murakkabligi. Test: 'shu servisni boshqalarni deploy qilmasdan chiqara olamanmi?' va 'kontrakt o'zgarmasa boshqalar buziladimi?'. Tuzatish yo'li ko'pincha chegaralarni qayta chizish (ma'lumot egaligi bo'yicha) yoki ortiqcha servislarni qayta birlashtirish."
-    },
-    {
-      "id": 30368,
-      "code": "SN369",
-      "level": "St",
-      "type": "open",
-      "topic": "Architecture",
-      "domain": "arch",
-      "section": "r1",
-      "question": "Yangi jamoa uchun servis shabloni (template) tuzyapsiz. Nima bo'lishi kerak?",
-      "modelAnswer": [
-        "Struktura: `cmd/`, `internal/domain|application|adapters`, migratsiyalar, `Makefile` — qatlam chegaralari import linter bilan majburlangan",
-        "Kuzatuv standart holda: strukturaviy log (trace_id bilan), Prometheus metrikalari (RED: rate/errors/duration), OTel tracing, `/healthz` va `/readyz` (dependency semantikasi to'g'ri)",
-        "Ishonchlilik primitivlari: HTTP client timeout va retry/breaker bilan o'ralgan, DB pool sozlamalari, graceful shutdown, panic recovery",
-        "Konfiguratsiya: env orqali, validatsiya ishga tushishda (fail fast), sirlar secret manager'dan",
-        "CI: lint (`golangci-lint`), `go test -race`, `govulncheck`, migratsiya tekshiruvi, konteyner qurilishi (distroless, nonroot), SBOM",
-        "Deploy: Helm/Kustomize bazasi, resurs requests/limits, `GOMEMLIMIT`/`automaxprocs`, HPA, PDB, topologySpread",
-        "Hujjat: README (qanday ishga tushirish, kim ega), ADR papkasi, runbook shabloni, alert va SLO bazasi",
-        "Maqsad: yangi servis birinchi kunida productionga chiqishga tayyor — 'platforma sifatida standart', har jamoa o'zi ixtiro qilmaydi"
-      ],
-      "explanation": "Staff darajadagi savol: javob kod strukturasidan boshlanmasligi kerak, balki 'productionda ishlash uchun nima majburiy' ro'yxatidan. Shablonning qiymati — takrorlanuvchi qarorlarni bir marta to'g'ri qilib qotirish."
-    },
-    {
       "id": 30475,
       "code": "SN476",
       "level": "St",

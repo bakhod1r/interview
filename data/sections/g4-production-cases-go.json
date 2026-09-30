@@ -348,65 +348,6 @@
       "explanation": "Kutilayotgan asosiy fikr: pool o'lchami tasodifiy raqam emas, DB sig'imi va Little's law bilan hisoblanadi; `ConnMaxLifetime` esa failover va PgBouncer bilan ishlashda majburiy."
     },
     {
-      "id": 30329,
-      "code": "SN330",
-      "level": "St",
-      "type": "open",
-      "topic": "Go case",
-      "domain": "go",
-      "section": "g4",
-      "question": "Production'da Go servis p99 latency 2 sekundga chiqdi, CPU 30%. Qanday tekshirasiz?",
-      "modelAnswer": [
-        "Avval o'lchov: p99 qaysi endpoint va qaysi instansiyada — hammasida yoki bittasida (hot shard/pod)? Trace bilan qaysi hop vaqt yeganini aniqlash",
-        "Bloklanish gipotezalari: DB pool tugagan (`sql.DBStats.WaitCount`/`WaitDuration`), tashqi HTTP timeout, mutex contention, kanal navbati",
-        "`/debug/pprof/block` va `/debug/pprof/mutex` (yoqilgan bo'lsa), `goroutine?debug=2` bilan bloklangan stack'lar — 10k goroutine bir joyda kutayotgani darhol ko'rinadi",
-        "GC: `GODEBUG=gctrace=1` yoki runtime metrikalari — pauza uzunligi va chastotasi; STW pauza p99'ni ko'tarishi mumkin (katta heap, ko'p pointer)",
-        "Runtime scheduling: `GOMAXPROCS` vs CPU limiti, CFS throttling (`container_cpu_cfs_throttled_seconds_total`) — CPU 30% ko'rinib turib throttle bo'lishi mumkin",
-        "Tashqi: DNS (5s retry), TLS handshake, keep-alive yo'qligi, downstream p99",
-        "Tuzatgandan keyin: xuddi shu metrikaga alert va yuk testi bilan regressiyani tekshirish"
-      ],
-      "explanation": "CPU past + latency yuqori — deyarli har doim kutish: qulf, pool, tashqi chaqiruv yoki throttling. Kutilayotgan javob tartibi: o'lchash → bloklanishni topish (block/mutex/goroutine profil) → runtime/infra cheklovlarini tekshirish."
-    },
-    {
-      "id": 30330,
-      "code": "SN331",
-      "level": "St",
-      "type": "open",
-      "topic": "Go case",
-      "domain": "go",
-      "section": "g4",
-      "question": "Servisda goroutine soni monoton o'sib boradi (leak). Qanday topib tuzatasiz?",
-      "modelAnswer": [
-        "Dalil: `runtime.NumGoroutine()` metrikasi vaqt bo'yicha o'sish grafigi (alert shu metrikaga qo'yilishi kerak)",
-        "Aniqlash: `curl /debug/pprof/goroutine?debug=1` — o'sayotgan stack guruhi darhol ko'rinadi; ikki snapshot farqi eng ishonchli",
-        "Eng ko'p uchraydigan sabablar: `resp.Body` yopilmagan (HTTP client goroutine'i qoladi), kanalga yozuv/ o'qish abadiy bloklangan, `time.Ticker` `Stop` qilinmagan, `ctx` uzatilmagan fon ishlari, `for { go ... }` cheksiz spawn",
-        "Tuzatish naqshlari: har goroutine uchun 'kim to'xtatadi' aniq bo'lishi, kanal operatsiyalari `select`da `ctx.Done()` bilan, `defer resp.Body.Close()` + `io.Copy(io.Discard, body)`",
-        "Profilaktika: `go.uber.org/goleak` bilan testda leak tekshiruvi, va `-race` bilan CI",
-        "Tasdiqlash: tuzatishdan keyin yuk testi ostida goroutine soni stabillashishi (grafik bilan), xotira RSS ham tekis bo'lishi"
-      ],
-      "explanation": "Bu savolda intervyuer aniq vositalarni eshitmoqchi: pprof goroutine ikki snapshot farqi va goleak. 'Xotira oshdi, GOGC o'zgartirdim' javobi sababni ko'rmaganlikni ko'rsatadi."
-    },
-    {
-      "id": 30331,
-      "code": "SN332",
-      "level": "S",
-      "type": "open",
-      "topic": "Go case",
-      "domain": "go",
-      "section": "g4",
-      "question": "Go servis DB bilan ishlaydi. Ulanish pool'ini qanday sozlaysiz va nega?",
-      "modelAnswer": [
-        "`SetMaxOpenConns`: DB tomonidagi `max_connections` va boshqa iste'molchilar bilan hisoblanadi — barcha pod × pool ≤ DB limiti (minus zaxira); PostgreSQL'da har ulanish alohida jarayon, shuning uchun 100-200 dan oshirish odatda zarar",
-        "`SetMaxIdleConns` = MaxOpen (yoki yaqin) — aks holda ulanishlar doimiy yopilib-ochiladi (handshake narxi)",
-        "`SetConnMaxLifetime` (masalan 30 daqiqa) — LB/PgBouncer orqasida eski ulanishlarni yangilash va failover'dan keyin trafik qayta taqsimlanishi uchun; `SetConnMaxIdleTime` bilan bo'sh ulanishlarni bo'shatish",
-        "Sizing: Little's law — kerakli parallel query = RPS × query_duration; pool shundan kichik bo'lsa navbat kutish latency'ga qo'shiladi (`DBStats.WaitDuration` bilan kuzatiladi)",
-        "Juda ko'p ulanish ham yomon: DB'da kontekst almashinish va lock contention oshadi — ko'pincha PgBouncer (transaction pooling) bilan markazlashtirish to'g'riroq",
-        "Har query'da `context` timeout; `statement_timeout` DB tomonda ham qo'yiladi",
-        "Kuzatuv: `WaitCount`, `WaitDuration`, `InUse`, `Idle` metrikalari — pool tugashi incident'larda eng ko'p uchraydigan bo'g'iz"
-      ],
-      "explanation": "Kutilayotgan asosiy fikr: pool o'lchami tasodifiy raqam emas, DB sig'imi va Little's law bilan hisoblanadi; `ConnMaxLifetime` esa failover va PgBouncer bilan ishlashda majburiy."
-    },
-    {
       "id": 30419,
       "code": "SN420",
       "level": "P",

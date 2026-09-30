@@ -280,42 +280,6 @@
       "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
     },
     {
-      "id": 30354,
-      "code": "SN355",
-      "level": "S",
-      "type": "mcq",
-      "topic": "TCP/IP",
-      "domain": "infra",
-      "section": "i4",
-      "question": "TCP va UDP orasidagi tanlov qachon UDP tomonga o'tadi?",
-      "options": [
-        "UDP har doim tezroq, doim tanlanadi",
-        "Yo'qolishga bardoshli va latency muhim bo'lgan oqimlarda (video/ovoz, o'yin holati, metrikalar/statsd, DNS) yoki o'z ustiga ishonchlilik qurganda (QUIC) — TCP head-of-line blocking va retransmit kechikishini olib tashlash uchun",
-        "Faqat lokal tarmoqda",
-        "UDP'da tartib kafolatlangan"
-      ],
-      "answer": 1,
-      "explanation": "TCP bitta paket yo'qolsa keyingi kelgan ma'lumotni ham kutishga majbur qiladi (head-of-line) — real-time uchun yomon. QUIC (HTTP/3) UDP ustida oqimlarni mustaqil qilib shu muammoni yechadi va handshake'ni 1-RTT/0-RTT ga tushiradi. UDP tanlansa: retransmit, tartib, congestion control kimning zimmasida — aniq javob bo'lishi kerak."
-    },
-    {
-      "id": 30355,
-      "code": "SN356",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Network",
-      "domain": "infra",
-      "section": "i4",
-      "question": "`ss -s` da `Recv-Q` katta. Bu nimani ko'rsatadi?",
-      "options": [
-        "Tarmoq sekin",
-        "Ilova socket'dan yetarlicha tez o'qimayapti — accept/read qatlamida bo'g'iz (goroutine yetmaydi, handler bloklangan); `Send-Q` katta bo'lsa teskarisi — qabul qiluvchi yoki tarmoq sekin",
-        "Paket yo'qolgan",
-        "MTU kichik"
-      ],
-      "answer": 1,
-      "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
-    },
-    {
       "id": 30437,
       "code": "SN438",
       "level": "S",

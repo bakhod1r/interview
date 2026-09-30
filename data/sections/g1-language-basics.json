@@ -871,61 +871,6 @@
       "explanation": "Slice qiymat bo'yicha uzatiladi, lekin backing array umumiy — shuning uchun `x[0]=100` ko'rinadi. `append` cap oshganda yangi massivga ko'chiradi, shundan keyin funksiya ichidagi slice mustaqil bo'ladi. Shu chalkashlik sababli slice'ni o'zgartiradigan funksiyalar natijani qaytarishi kerak (`func modify(x []int) []int`)."
     },
     {
-      "id": 30323,
-      "code": "SN324",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Errors",
-      "domain": "go",
-      "section": "g1",
-      "question": "Xatolarni qanday o'rash va tekshirish idiomatik?",
-      "options": [
-        "`fmt.Errorf(\"%v\", err)` va matn bo'yicha `strings.Contains`",
-        "`fmt.Errorf(\"context: %w\", err)` bilan o'rash, `errors.Is` (sentinel) va `errors.As` (tur/maydonlar) bilan tekshirish; API chegarasida ichki xatoni o'z turiga o'girish",
-        "Har joyda panic",
-        "Xatoni log qilib nil qaytarish"
-      ],
-      "answer": 1,
-      "explanation": "`%v` zanjirni uzadi — `errors.Is` ishlamaydi. Matn bo'yicha tekshirish esa kutubxona xabari o'zgarganda jim buziladi. Qatlamlar bo'yicha qoida: pastda `%w` bilan kontekst qo'shiladi, yuqorida (HTTP handler) `errors.As` bilan domain xatosi aniqlanib status kodga o'giriladi. `errors.Join` bir nechta xatoni birlashtiradi."
-    },
-    {
-      "id": 30324,
-      "code": "SN325",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Interfaces",
-      "domain": "go",
-      "section": "g1",
-      "question": "Go'da interfeys qayerda e'lon qilinishi kerak?",
-      "options": [
-        "Implementatsiya paketida, barcha metodlar bilan",
-        "Iste'molchi paketida va minimal (kerakli metodlargina) — 'accept interfaces, return structs'; katta interfeys mock va bog'liqlikni ko'paytiradi",
-        "`internal/interfaces` paketida markazlashgan",
-        "Farqi yo'q"
-      ],
-      "answer": 1,
-      "explanation": "Iste'molchi tomonda e'lon qilinsa: paket o'ziga kerakli minimal shartnomani belgilaydi, test uchun mock oson, va implementatsiya paketi hech kimga bog'lanmaydi. `io.Reader` — bu falsafaning namunasi. Konstruktor esa konkret turni qaytaradi, shunda iste'molchi kerakli qismini o'zi abstraktlaydi."
-    },
-    {
-      "id": 30325,
-      "code": "SN326",
-      "level": "S",
-      "type": "code",
-      "topic": "Basics",
-      "domain": "go",
-      "section": "g1",
-      "question": "Bu kod nima chiqaradi?",
-      "snippet": "s := []int{1, 2, 3}\nmodify(s)\nfmt.Println(s)\n\nfunc modify(x []int) {\n    x[0] = 100\n    x = append(x, 4)\n    x[1] = 200\n}",
-      "options": [
-        "`[100 200 3]`",
-        "`[100 2 3]` — `x[0]` umumiy massivga yozadi, `append` esa cap yetmagani uchun yangi massiv yaratadi va keyingi o'zgarishlar asl slice'ga tegmaydi",
-        "`[1 2 3]`",
-        "`[100 200 3 4]`"
-      ],
-      "answer": 1,
-      "explanation": "Slice qiymat bo'yicha uzatiladi, lekin backing array umumiy — shuning uchun `x[0]=100` ko'rinadi. `append` cap oshganda yangi massivga ko'chiradi, shundan keyin funksiya ichidagi slice mustaqil bo'ladi. Shu chalkashlik sababli slice'ni o'zgartiradigan funksiyalar natijani qaytarishi kerak (`func modify(x []int) []int`)."
-    },
-    {
       "id": 30416,
       "code": "SN417",
       "level": "S",

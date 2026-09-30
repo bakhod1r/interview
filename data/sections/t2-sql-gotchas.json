@@ -2,7 +2,7 @@
   "id": "t2",
   "name": "SQL gotchas",
   "domain": "db",
-  "domainLabel": "PostgreSQL & SQL",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "SQL gotcha"
   ],
@@ -334,81 +334,6 @@
     {
       "id": 30148,
       "code": "SN149",
-      "level": "S",
-      "type": "mcq",
-      "topic": "SQL gotcha",
-      "domain": "db",
-      "section": "t2",
-      "question": "`SELECT count(*)` katta jadvalda sekin. PostgreSQL'da nega va nima qilinadi?",
-      "options": [
-        "Indeks qo'shish `count(*)`ni tezlashtiradi",
-        "MVCC tufayli aniq sanoq har qatorning ko'rinishini tekshirishni talab qiladi (index-only scan bo'lsa ham to'liq skan) — taxminiy sanoq (`pg_class.reltuples`), alohida hisoblagich jadval yoki keshlangan qiymat ishlatiladi",
-        "`count(1)` tezroq",
-        "`VACUUM` count'ni tezlashtiradi"
-      ],
-      "answer": 1,
-      "explanation": "MySQL InnoDB'da ham shunday. Amaliy yechimlar: UI'da 'taxminan N natija' (reltuples yoki `EXPLAIN` bahosi), filtrlangan sanoq uchun alohida agregat jadval (trigger yoki eventdan yangilanadi), yoki `count(*) OVER ()` bilan faqat joriy sahifa kontekstida. `count(1)` va `count(*)` bir xil tezlikda."
-    },
-    {
-      "id": 30295,
-      "code": "SN296",
-      "level": "S",
-      "type": "code",
-      "topic": "SQL gotcha",
-      "domain": "db",
-      "section": "t2",
-      "question": "Bu query nega kutilganidan kam qator qaytaradi?",
-      "snippet": "SELECT u.id, u.email\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.status = 'paid';",
-      "options": [
-        "`LEFT JOIN` noto'g'ri yozilgan",
-        "`WHERE` filtri JOIN'dan keyin qo'llanadi va `NULL` qatorlarni kesib tashlaydi — LEFT JOIN amalda INNER JOIN'ga aylanadi; shart `ON`ga ko'chirilishi kerak",
-        "`status` indeksi yo'q",
-        "`u.id` unique emas"
-      ],
-      "answer": 1,
-      "explanation": "Outer join'da o'ng tomon shartlari `ON` ichida bo'lishi kerak: `LEFT JOIN orders o ON o.user_id = u.id AND o.status = 'paid'`. Agar maqsad 'to'lovi yo'q userlar' bo'lsa — `WHERE o.id IS NULL` (anti-join). Bu xato kod review'da eng ko'p o'tib ketadigan SQL xatolaridan biri."
-    },
-    {
-      "id": 30296,
-      "code": "SN297",
-      "level": "S",
-      "type": "code",
-      "topic": "SQL gotcha",
-      "domain": "db",
-      "section": "t2",
-      "question": "`NOT IN` bilan nega bo'sh natija keladi?",
-      "snippet": "SELECT * FROM users\nWHERE id NOT IN (SELECT user_id FROM orders);",
-      "options": [
-        "Jadval bo'sh",
-        "`orders.user_id` ichida bitta `NULL` bo'lsa — butun shart `UNKNOWN` bo'ladi va hech qanday qator qaytmaydi; `NOT EXISTS` yoki `IS NOT NULL` filtri ishlatiladi",
-        "Indeks yo'q",
-        "`NOT IN` sintaksisi xato"
-      ],
-      "answer": 1,
-      "explanation": "`id NOT IN (1, NULL)` = `id <> 1 AND id <> NULL` = `... AND UNKNOWN` — hech qachon rost bo'lmaydi. `NOT EXISTS` NULL bilan to'g'ri ishlaydi va planner uchun ko'pincha samaraliroq (anti-join). Bu klassik jim bug: ma'lumotga bitta NULL kelgan kuni hisobot bo'shab qoladi."
-    },
-    {
-      "id": 30297,
-      "code": "SN298",
-      "level": "S",
-      "type": "code",
-      "topic": "SQL gotcha",
-      "domain": "db",
-      "section": "t2",
-      "question": "Pagination'da qatorlar takrorlanib/tushib qolyapti. Nega?",
-      "snippet": "SELECT * FROM events ORDER BY created_at DESC LIMIT 20 OFFSET 40;",
-      "options": [
-        "OFFSET har doim xato",
-        "`created_at` unique emas — teng qiymatlarda tartib barqaror emas, shuning uchun sahifalar orasida qator takrorlanadi yoki yo'qoladi; tie-breaker (`, id DESC`) va keyset pagination kerak",
-        "LIMIT 20 kichik",
-        "Indeks yo'q"
-      ],
-      "answer": 1,
-      "explanation": "Ikki muammo birga: (1) barqaror bo'lmagan tartib — har doim unique tie-breaker qo'shiladi; (2) OFFSET chuqurlashganda sekinlashadi (N qatorni tashlab o'tish) va yangi yozuvlar sahifani surib yuboradi. Yechim — keyset: `WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT 20`."
-    },
-    {
-      "id": 30298,
-      "code": "SN299",
       "level": "S",
       "type": "mcq",
       "topic": "SQL gotcha",

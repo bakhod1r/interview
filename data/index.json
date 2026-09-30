@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1290,
+  "total": 1205,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -33,7 +33,7 @@
       "id": "g1",
       "name": "Language basics",
       "domain": "go",
-      "count": 51,
+      "count": 48,
       "file": "sections/g1-language-basics.json"
     },
     {
@@ -47,70 +47,70 @@
       "id": "g7",
       "name": "Runtime internals",
       "domain": "go",
-      "count": 25,
+      "count": 29,
       "file": "sections/g7-runtime-internals.json"
     },
     {
       "id": "g5",
       "name": "Tooling, modules, build",
       "domain": "go",
-      "count": 28,
+      "count": 25,
       "file": "sections/g5-tooling-modules-build.json"
     },
     {
       "id": "g6",
       "name": "Stdlib & web",
       "domain": "go",
-      "count": 30,
+      "count": 28,
       "file": "sections/g6-stdlib-web.json"
     },
     {
       "id": "g3",
       "name": "Memory, performance, testing",
       "domain": "go",
-      "count": 35,
+      "count": 37,
       "file": "sections/g3-memory-performance-testing.json"
     },
     {
       "id": "g4",
       "name": "Production cases (Go)",
       "domain": "go",
-      "count": 23,
+      "count": 20,
       "file": "sections/g4-production-cases-go.json"
     },
     {
       "id": "t1",
       "name": "Go gotchas",
       "domain": "go",
-      "count": 28,
+      "count": 23,
       "file": "sections/t1-go-gotchas.json"
     },
     {
       "id": "t4",
       "name": "Concurrency gotchas",
       "domain": "go",
-      "count": 13,
+      "count": 10,
       "file": "sections/t4-concurrency-gotchas.json"
     },
     {
       "id": "t5",
       "name": "Time, date, encoding gotchas",
       "domain": "go",
-      "count": 13,
+      "count": 10,
       "file": "sections/t5-time-date-encoding-gotchas.json"
     },
     {
       "id": "t8",
       "name": "Memory & GC gotchas",
       "domain": "go",
-      "count": 12,
+      "count": 10,
       "file": "sections/t8-memory-gc-gotchas.json"
     },
     {
       "id": "d1",
       "name": "SQL basics",
       "domain": "db",
-      "count": 24,
+      "count": 22,
       "file": "sections/d1-sql-basics.json"
     },
     {
@@ -124,28 +124,28 @@
       "id": "d3",
       "name": "Indexes & query planning",
       "domain": "db",
-      "count": 37,
+      "count": 35,
       "file": "sections/d3-indexes-query-planning.json"
     },
     {
       "id": "d4",
       "name": "Transactions & isolation",
       "domain": "db",
-      "count": 49,
+      "count": 46,
       "file": "sections/d4-transactions-isolation.json"
     },
     {
       "id": "d5",
       "name": "Operations, scaling, Go+DB",
       "domain": "db",
-      "count": 42,
+      "count": 40,
       "file": "sections/d5-operations-scaling-go-db.json"
     },
     {
       "id": "t2",
       "name": "SQL gotchas",
       "domain": "db",
-      "count": 23,
+      "count": 19,
       "file": "sections/t2-sql-gotchas.json"
     },
     {
@@ -159,7 +159,7 @@
       "id": "n1",
       "name": "Redis & caching",
       "domain": "nosql",
-      "count": 32,
+      "count": 29,
       "file": "sections/n1-redis-caching.json"
     },
     {
@@ -194,7 +194,7 @@
       "id": "m2",
       "name": "RabbitMQ & queues",
       "domain": "msg",
-      "count": 17,
+      "count": 15,
       "file": "sections/m2-rabbitmq-queues.json"
     },
     {
@@ -208,7 +208,7 @@
       "id": "t9",
       "name": "Kafka & queue gotchas",
       "domain": "msg",
-      "count": 13,
+      "count": 10,
       "file": "sections/t9-kafka-queue-gotchas.json"
     },
     {
@@ -250,7 +250,7 @@
       "id": "t6",
       "name": "API & HTTP gotchas",
       "domain": "api",
-      "count": 13,
+      "count": 10,
       "file": "sections/t6-api-http-gotchas.json"
     },
     {
@@ -264,7 +264,7 @@
       "id": "i2",
       "name": "CI/CD & deploy",
       "domain": "infra",
-      "count": 24,
+      "count": 26,
       "file": "sections/i2-ci-cd-deploy.json"
     },
     {
@@ -278,14 +278,14 @@
       "id": "i4",
       "name": "Networking & protocols",
       "domain": "infra",
-      "count": 20,
+      "count": 18,
       "file": "sections/i4-networking-protocols.json"
     },
     {
       "id": "i5",
       "name": "Cloud, OS, operations",
       "domain": "infra",
-      "count": 30,
+      "count": 26,
       "file": "sections/i5-cloud-os-operations.json"
     },
     {
@@ -313,14 +313,14 @@
       "id": "r1",
       "name": "Microservices & boundaries",
       "domain": "arch",
-      "count": 20,
+      "count": 18,
       "file": "sections/r1-microservices-boundaries.json"
     },
     {
       "id": "r2",
       "name": "OOP & SOLID",
       "domain": "arch",
-      "count": 14,
+      "count": 12,
       "file": "sections/r2-oop-solid.json"
     },
     {
@@ -334,7 +334,7 @@
       "id": "r4",
       "name": "Clean code & architecture",
       "domain": "arch",
-      "count": 16,
+      "count": 14,
       "file": "sections/r4-clean-code-architecture.json"
     },
     {
@@ -369,42 +369,42 @@
       "id": "s2",
       "name": "Practice: failure & scale",
       "domain": "dist",
-      "count": 22,
+      "count": 20,
       "file": "sections/s2-practice-failure-scale.json"
     },
     {
       "id": "t7",
       "name": "Distributed gotchas",
       "domain": "dist",
-      "count": 13,
+      "count": 10,
       "file": "sections/t7-distributed-gotchas.json"
     },
     {
       "id": "y1",
       "name": "System design basics",
       "domain": "sys",
-      "count": 27,
+      "count": 25,
       "file": "sections/y1-system-design-basics.json"
     },
     {
       "id": "y2",
       "name": "Case studies",
       "domain": "sys",
-      "count": 50,
+      "count": 47,
       "file": "sections/y2-case-studies.json"
     },
     {
       "id": "t3",
       "name": "System & infra gotchas",
       "domain": "sys",
-      "count": 13,
+      "count": 10,
       "file": "sections/t3-system-infra-gotchas.json"
     },
     {
       "id": "z1",
       "name": "Algorithm patterns",
       "domain": "alg",
-      "count": 59,
+      "count": 44,
       "file": "sections/z1-algorithm-patterns.json"
     },
     {
@@ -418,7 +418,7 @@
       "id": "x1",
       "name": "Application security",
       "domain": "sec",
-      "count": 24,
+      "count": 21,
       "file": "sections/x1-application-security.json"
     },
     {
@@ -432,7 +432,7 @@
       "id": "p3",
       "name": "Compliance, fraud, FX",
       "domain": "sec",
-      "count": 14,
+      "count": 12,
       "file": "sections/p3-compliance-fraud-fx.json"
     }
   ]

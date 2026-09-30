@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1290,
+  "total": 1205,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -902,61 +902,6 @@
           "explanation": "Slice qiymat bo'yicha uzatiladi, lekin backing array umumiy — shuning uchun `x[0]=100` ko'rinadi. `append` cap oshganda yangi massivga ko'chiradi, shundan keyin funksiya ichidagi slice mustaqil bo'ladi. Shu chalkashlik sababli slice'ni o'zgartiradigan funksiyalar natijani qaytarishi kerak (`func modify(x []int) []int`)."
         },
         {
-          "id": 30323,
-          "code": "SN324",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Errors",
-          "domain": "go",
-          "section": "g1",
-          "question": "Xatolarni qanday o'rash va tekshirish idiomatik?",
-          "options": [
-            "`fmt.Errorf(\"%v\", err)` va matn bo'yicha `strings.Contains`",
-            "`fmt.Errorf(\"context: %w\", err)` bilan o'rash, `errors.Is` (sentinel) va `errors.As` (tur/maydonlar) bilan tekshirish; API chegarasida ichki xatoni o'z turiga o'girish",
-            "Har joyda panic",
-            "Xatoni log qilib nil qaytarish"
-          ],
-          "answer": 1,
-          "explanation": "`%v` zanjirni uzadi — `errors.Is` ishlamaydi. Matn bo'yicha tekshirish esa kutubxona xabari o'zgarganda jim buziladi. Qatlamlar bo'yicha qoida: pastda `%w` bilan kontekst qo'shiladi, yuqorida (HTTP handler) `errors.As` bilan domain xatosi aniqlanib status kodga o'giriladi. `errors.Join` bir nechta xatoni birlashtiradi."
-        },
-        {
-          "id": 30324,
-          "code": "SN325",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Interfaces",
-          "domain": "go",
-          "section": "g1",
-          "question": "Go'da interfeys qayerda e'lon qilinishi kerak?",
-          "options": [
-            "Implementatsiya paketida, barcha metodlar bilan",
-            "Iste'molchi paketida va minimal (kerakli metodlargina) — 'accept interfaces, return structs'; katta interfeys mock va bog'liqlikni ko'paytiradi",
-            "`internal/interfaces` paketida markazlashgan",
-            "Farqi yo'q"
-          ],
-          "answer": 1,
-          "explanation": "Iste'molchi tomonda e'lon qilinsa: paket o'ziga kerakli minimal shartnomani belgilaydi, test uchun mock oson, va implementatsiya paketi hech kimga bog'lanmaydi. `io.Reader` — bu falsafaning namunasi. Konstruktor esa konkret turni qaytaradi, shunda iste'molchi kerakli qismini o'zi abstraktlaydi."
-        },
-        {
-          "id": 30325,
-          "code": "SN326",
-          "level": "S",
-          "type": "code",
-          "topic": "Basics",
-          "domain": "go",
-          "section": "g1",
-          "question": "Bu kod nima chiqaradi?",
-          "snippet": "s := []int{1, 2, 3}\nmodify(s)\nfmt.Println(s)\n\nfunc modify(x []int) {\n    x[0] = 100\n    x = append(x, 4)\n    x[1] = 200\n}",
-          "options": [
-            "`[100 200 3]`",
-            "`[100 2 3]` — `x[0]` umumiy massivga yozadi, `append` esa cap yetmagani uchun yangi massiv yaratadi va keyingi o'zgarishlar asl slice'ga tegmaydi",
-            "`[1 2 3]`",
-            "`[100 200 3 4]`"
-          ],
-          "answer": 1,
-          "explanation": "Slice qiymat bo'yicha uzatiladi, lekin backing array umumiy — shuning uchun `x[0]=100` ko'rinadi. `append` cap oshganda yangi massivga ko'chiradi, shundan keyin funksiya ichidagi slice mustaqil bo'ladi. Shu chalkashlik sababli slice'ni o'zgartiradigan funksiyalar natijani qaytarishi kerak (`func modify(x []int) []int`)."
-        },
-        {
           "id": 30416,
           "code": "SN417",
           "level": "S",
@@ -1736,79 +1681,6 @@
           "explanation": "Goroutine arzon, lekin har biri TCP ulanish, xotira buferi va downstream yukini keltiradi — 10k parallel so'rov tashqi servisni yoki o'z FD limitini o'ldiradi. N ni empirik tanlash kerak (latency × N ≈ throughput, Little's law). Qo'shimcha: natijalarni tartibli yig'ish uchun indeksli slice, kanalga yozishdan ko'ra oddiyroq."
         },
         {
-          "id": 30319,
-          "code": "SN320",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Context",
-          "domain": "go",
-          "section": "g2",
-          "question": "`ctx` bekor bo'lgach `errgroup`dagi qolgan goroutine'lar avtomatik to'xtaydimi?",
-          "options": [
-            "Ha, avtomatik",
-            "Yo'q — `errgroup.WithContext` faqat ctx'ni bekor qiladi; har goroutine o'zi `ctx.Done()`ni yoki ctx'ni qabul qiluvchi chaqiruvlarni (DB, HTTP) tekshirishi kerak, aks holda ish davom etadi",
-            "Faqat `SetLimit` bilan",
-            "Panic bo'ladi"
-          ],
-          "answer": 1,
-          "explanation": "Go'da cancellation kooperativ: hech kim goroutine'ni majburan to'xtata olmaydi. Shuning uchun uzun tsikllarda `select { case <-ctx.Done(): return ctx.Err(); default: }` yoki I/O chaqiruvlariga ctx uzatish kerak. `errgroup.Wait` birinchi xatoni qaytaradi, lekin qolganlarini kutadi — leak shu yerdan chiqadi."
-        },
-        {
-          "id": 30320,
-          "code": "SN321",
-          "level": "S",
-          "type": "code",
-          "topic": "Sync",
-          "domain": "go",
-          "section": "g2",
-          "question": "Bu kodda qanday xato bor?",
-          "snippet": "type Counter struct {\n    mu sync.RWMutex\n    m  map[string]int\n}\n\nfunc (c *Counter) Inc(k string) {\n    c.mu.RLock()\n    defer c.mu.RUnlock()\n    c.m[k]++\n}",
-          "options": [
-            "`RWMutex` o'rniga `Mutex` kerak emas, kod to'g'ri",
-            "`RLock` yozuvni himoya qilmaydi — bir necha goroutine bir vaqtda `RLock` oladi va map'ga yozadi: `concurrent map writes` panic yoki buzilgan sanoq",
-            "`defer` sekin",
-            "`map` nil"
-          ],
-          "answer": 1,
-          "explanation": "`RLock` faqat o'qishlar uchun va ular o'zaro bloklanmaydi. Yozuvda `Lock` kerak. Bu bug yuk ostida tasodifiy panic beradi va testda chiqmaydi — shuning uchun CI'da `go test -race` majburiy. Yuqori konkurentlikda `atomic.Int64` yoki shardlangan hisoblagich mutex'dan tez bo'ladi."
-        },
-        {
-          "id": 30321,
-          "code": "SN322",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Channels",
-          "domain": "go",
-          "section": "g2",
-          "question": "Worker pool'da natija kanali buferlanmagan va konsumer xato bo'lib chiqib ketdi. Nima bo'ladi?",
-          "options": [
-            "Hech narsa",
-            "Yozuvchi goroutine'lar abadiy bloklanadi — goroutine leak; shuning uchun yozish `select`da `ctx.Done()` bilan birga bo'lishi yoki konsumer kanalni oxirigacha drenaj qilishi kerak",
-            "Kanal avtomatik yopiladi",
-            "Xabarlar tashlanadi"
-          ],
-          "answer": 1,
-          "explanation": "Klassik leak: `results <- r` bloklangan, funksiya `return` qilmaydi, `wg.Wait()` ham abadiy kutadi. Naqsh: `select { case results <- r: case <-ctx.Done(): return }`. Qoida — kanalga yozish har doim bekor qilinishi mumkin bo'lgan operatsiya sifatida yozilsin; kanalni yopish esa faqat yozuvchi tomonning vazifasi."
-        },
-        {
-          "id": 30322,
-          "code": "SN323",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Concurrency",
-          "domain": "go",
-          "section": "g2",
-          "question": "10k tashqi HTTP chaqiruvni parallel qilish kerak. To'g'ri yondashuv?",
-          "options": [
-            "10k goroutine bir vaqtda",
-            "Konkurentlikni cheklash: `errgroup` + `SetLimit(N)` yoki semaphore; N tashqi servis limitiga va o'z resursiga qarab tanlanadi, ustiga per-request timeout, retry budget va umumiy ctx deadline",
-            "`GOMAXPROCS`ni oshirish",
-            "Kanalsiz `sync.WaitGroup`"
-          ],
-          "answer": 1,
-          "explanation": "Goroutine arzon, lekin har biri TCP ulanish, xotira buferi va downstream yukini keltiradi — 10k parallel so'rov tashqi servisni yoki o'z FD limitini o'ldiradi. N ni empirik tanlash kerak (latency × N ≈ throughput, Little's law). Qo'shimcha: natijalarni tartibli yig'ish uchun indeksli slice, kanalga yozishdan ko'ra oddiyroq."
-        },
-        {
           "id": 30412,
           "code": "SN413",
           "level": "S",
@@ -1879,6 +1751,78 @@
           ],
           "answer": 1,
           "explanation": "Ikki qoida yetarli: (1) kanalni faqat unga yozuvchi yopadi, (2) har bloklanuvchi operatsiya `ctx.Done()` bilan birga `select`da. Aks holda erta chiqishda yozuvchilar abadiy bloklanadi (goroutine leak) yoki yopilgan kanalga yozib panic bo'ladi. Testda `goleak` bilan tekshiriladi."
+        },
+        {
+          "id": 30694,
+          "code": "GX94",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Sync",
+          "domain": "go",
+          "section": "g2",
+          "question": "Go memory model bo'yicha qaysi gap to'g'ri?",
+          "options": [
+            "Sinxronizatsiyasiz bir goroutine yozgan qiymatni boshqasi ko'rishi kafolatlanmaydi; happens-before faqat kanal send/receive, Mutex Unlock/Lock, sync.Once, atomic operatsiyalar orqali o'rnatiladi",
+            "Bir yadroli mashinada data race bo'lmaydi",
+            "int'ga yozish har doim atomik, shuning uchun sinxronizatsiya kerak emas",
+            "time.Sleep happens-before beradi"
+          ],
+          "answer": 0,
+          "explanation": "Go 1.19 memory model: race'siz dastur ketma-ket izchil (DRF-SC). Race bo'lsa kompilyator va CPU tartibni o'zgartirishi mumkin — `for !done {}` flag'i abadiy loop bo'lishi mumkin (qiymat registrda qoladi). `time.Sleep` sinxronizatsiya emas. `go test -race` race'larni runtime'da topadi — CI'da majburiy bo'lishi kerak."
+        },
+        {
+          "id": 30695,
+          "code": "GX95",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Sync",
+          "domain": "go",
+          "section": "g2",
+          "question": "`atomic.Int64` (Go 1.19+) eski `atomic.AddInt64(&x, 1)` dan nimasi bilan yaxshi?",
+          "options": [
+            "Tezroq ishlaydi",
+            "Tip darajasida himoya: maydonni tasodifan atomiksiz o'qish/yozish mumkin emas; 32-bit platformalarda 64-bit alignment avtomatik kafolatlanadi; noCopy bilan vet nusxalashni ushlaydi",
+            "Mutex'ni to'liq almashtiradi",
+            "Faqat 64-bit tizimlarda ishlaydi"
+          ],
+          "answer": 1,
+          "explanation": "Eski API'da `x++` va `atomic.AddInt64(&x,1)` aralashib ketishi oson — bu race. 32-bit ARM/386 da int64 8-baytga tekislanmagan bo'lsa atomic panic berardi. `atomic.Pointer[T]` konfiguratsiyani lock'siz almashtirish (copy-on-write) uchun qulay. Bir nechta maydonni birga o'zgartirish kerak bo'lsa — atomic emas, Mutex."
+        },
+        {
+          "id": 30696,
+          "code": "GX96",
+          "level": "St",
+          "type": "mcq",
+          "topic": "Sync",
+          "domain": "go",
+          "section": "g2",
+          "question": "Juda ko'p o'qiladigan, kamdan-kam yangilanadigan konfiguratsiya uchun eng yaxshi pattern?",
+          "options": [
+            "sync.RWMutex har doim eng tez",
+            "Global o'zgaruvchi, sinxronizatsiyasiz",
+            "atomic.Pointer[Config]: o'quvchilar Load() qiladi (lock yo'q), yozuvchi yangi Config nusxasini yaratib Store() qiladi; Config yaratilgandan keyin o'zgartirilmaydi (immutable)",
+            "Har o'qishda kanal orqali so'rash"
+          ],
+          "answer": 2,
+          "explanation": "RWMutex ko'p yadroda RLock'dagi umumiy counter tufayli cache-line contention beradi — o'quvchilar ko'p bo'lsa sekinlashadi. atomic.Pointer bilan o'qish deyarli bepul. Shart: Store'dan keyin eski obyektni hech kim o'zgartirmasligi (aks holda race). sync.Map faqat kalitlar to'plami asosan o'sib boradigan yoki goroutine'lar alohida kalitlar bilan ishlaydigan holatlar uchun."
+        },
+        {
+          "id": 30697,
+          "code": "GX97",
+          "level": "S",
+          "type": "code",
+          "topic": "Sync",
+          "domain": "go",
+          "section": "g2",
+          "question": "Bu kod qanday ishlaydi?\n\n```go\ntype Stats struct {\n    hits   atomic.Int64\n    misses atomic.Int64\n}\n// 64 ta goroutine to'xtovsiz hits.Add(1) va misses.Add(1) qiladi\n```\n\nProfil `atomic.Add` da ko'p vaqt ko'rsatyapti. Sabab?",
+          "options": [
+            "atomic noto'g'ri ishlatilgan",
+            "Go'da atomic sekin, Mutex yaxshiroq",
+            "GC bosimi",
+            "False sharing: ikkala counter bitta 64-baytlik cache line'da — har yadro yozganda boshqalarning keshi bekor bo'ladi; yechim — padding yoki har yadroga/shard'ga alohida counter, keyin yig'ish"
+          ],
+          "answer": 3,
+          "explanation": "Tekshirish: benchmark'da `_ [56]byte` padding qo'shib farqni ko'rish. Yuqori yozuvli counterlar uchun sharding (masalan GOMAXPROCS ta slot, har birini cache line'ga tekislab) — o'qishda yig'iladi. Prometheus client ham ichida shunga o'xshash yondashuvdan foydalanadi."
         }
       ]
     },
@@ -2350,6 +2294,80 @@
           ],
           "answer": 1,
           "explanation": "Shuning uchun unbuffered kanal 'sinxronlash nuqtasi' deyiladi va happens-before beradi. Ishlash nuqtai nazaridan: kanal har operatsiyada `hchan` mutexini oladi — juda yuqori chastotali hisoblagich uchun kanal `atomic`dan sekinroq. Select esa bir necha kanalga navbatga turadi va tasodifiy tanlaydi (starvationni oldini olish uchun)."
+        },
+        {
+          "id": 30703,
+          "code": "GX103",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Runtime",
+          "domain": "go",
+          "section": "g7",
+          "question": "cgo chaqiruvining narxi va xavflari?",
+          "options": [
+            "cgo bepul",
+            "Har chaqiruv ~tens of ns (oddiy Go chaqiruvdan ko'p marta qimmat), C kodi bloklansa OS thread band bo'ladi; cross-compile qiyinlashadi, statik build yo'qoladi, C xotirasini GC ko'rmaydi (qo'lda free), Go pointer'larini C'da saqlash qoidalari qat'iy",
+            "cgo bilan GC C xotirasini ham tozalaydi",
+            "cgo faqat Windows'da ishlaydi"
+          ],
+          "answer": 1,
+          "explanation": "Mayda funksiyalarni loop ichida cgo orqali chaqirish — anti-pattern; ishni batch qilish kerak. pprof C kodini yaxshi ko'rmaydi. Imkon bo'lsa sof Go alternativ (masalan modernc.org/sqlite, pgx). 'cgo is not Go' — Rob Pike."
+        },
+        {
+          "id": 30704,
+          "code": "GX104",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Runtime",
+          "domain": "go",
+          "section": "g7",
+          "question": "Go scheduler'ning GMP modeli haqida to'g'ri gap?",
+          "options": [
+            "Har goroutine alohida OS thread",
+            "GOMAXPROCS goroutine sonini cheklaydi",
+            "G — goroutine, M — OS thread, P — ishga tushirish konteksti (GOMAXPROCS ta, local run queue bilan); bo'sh P boshqasidan work-stealing qiladi; syscall'da bloklangan M dan P ajratilib boshqa M ga beriladi; Go 1.14+ asinxron preemption uzun loop'larni ham to'xtata oladi",
+            "Goroutine'lar faqat kanal operatsiyasida almashadi"
+          ],
+          "answer": 2,
+          "explanation": "Tarmoq I/O netpoller (epoll/kqueue) orqali — goroutine park qilinadi, thread band bo'lmaydi. Fayl I/O va cgo esa thread'ni band qiladi — ko'p parallel fayl operatsiyasi thread sonini oshiradi (limit 10000, `debug.SetMaxThreads`). `GODEBUG=schedtrace=1000` scheduler holatini ko'rsatadi."
+        },
+        {
+          "id": 30705,
+          "code": "GX105",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Runtime",
+          "domain": "go",
+          "section": "g7",
+          "question": "Go 1.23 `unique` va Go 1.24 `weak` paketlari nima uchun?",
+          "options": [
+            "Ikkalasi ham unsafe'ning o'rnini bosadi",
+            "unique — UUID generatori",
+            "weak — zaif shifrlash",
+            "unique.Make — qiymatlarni intern qilib Handle qaytaradi: bir xil qiymat bitta nusxada saqlanadi, Handle solishtirish pointer solishtirishdek arzon; weak.Pointer — obyektni GC'dan ushlab turmaydigan ko'rsatkich, keshlar va kanonik xaritalar uchun"
+          ],
+          "answer": 3,
+          "explanation": "Takrorlanuvchi satrlar ko'p bo'lgan holatlar (masalan millionlab log label'lari, IP manzillari — net/netip ichida ishlatiladi) xotirani keskin kamaytiradi. weak bilan kesh qurilganda obyekt faqat keshda qolsa GC uni yig'adi. Go 1.24 da runtime.AddCleanup SetFinalizer'ning xavfsizroq o'rnini bosadi."
+        },
+        {
+          "id": 30706,
+          "code": "GX106",
+          "level": "St",
+          "type": "open",
+          "topic": "Runtime",
+          "domain": "go",
+          "section": "g7",
+          "question": "Go GC qanday ishlaydi va latency-sezgir servisda uni qanday sozlaysiz?",
+          "modelAnswer": [
+            "Concurrent, non-generational, non-moving tri-color mark-and-sweep; write barrier mark paytida yoqiladi; STW fazalari odatda < 1ms",
+            "Pacer: GOGC (default 100) — keyingi GC tirik heap 2x bo'lganda; GOMEMLIMIT — soft umumiy limit",
+            "Mark assist: tez allocation qilayotgan goroutine'lar GC ishiga majburan jalb qilinadi — bu latency cho'qqilari manbai",
+            "Diagnostika: GODEBUG=gctrace=1, runtime/metrics, pprof alloc profili, trace'da GC fazalari",
+            "Kamaytirish: allocation'ni qisqartirish (escape analysis, oldindan ajratilgan slice, sync.Pool, []byte qayta ishlatish), pointer'siz tuzilmalar (GC skanerlamaydi)",
+            "Sozlash: konteyner limitiga GOMEMLIMIT, xotira yetarli bo'lsa GOGC ni oshirish (CPU ↔ xotira savdosi)",
+            "Go 1.25 eksperimental Green Tea GC — kichik obyektlarda mark samaradorligi"
+          ],
+          "explanation": "Senior signal: GC pacer va GOGC/GOMEMLIMIT munosabatini tushunish, 'GC'ni o'chiramiz' emas, allocation'ni kamaytirishdan boshlash."
         }
       ]
     },
@@ -2578,60 +2596,6 @@
         {
           "id": 30184,
           "code": "SN185",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Tooling",
-          "domain": "go",
-          "section": "g5",
-          "question": "Bog'liqlik zanjiri xavfsizligi uchun Go'da nima ishlatiladi?",
-          "options": [
-            "Faqat `go get -u`",
-            "`go.sum` (hash tekshiruvi) + `GOFLAGS=-mod=readonly`, `go mod verify`, `govulncheck` CI'da, va yangilanishlarni nazorat bilan (Dependabot/Renovate) qilish; `GOPRIVATE`/proxy bilan ichki modullar",
-            "`vendor` papkasi yetarli",
-            "Hech narsa kerak emas"
-          ],
-          "answer": 1,
-          "explanation": "`go.sum` modul mazmunini qotirib qo'yadi — tasodifiy o'zgarishni aniqlaydi. `govulncheck` esa faqat haqiqatda chaqirilgan zaif funksiyalarni ko'rsatadi (shovqin kam). Qo'shimcha amaliyot: minimal bog'liqlik siyosati, `replace` direktivalarini productionda qoldirmaslik, va build reproducibility uchun `-trimpath` bilan qurish."
-        },
-        {
-          "id": 30270,
-          "code": "SN271",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Tooling",
-          "domain": "go",
-          "section": "g5",
-          "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
-          "options": [
-            "`git reset --hard` va force push",
-            "`git revert <sha>` — yangi commit bilan o'zgarishni bekor qiladi, tarix saqlanadi va boshqa ishlovchilar buzilmaydi; merge commit uchun `-m 1`. `reset --hard` + force push umumiy branch'da boshqalarning ishini yo'qotadi",
-            "`git rebase -i` bilan commit'ni o'chirish",
-            "Faqat yangi fix yozish"
-          ],
-          "answer": 1,
-          "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
-        },
-        {
-          "id": 30271,
-          "code": "SN272",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Tooling",
-          "domain": "go",
-          "section": "g5",
-          "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
-          "options": [
-            "Qo'lda har commit'ni tekshirish",
-            "`git bisect` — binary search bilan log2(N) qadamda topadi; `git bisect run ./test.sh` bilan avtomatlashtiriladi (test skript exit kodi bilan yaxshi/yomon aniqlanadi)",
-            "`git log --grep`",
-            "`git blame` yetarli"
-          ],
-          "answer": 1,
-          "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
-        },
-        {
-          "id": 30334,
-          "code": "SN335",
           "level": "S",
           "type": "mcq",
           "topic": "Tooling",
@@ -3128,42 +3092,6 @@
         {
           "id": 30183,
           "code": "SN184",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Stdlib",
-          "domain": "go",
-          "section": "g6",
-          "question": "`encoding/json` bilan katta javobni o'qishda qaysi yondashuv samarali?",
-          "options": [
-            "Har doim `io.ReadAll` + `Unmarshal`",
-            "Oqim bilan: `json.NewDecoder(r).Decode(&v)` — butun javobni xotiraga yig'maydi; juda katta massivda `Decoder.Token()` bilan element-element o'qish, va `MaxBytesReader` bilan hajm cheklovi",
-            "`Unmarshal` har doim tezroq",
-            "`json.RawMessage` ishlatmaslik"
-          ],
-          "answer": 1,
-          "explanation": "`ReadAll` + `Unmarshal` ikki nusxa (bayt + struct) va katta payloadda OOM xavfi. Decoder oqimda ishlaydi. Nozik nuqta: Decoder bir necha JSON qiymatini ketma-ket o'qiy oladi (NDJSON uchun qulay), lekin bitta obyekt kutilganda ortiqcha ma'lumotni tekshirish kerak. Eng tez variant kerak bo'lsa kod generatsiyasi (easyjson) yoki `jsoniter` o'lchanadi."
-        },
-        {
-          "id": 30332,
-          "code": "SN333",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Stdlib",
-          "domain": "go",
-          "section": "g6",
-          "question": "`http.Server` productionda qanday sozlanadi?",
-          "options": [
-            "Default sozlamalar yetarli",
-            "`ReadHeaderTimeout`, `ReadTimeout`, `WriteTimeout`, `IdleTimeout` va `MaxHeaderBytes` aniq qo'yiladi (Slowloris va osilib qolgan ulanishlarga qarshi), `Handler`ga panic recovery va request ID middleware, `Shutdown` bilan graceful to'xtash",
-            "Faqat `ReadTimeout`",
-            "Faqat `Handler`"
-          ],
-          "answer": 1,
-          "explanation": "`http.Server{}` default timeout'lari yo'q: sekin client ulanishni cheksiz ushlab turadi va FD tugaydi. `ReadHeaderTimeout` eng muhimi (header o'qishni cheklaydi). Body hajmini `http.MaxBytesReader` bilan cheklash ham kerak — aks holda katta payload xotirani yeydi."
-        },
-        {
-          "id": 30333,
-          "code": "SN334",
           "level": "S",
           "type": "mcq",
           "topic": "Stdlib",
@@ -3961,60 +3889,6 @@
           "explanation": "Tipik qochish sabablari: pointer qaytarish, interface'ga solish, closure'da ushlash, `fmt.Println`ga uzatish (interface{}), slice hajmi kompilyatsiya vaqtida noma'lum. Amaliy natija: kichik struct'ni value bilan uzatish ko'pincha pointer'dan tez, chunki heap ajratmasi va GC yuki bo'lmaydi."
         },
         {
-          "id": 30326,
-          "code": "SN327",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Performance",
-          "domain": "go",
-          "section": "g3",
-          "question": "Profil olindi: `runtime.mallocgc` va GC vaqti yuqori. Birinchi qadam?",
-          "options": [
-            "`GOGC=off`",
-            "`go tool pprof -alloc_objects`/`-alloc_space` bilan eng ko'p ajratuvchi joyni topish: ko'pincha `[]byte`/string konversiyalari, slice/map oldindan hajm berilmagan (`make(..., n)`), interface boxing, va log formatlash — shuni kamaytirish GC bosimini tushiradi",
-            "Xotirani oshirish",
-            "Barcha joyda `sync.Pool`"
-          ],
-          "answer": 1,
-          "explanation": "Go'da GC tuning emas, allocation kamaytirish asosiy vosita. Tipik g'alabalar: `strings.Builder`, `make([]T, 0, n)`, `bytes.Buffer` qayta ishlatish, kichik struct'larni pointer emas value bilan uzatish (escape analysis), `fmt.Sprintf` o'rniga `strconv`. `GOGC` oshirish CPU'ni xotiraga almashtiradi — `GOMEMLIMIT` bilan birga qaraladi."
-        },
-        {
-          "id": 30327,
-          "code": "SN328",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Testing",
-          "domain": "go",
-          "section": "g3",
-          "question": "Benchmark natijasi har ishga tushirishda 30% farq qiladi. Nima qilinadi?",
-          "options": [
-            "O'rtacha olib davom etish",
-            "Shovqinni kamaytirish: `-benchtime`/`-count` bilan bir necha o'lchov va `benchstat` orqali statistik solishtirish, CPU chastotasi/thermal va boshqa jarayonlarni nazarda tutish, `b.ReportAllocs()` va `b.ResetTimer()` to'g'ri qo'yilishi",
-            "Natijani e'tiborsiz qoldirish",
-            "`-race` bilan o'lchash"
-          ],
-          "answer": 1,
-          "explanation": "Bitta o'lchov hech narsa isbotlamaydi. Standart oqim: `go test -bench=X -count=10 > old.txt`, o'zgarishdan keyin `new.txt`, keyin `benchstat old.txt new.txt` — u p-value va farq foizini beradi. `-race` bilan o'lchash noto'g'ri (2-10x sekin). Kompilyator optimizatsiyasi natijani yo'q qilmasligi uchun natija global o'zgaruvchiga yoziladi."
-        },
-        {
-          "id": 30328,
-          "code": "SN329",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Memory",
-          "domain": "go",
-          "section": "g3",
-          "question": "Escape analysis nima va nega muhim?",
-          "options": [
-            "GC algoritmi",
-            "Kompilyator o'zgaruvchi funksiyadan tashqariga 'qochadimi' deb aniqlaydi: qochmasa stack'da (arzon, GC'siz), qochsa heap'da ajratiladi. `go build -gcflags='-m'` bilan ko'riladi",
-            "Xotira siqish",
-            "Goroutine rejalashtirish"
-          ],
-          "answer": 1,
-          "explanation": "Tipik qochish sabablari: pointer qaytarish, interface'ga solish, closure'da ushlash, `fmt.Println`ga uzatish (interface{}), slice hajmi kompilyatsiya vaqtida noma'lum. Amaliy natija: kichik struct'ni value bilan uzatish ko'pincha pointer'dan tez, chunki heap ajratmasi va GC yuki bo'lmaydi."
-        },
-        {
           "id": 30409,
           "code": "SN410",
           "level": "P",
@@ -4067,6 +3941,96 @@
           ],
           "answer": 1,
           "explanation": "Ikki holatni ajratish kerak: haqiqiy leak (`HeapInuse` o'sib boradi) va OS'ga qaytarilmagan bo'sh xotira (`HeapIdle` katta, `HeapReleased` past). Linux'da `MADV_FREE` bilan sahifalar bosim bo'lmaguncha hisobda qoladi — bu normal. Konteyner limitiga yaqin bo'lsa `GOMEMLIMIT` GC'ni agressivlashtiradi va scavenger'ni ishga soladi."
+        },
+        {
+          "id": 30698,
+          "code": "GX98",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Performance",
+          "domain": "go",
+          "section": "g3",
+          "question": "Production'da CPU profil qanday xavfsiz olinadi va o'qiladi?",
+          "options": [
+            "net/http/pprof ni alohida ichki portda ochish, `go tool pprof -http=: host/debug/pprof/profile?seconds=30`; flat — funksiyaning o'zi, cum — chaqirganlari bilan birga; flame graph'da keng blok — vaqt ko'p ketgan joy",
+            "pprof'ni public port'da ochish kerak",
+            "Profil faqat test muhitida olinadi",
+            "top buyrug'i yetarli"
+          ],
+          "answer": 0,
+          "explanation": "pprof endpoint'lari ma'lumot oqizadi va DoS'ga ochiq — faqat ichki tarmoq/auth ortida. CPU profil ~5% overhead, 100Hz namuna. Solishtirish uchun `-diff_base=old.pb.gz`. Continuous profiling (Pyroscope, Parca, Grafana) regressiyani vaqt bo'yicha ko'rsatadi."
+        },
+        {
+          "id": 30699,
+          "code": "GX99",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Performance",
+          "domain": "go",
+          "section": "g3",
+          "question": "heap profilidagi `inuse_space` va `alloc_space` farqi?",
+          "options": [
+            "Ikkalasi bir xil",
+            "inuse_space — hozir tirik (GC'dan omon qolgan) xotira: leak qidirish uchun; alloc_space — boshidan beri jami ajratilgan: GC bosimi va allocation hotspot'lari uchun",
+            "alloc_space faqat stack",
+            "inuse_space goroutine sonini ko'rsatadi"
+          ],
+          "answer": 1,
+          "explanation": "Leak: ikki vaqtda inuse profil olib `-diff_base` bilan solishtirish — o'sgan joy ko'rinadi. GC CPU yuqori bo'lsa — alloc_space/alloc_objects ga qarash va escape analysis (`-gcflags=-m`) bilan heap'ga qochayotgan qiymatlarni topish. RSS o'sib, heap o'smasa — goroutine stack'lari, cgo yoki OS xotirani qaytarmagani (GODEBUG=madvdontneed)."
+        },
+        {
+          "id": 30700,
+          "code": "GX100",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Tracing",
+          "domain": "go",
+          "section": "g3",
+          "question": "`go tool trace` qachon pprof'dan foydaliroq?",
+          "options": [
+            "Hech qachon, pprof hamma narsani ko'rsatadi",
+            "Faqat xotira uchun",
+            "Latency muammolarida: goroutine qayerda kutgani (scheduler, syscall, blocking, GC STW, network) vaqt chizig'ida ko'rinadi; pprof CPU faqat CPU ishlatgan vaqtni ko'rsatadi, kutishni emas",
+            "Faqat testlarda ishlaydi"
+          ],
+          "answer": 2,
+          "explanation": "p99 yuqori, CPU esa past — klassik trace holati. Go 1.21+ da trace overhead ~1-2% ga tushdi, Go 1.23 da flight recorder (so'nggi N soniyani xotirada ushlab, muammo paytida dump qilish) paydo bo'ldi. Block va mutex profillari (`runtime.SetBlockProfileRate`, `SetMutexProfileFraction`) — lock kutishini topishning arzonroq yo'li."
+        },
+        {
+          "id": 30701,
+          "code": "GX101",
+          "level": "S",
+          "type": "mcq",
+          "topic": "Performance",
+          "domain": "go",
+          "section": "g3",
+          "question": "PGO (Profile-Guided Optimization, Go 1.21+) qanday ishlatiladi?",
+          "options": [
+            "Maxsus kompilyator kerak",
+            "Faqat benchmark profilidan",
+            "Runtime'da dinamik JIT qiladi",
+            "Production'dan CPU profil olib `default.pgo` nomi bilan main paket katalogiga qo'yiladi; `go build` uni avtomatik ishlatadi — issiq funksiyalar inline va devirtualize qilinadi, odatda 2–14% CPU tejaladi"
+          ],
+          "answer": 3,
+          "explanation": "Profil vakil bo'lishi kerak (real trafik), eski profil ham ishlaydi — kod o'zgarsa ham mos keladigan joylar optimallashadi. Build vaqti biroz oshadi. Profilni vaqti-vaqti bilan yangilab, repo'ga commit qilish tavsiya etiladi. `-pgo=off` bilan o'chiriladi."
+        },
+        {
+          "id": 30702,
+          "code": "GX102",
+          "level": "St",
+          "type": "mcq",
+          "topic": "Memory",
+          "domain": "go",
+          "section": "g3",
+          "question": "Konteynerda (limit 2GiB) Go servis OOMKilled bo'lyapti, heap esa ~1.2GiB. Nima qilasiz?",
+          "options": [
+            "GOMEMLIMIT ni limitdan biroz past (masalan 1800MiB) qo'yish — GC limitga yaqinlashganda tez-tez ishlaydi; GOGC bilan birga sozlash; allocation manbasini profil bilan kamaytirish",
+            "GOGC=off qo'yish",
+            "Limitni cheksiz qilish",
+            "runtime.GC() ni har soniyada chaqirish"
+          ],
+          "answer": 0,
+          "explanation": "GOGC=100 da heap keyingi GC'gacha tirik xotiradan 2 marta o'sishi mumkin — 1.2GiB tirik ⇒ 2.4GiB cho'qqi. GOMEMLIMIT (Go 1.19+) soft limit: yetishmasa GC ko'proq CPU sarflaydi (death spiral'dan himoya bor). Go 1.25+ da GOMAXPROCS cgroup CPU limitini hisobga oladi; eskiroqlarda automaxprocs kerak edi."
         }
       ]
     },
@@ -4402,65 +4366,6 @@
         {
           "id": 30181,
           "code": "SN182",
-          "level": "S",
-          "type": "open",
-          "topic": "Go case",
-          "domain": "go",
-          "section": "g4",
-          "question": "Go servis DB bilan ishlaydi. Ulanish pool'ini qanday sozlaysiz va nega?",
-          "modelAnswer": [
-            "`SetMaxOpenConns`: DB tomonidagi `max_connections` va boshqa iste'molchilar bilan hisoblanadi — barcha pod × pool ≤ DB limiti (minus zaxira); PostgreSQL'da har ulanish alohida jarayon, shuning uchun 100-200 dan oshirish odatda zarar",
-            "`SetMaxIdleConns` = MaxOpen (yoki yaqin) — aks holda ulanishlar doimiy yopilib-ochiladi (handshake narxi)",
-            "`SetConnMaxLifetime` (masalan 30 daqiqa) — LB/PgBouncer orqasida eski ulanishlarni yangilash va failover'dan keyin trafik qayta taqsimlanishi uchun; `SetConnMaxIdleTime` bilan bo'sh ulanishlarni bo'shatish",
-            "Sizing: Little's law — kerakli parallel query = RPS × query_duration; pool shundan kichik bo'lsa navbat kutish latency'ga qo'shiladi (`DBStats.WaitDuration` bilan kuzatiladi)",
-            "Juda ko'p ulanish ham yomon: DB'da kontekst almashinish va lock contention oshadi — ko'pincha PgBouncer (transaction pooling) bilan markazlashtirish to'g'riroq",
-            "Har query'da `context` timeout; `statement_timeout` DB tomonda ham qo'yiladi",
-            "Kuzatuv: `WaitCount`, `WaitDuration`, `InUse`, `Idle` metrikalari — pool tugashi incident'larda eng ko'p uchraydigan bo'g'iz"
-          ],
-          "explanation": "Kutilayotgan asosiy fikr: pool o'lchami tasodifiy raqam emas, DB sig'imi va Little's law bilan hisoblanadi; `ConnMaxLifetime` esa failover va PgBouncer bilan ishlashda majburiy."
-        },
-        {
-          "id": 30329,
-          "code": "SN330",
-          "level": "St",
-          "type": "open",
-          "topic": "Go case",
-          "domain": "go",
-          "section": "g4",
-          "question": "Production'da Go servis p99 latency 2 sekundga chiqdi, CPU 30%. Qanday tekshirasiz?",
-          "modelAnswer": [
-            "Avval o'lchov: p99 qaysi endpoint va qaysi instansiyada — hammasida yoki bittasida (hot shard/pod)? Trace bilan qaysi hop vaqt yeganini aniqlash",
-            "Bloklanish gipotezalari: DB pool tugagan (`sql.DBStats.WaitCount`/`WaitDuration`), tashqi HTTP timeout, mutex contention, kanal navbati",
-            "`/debug/pprof/block` va `/debug/pprof/mutex` (yoqilgan bo'lsa), `goroutine?debug=2` bilan bloklangan stack'lar — 10k goroutine bir joyda kutayotgani darhol ko'rinadi",
-            "GC: `GODEBUG=gctrace=1` yoki runtime metrikalari — pauza uzunligi va chastotasi; STW pauza p99'ni ko'tarishi mumkin (katta heap, ko'p pointer)",
-            "Runtime scheduling: `GOMAXPROCS` vs CPU limiti, CFS throttling (`container_cpu_cfs_throttled_seconds_total`) — CPU 30% ko'rinib turib throttle bo'lishi mumkin",
-            "Tashqi: DNS (5s retry), TLS handshake, keep-alive yo'qligi, downstream p99",
-            "Tuzatgandan keyin: xuddi shu metrikaga alert va yuk testi bilan regressiyani tekshirish"
-          ],
-          "explanation": "CPU past + latency yuqori — deyarli har doim kutish: qulf, pool, tashqi chaqiruv yoki throttling. Kutilayotgan javob tartibi: o'lchash → bloklanishni topish (block/mutex/goroutine profil) → runtime/infra cheklovlarini tekshirish."
-        },
-        {
-          "id": 30330,
-          "code": "SN331",
-          "level": "St",
-          "type": "open",
-          "topic": "Go case",
-          "domain": "go",
-          "section": "g4",
-          "question": "Servisda goroutine soni monoton o'sib boradi (leak). Qanday topib tuzatasiz?",
-          "modelAnswer": [
-            "Dalil: `runtime.NumGoroutine()` metrikasi vaqt bo'yicha o'sish grafigi (alert shu metrikaga qo'yilishi kerak)",
-            "Aniqlash: `curl /debug/pprof/goroutine?debug=1` — o'sayotgan stack guruhi darhol ko'rinadi; ikki snapshot farqi eng ishonchli",
-            "Eng ko'p uchraydigan sabablar: `resp.Body` yopilmagan (HTTP client goroutine'i qoladi), kanalga yozuv/ o'qish abadiy bloklangan, `time.Ticker` `Stop` qilinmagan, `ctx` uzatilmagan fon ishlari, `for { go ... }` cheksiz spawn",
-            "Tuzatish naqshlari: har goroutine uchun 'kim to'xtatadi' aniq bo'lishi, kanal operatsiyalari `select`da `ctx.Done()` bilan, `defer resp.Body.Close()` + `io.Copy(io.Discard, body)`",
-            "Profilaktika: `go.uber.org/goleak` bilan testda leak tekshiruvi, va `-race` bilan CI",
-            "Tasdiqlash: tuzatishdan keyin yuk testi ostida goroutine soni stabillashishi (grafik bilan), xotira RSS ham tekis bo'lishi"
-          ],
-          "explanation": "Bu savolda intervyuer aniq vositalarni eshitmoqchi: pprof goroutine ikki snapshot farqi va goleak. 'Xotira oshdi, GOGC o'zgartirdim' javobi sababni ko'rmaganlikni ko'rsatadi."
-        },
-        {
-          "id": 30331,
-          "code": "SN332",
           "level": "S",
           "type": "open",
           "topic": "Go case",
@@ -4945,100 +4850,6 @@
           ],
           "answer": 1,
           "explanation": "`time.After(d)` kanalni qaytaradi, lekin timer runtime heap'ida `d` tugaguncha yashaydi. 1 daqiqali timeout bilan sekundda 10k iteratsiya — 600k tirik timer. Go 1.23'da timer GC xatti-harakati yaxshilangan, lekin idiomatik yechim baribir timer'ni qayta ishlatish yoki `ctx.Done()`."
-        },
-        {
-          "id": 30290,
-          "code": "SN291",
-          "level": "S",
-          "type": "code",
-          "topic": "Go gotcha",
-          "domain": "go",
-          "section": "t1",
-          "question": "Bu kod nima chiqaradi va nega?",
-          "snippet": "type MyErr struct{}\nfunc (e *MyErr) Error() string { return \"boom\" }\n\nfunc do() error {\n    var e *MyErr = nil\n    return e\n}\n\nfunc main() {\n    if err := do(); err != nil {\n        fmt.Println(\"xato bor:\", err == nil)\n    }\n}",
-          "options": [
-            "Hech narsa chiqmaydi",
-            "`xato bor: false` — typed nil interface'ga solinganda interface nil bo'lmaydi (tur bor, qiymat nil)",
-            "panic: nil pointer",
-            "Kompilyatsiya xatosi"
-          ],
-          "answer": 1,
-          "explanation": "Interface ikki so'zdan iborat: (type, value). `(*MyErr, nil)` — type mavjud, shuning uchun `err != nil` rost, lekin `err.Error()` chaqirilsa panic bo'lishi mumkin. Qoida: konkret pointer turini `error` sifatida qaytarmaslik — funksiya `error` qaytarsa `return nil` yozilishi kerak, `var e *MyErr; return e` emas."
-        },
-        {
-          "id": 30291,
-          "code": "SN292",
-          "level": "S",
-          "type": "code",
-          "topic": "Go gotcha",
-          "domain": "go",
-          "section": "t1",
-          "question": "`sub` slice'iga `append` qilinganda nima bo'ladi?",
-          "snippet": "a := []int{1, 2, 3, 4, 5}\nsub := a[1:3]          // len 2, cap 4\nsub = append(sub, 99)\nfmt.Println(a, sub)",
-          "options": [
-            "`[1 2 3 4 5] [2 3 99]` — a o'zgarmaydi",
-            "`[1 2 3 99 5] [2 3 99]` — cap yetgani uchun append asl massivni bosib yozadi",
-            "panic",
-            "`[1 2 3 4 5 99]`"
-          ],
-          "answer": 1,
-          "explanation": "Slice bir xil backing array'ni ko'rsatadi; `cap(sub)=4` bo'lgani uchun append yangi massiv ajratmay `a[3]`ni almashtiradi. Himoya: `a[1:3:3]` (full slice expression bilan cap'ni cheklash) yoki `slices.Clone`. Bu xato ayniqsa funksiyaga slice berib, u append qilganda jim ma'lumot buzilishiga olib keladi."
-        },
-        {
-          "id": 30292,
-          "code": "SN293",
-          "level": "S",
-          "type": "code",
-          "topic": "Go gotcha",
-          "domain": "go",
-          "section": "t1",
-          "question": "Ushbu map'dagi struct maydonini o'zgartirish nega kompilyatsiya qilinmaydi?",
-          "snippet": "type P struct{ N int }\nm := map[string]P{\"a\": {1}}\nm[\"a\"].N = 2",
-          "options": [
-            "Map faqat o'qish uchun",
-            "Map elementi addressable emas — `m[\"a\"]` nusxa qaytaradi; yechim: qiymatni olib o'zgartirib qaytib yozish yoki `map[string]*P` ishlatish",
-            "`N` eksport qilinmagan",
-            "Map'da struct saqlanmaydi"
-          ],
-          "answer": 1,
-          "explanation": "Map ichidagi qiymat ko'chishi mumkin (rehash), shuning uchun Go unga manzil bermaydi. Ikki yo'l: `p := m[\"a\"]; p.N = 2; m[\"a\"] = p` yoki pointer saqlash (lekin u holda nil tekshiruvi va GC yuki paydo bo'ladi). Slice elementi esa addressable — `s[0].N = 2` ishlaydi."
-        },
-        {
-          "id": 30293,
-          "code": "SN294",
-          "level": "S",
-          "type": "code",
-          "topic": "Go gotcha",
-          "domain": "go",
-          "section": "t1",
-          "question": "`defer` qaysi qiymatni yozadi?",
-          "snippet": "func f() (err error) {\n    defer fmt.Println(\"A:\", err)\n    defer func() { fmt.Println(\"B:\", err) }()\n    err = errors.New(\"late\")\n    return err\n}",
-          "options": [
-            "Ikkisi ham `late`",
-            "`B: late`, `A: <nil>` — birinchi defer argumenti darhol baholanadi, closure esa bajarilish paytida o'qiydi",
-            "Ikkisi ham nil",
-            "Kompilyatsiya xatosi"
-          ],
-          "answer": 1,
-          "explanation": "`defer f(x)` da `x` defer e'lon qilinganda hisoblanadi; closure ichidagi o'zgaruvchi esa keyin o'qiladi. Shuning uchun xatoni o'rab qaytarish (`defer func(){ if err != nil { err = fmt.Errorf(\"...: %w\", err) } }()`) faqat named return va closure bilan ishlaydi. Metrik/log yozadigan defer'larda bu eng ko'p uchraydigan xato."
-        },
-        {
-          "id": 30294,
-          "code": "SN295",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Go gotcha",
-          "domain": "go",
-          "section": "t1",
-          "question": "`time.After` uzoq ishlaydigan `select` loop ichida ishlatilgan. Muammo?",
-          "options": [
-            "Muammo yo'q",
-            "Har iteratsiyada yangi timer yaratiladi va o'z vaqtigacha GC qilinmaydi — yuqori RPS'da xotira va timer heap o'sadi; `time.NewTimer` + `Reset`/`Stop` yoki `context` bilan ishlanadi",
-            "Timer ishlamaydi",
-            "Goroutine deadlock"
-          ],
-          "answer": 1,
-          "explanation": "`time.After(d)` kanalni qaytaradi, lekin timer runtime heap'ida `d` tugaguncha yashaydi. 1 daqiqali timeout bilan sekundda 10k iteratsiya — 600k tirik timer. Go 1.23'da timer GC xatti-harakati yaxshilangan, lekin idiomatik yechim baribir timer'ni qayta ishlatish yoki `ctx.Done()`."
         }
       ]
     },
@@ -5232,62 +5043,6 @@
           ],
           "answer": 1,
           "explanation": "Klassik ko'rinish: metod `func (s Store) Add()` (value receiver) — har chaqiruvda mutex nusxasi qulflanadi va hech kimni to'xtatmaydi. `go vet` bu holatni topadi, CI'da majburiy bo'lishi kerak. Xuddi shu qoida `sync.WaitGroup`, `sync.Once`, `atomic.Value` uchun ham amal qiladi."
-        },
-        {
-          "id": 30302,
-          "code": "SN303",
-          "level": "S",
-          "type": "code",
-          "topic": "Concurrency gotcha",
-          "domain": "go",
-          "section": "t4",
-          "question": "Bu kodda qanday bug bor?",
-          "snippet": "var wg sync.WaitGroup\nfor _, u := range urls {\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        fetch(u)\n    }()\n}\nwg.Wait()",
-          "options": [
-            "`wg.Add` noto'g'ri joyda",
-            "Go 1.22'gacha loop o'zgaruvchisi barcha goroutine'lar uchun umumiy bo'lgan — hammasi oxirgi `u`ni oladi; 1.22+ da har iteratsiyada yangi o'zgaruvchi, lekin kod eski versiyalarda va linter'siz xavfli",
-            "`wg.Wait` deadlock",
-            "`fetch` nil"
-          ],
-          "answer": 1,
-          "explanation": "Go 1.22 loop semantikasini o'zgartirdi (har iteratsiya yangi o'zgaruvchi), shuning uchun yangi kodda bug yo'q. Lekin: `go.mod` da eski `go` direktivasi bo'lsa eski xatti-harakat saqlanadi. Ishonchli uslub — argument sifatida uzatish (`go func(u string){...}(u)`), va parallelizmni cheklash (semaphore/errgroup `SetLimit`), aks holda 10k URL 10k goroutine va tashqi servisni o'ldirish."
-        },
-        {
-          "id": 30303,
-          "code": "SN304",
-          "level": "S",
-          "type": "code",
-          "topic": "Concurrency gotcha",
-          "domain": "go",
-          "section": "t4",
-          "question": "Bu kod nega deadlock beradi?",
-          "snippet": "ch := make(chan int)   // unbuffered\nch <- 1\nfmt.Println(<-ch)",
-          "options": [
-            "Kanal yopilmagan",
-            "Buferlanmagan kanalda yuborish o'quvchi bo'lguncha bloklanadi — bir goroutine ichida o'zi kutadi: `fatal error: all goroutines are asleep - deadlock!`",
-            "`make` xato",
-            "Kanal turi mos emas"
-          ],
-          "answer": 1,
-          "explanation": "Unbuffered kanal — sinxronlash nuqtasi: yuborish va qabul qilish bir vaqtda bo'lishi kerak. Yechim: o'qishni alohida goroutine'da qilish yoki `make(chan int, 1)`. Kattaroq amaliy xulosa: kanal bilan ishlashda 'kim yopadi, kim o'qiydi' shartnomasi oldindan aniq bo'lishi kerak — aks holda yopilgan kanalga yozish (panic) yoki abadiy kutish paydo bo'ladi."
-        },
-        {
-          "id": 30304,
-          "code": "SN305",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Concurrency gotcha",
-          "domain": "go",
-          "section": "t4",
-          "question": "`sync.Mutex`ni struct bilan nusxalash nima qiladi?",
-          "options": [
-            "Hech narsa",
-            "Qulf holati nusxalanadi — ikki nusxa bir-birini himoya qilmaydi, race paydo bo'ladi (`go vet` copylocks bilan ogohlantiradi); shuning uchun mutexli struct pointer bilan uzatiladi",
-            "Kompilyatsiya xatosi",
-            "Deadlock kafolatlangan"
-          ],
-          "answer": 1,
-          "explanation": "Klassik ko'rinish: metod `func (s Store) Add()` (value receiver) — har chaqiruvda mutex nusxasi qulflanadi va hech kimni to'xtatmaydi. `go vet` bu holatni topadi, CI'da majburiy bo'lishi kerak. Xuddi shu qoida `sync.WaitGroup`, `sync.Once`, `atomic.Value` uchun ham amal qiladi."
         }
       ]
     },
@@ -5428,60 +5183,6 @@
         {
           "id": 30157,
           "code": "SN158",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Time gotcha",
-          "domain": "go",
-          "section": "t5",
-          "question": "'Har oyning 31-kuni' obunasini hisoblashda qanday edge case bor?",
-          "options": [
-            "Yo'q",
-            "Fevralda 31-kun yo'q — siyosat aniq belgilanishi kerak (oyning oxirgi kuni yoki 1-mart); shuningdek DST kunida mahalliy 02:30 mavjud bo'lmasligi va ikki marta bo'lishi mumkin",
-            "Faqat yillik hisobda",
-            "Faqat ma'lumot bazasida"
-          ],
-          "answer": 1,
-          "explanation": "Go'da `AddDate(0, 1, 0)` 31-yanvarga qo'shilsa 3-mart chiqadi (kun oshib ketadi) — bu odatda biznes kutganidan boshqa. Shuning uchun davriy hisob-kitob 'anchor day' + oy oxiri bilan clamp qilib yoziladi va testlarda fevral, kabisa yil, DST kunlari alohida holat sifatida bo'ladi."
-        },
-        {
-          "id": 30305,
-          "code": "SN306",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Time gotcha",
-          "domain": "go",
-          "section": "t5",
-          "question": "Kunlik hisobot `WHERE created_at >= current_date` bilan yozilgan, lekin natijalar 5 soatga surilgan. Sabab?",
-          "options": [
-            "Server sekin",
-            "`timestamp without time zone` vs `timestamptz` va sessiya `TimeZone` sozlamasi aralashgan — UTC'da saqlanib mahalliy vaqt bilan solishtirilgan yoki teskarisi",
-            "Indeks yo'q",
-            "DST"
-          ],
-          "answer": 1,
-          "explanation": "Qoida: hamma joyda `timestamptz` (UTC'da saqlanadi, chiqishda konvertatsiya) va biznes 'kun' chegarasi aniq vaqt zonasida hisoblanadi: `created_at >= (date_trunc('day', now() AT TIME ZONE 'Asia/Tashkent')) AT TIME ZONE 'Asia/Tashkent'`. Hisobot talabini 'kimning kuni' deb aniqlash — mahsulot qarori, texnik emas."
-        },
-        {
-          "id": 30306,
-          "code": "SN307",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Time gotcha",
-          "domain": "go",
-          "section": "t5",
-          "question": "Go'da ikki vaqt orasidagi o'tgan muddatni o'lchash uchun nima ishlatiladi?",
-          "options": [
-            "`time.Now().Sub(start)` — lekin `start` boshqa mashinadan kelgan bo'lsa ham to'g'ri",
-            "`time.Since(start)` bir jarayon ichida monoton soatni ishlatadi; lekin vaqt DB/tarmoqdan kelib serializatsiya qilinsa monoton komponent yo'qoladi va NTP tuzatishlari natijani buzadi",
-            "`time.Unix()` har doim",
-            "Faqat `time.Sleep`"
-          ],
-          "answer": 1,
-          "explanation": "Go `time.Time` ichida wall clock va monoton o'qish ikkalasini saqlaydi; `Sub`/`Since` monotondan foydalanadi. Ammo `t.Round(0)`, JSON marshal yoki DB'ga yozib qaytarish monoton qismni o'chiradi — shundan keyin o'lchov NTP sakrashiga bog'liq bo'ladi, hatto manfiy davomiylik chiqishi mumkin."
-        },
-        {
-          "id": 30307,
-          "code": "SN308",
           "level": "S",
           "type": "mcq",
           "topic": "Time gotcha",
@@ -5692,43 +5393,6 @@
           ],
           "answer": 1,
           "explanation": "Bu savol intervyularda aynan shu shaklda so'raladi. Diagnostika: `/debug/pprof/heap` (inuse_space) ikki snapshot farqi kerak bo'lmagan ushlanishni ko'rsatadi, `/debug/pprof/goroutine` bloklanganlarni, RSS va `MemStats` esa Go tashqarisidagi o'sishni. Eng ko'p uchraydigan sabab — chegarasiz kesh (map) va goroutine leak."
-        },
-        {
-          "id": 30314,
-          "code": "SN315",
-          "level": "S",
-          "type": "code",
-          "topic": "Memory gotcha",
-          "domain": "go",
-          "section": "t8",
-          "question": "Bu kod nega xotira ushlab qoladi?",
-          "snippet": "func firstLine(data []byte) []byte {\n    i := bytes.IndexByte(data, '\\n')\n    return data[:i]   // data 10MB bo'lsin\n}",
-          "options": [
-            "Ushlamaydi, faqat kichik qism qaytadi",
-            "Qaytgan slice 10MB backing array'ni ushlab turadi — GC butun massivni bo'shatmaydi; `append([]byte(nil), data[:i]...)` yoki `bytes.Clone` bilan nusxa olinadi",
-            "Panic bo'ladi",
-            "GC darhol tozalaydi"
-          ],
-          "answer": 1,
-          "explanation": "Slice — (ptr, len, cap): kichik oyna ham katta massivga havola. Bu naqsh HTTP javobini o'qib bir bo'lagini keshda saqlaganda haqiqiy leak keltiradi (kesh 100 element × 10MB). Xuddi shunday `string(bigBytes[:10])` esa nusxa oladi — string konversiyasi allocation qiladi."
-        },
-        {
-          "id": 30315,
-          "code": "SN316",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Memory gotcha",
-          "domain": "go",
-          "section": "t8",
-          "question": "`sync.Pool` bilan ishlashda klassik xato?",
-          "options": [
-            "Pool ishlatmaslik",
-            "Buferni pool'ga qaytarishdan oldin tozalamaslik (eski ma'lumot boshqa so'rovga oqadi) yoki juda katta buferlarni qaytarish (pool xotirani ushlab qoladi); shuningdek pool'dagi obyektga havolani saqlab qo'yish",
-            "`Get` nil qaytaradi",
-            "Pool goroutine-safe emas"
-          ],
-          "answer": 1,
-          "explanation": "Xavfsizlik nuqtasi: ma'lumot oqishi (bir foydalanuvchi javobi boshqasiga) — real incident turi. To'g'ri naqsh: `buf.Reset()` qaytarishdan oldin, hajm chegarasidan katta buferlarni umuman qaytarmaslik, va pool'dan olingan slice'ga tashqi havola qoldirmaslik. `sync.Pool` GC paytida tozalanadi — kesh emas, faqat allocation pressure'ni kamaytirish vositasi."
         },
         {
           "id": 30494,
@@ -6097,42 +5761,6 @@
         {
           "id": 30232,
           "code": "SN233",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Upsert",
-          "domain": "db",
-          "section": "d1",
-          "question": "`INSERT ... ON CONFLICT DO UPDATE` da qanday nozik xatarlar bor?",
-          "options": [
-            "Xatar yo'q",
-            "Unique indeks aynan konflikt maqsadiga mos bo'lishi kerak (aks holda xato yoki kutilmagan yozuv), yuqori konkurentlikda deadlock/`tuple concurrently updated` bo'lishi mumkin, va `EXCLUDED` bilan yozilgan qiymat eski qiymatni shartsiz bosib ketishi (yaxshisi `WHERE` sharti bilan)",
-            "Faqat sekin ishlaydi",
-            "Faqat PostgreSQL 9'da"
-          ],
-          "answer": 1,
-          "explanation": "Amaliy naqshlar: `ON CONFLICT (tenant_id, email) DO UPDATE SET ... WHERE excluded.updated_at > t.updated_at` — kechikkan yozuv yangi qiymatni buzmaydi (last-write-wins'ni vaqt bilan boshqarish). Idempotentlik uchun ko'pincha `DO NOTHING` + keyin `SELECT` yetarli, va bu deadlock ehtimolini kamaytiradi."
-        },
-        {
-          "id": 30381,
-          "code": "SN382",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Window",
-          "domain": "db",
-          "section": "d1",
-          "question": "Har foydalanuvchining oxirgi buyurtmasini olish uchun eng samarali usul (PostgreSQL)?",
-          "options": [
-            "`GROUP BY user_id` bilan `MAX(created_at)` va keyin qayta JOIN",
-            "`DISTINCT ON (user_id) ... ORDER BY user_id, created_at DESC` (PostgreSQL-specific, index bilan juda tez) yoki window funksiya `ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY created_at DESC) = 1`; ko'p foydalanuvchi uchun `LATERAL` bilan index skip scan naqshi",
-            "Korrelyatsiyalangan subquery har doim",
-            "Barchasini olib app'da filtrlash"
-          ],
-          "answer": 1,
-          "explanation": "`(user_id, created_at DESC)` indeksi bo'lsa `DISTINCT ON` har guruhdan faqat birinchi qatorni o'qiydi. `MAX` + JOIN ikki marta skan qiladi va teng timestamp'larda dublikat beradi. Juda ko'p guruh bo'lsa `LATERAL` bilan 'loose index scan' (har user uchun LIMIT 1) eng tez variant bo'ladi."
-        },
-        {
-          "id": 30382,
-          "code": "SN383",
           "level": "S",
           "type": "mcq",
           "topic": "Upsert",
@@ -7044,42 +6672,6 @@
           "explanation": "Tekshirish tartibi: `EXPLAIN (ANALYZE, BUFFERS)` bilan kutilgan va haqiqiy qator sonini solishtirish (katta farq — statistika muammosi: `ANALYZE`, `default_statistics_target`, korrelyatsiyalangan ustunlar uchun `CREATE STATISTICS`). SSD'da `random_page_cost` 1.1 atrofida bo'lishi kerak (default 4 — HDD davridan qolgan)."
         },
         {
-          "id": 30358,
-          "code": "SN359",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Index",
-          "domain": "db",
-          "section": "d3",
-          "question": "B-tree indeks nima uchun hash indeksdan ko'proq ishlatiladi (DB'da)?",
-          "options": [
-            "Hash indeks tezroq emas",
-            "B-tree tartibni saqlaydi: diapazon (`>`, `BETWEEN`), `ORDER BY`, prefiks va `LIKE 'abc%'` ishlaydi, hamda balanslangan chuqurlik (3-4 daraja) bilan disk o'qishlari kam; hash faqat tenglik uchun",
-            "B-tree kam joy oladi",
-            "Hash indeks PostgreSQL'da yo'q"
-          ],
-          "answer": 1,
-          "explanation": "B-tree node'i disk sahifasi (8 KB) o'lchamida — bir o'qishda yuzlab kalit, shuning uchun milliard qatorda ham 3-4 sahifa o'qish yetadi. Hash indeks faqat `=` uchun va PostgreSQL'da ham bor, lekin ustunligi kam. Ma'lumot turiga qarab boshqa turlar: GIN (array/jsonb/full-text), GiST (geometriya), BRIN (katta, tabiiy tartiblangan jadval)."
-        },
-        {
-          "id": 30359,
-          "code": "SN360",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Planner",
-          "domain": "db",
-          "section": "d3",
-          "question": "Planner nega ba'zan indeksni tashlab Seq Scan tanlaydi?",
-          "options": [
-            "Bug",
-            "Tanlanuvchanlik (selectivity) past bo'lsa: jadvalning katta ulushi qaytadi va tasodifiy sahifa o'qishlar ketma-ket o'qishdan qimmat bo'ladi; shuningdek statistika eskirgan bo'lsa yoki `random_page_cost` noto'g'ri sozlangan bo'lsa qaror xato bo'lishi mumkin",
-            "Indeks buzilgan",
-            "Faqat kichik jadvalda"
-          ],
-          "answer": 1,
-          "explanation": "Tekshirish tartibi: `EXPLAIN (ANALYZE, BUFFERS)` bilan kutilgan va haqiqiy qator sonini solishtirish (katta farq — statistika muammosi: `ANALYZE`, `default_statistics_target`, korrelyatsiyalangan ustunlar uchun `CREATE STATISTICS`). SSD'da `random_page_cost` 1.1 atrofida bo'lishi kerak (default 4 — HDD davridan qolgan)."
-        },
-        {
           "id": 30396,
           "code": "SN397",
           "level": "S",
@@ -7935,60 +7527,6 @@
           "explanation": "Deadlock ko'pincha teskari tartibdan kelib chiqadi: A→B va B→A. Tartibni normallashtirish (`ORDER BY id` bilan `SELECT ... FOR UPDATE`) muammoni ildizdan yechadi. DB deadlock'ni aniqlab bittasini bekor qiladi, shuning uchun ilova `40P01`/`40001` da idempotent retry qilishi kerak — lekin retry sababni yashirmasligi uchun metrikada sanalishi lozim."
         },
         {
-          "id": 30360,
-          "code": "SN361",
-          "level": "S",
-          "type": "mcq",
-          "topic": "MVCC",
-          "domain": "db",
-          "section": "d4",
-          "question": "PostgreSQL MVCC'da uzoq ochiq tranzaksiya nega xavfli?",
-          "options": [
-            "Faqat qulf ushlaydi",
-            "Eski qator versiyalari (dead tuple) tozalanmaydi: `VACUUM` `xmin` horizontidan o'tolmaydi — jadval va indeks shishadi (bloat), query sekinlashadi, og'ir holatda transaction ID wraparound xavfi paydo bo'ladi",
-            "Xotira oshadi faqat",
-            "WAL to'xtaydi"
-          ],
-          "answer": 1,
-          "explanation": "Shu sabab `idle in transaction` sessiyalar kuzatiladi (`pg_stat_activity`) va `idle_in_transaction_session_timeout` qo'yiladi. Xuddi shu ta'sirni uzoq ishlayotgan replica query'lari (`hot_standby_feedback`) va to'xtagan replication slot'lar ham beradi. Amaliy qoida: tranzaksiya ichida tashqi HTTP chaqiruv yoki foydalanuvchi kutishi bo'lmasligi kerak."
-        },
-        {
-          "id": 30361,
-          "code": "SN362",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Isolation",
-          "domain": "db",
-          "section": "d4",
-          "question": "`REPEATABLE READ` (PostgreSQL) qanday anomaliyani yechmaydi?",
-          "options": [
-            "Hech qanday, hammasini yechadi",
-            "Write skew: ikki tranzaksiya bir-birining o'qigan ma'lumotiga tayanib turli qatorlarni o'zgartiradi (masalan 'kamida bitta shifokor navbatchi bo'lishi kerak' qoidasi ikki tomondan buziladi); buni `SERIALIZABLE` yoki aniq qulf (`SELECT ... FOR UPDATE`) yechadi",
-            "Dirty read",
-            "Lost update"
-          ],
-          "answer": 1,
-          "explanation": "PostgreSQL `REPEATABLE READ` snapshot izolyatsiyasi: dirty/non-repeatable read va phantom yo'q, lekin write skew qoladi. Yechimlar: `SERIALIZABLE` (SSI — konflikt bo'lsa `40001` bilan rollback, demak retry mantiqi kerak), yoki invariantni bitta qatorga jamlab qulflash, yoki DB constraint bilan ifodalash."
-        },
-        {
-          "id": 30362,
-          "code": "SN363",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Locking",
-          "domain": "db",
-          "section": "d4",
-          "question": "Deadlock'ni kamaytirish uchun eng samarali amaliyot?",
-          "options": [
-            "Retry qo'shish yetarli",
-            "Qulflarni har joyda bir xil tartibda olish (masalan ID bo'yicha o'sish), tranzaksiyani qisqa ushlash, kerakli minimal qatorni qulflash, va `lock_timeout` bilan uzoq kutishni kesish; ustiga `40P01` uchun retry",
-            "Izolyatsiyani pasaytirish",
-            "Indeksni o'chirish"
-          ],
-          "answer": 1,
-          "explanation": "Deadlock ko'pincha teskari tartibdan kelib chiqadi: A→B va B→A. Tartibni normallashtirish (`ORDER BY id` bilan `SELECT ... FOR UPDATE`) muammoni ildizdan yechadi. DB deadlock'ni aniqlab bittasini bekor qiladi, shuning uchun ilova `40P01`/`40001` da idempotent retry qilishi kerak — lekin retry sababni yashirmasligi uchun metrikada sanalishi lozim."
-        },
-        {
           "id": 30398,
           "code": "SN399",
           "level": "S",
@@ -8545,44 +8083,6 @@
         {
           "id": 30230,
           "code": "SN231",
-          "level": "St",
-          "type": "open",
-          "topic": "Ops",
-          "domain": "db",
-          "section": "d5",
-          "question": "Productionda PostgreSQL CPU 100%, ilova timeout beryapti. Qadam-baqadam nima qilasiz?",
-          "modelAnswer": [
-            "Birinchi: ta'sirni cheklash — `pg_stat_activity` dan eng og'ir/uzun query'larni topish, kerak bo'lsa `pg_cancel_backend` (avval cancel, keyin `pg_terminate_backend`)",
-            "Sabab toifalari: yangi deploy bilan kelgan query (plan o'zgardi), statistikaning eskirishi, indeks yo'qligi, lock kutish zanjiri (`pg_locks`, `pg_blocking_pids`), vacuum/autovacuum og'ir ishi, yoki trafik o'sishi",
-            "Tez choralar: eng qimmat query'ni bloklash/rate limit qilish, `statement_timeout` qo'yish, kesh qatlamini yoqish, read replica'ga o'qishni ko'chirish, ilova pool'ini kamaytirish (paradoks: kamroq ulanish — kamroq kontention)",
-            "`pg_stat_statements` bo'yicha total vaqt reytingi — real aybdor ko'pincha 'sekin' emas, 'juda tez-tez' query",
-            "Tuzatgandan keyin: `EXPLAIN (ANALYZE, BUFFERS)` bilan plan tekshirish, indeks qo'shish (`CONCURRENTLY`), `ANALYZE`, va zarur bo'lsa query'ni qayta yozish",
-            "Profilaktika: `pg_stat_statements` doimiy monitoringda, sekin query log, migratsiya va deploy'da plan regressiyasini tekshirish, `lock_timeout` standart sozlama sifatida",
-            "Aloqa: incident kanalida holat, ta'sir va ETA; postmortem bilan yopish"
-          ],
-          "explanation": "Kutiladigan tartib: mitigation avval (cancel/timeout/trafikni kamaytirish), keyin sabab (`pg_stat_statements`, `EXPLAIN`), keyin profilaktika. 'Indeks qo'shaman' darhol aytilishi — diagnozsiz harakat belgisidir."
-        },
-        {
-          "id": 30379,
-          "code": "SN380",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Partitioning",
-          "domain": "db",
-          "section": "d5",
-          "question": "PostgreSQL'da vaqt bo'yicha partitionlash qanday foyda beradi?",
-          "options": [
-            "Query har doim tezlashadi",
-            "Eski ma'lumotni `DROP PARTITION` bilan bir zumda o'chirish (`DELETE` va vacuum yuki yo'q), partition pruning bilan skan hajmini kamaytirish, indekslarni kichik ushlash va `VACUUM`/`REINDEX` ni bo'laklab qilish",
-            "Faqat disk tejaydi",
-            "Indeks keraksiz bo'ladi"
-          ],
-          "answer": 1,
-          "explanation": "Eng katta amaliy foyda — retention: `DELETE FROM events WHERE created_at < ...` milliard qatorda soatlab ishlaydi va bloat qoldiradi, `DROP TABLE` esa millisekund. Shartlar: partition kaliti query'larda bo'lishi kerak (aks holda barcha partition skan qilinadi), unique constraint kalitni o'z ichiga olishi kerak, va partitionlarni oldindan yaratish avtomatlashtirilishi lozim (`pg_partman`)."
-        },
-        {
-          "id": 30380,
-          "code": "SN381",
           "level": "St",
           "type": "open",
           "topic": "Ops",
@@ -9211,81 +8711,6 @@
         {
           "id": 30148,
           "code": "SN149",
-          "level": "S",
-          "type": "mcq",
-          "topic": "SQL gotcha",
-          "domain": "db",
-          "section": "t2",
-          "question": "`SELECT count(*)` katta jadvalda sekin. PostgreSQL'da nega va nima qilinadi?",
-          "options": [
-            "Indeks qo'shish `count(*)`ni tezlashtiradi",
-            "MVCC tufayli aniq sanoq har qatorning ko'rinishini tekshirishni talab qiladi (index-only scan bo'lsa ham to'liq skan) — taxminiy sanoq (`pg_class.reltuples`), alohida hisoblagich jadval yoki keshlangan qiymat ishlatiladi",
-            "`count(1)` tezroq",
-            "`VACUUM` count'ni tezlashtiradi"
-          ],
-          "answer": 1,
-          "explanation": "MySQL InnoDB'da ham shunday. Amaliy yechimlar: UI'da 'taxminan N natija' (reltuples yoki `EXPLAIN` bahosi), filtrlangan sanoq uchun alohida agregat jadval (trigger yoki eventdan yangilanadi), yoki `count(*) OVER ()` bilan faqat joriy sahifa kontekstida. `count(1)` va `count(*)` bir xil tezlikda."
-        },
-        {
-          "id": 30295,
-          "code": "SN296",
-          "level": "S",
-          "type": "code",
-          "topic": "SQL gotcha",
-          "domain": "db",
-          "section": "t2",
-          "question": "Bu query nega kutilganidan kam qator qaytaradi?",
-          "snippet": "SELECT u.id, u.email\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.id\nWHERE o.status = 'paid';",
-          "options": [
-            "`LEFT JOIN` noto'g'ri yozilgan",
-            "`WHERE` filtri JOIN'dan keyin qo'llanadi va `NULL` qatorlarni kesib tashlaydi — LEFT JOIN amalda INNER JOIN'ga aylanadi; shart `ON`ga ko'chirilishi kerak",
-            "`status` indeksi yo'q",
-            "`u.id` unique emas"
-          ],
-          "answer": 1,
-          "explanation": "Outer join'da o'ng tomon shartlari `ON` ichida bo'lishi kerak: `LEFT JOIN orders o ON o.user_id = u.id AND o.status = 'paid'`. Agar maqsad 'to'lovi yo'q userlar' bo'lsa — `WHERE o.id IS NULL` (anti-join). Bu xato kod review'da eng ko'p o'tib ketadigan SQL xatolaridan biri."
-        },
-        {
-          "id": 30296,
-          "code": "SN297",
-          "level": "S",
-          "type": "code",
-          "topic": "SQL gotcha",
-          "domain": "db",
-          "section": "t2",
-          "question": "`NOT IN` bilan nega bo'sh natija keladi?",
-          "snippet": "SELECT * FROM users\nWHERE id NOT IN (SELECT user_id FROM orders);",
-          "options": [
-            "Jadval bo'sh",
-            "`orders.user_id` ichida bitta `NULL` bo'lsa — butun shart `UNKNOWN` bo'ladi va hech qanday qator qaytmaydi; `NOT EXISTS` yoki `IS NOT NULL` filtri ishlatiladi",
-            "Indeks yo'q",
-            "`NOT IN` sintaksisi xato"
-          ],
-          "answer": 1,
-          "explanation": "`id NOT IN (1, NULL)` = `id <> 1 AND id <> NULL` = `... AND UNKNOWN` — hech qachon rost bo'lmaydi. `NOT EXISTS` NULL bilan to'g'ri ishlaydi va planner uchun ko'pincha samaraliroq (anti-join). Bu klassik jim bug: ma'lumotga bitta NULL kelgan kuni hisobot bo'shab qoladi."
-        },
-        {
-          "id": 30297,
-          "code": "SN298",
-          "level": "S",
-          "type": "code",
-          "topic": "SQL gotcha",
-          "domain": "db",
-          "section": "t2",
-          "question": "Pagination'da qatorlar takrorlanib/tushib qolyapti. Nega?",
-          "snippet": "SELECT * FROM events ORDER BY created_at DESC LIMIT 20 OFFSET 40;",
-          "options": [
-            "OFFSET har doim xato",
-            "`created_at` unique emas — teng qiymatlarda tartib barqaror emas, shuning uchun sahifalar orasida qator takrorlanadi yoki yo'qoladi; tie-breaker (`, id DESC`) va keyset pagination kerak",
-            "LIMIT 20 kichik",
-            "Indeks yo'q"
-          ],
-          "answer": 1,
-          "explanation": "Ikki muammo birga: (1) barqaror bo'lmagan tartib — har doim unique tie-breaker qo'shiladi; (2) OFFSET chuqurlashganda sekinlashadi (N qatorni tashlab o'tish) va yangi yozuvlar sahifani surib yuboradi. Yechim — keyset: `WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT 20`."
-        },
-        {
-          "id": 30298,
-          "code": "SN299",
           "level": "S",
           "type": "mcq",
           "topic": "SQL gotcha",
@@ -10056,60 +9481,6 @@
           ],
           "answer": 1,
           "explanation": "Amaliy natijalar: `used_memory` muddati o'tgan kalitlarni darhol qaytarmaydi (xotira rejasida hisobga olinadi); replicada kalitlar mustaqil o'chirilmaydi — master `DEL` yuboradi (shuning uchun eski versiyalarda replicadan o'qishda stale qiymat muammosi bo'lgan); ko'p kalit bir vaqtda expire bo'lsa active cycle CPU spike beradi — TTL'ga jitter shuning uchun ham kerak."
-        },
-        {
-          "id": 30374,
-          "code": "SN375",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Redis",
-          "domain": "nosql",
-          "section": "n1",
-          "question": "Redis'da eviction policy `noeviction` bo'lsa xotira tugaganda nima bo'ladi?",
-          "options": [
-            "Eng eski kalitlar o'chadi",
-            "Yozuv operatsiyalari xato qaytaradi (`OOM command not allowed`) — kesh sifatida ishlatilganda bu incident'ga olib keladi; kesh uchun `allkeys-lru`/`allkeys-lfu`, ma'lumot ombori sifatida esa `noeviction` + xotira nazorati to'g'ri",
-            "Redis qayta ishga tushadi",
-            "Diskka yoziladi"
-          ],
-          "answer": 1,
-          "explanation": "Qaror 'Redis nima vazifada' degan savoldan kelib chiqadi: kesh — yo'qotish mumkin, demak LRU/LFU; navbat yoki yagona holat ombori — yo'qotish mumkin emas, demak `noeviction`, `maxmemory` zapas bilan va alert. Ikkisini bir instansiyada aralashtirish klassik xato — kesh yozuvi muhim ma'lumotni evict qiladi."
-        },
-        {
-          "id": 30375,
-          "code": "SN376",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Cache",
-          "domain": "nosql",
-          "section": "n1",
-          "question": "Kesh kaliti dizaynida nimalarga e'tibor beriladi?",
-          "options": [
-            "Faqat qisqa bo'lishi",
-            "Versiya/sxema prefiksi (`v2:user:42`) — format o'zgarganda eski qiymatlarni bir zumda 'bekor qilish' imkonini beradi; tenant/locale kabi barcha kontekst kalitda bo'lishi (aks holda ma'lumot oqadi), va kalit kardinalligini nazorat qilish",
-            "Foydalanuvchi ID'sini qo'shmaslik",
-            "Kalitni hash qilish shart"
-          ],
-          "answer": 1,
-          "explanation": "Eng xavfli bug: kontekstni kalitga qo'shmaslik — bir tenant/til uchun keshlangan javob boshqasiga beriladi (ma'lumot oqishi). Versiyalash esa deploy paytida strukturasi o'zgargan qiymatlar bilan crash bo'lishini oldini oladi; alternativa — kesh qiymatida sxema versiyasini saqlab, mos kelmasa miss deb hisoblash."
-        },
-        {
-          "id": 30376,
-          "code": "SN377",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Redis",
-          "domain": "nosql",
-          "section": "n1",
-          "question": "Redis'ni navbat (queue) sifatida ishlatish qachon to'g'ri, qachon yo'q?",
-          "options": [
-            "Har doim to'g'ri, Kafka keraksiz",
-            "Qisqa muddatli, yo'qotilishi mumkin bo'lgan ishlar uchun maqbul (`LPUSH`/`BRPOPLPUSH` yoki Streams consumer group bilan). Durability, uzun retention, qayta o'ynatish va ko'p consumer guruhi kerak bo'lsa — Kafka/RabbitMQ; Redis'da failover paytida ack qilinmagan ish yo'qolishi mumkin",
-            "Redis'da navbat yo'q",
-            "Faqat Streams bilan mumkin"
-          ],
-          "answer": 1,
-          "explanation": "Redis Streams (`XADD`/`XREADGROUP`/`XACK`) haqiqiy consumer group va pending list beradi — bu `LPUSH`/`RPOP` dan ancha ishonchli (ishlov berilayotgan xabar yo'qolmaydi). Lekin asinxron replikatsiya tufayli failover'da oxirgi yozuvlar yo'qolishi mumkin: pul yoki buyurtmaga tegishli ishni Redis navbatiga yolg'iz ishonib topshirmaslik kerak."
         }
       ]
     },
@@ -11478,42 +10849,6 @@
           "explanation": "Tanlov mezoni: murakkab marshrutlash, per-task ack, prioritet va kechiktirilgan yetkazib berish kerak bo'lsa — RabbitMQ; eventlarni saqlash, replay, stream processing va juda yuqori throughput kerak bo'lsa — Kafka. Ko'p tizimda ikkisi birga yashaydi: Kafka — event backbone, RabbitMQ yoki DB navbati — task queue."
         },
         {
-          "id": 30377,
-          "code": "SN378",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Queue",
-          "domain": "msg",
-          "section": "m2",
-          "question": "PostgreSQL'ni navbat sifatida ishlatish (`SELECT ... FOR UPDATE SKIP LOCKED`) qachon oqlanadi?",
-          "options": [
-            "Hech qachon",
-            "O'rtacha yuklamada (minglab ish/daqiqa) va ish biznes ma'lumoti bilan bir tranzaksiyada bo'lishi kerak bo'lganda — bitta tizim, tranzaksion kafolat, oson kuzatuv va SQL bilan inspektsiya; juda yuqori throughput yoki fan-out kerak bo'lsa broker afzal",
-            "Har doim, broker keraksiz",
-            "Faqat testda"
-          ],
-          "answer": 1,
-          "explanation": "Afzalliklari amaliy: outbox bilan tabiiy birlashadi, 'qaysi ish qotib qoldi' savoliga `SELECT` bilan javob beriladi, alohida infra saqlash kerak emas. Cheklovlari: yuqori RPS'da vacuum va bloat (tez o'chirish yoki partition bilan hal qilinadi), pub/sub fan-out yo'q, va uzoq ishlar uchun lease/`visibility timeout` ni o'zingiz yozasiz."
-        },
-        {
-          "id": 30378,
-          "code": "SN379",
-          "level": "S",
-          "type": "mcq",
-          "topic": "RabbitMQ",
-          "domain": "msg",
-          "section": "m2",
-          "question": "RabbitMQ va Kafka o'rtasidagi asosiy model farqi?",
-          "options": [
-            "Faqat tezlik",
-            "RabbitMQ — broker xabarni consumer'ga yetkazadi va ack'dan keyin o'chiradi (smart broker, marshrutlash exchange orqali, per-message ack, prioritet); Kafka — o'zgarmas log, consumer offsetni o'zi boshqaradi, qayta o'ynatish va ko'p mustaqil consumer guruhi tabiiy",
-            "Kafka'da ack yo'q",
-            "RabbitMQ log saqlaydi"
-          ],
-          "answer": 1,
-          "explanation": "Tanlov mezoni: murakkab marshrutlash, per-task ack, prioritet va kechiktirilgan yetkazib berish kerak bo'lsa — RabbitMQ; eventlarni saqlash, replay, stream processing va juda yuqori throughput kerak bo'lsa — Kafka. Ko'p tizimda ikkisi birga yashaydi: Kafka — event backbone, RabbitMQ yoki DB navbati — task queue."
-        },
-        {
           "id": 30446,
           "code": "SN447",
           "level": "S",
@@ -11913,60 +11248,6 @@
         {
           "id": 30168,
           "code": "SN169",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Messaging gotcha",
-          "domain": "msg",
-          "section": "t9",
-          "question": "Retry uchun xabar qayta navbatga qo'yiladi (`requeue=true`). Qanday tuzoq bor?",
-          "options": [
-            "Tuzoq yo'q",
-            "Xabar darhol boshiga qaytib cheksiz aylanadi (hot loop, CPU va broker yuki) — kechiktirilgan retry kerak: DLX + TTL bilan 'retry queue' yoki alohida delay navbatlari, va urinish sonini headerda hisoblash",
-            "Xabar o'chib ketadi",
-            "Tartib saqlanadi"
-          ],
-          "answer": 1,
-          "explanation": "RabbitMQ'da tabiiy 'delayed retry' yo'q, shuning uchun naqsh: asosiy navbat → nack → DLX → TTL'li retry navbati → qaytib asosiy navbatga. Urinish soni `x-death` yoki o'z headerida saqlanadi va N dan keyin DLQ'ga o'tadi. Kafka'da esa retry topic'lari (`topic.retry.5m`) shu maqsadda ishlatiladi."
-        },
-        {
-          "id": 30316,
-          "code": "SN317",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Messaging gotcha",
-          "domain": "msg",
-          "section": "t9",
-          "question": "Consumer xabarni oldi, DB'ga yozdi, keyin ack yuborishdan oldin yiqildi. Nima bo'ladi?",
-          "options": [
-            "Xabar yo'qoladi",
-            "Xabar qayta yetkaziladi va DB yozuvi ikkinchi marta bajariladi — shuning uchun handler idempotent bo'lishi shart (unique kalit yoki inbox jadval)",
-            "Broker o'zi dedupe qiladi",
-            "Tranzaksiya rollback bo'ladi"
-          ],
-          "answer": 1,
-          "explanation": "Ack va DB commit atomik emas — bu dual-write muammosining ikkinchi yuzi. Yechim: xabar ID'sini biznes tranzaksiyasi ichida `processed_messages` jadvaliga unique yozish (inbox pattern); ikkinchi urinishda konflikt bo'ladi va ish o'tkazib yuboriladi. Teskari tartib (avval ack, keyin yozish) esa ma'lumot yo'qotadi."
-        },
-        {
-          "id": 30317,
-          "code": "SN318",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Messaging gotcha",
-          "domain": "msg",
-          "section": "t9",
-          "question": "RabbitMQ'da `prefetch` (QoS) sozlanmagan. Natija?",
-          "options": [
-            "Hech narsa",
-            "Broker consumer'ga cheksiz xabar yuboradi: bitta consumer navbatni o'ziga tortadi, xotira to'ladi va yuk taqsimlanmaydi (sekin consumer boshqalarni kutishga majbur qilmaydi lekin o'zida ushlab qoladi)",
-            "Xabarlar yo'qoladi",
-            "Tartib buziladi"
-          ],
-          "answer": 1,
-          "explanation": "`basic.qos(prefetch=N)` — oqim nazorati: N ta ack qilinmagan xabardan ko'p berilmaydi. Kichik N (1-10) adolatli taqsimot va tez failover beradi, katta N throughputni oshiradi. Shu bilan birga `ack` qo'lda bo'lishi (`autoAck=false`) va xato bo'lganda `nack` + DLX (dead letter exchange) sozlanishi kerak."
-        },
-        {
-          "id": 30318,
-          "code": "SN319",
           "level": "St",
           "type": "mcq",
           "topic": "Messaging gotcha",
@@ -13816,60 +13097,6 @@
           "explanation": "ORM entity'sini to'g'ridan-to'g'ri request body'ga bind qilish — OWASP API ro'yxatidagi klassik zaiflik. To'g'ri qatlamlar: request DTO → validatsiya → domain obyektiga aniq maydonlar bilan o'girish. Bonus: `DisallowUnknownFields` client xatolarini erta ko'rsatadi, lekin forward compatibility'ni cheklaydi — public API'da ehtiyotkorlik bilan."
         },
         {
-          "id": 30308,
-          "code": "SN309",
-          "level": "S",
-          "type": "mcq",
-          "topic": "API gotcha",
-          "domain": "api",
-          "section": "t6",
-          "question": "JSON'da `PATCH` bilan maydonni `null` ga o'rnatish va maydonni yubormaslikni qanday ajratasiz (Go)?",
-          "options": [
-            "Ajratish kerak emas",
-            "Pointer (`*string`) yoki `json.RawMessage`/maxsus `Optional[T]` tur — `nil` pointer 'yuborilmagan', `pointer to nil`/mavjud kalit 'null ga o'rnat' degani; yoki JSON Merge Patch semantikasini aniq hujjatlashtirish",
-            "`omitempty` hal qiladi",
-            "Har doim to'liq PUT ishlatish"
-          ],
-          "answer": 1,
-          "explanation": "Oddiy struct bilan `\"\"` va 'yubormadi' farqlanmaydi — natijada PATCH tasodifan maydonni tozalaydi. Amaliy yechimlar: pointerlar, `map[string]json.RawMessage` bilan mavjud kalitlar to'plamini olish, yoki JSON Patch (RFC 6902) ishlatish. `omitempty` faqat serializatsiyaga ta'sir qiladi, deserializatsiyaga emas."
-        },
-        {
-          "id": 30309,
-          "code": "SN310",
-          "level": "S",
-          "type": "mcq",
-          "topic": "API gotcha",
-          "domain": "api",
-          "section": "t6",
-          "question": "Go'da JSON'ga katta `int64` ID yuborilgan, frontendda qiymat buzildi. Nega?",
-          "options": [
-            "Go bug'i",
-            "JavaScript `Number` — IEEE 754 double: 2^53 dan katta butun sonlar aniqligini yo'qotadi; ID'lar string sifatida yuborilishi kerak",
-            "JSON `int64`ni qo'llamaydi",
-            "Encoding muammosi"
-          ],
-          "answer": 1,
-          "explanation": "Snowflake uslubidagi 64-bit ID'lar aynan shu chegaradan oshadi va oxirgi raqamlar o'zgaradi — jim bug (noto'g'ri yozuv ochiladi). Shuning uchun API kontraktida ID string (`\"id\": \"7231...\"`), yoki `json:\",string\"` tegi. Xuddi shu muammo pul miqdorini float bilan yuborishda ham chiqadi."
-        },
-        {
-          "id": 30310,
-          "code": "SN311",
-          "level": "S",
-          "type": "mcq",
-          "topic": "API gotcha",
-          "domain": "api",
-          "section": "t6",
-          "question": "Go'da `json.Unmarshal` bilan validatsiya qilinmagan payload qanday xatarga olib keladi?",
-          "options": [
-            "Faqat xato qaytadi",
-            "Mass assignment: kutilmagan maydonlar (`is_admin`, `balance`) struct'ga tushadi va keyin DB'ga yoziladi; yechim — alohida DTO (faqat ruxsat etilgan maydonlar), `DisallowUnknownFields`, va domain darajasidagi validatsiya",
-            "Panic",
-            "Xotira oshadi faqat"
-          ],
-          "answer": 1,
-          "explanation": "ORM entity'sini to'g'ridan-to'g'ri request body'ga bind qilish — OWASP API ro'yxatidagi klassik zaiflik. To'g'ri qatlamlar: request DTO → validatsiya → domain obyektiga aniq maydonlar bilan o'girish. Bonus: `DisallowUnknownFields` client xatolarini erta ko'rsatadi, lekin forward compatibility'ni cheklaydi — public API'da ehtiyotkorlik bilan."
-        },
-        {
           "id": 30498,
           "code": "SN499",
           "level": "S",
@@ -14665,6 +13892,42 @@
           "modelAnswer": "DevOps — vosita emas, madaniyat: dasturchi va operatsiya umumiy mas'uliyati ('you build it, you run it'), kichik tez-tez relizlar, avtomatlashtirish, fikr-mulohaza tsikllari (monitoring, blameless postmortem). Joriy qilish: 1) DORA metrikalarini o'lchashdan boshlash. 2) Eng og'riqli qo'lda jarayonni avtomatlashtirish (deploy). 3) Platform jamoa — golden path (shablon repo, pipeline, observability tayyor), self-service. 4) On-call dasturchilar bilan, runbook'lar. 5) Blameless postmortem. SRE — Google'ning DevOps'ni amalga oshirish usuli: SLO/SLI, error budget (budget tugasa feature o'rniga ishonchlilik), toil'ni 50%dan kam ushlash.",
           "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
           "source": "https://sre.google/sre-book/table-of-contents/"
+        },
+        {
+          "id": 30270,
+          "code": "SN271",
+          "level": "S",
+          "type": "mcq",
+          "topic": "CI/CD",
+          "domain": "infra",
+          "section": "i2",
+          "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
+          "options": [
+            "`git reset --hard` va force push",
+            "`git revert <sha>` — yangi commit bilan o'zgarishni bekor qiladi, tarix saqlanadi va boshqa ishlovchilar buzilmaydi; merge commit uchun `-m 1`. `reset --hard` + force push umumiy branch'da boshqalarning ishini yo'qotadi",
+            "`git rebase -i` bilan commit'ni o'chirish",
+            "Faqat yangi fix yozish"
+          ],
+          "answer": 1,
+          "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
+        },
+        {
+          "id": 30271,
+          "code": "SN272",
+          "level": "S",
+          "type": "mcq",
+          "topic": "CI/CD",
+          "domain": "infra",
+          "section": "i2",
+          "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
+          "options": [
+            "Qo'lda har commit'ni tekshirish",
+            "`git bisect` — binary search bilan log2(N) qadamda topadi; `git bisect run ./test.sh` bilan avtomatlashtiriladi (test skript exit kodi bilan yaxshi/yomon aniqlanadi)",
+            "`git log --grep`",
+            "`git blame` yetarli"
+          ],
+          "answer": 1,
+          "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
         }
       ]
     },
@@ -15293,42 +14556,6 @@
           "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
         },
         {
-          "id": 30354,
-          "code": "SN355",
-          "level": "S",
-          "type": "mcq",
-          "topic": "TCP/IP",
-          "domain": "infra",
-          "section": "i4",
-          "question": "TCP va UDP orasidagi tanlov qachon UDP tomonga o'tadi?",
-          "options": [
-            "UDP har doim tezroq, doim tanlanadi",
-            "Yo'qolishga bardoshli va latency muhim bo'lgan oqimlarda (video/ovoz, o'yin holati, metrikalar/statsd, DNS) yoki o'z ustiga ishonchlilik qurganda (QUIC) — TCP head-of-line blocking va retransmit kechikishini olib tashlash uchun",
-            "Faqat lokal tarmoqda",
-            "UDP'da tartib kafolatlangan"
-          ],
-          "answer": 1,
-          "explanation": "TCP bitta paket yo'qolsa keyingi kelgan ma'lumotni ham kutishga majbur qiladi (head-of-line) — real-time uchun yomon. QUIC (HTTP/3) UDP ustida oqimlarni mustaqil qilib shu muammoni yechadi va handshake'ni 1-RTT/0-RTT ga tushiradi. UDP tanlansa: retransmit, tartib, congestion control kimning zimmasida — aniq javob bo'lishi kerak."
-        },
-        {
-          "id": 30355,
-          "code": "SN356",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Network",
-          "domain": "infra",
-          "section": "i4",
-          "question": "`ss -s` da `Recv-Q` katta. Bu nimani ko'rsatadi?",
-          "options": [
-            "Tarmoq sekin",
-            "Ilova socket'dan yetarlicha tez o'qimayapti — accept/read qatlamida bo'g'iz (goroutine yetmaydi, handler bloklangan); `Send-Q` katta bo'lsa teskarisi — qabul qiluvchi yoki tarmoq sekin",
-            "Paket yo'qolgan",
-            "MTU kichik"
-          ],
-          "answer": 1,
-          "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
-        },
-        {
           "id": 30437,
           "code": "SN438",
           "level": "S",
@@ -15723,78 +14950,6 @@
           ],
           "answer": 1,
           "explanation": "Amaliy qadamlar: uzoq yashovchi access key'lardan voz kechish (rol + STS), har servisga alohida rol (umumiy rol bo'lsa blast radius katta), `iam:PassRole` va wildcard action'larni ehtiyot bilan berish, va CloudTrail'dan haqiqiy ishlatilgan huquqlar bo'yicha policy'ni qisqartirish. S3'da bucket policy + `BlockPublicAccess` majburiy."
-        },
-        {
-          "id": 30350,
-          "code": "SN351",
-          "level": "S",
-          "type": "mcq",
-          "topic": "OS",
-          "domain": "infra",
-          "section": "i5",
-          "question": "Jarayon va oqim (thread) farqi, va nega Go goroutine ikkisidan arzon?",
-          "options": [
-            "Farqi yo'q",
-            "Jarayon — alohida adres maydoni (izolyatsiya, qimmat almashinish), thread — umumiy adres maydoni lekin OS rejalashtiradi (~1-8 MB stack, kernel switch); goroutine — user-space'da rejalashtiriladigan yengil oqim (2 KB dan boshlanadigan o'suvchi stack), M:N modeli bilan bir necha OS thread ustida ishlaydi",
-            "Goroutine — jarayon",
-            "Thread har doim tezroq"
-          ],
-          "answer": 1,
-          "explanation": "Go runtime scheduler (G-M-P modeli) kanal yoki tarmoq kutishida goroutine'ni thread'dan yechib qo'yadi — kernel switch bo'lmaydi. Shu sabab 100k goroutine normal, 100k OS thread esa emas. Blokirovka qiluvchi syscall (fayl, cgo) bo'lsa runtime yangi thread ajratadi — bu joy sizib ketishi mumkin (`GOMAXPROCS`dan ko'p thread)."
-        },
-        {
-          "id": 30351,
-          "code": "SN352",
-          "level": "S",
-          "type": "mcq",
-          "topic": "OS",
-          "domain": "infra",
-          "section": "i5",
-          "question": "Fayldan o'qishda `page cache` nimani o'zgartiradi?",
-          "options": [
-            "Hech narsa",
-            "Kernel o'qilgan bloklarni xotirada keshlaydi — takroriy o'qish diskka bormaydi; shuning uchun DB serverida bo'sh RAM 'behuda' emas, va `free` chiqishidagi `buff/cache` normal holat. Yozuvda esa `fsync` bo'lmaguncha ma'lumot faqat page cache'da (yo'qolishi mumkin)",
-            "Faqat yozuvni tezlashtiradi",
-            "Faqat SSD'da ishlaydi"
-          ],
-          "answer": 1,
-          "explanation": "Amaliy natijalar: PostgreSQL `shared_buffers` + OS page cache birga ishlaydi (shuning uchun shared_buffers RAM'ning 25% atrofida); `fsync`ni o'chirish tezlik beradi lekin crash'da ma'lumot yo'qoladi; konteynerda page cache cgroup memory hisobiga kiradi va OOM hisobida ko'rinishi mumkin."
-        },
-        {
-          "id": 30352,
-          "code": "SN353",
-          "level": "S",
-          "type": "mcq",
-          "topic": "OS",
-          "domain": "infra",
-          "section": "i5",
-          "question": "`fork` qilinganda xotira qanday nusxalanadi va bu nega muhim?",
-          "options": [
-            "To'liq nusxa olinadi",
-            "Copy-on-write: sahifalar umumiy qoladi, faqat yozilganda nusxalanadi — shuning uchun Redis `BGSAVE` paytida yozuv ko'p bo'lsa xotira ikki barobarga yaqin oshishi mumkin",
-            "Xotira umuman nusxalanmaydi",
-            "Faqat stack nusxalanadi"
-          ],
-          "answer": 1,
-          "explanation": "Redis persistence'dagi klassik incident: `fork` arzon ko'rinadi, lekin yozuv intensiv bo'lsa CoW sahifalari ko'payib OOM bo'ladi (shuning uchun `vm.overcommit_memory=1` tavsiya qilinadi va xotira zapasi qoldiriladi). Xuddi shu mexanizm konteyner image qatlamlari va `vfork`/`posix_spawn` optimizatsiyalarida ham asos."
-        },
-        {
-          "id": 30353,
-          "code": "SN354",
-          "level": "St",
-          "type": "mcq",
-          "topic": "OS",
-          "domain": "infra",
-          "section": "i5",
-          "question": "Latency raqamlari (tartib bo'yicha): L1 kesh, RAM, SSD, bir DC ichida tarmoq, kontinentlar orasi?",
-          "options": [
-            "Hammasi mikrosekund atrofida",
-            "~1 ns L1, ~100 ns RAM, ~100 µs SSD o'qish, ~0.5 ms bir DC ichida round-trip, ~150 ms kontinentlar orasi — har bosqich taxminan 100-1000x farq qiladi",
-            "RAM va SSD teng",
-            "Tarmoq RAM'dan tez"
-          ],
-          "answer": 1,
-          "explanation": "Bu raqamlar dizayn qarorlarini boshqaradi: RAM'dan o'qish diskdan ~1000x tez (shuning uchun kesh), bir DC ichidagi chaqiruv RAM'dan ~5000x sekin (shuning uchun N+1 chaqiruv halokatli), cross-region esa har round-trip 150 ms (shuning uchun cross-region sinxron yozuv qabul qilinmaydi). Aniq raqam emas, kattalik tartibi muhim."
         },
         {
           "id": 30457,
@@ -17760,45 +16915,6 @@
           "explanation": "Staff darajadagi savol: javob kod strukturasidan boshlanmasligi kerak, balki 'productionda ishlash uchun nima majburiy' ro'yxatidan. Shablonning qiymati — takrorlanuvchi qarorlarni bir marta to'g'ri qilib qotirish."
         },
         {
-          "id": 30367,
-          "code": "SN368",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Microservices",
-          "domain": "arch",
-          "section": "r1",
-          "question": "'Distributed monolith' belgilari qaysilar?",
-          "options": [
-            "Ko'p servis bo'lishi",
-            "Servislar birgalikda deploy qilinishi shart, bitta DB/jadvalni bo'lishishi, har o'zgarish bir necha repo'ni talab qilishi, sinxron chaqiruv zanjirlari va umumiy kutubxonada biznes mantiqi — ya'ni mustaqillik yo'q, lekin tarmoq narxi bor",
-            "Har servisda alohida DB",
-            "Event ishlatish"
-          ],
-          "answer": 1,
-          "explanation": "Bu eng qimmat holat: monolitning bog'liqligi + taqsimlangan tizimning murakkabligi. Test: 'shu servisni boshqalarni deploy qilmasdan chiqara olamanmi?' va 'kontrakt o'zgarmasa boshqalar buziladimi?'. Tuzatish yo'li ko'pincha chegaralarni qayta chizish (ma'lumot egaligi bo'yicha) yoki ortiqcha servislarni qayta birlashtirish."
-        },
-        {
-          "id": 30368,
-          "code": "SN369",
-          "level": "St",
-          "type": "open",
-          "topic": "Architecture",
-          "domain": "arch",
-          "section": "r1",
-          "question": "Yangi jamoa uchun servis shabloni (template) tuzyapsiz. Nima bo'lishi kerak?",
-          "modelAnswer": [
-            "Struktura: `cmd/`, `internal/domain|application|adapters`, migratsiyalar, `Makefile` — qatlam chegaralari import linter bilan majburlangan",
-            "Kuzatuv standart holda: strukturaviy log (trace_id bilan), Prometheus metrikalari (RED: rate/errors/duration), OTel tracing, `/healthz` va `/readyz` (dependency semantikasi to'g'ri)",
-            "Ishonchlilik primitivlari: HTTP client timeout va retry/breaker bilan o'ralgan, DB pool sozlamalari, graceful shutdown, panic recovery",
-            "Konfiguratsiya: env orqali, validatsiya ishga tushishda (fail fast), sirlar secret manager'dan",
-            "CI: lint (`golangci-lint`), `go test -race`, `govulncheck`, migratsiya tekshiruvi, konteyner qurilishi (distroless, nonroot), SBOM",
-            "Deploy: Helm/Kustomize bazasi, resurs requests/limits, `GOMEMLIMIT`/`automaxprocs`, HPA, PDB, topologySpread",
-            "Hujjat: README (qanday ishga tushirish, kim ega), ADR papkasi, runbook shabloni, alert va SLO bazasi",
-            "Maqsad: yangi servis birinchi kunida productionga chiqishga tayyor — 'platforma sifatida standart', har jamoa o'zi ixtiro qilmaydi"
-          ],
-          "explanation": "Staff darajadagi savol: javob kod strukturasidan boshlanmasligi kerak, balki 'productionda ishlash uchun nima majburiy' ro'yxatidan. Shablonning qiymati — takrorlanuvchi qarorlarni bir marta to'g'ri qilib qotirish."
-        },
-        {
           "id": 30475,
           "code": "SN476",
           "level": "St",
@@ -17994,42 +17110,6 @@
         {
           "id": 30214,
           "code": "SN215",
-          "level": "S",
-          "type": "mcq",
-          "topic": "OOP",
-          "domain": "arch",
-          "section": "r2",
-          "question": "Composition va inheritance: Go'da nega embedding ham ehtiyotkorlik talab qiladi?",
-          "options": [
-            "Embedding = inheritance, muammo yo'q",
-            "Embedding metodlarni yuqoriga ko'taradi — tashqi turning API'si kutilmaganda kengayadi (ichki turning barcha public metodlari oqib chiqadi) va keyinchalik ichki turni almashtirish breaking bo'ladi; aniq delegatsiya xavfsizroq",
-            "Embedding sekin",
-            "Faqat interfeyslarda ishlaydi"
-          ],
-          "answer": 1,
-          "explanation": "Misol: `struct{ sync.Mutex }` embed qilinsa `Lock`/`Unlock` tashqariga chiqadi va tashqi kod ichki qulfni boshqaradi. Shuning uchun `mu sync.Mutex` nomli maydon afzal. Embedding mos keladigan joy — haqiqiy 'is-a' emas, balki interfeys implementatsiyasini qayta ishlatish yoki dekorator qurish."
-        },
-        {
-          "id": 30363,
-          "code": "SN364",
-          "level": "S",
-          "type": "mcq",
-          "topic": "SOLID",
-          "domain": "arch",
-          "section": "r2",
-          "question": "Dependency Inversion amalda Go'da qanday ko'rinadi?",
-          "options": [
-            "Har joyda interfeys yaratish",
-            "Yuqori qatlam (use case) o'ziga kerakli interfeysni e'lon qiladi, past qatlam (Postgres adapter) uni implement qiladi — bog'liqlik yo'nalishi ichkariga qaraydi va domain infrastrukturani bilmaydi; ulash `main`/wiring'da",
-            "DI freymvork o'rnatish",
-            "Global o'zgaruvchilar"
-          ],
-          "answer": 1,
-          "explanation": "Muhim farq: DI (bog'liqlikni tashqaridan berish) va DIP (abstraksiyaga bog'lanish) — bir narsa emas. Go'da freymvork kerak emas: konstruktorlar va `main`da yig'ish yetarli. Signal: `domain` paketi `database/sql` yoki `net/http`ni import qilmasligi kerak — buni hatto linter qoidasi bilan majburlash mumkin."
-        },
-        {
-          "id": 30364,
-          "code": "SN365",
           "level": "S",
           "type": "mcq",
           "topic": "OOP",
@@ -18579,42 +17659,6 @@
           ],
           "answer": 1,
           "explanation": "Katta 'big bang' qayta yozish deyarli har doim muddatdan chiqadi va bir vaqtda ikki tizimni saqlashga olib keladi. Shadow run (ikkalasini ishlatib natijalarni solishtirish, faqat eskisining javobini qaytarish) — pul yoki hisob-kitobga tegishli modullarda eng xavfsiz usul. Har qadamda deploy qilinadigan holat saqlanadi."
-        },
-        {
-          "id": 30365,
-          "code": "SN366",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Clean code",
-          "domain": "arch",
-          "section": "r4",
-          "question": "Funksiya 200 qator. Uni bo'lishning to'g'ri mezoni nima?",
-          "options": [
-            "Har 20 qatorda yangi funksiya",
-            "Mavhumlik darajasi bo'yicha: bir funksiya bir darajadagi qarorlarni bajarsin, ajratilgan qism mustaqil nom oladigan ma'noga ega bo'lsin; sun'iy bo'lish (faqat qator soni uchun) o'qishni yomonlashtiradi",
-            "Uzunlik muhim emas",
-            "Faqat testlash uchun bo'lish"
-          ],
-          "answer": 1,
-          "explanation": "Yaxshi ajratish belgisi: yangi funksiyaga aniq nom topiladi va u 3-4 argumentdan ko'p talab qilmaydi. Yomon ajratish belgisi: `processPart2(a, b, c, d, e, f)` — holat argumentlar orqali sudralib yuradi. Amaliy yondashuv: avval nomlash (nima qilinadi), keyin chegara — shunda kod o'qilishi hikoya kabi bo'ladi."
-        },
-        {
-          "id": 30366,
-          "code": "SN367",
-          "level": "S",
-          "type": "mcq",
-          "topic": "ADR",
-          "domain": "arch",
-          "section": "r4",
-          "question": "ADR (Architecture Decision Record) nimani o'z ichiga olishi kerak?",
-          "options": [
-            "Faqat tanlangan texnologiya nomi",
-            "Kontekst (qanday muammo va cheklovlar), ko'rib chiqilgan variantlar va ularning almashinuvlari, qabul qilingan qaror va sabab, natijalar/oqibatlar, holat (taklif/qabul/bekor) va sana",
-            "UML diagramma",
-            "Kod namunasi"
-          ],
-          "answer": 1,
-          "explanation": "ADR'ning qiymati — 'nega' ni saqlash: 6 oydan keyin kelgan odam qarorni takrorlamasdan qayta ko'rib chiqa oladi. Eng ko'p tashlab ketiladigan qism — rad etilgan variantlar va ularning sababi. ADR qisqa (1 sahifa), repo ichida versiyalangan va o'zgarganda yangi ADR bilan bekor qilinadi (tahrir qilinmaydi)."
         }
       ]
     },
@@ -19975,42 +19019,6 @@
           "explanation": "Shu sabab 'set'ga qo'shish' yoki 'maksimum olish' taqsimlangan tizimda 'qiymatni o'rnatish' yoki 'hisoblagichni oshirish (LWW bilan)' dan xavfsizroq. Amaliy natija: hodisalarni shunday loyihalash kerakki, ularning qo'llanishi tartibga va takrorga sezgir bo'lmasin — shunda at-least-once yetkazib berish yetarli bo'ladi."
         },
         {
-          "id": 30356,
-          "code": "SN357",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Fundamentals",
-          "domain": "dist",
-          "section": "s2",
-          "question": "Amdahl qonuni tizim dizaynida nimani aytadi?",
-          "options": [
-            "Ko'p node har doim chiziqli tezlashtiradi",
-            "Tezlashish ketma-ket (parallellashmaydigan) qism bilan cheklangan: 5% sinxron qism bo'lsa, cheksiz parallelizm ham 20x dan oshira olmaydi — shuning uchun umumiy qulf, yagona koordinator yoki bitta DB yozuv nuqtasi miqyoslashning asosiy chegarasi",
-            "Faqat CPU uchun",
-            "Xotira haqida"
-          ],
-          "answer": 1,
-          "explanation": "Amaliy tarjimasi: 'yana pod qo'shamiz' ishlamaydigan holatlar — barcha yozuvlar bitta primary'ga borsa, global qulf bo'lsa, yoki har so'rov markazlashgan hisoblagichni yangilasa. Shuning uchun dizaynda sharding va kontention nuqtalarini yo'q qilish birinchi o'rinda turadi (Universal Scalability Law bundan ham qattiqroq: koordinatsiya o'sishi bilan throughput tushib ketishi mumkin)."
-        },
-        {
-          "id": 30357,
-          "code": "SN358",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Fundamentals",
-          "domain": "dist",
-          "section": "s2",
-          "question": "Idempotent, kommutativ va assotsiativ operatsiyalar taqsimlangan tizimda nega qadrli?",
-          "options": [
-            "Faqat matematik chiroylilik",
-            "Ular retry, tartib buzilishi va parallel birlashtirishga bardosh beradi: idempotent — takroriy yetkazib berish xavfsiz, kommutativ/assotsiativ — xabarlar tartibsiz kelsa ham natija bir xil (CRDT va agregatlar shunga tayanadi)",
-            "Faqat funksional tillarda",
-            "Faqat testda"
-          ],
-          "answer": 1,
-          "explanation": "Shu sabab 'set'ga qo'shish' yoki 'maksimum olish' taqsimlangan tizimda 'qiymatni o'rnatish' yoki 'hisoblagichni oshirish (LWW bilan)' dan xavfsizroq. Amaliy natija: hodisalarni shunday loyihalash kerakki, ularning qo'llanishi tartibga va takrorga sezgir bo'lmasin — shunda at-least-once yetkazib berish yetarli bo'ladi."
-        },
-        {
           "id": 30455,
           "code": "SN456",
           "level": "S",
@@ -20181,60 +19189,6 @@
         {
           "id": 30163,
           "code": "SN164",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Distributed gotcha",
-          "domain": "dist",
-          "section": "t7",
-          "question": "Kesh va DB o'rtasida izchillik: `DB'ni yangilash → keshni yangilash` ketma-ketligi nega xavfli?",
-          "options": [
-            "Xavfli emas",
-            "Parallel oqimda eski qiymat keshga keyin yozilib qolishi mumkin (race) — natijada kesh jim ravishda eskirgan bo'lib qoladi; xavfsizroq: keshni o'chirish (invalidate), TTL bilan chegaralash, yoki versiyalangan yozuv",
-            "Kesh har doim to'g'ri",
-            "DB yozuvi yo'qoladi"
-          ],
-          "answer": 1,
-          "explanation": "Ssenariy: T1 DB'ga yangi qiymat yozdi, T2 eski qiymatni o'qib turgan edi va keshga yozdi — kesh eski. `DELETE`+TTL bu oynani ancha qisqartiradi; to'liqroq yechim — yozuvda versiya/timestamp bilan CAS (faqat yangiroq qiymat keshga tushadi) yoki keshni CDC/outbox eventidan yangilash."
-        },
-        {
-          "id": 30311,
-          "code": "SN312",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Distributed gotcha",
-          "domain": "dist",
-          "section": "t7",
-          "question": "Two-phase commit (2PC) mikroservislarda nega kamdan-kam ishlatiladi?",
-          "options": [
-            "Sekin bo'lgani uchun faqat",
-            "Koordinator yiqilsa qatnashchilar resurslarni qulflab noma'lum holatda qoladi (blocking protokol), availability barcha qatnashchilarning ko'paytmasiga teng bo'lib pasayadi, va ko'p servis/API 2PC'ni qo'llamaydi — shuning uchun saga + idempotentlik tanlanadi",
-            "Faqat eski texnologiya",
-            "Ma'lumot yo'qotadi"
-          ],
-          "answer": 1,
-          "explanation": "2PC atomiklikni beradi, lekin ishlash muddatida barcha qatnashchi tirik bo'lishini talab qiladi. Amalda tanlov: bir DB ichida — oddiy tranzaksiya; servislar orasida — saga/outbox bilan eventual izchillik va biznes darajasidagi compensation. Aytish kerak bo'lgan nuqta: 2PC noto'g'ri emas, shunchaki availability narxi yuqori."
-        },
-        {
-          "id": 30312,
-          "code": "SN313",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Distributed gotcha",
-          "domain": "dist",
-          "section": "t7",
-          "question": "Servis A, B, C zanjirida retry'lar bor. Nega 'retry amplification' xavfli?",
-          "options": [
-            "Xavfli emas",
-            "Har qatlam 3 marta urinsa 3×3×3 = 27 chaqiruv — sekinlashgan pastki servis butunlay yiqiladi; faqat eng chetdagi qatlam (yoki budjet bilan) retry qilishi kerak",
-            "Faqat log ko'payadi",
-            "Latency o'zgarmaydi"
-          ],
-          "answer": 1,
-          "explanation": "Qoida: retry bir joyda — foydalanuvchiga eng yaqin nuqtada yoki eng ichkarida, lekin barcha qatlamlarda emas. Qo'shimcha nazorat: retry budget (trafikning ~10%), `Retry-After` hurmat qilish, va serverdan 'retryable emas' signali (429/400 farqi). Incident'da birinchi choralardan biri — retry'ni vaqtincha o'chirish."
-        },
-        {
-          "id": 30313,
-          "code": "SN314",
           "level": "St",
           "type": "mcq",
           "topic": "Distributed gotcha",
@@ -20704,42 +19658,6 @@
         {
           "id": 30237,
           "code": "SN238",
-          "level": "St",
-          "type": "mcq",
-          "topic": "System design",
-          "domain": "sys",
-          "section": "y1",
-          "question": "'Bu tizimni 10x yuklamaga qanday chidamli qilasiz?' savoliga javob strukturasi?",
-          "options": [
-            "Kubernetes replicani oshirish",
-            "Bo'g'izni aniqlash tartibi: o'lchash (qaysi resurs to'yingan) → arzon g'alabalar (kesh, N+1 yo'q qilish, batching, indeks) → gorizontal skale (stateless qatlam) → ma'lumot qatlami (read replica, partition, sharding) → arxitektura o'zgarishi (asinxron qilish, CQRS) — va har qadamda narx/murakkablik almashinuvi",
-            "Hammasini qayta yozish",
-            "Faqat DB'ni kattalashtirish"
-          ],
-          "answer": 1,
-          "explanation": "Yaxshi javob tartibli va o'lchovga tayanadi: 'nima to'yingan?' savolisiz har qanday optimizatsiya taxmin. Odatda eng katta g'alaba arzon qismda bo'ladi (bitta N+1 query yoki keshning yo'qligi), sharding esa oxirgi chora — chunki u operatsion murakkablikni keskin oshiradi."
-        },
-        {
-          "id": 30386,
-          "code": "SN387",
-          "level": "S",
-          "type": "mcq",
-          "topic": "System design",
-          "domain": "sys",
-          "section": "y1",
-          "question": "Dizayn suhbatida birinchi 5 daqiqada nima qilinishi kerak?",
-          "options": [
-            "Darhol arxitektura chizish",
-            "Talablarni aniqlashtirish: funksional (nima kerak, nima kerak emas), nofunksional (RPS, ma'lumot hajmi, latency maqsadi, izchillik talabi, SLA), keyin kattalik tartibida hisob-kitob — shundan keyingina komponentlar",
-            "Texnologiyalarni sanash",
-            "Ma'lumotlar bazasi tanlash"
-          ],
-          "answer": 1,
-          "explanation": "Intervyuerlar eng ko'p baholaydigan signal — noaniq talabni o'zi aniqlab, doirani cheklash (scoping). Hisob-kitob (QPS, hajm, band kenglik) keyingi barcha qarorlarni oqlaydi: 100 RPS uchun bitta PostgreSQL yetarli, 100k RPS uchun butunlay boshqa arxitektura. Texnologiya nomlari eng oxirida keladi."
-        },
-        {
-          "id": 30387,
-          "code": "SN388",
           "level": "St",
           "type": "mcq",
           "topic": "System design",
@@ -21671,69 +20589,6 @@
           "explanation": "Bu keys 'vaqt kam' cheklovi bilan boshqacha javob talab qiladi: arxitektura qayta qurilmaydi — o'lchash, arzon optimizatsiya, oldindan skale va degradatsiya rejasi. Degradatsiya va prioritetni aytish eng kuchli signal."
         },
         {
-          "id": 30383,
-          "code": "SN384",
-          "level": "St",
-          "type": "open",
-          "topic": "Case",
-          "domain": "sys",
-          "section": "y2",
-          "question": "To'lov gateway'i loyihalang: 500 TPS, bir necha PSP, pul yo'qolmasin.",
-          "modelAnswer": [
-            "Kontrakt: har to'lov `payment_intent` sifatida boshlanadi (mahalliy ID, idempotency key mijozdan) — holat mashinasi: `created → authorized → captured → settled`, yoki `failed/canceled/refunded`",
-            "Yozuv yo'li: DB tranzaksiyasida intent + outbox eventi; PSP chaqiruvi tranzaksiyadan tashqarida (tashqi chaqiruv hech qachon ochiq tranzaksiya ichida bo'lmaydi)",
-            "PSP routing: har PSP uchun adapter (anti-corruption layer), yo'naltirish qoidalari (valyuta, karta turi, narx, muvaffaqiyat darajasi), va bitta PSP yiqilsa fallback — lekin fallback dublikat to'lov keltirmasligi uchun avval holat aniqlanadi",
-            "Noma'lum holat: timeout bo'lsa retry aynan shu idempotency key bilan yoki status so'rovi; hal bo'lmasa `pending` va reconciliation navbatiga",
-            "Webhook: imzo tekshirish, idempotent qabul, kechikkan/tartibsiz eventlarni versiya bo'yicha qo'llash; webhook yagona manba emas — davriy pull ham bor",
-            "Ledger: har pul harakati double-entry yozuv; hisobotlar ledger'dan, `status` ustunidan emas",
-            "Xavfsizlik/compliance: PAN tizimga kirmaydi (tokenizatsiya), PCI doirasi minimal, audit log o'zgarmas, sirlar KMS'da",
-            "Kuzatuv: PSP bo'yicha muvaffaqiyat darajasi va latency, `pending` yoshi, reconciliation ochiq farqi, dublikat to'lov alerti (eng muhim biznes alerti)",
-            "Miqyos: 500 TPS DB uchun katta emas, lekin hot hisob qatorlari (merchant balansi) uchun yozuvni agregatlash/sharding kerak bo'lishi mumkin"
-          ],
-          "explanation": "Bu keysda intervyuer texnik miqyosni emas, pul bilan ishlash intizomini tekshiradi: idempotentlik, noma'lum holatni boshqarish, outbox, ledger va reconciliation. Har birini nomlash va sababini aytish kutiladi."
-        },
-        {
-          "id": 30384,
-          "code": "SN385",
-          "level": "St",
-          "type": "open",
-          "topic": "Case",
-          "domain": "sys",
-          "section": "y2",
-          "question": "Ko'p tenant'li SaaS analitika servisi: mijoz dashboardlari, kunlik 5 mlrd hodisa.",
-          "modelAnswer": [
-            "Ingest: SDK → gateway (validatsiya, tenant aniqlash, rate limit) → Kafka; hodisa sxemasi versiyalangan (schema registry), noto'g'ri hodisalar DLQ'ga",
-            "Saqlash: kolonkali ombor (ClickHouse) — `(tenant_id, event_date, event_name)` bo'yicha partition va tartiblash kaliti; xom hodisa + oldindan agregatlangan jadvallar (materialized view) birga",
-            "O'qish: dashboard query'lari agregat jadvaldan (sekundlar emas, millisekundlar), ad-hoc query'lar xom ma'lumotdan lekin kvota bilan (vaqt/skan hajmi limiti, aks holda bitta mijoz klasterni band qiladi)",
-            "Tenant izolyatsiyasi: query kvotasi, alohida query pool, va kritik mijozlar uchun ajratilgan klaster (noisy neighbour muammosi bu yerda asosiy xatar)",
-            "Aniqlik/narx: taxminiy aniqlik yetarli bo'lgan joyda HyperLogLog (unique count) va sampling — xarajatni bir necha barobar kamaytiradi",
-            "Retention va narx: xom ma'lumot 30-90 kun, agregatlar yillar; sovuq ma'lumot obyekt saqlashda (S3) va kamdan-kam so'raladi",
-            "Kechikkan hodisalar: mobil qurilma offline bo'lib 3 kundan keyin yuboradi — agregatlarni qayta hisoblash oynasi (late arrival window) va idempotent qayta yozish kerak",
-            "Kuzatuv: ingest lag, dropped events, query p95 tenant bo'yicha, xarajat/tenant (unit economics)"
-          ],
-          "explanation": "Farqlovchi detallar: oldindan agregatlash, tenant kvotalari (noisy neighbour), kechikkan hodisalarni qayta hisoblash, va HyperLogLog bilan aniqlikni narxga almashtirish. 'PostgreSQL'da `GROUP BY` qilaman' javobi bu hajmda ishlamaydi."
-        },
-        {
-          "id": 30385,
-          "code": "SN386",
-          "level": "S",
-          "type": "open",
-          "topic": "Case",
-          "domain": "sys",
-          "section": "y2",
-          "question": "Hujjat ustida real-time birgalikda ishlash (Google Docs uslubida) — asosiy qarorlar?",
-          "modelAnswer": [
-            "Konflikt modeli: OT (operational transformation) yoki CRDT. CRDT — markazsiz, birlashtirish matematik kafolatlangan, lekin metadata o'sadi (tombstone); OT — ixchamroq lekin markaziy server va murakkab transformatsiyalar talab qiladi",
-            "Transport: WebSocket bilan kichik operatsiyalar (insert/delete pozitsiya bilan), har client uchun versiya/vektor; offline'dan keyin qayta birlashtirish ishlashi kerak",
-            "Kursorlar va presence: alohida yengil kanal, tez-tez lekin ishonchsiz (yo'qolsa muammo emas)",
-            "Doimiylik: operatsiyalar jurnali (append-only) + davriy snapshot — yuklashda snapshot + keyingi operatsiyalar qo'llanadi; bu event sourcing'ning tabiiy qo'llanishi",
-            "Tarix va undo: jurnal bo'yicha versiyalar, foydalanuvchi bo'yicha undo (o'z operatsiyalarini teskari qilish — CRDT'da nozik masala)",
-            "Miqyos: bitta hujjat = bitta koordinator (shard by document) — shu bilan tartib va konflikt hal qilish arzon bo'ladi; hujjatlar bo'ylab esa gorizontal",
-            "Ruxsat: har operatsiyada tekshirish (faqat ochilishda emas), havola bilan bo'lishish modeli, va audit"
-          ],
-          "explanation": "Kutilayotgan asosiy qaror — OT va CRDT o'rtasidagi tanlov va uning sababi, hamda 'bitta hujjat bitta koordinatorda' shardlash g'oyasi. Snapshot + operatsiya jurnali esa yuklash tezligini hal qiladi."
-        },
-        {
           "id": 30480,
           "code": "SN481",
           "level": "St",
@@ -21991,60 +20846,6 @@
         {
           "id": 30151,
           "code": "SN152",
-          "level": "St",
-          "type": "mcq",
-          "topic": "System gotcha",
-          "domain": "sys",
-          "section": "t3",
-          "question": "Servis xotirasi asta o'sadi, pprof heap'da hech narsa ko'rinmaydi. Qaysi variantni tekshirasiz?",
-          "options": [
-            "Faqat GOGC",
-            "Go heap tashqarisidagi o'sish: goroutine leak (stack), `mmap`/cgo ajratmalari, fayl deskriptorlari, yoki fragmentatsiya — `runtime.NumGoroutine()`, `/debug/pprof/goroutine`, RSS va `runtime.MemStats` (HeapSys vs HeapInuse) solishtiriladi",
-            "Faqat CPU profili",
-            "Disk"
-          ],
-          "answer": 1,
-          "explanation": "Heap profil faqat Go ajratmalarini ko'rsatadi. Tekshirish zanjiri: goroutine soni (eng ko'p uchraydigan sabab — bloklangan kanal yoki yopilmagan `resp.Body`), `HeapReleased`/RSS farqi (OS xotirani qaytarmagan), cgo yoki `mmap` ishlatadigan kutubxona, va bir marta katta ajratilgan buferlar (pool ichida ushlanib qolgan)."
-        },
-        {
-          "id": 30299,
-          "code": "SN300",
-          "level": "S",
-          "type": "mcq",
-          "topic": "System gotcha",
-          "domain": "sys",
-          "section": "t3",
-          "question": "Servis `context.Background()` bilan DB query qiladi (HTTP handler ichida). Nima yo'qoladi?",
-          "options": [
-            "Hech narsa",
-            "Cancellation: client ketganda yoki deadline o'tganda query to'xtamaydi — DB va goroutine bekorga ishlaydi, yuk ostida bu resurs tugashiga olib keladi",
-            "Tracing faqat",
-            "Metrikalar"
-          ],
-          "answer": 1,
-          "explanation": "`r.Context()` uzatilishi kerak: client uzilsa `ctx` bekor bo'ladi, `database/sql` query'ni cancel qiladi (PostgreSQL'da cancel request yuboriladi). `context.Background()` — faqat haqiqatan mustaqil fon ishi uchun, va u holda ham o'z deadline'i va shutdown'da to'xtash mexanizmi bo'lishi kerak."
-        },
-        {
-          "id": 30300,
-          "code": "SN301",
-          "level": "S",
-          "type": "mcq",
-          "topic": "System gotcha",
-          "domain": "sys",
-          "section": "t3",
-          "question": "Graceful shutdown yozilgan, lekin deploy paytida so'rovlar uziladi. Eng ko'p uchraydigan sabab?",
-          "options": [
-            "`http.Server.Shutdown` ishlamaydi",
-            "SIGTERM kelishi bilan darhol shutdown boshlanadi, lekin LB/endpoint ro'yxati hali yangilanmagan — `preStop` kutish (yoki readiness'ni avval false qilish) qo'shilmagan",
-            "Timeout kichik",
-            "Port band"
-          ],
-          "answer": 1,
-          "explanation": "Tartib muhim: (1) readiness false / preStop sleep — yangi trafik kelishi to'xtaydi, (2) `srv.Shutdown(ctx)` mavjud so'rovlarni tugatadi, (3) background workerlar `ctx` bilan to'xtaydi, (4) DB pool yopiladi. `terminationGracePeriodSeconds` shu jamiga yetishi kerak, aks holda SIGKILL keladi."
-        },
-        {
-          "id": 30301,
-          "code": "SN302",
           "level": "St",
           "type": "mcq",
           "topic": "System gotcha",
@@ -22889,276 +21690,6 @@
           ],
           "answer": 1,
           "explanation": "Backend misollari: dostavka marshruti (TSP/VRP) — greedy + local search yoki tashqi solver; podlarni node'larga joylash (bin packing) — Kubernetes scheduler heuristikasi; smena jadvali — constraint solver. Intervyuda to'g'ri javob 'optimal emas, lekin yetarlicha yaxshi va vaqt chegarasida' yechimni taklif qilish."
-        },
-        {
-          "id": 30335,
-          "code": "SN336",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Approach",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Amortizatsiyalangan murakkablik nima? Dinamik massivga `append` misolida.",
-          "options": [
-            "O'rtacha holat murakkabligi (average case)",
-            "N ta operatsiyaning umumiy narxini N ga bo'lish: har `append` O(1) amortizatsiyalangan, chunki cap tugaganda O(n) ko'chirish bo'ladi, lekin u har 2x o'sishda bir marta — jami O(n) ish N operatsiyaga taqsimlanadi",
-            "Eng yomon holat O(1)",
-            "Tasodifiy ma'lumotdagi tezlik"
-          ],
-          "answer": 1,
-          "explanation": "Average case ma'lumot taqsimotiga tayanadi, amortizatsiya esa hech qanday ehtimollik talab qilmaydi — bu kafolat. Muhim amaliy natija: real-time tizimda amortizatsiya yetmaydi, chunki bitta operatsiya O(n) bo'lib latency spike beradi (shu sabab GC va rehash pauzalari). Ikki barobar o'sish siyosati aynan shu amortizatsiyani ta'minlaydi; 1.25x o'sish xotirani tejaydi, lekin ko'chirishlar ko'payadi."
-        },
-        {
-          "id": 30336,
-          "code": "SN337",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Hash tables",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Hash jadvalining eng yomon holati O(n) bo'lishi qanday hujumga aylanadi?",
-          "options": [
-            "Hujum bo'lolmaydi",
-            "Hash collision DoS: hujumchi bir xil bucket'ga tushadigan kalitlar yuboradi (JSON kalitlari, HTTP parametrlari) va har operatsiya O(n) bo'lib CPU tugaydi; himoya — tasodifiy seed bilan hash (Go map shunday qiladi) yoki SipHash",
-            "Faqat xotira oshadi",
-            "Faqat eski tillarda"
-          ],
-          "answer": 1,
-          "explanation": "2011-2012 yillarda PHP/Java/Python veb-freymvorklari shu bilan yiqitilgan. Go map har jarayonda tasodifiy seed ishlatadi, shuning uchun kalitlarni oldindan tanlab bo'lmaydi (shu sababdan map iteratsiya tartibi ham har safar boshqa). Qo'shimcha himoya — kirish o'lchamini cheklash (parametrlar soni, JSON kalitlari soni)."
-        },
-        {
-          "id": 30337,
-          "code": "SN338",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Hash tables",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Open addressing (linear probing) va chaining farqi amalda nimada?",
-          "options": [
-            "Faqat kod uzunligi",
-            "Chaining: har bucket'da ro'yxat — yuqori load factor'da ham ishlaydi, lekin pointer sakrashlari (kesh miss); open addressing: elementlar massivda ketma-ket — kesh uchun juda yaxshi, lekin load factor ~0.7 dan oshsa clustering va o'chirish murakkab (tombstone)",
-            "Chaining har doim tezroq",
-            "Open addressing kolliziyasiz"
-          ],
-          "answer": 1,
-          "explanation": "Zamonaviy implementatsiyalar (Go map, Swiss table, abseil `flat_hash_map`) kesh lokalligi uchun ochiq adreslash yoki bucket ichida bir necha slot ishlatadi — CPU'da kesh miss narxi hash hisoblashdan qimmatroq. Bu 'nazariy bir xil O(1)' bo'lsa ham amalda 2-5x farq beradigan klassik misol."
-        },
-        {
-          "id": 30338,
-          "code": "SN339",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Sorting",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Barqaror (stable) saralash qachon majburiy?",
-          "options": [
-            "Har doim",
-            "Ko'p kalit bo'yicha ketma-ket saralaganda (avval ism, keyin yosh — teng yoshlarda ism tartibi saqlanishi kerak) va pagination/UI'da barqaror tartib talab qilinganda; `sort.Slice` barqaror emas, `sort.SliceStable` barqaror",
-            "Faqat kichik massivda",
-            "Faqat butun sonlarda"
-          ],
-          "answer": 1,
-          "explanation": "Go'da `sort.Slice` pdqsort (barqaror emas) — teng elementlar tartibi kafolatlanmaydi va har ishga tushirishda farq qilishi mumkin. Barqarorlik narxi: qo'shimcha xotira yoki sekinroq ishlash. DB'da ham xuddi shu tamoyil: `ORDER BY` unique bo'lmasa tartib barqaror emas, tie-breaker kerak."
-        },
-        {
-          "id": 30339,
-          "code": "SN340",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Sorting",
-          "domain": "alg",
-          "section": "z1",
-          "question": "100 GB faylni 8 GB RAM bilan saralash kerak. Qanday?",
-          "options": [
-            "Hammasini xotiraga yuklab `sort`",
-            "External merge sort: fayl xotiraga sig'adigan bo'laklarga bo'linadi, har biri saralanib diskka yoziladi (run), keyin k-way merge (min-heap bilan) bitta o'tishda birlashtiriladi — I/O O(n log_k n) blokda",
-            "Quicksort diskda",
-            "Faqat ClickHouse ishlatish"
-          ],
-          "answer": 1,
-          "explanation": "Bu PostgreSQL `work_mem` yetmaganda qiladigan ish (disk-based sort) va MapReduce shuffle bosqichining asosi. Amaliy detallar: blok kattaligi ketma-ket o'qishni maksimallashtirish uchun tanlanadi, k (bir vaqtda ochiladigan run soni) fayl deskriptorlari va buferga bog'liq, va siqish I/O ni kamaytiradi."
-        },
-        {
-          "id": 30340,
-          "code": "SN341",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Heap",
-          "domain": "alg",
-          "section": "z1",
-          "question": "N elementdan eng katta K tasini topish: qaysi yondashuv samarali?",
-          "options": [
-            "Hammasini saralash — O(n log n)",
-            "Hajmi K bo'lgan min-heap bilan bitta o'tish — O(n log k) va xotira O(k); oqim (stream) uchun ham ishlaydi. Quickselect esa O(n) o'rtacha, lekin butun massiv xotirada bo'lishi kerak",
-            "Har doim quickselect",
-            "Bubble sort K marta"
-          ],
-          "answer": 1,
-          "explanation": "K << N bo'lganda heap yondashuvi aniq g'olib, ayniqsa ma'lumot oqimda kelsa (barchasini saqlash imkonsiz). Quickselect (`nth_element`) bir martalik in-memory holat uchun eng tez. Taqsimlangan variantda: har node o'zining top-K sini beradi, keyin natijalar birlashtiriladi — bu 'top-K exact' uchun to'g'ri, chunki K dan tashqaridagi element global top-K ga kira olmaydi."
-        },
-        {
-          "id": 30341,
-          "code": "SN342",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Graphs",
-          "domain": "alg",
-          "section": "z1",
-          "question": "BFS va Dijkstra qachon ekvivalent, qachon Dijkstra shart?",
-          "options": [
-            "Har doim bir xil",
-            "Barcha qirralar vazni teng (yoki 1) bo'lsa BFS eng qisqa yo'lni beradi — O(V+E); turli musbat vaznlarda Dijkstra (priority queue) kerak — O(E log V). Manfiy vazn bo'lsa Bellman-Ford yoki SPFA",
-            "BFS har doim tezroq va to'g'ri",
-            "Dijkstra manfiy vaznda ham ishlaydi"
-          ],
-          "answer": 1,
-          "explanation": "Dijkstra manfiy qirrada buziladi, chunki u 'bir marta yopilgan node qayta yaxshilanmaydi' taxminiga tayanadi. Amaliy misollar: sotsial graf masofasi — BFS; yo'l/latency marshruti — Dijkstra; valyuta arbitraji (manfiy log vazn) — Bellman-Ford bilan sikl aniqlash. 0-1 vaznlarda esa deque bilan 0-1 BFS O(V+E) beradi."
-        },
-        {
-          "id": 30342,
-          "code": "SN343",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Graphs",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Topologik saralash qanday amaliy muammoni yechadi va qachon imkonsiz?",
-          "options": [
-            "Faqat o'quv masalasi",
-            "Bog'liqliklarni tartibga solish: build tizimi, migratsiya tartibi, task scheduler, paket o'rnatish. Sikl bo'lsa imkonsiz — Kahn algoritmi qolgan tugunlar orqali siklni aniqlaydi (aylanma bog'liqlik xatosi)",
-            "Har doim mumkin",
-            "Faqat daraxtda ishlaydi"
-          ],
-          "answer": 1,
-          "explanation": "Kahn: in-degree 0 bo'lgan tugunlardan boshlab navbat bilan olib boriladi; oxirida qolgan tugunlar sikl tarkibida. DFS varianti orqa qirra (back edge) bilan siklni topadi. Mikroservis arxitekturasida ham shu vosita: bog'liqlik grafida sikl bo'lsa deploy tartibi aniqlanmaydi — bu dizayn xatosi belgisi."
-        },
-        {
-          "id": 30343,
-          "code": "SN344",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Graphs",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Union-Find (DSU) qanday muammolarda eng mos?",
-          "options": [
-            "Eng qisqa yo'l",
-            "Dinamik ulanish: komponentlarni birlashtirish va 'bir komponentdami?' savoli — path compression + union by rank bilan deyarli O(1) (amortizatsiyalangan α(n)); misollar: Kruskal MST, dedupe/klasterlash, akkauntlarni birlashtirish (identity resolution)",
-            "Saralash",
-            "Hash jadval o'rniga"
-          ],
-          "answer": 1,
-          "explanation": "DSU faqat birlashtirishga imkon beradi — ajratish (undo) qo'llanmaydi, buning uchun offline dinamik algoritmlar kerak. Amaliy backend misoli: bir xil foydalanuvchini turli signal bo'yicha (email, qurilma, karta) bitta identitetga yig'ish — bu tabiiy union-find masalasi va uni DB'da `root_id` bilan saqlash mumkin."
-        },
-        {
-          "id": 30344,
-          "code": "SN345",
-          "level": "S",
-          "type": "mcq",
-          "topic": "DP",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Masala DP bilan yechiladimi — qanday aniqlanadi?",
-          "options": [
-            "Har optimizatsiya masalasi DP",
-            "Ikki shart: optimal substructure (butun yechim qism yechimlardan quriladi) va overlapping subproblems (bir xil qism yechim qayta hisoblanadi). Ikkinchisi bo'lmasa — divide and conquer; greedy to'g'ri bo'lsa (exchange argument bilan isbot) DP keraksiz",
-            "Faqat massivlarda",
-            "Faqat rekursiv kodda"
-          ],
-          "answer": 1,
-          "explanation": "Amaliy tartib: rekursiv formulani yozish (holat va o'tish), keyin memoizatsiya (top-down), keyin kerak bo'lsa tabulyatsiya va xotirani qisqartirish (faqat oxirgi qator). Intervyu signali — holatni to'g'ri ta'riflash: 'dp[i][j] = ... ma'nosi' aniq aytilsa, qolgani mexanik."
-        },
-        {
-          "id": 30345,
-          "code": "SN346",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Binary search",
-          "domain": "alg",
-          "section": "z1",
-          "question": "'Javob bo'yicha binary search' (parametric search) qanday ishlaydi?",
-          "options": [
-            "Faqat saralangan massivda qidirish",
-            "Monoton predikat ustida: `can(x)` rost bo'lsa barcha kattalarida ham rost bo'lsa — minimal x ni log(diapazon) qadamda topamiz. Misollar: minimal sig'im/tezlik, deadline'ga sig'adigan worker soni, rate limit sozlash",
-            "Faqat butun sonlarda",
-            "Har doim O(1)"
-          ],
-          "answer": 1,
-          "explanation": "Kalit shart — monotonlik; uni isbotlash yoki kamida aniq aytish kerak. Backend misoli: 'N ta faylni K worker bilan T vaqtda ko'chirish mumkinmi?' — `can(T)` monoton, demak minimal T binary search bilan topiladi. Capacity planning masalalarida ham shu naqsh ishlatiladi."
-        },
-        {
-          "id": 30346,
-          "code": "SN347",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Intervals",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Ko'p intervalni birlashtirish (merge intervals) va 'eng ko'p bir vaqtda faol' masalasi qanday yechiladi?",
-          "options": [
-            "Har juftlikni solishtirish — O(n²)",
-            "Boshlanish bo'yicha saralab bitta o'tish (merge) — O(n log n); 'bir vaqtda faol maksimum' uchun sweep line: boshlanishga +1, tugashga -1 qo'yib saralangan hodisalar bo'yicha prefiks maksimumi",
-            "Heap majburiy",
-            "DP kerak"
-          ],
-          "answer": 1,
-          "explanation": "Sweep line amaliyotda ko'p uchraydi: bir vaqtdagi maksimal ulanish soni, xona/resurs bandligi, rate limit oynasi, monitoringda concurrency hisoblash. Nozik joyi — teng koordinatalarda tartib: tugash boshlanishdan oldin qo'llanadimi (yopiq/ochiq interval semantikasi) — buni aniq belgilash kerak, aks holda off-by-one bug chiqadi."
-        },
-        {
-          "id": 30347,
-          "code": "SN348",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Linked list",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Amaliyotda bog'langan ro'yxat massivdan qachon afzal?",
-          "options": [
-            "Deyarli har doim",
-            "Kamdan-kam: kesh lokalligi yo'q (har node alohida joyda) — iteratsiya massivdan ancha sekin. Afzal holatlar: o'rtaga O(1) qo'shish/o'chirish node havolasi bo'lganda (LRU ro'yxati), yoki ko'chirish qimmat bo'lgan katta elementlar",
-            "Xotira kam ishlatadi",
-            "Saralash tezroq"
-          ],
-          "answer": 1,
-          "explanation": "Nazariy murakkablik teng bo'lsa ham amalda massiv/slice g'olib chiqadi, chunki CPU ketma-ket xotirani oldindan o'qiydi (prefetch). Shuning uchun LRU keshda ham ro'yxat faqat tartib uchun, qidiruv map bilan. Bu 'big-O hamma narsani aytmaydi' tamoyilining eng aniq misoli."
-        },
-        {
-          "id": 30348,
-          "code": "SN349",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Approach",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Ikkita katta fayl (har biri 50 GB) ichida umumiy satrlarni topish kerak. Xotira 4 GB.",
-          "options": [
-            "Ikkisini xotiraga yuklash",
-            "Hash bo'yicha shardlash: har satrni `hash(line) % K` bilan K ta bo'lakka yozib chiqish (ikki fayl uchun ham) — bir xil satr bir xil bo'lakka tushadi, keyin har juft bo'lakni xotirada set bilan solishtirish",
-            "Faqat `sort | uniq -d`",
-            "Bloom filter yetarli (aniq natija uchun)"
-          ],
-          "answer": 1,
-          "explanation": "Bu MapReduce join'ning mohiyati: 'katta masalani hash bo'yicha mustaqil bo'laklarga ajratish'. Alternativa — ikkisini external sort qilib merge (`sort | comm`), I/O ko'proq lekin xotira kam. Bloom filter tez oldindan filtrlash uchun yaxshi (false positive bor), shuning uchun aniq natija uchun keyin tekshirish kerak."
-        },
-        {
-          "id": 30349,
-          "code": "SN350",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Design",
-          "domain": "alg",
-          "section": "z1",
-          "question": "Trie (prefix tree) hash jadvaldan qachon afzal?",
-          "options": [
-            "Har doim tezroq",
-            "Prefiks bo'yicha so'rovlar kerak bo'lganda (autocomplete, IP routing/longest prefix match, lug'at tekshiruvi) va umumiy prefikslar xotirani tejaganda; aniq kalit qidiruvida hash jadval odatda tezroq",
-            "Xotira kam ishlatadi",
-            "Kolliziyasiz bo'lgani uchun"
-          ],
-          "answer": 1,
-          "explanation": "Trie qidiruvi O(kalit uzunligi) va hash hisoblashni talab qilmaydi, lekin node'lar tarqoq joylashgani uchun kesh miss ko'p. Amaliy optimizatsiyalar: radix/patricia tree (bir bolali zanjirlarni siqish), DAWG (qo'shimcha siqish), yoki oddiygina prefiks→natija xaritasi (oldindan hisoblangan) — ko'p tizimda eng arzon yechim shu."
         }
       ]
     },
@@ -23810,60 +22341,6 @@
           "explanation": "Amaliy usul: maxfiy turlar uchun maxsus tip (`type Token string` + `func (t Token) String() string { return \"[REDACTED]\" }`) — tasodifiy `%v` bilan chiqib ketmaydi. Shuningdek xato matnlariga query parametrlari va URL'dagi tokenlar tushishini tekshirish, retention siyosati va log'larga kirish nazorati (GDPR talablari)."
         },
         {
-          "id": 30369,
-          "code": "SN370",
-          "level": "S",
-          "type": "mcq",
-          "topic": "AppSec",
-          "domain": "sec",
-          "section": "x1",
-          "question": "Fayl yuklash funksiyasi bor. Xavfsizlik nazorati ro'yxati?",
-          "options": [
-            "Kengaytmani tekshirish yetarli",
-            "Hajm va tur cheklovi (mazmun bo'yicha sniffing, kengaytmaga ishonmaslik), fayl nomini normalizatsiya (path traversal), alohida domen/bucket'da saqlash va `Content-Disposition: attachment` bilan berish, `X-Content-Type-Options: nosniff`, antivirus/sandbox skan, imzolangan URL bilan kirish",
-            "Faqat hajmni cheklash",
-            "Faqat autentifikatsiya"
-          ],
-          "answer": 1,
-          "explanation": "Eng xavfli ssenariylar: SVG/HTML yuklab XSS (shuning uchun alohida domen yoki attachment), `../../etc/passwd` bilan traversal, ZIP bomb (dekompressiya limiti), va rasm parseridagi zaifliklar. Fayl app serveridan emas, obyekt saqlashdan imzolangan URL bilan berilishi kerak — bu ham xavfsizlik, ham miqyos jihatidan to'g'ri."
-        },
-        {
-          "id": 30370,
-          "code": "SN371",
-          "level": "S",
-          "type": "mcq",
-          "topic": "AppSec",
-          "domain": "sec",
-          "section": "x1",
-          "question": "Parol tiklash (reset) oqimini xavfsiz qanday quriladi?",
-          "options": [
-            "Email'ga parolni yuborish",
-            "Bir martalik, tasodifiy (128+ bit) token — DB'da hash holida, qisqa TTL (15-60 daqiqa), ishlatilgach bekor qilinadi; javob har doim bir xil ('agar email mavjud bo'lsa yuborildi'), rate limit, tiklashdan keyin barcha sessiyalar bekor qilinadi",
-            "Xavfsizlik savoli bilan",
-            "Token'ni URL'da `user_id` bilan birga yuborish yetarli"
-          ],
-          "answer": 1,
-          "explanation": "Detallar muhim: token DB'da ochiq saqlansa DB leak'da hisoblar egallanadi (shuning uchun hash); javob farq qilsa foydalanuvchi mavjudligi oshkor bo'ladi (enumeration); sessiyalar bekor qilinmasa hujumchi kirishda qoladi. Bundan tashqari email o'zgartirishda eski manzilga ogohlantirish yuborilishi kerak."
-        },
-        {
-          "id": 30371,
-          "code": "SN372",
-          "level": "St",
-          "type": "mcq",
-          "topic": "AppSec",
-          "domain": "sec",
-          "section": "x1",
-          "question": "Ichki admin panel faqat VPN orqasida. Bu yetarlimi?",
-          "options": [
-            "Ha, ichki tarmoq ishonchli",
-            "Yo'q — zero trust: autentifikatsiya va avtorizatsiya har so'rovda, MFA, harakatlar audit log'i, kritik amallarga ikki kishi tasdig'i (four-eyes), va eng kam huquq; VPN faqat qo'shimcha qatlam",
-            "Faqat IP allowlist yetarli",
-            "Faqat HTTPS yetarli"
-          ],
-          "answer": 1,
-          "explanation": "VPN kompromis bo'lgan ishchi noutbuki yoki ichki hujumchini to'xtatmaydi, shuningdek SSRF orqali ichki panelga so'rov yuborilishi mumkin. Admin harakatlari (mablag' o'zgartirish, foydalanuvchi ma'lumoti ko'rish) audit qilinishi va PII ko'rish sababini so'rashi kerak — bu compliance talabi ham."
-        },
-        {
           "id": 30476,
           "code": "SN477",
           "level": "St",
@@ -24199,42 +22676,6 @@
         {
           "id": 30223,
           "code": "SN224",
-          "level": "St",
-          "type": "mcq",
-          "topic": "Fintech",
-          "domain": "sec",
-          "section": "p3",
-          "question": "Fraud (firibgarlik) tekshiruvini to'lov oqimiga qanday joylashtirasiz?",
-          "options": [
-            "Har to'lovni qo'lda tekshirish",
-            "Ikki bosqich: sinxron tez qoidalar (velocity limit, qora ro'yxat, geo/qurilma nomuvofiqligi) — qat'iy timeout bilan va fail-open/fail-close siyosati aniq; asinxron chuqur skoring (model) — natija bo'yicha ushlab qolish/qaytarish va qo'lda ko'rib chiqish navbati",
-            "Faqat model chiqargan skorga ishonish",
-            "To'lovdan keyin hech narsa tekshirmaslik"
-          ],
-          "answer": 1,
-          "explanation": "Muhim muhandislik qarorlari: fraud servisi yiqilsa to'lov to'xtaydimi yoki o'tadimi (biznes qarori, lekin oldindan yozilgan bo'lishi kerak), qoidalar deploy'siz o'zgarishi (konfiguratsiya), har qaror uchun audit va tushuntirish (regulyator talabi), va false positive narxi — haqiqiy mijozni bloklash ham zarar."
-        },
-        {
-          "id": 30372,
-          "code": "SN373",
-          "level": "S",
-          "type": "mcq",
-          "topic": "Fintech",
-          "domain": "sec",
-          "section": "p3",
-          "question": "Valyuta konvertatsiyasida (FX) texnik jihatdan nimani to'g'ri qilish kerak?",
-          "options": [
-            "Kursni har chaqiruvda tashqi API'dan olish",
-            "Kurs snapshot'i sifatida saqlanadi (`rate`, `source`, `fetched_at`) va tranzaksiyaga biriktiriladi — keyin hisob-kitob qayta tiklanadi; yaxlitlash qoidasi (yo'nalish va aniqlik) aniq belgilanadi va konvertatsiya ikki tomonlama teng bo'lmasligi hisobga olinadi",
-            "Float bilan hisoblash",
-            "Kursni frontenddan olish"
-          ],
-          "answer": 1,
-          "explanation": "Eng ko'p uchraydigan xatolar: kursni saqlamaslik (hisobni qayta tekshirib bo'lmaydi), yaxlitlashda tiyinlarning yo'qolishi (jami mos kelmaydi — ledger invariantini buzadi), va A→B→A konvertatsiyada boshlang'ich summaga qaytmaslik. Yaxlitlash farqlari alohida 'rounding' hisobiga yozilishi kerak."
-        },
-        {
-          "id": 30373,
-          "code": "SN374",
           "level": "St",
           "type": "mcq",
           "topic": "Fintech",

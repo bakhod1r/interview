@@ -2,7 +2,7 @@
   "id": "t10",
   "name": "Redis & cache gotchas",
   "domain": "nosql",
-  "domainLabel": "Redis, Mongo, Elastic",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Redis gotcha"
   ],

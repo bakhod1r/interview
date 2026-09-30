@@ -2,7 +2,7 @@
   "id": "t1",
   "name": "Go gotchas",
   "domain": "go",
-  "domainLabel": "Go",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Go gotcha"
   ],
@@ -430,100 +430,6 @@
     {
       "id": 30144,
       "code": "SN145",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Go gotcha",
-      "domain": "go",
-      "section": "t1",
-      "question": "`time.After` uzoq ishlaydigan `select` loop ichida ishlatilgan. Muammo?",
-      "options": [
-        "Muammo yo'q",
-        "Har iteratsiyada yangi timer yaratiladi va o'z vaqtigacha GC qilinmaydi — yuqori RPS'da xotira va timer heap o'sadi; `time.NewTimer` + `Reset`/`Stop` yoki `context` bilan ishlanadi",
-        "Timer ishlamaydi",
-        "Goroutine deadlock"
-      ],
-      "answer": 1,
-      "explanation": "`time.After(d)` kanalni qaytaradi, lekin timer runtime heap'ida `d` tugaguncha yashaydi. 1 daqiqali timeout bilan sekundda 10k iteratsiya — 600k tirik timer. Go 1.23'da timer GC xatti-harakati yaxshilangan, lekin idiomatik yechim baribir timer'ni qayta ishlatish yoki `ctx.Done()`."
-    },
-    {
-      "id": 30290,
-      "code": "SN291",
-      "level": "S",
-      "type": "code",
-      "topic": "Go gotcha",
-      "domain": "go",
-      "section": "t1",
-      "question": "Bu kod nima chiqaradi va nega?",
-      "snippet": "type MyErr struct{}\nfunc (e *MyErr) Error() string { return \"boom\" }\n\nfunc do() error {\n    var e *MyErr = nil\n    return e\n}\n\nfunc main() {\n    if err := do(); err != nil {\n        fmt.Println(\"xato bor:\", err == nil)\n    }\n}",
-      "options": [
-        "Hech narsa chiqmaydi",
-        "`xato bor: false` — typed nil interface'ga solinganda interface nil bo'lmaydi (tur bor, qiymat nil)",
-        "panic: nil pointer",
-        "Kompilyatsiya xatosi"
-      ],
-      "answer": 1,
-      "explanation": "Interface ikki so'zdan iborat: (type, value). `(*MyErr, nil)` — type mavjud, shuning uchun `err != nil` rost, lekin `err.Error()` chaqirilsa panic bo'lishi mumkin. Qoida: konkret pointer turini `error` sifatida qaytarmaslik — funksiya `error` qaytarsa `return nil` yozilishi kerak, `var e *MyErr; return e` emas."
-    },
-    {
-      "id": 30291,
-      "code": "SN292",
-      "level": "S",
-      "type": "code",
-      "topic": "Go gotcha",
-      "domain": "go",
-      "section": "t1",
-      "question": "`sub` slice'iga `append` qilinganda nima bo'ladi?",
-      "snippet": "a := []int{1, 2, 3, 4, 5}\nsub := a[1:3]          // len 2, cap 4\nsub = append(sub, 99)\nfmt.Println(a, sub)",
-      "options": [
-        "`[1 2 3 4 5] [2 3 99]` — a o'zgarmaydi",
-        "`[1 2 3 99 5] [2 3 99]` — cap yetgani uchun append asl massivni bosib yozadi",
-        "panic",
-        "`[1 2 3 4 5 99]`"
-      ],
-      "answer": 1,
-      "explanation": "Slice bir xil backing array'ni ko'rsatadi; `cap(sub)=4` bo'lgani uchun append yangi massiv ajratmay `a[3]`ni almashtiradi. Himoya: `a[1:3:3]` (full slice expression bilan cap'ni cheklash) yoki `slices.Clone`. Bu xato ayniqsa funksiyaga slice berib, u append qilganda jim ma'lumot buzilishiga olib keladi."
-    },
-    {
-      "id": 30292,
-      "code": "SN293",
-      "level": "S",
-      "type": "code",
-      "topic": "Go gotcha",
-      "domain": "go",
-      "section": "t1",
-      "question": "Ushbu map'dagi struct maydonini o'zgartirish nega kompilyatsiya qilinmaydi?",
-      "snippet": "type P struct{ N int }\nm := map[string]P{\"a\": {1}}\nm[\"a\"].N = 2",
-      "options": [
-        "Map faqat o'qish uchun",
-        "Map elementi addressable emas — `m[\"a\"]` nusxa qaytaradi; yechim: qiymatni olib o'zgartirib qaytib yozish yoki `map[string]*P` ishlatish",
-        "`N` eksport qilinmagan",
-        "Map'da struct saqlanmaydi"
-      ],
-      "answer": 1,
-      "explanation": "Map ichidagi qiymat ko'chishi mumkin (rehash), shuning uchun Go unga manzil bermaydi. Ikki yo'l: `p := m[\"a\"]; p.N = 2; m[\"a\"] = p` yoki pointer saqlash (lekin u holda nil tekshiruvi va GC yuki paydo bo'ladi). Slice elementi esa addressable — `s[0].N = 2` ishlaydi."
-    },
-    {
-      "id": 30293,
-      "code": "SN294",
-      "level": "S",
-      "type": "code",
-      "topic": "Go gotcha",
-      "domain": "go",
-      "section": "t1",
-      "question": "`defer` qaysi qiymatni yozadi?",
-      "snippet": "func f() (err error) {\n    defer fmt.Println(\"A:\", err)\n    defer func() { fmt.Println(\"B:\", err) }()\n    err = errors.New(\"late\")\n    return err\n}",
-      "options": [
-        "Ikkisi ham `late`",
-        "`B: late`, `A: <nil>` — birinchi defer argumenti darhol baholanadi, closure esa bajarilish paytida o'qiydi",
-        "Ikkisi ham nil",
-        "Kompilyatsiya xatosi"
-      ],
-      "answer": 1,
-      "explanation": "`defer f(x)` da `x` defer e'lon qilinganda hisoblanadi; closure ichidagi o'zgaruvchi esa keyin o'qiladi. Shuning uchun xatoni o'rab qaytarish (`defer func(){ if err != nil { err = fmt.Errorf(\"...: %w\", err) } }()`) faqat named return va closure bilan ishlaydi. Metrik/log yozadigan defer'larda bu eng ko'p uchraydigan xato."
-    },
-    {
-      "id": 30294,
-      "code": "SN295",
       "level": "S",
       "type": "mcq",
       "topic": "Go gotcha",

@@ -542,60 +542,6 @@
       "explanation": "Tipik qochish sabablari: pointer qaytarish, interface'ga solish, closure'da ushlash, `fmt.Println`ga uzatish (interface{}), slice hajmi kompilyatsiya vaqtida noma'lum. Amaliy natija: kichik struct'ni value bilan uzatish ko'pincha pointer'dan tez, chunki heap ajratmasi va GC yuki bo'lmaydi."
     },
     {
-      "id": 30326,
-      "code": "SN327",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Performance",
-      "domain": "go",
-      "section": "g3",
-      "question": "Profil olindi: `runtime.mallocgc` va GC vaqti yuqori. Birinchi qadam?",
-      "options": [
-        "`GOGC=off`",
-        "`go tool pprof -alloc_objects`/`-alloc_space` bilan eng ko'p ajratuvchi joyni topish: ko'pincha `[]byte`/string konversiyalari, slice/map oldindan hajm berilmagan (`make(..., n)`), interface boxing, va log formatlash — shuni kamaytirish GC bosimini tushiradi",
-        "Xotirani oshirish",
-        "Barcha joyda `sync.Pool`"
-      ],
-      "answer": 1,
-      "explanation": "Go'da GC tuning emas, allocation kamaytirish asosiy vosita. Tipik g'alabalar: `strings.Builder`, `make([]T, 0, n)`, `bytes.Buffer` qayta ishlatish, kichik struct'larni pointer emas value bilan uzatish (escape analysis), `fmt.Sprintf` o'rniga `strconv`. `GOGC` oshirish CPU'ni xotiraga almashtiradi — `GOMEMLIMIT` bilan birga qaraladi."
-    },
-    {
-      "id": 30327,
-      "code": "SN328",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Testing",
-      "domain": "go",
-      "section": "g3",
-      "question": "Benchmark natijasi har ishga tushirishda 30% farq qiladi. Nima qilinadi?",
-      "options": [
-        "O'rtacha olib davom etish",
-        "Shovqinni kamaytirish: `-benchtime`/`-count` bilan bir necha o'lchov va `benchstat` orqali statistik solishtirish, CPU chastotasi/thermal va boshqa jarayonlarni nazarda tutish, `b.ReportAllocs()` va `b.ResetTimer()` to'g'ri qo'yilishi",
-        "Natijani e'tiborsiz qoldirish",
-        "`-race` bilan o'lchash"
-      ],
-      "answer": 1,
-      "explanation": "Bitta o'lchov hech narsa isbotlamaydi. Standart oqim: `go test -bench=X -count=10 > old.txt`, o'zgarishdan keyin `new.txt`, keyin `benchstat old.txt new.txt` — u p-value va farq foizini beradi. `-race` bilan o'lchash noto'g'ri (2-10x sekin). Kompilyator optimizatsiyasi natijani yo'q qilmasligi uchun natija global o'zgaruvchiga yoziladi."
-    },
-    {
-      "id": 30328,
-      "code": "SN329",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Memory",
-      "domain": "go",
-      "section": "g3",
-      "question": "Escape analysis nima va nega muhim?",
-      "options": [
-        "GC algoritmi",
-        "Kompilyator o'zgaruvchi funksiyadan tashqariga 'qochadimi' deb aniqlaydi: qochmasa stack'da (arzon, GC'siz), qochsa heap'da ajratiladi. `go build -gcflags='-m'` bilan ko'riladi",
-        "Xotira siqish",
-        "Goroutine rejalashtirish"
-      ],
-      "answer": 1,
-      "explanation": "Tipik qochish sabablari: pointer qaytarish, interface'ga solish, closure'da ushlash, `fmt.Println`ga uzatish (interface{}), slice hajmi kompilyatsiya vaqtida noma'lum. Amaliy natija: kichik struct'ni value bilan uzatish ko'pincha pointer'dan tez, chunki heap ajratmasi va GC yuki bo'lmaydi."
-    },
-    {
       "id": 30409,
       "code": "SN410",
       "level": "P",
@@ -648,6 +594,96 @@
       ],
       "answer": 1,
       "explanation": "Ikki holatni ajratish kerak: haqiqiy leak (`HeapInuse` o'sib boradi) va OS'ga qaytarilmagan bo'sh xotira (`HeapIdle` katta, `HeapReleased` past). Linux'da `MADV_FREE` bilan sahifalar bosim bo'lmaguncha hisobda qoladi — bu normal. Konteyner limitiga yaqin bo'lsa `GOMEMLIMIT` GC'ni agressivlashtiradi va scavenger'ni ishga soladi."
+    },
+    {
+      "id": 30698,
+      "code": "GX98",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Production'da CPU profil qanday xavfsiz olinadi va o'qiladi?",
+      "options": [
+        "net/http/pprof ni alohida ichki portda ochish, `go tool pprof -http=: host/debug/pprof/profile?seconds=30`; flat — funksiyaning o'zi, cum — chaqirganlari bilan birga; flame graph'da keng blok — vaqt ko'p ketgan joy",
+        "pprof'ni public port'da ochish kerak",
+        "Profil faqat test muhitida olinadi",
+        "top buyrug'i yetarli"
+      ],
+      "answer": 0,
+      "explanation": "pprof endpoint'lari ma'lumot oqizadi va DoS'ga ochiq — faqat ichki tarmoq/auth ortida. CPU profil ~5% overhead, 100Hz namuna. Solishtirish uchun `-diff_base=old.pb.gz`. Continuous profiling (Pyroscope, Parca, Grafana) regressiyani vaqt bo'yicha ko'rsatadi."
+    },
+    {
+      "id": 30699,
+      "code": "GX99",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "heap profilidagi `inuse_space` va `alloc_space` farqi?",
+      "options": [
+        "Ikkalasi bir xil",
+        "inuse_space — hozir tirik (GC'dan omon qolgan) xotira: leak qidirish uchun; alloc_space — boshidan beri jami ajratilgan: GC bosimi va allocation hotspot'lari uchun",
+        "alloc_space faqat stack",
+        "inuse_space goroutine sonini ko'rsatadi"
+      ],
+      "answer": 1,
+      "explanation": "Leak: ikki vaqtda inuse profil olib `-diff_base` bilan solishtirish — o'sgan joy ko'rinadi. GC CPU yuqori bo'lsa — alloc_space/alloc_objects ga qarash va escape analysis (`-gcflags=-m`) bilan heap'ga qochayotgan qiymatlarni topish. RSS o'sib, heap o'smasa — goroutine stack'lari, cgo yoki OS xotirani qaytarmagani (GODEBUG=madvdontneed)."
+    },
+    {
+      "id": 30700,
+      "code": "GX100",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Tracing",
+      "domain": "go",
+      "section": "g3",
+      "question": "`go tool trace` qachon pprof'dan foydaliroq?",
+      "options": [
+        "Hech qachon, pprof hamma narsani ko'rsatadi",
+        "Faqat xotira uchun",
+        "Latency muammolarida: goroutine qayerda kutgani (scheduler, syscall, blocking, GC STW, network) vaqt chizig'ida ko'rinadi; pprof CPU faqat CPU ishlatgan vaqtni ko'rsatadi, kutishni emas",
+        "Faqat testlarda ishlaydi"
+      ],
+      "answer": 2,
+      "explanation": "p99 yuqori, CPU esa past — klassik trace holati. Go 1.21+ da trace overhead ~1-2% ga tushdi, Go 1.23 da flight recorder (so'nggi N soniyani xotirada ushlab, muammo paytida dump qilish) paydo bo'ldi. Block va mutex profillari (`runtime.SetBlockProfileRate`, `SetMutexProfileFraction`) — lock kutishini topishning arzonroq yo'li."
+    },
+    {
+      "id": 30701,
+      "code": "GX101",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "PGO (Profile-Guided Optimization, Go 1.21+) qanday ishlatiladi?",
+      "options": [
+        "Maxsus kompilyator kerak",
+        "Faqat benchmark profilidan",
+        "Runtime'da dinamik JIT qiladi",
+        "Production'dan CPU profil olib `default.pgo` nomi bilan main paket katalogiga qo'yiladi; `go build` uni avtomatik ishlatadi — issiq funksiyalar inline va devirtualize qilinadi, odatda 2–14% CPU tejaladi"
+      ],
+      "answer": 3,
+      "explanation": "Profil vakil bo'lishi kerak (real trafik), eski profil ham ishlaydi — kod o'zgarsa ham mos keladigan joylar optimallashadi. Build vaqti biroz oshadi. Profilni vaqti-vaqti bilan yangilab, repo'ga commit qilish tavsiya etiladi. `-pgo=off` bilan o'chiriladi."
+    },
+    {
+      "id": 30702,
+      "code": "GX102",
+      "level": "St",
+      "type": "mcq",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Konteynerda (limit 2GiB) Go servis OOMKilled bo'lyapti, heap esa ~1.2GiB. Nima qilasiz?",
+      "options": [
+        "GOMEMLIMIT ni limitdan biroz past (masalan 1800MiB) qo'yish — GC limitga yaqinlashganda tez-tez ishlaydi; GOGC bilan birga sozlash; allocation manbasini profil bilan kamaytirish",
+        "GOGC=off qo'yish",
+        "Limitni cheksiz qilish",
+        "runtime.GC() ni har soniyada chaqirish"
+      ],
+      "answer": 0,
+      "explanation": "GOGC=100 da heap keyingi GC'gacha tirik xotiradan 2 marta o'sishi mumkin — 1.2GiB tirik ⇒ 2.4GiB cho'qqi. GOMEMLIMIT (Go 1.19+) soft limit: yetishmasa GC ko'proq CPU sarflaydi (death spiral'dan himoya bor). Go 1.25+ da GOMAXPROCS cgroup CPU limitini hisobga oladi; eskiroqlarda automaxprocs kerak edi."
     }
   ]
 }

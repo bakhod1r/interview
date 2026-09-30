@@ -263,42 +263,6 @@
       "explanation": "Tanlov mezoni: murakkab marshrutlash, per-task ack, prioritet va kechiktirilgan yetkazib berish kerak bo'lsa — RabbitMQ; eventlarni saqlash, replay, stream processing va juda yuqori throughput kerak bo'lsa — Kafka. Ko'p tizimda ikkisi birga yashaydi: Kafka — event backbone, RabbitMQ yoki DB navbati — task queue."
     },
     {
-      "id": 30377,
-      "code": "SN378",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Queue",
-      "domain": "msg",
-      "section": "m2",
-      "question": "PostgreSQL'ni navbat sifatida ishlatish (`SELECT ... FOR UPDATE SKIP LOCKED`) qachon oqlanadi?",
-      "options": [
-        "Hech qachon",
-        "O'rtacha yuklamada (minglab ish/daqiqa) va ish biznes ma'lumoti bilan bir tranzaksiyada bo'lishi kerak bo'lganda — bitta tizim, tranzaksion kafolat, oson kuzatuv va SQL bilan inspektsiya; juda yuqori throughput yoki fan-out kerak bo'lsa broker afzal",
-        "Har doim, broker keraksiz",
-        "Faqat testda"
-      ],
-      "answer": 1,
-      "explanation": "Afzalliklari amaliy: outbox bilan tabiiy birlashadi, 'qaysi ish qotib qoldi' savoliga `SELECT` bilan javob beriladi, alohida infra saqlash kerak emas. Cheklovlari: yuqori RPS'da vacuum va bloat (tez o'chirish yoki partition bilan hal qilinadi), pub/sub fan-out yo'q, va uzoq ishlar uchun lease/`visibility timeout` ni o'zingiz yozasiz."
-    },
-    {
-      "id": 30378,
-      "code": "SN379",
-      "level": "S",
-      "type": "mcq",
-      "topic": "RabbitMQ",
-      "domain": "msg",
-      "section": "m2",
-      "question": "RabbitMQ va Kafka o'rtasidagi asosiy model farqi?",
-      "options": [
-        "Faqat tezlik",
-        "RabbitMQ — broker xabarni consumer'ga yetkazadi va ack'dan keyin o'chiradi (smart broker, marshrutlash exchange orqali, per-message ack, prioritet); Kafka — o'zgarmas log, consumer offsetni o'zi boshqaradi, qayta o'ynatish va ko'p mustaqil consumer guruhi tabiiy",
-        "Kafka'da ack yo'q",
-        "RabbitMQ log saqlaydi"
-      ],
-      "answer": 1,
-      "explanation": "Tanlov mezoni: murakkab marshrutlash, per-task ack, prioritet va kechiktirilgan yetkazib berish kerak bo'lsa — RabbitMQ; eventlarni saqlash, replay, stream processing va juda yuqori throughput kerak bo'lsa — Kafka. Ko'p tizimda ikkisi birga yashaydi: Kafka — event backbone, RabbitMQ yoki DB navbati — task queue."
-    },
-    {
       "id": 30446,
       "code": "SN447",
       "level": "S",

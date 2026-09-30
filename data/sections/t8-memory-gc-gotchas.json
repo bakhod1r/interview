@@ -2,7 +2,7 @@
   "id": "t8",
   "name": "Memory & GC gotchas",
   "domain": "go",
-  "domainLabel": "Go",
+  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Memory gotcha"
   ],
@@ -155,43 +155,6 @@
       ],
       "answer": 1,
       "explanation": "Bu savol intervyularda aynan shu shaklda so'raladi. Diagnostika: `/debug/pprof/heap` (inuse_space) ikki snapshot farqi kerak bo'lmagan ushlanishni ko'rsatadi, `/debug/pprof/goroutine` bloklanganlarni, RSS va `MemStats` esa Go tashqarisidagi o'sishni. Eng ko'p uchraydigan sabab — chegarasiz kesh (map) va goroutine leak."
-    },
-    {
-      "id": 30314,
-      "code": "SN315",
-      "level": "S",
-      "type": "code",
-      "topic": "Memory gotcha",
-      "domain": "go",
-      "section": "t8",
-      "question": "Bu kod nega xotira ushlab qoladi?",
-      "snippet": "func firstLine(data []byte) []byte {\n    i := bytes.IndexByte(data, '\\n')\n    return data[:i]   // data 10MB bo'lsin\n}",
-      "options": [
-        "Ushlamaydi, faqat kichik qism qaytadi",
-        "Qaytgan slice 10MB backing array'ni ushlab turadi — GC butun massivni bo'shatmaydi; `append([]byte(nil), data[:i]...)` yoki `bytes.Clone` bilan nusxa olinadi",
-        "Panic bo'ladi",
-        "GC darhol tozalaydi"
-      ],
-      "answer": 1,
-      "explanation": "Slice — (ptr, len, cap): kichik oyna ham katta massivga havola. Bu naqsh HTTP javobini o'qib bir bo'lagini keshda saqlaganda haqiqiy leak keltiradi (kesh 100 element × 10MB). Xuddi shunday `string(bigBytes[:10])` esa nusxa oladi — string konversiyasi allocation qiladi."
-    },
-    {
-      "id": 30315,
-      "code": "SN316",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Memory gotcha",
-      "domain": "go",
-      "section": "t8",
-      "question": "`sync.Pool` bilan ishlashda klassik xato?",
-      "options": [
-        "Pool ishlatmaslik",
-        "Buferni pool'ga qaytarishdan oldin tozalamaslik (eski ma'lumot boshqa so'rovga oqadi) yoki juda katta buferlarni qaytarish (pool xotirani ushlab qoladi); shuningdek pool'dagi obyektga havolani saqlab qo'yish",
-        "`Get` nil qaytaradi",
-        "Pool goroutine-safe emas"
-      ],
-      "answer": 1,
-      "explanation": "Xavfsizlik nuqtasi: ma'lumot oqishi (bir foydalanuvchi javobi boshqasiga) — real incident turi. To'g'ri naqsh: `buf.Reset()` qaytarishdan oldin, hajm chegarasidan katta buferlarni umuman qaytarmaslik, va pool'dan olingan slice'ga tashqi havola qoldirmaslik. `sync.Pool` GC paytida tozalanadi — kesh emas, faqat allocation pressure'ni kamaytirish vositasi."
     },
     {
       "id": 30494,

@@ -190,42 +190,6 @@
       "explanation": "Misol: `struct{ sync.Mutex }` embed qilinsa `Lock`/`Unlock` tashqariga chiqadi va tashqi kod ichki qulfni boshqaradi. Shuning uchun `mu sync.Mutex` nomli maydon afzal. Embedding mos keladigan joy — haqiqiy 'is-a' emas, balki interfeys implementatsiyasini qayta ishlatish yoki dekorator qurish."
     },
     {
-      "id": 30363,
-      "code": "SN364",
-      "level": "S",
-      "type": "mcq",
-      "topic": "SOLID",
-      "domain": "arch",
-      "section": "r2",
-      "question": "Dependency Inversion amalda Go'da qanday ko'rinadi?",
-      "options": [
-        "Har joyda interfeys yaratish",
-        "Yuqori qatlam (use case) o'ziga kerakli interfeysni e'lon qiladi, past qatlam (Postgres adapter) uni implement qiladi — bog'liqlik yo'nalishi ichkariga qaraydi va domain infrastrukturani bilmaydi; ulash `main`/wiring'da",
-        "DI freymvork o'rnatish",
-        "Global o'zgaruvchilar"
-      ],
-      "answer": 1,
-      "explanation": "Muhim farq: DI (bog'liqlikni tashqaridan berish) va DIP (abstraksiyaga bog'lanish) — bir narsa emas. Go'da freymvork kerak emas: konstruktorlar va `main`da yig'ish yetarli. Signal: `domain` paketi `database/sql` yoki `net/http`ni import qilmasligi kerak — buni hatto linter qoidasi bilan majburlash mumkin."
-    },
-    {
-      "id": 30364,
-      "code": "SN365",
-      "level": "S",
-      "type": "mcq",
-      "topic": "OOP",
-      "domain": "arch",
-      "section": "r2",
-      "question": "Composition va inheritance: Go'da nega embedding ham ehtiyotkorlik talab qiladi?",
-      "options": [
-        "Embedding = inheritance, muammo yo'q",
-        "Embedding metodlarni yuqoriga ko'taradi — tashqi turning API'si kutilmaganda kengayadi (ichki turning barcha public metodlari oqib chiqadi) va keyinchalik ichki turni almashtirish breaking bo'ladi; aniq delegatsiya xavfsizroq",
-        "Embedding sekin",
-        "Faqat interfeyslarda ishlaydi"
-      ],
-      "answer": 1,
-      "explanation": "Misol: `struct{ sync.Mutex }` embed qilinsa `Lock`/`Unlock` tashqariga chiqadi va tashqi kod ichki qulfni boshqaradi. Shuning uchun `mu sync.Mutex` nomli maydon afzal. Embedding mos keladigan joy — haqiqiy 'is-a' emas, balki interfeys implementatsiyasini qayta ishlatish yoki dekorator qurish."
-    },
-    {
       "id": 30472,
       "code": "SN473",
       "level": "S",

@@ -2,7 +2,7 @@
   "id": "p3",
   "name": "Compliance, fraud, FX",
   "domain": "sec",
-  "domainLabel": "Security",
+  "domainLabel": "Fintech & payments",
   "topics": [
     "Fintech"
   ],
@@ -138,42 +138,6 @@
     {
       "id": 30223,
       "code": "SN224",
-      "level": "St",
-      "type": "mcq",
-      "topic": "Fintech",
-      "domain": "sec",
-      "section": "p3",
-      "question": "Fraud (firibgarlik) tekshiruvini to'lov oqimiga qanday joylashtirasiz?",
-      "options": [
-        "Har to'lovni qo'lda tekshirish",
-        "Ikki bosqich: sinxron tez qoidalar (velocity limit, qora ro'yxat, geo/qurilma nomuvofiqligi) — qat'iy timeout bilan va fail-open/fail-close siyosati aniq; asinxron chuqur skoring (model) — natija bo'yicha ushlab qolish/qaytarish va qo'lda ko'rib chiqish navbati",
-        "Faqat model chiqargan skorga ishonish",
-        "To'lovdan keyin hech narsa tekshirmaslik"
-      ],
-      "answer": 1,
-      "explanation": "Muhim muhandislik qarorlari: fraud servisi yiqilsa to'lov to'xtaydimi yoki o'tadimi (biznes qarori, lekin oldindan yozilgan bo'lishi kerak), qoidalar deploy'siz o'zgarishi (konfiguratsiya), har qaror uchun audit va tushuntirish (regulyator talabi), va false positive narxi — haqiqiy mijozni bloklash ham zarar."
-    },
-    {
-      "id": 30372,
-      "code": "SN373",
-      "level": "S",
-      "type": "mcq",
-      "topic": "Fintech",
-      "domain": "sec",
-      "section": "p3",
-      "question": "Valyuta konvertatsiyasida (FX) texnik jihatdan nimani to'g'ri qilish kerak?",
-      "options": [
-        "Kursni har chaqiruvda tashqi API'dan olish",
-        "Kurs snapshot'i sifatida saqlanadi (`rate`, `source`, `fetched_at`) va tranzaksiyaga biriktiriladi — keyin hisob-kitob qayta tiklanadi; yaxlitlash qoidasi (yo'nalish va aniqlik) aniq belgilanadi va konvertatsiya ikki tomonlama teng bo'lmasligi hisobga olinadi",
-        "Float bilan hisoblash",
-        "Kursni frontenddan olish"
-      ],
-      "answer": 1,
-      "explanation": "Eng ko'p uchraydigan xatolar: kursni saqlamaslik (hisobni qayta tekshirib bo'lmaydi), yaxlitlashda tiyinlarning yo'qolishi (jami mos kelmaydi — ledger invariantini buzadi), va A→B→A konvertatsiyada boshlang'ich summaga qaytmaslik. Yaxlitlash farqlari alohida 'rounding' hisobiga yozilishi kerak."
-    },
-    {
-      "id": 30373,
-      "code": "SN374",
       "level": "St",
       "type": "mcq",
       "topic": "Fintech",
