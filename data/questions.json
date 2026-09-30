@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1205,
+  "total": 1206,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -16224,6 +16224,25 @@
           "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
           "modelAnswer": "Avval o'lchash, keyin o'zgartirish — default'lar ko'pincha yetarli. Tarmoq: `net.core.somaxconn` va ilovadagi listen backlog (ulanish tushishi — `ss -lnt` Recv-Q, ListenOverflows), `net.ipv4.ip_local_port_range` (ko'p chiquvchi ulanish), `net.ipv4.tcp_tw_reuse`, `net.core.netdev_max_backlog`, conntrack hajmi (`nf_conntrack_max`). Fayl: `fs.file-max` va ulimit `nofile` (systemd'da LimitNOFILE). Xotira: `vm.swappiness`, `vm.overcommit_memory` (Redis 1 tavsiya qiladi), `vm.max_map_count` (Elasticsearch). Har o'zgarish — /etc/sysctl.d/ da versiyalangan (IaC), sabab izohi bilan, yuk testida tekshirilgan.",
           "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
+        },
+        {
+          "id": 30707,
+          "code": "LX60",
+          "level": "M",
+          "type": "open",
+          "topic": "Linux",
+          "domain": "infra",
+          "section": "i7",
+          "question": "Hard link va soft (symbolic) link'ni chuqur solishtiring: `ln` va `ln -s` qanday ishlaydi, qachon qaysi biri, va 'log faylni o'chirdim, lekin disk bo'shamadi' holati bunga qanday bog'liq?",
+          "modelAnswer": [
+            "Hard link (`ln a b`): o'sha inode'ga yangi katalog yozuvi (nom). Inode link count +1. 'Asl' va 'nusxa' yo'q — ikkala nom teng. Cheklovlar: bir fayl tizimi ichida (inode raqami FS'ga xos), kataloglarga ruxsat yo'q (sikl xavfi, `.`/`..` bundan mustasno).",
+            "Soft link (`ln -s target link`): alohida inode, tur `l`, ichida faqat yo'l matni saqlanadi. Boshqa FS'ga, katalogga ham bo'ladi. Target o'chsa yoki ko'chsa — dangling (osilgan) link. `readlink -f` oxirgi manzilni ko'rsatadi.",
+            "Nisbiy vs absolyut: `ln -s ../lib/x.so` nisbiy yo'l LINK joylashgan katalogga nisbatan hisoblanadi (joriy katalogga emas) — keng tarqalgan xato. Absolyut yo'l ko'chirilganda/konteynerda mount boshqa bo'lsa buziladi.",
+            "Ruxsatlar: symlink'ning o'z ruxsati (`lrwxrwxrwx`) ahamiyatsiz — target ruxsati tekshiriladi. Hard link'da ruxsat inode'da, shuning uchun hamma nomlar uchun bir xil.",
+            "O'chirish: `rm`/`unlink` faqat nomni olib tashlaydi, link count -1. Ma'lumot link count 0 VA hech bir jarayon fayl deskriptorni ochib turmaganda bo'shaydi. Shuning uchun ishlayotgan servis log faylini `rm` qilsangiz, `df` bo'sh joyni ko'rsatmaydi: `lsof +L1` (yoki `ls -l /proc/<pid>/fd | grep deleted`) bilan topiladi. Yechim: servisni restart/reopen (SIGHUP, logrotate `copytruncate`) yoki `: > /proc/<pid>/fd/N` bilan truncate.",
+            "Qo'llanish: symlink — versiya almashtirish (`current -> releases/v42`, atomik deploy: yangi symlink yaratib `mv -T` bilan almashtirish), /etc/alternatives, usrmerge. Hard link — backup'larda deduplikatsiya (rsync `--link-dest`, Time Machine), atomik 'fayl mavjud bo'lsa yaratma' lock'lari."
+          ],
+          "explanation": "Tekshirish: `ls -li` (inode raqami va link count), `stat`, `find -samefile`, `find -xtype l` (osilgan symlink'lar). `cp` default symlink'ni kuzatadi, `cp -P`/`-a` saqlaydi. Docker COPY va tar ham symlink'ni turlicha qayta ishlaydi — build'dagi 'fayl topilmadi' xatolarining tez-tez sababi."
         }
       ]
     },
