@@ -1,0 +1,6 @@
+{
+"30257":{"a":"**Binar ma'lumotni matnli kanalda (JSON, URL, email) xavfsiz uzatish uchun — shifrlash EMAS; hajm ~33% oshadi.**\n\n- URL'da `base64url` (`-`, `_`) — JWT shuni ishlatadi.\n- Rasmni JSON ichida yuborish — ortiqcha trafik; presigned URL to'g'riroq."},
+"30258":{"a":"**BST tugunida bitta kalit — chuqurlik log₂N, har daraja alohida disk sakrashi. B-tree tuguni bir sahifada yuzlab kalit — chuqurlik 3–4, disk o'qishlari minimal.**\n\n- Disk blok bilan o'qiladi (4–8 KB) → tugun blokka moslanadi.\n- Xotirada — BST/skip list maqbul.\n- LSM-tree — yozuvga optimallashgan alternativa."},
+"30259":{"a":"**LSM — yozuv ketma-ket (memtable → SSTable), siqish yaxshi; lekin o'qishda bir necha darajaga qarash (bloom filter yumshatadi) va compaction yuki. B-tree — o'qish barqaror, yozuvda tasodifiy I/O va page split.**\n\n- Yozuv-og'ir, time-series, append-only — LSM (Cassandra, RocksDB, ClickHouse).\n- Tranzaksion o'qish, diapazon, MVCC — B-tree (Postgres).\n- Compaction: disk vaqtincha 2x, I/O spike."},
+"30260":{"a":"**NP-hard masalaning aniq optimal yechimi katta kirishda amalda topilmaydi — heuristika, approximation yoki soddalashtirish tanlanadi.**\n\n- Kuryer marshruti = TSP/VRP; podlarni joylash = bin packing; smena jadvali — constraint solver.\n- To'g'ri javob: \"optimal emas, lekin vaqt ichida yetarlicha yaxshi\"."}
+}
