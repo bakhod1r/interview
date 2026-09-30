@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1187,
+  "total": 1207,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -226,6 +226,13 @@
       "domain": "infra",
       "count": 24,
       "file": "sections/i5-cloud-os-operations.json"
+    },
+    {
+      "id": "i6",
+      "name": "DevOps: IaC, Linux, Git, GitOps",
+      "domain": "infra",
+      "count": 20,
+      "file": "sections/i6-devops-iac-linux-git-gitops.json"
     },
     {
       "id": "r1",

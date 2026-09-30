@@ -1,0 +1,353 @@
+{
+  "id": "i6",
+  "name": "DevOps: IaC, Linux, Git, GitOps",
+  "domain": "infra",
+  "domainLabel": "Infrastructure & DevOps",
+  "topics": [
+    "IaC",
+    "Linux",
+    "Git",
+    "GitOps"
+  ],
+  "questions": [
+    {
+      "id": 30535,
+      "code": "DO1",
+      "level": "J",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Infrastructure as Code (IaC) nima beradi?",
+      "options": [
+        "Serverlarni qo'lda sozlashni tezlashtiradi",
+        "Infratuzilma kod sifatida versiyalanadi, review qilinadi va takrorlanadigan tarzda yaratiladi — 'snowflake' serverlar yo'qoladi",
+        "Faqat bulutda ishlaydi",
+        "Monitoring o'rnini bosadi"
+      ],
+      "answer": 1,
+      "explanation": "IaC: git tarixi (kim, qachon, nima o'zgartirdi), PR review, bir xil muhitlar (dev/stage/prod), tez tiklash (disaster recovery). Deklarativ (Terraform, CloudFormation — 'qanday holat kerak') va imperativ (skriptlar — 'qanday qadamlar') yondashuvlar bor."
+    },
+    {
+      "id": 30536,
+      "code": "DO2",
+      "level": "M",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i6",
+      "question": "`terraform plan` va `terraform apply` farqi?",
+      "options": [
+        "Bir xil",
+        "plan — joriy state va real resurslarni kod bilan solishtirib, qanday o'zgarish bo'lishini ko'rsatadi (hech narsa o'zgartirmaydi); apply — o'sha o'zgarishlarni bajaradi",
+        "plan faqat syntax tekshiradi",
+        "apply state faylni o'chiradi"
+      ],
+      "answer": 1,
+      "explanation": "CI'da odatiy oqim: PR'da plan chiqishi komment sifatida ko'rsatiladi, merge'dan keyin saqlangan plan fayl (`plan -out=tfplan`, `apply tfplan`) qo'llanadi — review qilingan va bajarilgan o'zgarish bir xil bo'lishi kafolatlanadi. `-/+` (destroy va qayta yaratish) belgisiga alohida e'tibor: DB kabi resurs uchun bu ma'lumot yo'qolishi."
+    },
+    {
+      "id": 30537,
+      "code": "DO3",
+      "level": "S",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Ikki muhandis bir vaqtda `terraform apply` qilsa nima bo'ladi va qanday oldini olasiz?",
+      "options": [
+        "Hech narsa, Terraform birlashtiradi",
+        "State buzilishi yoki resurslar ikki marta yaratilishi mumkin; remote backend + state locking (S3+DynamoDB, GCS, Terraform Cloud) va apply faqat CI orqali",
+        "Faqat oxirgisi saqlanadi, muammo yo'q",
+        "terraform fmt yordam beradi"
+      ],
+      "answer": 1,
+      "explanation": "Lock state'ni bir vaqtda faqat bitta jarayon yozishini ta'minlaydi. Qo'shimcha: state'ni muhit/komponent bo'yicha bo'lish (blast radius kichik), state ichida sirlar bo'lishi mumkin — shifrlangan backend va cheklangan kirish. `terraform force-unlock` faqat jarayon aniq o'lgan bo'lsa."
+    },
+    {
+      "id": 30538,
+      "code": "DO4",
+      "level": "S",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Drift nima?",
+      "options": [
+        "Terraform versiyasining eskirishi",
+        "Real infratuzilma koddan farq qilib qolishi — kimdir konsolda qo'lda o'zgartirgan; keyingi plan uni qaytarishga urinadi",
+        "Tarmoq kechikishi",
+        "Modul versiyalari mos kelmasligi"
+      ],
+      "answer": 1,
+      "explanation": "Aniqlash: rejali `terraform plan -detailed-exitcode` (exit 2 = farq bor) CI'da, alert bilan. Oldini olish: prod'da konsolga yozish huquqini cheklash, 'break-glass' kirish audit bilan. Qo'lda o'zgarish kerak bo'lsa — keyin albatta kodga qaytariladi yoki `terraform import` qilinadi."
+    },
+    {
+      "id": 30539,
+      "code": "DO5",
+      "level": "M",
+      "type": "mcq",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Terraform va Ansible farqi?",
+      "options": [
+        "Bir xil vosita",
+        "Terraform — asosan resurslarni yaratish (provisioning, deklarativ, state bilan); Ansible — mavjud serverlarni sozlash (configuration management, agentsiz SSH, idempotent tasklar)",
+        "Ansible faqat Windows uchun",
+        "Terraform faqat Kubernetes uchun"
+      ],
+      "answer": 1,
+      "explanation": "Ko'p jamoada ular birga ishlatiladi: Terraform VM/tarmoq/DB yaratadi, Ansible ichini sozlaydi. Konteyner va immutable image (Packer) davrida configuration management roli kamaydi — server sozlanmaydi, yangi image bilan almashtiriladi."
+    },
+    {
+      "id": 30540,
+      "code": "DO6",
+      "level": "St",
+      "type": "open",
+      "topic": "IaC",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Katta kompaniyada Terraform kodini qanday tashkil qilasan (modullar, muhitlar, state)?",
+      "modelAnswer": "1) Qayta ishlatiladigan modullar alohida repo/katalogda, semver teglari bilan. 2) Muhitlar (dev/stage/prod) alohida katalog yoki workspace — lekin alohida state va alohida bulut akkauntlari (blast radius). 3) State'ni komponentlarga bo'lish (network, data, app) — kichik plan, tez, xavfsiz. 4) Remote backend + locking + shifrlash. 5) CI: fmt, validate, tflint, checkov/tfsec, plan PR'da, apply faqat merge'dan keyin va prod uchun manual approval. 6) Provider va modul versiyalarini pin qilish (.terraform.lock.hcl commit). 7) Drift tekshiruvi rejada. 8) Sirlar kodda emas — Vault/Secrets Manager.",
+      "explanation": "Asosiy g'oya: kichik, mustaqil state'lar va hamma o'zgarish PR orqali. Monolit state — har apply butun infratuzilmani xavf ostiga qo'yadi."
+    },
+    {
+      "id": 30541,
+      "code": "DO7",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Linux",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Serverda disk to'lib qoldi. Birinchi qaysi buyruqlar?",
+      "options": [
+        "reboot",
+        "`df -h` (qaysi fayl tizimi to'la), `du -sh /* | sort -h` (qaysi katalog), `df -i` (inode tugagan bo'lishi mumkin)",
+        "`rm -rf /var`",
+        "`top`"
+      ],
+      "answer": 1,
+      "explanation": "Klassik tuzoq: log fayl o'chirilgan, lekin jarayon uni hali ochiq ushlab turibdi — joy bo'shamaydi. `lsof +L1` bilan topiladi; jarayonni qayta ishga tushirish yoki `> file` bilan truncate qilish kerak. Oldini olish: logrotate, alert 80%da."
+    },
+    {
+      "id": 30542,
+      "code": "DO8",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Linux",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Load average 16, CPU foydalanish esa 10%. Nima bo'lishi mumkin?",
+      "options": [
+        "Hisoblagich xato",
+        "Load average D-holatdagi (uninterruptible, odatda I/O kutayotgan) jarayonlarni ham hisoblaydi — disk yoki NFS sekin; `iostat -x`, `vmstat` (wa ustuni), `ps -eo state` bilan tekshiriladi",
+        "CPU yetishmayapti",
+        "Xotira ko'p"
+      ],
+      "answer": 1,
+      "explanation": "Linux'da load = running + runnable + D-state. Yuqori iowait, to'yingan disk (%util ~100) yoki osilib qolgan tarmoq fayl tizimi odatiy sabablar. Load'ni yadrolar soni bilan solishtiring (`nproc`)."
+    },
+    {
+      "id": 30543,
+      "code": "DO9",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Linux",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Servis `kill -9` o'rniga `kill -15` (SIGTERM) bilan to'xtatilishi nega muhim?",
+      "options": [
+        "Farqi yo'q",
+        "SIGTERM jarayonga graceful shutdown imkonini beradi (so'rovlarni tugatish, ulanishlarni yopish, bufferni yozish); SIGKILL ushlab bo'lmaydi — jarayon darhol o'ladi",
+        "SIGKILL xavfsizroq",
+        "SIGTERM faqat root uchun"
+      ],
+      "answer": 1,
+      "explanation": "Kubernetes ham avval SIGTERM yuboradi, terminationGracePeriodSeconds (default 30s)dan keyin SIGKILL. Konteynerda PID 1 muammosi: shell-form ENTRYPOINT signalni ilovaga uzatmaydi — exec-form yoki tini ishlating."
+    },
+    {
+      "id": 30544,
+      "code": "DO10",
+      "level": "S",
+      "type": "open",
+      "topic": "Linux",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Production serverda ilova sekinlashdi. Linux darajasida qanday tekshirasan?",
+      "modelAnswer": "USE metodi (Utilization, Saturation, Errors) har resurs uchun: 1) `uptime` — load trend. 2) `dmesg -T | tail` — OOM killer, disk xatolari. 3) `vmstat 1` — r (run queue), wa, swap si/so. 4) `mpstat -P ALL 1` — bitta yadro 100%mi. 5) `pidstat 1` — qaysi jarayon. 6) `iostat -xz 1` — disk latency va %util. 7) `free -m` — page cache, swap. 8) `sar -n DEV 1`, `ss -s` — tarmoq, TIME_WAIT, ulanishlar soni. 9) `top`/`htop`. Keyin chuqurroq: perf, strace (ehtiyot — sekinlashtiradi), eBPF vositalar.",
+      "explanation": "Brendan Gregg'ning '60 soniyada Linux tahlili' ro'yxati — intervyuda tizimli yondashuvni ko'rsatish muhim, tasodifiy buyruqlarni emas.",
+      "source": "https://www.brendangregg.com/usemethod.html"
+    },
+    {
+      "id": 30545,
+      "code": "DO11",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Linux",
+      "domain": "infra",
+      "section": "i6",
+      "question": "systemd servisi crash bo'lsa avtomatik qayta ishga tushishi uchun?",
+      "options": [
+        "cron har daqiqada tekshiradi",
+        "Unit faylda `Restart=on-failure` (va `RestartSec=`); loglar `journalctl -u servis -f` bilan",
+        "nohup bilan ishga tushirish",
+        "/etc/rc.local"
+      ],
+      "answer": 1,
+      "explanation": "`StartLimitIntervalSec`/`StartLimitBurst` cheksiz restart tsiklini to'xtatadi. Resurs cheklovlari ham unit'da: MemoryMax, CPUQuota (cgroups). Xavfsizlik: User=, NoNewPrivileges=yes, ProtectSystem=strict."
+    },
+    {
+      "id": 30546,
+      "code": "DO12",
+      "level": "J",
+      "type": "mcq",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i6",
+      "question": "`git merge` va `git rebase` farqi?",
+      "options": [
+        "Bir xil",
+        "merge — ikki tarixni merge commit bilan birlashtiradi (tarix saqlanadi); rebase — commitlarni boshqa bazaga qayta yozadi (chiziqli tarix, lekin hash'lar o'zgaradi)",
+        "rebase faylarni o'chiradi",
+        "merge faqat main uchun"
+      ],
+      "answer": 1,
+      "explanation": "Oltin qoida: umumiy (push qilingan, boshqalar ishlatayotgan) branchni rebase qilmang — boshqalar tarixi buziladi. O'z feature branchingizni main ustiga rebase qilish odatiy. Majburiy push kerak bo'lsa `--force-with-lease` (boshqaning commitini ustidan yozib yubormaydi)."
+    },
+    {
+      "id": 30547,
+      "code": "DO13",
+      "level": "M",
+      "type": "mcq",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Tasodifan secret (API kalit) commit qilinib, push bo'ldi. To'g'ri harakat?",
+      "options": [
+        "Keyingi commitda o'chirish yetarli",
+        "Avvalo kalitni darhol bekor qilish (rotate) — u allaqachon oshkor; keyin tarixdan tozalash (git filter-repo/BFG) ixtiyoriy",
+        "Repo'ni private qilish",
+        "git revert"
+      ],
+      "answer": 1,
+      "explanation": "Tarix tozalansa ham fork, klon, CI keshi, GitHub cache'da qolishi mumkin — shuning uchun rotatsiya birinchi. Oldini olish: pre-commit gitleaks/trufflehog, GitHub push protection, sirlarni .env + .gitignore emas, secret manager'da saqlash."
+    },
+    {
+      "id": 30548,
+      "code": "DO14",
+      "level": "M",
+      "type": "code",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Qaysi commit bug keltirganini 500 ta commit ichidan tez topish?",
+      "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.4.0\n# har qadamda test qilib: git bisect good | bad\n# yoki avtomatik:\ngit bisect run ./test.sh",
+      "options": [
+        "Bu ikkilik qidiruv — ~9 qadamda (log2 500) aybdor commit topiladi; `bisect run` skript exit code bo'yicha avtomatlashtiradi",
+        "Bu barcha commitlarni ketma-ket tekshiradi",
+        "Bu faqat merge commitlarni ko'radi",
+        "Bu commitlarni o'chiradi"
+      ],
+      "answer": 0,
+      "explanation": "Skript exit 0 = good, 1–127 = bad, 125 = skip (build bo'lmaydigan commit). Tugagach `git bisect reset`. Kichik, atomar commitlar bisect'ni foydali qiladi."
+    },
+    {
+      "id": 30549,
+      "code": "DO15",
+      "level": "S",
+      "type": "mcq",
+      "topic": "Git",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Trunk-based development va GitFlow — CI/CD uchun qaysi biri va nega?",
+      "options": [
+        "GitFlow har doim yaxshi",
+        "Trunk-based: qisqa umrli branchlar (1–2 kun), tez-tez main'ga merge, tugallanmagan ish feature flag ortida — continuous delivery'ga mos; GitFlow uzoq branchlar bilan relizli (masalan, box mahsulot) loyihalarga",
+        "Farqi yo'q",
+        "Trunk-based faqat bitta dasturchi uchun"
+      ],
+      "answer": 1,
+      "explanation": "DORA tadqiqotlari trunk-based'ni yuqori samarali jamoalar bilan bog'laydi. Talab: kuchli avtotestlar, main har doim deploy qilinadigan holatda, branch protection va majburiy CI."
+    },
+    {
+      "id": 30550,
+      "code": "DO16",
+      "level": "M",
+      "type": "mcq",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i6",
+      "question": "GitOps nima?",
+      "options": [
+        "GitHub'da CI ishlatish",
+        "Kerakli holat (K8s manifestlari) Git'da saqlanadi; klaster ichidagi agent (Argo CD, Flux) uni doimiy ravishda Git bilan solishtirib, farqni o'zi tuzatadi (pull model)",
+        "Git hook'lar bilan deploy",
+        "Faqat Helm ishlatish"
+      ],
+      "answer": 1,
+      "explanation": "Afzalliklar: CI'ga klaster kalitlari berilmaydi (pull), audit — git log, rollback — git revert, drift avtomatik tuzatiladi. CI image build qilib, config repo'dagi image tegini yangilaydi; CD'ni agent bajaradi."
+    },
+    {
+      "id": 30551,
+      "code": "DO17",
+      "level": "M",
+      "type": "mcq",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Helm chart'da `values.yaml` va muhitlar?",
+      "options": [
+        "Har muhitga alohida chart nusxasi",
+        "Bitta chart, muhitga xos values fayllar (`-f values-prod.yaml`); `helm template` / `helm diff` bilan oldindan ko'rish; chart versiyalanadi",
+        "values faqat dev uchun",
+        "Helm muhitlarni qo'llab-quvvatlamaydi"
+      ],
+      "answer": 1,
+      "explanation": "Alternativa — Kustomize (base + overlays, shablonsiz patch). `helm upgrade --install --atomic` xato bo'lsa o'zi rollback qiladi. Sirlarni values'da ochiq saqlamang: sealed-secrets, external-secrets yoki SOPS."
+    },
+    {
+      "id": 30552,
+      "code": "DO18",
+      "level": "S",
+      "type": "open",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Noldan servis uchun CI/CD pipeline'ni loyihala: commit'dan production'gacha.",
+      "modelAnswer": "1) PR: lint, unit test, SAST, dependency scan, build. 2) Merge: image build (multi-stage, distroless), tag = git SHA (latest emas), SBOM va imzo (cosign), image scan (trivy), registry'ga push. 3) Integratsiya testlari staging'da, migration'lar oldinga-orqaga mos (expand/contract). 4) Deploy: GitOps — config repo'da tegni yangilash, Argo CD sinxronlaydi. 5) Progressive delivery: canary (Argo Rollouts/Flagger) SLO metrikalari bo'yicha avtomatik analiz va rollback. 6) Prod uchun approval yoki avtomatik (jamoa etukligiga qarab). 7) Kuzatuv: deploy markerlari dashboard'da, DORA metrikalari (deploy chastotasi, lead time, change failure rate, MTTR).",
+      "explanation": "Intervyuda ta'kidlanadigan jihatlar: immutable artefakt (bir image hamma muhitdan o'tadi), tez rollback, xavfsizlik (supply chain), va o'lchanadigan natija."
+    },
+    {
+      "id": 30553,
+      "code": "DO19",
+      "level": "S",
+      "type": "mcq",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i6",
+      "question": "Docker image'ni `latest` tegi bilan deploy qilishning muammosi?",
+      "options": [
+        "Muammo yo'q",
+        "Teg o'zgaruvchan — qaysi versiya ishlayotgani noma'lum, rollback qiyin, node'lar turli image olishi mumkin (imagePullPolicy); SHA yoki semver teg, eng ishonchlisi digest (@sha256:...)",
+        "latest sekinroq yuklanadi",
+        "latest faqat Docker Hub'da ishlaydi"
+      ],
+      "answer": 1,
+      "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
+    },
+    {
+      "id": 30554,
+      "code": "DO20",
+      "level": "St",
+      "type": "open",
+      "topic": "GitOps",
+      "domain": "infra",
+      "section": "i6",
+      "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
+      "modelAnswer": "DevOps — vosita emas, madaniyat: dasturchi va operatsiya umumiy mas'uliyati ('you build it, you run it'), kichik tez-tez relizlar, avtomatlashtirish, fikr-mulohaza tsikllari (monitoring, blameless postmortem). Joriy qilish: 1) DORA metrikalarini o'lchashdan boshlash. 2) Eng og'riqli qo'lda jarayonni avtomatlashtirish (deploy). 3) Platform jamoa — golden path (shablon repo, pipeline, observability tayyor), self-service. 4) On-call dasturchilar bilan, runbook'lar. 5) Blameless postmortem. SRE — Google'ning DevOps'ni amalga oshirish usuli: SLO/SLI, error budget (budget tugasa feature o'rniga ishonchlilik), toil'ni 50%dan kam ushlash.",
+      "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
+      "source": "https://sre.google/sre-book/table-of-contents/"
+    }
+  ]
+}
