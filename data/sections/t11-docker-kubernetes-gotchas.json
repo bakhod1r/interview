@@ -60,7 +60,7 @@
       "domain": "cont",
       "section": "t11",
       "question": "Konteynerda Go jarayoni `GOMAXPROCS` 64 deb ko'rsatadi, lekin CPU limiti 2. Nima bo'ladi?",
-      "explanation": "Go 1.21 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
+      "explanation": "Go 1.25 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
     },
     {
       "id": 30104,

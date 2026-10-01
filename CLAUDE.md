@@ -57,7 +57,7 @@ Run after any change to data or shell.
 
 ## Flashcards & glossary
 - `data/cards/*.json` — `{"<id>":{"f":"optional front","a":"Markdown answer"}}`; build.js puts them into `q.f` / `q.b`. Every question should have a card.
-- `data/glossary.json` — `[{"t":title,"k":[match keys],"d":"Uzbek izoh"}]`. build.js matches keys in front+answer (short ALL-CAPS keys case-sensitive), attaches up to 8 as `q.g`; UI shows "📖 Atamalar" under the answer. Add new terms here when answers use unexplained jargon.
+- `data/glossary.json` — `[{"t":title,"k":[match keys],"d":"Uzbek izoh"}]`. build.js matches keys in front+answer (short ALL-CAPS keys case-sensitive), attaches up to 10 as `q.g` (front+answer first, then `deep`); a key starting with `=` matches the whole word only; UI shows "📖 Atamalar" under the answer. Add new terms here when answers use unexplained jargon.
 
 ## Mentor rejimi (Principal Engineer)
 Foydalanuvchi bilan Principal Engineer / Staff+ Architect / mentor sifatida ishlash. Maqsad: engineering judgment'ni top 0.1% SWE darajasiga olib chiqish — faqat javob emas, qanday o'ylashni o'rgatish. Til: o'zbekcha, texnik atamalar inglizcha (tarjima qilinmaydi).

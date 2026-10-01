@@ -15,7 +15,7 @@
       "domain": "api",
       "section": "a5",
       "question": "Token bucket rate limiting qanday ishlaydi?",
-      "explanation": "Token bucket burst'ga ruxsat beradi (capacity gacha), o'rtacha tezlikni cheklaydi. Fixed window — oyna chegarasida 2x burst muammosi. Leaky bucket — chiqishni tekislaydi (4-variant). Javobda 429 + Retry-After header."
+      "explanation": "Token bucket burst'ga ruxsat beradi (capacity gacha), o'rtacha tezlikni cheklaydi. Fixed window — oyna chegarasida 2x burst muammosi. Leaky bucket — chiqishni tekislaydi. Javobda 429 + Retry-After header."
     },
     {
       "id": 1010,

@@ -184,7 +184,7 @@
       "section": "g2",
       "question": "Worker'ni to'g'ri to'xtatish uchun qaysi variant to'g'ri?",
       "snippet": "// A\nfor job := range jobs {\n    process(job)\n}\n\n// B\nfor {\n    select {\n    case job, ok := <-jobs:\n        if !ok { return }\n        process(ctx, job)\n    case <-ctx.Done():\n        return\n    }\n}",
-      "explanation": "A varianti faqat kanal yopilganda tugaydi — graceful shutdown'da jo'natuvchi bloklangan bo'lsa, worker abadiy kutishi mumkin. Muhim tafsilot: process(ctx, job) — context ichkariga ham uzatiladi, aks holda uzoq DB query'i baribir kutadi. Shutdown deadline: context.WithTimeout bilan cheklab, tugamaganini majburan tark etish."
+      "explanation": "Faqat `for v := range ch` ishlatilsa, sikl kanal yopilgandagina tugaydi — graceful shutdown'da jo'natuvchi bloklangan bo'lsa, worker abadiy kutishi mumkin. Muhim tafsilot: process(ctx, job) — context ichkariga ham uzatiladi, aks holda uzoq DB query'i baribir kutadi. Shutdown deadline: context.WithTimeout bilan cheklab, tugamaganini majburan tark etish."
     },
     {
       "id": 3027,

@@ -900,7 +900,7 @@
           "section": "g2",
           "question": "Worker'ni to'g'ri to'xtatish uchun qaysi variant to'g'ri?",
           "snippet": "// A\nfor job := range jobs {\n    process(job)\n}\n\n// B\nfor {\n    select {\n    case job, ok := <-jobs:\n        if !ok { return }\n        process(ctx, job)\n    case <-ctx.Done():\n        return\n    }\n}",
-          "explanation": "A varianti faqat kanal yopilganda tugaydi — graceful shutdown'da jo'natuvchi bloklangan bo'lsa, worker abadiy kutishi mumkin. Muhim tafsilot: process(ctx, job) — context ichkariga ham uzatiladi, aks holda uzoq DB query'i baribir kutadi. Shutdown deadline: context.WithTimeout bilan cheklab, tugamaganini majburan tark etish."
+          "explanation": "Faqat `for v := range ch` ishlatilsa, sikl kanal yopilgandagina tugaydi — graceful shutdown'da jo'natuvchi bloklangan bo'lsa, worker abadiy kutishi mumkin. Muhim tafsilot: process(ctx, job) — context ichkariga ham uzatiladi, aks holda uzoq DB query'i baribir kutadi. Shutdown deadline: context.WithTimeout bilan cheklab, tugamaganini majburan tark etish."
         },
         {
           "id": 3027,
@@ -6777,7 +6777,7 @@
           "section": "t2",
           "question": "<code>CHAR(10)</code> column'da saqlangan 'abc' bilan taqqoslash:",
           "snippet": "-- c CHAR(10) column'ida 'abc' saqlangan\nSELECT c = 'abc', length(c), c || '!' FROM t;",
-          "explanation": "CHAR(n) — deyarli har doim keraksiz tip: padding kutilmagan natijalar beradi (konkatenatsiya, uzunlik, ba'zi funksiyalar). Postgres'da length() padding'ni hisobga olmaydi, char_length esa... aynan shu chalkashlik sababli amaliyotda faqat text yoki varchar ishlatiladi."
+          "explanation": "CHAR(n) — deyarli har doim keraksiz tip: padding kutilmagan natijalar beradi (konkatenatsiya, uzunlik, ba'zi funksiyalar). Postgres'da trailing bo'shliqlar ahamiyatsiz: taqqoslash, length() va text'ga aylantirishda (||) tashlanadi — natija true, 3, 'abc!'; boshqa DB'larda xulq farq qiladi. Shu chalkashlik sababli amaliyotda faqat text yoki varchar ishlatiladi."
         },
         {
           "id": 16020,
@@ -10888,7 +10888,7 @@
           "domain": "api",
           "section": "a5",
           "question": "Token bucket rate limiting qanday ishlaydi?",
-          "explanation": "Token bucket burst'ga ruxsat beradi (capacity gacha), o'rtacha tezlikni cheklaydi. Fixed window — oyna chegarasida 2x burst muammosi. Leaky bucket — chiqishni tekislaydi (4-variant). Javobda 429 + Retry-After header."
+          "explanation": "Token bucket burst'ga ruxsat beradi (capacity gacha), o'rtacha tezlikni cheklaydi. Fixed window — oyna chegarasida 2x burst muammosi. Leaky bucket — chiqishni tekislaydi. Javobda 429 + Retry-After header."
         },
         {
           "id": 1010,
@@ -17550,7 +17550,7 @@
           "domain": "cont",
           "section": "t11",
           "question": "Konteynerda Go jarayoni `GOMAXPROCS` 64 deb ko'rsatadi, lekin CPU limiti 2. Nima bo'ladi?",
-          "explanation": "Go 1.21 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
+          "explanation": "Go 1.25 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
         },
         {
           "id": 30104,
