@@ -1,32 +1,93 @@
 {
-"8010":{"a":"**30 — 10 ta NULL qator tushib qoladi, chunki `NULL <> 'active'` = UNKNOWN.**\n\n- To'g'ri: `WHERE status IS DISTINCT FROM 'active'` yoki `... OR status IS NULL`.\n- NOT IN va JOIN shartlarida ham shu tuzoq."},
-"8011":{"a":"**`2`, `2.5`, `1.5` — butun ÷ butun = butun (kasr tashlanadi).**\n\n- Klassik bug: `(a / b) * 100` doim 0.\n- Tuzatish: `100.0 * a / b` yoki `a::numeric / b`."},
-"8012":{"a":"**ORDER BY unikal emas — bir xil `created_at` li qatorlar tartibi har safar boshqacha bo'lishi mumkin.**\n\n- Tie-breaker: `ORDER BY created_at DESC, id DESC`.\n- Sahifalar orasida yangi qator qo'shilsa OFFSET siljiydi → keyset pagination."},
-"8013":{"a":"**6 — sequence tranzaksiyaga bo'ysunmaydi, rollback qilinmaydi; ID'larda bo'shliq bo'lishi normal.**\n\n- Aks holda har INSERT sequence'ni qulflardi.\n- `max(id) - min(id)` bilan sanash — xato.\n- ID tartibi vaqt tartibini kafolatlamaydi."},
-"8014":{"f":"`timestamp` va `timestamptz` farqi nima va qaysi birini qachon ishlatish kerak?","a":"**`timestamptz` — lahzani UTC'da saqlab, ko'rsatishda sessiya zonasiga o'giradi. `timestamp` — zonasiz \"devordagi soat\": turli zonada boshqa lahzani anglatadi.**\n\n- Hodisa vaqti (created_at) — DOIM `timestamptz`.\n- `timestamp` — tug'ilgan sana, \"har kuni 09:00\" kabi.\n- Tipik bug: 5 soatlik siljish."},
-"8015":{"a":"**Bitta order'ga bir nechta payment bo'lsa, qaysi qiymat yozilishi aniqlanmagan — natija tasodifiy, SQL xato bermaydi.**\n\n- Avval bitta qatorga keltirish: `FROM (SELECT DISTINCT ON (order_id) order_id, status FROM payments ORDER BY order_id, created_at DESC) p`."},
-"8016":{"a":"**Yo'q — ORDER BY `DISTINCT ON` ustunidan boshlanishi shart: `ORDER BY user_id, created_at DESC`.**\n\n- DISTINCT ON har guruhdan tartib bo'yicha BIRINCHI qatorni oladi.\n- Alternativa: `ROW_NUMBER() ... = 1`."},
-"8017":{"a":"**`true`, `3`, `'abc       !'` — CHAR bo'shliq bilan to'ldiriladi: taqqoslashda e'tiborsiz, konkatenatsiyada chiqadi.**\n\n- `CHAR(n)` deyarli har doim keraksiz — `text`/`varchar` ishlating."},
-"10000":{"a":"**Har pul harakati kamida ikki yozuv: bir hisobdan debet, boshqasiga kredit; barcha yozuvlar yig'indisi doim 0. Balans — yozuvlardan hisoblanadi.**\n\n- Har balans tarix bilan izohlanadi (audit).\n- Yo'qolgan pul darhol ko'rinadi.\n- Faqat INSERT — lost update yo'q."},
-"10004":{"a":"**O'zgarmas yozuvlar jurnali (faqat INSERT) + tez o'qish uchun agregat/snapshot.**\n\n- Balans ustuni ham bo'lsa — yozuv bilan bitta tranzaksiyada va `CHECK` bilan.\n- Yetarlilik tekshiruvi va yechish bitta atomik operatsiyada — aks holda double-spend."},
-"10005":{"a":"**Ichki ledger va tashqi manba (bank/PSP hisoboti) mosligini muntazam tekshirish: yo'qolgan, takrorlangan, summasi farqli tranzaksiyalarni topish.**\n\n- Hisobot → moslash kaliti (provayder tx id) → farqlar jadvali → panel va alert.\n- Farqlar normal (vaqt, FX, komissiya) — muhimi ularni tushuntirib yopish."},
-"10008":{"a":"**Double-entry (INSERT) varianti: bitta tranzaksiyada ikki yozuv, yig'indisi 0, tarix saqlanadi.**\n\n- UPDATE variantida `WHERE balance >= 10000` va natijani tekshirish shart — aks holda manfiy balans.\n- Ikkalasida BEGIN/COMMIT.\n- Invariantlar: `tx_id` bo'yicha yig'indi 0, amount ≠ 0, `tx_id` unikal (idempotentlik)."},
-"16020":{"a":"**WHERE'dagi `o.status = 'paid'` LEFT JOIN'ni INNER JOIN'ga aylantiradi: buyurtmasiz user'da `o.status` NULL → shart TRUE bo'lmaydi → qator tashlanadi.**\n\n```sql\nSELECT u.id, o.total\nFROM users u\nLEFT JOIN orders o\n  ON o.user_id = u.id AND o.status = 'paid';\n```\n\n- Qoida: o'ng jadval filtri — `ON` da, chap jadval filtri — `WHERE` da."},
-"16021":{"a":"**Subquery'da bitta NULL bo'lsa `NOT IN` hech qachon TRUE bo'lmaydi (`id <> NULL` = UNKNOWN) → bo'sh natija.**\n\n```sql\nSELECT * FROM users u\nWHERE NOT EXISTS (\n  SELECT 1 FROM bans b WHERE b.user_id = u.id);\n```\n\n- Yoki subquery'ga `WHERE user_id IS NOT NULL`.\n- NOT EXISTS planner uchun ham qulay (anti-join)."},
-"16022":{"a":"**`count(*)` — hamma qator; `count(rating)` — NULL bo'lmaganlar; `avg(rating)` — NULL'larni butunlay tashlaydi (0 deb hisoblamaydi).**\n\n- NULL'ni 0 deb sanash: `avg(coalesce(rating, 0))`.\n- `sum()` qator bo'lmasa NULL qaytaradi, 0 emas."},
-"16023":{"a":"**Ustunga funksiya qo'llangan — oddiy B-tree `email` bo'yicha, `lower(email)` bo'yicha emas.**\n\n```sql\nCREATE INDEX ON users (lower(email));\n```\n\n- Yoki `citext` tipi.\n- Xuddi shunday: `created_at::date = '2024-01-01'` o'rniga diapazon: `created_at >= '2024-01-01' AND created_at < '2024-01-02'`."},
-"16024":{"a":"**Ikki xavf: ALTER qisqa bo'lsa ham ACCESS EXCLUSIVE lock kutadi va orqasidagi hamma query'larni to'sadi; `CREATE INDEX` CONCURRENTLY'siz yozishni bloklaydi.**\n\n```sql\nSET lock_timeout = '3s';  -- + retry\nALTER TABLE orders ADD COLUMN status text NOT NULL DEFAULT 'new';\nCREATE INDEX CONCURRENTLY idx_orders_status ON orders(status);\n```\n\n- PG11+ o'zgarmas DEFAULT jadvalni qayta yozmaydi.\n- CONCURRENTLY tranzaksiyadan tashqarida; migratsiyani kichik qadamlarga bo'ling."},
-"16025":{"a":"**Lock ordering deadlock: A 1→2, B 2→1 tartibda qulflaydi. Postgres ~1s dan keyin birini bekor qiladi.**\n\n```sql\nSELECT * FROM accounts WHERE id = ANY($1)\nORDER BY id FOR UPDATE;\n```\n\n- Hamma kod yo'lida bir xil tartib (id o'sishi).\n- Ilovada `40P01` ni retry qilish."},
-"16026":{"a":"**OFFSET qatorlarni tashlab o'tmaydi — baribir o'qib, keyin tashlaydi: 100 020 qator o'qiladi.**\n\n```sql\nSELECT * FROM events\nWHERE (created_at, id) < ($1, $2)\nORDER BY created_at DESC, id DESC\nLIMIT 20;\n```\n\n- Keyset (seek) pagination — O(log n).\n- Bonus: yangi qator qo'shilganda dublikat/yo'qolish bo'lmaydi."},
-"30094":{"a":"**Immutable `entries` (debit/credit) — balans ularning yig'indisi; tezlik uchun davriy snapshot + undan keyingi yozuvlar.**\n\n- Mutable balans audit'ni yo'qotadi.\n- Invariant `sum(debit) = sum(credit)` tekshiriladi.\n- Xato — faqat qarama-qarshi yozuv (reversal) bilan tuzatiladi."},
-"30095":{"a":"**Hisob bo'yicha version/qulf, balans chegarasi atomik shartli yozuv bilan, har tranzaksiyada idempotency key.**\n\n- Ikki xavf: qo'sh yozuv (unique key) va minusga tushish (atomik shart).\n- Hot hisob — sub-balanslarga bo'lish yoki navbat."},
-"30096":{"a":"**Import → moslash → farqlarni toifalash → append-only tuzatish.**\n\n- Settlement faylini xom holda saqlash; external ID bo'yicha: mos / faqat bizda / faqat PSP'da.\n- Sabablar: timing, komissiya/FX, refund/chargeback, yo'qolgan webhook, qo'lda operatsiya.\n- Har farqqa exception: egasi, sababi, yechimi.\n- Tuzatish faqat adjustment/reversal yozuv bilan.\n- Timing farqini T+1 da avtomatik yopish; ochiq farq summasi va yoshi — KPI.\n- Webhook'ga yagona manba sifatida ishonmaslik."},
-"30145":{"a":"**WHERE filtri JOIN'dan keyin qo'llanadi va NULL qatorlarni kesadi — LEFT JOIN INNER'ga aylanadi.**\n\n- Shartni `ON` ga: `LEFT JOIN orders o ON o.user_id = u.id AND o.status = 'paid'`.\n- \"To'lovi yo'q user'lar\" kerak bo'lsa: `WHERE o.id IS NULL` (anti-join)."},
-"30146":{"a":"**`orders.user_id` da bitta NULL bo'lsa butun shart UNKNOWN → hech narsa qaytmaydi.**\n\n- `NOT EXISTS` yoki `IS NOT NULL` filtri.\n- Jim bug: bitta NULL kelgan kuni hisobot bo'shab qoladi."},
-"30147":{"a":"**`created_at` unikal emas — teng qiymatlarda tartib barqaror emas.**\n\n- Tie-breaker: `, id DESC`.\n- Keyset: `WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT 20`."},
-"30148":{"a":"**MVCC: aniq sanoq har qatorning ko'rinishini tekshirishni talab qiladi — to'liq skan.**\n\n- Taxminiy: `pg_class.reltuples` yoki EXPLAIN bahosi (\"taxminan N natija\").\n- Filtrlangan sanoq — alohida agregat jadval.\n- `count(1)` va `count(*)` bir xil tez."},
-"30464":{"a":"**Bitta tranzaksiyada ikki entry: A'ga debit, B'ga kredit, bitta `transaction_id` ostida; `sum(debit) = sum(credit)`.**\n\n- Alohida ikki tranzaksiya — pul \"havoda\" qolishi mumkin.\n- Servislar orasida — saga (`pending` → tasdiq); ledgerni bo'lish — oxirgi chora."},
-"30465":{"a":"**Yaxlitlash faqat belgilangan nuqtalarda, qoidasi hujjatlashtirilgan (half-up/banker's), yo'qolgan tiyinlar alohida \"rounding\" hisobiga.**\n\n- 100.00 / 3 = 33.33 × 3 = 99.99 → 1 tiyin yo'qoladi.\n- Qoldiqni oxirgi qismga qo'shish."},
-"30514":{"a":"**Vaqt bo'yicha partitioning + davriy balans snapshot; eski bo'laklar arxivga (o'chirilmaydi — qonuniy saqlash muddati).**\n\n- Snapshot ham immutable, qaysi entry'gacha hisoblangani bilan.\n- Arxivdan so'rov yo'li saqlansin (DWH nusxasi)."},
-"30519":{"a":"**DB darajasida atomik shart: `UPDATE ... SET balance = balance - $1 WHERE account_id = $2 AND balance >= $1` (0 qator → rad etish) yoki `CHECK (balance >= 0)`.**\n\n- Ilovadagi tekshiruv — faqat UX uchun; read-then-write doim race.\n- Hot hisob — sub-balanslarga bo'lish."}
+ "8010": {
+  "a": "**30 — 10 ta NULL qator tushib qoladi, chunki `NULL <> 'active'` = UNKNOWN.**\n\n- To'g'ri: `WHERE status IS DISTINCT FROM 'active'` yoki `... OR status IS NULL`.\n- NOT IN va JOIN shartlarida ham shu tuzoq."
+ },
+ "8011": {
+  "a": "**`2`, `2.5`, `1.5` — butun ÷ butun = butun (kasr tashlanadi).**\n\n- Klassik bug: `(a / b) * 100` doim 0.\n- Tuzatish: `100.0 * a / b` yoki `a::numeric / b`."
+ },
+ "8012": {
+  "a": "**ORDER BY unikal emas — bir xil `created_at` li qatorlar tartibi har safar boshqacha bo'lishi mumkin.**\n\n- Tie-breaker: `ORDER BY created_at DESC, id DESC`.\n- Sahifalar orasida yangi qator qo'shilsa OFFSET siljiydi → keyset pagination."
+ },
+ "8013": {
+  "a": "**6 — sequence tranzaksiyaga bo'ysunmaydi, rollback qilinmaydi; ID'larda bo'shliq bo'lishi normal.**\n\n- Aks holda har INSERT sequence'ni qulflardi.\n- `max(id) - min(id)` bilan sanash — xato.\n- ID tartibi vaqt tartibini kafolatlamaydi."
+ },
+ "8014": {
+  "f": "`timestamp` va `timestamptz` farqi nima va qaysi birini qachon ishlatish kerak?",
+  "a": "**`timestamptz` — lahzani UTC'da saqlab, ko'rsatishda sessiya zonasiga o'giradi. `timestamp` — zonasiz \"devordagi soat\": turli zonada boshqa lahzani anglatadi.**\n\n- Hodisa vaqti (created_at) — DOIM `timestamptz`.\n- `timestamp` — tug'ilgan sana, \"har kuni 09:00\" kabi.\n- Tipik bug: 5 soatlik siljish."
+ },
+ "8015": {
+  "a": "**Bitta order'ga bir nechta payment bo'lsa, qaysi qiymat yozilishi aniqlanmagan — natija tasodifiy, SQL xato bermaydi.**\n\n- Avval bitta qatorga keltirish: `FROM (SELECT DISTINCT ON (order_id) order_id, status FROM payments ORDER BY order_id, created_at DESC) p`."
+ },
+ "8016": {
+  "a": "**Yo'q — ORDER BY `DISTINCT ON` ustunidan boshlanishi shart: `ORDER BY user_id, created_at DESC`.**\n\n- DISTINCT ON har guruhdan tartib bo'yicha BIRINCHI qatorni oladi.\n- Alternativa: `ROW_NUMBER() ... = 1`."
+ },
+ "8017": {
+  "a": "**PostgreSQL'da: `true`, `3`, `'abc!'`. `CHAR(10)` qiymatni bo'shliq bilan 10 belgigacha to'ldiradi, lekin Postgres bu trailing bo'shliqlarni ahamiyatsiz deb hisoblaydi: taqqoslashda ham, `length()` da ham, `text`ga aylantirishda (`||`) ham ular tashlanadi.**\n\n- Oracle kabi boshqa DB'larda `||` padding'ni saqlab `'abc       !'` berishi mumkin — xulq DB'ga bog'liq.\n- `octet_length(c)` esa 10 qaytaradi (saqlangan baytlar).\n- `CHAR(n)` deyarli har doim keraksiz — `text`/`varchar` ishlating."
+ },
+ "10000": {
+  "a": "**Har pul harakati kamida ikki yozuv: bir hisobdan debet, boshqasiga kredit; barcha yozuvlar yig'indisi doim 0. Balans — yozuvlardan hisoblanadi.**\n\n- Har balans tarix bilan izohlanadi (audit).\n- Yo'qolgan pul darhol ko'rinadi.\n- Faqat INSERT — lost update yo'q."
+ },
+ "10004": {
+  "a": "**O'zgarmas yozuvlar jurnali (faqat INSERT) + tez o'qish uchun agregat/snapshot.**\n\n- Balans ustuni ham bo'lsa — yozuv bilan bitta tranzaksiyada va `CHECK` bilan.\n- Yetarlilik tekshiruvi va yechish bitta atomik operatsiyada — aks holda double-spend."
+ },
+ "10005": {
+  "a": "**Ichki ledger va tashqi manba (bank/PSP hisoboti) mosligini muntazam tekshirish: yo'qolgan, takrorlangan, summasi farqli tranzaksiyalarni topish.**\n\n- Hisobot → moslash kaliti (provayder tx id) → farqlar jadvali → panel va alert.\n- Farqlar normal (vaqt, FX, komissiya) — muhimi ularni tushuntirib yopish."
+ },
+ "10008": {
+  "a": "**Double-entry (INSERT) varianti: bitta tranzaksiyada ikki yozuv, yig'indisi 0, tarix saqlanadi.**\n\n- UPDATE variantida `WHERE balance >= 10000` va natijani tekshirish shart — aks holda manfiy balans.\n- Ikkalasida BEGIN/COMMIT.\n- Invariantlar: `tx_id` bo'yicha yig'indi 0, amount ≠ 0, `tx_id` unikal (idempotentlik)."
+ },
+ "16020": {
+  "a": "**WHERE'dagi `o.status = 'paid'` LEFT JOIN'ni INNER JOIN'ga aylantiradi: buyurtmasiz user'da `o.status` NULL → shart TRUE bo'lmaydi → qator tashlanadi.**\n\n```sql\nSELECT u.id, o.total\nFROM users u\nLEFT JOIN orders o\n  ON o.user_id = u.id AND o.status = 'paid';\n```\n\n- Qoida: o'ng jadval filtri — `ON` da, chap jadval filtri — `WHERE` da."
+ },
+ "16021": {
+  "a": "**Subquery'da bitta NULL bo'lsa `NOT IN` hech qachon TRUE bo'lmaydi (`id <> NULL` = UNKNOWN) → bo'sh natija.**\n\n```sql\nSELECT * FROM users u\nWHERE NOT EXISTS (\n  SELECT 1 FROM bans b WHERE b.user_id = u.id);\n```\n\n- Yoki subquery'ga `WHERE user_id IS NOT NULL`.\n- NOT EXISTS planner uchun ham qulay (anti-join)."
+ },
+ "16022": {
+  "a": "**`count(*)` — hamma qator; `count(rating)` — NULL bo'lmaganlar; `avg(rating)` — NULL'larni butunlay tashlaydi (0 deb hisoblamaydi).**\n\n- NULL'ni 0 deb sanash: `avg(coalesce(rating, 0))`.\n- `sum()` qator bo'lmasa NULL qaytaradi, 0 emas."
+ },
+ "16023": {
+  "a": "**Ustunga funksiya qo'llangan — oddiy B-tree `email` bo'yicha, `lower(email)` bo'yicha emas.**\n\n```sql\nCREATE INDEX ON users (lower(email));\n```\n\n- Yoki `citext` tipi.\n- Xuddi shunday: `created_at::date = '2024-01-01'` o'rniga diapazon: `created_at >= '2024-01-01' AND created_at < '2024-01-02'`."
+ },
+ "16024": {
+  "a": "**Ikki xavf: ALTER qisqa bo'lsa ham ACCESS EXCLUSIVE lock kutadi va orqasidagi hamma query'larni to'sadi; `CREATE INDEX` CONCURRENTLY'siz yozishni bloklaydi.**\n\n```sql\nSET lock_timeout = '3s';  -- + retry\nALTER TABLE orders ADD COLUMN status text NOT NULL DEFAULT 'new';\nCREATE INDEX CONCURRENTLY idx_orders_status ON orders(status);\n```\n\n- PG11+ o'zgarmas DEFAULT jadvalni qayta yozmaydi.\n- CONCURRENTLY tranzaksiyadan tashqarida; migratsiyani kichik qadamlarga bo'ling."
+ },
+ "16025": {
+  "a": "**Lock ordering deadlock: A 1→2, B 2→1 tartibda qulflaydi. Postgres ~1s dan keyin birini bekor qiladi.**\n\n```sql\nSELECT * FROM accounts WHERE id = ANY($1)\nORDER BY id FOR UPDATE;\n```\n\n- Hamma kod yo'lida bir xil tartib (id o'sishi).\n- Ilovada `40P01` ni retry qilish."
+ },
+ "16026": {
+  "a": "**OFFSET qatorlarni tashlab o'tmaydi — baribir o'qib, keyin tashlaydi: 100 020 qator o'qiladi.**\n\n```sql\nSELECT * FROM events\nWHERE (created_at, id) < ($1, $2)\nORDER BY created_at DESC, id DESC\nLIMIT 20;\n```\n\n- Keyset (seek) pagination — O(log n).\n- Bonus: yangi qator qo'shilganda dublikat/yo'qolish bo'lmaydi."
+ },
+ "30094": {
+  "a": "**Immutable `entries` (debit/credit) — balans ularning yig'indisi; tezlik uchun davriy snapshot + undan keyingi yozuvlar.**\n\n- Mutable balans audit'ni yo'qotadi.\n- Invariant `sum(debit) = sum(credit)` tekshiriladi.\n- Xato — faqat qarama-qarshi yozuv (reversal) bilan tuzatiladi."
+ },
+ "30095": {
+  "a": "**Hisob bo'yicha version/qulf, balans chegarasi atomik shartli yozuv bilan, har tranzaksiyada idempotency key.**\n\n- Ikki xavf: qo'sh yozuv (unique key) va minusga tushish (atomik shart).\n- Hot hisob — sub-balanslarga bo'lish yoki navbat."
+ },
+ "30096": {
+  "a": "**Import → moslash → farqlarni toifalash → append-only tuzatish.**\n\n- Settlement faylini xom holda saqlash; external ID bo'yicha: mos / faqat bizda / faqat PSP'da.\n- Sabablar: timing, komissiya/FX, refund/chargeback, yo'qolgan webhook, qo'lda operatsiya.\n- Har farqqa exception: egasi, sababi, yechimi.\n- Tuzatish faqat adjustment/reversal yozuv bilan.\n- Timing farqini T+1 da avtomatik yopish; ochiq farq summasi va yoshi — KPI.\n- Webhook'ga yagona manba sifatida ishonmaslik."
+ },
+ "30145": {
+  "a": "**WHERE filtri JOIN'dan keyin qo'llanadi va NULL qatorlarni kesadi — LEFT JOIN INNER'ga aylanadi.**\n\n- Shartni `ON` ga: `LEFT JOIN orders o ON o.user_id = u.id AND o.status = 'paid'`.\n- \"To'lovi yo'q user'lar\" kerak bo'lsa: `WHERE o.id IS NULL` (anti-join)."
+ },
+ "30146": {
+  "a": "**`orders.user_id` da bitta NULL bo'lsa butun shart UNKNOWN → hech narsa qaytmaydi.**\n\n- `NOT EXISTS` yoki `IS NOT NULL` filtri.\n- Jim bug: bitta NULL kelgan kuni hisobot bo'shab qoladi."
+ },
+ "30147": {
+  "a": "**`created_at` unikal emas — teng qiymatlarda tartib barqaror emas.**\n\n- Tie-breaker: `, id DESC`.\n- Keyset: `WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT 20`."
+ },
+ "30148": {
+  "a": "**MVCC: aniq sanoq har qatorning ko'rinishini tekshirishni talab qiladi — to'liq skan.**\n\n- Taxminiy: `pg_class.reltuples` yoki EXPLAIN bahosi (\"taxminan N natija\").\n- Filtrlangan sanoq — alohida agregat jadval.\n- `count(1)` va `count(*)` bir xil tez."
+ },
+ "30464": {
+  "a": "**Bitta tranzaksiyada ikki entry: A'ga debit, B'ga kredit, bitta `transaction_id` ostida; `sum(debit) = sum(credit)`.**\n\n- Alohida ikki tranzaksiya — pul \"havoda\" qolishi mumkin.\n- Servislar orasida — saga (`pending` → tasdiq); ledgerni bo'lish — oxirgi chora."
+ },
+ "30465": {
+  "a": "**Yaxlitlash faqat belgilangan nuqtalarda, qoidasi hujjatlashtirilgan (half-up/banker's), yo'qolgan tiyinlar alohida \"rounding\" hisobiga.**\n\n- 100.00 / 3 = 33.33 × 3 = 99.99 → 1 tiyin yo'qoladi.\n- Qoldiqni oxirgi qismga qo'shish."
+ },
+ "30514": {
+  "a": "**Vaqt bo'yicha partitioning + davriy balans snapshot; eski bo'laklar arxivga (o'chirilmaydi — qonuniy saqlash muddati).**\n\n- Snapshot ham immutable, qaysi entry'gacha hisoblangani bilan.\n- Arxivdan so'rov yo'li saqlansin (DWH nusxasi)."
+ },
+ "30519": {
+  "a": "**DB darajasida atomik shart: `UPDATE ... SET balance = balance - $1 WHERE account_id = $2 AND balance >= $1` (0 qator → rad etish) yoki `CHECK (balance >= 0)`.**\n\n- Ilovadagi tekshiruv — faqat UX uchun; read-then-write doim race.\n- Hot hisob — sub-balanslarga bo'lish."
+ }
 }

@@ -6716,7 +6716,7 @@
           "section": "t2",
           "question": "<code>CHAR(10)</code> column'da saqlangan 'abc' bilan taqqoslash:",
           "snippet": "-- c CHAR(10) column'ida 'abc' saqlangan\nSELECT c = 'abc', length(c), c || '!' FROM t;",
-          "explanation": "CHAR(n) — deyarli har doim keraksiz tip: padding kutilmagan natijalar beradi (konkatenatsiya, uzunlik, ba'zi funksiyalar). Postgres'da length() padding'ni hisobga olmaydi, char_length esa... aynan shu chalkashlik sababli amaliyotda faqat text yoki varchar ishlatiladi."
+          "explanation": "CHAR(n) — deyarli har doim keraksiz tip: padding kutilmagan natijalar beradi (konkatenatsiya, uzunlik, ba'zi funksiyalar). Postgres'da trailing bo'shliqlar ahamiyatsiz: taqqoslash, length() va text'ga aylantirishda (||) tashlanadi — natija true, 3, 'abc!'; boshqa DB'larda xulq farq qiladi. Shu chalkashlik sababli amaliyotda faqat text yoki varchar ishlatiladi."
         },
         {
           "id": 16020,
@@ -16296,7 +16296,7 @@
           "domain": "cont",
           "section": "t11",
           "question": "Konteynerda Go jarayoni `GOMAXPROCS` 64 deb ko'rsatadi, lekin CPU limiti 2. Nima bo'ladi?",
-          "explanation": "Go 1.21 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
+          "explanation": "Go 1.25 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
         },
         {
           "id": 30104,
