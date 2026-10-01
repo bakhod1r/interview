@@ -1,0 +1,44 @@
+{
+ "31103": {
+  "a": "**FHS — standart joylashuv.**\n\n- `/etc` — config.\n- `/var` — log, spool, DB (`/var/lib`).\n- `/usr` — read-only dasturlar (`/usr/bin`, `/usr/lib`).\n- `/opt` — tashqi paketlar.\n- `/tmp` — reboot'da tozalanishi mumkin (ko'pincha tmpfs).\n- `/proc`, `/sys` — kernel virtual FS.\n- `/home`, `/root`, `/boot`, `/dev`."
+ },
+ "31104": {
+  "a": "**fstab — boot'da nima, qayerga, qanday mount bo'lishi.**\n\n```\nUUID=3f1c...  /data  ext4  defaults,noatime  0  2\n```\n\n- `blkid` — UUID topish.\n- `mount -a` — fstab'ni tekshirish (reboot'dan oldin!).\n- `nofail` — disk yo'q bo'lsa boot to'xtamasin.\n- Xato fstab = emergency mode."
+ },
+ "31105": {
+  "a": "**df — FS statistikasi; du — fayllarni sanaydi.**\n\n```sh\ndf -h          # hajm\ndf -i          # inode\ndu -sh /var/*  # qaysi dir katta\ndu -xh --max-depth=1 / | sort -h\n```\n\n- Ular farq qilsa — o'chirilgan lekin ochiq fayl (`lsof +L1`)."
+ },
+ "31106": {
+  "a": "**Tanlov ish yukiga bog'liq.**\n\n- **ext4** — barqaror, offline shrink, Debian/Ubuntu default.\n- **XFS** — katta FS, parallel yozish, allocation groups; faqat grow.\n- **Btrfs** — copy-on-write, subvolume, snapshot, checksum, compression.\n- **ZFS** — CoW + volume manager + RAID, checksum; litsenziya modul.\n- DB uchun: XFS/ext4 eng ko'p ishlatiladi."
+ },
+ "31107": {
+  "a": "**Ko'pincha inode tugagan.**\n\n```sh\ndf -i\nfind /var -xdev -type f | cut -d/ -f3 | sort | uniq -c | sort -n | tail\n```\n\n- Sabab: session/cache millionlab kichik fayl.\n- ext4'da inode soni `mkfs` da belgilanadi (`-i`, `-N`).\n- XFS inode'ni dinamik ajratadi.\n- Boshqa sabab: ext4 5% reserved root uchun (`tune2fs -m`)."
+ },
+ "31108": {
+  "a": "**Fayl process fd'si yopilmaguncha yashaydi.**\n\n```sh\nlsof +L1 | grep deleted\n: > /proc/<pid>/fd/<fd>   # restartsiz truncate\n```\n\n- Odatiy: log `rm` qilingan, servis yozishda davom etyapti.\n- To'g'ri: `logrotate` + `copytruncate` yoki signal (`postrotate` da `kill -HUP`)."
+ },
+ "31109": {
+  "a": "**Journal — crash'da FS buzilmasligi uchun WAL.**\n\n- `journal` — data+metadata jurnalga (sekin, xavfsiz).\n- `ordered` (default) — faqat metadata jurnalda, lekin data oldin yoziladi: eski axlat ko'rinmaydi.\n- `writeback` — tartib yo'q, tez.\n- Journal ilova ma'lumotini kafolatlamaydi — `fsync` kerak."
+ },
+ "31110": {
+  "a": "**Virtual FS — diskda yo'q.**\n\n- `tmpfs` — RAM/swap, tez, reboot'da yo'qoladi (`/dev/shm`, `/run`).\n- `/proc` — `/proc/<pid>/status`, `/proc/meminfo`, `/proc/sys` (sysctl).\n- `/sys` — `/sys/block/sda/queue/scheduler`.\n- `mount -t tmpfs -o size=1G tmpfs /mnt/ram`."
+ },
+ "31111": {
+  "a": "**Performance va hardening.**\n\n- `noatime` — har o'qishda metadata yozilmaydi (`relatime` default).\n- `noexec` — binar ishga tushmaydi.\n- `nosuid` — setuid bit e'tiborsiz.\n- `nodev` — device fayllar ishlamaydi.\n- `ro` — read-only.\n- `/tmp`, `/var/tmp`, `/dev/shm`: `nodev,nosuid,noexec`."
+ },
+ "31112": {
+  "a": "**`write()` qaytdi ≠ diskda.**\n\n- Data page cache'da (dirty), flush keyin (`vm.dirty_*`).\n- `fsync(fd)` — data+metadata diskka.\n- `fdatasync` — kerakli metadata'gina.\n- Atomik almashtirish:\n```\nwrite tmp -> fsync(tmp) -> rename(tmp, file) -> fsync(dir)\n```\n- Disk write cache: FUA/flush; RAID controller'da BBU.\n- PostgreSQL fsyncgate (2018): fsync xatosidan keyin dirty page tashlanadi."
+ },
+ "31113": {
+  "a": "**XFS — faqat `xfs_growfs`.**\n\n1. Yangi LV yarat, `mkfs.xfs`.\n2. Ko'chir: `xfsdump | xfsrestore` yoki `rsync -aHAX`.\n3. Servisni to'xtat, oxirgi sync.\n4. fstab'ni almashtir, eski LV'ni o'chir.\n\n- Shuning uchun LV'ni kichik boshlab, kerak bo'lganda grow qil."
+ },
+ "31114": {
+  "a": "**DB o'z joyida yozadi; CoW har yozishni yangi joyga ko'chiradi.**\n\n- Natija: fragmentatsiya, sekin sequential read.\n- Btrfs: DB dir'ga `chattr +C` (yangi fayllar uchun) — checksum ham o'chadi.\n- ZFS: `recordsize=16k` (InnoDB) / `8k` (Postgres), `logbias=throughput`, compression foydali.\n- Afzallik: arzon snapshot, checksum."
+ },
+ "31115": {
+  "a": "**Mount qilingan FS'da fsck — yanada buzadi.**\n\n```sh\numount /data\ne2fsck -f /dev/vg/data\nxfs_repair -n /dev/vg/data   # -n: dry run\n```\n\n- Avval: `dmesg`, `smartctl -a` — apparat muammosimi?\n- Muhim data: avval `ddrescue` bilan image.\n- `lost+found` — tiklangan yetim inode'lar."
+ },
+ "31116": {
+  "a": "**POSIX kerakmi? Ko'pincha yo'q.**\n\n- **NFS** — tez sozlash; SPOF, close-to-open cache, `flock` noaniq.\n- **CephFS** — taqsimlangan, MDS, operatsion murakkab.\n- **EFS/Filestore** — managed NFS, latency yuqori.\n- **S3** — cheksiz, arzon; rename atomik emas, append yo'q.\n- K8s: RWX PVC kerak bo'lsa NFS/CephFS; yaxshisi — app'ni object storage'ga moslash."
+ }
+}

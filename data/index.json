@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1167,
+  "total": 1284,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -154,10 +154,17 @@
     },
     {
       "id": "n1",
-      "name": "Redis & caching",
+      "name": "Caching",
       "domain": "nosql",
-      "count": 29,
+      "count": 7,
       "file": "sections/n1-redis-caching.json"
+    },
+    {
+      "id": "n4",
+      "name": "Redis",
+      "domain": "nosql",
+      "count": 98,
+      "file": "sections/n4-redis.json"
     },
     {
       "id": "n2",
@@ -382,6 +389,27 @@
       "domain": "devops",
       "count": 24,
       "file": "sections/v1-lvm.json"
+    },
+    {
+      "id": "v2",
+      "name": "Linux users, groups, permissions",
+      "domain": "devops",
+      "count": 15,
+      "file": "sections/v2-linux-users.json"
+    },
+    {
+      "id": "v3",
+      "name": "Package management",
+      "domain": "devops",
+      "count": 12,
+      "file": "sections/v3-package-management.json"
+    },
+    {
+      "id": "v4",
+      "name": "Linux filesystems",
+      "domain": "devops",
+      "count": 14,
+      "file": "sections/v4-linux-filesystems.json"
     }
   ]
 }

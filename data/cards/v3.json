@@ -1,0 +1,38 @@
+{
+ "31091": {
+  "a": "**Paket menejer — repo'dan yuklaydi, bog'liqlikni hal qiladi.**\n\n```sh\n# Debian/Ubuntu\napt update && apt install -y nginx\napt remove nginx; apt purge nginx   # purge: config ham\n# RHEL/Fedora\ndnf install -y nginx\ndnf remove nginx\n```\n\n- Alpine — `apk`, Arch — `pacman`."
+ },
+ "31092": {
+  "a": "**`update` — ro'yxatni yangila; `upgrade` — paketlarni yangila.**\n\n- `apt upgrade` — paket o'chirmaydi.\n- `apt full-upgrade` — kerak bo'lsa o'chiradi/yangisini qo'shadi.\n- dnf'da `dnf check-update` / `dnf upgrade`; metadata avtomatik."
+ },
+ "31093": {
+  "a": "**dpkg/rpm — lokal paket; apt/dnf — ular ustidagi resolver.**\n\n```sh\ndpkg -l | grep nginx     # o'rnatilganlar\ndpkg -L nginx            # paket fayllari\ndpkg -S /usr/sbin/nginx  # fayl qaysi paketdan\nrpm -qa; rpm -ql nginx; rpm -qf /usr/sbin/nginx\napt install ./pkg.deb    # lokal faylni dependency bilan\n```"
+ },
+ "31094": {
+  "a": "**Imzo — paket haqiqatan repo egasidan ekanini kafolatlaydi.**\n\n```sh\ncurl -fsSL https://example.com/key.gpg | gpg --dearmor -o /etc/apt/keyrings/ex.gpg\necho \"deb [signed-by=/etc/apt/keyrings/ex.gpg] https://example.com/apt stable main\" \\\n  > /etc/apt/sources.list.d/ex.list\n```\n\n- `apt-key add` deprecated — kalit hamma repo'ga ishonchli bo'lib qolardi.\n- dnf: `/etc/yum.repos.d/*.repo`, `gpgcheck=1`."
+ },
+ "31095": {
+  "a": "**Kutilmagan upgrade'dan himoya:**\n\n```sh\napt install postgresql-16=16.4-1.pgdg22.04+1\napt-mark hold postgresql-16\napt-mark unhold postgresql-16\ndnf install 'dnf-command(versionlock)'; dnf versionlock add kernel\n```\n\n- Docker'da: `apt-get install -y pkg=ver` — reproducible build."
+ },
+ "31096": {
+  "a": "**Bitta layer: update + install + cleanup.**\n\n```dockerfile\nRUN apt-get update \\\n && apt-get install -y --no-install-recommends ca-certificates curl \\\n && rm -rf /var/lib/apt/lists/*\n```\n\n- Alohida `RUN apt-get update` — keshlanadi, eskirgan indeks bilan install.\n- `apt` emas `apt-get` — skript uchun barqaror interfeys.\n- `DEBIAN_FRONTEND=noninteractive`."
+ },
+ "31097": {
+  "a": "**Dinamik linker `.so` ni topa olmayapti.**\n\n```sh\nldd /usr/local/bin/app | grep 'not found'\napt-file search libssl.so.3   # qaysi paketda\nldconfig -p | grep ssl\n```\n\n- Custom yo'l: `/etc/ld.so.conf.d/x.conf` + `ldconfig`.\n- `LD_LIBRARY_PATH` — vaqtinchalik; prod'da qochish.\n- Go static binar — muammo yo'q (CGO_ENABLED=0)."
+ },
+ "31098": {
+  "a": "**Bundled vs shared.**\n\n- Distro (.deb/.rpm) — kutubxona bitta, CVE patch bir joyda.\n- Snap — Canonical store, auto-update, squashfs mount.\n- Flatpak — desktop, runtime'lar.\n- AppImage — bitta fayl, o'rnatishsiz.\n- Serverda: distro paket yoki container."
+ },
+ "31099": {
+  "a": "**Ikki paket bitta kutubxonaning mos kelmaydigan versiyasini talab qiladi.**\n\n- SemVer: MAJOR — buzuvchi, MINOR — yangi funksiya, PATCH — fix.\n- Yechimlar:\n  - Lock fayl (`go.sum`, `package-lock.json`).\n  - Izolyatsiya: container, venv.\n  - Distro'da: bir nechta major parallel (`libssl1.1` + `libssl3`) — soname.\n- Go: MVS (minimal version selection) — deterministik."
+ },
+ "31100": {
+  "a": "**Tez patch vs barqarorlik.**\n\n- `unattended-upgrades` (Debian), `dnf-automatic` (RHEL).\n- Faqat `-security` origin.\n- Canary: avval bitta guruh serverda.\n- Kernel/libc: reboot kerak — `needrestart`, `/var/run/reboot-required`; livepatch.\n- Immutable infra: yangi image build, eski node'larni almashtir."
+ },
+ "31101": {
+  "a": "**Tashqi internetga bog'liqlikni kesish.**\n\n- Vositalar: Artifactory, Nexus, aptly, Pulp, Athens (Go proxy).\n- Foyda: offline build, snapshot (bugungi repo holati), skanerlash, tezlik.\n- Supply chain: dependency confusion — internal nom public'da ham bo'lsa, scope/priority sozla."
+ },
+ "31102": {
+  "a": "**Ishonch zanjiri: manba → build → artefakt → deploy.**\n\n- Hash pin: `go.sum`, `pip --require-hashes`.\n- Imzo: GPG repo, `cosign` image.\n- SBOM (Syft) + CVE skan (Grype/Trivy) CI'da.\n- SLSA provenance — artefakt qaysi commit/CI'dan.\n- Distroless/minimal base — kam paket, kam hujum yuzasi.\n- Misol: xz-utils backdoor (2024) — upstream maintainer darajasida."
+ }
+}

@@ -1,0 +1,47 @@
+{
+ "31076": {
+  "a": "**`/etc/passwd` — user ma'lumoti, `/etc/shadow` — parol hash, `/etc/group` — guruhlar.**\n\n```\nalice:x:1001:1001:Alice:/home/alice:/bin/bash\n# name:pw:UID:GID:GECOS:home:shell\n```\n\n- `x` — parol `shadow` da.\n- `shadow`: hash (`$6$` = SHA-512, `$y$` = yescrypt), oxirgi o'zgarish, muddat.\n- `getent passwd alice` — NSS orqali (LDAP/SSSD ham)."
+ },
+ "31077": {
+  "a": "**Kernel nomni emas, UID'ni ko'radi. UID 0 = root.**\n\n- 1–999 — system/service userlar (`nginx`, `postgres`), odatda `/usr/sbin/nologin`.\n- 1000+ — oddiy userlar (`/etc/login.defs`: `UID_MIN`).\n- Servisni alohida unprivileged user ostida ishlat — buzilsa zarar kichik.\n\n```sh\nuseradd -r -s /usr/sbin/nologin -d /var/lib/app app\n```"
+ },
+ "31078": {
+  "a": "**User hayot sikli:**\n\n```sh\nuseradd -m -s /bin/bash alice   # -m: home yarat\npasswd alice\nusermod -aG docker alice        # -a bo'lmasa boshqa guruhlar O'CHADI\nid alice\nuserdel -r alice                # -r: home ham\n```\n\n- Gotcha: `usermod -G` (`-a` siz) supplementary guruhlarni almashtiradi.\n- Yangi guruh session'da ko'rinishi uchun qayta login yoki `newgrp`."
+ },
+ "31079": {
+  "a": "**Uch triplet: owner / group / others. r=4 w=2 x=1.**\n\n```sh\nchmod 755 script.sh   # rwxr-xr-x\nchmod 640 secret.conf # rw-r-----\nchmod u+x,g-w file\nchown app:app file\n```\n\n- Direktoriyada: `r` — ro'yxat, `w` — fayl yaratish/o'chirish, `x` — ichiga kirish (traverse).\n- Fayl o'chirish huquqi — **direktoriyaning** `w` sidan, faylnikidan emas."
+ },
+ "31080": {
+  "a": "**umask — yangi fayldan o'chiriladigan ruxsat bitlari.**\n\n- Fayl bazasi 666, dir bazasi 777.\n- `022`: fayl `644`, dir `755`.\n- `077`: faqat owner — maxfiy servislar uchun.\n- systemd'da: `UMask=0027` unit faylda.\n- Bu ayirish emas, bit mask: `666 & ~umask`."
+ },
+ "31081": {
+  "a": "**Maxsus bitlar (4/2/1 to'rtinchi raqam):**\n\n- **setuid (4)** — `/usr/bin/passwd` root sifatida ishlaydi (`-rwsr-xr-x`).\n- **setgid (2)** — dir'da yangi fayllar dir guruhini oladi; jamoa papkalari uchun.\n- **sticky (1)** — `/tmp` (`drwxrwxrwt`): faylni faqat egasi o'chiradi.\n\n```sh\nchmod 2775 /srv/shared\nfind / -perm -4000 -type f 2>/dev/null   # setuid audit\n```\n\n- Xavf: setuid binaridagi bug = privilege escalation."
+ },
+ "31082": {
+  "a": "**sudo — qoidaga ko'ra boshqa UID sifatida buyruq; log qiladi.**\n\n```\n# /etc/sudoers.d/deploy  (visudo -f bilan)\ndeploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart app\n%admin ALL=(ALL:ALL) ALL\n```\n\n- `visudo` sintaksisni tekshiradi — buzilgan sudoers = sudo ishlamaydi.\n- Buyruqlarni aniq yo'l bilan chekla; `NOPASSWD: ALL` dan qoch.\n- Gotcha: `sudo vim`, `sudo less` — shell escape. `sudoedit` ishlat."
+ },
+ "31083": {
+  "a": "**`-` = login shell: HOME, PATH, profile qayta yuklanadi.**\n\n- `su alice` — parol alice'niki, env eski.\n- `su -` — root login shell, root parol.\n- `sudo -i` — o'z parolingiz bilan root login shell; audit log bor.\n- `sudo -u postgres psql` — bitta buyruq boshqa user sifatida."
+ },
+ "31084": {
+  "a": "**Primary — fayl yaratishda; supplementary — huquq tekshirishda.**\n\n```sh\nid alice\n# uid=1001(alice) gid=1001(alice) groups=1001(alice),998(docker)\n```\n\n- `newgrp docker` — joriy shell'da primary'ni almashtirish.\n- Gotcha: `docker` guruhi = amalda root (socket orqali host'ni mount qila oladi)."
+ },
+ "31085": {
+  "a": "**ACL — bir faylga bir nechta user/guruh uchun alohida ruxsat.**\n\n```sh\nsetfacl -m u:bob:rw report.csv\nsetfacl -d -m g:dev:rwx /srv/proj   # default ACL: yangi fayllarga meros\ngetfacl report.csv\n```\n\n- `ls -l` da `-rw-rw-r--+`.\n- `mask` — group va named entry'lar uchun maksimal chegara.\n- FS qo'llashi kerak (ext4/xfs default bor)."
+ },
+ "31086": {
+  "a": "**Kernel ruxsatni effective UID bo'yicha tekshiradi.**\n\n- **ruid** — process egasi.\n- **euid** — huquq tekshiruvi (setuid binar'da owner).\n- **suid** — euid'ni keyin qaytarish uchun saqlangan.\n\nTartib muhim:\n1. `setgroups(0, NULL)` — supplementary'larni tozala.\n2. `setgid(gid)`.\n3. `setuid(uid)` — oxirida; avval setuid qilsang setgid uchun huquq qolmaydi.\n\n- Tekshir: `setuid(0)` muvaffaqiyatsiz bo'lishi kerak."
+ },
+ "31087": {
+  "a": "**Root vakolati bo'laklarga bo'lingan — faqat kerakligini ber.**\n\n```sh\nsetcap cap_net_bind_service=+ep /usr/local/bin/app   # 80-portga bind, rootsiz\ngetcap /usr/local/bin/app\n```\n\n- systemd: `AmbientCapabilities=CAP_NET_BIND_SERVICE`, `CapabilityBoundingSet=`.\n- Docker: `--cap-drop=ALL --cap-add=NET_BIND_SERVICE`.\n- `CAP_SYS_ADMIN` — amalda root, berma."
+ },
+ "31088": {
+  "a": "**Ha. Ruxsat faqat fayl bitlari emas.**\n\n- Yo'ldagi har dir'da `x` kerak: `namei -l /a/b/file`.\n- SELinux/AppArmor: `ls -Z`, `ausearch -m avc`.\n- ACL mask cheklaydi.\n- `chattr +i` — immutable (`lsattr`), root ham yoza olmaydi.\n- Mount: `ro`, `noexec`, NFS `root_squash`.\n- Container: user namespace UID map."
+ },
+ "31089": {
+  "a": "**Manba bitta, serverlar undan o'qiydi.**\n\n- **LDAP / FreeIPA / AD + SSSD** — NSS/PAM orqali `getent passwd` markaziy.\n- **SSH CA** — qisqa muddatli sertifikat (`TrustedUserCAKeys`), authorized_keys tarqatish yo'q.\n- Ansible/Puppet — service userlar, sudoers.\n- Offboarding: bir joyda o'chir, hamma joyda kirish yopiladi.\n- UID'lar hamma serverda bir xil — NFS uchun muhim."
+ },
+ "31090": {
+  "a": "**Userns'siz container root — host'da ham UID 0.**\n\n- Xavf: kernel exploit, `-v /:/host`, `--privileged`, docker socket.\n- Yechim:\n  - Dockerfile'da `USER 10001`.\n  - Rootless Docker/Podman — userns: container 0 → host 100000.\n  - K8s: `runAsNonRoot: true`, `allowPrivilegeEscalation: false`, `readOnlyRootFilesystem`.\n- `/etc/subuid`, `/etc/subgid` — map diapazonlari."
+ }
+}
