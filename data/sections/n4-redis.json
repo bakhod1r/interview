@@ -178,6 +178,17 @@
       "explanation": "To'g'ri tur, listpack encoding, qisqa key, bucket'larga bo'lish."
     },
     {
+      "id": 31127,
+      "code": "RD100",
+      "level": "St",
+      "type": "card",
+      "topic": "Data types",
+      "domain": "nosql",
+      "section": "n4",
+      "question": "Streams'ni uzoq muddat ishlatganda qanday muammolar paydo bo'ladi?",
+      "explanation": "Cheklanmagan o'sish, PEL to'planishi, o'lik consumer'lar, trimming va memory."
+    },
+    {
       "id": 31071,
       "code": "RD72",
       "level": "P",
@@ -309,6 +320,17 @@
       "section": "n4",
       "question": "Nega Redis yozuv buyruqlari replikaga effect sifatida (natija) yuboriladi, skript sifatida emas?",
       "explanation": "Effect replication — deterministik bo'lmagan skriptlar replikada boshqa natija bermasligi uchun."
+    },
+    {
+      "id": 31128,
+      "code": "RD101",
+      "level": "St",
+      "type": "card",
+      "topic": "Internals",
+      "domain": "nosql",
+      "section": "n4",
+      "question": "Redis memory overhead'i qayerdan keladi: 1 mln mayda key nega kutilganidan ko'p joy oladi?",
+      "explanation": "Har key: dictEntry, robj, SDS header, expire dict yozuvi, allocator yaxlitlash."
     },
     {
       "id": 31049,
@@ -1084,6 +1106,17 @@
       "section": "n4",
       "question": "Redis'ni qaysi holatlarda ishlatmaslik kerak?",
       "explanation": "Asosiy haqiqat manbai sifatida pul/ledger, katta dataset, murakkab query, uzoq retention."
+    },
+    {
+      "id": 31129,
+      "code": "RD102",
+      "level": "St",
+      "type": "card",
+      "topic": "Use cases",
+      "domain": "nosql",
+      "section": "n4",
+      "question": "Redis'ni Kafka oldida buffer yoki 'tez yozish qatlami' sifatida ishlatish to'g'rimi?",
+      "explanation": "Ko'pincha anti-pattern: qo'shimcha yo'qotish nuqtasi; faqat aniq sabab bilan."
     },
     {
       "id": 31074,

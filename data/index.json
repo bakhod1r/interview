@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1284,
+  "total": 1297,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -163,7 +163,7 @@
       "id": "n4",
       "name": "Redis",
       "domain": "nosql",
-      "count": 98,
+      "count": 101,
       "file": "sections/n4-redis.json"
     },
     {
@@ -184,7 +184,7 @@
       "id": "t10",
       "name": "Redis & cache gotchas",
       "domain": "nosql",
-      "count": 9,
+      "count": 19,
       "file": "sections/t10-redis-cache-gotchas.json"
     },
     {
