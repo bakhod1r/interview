@@ -1,8 +1,8 @@
 {
  "id": "v3",
  "name": "Package management",
- "domain": "devops",
- "domainLabel": "DevOps",
+ "domain": "linux",
+ "domainLabel": "Linux",
  "topics": [
   "Package management"
  ],
@@ -13,7 +13,7 @@
    "level": "J",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "apt va dnf/yum nima? Asosiy buyruqlar.",
    "explanation": "Debian/Ubuntu — apt (.deb), RHEL/Fedora — dnf (.rpm). install, remove, update, upgrade, search."
@@ -24,7 +24,7 @@
    "level": "J",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "apt update va apt upgrade farqi nima?",
    "explanation": "update — repo indeksini yangilaydi (hech narsa o'rnatmaydi). upgrade — o'rnatilgan paketlarni yangi versiyaga ko'taradi."
@@ -35,7 +35,7 @@
    "level": "J",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "dpkg va apt farqi; rpm va dnf farqi?",
    "explanation": "dpkg/rpm — past daraja, bitta faylni o'rnatadi, bog'liqlik hal qilmaydi. apt/dnf — repo + dependency resolver."
@@ -46,7 +46,7 @@
    "level": "M",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Repository va GPG kalit qanday qo'shiladi? Nega imzo muhim?",
    "explanation": "Repo /etc/apt/sources.list.d ga, kalit /etc/apt/keyrings ga, signed-by bilan bog'lanadi. Imzo — MITM/zararli paketdan himoya."
@@ -57,7 +57,7 @@
    "level": "M",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Paket versiyasini qanday qotirish (pin/hold) mumkin?",
    "explanation": "apt-mark hold, apt install pkg=ver, /etc/apt/preferences pin; dnf versionlock."
@@ -68,7 +68,7 @@
    "level": "M",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Dockerfile'da apt-get to'g'ri qanday ishlatiladi?",
    "explanation": "update va install bitta RUN'da, --no-install-recommends, keyin /var/lib/apt/lists o'chiriladi."
@@ -79,7 +79,7 @@
    "level": "M",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Shared library bog'liqligi: ldd va 'cannot open shared object file' xatosi.",
    "explanation": "Binar kerakli .so ni topmaydi. ldd bilan tekshir, paketni o'rnat yoki ldconfig / LD_LIBRARY_PATH."
@@ -90,7 +90,7 @@
    "level": "M",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Snap, Flatpak, AppImage va distro paketlari farqi?",
    "explanation": "Snap/Flatpak — bog'liqliklar ichida, sandbox, distrodan mustaqil; katta hajm. Distro paket — umumiy kutubxonalar, distro xavfsizlik yangilanishi."
@@ -101,7 +101,7 @@
    "level": "S",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Semantic versioning va dependency hell — qanday yechiladi?",
    "explanation": "MAJOR.MINOR.PATCH; konflikt versiyalar. Lock fayl, pinning, isolation (container, venv), monorepo."
@@ -112,7 +112,7 @@
    "level": "S",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Unattended security updates prod'da: foyda va xavf?",
    "explanation": "Foyda — CVE tez yopiladi. Xavf — kutilmagan restart/regressiya. Faqat security repo, staged rollout, reboot oynasi."
@@ -123,7 +123,7 @@
    "level": "S",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Internal paket mirror / artifact repository nega kerak?",
    "explanation": "Tashqi repo yiqilsa build to'xtamaydi, versiyalar muzlatiladi, audit, tezlik, supply chain nazorati."
@@ -134,7 +134,7 @@
    "level": "St",
    "type": "card",
    "topic": "Package management",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v3",
    "question": "Supply chain hujumlaridan paketlarni qanday himoya qilasan?",
    "explanation": "Imzo tekshiruvi, lock/hash pin, SBOM, provenance (SLSA, Sigstore), internal mirror, minimal base image, skanerlash."

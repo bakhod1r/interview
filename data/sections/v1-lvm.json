@@ -1,275 +1,275 @@
 {
-  "id": "v1",
-  "name": "LVM: PV, VG, LV",
-  "domain": "devops",
-  "domainLabel": "DevOps",
-  "topics": [
-    "LVM"
-  ],
-  "questions": [
-    {
-      "id": 30708,
-      "code": "LX61",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "LVM'ning uch qatlami — PV, VG, LV — nima?",
-      "explanation": "Tartib: `pvcreate /dev/sdb` -> `vgcreate data /dev/sdb` -> `lvcreate -L 50G -n pg data` -> `mkfs.ext4 /dev/data/pg`. Ko'rish: `pvs`, `vgs`, `lvs`, `lsblk`. Disk hovuzga bo'linadi PE (physical extent, default 4MiB) bo'laklarida."
-    },
-    {
-      "id": 30711,
-      "code": "LX64",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "LVM qaysi kernel mexanizmi ustida ishlaydi?",
-      "explanation": "LV'lar /dev/mapper/vg-lv sifatida ko'rinadi. `dmsetup ls` — device-mapper qurilmalari."
-    },
-    {
-      "id": 30713,
-      "code": "LX66",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "PE (physical extent) nima?",
-      "explanation": "LV hajmi PE soni bilan o'lchanadi: `lvextend -l +100%FREE` — extent'lar bilan."
-    },
-    {
-      "id": 30714,
-      "code": "LX67",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "VG'ga yangi disk qo'shish buyrug'i?",
-      "explanation": "Avval `pvcreate /dev/sdc`, keyin `vgextend`. Tekshirish: `vgs` (VFree)."
-    },
-    {
-      "id": 30720,
-      "code": "LX73",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "`lvs` katta hajm ko'rsatadi, `df` esa eski. Sabab?",
-      "explanation": "`resize2fs` / `xfs_growfs` yoki boshidan `lvextend -r`."
-    },
-    {
-      "id": 30781,
-      "code": "LVM1",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "PV, VG, LV ni noldan yaratish ketma-ketligi (ikki disk: /dev/sdb, /dev/sdc)?",
-      "explanation": "`pvcreate` diskni belgilaydi, `vgcreate` hovuz yig'adi, `lvcreate` undan bo'lak kesadi, keyin `mkfs` va `mount`."
-    },
-    {
-      "id": 30782,
-      "code": "LVM2",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "`pvs`, `vgs`, `lvs` va `pvdisplay/vgdisplay/lvdisplay` farqi?",
-      "explanation": "`*s` — qisqa jadval, `*display` — batafsil."
-    },
-    {
-      "id": 30783,
-      "code": "LVM3",
-      "level": "J",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "`/dev/vg0/root` va `/dev/mapper/vg0-root` — farqi bormi?",
-      "explanation": "Ikkalasi bir device-mapper qurilmasiga symlink."
-    },
-    {
-      "id": 30685,
-      "code": "LX51",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "LVM nima beradi?",
-      "explanation": "Disk kengaytirish oqimi: bulutda diskni kattalashtirish -> `growpart` -> `pvresize` -> `lvextend -r -L +10G /dev/vg/lv` (-r fayl tizimini ham kengaytiradi). LVM'siz ham: growpart + resize2fs / xfs_growfs."
-    },
-    {
-      "id": 30709,
-      "code": "LX62",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Serverda /var 95% to'lgan, u LVM ustida ext4. VG'da bo'sh joy bor. Downtime'siz kengaytirishning to'g'ri yo'li?",
-      "explanation": "Klassik xato: `lvextend` qilib, fayl tizimini kattalashtirishni unutish — `lvs` katta, `df` eski. ext4 va XFS online kengayadi. Kichraytirish: ext4 faqat unmount qilib (`e2fsck` + `resize2fs`), XFS umuman kichraymaydi. VG'da joy bo'lmasa: yangi disk -> `pvcreate` -> `vgextend vg0 /dev/sdc`. Cloud'da disk kattalashtirilsa: `growpart` + `pvresize`."
-    },
-    {
-      "id": 30710,
-      "code": "LX63",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "LVM snapshot qanday ishlaydi va uning xavfi nima?",
-      "explanation": "`lvcreate -s -L 10G -n db_snap /dev/vg0/db`. Ishlatilish: backup oldidan bir lahzalik barqaror holat, yangilanishdan oldin qaytish nuqtasi (`lvconvert --merge`). Snapshot o'sha VG/disklarda — disk o'lsa ikkalasi ham yo'qoladi, shuning uchun backup emas. DB uchun: avval flush/freeze (`fsfreeze` yoki DB backup rejimi). Thin pool'da snapshot'lar arzonroq, lekin pool to'lib qolishini monitoring qilish shart."
-    },
-    {
-      "id": 30712,
-      "code": "LX65",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Cloud VM'da root disk 20G dan 50G ga kattalashtirildi (LVM: /dev/sda3 -> vg0/root). `df -h` hali 20G. To'g'ri ketma-ketlik?",
-      "explanation": "Har qatlam o'z hajmini alohida biladi: disk -> partition -> PV -> LV -> FS. Qaysi qatlam kattalashmaganini `lsblk`, `pvs` (PFree), `vgs` (VFree), `lvs`, `df` bilan ketma-ket tekshirish. `-l +100%FREE` — VG'dagi hamma bo'sh extent'lar."
-    },
-    {
-      "id": 30718,
-      "code": "LX71",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Linear LV ikki diskka yoyilgan. Bitta disk o'ldi. Natija?",
-      "explanation": "LVM default'da redundancy bermaydi. Himoya: `--type raid1` yoki mdadm ostida."
-    },
-    {
-      "id": 30719,
-      "code": "LX72",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "LVM metadata backup'i qayerda va qanday tiklanadi?",
-      "explanation": "Har o'zgarishdan keyin avtomatik saqlanadi; /etc/lvm/archive — tarix."
-    },
-    {
-      "id": 30784,
-      "code": "LVM4",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "LV'ni kichraytirish (shrink) — qanday va qanday xavf bor?",
-      "explanation": "Avval fayl tizimini, keyin LV'ni; XFS kichraymaydi."
-    },
-    {
-      "id": 30785,
-      "code": "LVM5",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "`lvextend -l +100%FREE` va `-L +10G` farqi? `-r` flagi nima qiladi?",
-      "explanation": "`-l` — extent/foiz, `-L` — hajm; `-r` FS'ni ham kengaytiradi."
-    },
-    {
-      "id": 30786,
-      "code": "LVM6",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Diskni VG'dan chiqarish kerak (eskirgan disk). Downtime'siz qanday?",
-      "explanation": "`pvmove` extent'larni boshqa PV'ga ko'chiradi, keyin `vgreduce`."
-    },
-    {
-      "id": 30787,
-      "code": "LVM7",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Thin provisioning (thin pool) nima va xavfi?",
-      "explanation": "Joy yozilganda ajratiladi; overcommit — pool to'lsa LV'lar qotadi."
-    },
-    {
-      "id": 30788,
-      "code": "LVM8",
-      "level": "M",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Linear, striped va mirror (raid1) LV farqi?",
-      "explanation": "Linear — ketma-ket, striped — parallel (tez, xavfli), raid1 — nusxa."
-    },
-    {
-      "id": 30789,
-      "code": "LVM9",
-      "level": "S",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "LVM snapshot bilan izchil (consistent) DB backup qanday olinadi?",
-      "explanation": "Snapshot crash-consistent; DB'ni freeze/checkpoint qilib olinadi, tez o'chiriladi."
-    },
-    {
-      "id": 30790,
-      "code": "LVM10",
-      "level": "S",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Snapshot'dan LV'ni orqaga qaytarish (rollback) qanday?",
-      "explanation": "`lvconvert --merge` — snapshot holatiga qaytaradi."
-    },
-    {
-      "id": 30791,
-      "code": "LVM11",
-      "level": "S",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Bulutda (AWS EBS, GCP PD) LVM kerakmi?",
-      "explanation": "Ko'pincha shart emas; kerak bo'lsa — bir nechta diskni birlashtirish yoki striping uchun."
-    },
-    {
-      "id": 30792,
-      "code": "LVM12",
-      "level": "S",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Server reboot'dan keyin VG ko'rinmayapti (`vgs` bo'sh). Diagnostika?",
-      "explanation": "PV skan, filter, aktivatsiya va metadata tekshiriladi."
-    },
-    {
-      "id": 30793,
-      "code": "LVM13",
-      "level": "St",
-      "type": "card",
-      "topic": "LVM",
-      "domain": "devops",
-      "section": "v1",
-      "question": "Prod DB serverlar uchun disk qatlamini qanday dizayn qilasan: LVM, RAID, FS, snapshot?",
-      "explanation": "Data, WAL, OS — alohida LV; monitoring va tiklash rejasi bilan."
-    }
-  ]
+ "id": "v1",
+ "name": "LVM: PV, VG, LV",
+ "domain": "linux",
+ "domainLabel": "Linux",
+ "topics": [
+  "LVM"
+ ],
+ "questions": [
+  {
+   "id": 30708,
+   "code": "LX61",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "LVM'ning uch qatlami — PV, VG, LV — nima?",
+   "explanation": "Tartib: `pvcreate /dev/sdb` -> `vgcreate data /dev/sdb` -> `lvcreate -L 50G -n pg data` -> `mkfs.ext4 /dev/data/pg`. Ko'rish: `pvs`, `vgs`, `lvs`, `lsblk`. Disk hovuzga bo'linadi PE (physical extent, default 4MiB) bo'laklarida."
+  },
+  {
+   "id": 30711,
+   "code": "LX64",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "LVM qaysi kernel mexanizmi ustida ishlaydi?",
+   "explanation": "LV'lar /dev/mapper/vg-lv sifatida ko'rinadi. `dmsetup ls` — device-mapper qurilmalari."
+  },
+  {
+   "id": 30713,
+   "code": "LX66",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "PE (physical extent) nima?",
+   "explanation": "LV hajmi PE soni bilan o'lchanadi: `lvextend -l +100%FREE` — extent'lar bilan."
+  },
+  {
+   "id": 30714,
+   "code": "LX67",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "VG'ga yangi disk qo'shish buyrug'i?",
+   "explanation": "Avval `pvcreate /dev/sdc`, keyin `vgextend`. Tekshirish: `vgs` (VFree)."
+  },
+  {
+   "id": 30720,
+   "code": "LX73",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "`lvs` katta hajm ko'rsatadi, `df` esa eski. Sabab?",
+   "explanation": "`resize2fs` / `xfs_growfs` yoki boshidan `lvextend -r`."
+  },
+  {
+   "id": 30781,
+   "code": "LVM1",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "PV, VG, LV ni noldan yaratish ketma-ketligi (ikki disk: /dev/sdb, /dev/sdc)?",
+   "explanation": "`pvcreate` diskni belgilaydi, `vgcreate` hovuz yig'adi, `lvcreate` undan bo'lak kesadi, keyin `mkfs` va `mount`."
+  },
+  {
+   "id": 30782,
+   "code": "LVM2",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "`pvs`, `vgs`, `lvs` va `pvdisplay/vgdisplay/lvdisplay` farqi?",
+   "explanation": "`*s` — qisqa jadval, `*display` — batafsil."
+  },
+  {
+   "id": 30783,
+   "code": "LVM3",
+   "level": "J",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "`/dev/vg0/root` va `/dev/mapper/vg0-root` — farqi bormi?",
+   "explanation": "Ikkalasi bir device-mapper qurilmasiga symlink."
+  },
+  {
+   "id": 30685,
+   "code": "LX51",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "LVM nima beradi?",
+   "explanation": "Disk kengaytirish oqimi: bulutda diskni kattalashtirish -> `growpart` -> `pvresize` -> `lvextend -r -L +10G /dev/vg/lv` (-r fayl tizimini ham kengaytiradi). LVM'siz ham: growpart + resize2fs / xfs_growfs."
+  },
+  {
+   "id": 30709,
+   "code": "LX62",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Serverda /var 95% to'lgan, u LVM ustida ext4. VG'da bo'sh joy bor. Downtime'siz kengaytirishning to'g'ri yo'li?",
+   "explanation": "Klassik xato: `lvextend` qilib, fayl tizimini kattalashtirishni unutish — `lvs` katta, `df` eski. ext4 va XFS online kengayadi. Kichraytirish: ext4 faqat unmount qilib (`e2fsck` + `resize2fs`), XFS umuman kichraymaydi. VG'da joy bo'lmasa: yangi disk -> `pvcreate` -> `vgextend vg0 /dev/sdc`. Cloud'da disk kattalashtirilsa: `growpart` + `pvresize`."
+  },
+  {
+   "id": 30710,
+   "code": "LX63",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "LVM snapshot qanday ishlaydi va uning xavfi nima?",
+   "explanation": "`lvcreate -s -L 10G -n db_snap /dev/vg0/db`. Ishlatilish: backup oldidan bir lahzalik barqaror holat, yangilanishdan oldin qaytish nuqtasi (`lvconvert --merge`). Snapshot o'sha VG/disklarda — disk o'lsa ikkalasi ham yo'qoladi, shuning uchun backup emas. DB uchun: avval flush/freeze (`fsfreeze` yoki DB backup rejimi). Thin pool'da snapshot'lar arzonroq, lekin pool to'lib qolishini monitoring qilish shart."
+  },
+  {
+   "id": 30712,
+   "code": "LX65",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Cloud VM'da root disk 20G dan 50G ga kattalashtirildi (LVM: /dev/sda3 -> vg0/root). `df -h` hali 20G. To'g'ri ketma-ketlik?",
+   "explanation": "Har qatlam o'z hajmini alohida biladi: disk -> partition -> PV -> LV -> FS. Qaysi qatlam kattalashmaganini `lsblk`, `pvs` (PFree), `vgs` (VFree), `lvs`, `df` bilan ketma-ket tekshirish. `-l +100%FREE` — VG'dagi hamma bo'sh extent'lar."
+  },
+  {
+   "id": 30718,
+   "code": "LX71",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Linear LV ikki diskka yoyilgan. Bitta disk o'ldi. Natija?",
+   "explanation": "LVM default'da redundancy bermaydi. Himoya: `--type raid1` yoki mdadm ostida."
+  },
+  {
+   "id": 30719,
+   "code": "LX72",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "LVM metadata backup'i qayerda va qanday tiklanadi?",
+   "explanation": "Har o'zgarishdan keyin avtomatik saqlanadi; /etc/lvm/archive — tarix."
+  },
+  {
+   "id": 30784,
+   "code": "LVM4",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "LV'ni kichraytirish (shrink) — qanday va qanday xavf bor?",
+   "explanation": "Avval fayl tizimini, keyin LV'ni; XFS kichraymaydi."
+  },
+  {
+   "id": 30785,
+   "code": "LVM5",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "`lvextend -l +100%FREE` va `-L +10G` farqi? `-r` flagi nima qiladi?",
+   "explanation": "`-l` — extent/foiz, `-L` — hajm; `-r` FS'ni ham kengaytiradi."
+  },
+  {
+   "id": 30786,
+   "code": "LVM6",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Diskni VG'dan chiqarish kerak (eskirgan disk). Downtime'siz qanday?",
+   "explanation": "`pvmove` extent'larni boshqa PV'ga ko'chiradi, keyin `vgreduce`."
+  },
+  {
+   "id": 30787,
+   "code": "LVM7",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Thin provisioning (thin pool) nima va xavfi?",
+   "explanation": "Joy yozilganda ajratiladi; overcommit — pool to'lsa LV'lar qotadi."
+  },
+  {
+   "id": 30788,
+   "code": "LVM8",
+   "level": "M",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Linear, striped va mirror (raid1) LV farqi?",
+   "explanation": "Linear — ketma-ket, striped — parallel (tez, xavfli), raid1 — nusxa."
+  },
+  {
+   "id": 30789,
+   "code": "LVM9",
+   "level": "S",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "LVM snapshot bilan izchil (consistent) DB backup qanday olinadi?",
+   "explanation": "Snapshot crash-consistent; DB'ni freeze/checkpoint qilib olinadi, tez o'chiriladi."
+  },
+  {
+   "id": 30790,
+   "code": "LVM10",
+   "level": "S",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Snapshot'dan LV'ni orqaga qaytarish (rollback) qanday?",
+   "explanation": "`lvconvert --merge` — snapshot holatiga qaytaradi."
+  },
+  {
+   "id": 30791,
+   "code": "LVM11",
+   "level": "S",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Bulutda (AWS EBS, GCP PD) LVM kerakmi?",
+   "explanation": "Ko'pincha shart emas; kerak bo'lsa — bir nechta diskni birlashtirish yoki striping uchun."
+  },
+  {
+   "id": 30792,
+   "code": "LVM12",
+   "level": "S",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Server reboot'dan keyin VG ko'rinmayapti (`vgs` bo'sh). Diagnostika?",
+   "explanation": "PV skan, filter, aktivatsiya va metadata tekshiriladi."
+  },
+  {
+   "id": 30793,
+   "code": "LVM13",
+   "level": "St",
+   "type": "card",
+   "topic": "LVM",
+   "domain": "linux",
+   "section": "v1",
+   "question": "Prod DB serverlar uchun disk qatlamini qanday dizayn qilasan: LVM, RAID, FS, snapshot?",
+   "explanation": "Data, WAL, OS — alohida LV; monitoring va tiklash rejasi bilan."
+  }
+ ]
 }

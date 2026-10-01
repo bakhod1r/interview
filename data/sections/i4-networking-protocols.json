@@ -1,8 +1,8 @@
 {
  "id": "i4",
  "name": "Networking & protocols",
- "domain": "devops",
- "domainLabel": "DevOps",
+ "domain": "net",
+ "domainLabel": "Networking",
  "topics": [
   "Network",
   "TCP/IP",
@@ -15,7 +15,7 @@
    "level": "M",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "CDN nima qiladi va qanday sozlanadi?",
    "explanation": "Amaliy qoidalar: o'zgarmas fayllarga uzoq max-age va fayl nomida hash (app.9f2a.js), HTML'ga qisqa yoki no-cache; dinamik javoblarni ham qisqa TTL bilan keshlash mumkin (stale-while-revalidate). Ehtiyot: shaxsiy ma'lumotli javoblar cache'ga tushmasin (Cache-Control: private, Vary: Authorization)."
@@ -26,7 +26,7 @@
    "level": "M",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "Forward proxy va reverse proxy farqi?",
    "explanation": "Reverse proxy backend'ni tashqi dunyodan yashiradi va cross-cutting vazifalarni ilovadan oladi. Tipik zanjir: CDN → LB → reverse proxy → ilova. Muhim tafsilot: client IP ni X-Forwarded-For orqali uzatish va ilovada uni to'g'ri o'qish (rate limit va audit uchun)."
@@ -37,7 +37,7 @@
    "level": "J",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "L4 va L7 load balancer farqi?",
    "explanation": "L7 kerak bo'lgan holat: /api → servis A, /admin → servis B, canary uchun header bo'yicha bo'lish. L4 — oddiy TCP servis (DB proxy, gRPC stream) yoki maksimal throughput. Kubernetes'da Service (L4) va Ingress/Gateway (L7)."
@@ -48,7 +48,7 @@
    "level": "M",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "Failover'ni faqat DNS o'zgartirish bilan qilishning muammosi?",
    "explanation": "Rejalashtirilgan o'tishdan oldin TTL'ni pasaytirish (60s) — standart amaliyot, lekin hamma resolver hurmat qilmaydi. Tezroq yechimlar: anycast IP, LB level'ida qayta yo'naltirish, health check bilan avtomatik target o'zgarishi. Uzoq yashaydigan TCP connection'lar DNS o'zgarishini umuman sezmaydi — ularni uzish kerak."
@@ -59,7 +59,7 @@
    "level": "M",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "mTLS (mutual TLS) oddiy TLS'dan nimasi bilan farq qiladi?",
    "explanation": "Oddiy TLS'da faqat server o'zini tanitadi (brauzer stsenariysi). Ichki network'da 'network ichida bo'lsa ishonamiz' — eskirgan model (zero trust). mTLS servis identifikatsiyasini beradi, lekin sertifikat rotatsiyasi kerak — service mesh yoki SPIFFE buni avtomatlashtiradi."
@@ -70,7 +70,7 @@
    "level": "S",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "A → B → C zanjiri. A timeout 10s, B timeout 10s, C sekinlashdi. Nima bo'ladi?",
    "explanation": "Timeout'lar ichma-ich kamayib borishi kerak (10s → 3s → 1s), aks holda cascading failure. Retry bilan birga bo'lsa yanada yomon: har qadam 3 marta urinsa, 3 qadamda 27 ta query — retry amplification. Yechim: deadline (gRPC'da bor), retry budget, circuit breaker."
@@ -81,7 +81,7 @@
    "level": "J",
    "type": "card",
    "topic": "TCP/IP",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "TCP va UDP farqi?",
    "explanation": "UDP mos keladigan joylar: video/ovozli qo'ng'iroq (eski paket keraksiz), DNS, o'yin, QUIC (HTTP/3 ham UDP ustida — ishonchlilikni o'zi amalga oshiradi). TCP'da 'ishonchlilik' latency narxiga keladi: paket yo'qolsa qayta yuborish kutiladi va butun oqim to'xtaydi (head-of-line blocking)."
@@ -92,7 +92,7 @@
    "level": "J",
    "type": "card",
    "topic": "TCP/IP",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "TCP connection qanday o'rnatiladi?",
    "explanation": "Har yangi connection kamida bitta round-trip (RTT) — TLS bo'lsa yana qo'shiladi. Shuning uchun keep-alive va connection pool'i muhim: har query'ga yangi connection ochish uzoq masofada juda qimmat. Serverda TIME_WAIT ko'payishi va ephemeral port tugashi — yuqori yukdagi klassik muammo."
@@ -103,7 +103,7 @@
    "level": "M",
    "type": "card",
    "topic": "TLS",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "TLS qo'l berishda (handshake) nima sodir bo'ladi?",
    "explanation": "TLS 1.3 qo'l berishni 1-RTT ga qisqartirdi (0-RTT ham bor, lekin replay xavfi tufayli ehtiyotkorlik talab qiladi). Asimmetrik kriptografiya faqat key kelishuvi uchun — qolgani simmetrik (tez). Forward secrecy: ECDHE tufayli server key'i keyin sizib chiqsa ham eski trafik ochilmaydi. mTLS'da client ham sertifikat beradi."
@@ -114,7 +114,7 @@
    "level": "S",
    "type": "card",
    "topic": "TCP/IP",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "Servis ko'p chiquvchi ulanish qiladi va `connect: cannot assign requested address` xatosi keladi. Sabab?",
    "explanation": "Har ulanish (src IP, src port, dst IP, dst port) to'rtligi bilan aniqlanadi; bir xil dst uchun ~28k ephemeral port. Yechim tartibi: (1) HTTP client'da `Transport` qayta ishlatish va `MaxIdleConnsPerHost` oshirish — Go'da har request'da yangi client yaratish klassik xato, (2) keep-alive, (3) port diapazonini kengaytirish, (4) NAT'da SNAT pool. `tw_reuse` — palliativ."
@@ -125,7 +125,7 @@
    "level": "S",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "Kubernetes'da DNS so'rovlar sekin va ba'zan 5s kechikadi. Klassik sabab?",
    "explanation": "Tashqi domenga (`api.stripe.com`) so'rov avval `.svc.cluster.local` variantlari bilan sinaladi — ortiqcha yuk. Yechimlar: `dnsConfig` bilan `ndots:1`, FQDN ishlatish (nuqta bilan tugash), NodeLocal DNSCache, resolver keshi. 5 sekundli kechikish deyarli har doim DNS retry timeoutning izi."
@@ -136,7 +136,7 @@
    "level": "S",
    "type": "card",
    "topic": "TLS",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "TLS handshake narxini kamaytirish uchun eng samarali choralar?",
    "explanation": "Eng katta g'alaba — handshake'ni umuman qilmaslik (pool). TLS 1.3 to'liq handshake'ni 1-RTT ga tushiradi; 0-RTT replay xavfi bor, faqat idempotent GET uchun. ECDSA P-256 RSA-2048 dan tez imzo tekshiruvi beradi. OCSP stapling client tomonidagi qo'shimcha so'rovni yo'qotadi."
@@ -147,7 +147,7 @@
    "level": "S",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "Ma'lumot markazlar orasida throughput past, latency 80ms. Kanal keng. Sabab?",
    "explanation": "BDP = bandwidth × RTT: 1 Gbit/s × 80ms ≈ 10 MB 'uchishda' bo'lishi kerak. Oyna kichik bo'lsa oqim ACK kutib turadi. Choralar: window scaling va socket buffer'lar, bir nechta parallel oqim, BBR congestion control (loss-based emas), yoki ma'lumotni siqish/yaqinga ko'chirish. Ozgina loss ham yuqori RTT'da throughputni keskin tushiradi."
@@ -158,7 +158,7 @@
    "level": "S",
    "type": "card",
    "topic": "TCP/IP",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "TCP va UDP orasidagi tanlov qachon UDP tomonga o'tadi?",
    "explanation": "TCP bitta paket yo'qolsa keyingi kelgan ma'lumotni ham kutishga majbur qiladi (head-of-line) — real-time uchun yomon. QUIC (HTTP/3) UDP ustida oqimlarni mustaqil qilib shu muammoni yechadi va handshake'ni 1-RTT/0-RTT ga tushiradi. UDP tanlansa: retransmit, tartib, congestion control kimning zimmasida — aniq javob bo'lishi kerak."
@@ -169,7 +169,7 @@
    "level": "S",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "`ss -s` da `Recv-Q` katta. Bu nimani ko'rsatadi?",
    "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
@@ -180,7 +180,7 @@
    "level": "S",
    "type": "card",
    "topic": "Network",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "HTTP/1.1 keep-alive, HTTP/2 multiplexing va HTTP/3 farqi nimada?",
    "explanation": "Backend uchun amaliy oqibatlar: HTTP/2 bilan bitta ulanish — L4 balansirovka yuklamani tarqatmaydi (gRPC muammosi), va server tomonda `MaxConcurrentStreams` bo'g'iz bo'lishi mumkin. Yuqori paket yo'qotishli mobil tarmoqlarda HTTP/3 sezilarli yutuq beradi; ma'lumot markazi ichida esa farq kam."
@@ -191,7 +191,7 @@
    "level": "S",
    "type": "card",
    "topic": "TLS",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "mTLS'da sertifikat rotatsiyasi qanday tashkil qilinadi?",
    "explanation": "Nozik joylar: ilova sertifikatni ishga tushganda bir marta o'qisa — muddati tugagach barcha ulanish yiqiladi (klassik yarim tunlik incident); `tls.Config.GetCertificate`/`GetClientCertificate` bilan har handshake'da yangisi olinadi. CA rotatsiyasida ikki CA bir vaqtda ishonchli bo'lishi kerak (overlap), aks holda hamma yoqda uzilish."
@@ -202,7 +202,7 @@
    "level": "S",
    "type": "card",
    "topic": "TLS",
-   "domain": "devops",
+   "domain": "net",
    "section": "i4",
    "question": "TLS 1.3 handshake'da nima o'zgardi va 0-RTT xavfi nimada?",
    "explanation": "0-RTT ma'lumotini hujumchi yozib olib qayta yuborishi mumkin — `POST /transfer` bo'lsa ikki marta o'tkazma bo'lishi mumkin. Shuning uchun CDN/proxy'da 0-RTT faqat `GET`/idempotent yo'llarga ruxsat etiladi yoki umuman o'chiriladi. Forward secrecy: kalit o'g'irlansa ham o'tmishdagi trafikni ochib bo'lmaydi."

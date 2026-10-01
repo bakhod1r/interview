@@ -1,8 +1,8 @@
 {
  "id": "v2",
  "name": "Linux users, groups, permissions",
- "domain": "devops",
- "domainLabel": "DevOps",
+ "domain": "linux",
+ "domainLabel": "Linux",
  "topics": [
   "Linux users"
  ],
@@ -13,7 +13,7 @@
    "level": "J",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "/etc/passwd, /etc/shadow, /etc/group fayllarida nima saqlanadi?",
    "explanation": "passwd — user ro'yxati (parolsiz), shadow — parol hash'lari (faqat root o'qiydi), group — guruhlar."
@@ -24,7 +24,7 @@
    "level": "J",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "UID 0, system user (UID < 1000) va oddiy user farqi nima?",
    "explanation": "UID 0 — root, hamma tekshiruvlarni chetlab o'tadi. System userlar servislar uchun, login shell'siz."
@@ -35,7 +35,7 @@
    "level": "J",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "useradd, usermod, userdel, passwd buyruqlari nima qiladi?",
    "explanation": "useradd -m yaratadi, usermod -aG guruhga qo'shadi, userdel -r o'chiradi, passwd parol o'rnatadi."
@@ -46,7 +46,7 @@
    "level": "J",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "rwx ruxsatlari va 755 / 644 raqamlari nimani bildiradi?",
    "explanation": "r=4, w=2, x=1; uch raqam: owner, group, others. 755 = rwxr-xr-x, 644 = rw-r--r--."
@@ -57,7 +57,7 @@
    "level": "M",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "umask nima va 022 qanday ishlaydi?",
    "explanation": "umask — yangi fayl/dir dan olib tashlanadigan bitlar. 666&~022=644, 777&~022=755."
@@ -68,7 +68,7 @@
    "level": "M",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "setuid, setgid va sticky bit nima? Misol.",
    "explanation": "setuid — fayl owner huquqi bilan ishlaydi (passwd). setgid dir — guruh meros. sticky /tmp — faqat owner o'chiradi."
@@ -79,7 +79,7 @@
    "level": "M",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "sudo qanday ishlaydi va sudoers'ni qanday xavfsiz tahrirlash kerak?",
    "explanation": "sudo /etc/sudoers qoidasiga ko'ra boshqa user (root) sifatida buyruq ishlatadi; faqat visudo bilan tahrirla."
@@ -90,7 +90,7 @@
    "level": "M",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "su, su - va sudo -i farqi nima?",
    "explanation": "su — userni almashtiradi, env saqlanadi; su - / sudo -i — to'liq login shell, target env."
@@ -101,7 +101,7 @@
    "level": "M",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "Primary va supplementary group farqi nima?",
    "explanation": "Primary — passwd'dagi GID, yangi fayllar shu guruhni oladi. Supplementary — qo'shimcha a'zolik, ruxsat tekshiruvida ishlatiladi."
@@ -112,7 +112,7 @@
    "level": "M",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "ACL (setfacl/getfacl) qachon kerak?",
    "explanation": "Owner/group/others yetmaganda: aniq userga yoki guruhga qo'shimcha ruxsat. ls'da '+' belgisi."
@@ -123,7 +123,7 @@
    "level": "S",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "Real, effective va saved UID nima? Privilege drop qanday to'g'ri qilinadi?",
    "explanation": "Real — kim ishga tushirdi, effective — huquq tekshiruvi, saved — qaytish imkoniyati. To'g'ri drop: setgroups, setgid, keyin setuid."
@@ -134,7 +134,7 @@
    "level": "S",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "Linux capabilities nima va nega root o'rniga ishlatiladi?",
    "explanation": "Root huquqi ~40 bo'lakka bo'lingan (CAP_NET_BIND_SERVICE va h.k.). Faqat keraklisini ber — least privilege."
@@ -145,7 +145,7 @@
    "level": "S",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "Fayl 777 bo'lsa ham user uni o'qiy olmasligi mumkinmi? Sabablar.",
    "explanation": "Ha: yo'ldagi dir'da x yo'q, SELinux/AppArmor, ACL mask, mount opsiyalari, immutable atribut."
@@ -156,7 +156,7 @@
    "level": "S",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "Ko'p serverda userlarni markazlashtirilgan boshqarish qanday qilinadi?",
    "explanation": "LDAP/FreeIPA/AD + SSSD, yoki SSH CA sertifikatlari; config management bilan local userlar. Lokal qo'lda useradd yo'q."
@@ -167,7 +167,7 @@
    "level": "St",
    "type": "card",
    "topic": "Linux users",
-   "domain": "devops",
+   "domain": "linux",
    "section": "v2",
    "question": "Container ichida root ishlatish xavfi va user namespaces qanday yordam beradi?",
    "explanation": "Container root = host UID 0 (userns bo'lmasa); kernel bug yoki noto'g'ri mount host'ni buzadi. userns container 0 ni host'dagi yuqori UID'ga map qiladi."

@@ -23,7 +23,12 @@
     "alg": "Algorithms",
     "soft": "Behavioral",
     "sec": "Security",
-    "devops": "DevOps"
+    "linux": "Linux",
+    "cont": "Containers & K8s",
+    "cicd": "CI/CD",
+    "obs": "Observability",
+    "net": "Networking",
+    "cloud": "Cloud"
   },
   "sections": [
     {
@@ -14513,8 +14518,8 @@
     {
       "id": "v1",
       "name": "LVM: PV, VG, LV",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "linux",
+      "domainLabel": "Linux",
       "topics": [
         "LVM"
       ],
@@ -14525,7 +14530,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "LVM'ning uch qatlami — PV, VG, LV — nima?",
           "explanation": "Tartib: `pvcreate /dev/sdb` -> `vgcreate data /dev/sdb` -> `lvcreate -L 50G -n pg data` -> `mkfs.ext4 /dev/data/pg`. Ko'rish: `pvs`, `vgs`, `lvs`, `lsblk`. Disk hovuzga bo'linadi PE (physical extent, default 4MiB) bo'laklarida."
@@ -14536,7 +14541,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "LVM qaysi kernel mexanizmi ustida ishlaydi?",
           "explanation": "LV'lar /dev/mapper/vg-lv sifatida ko'rinadi. `dmsetup ls` — device-mapper qurilmalari."
@@ -14547,7 +14552,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "PE (physical extent) nima?",
           "explanation": "LV hajmi PE soni bilan o'lchanadi: `lvextend -l +100%FREE` — extent'lar bilan."
@@ -14558,7 +14563,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "VG'ga yangi disk qo'shish buyrug'i?",
           "explanation": "Avval `pvcreate /dev/sdc`, keyin `vgextend`. Tekshirish: `vgs` (VFree)."
@@ -14569,7 +14574,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "`lvs` katta hajm ko'rsatadi, `df` esa eski. Sabab?",
           "explanation": "`resize2fs` / `xfs_growfs` yoki boshidan `lvextend -r`."
@@ -14580,7 +14585,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "PV, VG, LV ni noldan yaratish ketma-ketligi (ikki disk: /dev/sdb, /dev/sdc)?",
           "explanation": "`pvcreate` diskni belgilaydi, `vgcreate` hovuz yig'adi, `lvcreate` undan bo'lak kesadi, keyin `mkfs` va `mount`."
@@ -14591,7 +14596,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "`pvs`, `vgs`, `lvs` va `pvdisplay/vgdisplay/lvdisplay` farqi?",
           "explanation": "`*s` — qisqa jadval, `*display` — batafsil."
@@ -14602,7 +14607,7 @@
           "level": "J",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "`/dev/vg0/root` va `/dev/mapper/vg0-root` — farqi bormi?",
           "explanation": "Ikkalasi bir device-mapper qurilmasiga symlink."
@@ -14613,7 +14618,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "LVM nima beradi?",
           "explanation": "Disk kengaytirish oqimi: bulutda diskni kattalashtirish -> `growpart` -> `pvresize` -> `lvextend -r -L +10G /dev/vg/lv` (-r fayl tizimini ham kengaytiradi). LVM'siz ham: growpart + resize2fs / xfs_growfs."
@@ -14624,7 +14629,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Serverda /var 95% to'lgan, u LVM ustida ext4. VG'da bo'sh joy bor. Downtime'siz kengaytirishning to'g'ri yo'li?",
           "explanation": "Klassik xato: `lvextend` qilib, fayl tizimini kattalashtirishni unutish — `lvs` katta, `df` eski. ext4 va XFS online kengayadi. Kichraytirish: ext4 faqat unmount qilib (`e2fsck` + `resize2fs`), XFS umuman kichraymaydi. VG'da joy bo'lmasa: yangi disk -> `pvcreate` -> `vgextend vg0 /dev/sdc`. Cloud'da disk kattalashtirilsa: `growpart` + `pvresize`."
@@ -14635,7 +14640,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "LVM snapshot qanday ishlaydi va uning xavfi nima?",
           "explanation": "`lvcreate -s -L 10G -n db_snap /dev/vg0/db`. Ishlatilish: backup oldidan bir lahzalik barqaror holat, yangilanishdan oldin qaytish nuqtasi (`lvconvert --merge`). Snapshot o'sha VG/disklarda — disk o'lsa ikkalasi ham yo'qoladi, shuning uchun backup emas. DB uchun: avval flush/freeze (`fsfreeze` yoki DB backup rejimi). Thin pool'da snapshot'lar arzonroq, lekin pool to'lib qolishini monitoring qilish shart."
@@ -14646,7 +14651,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Cloud VM'da root disk 20G dan 50G ga kattalashtirildi (LVM: /dev/sda3 -> vg0/root). `df -h` hali 20G. To'g'ri ketma-ketlik?",
           "explanation": "Har qatlam o'z hajmini alohida biladi: disk -> partition -> PV -> LV -> FS. Qaysi qatlam kattalashmaganini `lsblk`, `pvs` (PFree), `vgs` (VFree), `lvs`, `df` bilan ketma-ket tekshirish. `-l +100%FREE` — VG'dagi hamma bo'sh extent'lar."
@@ -14657,7 +14662,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Linear LV ikki diskka yoyilgan. Bitta disk o'ldi. Natija?",
           "explanation": "LVM default'da redundancy bermaydi. Himoya: `--type raid1` yoki mdadm ostida."
@@ -14668,7 +14673,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "LVM metadata backup'i qayerda va qanday tiklanadi?",
           "explanation": "Har o'zgarishdan keyin avtomatik saqlanadi; /etc/lvm/archive — tarix."
@@ -14679,7 +14684,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "LV'ni kichraytirish (shrink) — qanday va qanday xavf bor?",
           "explanation": "Avval fayl tizimini, keyin LV'ni; XFS kichraymaydi."
@@ -14690,7 +14695,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "`lvextend -l +100%FREE` va `-L +10G` farqi? `-r` flagi nima qiladi?",
           "explanation": "`-l` — extent/foiz, `-L` — hajm; `-r` FS'ni ham kengaytiradi."
@@ -14701,7 +14706,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Diskni VG'dan chiqarish kerak (eskirgan disk). Downtime'siz qanday?",
           "explanation": "`pvmove` extent'larni boshqa PV'ga ko'chiradi, keyin `vgreduce`."
@@ -14712,7 +14717,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Thin provisioning (thin pool) nima va xavfi?",
           "explanation": "Joy yozilganda ajratiladi; overcommit — pool to'lsa LV'lar qotadi."
@@ -14723,7 +14728,7 @@
           "level": "M",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Linear, striped va mirror (raid1) LV farqi?",
           "explanation": "Linear — ketma-ket, striped — parallel (tez, xavfli), raid1 — nusxa."
@@ -14734,7 +14739,7 @@
           "level": "S",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "LVM snapshot bilan izchil (consistent) DB backup qanday olinadi?",
           "explanation": "Snapshot crash-consistent; DB'ni freeze/checkpoint qilib olinadi, tez o'chiriladi."
@@ -14745,7 +14750,7 @@
           "level": "S",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Snapshot'dan LV'ni orqaga qaytarish (rollback) qanday?",
           "explanation": "`lvconvert --merge` — snapshot holatiga qaytaradi."
@@ -14756,7 +14761,7 @@
           "level": "S",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Bulutda (AWS EBS, GCP PD) LVM kerakmi?",
           "explanation": "Ko'pincha shart emas; kerak bo'lsa — bir nechta diskni birlashtirish yoki striping uchun."
@@ -14767,7 +14772,7 @@
           "level": "S",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Server reboot'dan keyin VG ko'rinmayapti (`vgs` bo'sh). Diagnostika?",
           "explanation": "PV skan, filter, aktivatsiya va metadata tekshiriladi."
@@ -14778,7 +14783,7 @@
           "level": "St",
           "type": "card",
           "topic": "LVM",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v1",
           "question": "Prod DB serverlar uchun disk qatlamini qanday dizayn qilasan: LVM, RAID, FS, snapshot?",
           "explanation": "Data, WAL, OS — alohida LV; monitoring va tiklash rejasi bilan."
@@ -14788,8 +14793,8 @@
     {
       "id": "v2",
       "name": "Linux users, groups, permissions",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "linux",
+      "domainLabel": "Linux",
       "topics": [
         "Linux users"
       ],
@@ -14800,7 +14805,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "/etc/passwd, /etc/shadow, /etc/group fayllarida nima saqlanadi?",
           "explanation": "passwd — user ro'yxati (parolsiz), shadow — parol hash'lari (faqat root o'qiydi), group — guruhlar."
@@ -14811,7 +14816,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "UID 0, system user (UID < 1000) va oddiy user farqi nima?",
           "explanation": "UID 0 — root, hamma tekshiruvlarni chetlab o'tadi. System userlar servislar uchun, login shell'siz."
@@ -14822,7 +14827,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "useradd, usermod, userdel, passwd buyruqlari nima qiladi?",
           "explanation": "useradd -m yaratadi, usermod -aG guruhga qo'shadi, userdel -r o'chiradi, passwd parol o'rnatadi."
@@ -14833,7 +14838,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "rwx ruxsatlari va 755 / 644 raqamlari nimani bildiradi?",
           "explanation": "r=4, w=2, x=1; uch raqam: owner, group, others. 755 = rwxr-xr-x, 644 = rw-r--r--."
@@ -14844,7 +14849,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "umask nima va 022 qanday ishlaydi?",
           "explanation": "umask — yangi fayl/dir dan olib tashlanadigan bitlar. 666&~022=644, 777&~022=755."
@@ -14855,7 +14860,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "setuid, setgid va sticky bit nima? Misol.",
           "explanation": "setuid — fayl owner huquqi bilan ishlaydi (passwd). setgid dir — guruh meros. sticky /tmp — faqat owner o'chiradi."
@@ -14866,7 +14871,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "sudo qanday ishlaydi va sudoers'ni qanday xavfsiz tahrirlash kerak?",
           "explanation": "sudo /etc/sudoers qoidasiga ko'ra boshqa user (root) sifatida buyruq ishlatadi; faqat visudo bilan tahrirla."
@@ -14877,7 +14882,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "su, su - va sudo -i farqi nima?",
           "explanation": "su — userni almashtiradi, env saqlanadi; su - / sudo -i — to'liq login shell, target env."
@@ -14888,7 +14893,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "Primary va supplementary group farqi nima?",
           "explanation": "Primary — passwd'dagi GID, yangi fayllar shu guruhni oladi. Supplementary — qo'shimcha a'zolik, ruxsat tekshiruvida ishlatiladi."
@@ -14899,7 +14904,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "ACL (setfacl/getfacl) qachon kerak?",
           "explanation": "Owner/group/others yetmaganda: aniq userga yoki guruhga qo'shimcha ruxsat. ls'da '+' belgisi."
@@ -14910,7 +14915,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "Real, effective va saved UID nima? Privilege drop qanday to'g'ri qilinadi?",
           "explanation": "Real — kim ishga tushirdi, effective — huquq tekshiruvi, saved — qaytish imkoniyati. To'g'ri drop: setgroups, setgid, keyin setuid."
@@ -14921,7 +14926,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "Linux capabilities nima va nega root o'rniga ishlatiladi?",
           "explanation": "Root huquqi ~40 bo'lakka bo'lingan (CAP_NET_BIND_SERVICE va h.k.). Faqat keraklisini ber — least privilege."
@@ -14932,7 +14937,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "Fayl 777 bo'lsa ham user uni o'qiy olmasligi mumkinmi? Sabablar.",
           "explanation": "Ha: yo'ldagi dir'da x yo'q, SELinux/AppArmor, ACL mask, mount opsiyalari, immutable atribut."
@@ -14943,7 +14948,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "Ko'p serverda userlarni markazlashtirilgan boshqarish qanday qilinadi?",
           "explanation": "LDAP/FreeIPA/AD + SSSD, yoki SSH CA sertifikatlari; config management bilan local userlar. Lokal qo'lda useradd yo'q."
@@ -14954,7 +14959,7 @@
           "level": "St",
           "type": "card",
           "topic": "Linux users",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v2",
           "question": "Container ichida root ishlatish xavfi va user namespaces qanday yordam beradi?",
           "explanation": "Container root = host UID 0 (userns bo'lmasa); kernel bug yoki noto'g'ri mount host'ni buzadi. userns container 0 ni host'dagi yuqori UID'ga map qiladi."
@@ -14964,8 +14969,8 @@
     {
       "id": "v3",
       "name": "Package management",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "linux",
+      "domainLabel": "Linux",
       "topics": [
         "Package management"
       ],
@@ -14976,7 +14981,7 @@
           "level": "J",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "apt va dnf/yum nima? Asosiy buyruqlar.",
           "explanation": "Debian/Ubuntu — apt (.deb), RHEL/Fedora — dnf (.rpm). install, remove, update, upgrade, search."
@@ -14987,7 +14992,7 @@
           "level": "J",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "apt update va apt upgrade farqi nima?",
           "explanation": "update — repo indeksini yangilaydi (hech narsa o'rnatmaydi). upgrade — o'rnatilgan paketlarni yangi versiyaga ko'taradi."
@@ -14998,7 +15003,7 @@
           "level": "J",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "dpkg va apt farqi; rpm va dnf farqi?",
           "explanation": "dpkg/rpm — past daraja, bitta faylni o'rnatadi, bog'liqlik hal qilmaydi. apt/dnf — repo + dependency resolver."
@@ -15009,7 +15014,7 @@
           "level": "M",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Repository va GPG kalit qanday qo'shiladi? Nega imzo muhim?",
           "explanation": "Repo /etc/apt/sources.list.d ga, kalit /etc/apt/keyrings ga, signed-by bilan bog'lanadi. Imzo — MITM/zararli paketdan himoya."
@@ -15020,7 +15025,7 @@
           "level": "M",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Paket versiyasini qanday qotirish (pin/hold) mumkin?",
           "explanation": "apt-mark hold, apt install pkg=ver, /etc/apt/preferences pin; dnf versionlock."
@@ -15031,7 +15036,7 @@
           "level": "M",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Dockerfile'da apt-get to'g'ri qanday ishlatiladi?",
           "explanation": "update va install bitta RUN'da, --no-install-recommends, keyin /var/lib/apt/lists o'chiriladi."
@@ -15042,7 +15047,7 @@
           "level": "M",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Shared library bog'liqligi: ldd va 'cannot open shared object file' xatosi.",
           "explanation": "Binar kerakli .so ni topmaydi. ldd bilan tekshir, paketni o'rnat yoki ldconfig / LD_LIBRARY_PATH."
@@ -15053,7 +15058,7 @@
           "level": "M",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Snap, Flatpak, AppImage va distro paketlari farqi?",
           "explanation": "Snap/Flatpak — bog'liqliklar ichida, sandbox, distrodan mustaqil; katta hajm. Distro paket — umumiy kutubxonalar, distro xavfsizlik yangilanishi."
@@ -15064,7 +15069,7 @@
           "level": "S",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Semantic versioning va dependency hell — qanday yechiladi?",
           "explanation": "MAJOR.MINOR.PATCH; konflikt versiyalar. Lock fayl, pinning, isolation (container, venv), monorepo."
@@ -15075,7 +15080,7 @@
           "level": "S",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Unattended security updates prod'da: foyda va xavf?",
           "explanation": "Foyda — CVE tez yopiladi. Xavf — kutilmagan restart/regressiya. Faqat security repo, staged rollout, reboot oynasi."
@@ -15086,7 +15091,7 @@
           "level": "S",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Internal paket mirror / artifact repository nega kerak?",
           "explanation": "Tashqi repo yiqilsa build to'xtamaydi, versiyalar muzlatiladi, audit, tezlik, supply chain nazorati."
@@ -15097,7 +15102,7 @@
           "level": "St",
           "type": "card",
           "topic": "Package management",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v3",
           "question": "Supply chain hujumlaridan paketlarni qanday himoya qilasan?",
           "explanation": "Imzo tekshiruvi, lock/hash pin, SBOM, provenance (SLSA, Sigstore), internal mirror, minimal base image, skanerlash."
@@ -15107,8 +15112,8 @@
     {
       "id": "v4",
       "name": "Linux filesystems",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "linux",
+      "domainLabel": "Linux",
       "topics": [
         "Filesystems"
       ],
@@ -15119,7 +15124,7 @@
           "level": "J",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "Linux katalog ierarxiyasi (FHS): /etc, /var, /usr, /opt, /tmp nima uchun?",
           "explanation": "/etc — config, /var — o'zgaruvchan ma'lumot (log, db), /usr — o'rnatilgan dastur, /opt — 3rd party, /tmp — vaqtinchalik."
@@ -15130,7 +15135,7 @@
           "level": "J",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "mount va /etc/fstab nima? Nega UUID ishlatiladi?",
           "explanation": "mount — qurilmani dir'ga ulaydi. fstab — boot'da avtomatik. /dev/sdX nomi o'zgarishi mumkin, UUID o'zgarmaydi."
@@ -15141,7 +15146,7 @@
           "level": "J",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "df va du farqi nima?",
           "explanation": "df — FS darajasida bo'sh/band joy. du — fayl/dir hajmini yig'adi."
@@ -15152,7 +15157,7 @@
           "level": "M",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "ext4, XFS va Btrfs farqi; qachon qaysi?",
           "explanation": "ext4 — universal, shrink mumkin. XFS — katta fayl, parallel IO, shrink yo'q (RHEL default). Btrfs — CoW, snapshot, checksum."
@@ -15163,7 +15168,7 @@
           "level": "M",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "Disk to'liq emas (df), lekin 'No space left on device'. Sabab?",
           "explanation": "Inode tugagan (ko'p kichik fayl), reserved blocks, yoki o'chirilgan lekin ochiq fayl boshqa holat. df -i tekshir."
@@ -15174,7 +15179,7 @@
           "level": "M",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "O'chirilgan fayl joyni bo'shatmayapti. Nega va qanday hal qilinadi?",
           "explanation": "Process faylni ochiq ushlab turibdi; inode link soni 0 lekin fd bor. lsof +L1, process restart yoki fd'ni truncate."
@@ -15185,7 +15190,7 @@
           "level": "M",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "Journaling nima va ext4 data=ordered rejimi nimani kafolatlaydi?",
           "explanation": "Metadata o'zgarishi avval jurnalga yoziladi — crash'dan keyin FS izchil. ordered: data metadata'dan oldin diskka tushadi."
@@ -15196,7 +15201,7 @@
           "level": "M",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "tmpfs, procfs, sysfs nima?",
           "explanation": "tmpfs — RAM'dagi FS. procfs (/proc) — process va kernel holati. sysfs (/sys) — qurilma va driver parametrlari."
@@ -15207,7 +15212,7 @@
           "level": "M",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "Foydali mount opsiyalari: noatime, noexec, nosuid, nodev, ro.",
           "explanation": "noatime — o'qishda atime yozilmaydi (IO kamayadi). noexec/nosuid/nodev — /tmp kabi joylarda xavfsizlik."
@@ -15218,7 +15223,7 @@
           "level": "S",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "fsync, page cache va 'yozildi' degan nima? Ma'lumot qachon yo'qolishi mumkin?",
           "explanation": "write() page cache'ga yozadi; diskka keyin. fsync gacha crash = yo'qotish. Yangi faylda dir'ni ham fsync qil."
@@ -15229,7 +15234,7 @@
           "level": "S",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "XFS'ni kichraytirish kerak bo'lsa nima qilasan?",
           "explanation": "XFS shrink qo'llamaydi. Yangi kichik LV/disk, xfsdump/rsync bilan ko'chirish, mount almashtirish."
@@ -15240,7 +15245,7 @@
           "level": "S",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "Copy-on-write FS (Btrfs/ZFS) va DB: qanday muammo bor?",
           "explanation": "CoW random write'da fragmentatsiya va write amplification beradi. DB uchun nodatacow/chattr +C yoki ZFS recordsize tuning."
@@ -15251,7 +15256,7 @@
           "level": "S",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "FS buzilganda (fsck) qanday tiklash va xavfsizlik qoidalari?",
           "explanation": "Faqat unmount holatda fsck/xfs_repair. Avval disk image/snapshot. dmesg'da IO xatolarini tekshir."
@@ -15262,7 +15267,7 @@
           "level": "St",
           "type": "card",
           "topic": "Filesystems",
-          "domain": "devops",
+          "domain": "linux",
           "section": "v4",
           "question": "Ko'p node bitta FS'ga yozishi kerak: NFS, CephFS, object storage — qanday tanlaysan?",
           "explanation": "NFS — oddiy, bitta server, lock/cache muammolari. CephFS/GlusterFS — taqsimlangan POSIX. Object storage (S3) — eng scalable, POSIX emas."
@@ -15272,8 +15277,8 @@
     {
       "id": "i1",
       "name": "Containers & Kubernetes",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "cont",
+      "domainLabel": "Containers & K8s",
       "topics": [
         "Docker",
         "Kubernetes"
@@ -15285,7 +15290,7 @@
           "level": "J",
           "type": "card",
           "topic": "Docker",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Konteyner va virtual mashina farqi?",
           "explanation": "Konteyner — o'ralgan jarayon, 'kichik VM' emas. Oqibatlari: yadro umumiy (security chegarasi zaifroq — shuning uchun ko'p tenantli muhitda gVisor/Firecracker), host yadrosiga bog'liqlik (Linux image Windows yadrosida ishlamaydi). Image — qatlamli fayl tizimi, konteyner esa shu image'dan ishga tushgan jarayon."
@@ -15296,7 +15301,7 @@
           "level": "J",
           "type": "card",
           "topic": "Docker",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Nega har kod o'zgarishida build 5 daqiqa ketadi? Tuzatish?",
           "snippet": "FROM node:20\nWORKDIR /app\nCOPY . .\nRUN npm ci\nRUN npm run build\nCMD [\"node\", \"dist/main.js\"]",
@@ -15308,7 +15313,7 @@
           "level": "M",
           "type": "card",
           "topic": "Docker",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Production image hajmini kamaytirishning eng samarali yo'li?",
           "explanation": "Katta image — sekin deploy, sekin autoscaling, katta hujum yuzasi. Qo'shimcha: slim/alpine yoki distroless base, RUN'larni birlashtirib cache'ni o'chirish (apt-get clean), .dockerignore. Go uchun yakuniy image scratch/distroless'da bir necha MB bo'lishi mumkin."
@@ -15319,7 +15324,7 @@
           "level": "M",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Liveness va readiness probe farqi?",
           "explanation": "Tipik xato: liveness probe'ni DB'ga bog'lash — DB bir daqiqa sekinlashса, Kubernetes hamma podlarni restart qilib incidentni kuchaytiradi. Qoida: liveness faqat 'jarayon tirikmi' (yengil, bog'liqliksiz), readiness bog'liqliklarni tekshirishi mumkin. Sekin startlar uchun startupProbe."
@@ -15330,7 +15335,7 @@
           "level": "M",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Pod tez-tez OOMKilled bo'lyapti va latency sakrayapti. Bu manifestda nima muammo?",
           "snippet": "resources:\n  requests:\n    cpu: \"2\"\n    memory: \"2Gi\"\n  limits:\n    cpu: \"2\"\n    memory: \"256Mi\"",
@@ -15342,7 +15347,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Rolling update paytida qisqa uzilishlar bo'lyapti. Qaysi to'plam buni yopadi?",
           "explanation": "Uzilishning ikki sababi: 1) yangi pod tayyor bo'lmasdan trafik oldi (readiness yo'q), 2) eski pod query o'rtasida o'ldirildi (graceful shutdown yo'q). PDB node drain/cluster upgrade paytida bir vaqtda qancha pod yo'qolishini cheklaydi. terminationGracePeriodSeconds shutdown vaqtidan katta bo'lsin."
@@ -15353,7 +15358,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Deployment va StatefulSet farqi? Postgres'ni Kubernetes'da ishlatasizmi?",
           "explanation": "Senior javob: 'mumkin, lekin kerakmi?' Konteyner DB'ni sekinlashtirmaydi — murakkablik operatsiyada. Test/dev muhit uchun — bemalol."
@@ -15364,7 +15369,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Go servis podda deploy paytida 5xx beradi, keyin tinchiydi. Eng ehtimolli sabab va yechim?",
           "explanation": "Ikki tomonli muammo: (1) start — readiness probe haqiqiy dependency tayyorligini (DB pool, migratsiya, kesh warm) tekshirishi kerak; (2) stop — `preStop` sleep (5-15s) + graceful shutdown: SIGTERM'da yangi ulanish qabul qilinmaydi, mavjudlari tugatiladi, `terminationGracePeriodSeconds` shundan katta. Endpoint propagatsiyasi asinxron — shuning uchun sleep kerak."
@@ -15375,7 +15380,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Go servisga `limits.memory: 512Mi` qo'yilgan, OOMKilled bo'lyapti. To'g'ri chora?",
           "explanation": "Go GC default soft limitni bilmaydi: heap 2x o'sib limitdan oshadi va cgroup OOM killer o'ldiradi (Go panic ham bermaydi). `GOMEMLIMIT=400MiB` soft limit — GC agressivlashadi. `GOGC` bilan birga ishlatiladi. Ustiga `GOMAXPROCS` CPU limitga moslanishi kerak (automaxprocs), aks holda throttling va latency."
@@ -15386,7 +15391,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "CPU `limits` qo'yilgan podda p99 latency portlaydi, CPU ishlatish esa 40%. Sabab?",
           "explanation": "O'rtacha ishlatish past bo'lishi mumkin, lekin burst paytda kvota tugaydi. Yechimlar: limitni oshirish yoki latency-sezgir servisda CPU limitni olib tashlash (faqat `requests` + to'g'ri sizing), GOMAXPROCS'ni kvotaga moslash, goroutine parallelizmini kamaytirish. `container_cpu_cfs_throttled_seconds_total` — asosiy dalil."
@@ -15397,7 +15402,7 @@
           "level": "St",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "HPA CPU bo'yicha skale qiladi, lekin Kafka consumer lag o'sib ketyapti. To'g'ri yondashuv?",
           "explanation": "Consumer I/O'ga bog'liq bo'lishi mumkin — CPU signal bermaydi. KEDA lag'ni to'g'ridan-to'g'ri o'qib skale qiladi. Muhim cheklov: consumer'lar soni partition sonidan oshsa foyda yo'q (ortiqchasi bo'sh turadi) — demak partition soni oldindan rejalashtiriladi va rebalance narxi (stop-the-world) hisobga olinadi."
@@ -15408,7 +15413,7 @@
           "level": "S",
           "type": "card",
           "topic": "Docker",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Go servis uchun production image: qaysi qurilish to'g'ri?",
           "explanation": "Toolchain'li image: 1GB+ hajm, ko'p CVE, ichida kompilyator va shell — hujum yuzasi. Distroless/scratch bilan bir necha o'n MB. Eslatmalar: `scratch`da TLS uchun `ca-certificates` va zone ma'lumotlari ko'chiriladi, `CGO_ENABLED=0` static bo'lishi uchun, layer keshi uchun `go mod download` alohida qatlamda."
@@ -15419,7 +15424,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "`requests` va `limits` farqi va QoS klasslariga ta'siri?",
           "explanation": "Amaliy siyosat: xotirada `requests = limits` (Guaranteed) — chunki xotira siqilmaydigan resurs va OOM keladi; CPU'da `requests` aniq, `limits` ehtiyotkorlik bilan (latency-sezgir servisda throttling zarar qiladi). Klaster sig'imini rejalashtirishda `requests` yig'indisi muhim, `limits` esa overcommit darajasini belgilaydi."
@@ -15430,7 +15435,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "`livenessProbe` va `readinessProbe` ni noto'g'ri sozlash qanday incident keltiradi?",
           "explanation": "Qoida: liveness — 'jarayon o'zini tiklay olmaydigan holatda qotib qoldimi' (deadlock) uchun, faqat mahalliy tekshiruv; readiness — 'hozir trafik qabul qila olamanmi'; startupProbe — sekin ishga tushish uchun (liveness'ni erta o'ldirmasligi uchun). `failureThreshold` va `periodSeconds` real ish vaqtiga moslanadi."
@@ -15441,7 +15446,7 @@
           "level": "St",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Deploy paytida 100% mavjudlikni saqlash uchun qaysi obyektlar birga kerak?",
           "explanation": "PDB ayniqsa muhim: klaster avtoskaler yoki node yangilanishi bir vaqtda ko'p podni chiqarib tashlamasligi uchun. `maxUnavailable: 0` bilan yangi pod tayyor bo'lgach eskisi o'chadi. Bularsiz 'rolling update' amalda qisqa downtime yoki 5xx to'lqini beradi — eng ko'p uchraydigan 'sababsiz xatolar' manbasi."
@@ -15452,7 +15457,7 @@
           "level": "St",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Service trafikni podlarga qanday yetkazadi (kube-proxy)?",
           "explanation": "Amaliy oqibatlar: iptables rejimida minglab Service bo'lsa qoidalarni yangilash sekundlarga cho'ziladi (endpoint o'zgarishi kech yetadi — deploy paytida 5xx); IPVS/eBPF kattaroq klasterlarda barqarorroq. Balansirovka L4 darajasida — HTTP/2/gRPC uchun yetarli emas (ulanish darajasida taqsimlanadi), shuning uchun client-side LB yoki mesh kerak."
@@ -15463,7 +15468,7 @@
           "level": "S",
           "type": "card",
           "topic": "Kubernetes",
-          "domain": "devops",
+          "domain": "cont",
           "section": "i1",
           "question": "Service mesh (sidecar) qanday narxga ega va qachon oqlanadi?",
           "explanation": "Kichik tizimda (3-5 servis, bitta til) kutubxona darajasidagi yechim (gRPC interceptor + OTel) arzonroq va shaffofroq. Mesh'ning haqiqiy qiymati — siyosatni koddan ajratish va ko'p jamoada bir xil xatti-harakat. Sidecarsiz variantlar (ambient mesh, eBPF) narxni kamaytiradi, lekin yetuklik darajasi tekshirilishi kerak."
@@ -15473,8 +15478,8 @@
     {
       "id": "i2",
       "name": "CI/CD & deploy",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "cicd",
+      "domainLabel": "CI/CD",
       "topics": [
         "CI/CD",
         "Deploy",
@@ -15489,7 +15494,7 @@
           "level": "J",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Continuous Integration nimani anglatadi?",
           "explanation": "CI — branch uzoq yashamasligi haqida. CD ikki ma'noda: Continuous Delivery (har build deploy qilishga tayyor, tugma bosiladi) va Continuous Deployment (avtomatik production'ga). Uzoq feature branch — merge do'zaxi; yechim: kichik PR + feature flag."
@@ -15500,7 +15505,7 @@
           "level": "M",
           "type": "card",
           "topic": "Deploy",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Blue-green va canary deploy farqi?",
           "explanation": "Blue-green: tez rollback, lekin xato hamma userga birdan tegadi; ikki barobar resurs. Canary: xato ta'siri kichik, lekin trafik bo'lish mexanizmi va avtomatik metrika tahlili kerak; ikki versiya birga ishlaydi — DB sxemasi ikkalasiga mos bo'lishi shart (expand-contract). Uchinchisi — rolling update (Kubernetes default)."
@@ -15511,7 +15516,7 @@
           "level": "M",
           "type": "card",
           "topic": "Secrets",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Parol, API key va sertifikatlarni qanday boshqarasiz?",
           "explanation": "Amaliy signal: 'git'ga tushib qolsa nima qilasiz?' — javob: darhol revoke/rotate, keyin tarixni tozalash (tozalash yetarli emas, key allaqachon ochiq)."
@@ -15522,7 +15527,7 @@
           "level": "S",
           "type": "card",
           "topic": "Deploy",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Qaysi yondashuv to'g'ri: artefakt va muhitlar haqida?",
           "explanation": "Build once, deploy many: stage'da test qilingan narsa aynan prod'ga boradi. latest — aniqlikni yo'qotadi (qaysi kod ishlayotgani noma'lum, rollback qiyin); digest yoki semantik versiya bilan teglang. Konfiguratsiya image ichida emas, tashqarida (12-factor)."
@@ -15533,7 +15538,7 @@
           "level": "S",
           "type": "card",
           "topic": "Deploy",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "DB migratsiyasi deploy pipeline'ining qaysi qadamida bajarilishi kerak?",
           "explanation": "Senior signal: 'migratsiya va kod deploy'i bir atomik qadam emas' degan tushuncha. Ma'lumot o'chirish (DROP COLUMN) odatda bir necha kun/hafta keyin, kuzatuvdan so'ng."
@@ -15544,7 +15549,7 @@
           "level": "St",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Katta feature'ni uzoq branchda emas, feature flag bilan qilishning asosiy afzalligi?",
           "explanation": "Narxi: flaglar texnik qarz — muddati o'tganini o'chirish tartibi bo'lishi kerak, aks holda kodda o'nlab shart qoladi. Kill switch sifatida ham qimmatli: incidentda deploy'siz o'chirish. Flag holati kuzatiladigan va audit qilinadigan bo'lsin."
@@ -15555,7 +15560,7 @@
           "level": "St",
           "type": "card",
           "topic": "Deploy",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Feature flag tizimini va bosqichli rollout jarayonini loyihalang.",
           "explanation": "Staff signal: flagni release vositasi sifatida emas, xavfni boshqarish tizimi sifatida ko'rish va texnik qarzni boshqarish rejasini aytish."
@@ -15566,7 +15571,7 @@
           "level": "S",
           "type": "card",
           "topic": "Deploy",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Sxema o'zgarishi bo'lgan relizni zero-downtime chiqarish tartibi?",
           "explanation": "Rolling deploy paytida eski va yangi kod bir vaqtda ishlaydi — sxema ikkisiga ham mos bo'lishi shart (backward + forward compatible). PostgreSQL detallari: `CREATE INDEX CONCURRENTLY`, `ADD COLUMN` default bilan 11+ da tez, `NOT NULL`ni bosqichma-bosqich (CHECK NOT VALID → VALIDATE), uzun migratsiyalarga `lock_timeout` qo'yish."
@@ -15577,7 +15582,7 @@
           "level": "S",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Canary deploy qachon avtomatik rollback qilinishi kerak?",
           "explanation": "To'g'ri canary — statistik taqqoslash (baseline vs canary bir xil trafik shartida), mutlaq threshold emas. Argo Rollouts/Flagger shu analizni qiladi. Shart: metrikalar versiya yorlig'i bilan ajratilgan bo'lishi, qaror oynasi yetarli trafik yig'ishi, va rollback yo'li migratsiya bilan ham xavfsiz (shu sabab expand-contract)."
@@ -15588,7 +15593,7 @@
           "level": "S",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Feature flag va deploy ajratilishi nimani beradi?",
           "explanation": "Trunk-based development'ning kaliti. Narxi: flag qarzi — har flag uchun ega, muddat va tozalash rejasi kerak, aks holda kod branch portlashiga aylanadi. Kritik yo'nalishlarda flag o'qish default xavfsiz qiymat bilan (provider ishlamasa ham servis ishlaydi) va flag holati log/trace'ga yozilishi kerak."
@@ -15599,7 +15604,7 @@
           "level": "S",
           "type": "card",
           "topic": "Secrets",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Kubernetes'da sirlar: qaysi variant eng mustahkam?",
           "explanation": "K8s `Secret` default holatda etcd'da faqat base64 (shifrlanmagan, agar encryption-at-rest yoqilmagan bo'lsa) va RBAC noto'g'ri bo'lsa o'qiladi. Eng yaxshisi: DB uchun dinamik, qisqa muddatli credential (Vault) — leak bo'lsa ham tez o'lik; aks holda KMS bilan shifrlash, avtomatik rotation, va audit. Sirlar log'da va crash dump'da chiqmasligi tekshiriladi."
@@ -15610,7 +15615,7 @@
           "level": "St",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "CI 40 daqiqa ketadi, jamoa relizdan qo'rqadi. Qanday tuzatasiz?",
           "explanation": "Relizdan qo'rqish odatda sekin CI + flaky test + og'riqli rollback kombinatsiyasi. Uchtasi ham alohida hal qilinadi; faqat CI tezlashtirish yetmaydi."
@@ -15621,7 +15626,7 @@
           "level": "S",
           "type": "card",
           "topic": "Deploy",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Blue-green va canary orasidagi tanlov nimaga bog'liq?",
           "explanation": "Amalda ko'pincha canary tanlanadi, chunki bug faqat real trafikda ko'rinadi. Ikkisida ham asosiy cheklov — ma'lumot qatlami: sxema o'zgarishi expand-contract bilan qilinmasa rollback imkonsiz bo'ladi. Stateful servislarda (navbat consumer'lari) trafikni bo'lish qiyin, shuning uchun feature flag bilan boshqarish afzal."
@@ -15632,7 +15637,7 @@
           "level": "S",
           "type": "card",
           "topic": "Secrets",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "CI pipeline'da sirlar bilan ishlashda nima majburiy?",
           "explanation": "OIDC federatsiyasi (GitHub Actions → AWS/GCP) eng katta yutuq: uzoq yashovchi kalit umuman bo'lmaydi. Qo'shimcha xatarlar: PR'dan kelgan kod sirni chiqarib yuborishi (`pull_request_target` tuzog'i), artefaktlarda qolgan sirlar, va build log'lari. Sir aniqlansa rotation protsedurasi oldindan yozilgan bo'lishi kerak."
@@ -15643,7 +15648,7 @@
           "level": "St",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Build reproducibility (takrorlanuvchanlik) nega muhim?",
           "explanation": "Amaliy minimum: image tag sifatida commit SHA (mutable `latest` emas), `go.sum` bilan qotirilgan bog'liqliklar, bazaviy image digest bo'yicha (`@sha256:...`), va artefakt imzosi (cosign) + SBOM. Shunda incident paytida 'qaysi kod, qaysi bog'liqliklar' savoli sekundlarda javob topadi."
@@ -15654,7 +15659,7 @@
           "level": "J",
           "type": "card",
           "topic": "Git",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "`git merge` va `git rebase` farqi?",
           "explanation": "Oltin qoida: umumiy (push qilingan, boshqalar ishlatayotgan) branchni rebase qilmang — boshqalar tarixi buziladi. O'z feature branchingizni main ustiga rebase qilish odatiy. Majburiy push kerak bo'lsa `--force-with-lease` (boshqaning commitini ustidan yozib yubormaydi)."
@@ -15665,7 +15670,7 @@
           "level": "M",
           "type": "card",
           "topic": "Git",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Tasodifan secret (API kalit) commit qilinib, push bo'ldi. To'g'ri harakat?",
           "explanation": "Tarix tozalansa ham fork, klon, CI keshi, GitHub cache'da qolishi mumkin — shuning uchun rotatsiya birinchi. Oldini olish: pre-commit gitleaks/trufflehog, GitHub push protection, sirlarni .env + .gitignore emas, secret manager'da saqlash."
@@ -15676,7 +15681,7 @@
           "level": "M",
           "type": "card",
           "topic": "Git",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Qaysi commit bug keltirganini 500 ta commit ichidan tez topish?",
           "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.4.0\n# har qadamda test qilib: git bisect good | bad\n# yoki avtomatik:\ngit bisect run ./test.sh",
@@ -15688,7 +15693,7 @@
           "level": "S",
           "type": "card",
           "topic": "Git",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Trunk-based development va GitFlow — CI/CD uchun qaysi biri va nega?",
           "explanation": "DORA tadqiqotlari trunk-based'ni yuqori samarali jamoalar bilan bog'laydi. Talab: kuchli avtotestlar, main har doim deploy qilinadigan holatda, branch protection va majburiy CI."
@@ -15699,7 +15704,7 @@
           "level": "M",
           "type": "card",
           "topic": "GitOps",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "GitOps nima?",
           "explanation": "Afzalliklar: CI'ga klaster kalitlari berilmaydi (pull), audit — git log, rollback — git revert, drift avtomatik tuzatiladi. CI image build qilib, config repo'dagi image tegini yangilaydi; CD'ni agent bajaradi."
@@ -15710,7 +15715,7 @@
           "level": "M",
           "type": "card",
           "topic": "GitOps",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Helm chart'da `values.yaml` va muhitlar?",
           "explanation": "Alternativa — Kustomize (base + overlays, shablonsiz patch). `helm upgrade --install --atomic` xato bo'lsa o'zi rollback qiladi. Sirlarni values'da ochiq saqlamang: sealed-secrets, external-secrets yoki SOPS."
@@ -15721,7 +15726,7 @@
           "level": "S",
           "type": "card",
           "topic": "GitOps",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Noldan servis uchun CI/CD pipeline'ni loyihala: commit'dan production'gacha.",
           "explanation": "Intervyuda ta'kidlanadigan jihatlar: immutable artefakt (bir image hamma muhitdan o'tadi), tez rollback, xavfsizlik (supply chain), va o'lchanadigan natija."
@@ -15732,7 +15737,7 @@
           "level": "S",
           "type": "card",
           "topic": "GitOps",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Docker image'ni `latest` tegi bilan deploy qilishning muammosi?",
           "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
@@ -15743,7 +15748,7 @@
           "level": "St",
           "type": "card",
           "topic": "GitOps",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
           "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
@@ -15755,7 +15760,7 @@
           "level": "S",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
           "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
@@ -15766,7 +15771,7 @@
           "level": "S",
           "type": "card",
           "topic": "CI/CD",
-          "domain": "devops",
+          "domain": "cicd",
           "section": "i2",
           "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
           "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
@@ -15776,8 +15781,8 @@
     {
       "id": "i3",
       "name": "Observability & SRE",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "obs",
+      "domainLabel": "Observability",
       "topics": [
         "Logging",
         "Metrics",
@@ -15792,7 +15797,7 @@
           "level": "P",
           "type": "card",
           "topic": "SRE",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "SLO 99.9% (oylik), error budget tugadi. Yetuk tashkilot nima qiladi?",
           "explanation": "99.9% ≈ oyiga 43 daqiqa. Error budget — tezlik va ishonchlilik o'rtasidagi kelishuv; ma'no faqat oqibat bo'lganda. SLO userga ko'rinadigan SLI'ga (success'li query'lar %, p99 latency) asoslanadi, CPU'ga emas."
@@ -15803,7 +15808,7 @@
           "level": "P",
           "type": "card",
           "topic": "SRE",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
           "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
@@ -15814,7 +15819,7 @@
           "level": "J",
           "type": "card",
           "topic": "Logging",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Log, metrika va trace farqi?",
           "explanation": "Ishlatish tartibi: metrika 'muammo bor va qayerda' (alert), trace 'qaysi qadam sekin', log 'aniq nima bo'ldi'. Metrika arzon va agregat; log qimmat (hajm); trace odatda sampling bilan. Uchalasini bog'lovchi element — trace_id."
@@ -15825,7 +15830,7 @@
           "level": "M",
           "type": "card",
           "topic": "Logging",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Mikroservislarda loglarni tekshirishni haqiqatan osonlashtiradigan narsa?",
           "explanation": "Bitta query 6 ta servisdan o'tadi — trace_id'siz ularni bog'lab bo'lmaydi. Har logda: trace_id, service, level, user/tenant id (PII'siz), xabar. Qo'shimcha: sampling va log level'si (debugni prodda yoqmaslik), maxfiy ma'lumotni maskalash, saqlash muddati va narxi."
@@ -15836,7 +15841,7 @@
           "level": "M",
           "type": "card",
           "topic": "Tracing",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Trace servis chegarasida uzilib qolyapti (har servis alohida trace ko'rsatadi). Sabab?",
           "snippet": "// A servis\nspan = tracer.start_span(\"call_b\")\nresp = http.get(\"http://b/api/items\")   # header yo'q\nspan.end()",
@@ -15848,7 +15853,7 @@
           "level": "S",
           "type": "card",
           "topic": "Metrics",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Servis uchun qaysi to'plam asosiy metrika sifatida eng foydali (RED metodikasi)?",
           "explanation": "RED — servis uchun (userga ko'rinadigan), USE (Utilization, Saturation, Errors) — resurs uchun. O'rtacha latency yashiradi: 100 ta query'dan 99 tasi 10ms, bittasi 5s bo'lsa o'rtacha 60ms — 'yaxshi', lekin p99 5s. Shuning uchun persentil va histogram; SLO ham persentilga qo'yiladi."
@@ -15859,7 +15864,7 @@
           "level": "S",
           "type": "card",
           "topic": "Alerting",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Alertlar juda ko'p, jamoa ularga e'tibor bermay qo'ydi. Nima qilasiz?",
           "explanation": "Senior/Staff signal: alert charchashi — texnik emas, jarayon muammosi. O'lchov: haftada nechta page, nechtasi harakatga olib keldi."
@@ -15870,7 +15875,7 @@
           "level": "St",
           "type": "card",
           "topic": "Metrics",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Metrika tizimi hisobi keskin oshdi (kardinallik portlashi). Sabab va yechim?",
           "explanation": "Staff signal: observability xarajatini mahsulot xarajati sifatida boshqarish — qaysi signal qancha turadi va qancha qiymat beradi."
@@ -15881,7 +15886,7 @@
           "level": "S",
           "type": "card",
           "topic": "Logging",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Go 1.21+ da strukturaviy loglash uchun nima ishlatiladi?",
           "explanation": "Amaliy qoidalar: har logda trace_id va so'rov konteksti (handler orqali), maxfiy ma'lumotni maskalash, daraja siyosati (debug prodda o'chiq), va xatoni bir marta — eng yuqori qatlamda loglash. slog handler'ini almashtirib, chiqish formatini muhitga qarab o'zgartirish mumkin.",
@@ -15893,7 +15898,7 @@
           "level": "S",
           "type": "card",
           "topic": "Tracing",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Distributed tracing joriy qilindi, lekin sekin so'rovlar trace'da ko'rinmaydi. Sabab?",
           "explanation": "Head sampling qarorni boshida qabul qiladi — natija noma'lum. Tail-based sampling (OTel Collector) butun trace'ni yig'ib, keyin 'sekin yoki xato bo'lsa saqla' qaroriga keladi. Amalda aralash: 1% baseline + 100% xato/p99 ustidagi. Shuningdek context propagation (traceparent) har hop va queue orqali o'tishi kerak, aks holda trace uzilib qoladi."
@@ -15904,7 +15909,7 @@
           "level": "S",
           "type": "card",
           "topic": "Metrics",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Prometheus'da p99 latency'ni to'g'ri o'lchash uchun?",
           "explanation": "Summary quantile instansiyalar bo'ylab qo'shib bo'lmaydi (p99'lar o'rtachasi p99 emas) — histogram esa bucket'lar yig'indisi orqali agregatlanadi. Kamchiligi: aniqlik bucket'ga bog'liq, shuning uchun SLO chegarasi (masalan 300ms) bucket bo'lishi kerak. Cardinality: label'da user ID/URL ID qo'yilmaydi — TSDB portlaydi."
@@ -15915,7 +15920,7 @@
           "level": "S",
           "type": "card",
           "topic": "Alerting",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Alert shovqini ko'p, dejurlik charchagan. To'g'ri qayta qurish?",
           "explanation": "Foydalanuvchi ta'sirini ko'rsatadigan signal page qiladi: 'checkout xato nisbati budjetni 14x tezlikda yeyapti'. Sabab metrikasi (CPU 90%) o'z-o'zidan muammo emas. Multi-window burn rate: tez oyna (5m/1h) darhol page, sekin oyna (6h) ticket. Har alertda runbook havolasi va aniq harakat bo'lishi shart."
@@ -15926,7 +15931,7 @@
           "level": "S",
           "type": "card",
           "topic": "Logging",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Yuqori RPS'li servisda log xarajati portladi. Nima qilinadi?",
           "explanation": "Log qimmat va qidirish sekin; metrika agregat uchun, trace sababni topish uchun arzonroq. Amaliy chora: request log'ni faqat xato/sekin holatlarda to'liq yozish, `trace_id`ni har log qatoriga qo'yish (log↔trace bog'lanadi), PII maskalash, retention siyosati (7 kun hot, 90 kun arxiv)."
@@ -15937,7 +15942,7 @@
           "level": "St",
           "type": "card",
           "topic": "SRE",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Yangi servis uchun SLO'ni qanday belgilaysiz va error budget bilan nima qilasiz?",
           "explanation": "Senior'dan kutiladigan asosiy g'oya: SLO — muhandislik qarorlarini boshqaradigan budjet, shunchaki grafik emas. Va o'lchash foydalanuvchi ko'rgan joyda bo'lishi kerak."
@@ -15948,7 +15953,7 @@
           "level": "S",
           "type": "card",
           "topic": "Metrics",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "RED va USE metodikalari nimani anglatadi?",
           "explanation": "Amaliy qo'llash: har servisda standart RED dashboard (va alert faqat shunga), har resursda (CPU, pool, disk, navbat) USE paneli. Saturation eng ko'p e'tibordan qoladigan signal: DB pool navbati, goroutine kutishi, Kafka lag — utilization 100% ga yetmasa ham saturation muammoni ko'rsatadi."
@@ -15959,7 +15964,7 @@
           "level": "S",
           "type": "card",
           "topic": "SRE",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Postmortem 'blameless' bo'lishi nima uchun texnik jihatdan muhim?",
           "explanation": "Yaxshi postmortem tarkibi: vaqt chizig'i (aniq timestamp bilan), ta'sir (foydalanuvchi va biznes raqamda), aniqlash vaqti (nega tezroq bilmadik — monitoring bo'shlig'i), tiklanish qadamlari, va action item'lar egasi/muddati bilan. Eng qadrli qism — 'nega bu xato mumkin edi' (guardrail yo'qligi), 'kim bosdi' emas."
@@ -15970,7 +15975,7 @@
           "level": "S",
           "type": "card",
           "topic": "Tracing",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "OpenTelemetry'da span, trace va context propagation qanday bog'lanadi?",
           "explanation": "Eng ko'p uchraydigan bo'shliq — asinxron chegara: Kafka'ga yozishda `traceparent` xabar headeriga solinmasa trace uziladi va 'ish qayerda sekinlashdi' savoliga javob yo'qoladi. Ikkinchi bo'shliq: log va trace bog'lanmagan (`trace_id` log maydoni sifatida yozilishi kerak). Span atributlari kardinalligi ham nazorat qilinadi."
@@ -15981,7 +15986,7 @@
           "level": "St",
           "type": "card",
           "topic": "Metrics",
-          "domain": "devops",
+          "domain": "obs",
           "section": "i3",
           "question": "Prometheus'da yuqori kardinallik nega xavfli va qanday nazorat qilinadi?",
           "explanation": "Qoida: metrika — agregat (nima bo'lyapti), trace/log — individual (qaysi so'rovda). Foydali label'lar: servis, endpoint shabloni (`/users/:id`, konkret ID emas), status klassi, metod. Kardinallikni kuzatish uchun `topk(10, count by (__name__)({__name__=~\".+\"}))` kabi so'rovlar va scrape darajasidagi limitlar (`sample_limit`) ishlatiladi."
@@ -15991,8 +15996,8 @@
     {
       "id": "i4",
       "name": "Networking & protocols",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "net",
+      "domainLabel": "Networking",
       "topics": [
         "Network",
         "TCP/IP",
@@ -16005,7 +16010,7 @@
           "level": "M",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "CDN nima qiladi va qanday sozlanadi?",
           "explanation": "Amaliy qoidalar: o'zgarmas fayllarga uzoq max-age va fayl nomida hash (app.9f2a.js), HTML'ga qisqa yoki no-cache; dinamik javoblarni ham qisqa TTL bilan keshlash mumkin (stale-while-revalidate). Ehtiyot: shaxsiy ma'lumotli javoblar cache'ga tushmasin (Cache-Control: private, Vary: Authorization)."
@@ -16016,7 +16021,7 @@
           "level": "M",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "Forward proxy va reverse proxy farqi?",
           "explanation": "Reverse proxy backend'ni tashqi dunyodan yashiradi va cross-cutting vazifalarni ilovadan oladi. Tipik zanjir: CDN → LB → reverse proxy → ilova. Muhim tafsilot: client IP ni X-Forwarded-For orqali uzatish va ilovada uni to'g'ri o'qish (rate limit va audit uchun)."
@@ -16027,7 +16032,7 @@
           "level": "J",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "L4 va L7 load balancer farqi?",
           "explanation": "L7 kerak bo'lgan holat: /api → servis A, /admin → servis B, canary uchun header bo'yicha bo'lish. L4 — oddiy TCP servis (DB proxy, gRPC stream) yoki maksimal throughput. Kubernetes'da Service (L4) va Ingress/Gateway (L7)."
@@ -16038,7 +16043,7 @@
           "level": "M",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "Failover'ni faqat DNS o'zgartirish bilan qilishning muammosi?",
           "explanation": "Rejalashtirilgan o'tishdan oldin TTL'ni pasaytirish (60s) — standart amaliyot, lekin hamma resolver hurmat qilmaydi. Tezroq yechimlar: anycast IP, LB level'ida qayta yo'naltirish, health check bilan avtomatik target o'zgarishi. Uzoq yashaydigan TCP connection'lar DNS o'zgarishini umuman sezmaydi — ularni uzish kerak."
@@ -16049,7 +16054,7 @@
           "level": "M",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "mTLS (mutual TLS) oddiy TLS'dan nimasi bilan farq qiladi?",
           "explanation": "Oddiy TLS'da faqat server o'zini tanitadi (brauzer stsenariysi). Ichki network'da 'network ichida bo'lsa ishonamiz' — eskirgan model (zero trust). mTLS servis identifikatsiyasini beradi, lekin sertifikat rotatsiyasi kerak — service mesh yoki SPIFFE buni avtomatlashtiradi."
@@ -16060,7 +16065,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "A → B → C zanjiri. A timeout 10s, B timeout 10s, C sekinlashdi. Nima bo'ladi?",
           "explanation": "Timeout'lar ichma-ich kamayib borishi kerak (10s → 3s → 1s), aks holda cascading failure. Retry bilan birga bo'lsa yanada yomon: har qadam 3 marta urinsa, 3 qadamda 27 ta query — retry amplification. Yechim: deadline (gRPC'da bor), retry budget, circuit breaker."
@@ -16071,7 +16076,7 @@
           "level": "J",
           "type": "card",
           "topic": "TCP/IP",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "TCP va UDP farqi?",
           "explanation": "UDP mos keladigan joylar: video/ovozli qo'ng'iroq (eski paket keraksiz), DNS, o'yin, QUIC (HTTP/3 ham UDP ustida — ishonchlilikni o'zi amalga oshiradi). TCP'da 'ishonchlilik' latency narxiga keladi: paket yo'qolsa qayta yuborish kutiladi va butun oqim to'xtaydi (head-of-line blocking)."
@@ -16082,7 +16087,7 @@
           "level": "J",
           "type": "card",
           "topic": "TCP/IP",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "TCP connection qanday o'rnatiladi?",
           "explanation": "Har yangi connection kamida bitta round-trip (RTT) — TLS bo'lsa yana qo'shiladi. Shuning uchun keep-alive va connection pool'i muhim: har query'ga yangi connection ochish uzoq masofada juda qimmat. Serverda TIME_WAIT ko'payishi va ephemeral port tugashi — yuqori yukdagi klassik muammo."
@@ -16093,7 +16098,7 @@
           "level": "M",
           "type": "card",
           "topic": "TLS",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "TLS qo'l berishda (handshake) nima sodir bo'ladi?",
           "explanation": "TLS 1.3 qo'l berishni 1-RTT ga qisqartirdi (0-RTT ham bor, lekin replay xavfi tufayli ehtiyotkorlik talab qiladi). Asimmetrik kriptografiya faqat key kelishuvi uchun — qolgani simmetrik (tez). Forward secrecy: ECDHE tufayli server key'i keyin sizib chiqsa ham eski trafik ochilmaydi. mTLS'da client ham sertifikat beradi."
@@ -16104,7 +16109,7 @@
           "level": "S",
           "type": "card",
           "topic": "TCP/IP",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "Servis ko'p chiquvchi ulanish qiladi va `connect: cannot assign requested address` xatosi keladi. Sabab?",
           "explanation": "Har ulanish (src IP, src port, dst IP, dst port) to'rtligi bilan aniqlanadi; bir xil dst uchun ~28k ephemeral port. Yechim tartibi: (1) HTTP client'da `Transport` qayta ishlatish va `MaxIdleConnsPerHost` oshirish — Go'da har request'da yangi client yaratish klassik xato, (2) keep-alive, (3) port diapazonini kengaytirish, (4) NAT'da SNAT pool. `tw_reuse` — palliativ."
@@ -16115,7 +16120,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "Kubernetes'da DNS so'rovlar sekin va ba'zan 5s kechikadi. Klassik sabab?",
           "explanation": "Tashqi domenga (`api.stripe.com`) so'rov avval `.svc.cluster.local` variantlari bilan sinaladi — ortiqcha yuk. Yechimlar: `dnsConfig` bilan `ndots:1`, FQDN ishlatish (nuqta bilan tugash), NodeLocal DNSCache, resolver keshi. 5 sekundli kechikish deyarli har doim DNS retry timeoutning izi."
@@ -16126,7 +16131,7 @@
           "level": "S",
           "type": "card",
           "topic": "TLS",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "TLS handshake narxini kamaytirish uchun eng samarali choralar?",
           "explanation": "Eng katta g'alaba — handshake'ni umuman qilmaslik (pool). TLS 1.3 to'liq handshake'ni 1-RTT ga tushiradi; 0-RTT replay xavfi bor, faqat idempotent GET uchun. ECDSA P-256 RSA-2048 dan tez imzo tekshiruvi beradi. OCSP stapling client tomonidagi qo'shimcha so'rovni yo'qotadi."
@@ -16137,7 +16142,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "Ma'lumot markazlar orasida throughput past, latency 80ms. Kanal keng. Sabab?",
           "explanation": "BDP = bandwidth × RTT: 1 Gbit/s × 80ms ≈ 10 MB 'uchishda' bo'lishi kerak. Oyna kichik bo'lsa oqim ACK kutib turadi. Choralar: window scaling va socket buffer'lar, bir nechta parallel oqim, BBR congestion control (loss-based emas), yoki ma'lumotni siqish/yaqinga ko'chirish. Ozgina loss ham yuqori RTT'da throughputni keskin tushiradi."
@@ -16148,7 +16153,7 @@
           "level": "S",
           "type": "card",
           "topic": "TCP/IP",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "TCP va UDP orasidagi tanlov qachon UDP tomonga o'tadi?",
           "explanation": "TCP bitta paket yo'qolsa keyingi kelgan ma'lumotni ham kutishga majbur qiladi (head-of-line) — real-time uchun yomon. QUIC (HTTP/3) UDP ustida oqimlarni mustaqil qilib shu muammoni yechadi va handshake'ni 1-RTT/0-RTT ga tushiradi. UDP tanlansa: retransmit, tartib, congestion control kimning zimmasida — aniq javob bo'lishi kerak."
@@ -16159,7 +16164,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "`ss -s` da `Recv-Q` katta. Bu nimani ko'rsatadi?",
           "explanation": "Diagnostika juftligi: `Recv-Q` — kernel buferida o'qilmagan ma'lumot (server ilovasi sekin), `Send-Q` — yuborilib ack olinmagan ma'lumot (tarmoq/peer sekin). Bunga qo'shimcha: `netstat -s` da retransmit va `listen queue overflow` (`somaxconn`/backlog to'lgani) — yuqori yuk incidentlarida birinchi qaraladigan signallar."
@@ -16170,7 +16175,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "HTTP/1.1 keep-alive, HTTP/2 multiplexing va HTTP/3 farqi nimada?",
           "explanation": "Backend uchun amaliy oqibatlar: HTTP/2 bilan bitta ulanish — L4 balansirovka yuklamani tarqatmaydi (gRPC muammosi), va server tomonda `MaxConcurrentStreams` bo'g'iz bo'lishi mumkin. Yuqori paket yo'qotishli mobil tarmoqlarda HTTP/3 sezilarli yutuq beradi; ma'lumot markazi ichida esa farq kam."
@@ -16181,7 +16186,7 @@
           "level": "S",
           "type": "card",
           "topic": "TLS",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "mTLS'da sertifikat rotatsiyasi qanday tashkil qilinadi?",
           "explanation": "Nozik joylar: ilova sertifikatni ishga tushganda bir marta o'qisa — muddati tugagach barcha ulanish yiqiladi (klassik yarim tunlik incident); `tls.Config.GetCertificate`/`GetClientCertificate` bilan har handshake'da yangisi olinadi. CA rotatsiyasida ikki CA bir vaqtda ishonchli bo'lishi kerak (overlap), aks holda hamma yoqda uzilish."
@@ -16192,7 +16197,7 @@
           "level": "S",
           "type": "card",
           "topic": "TLS",
-          "domain": "devops",
+          "domain": "net",
           "section": "i4",
           "question": "TLS 1.3 handshake'da nima o'zgardi va 0-RTT xavfi nimada?",
           "explanation": "0-RTT ma'lumotini hujumchi yozib olib qayta yuborishi mumkin — `POST /transfer` bo'lsa ikki marta o'tkazma bo'lishi mumkin. Shuning uchun CDN/proxy'da 0-RTT faqat `GET`/idempotent yo'llarga ruxsat etiladi yoki umuman o'chiriladi. Forward secrecy: kalit o'g'irlansa ham o'tmishdagi trafikni ochib bo'lmaydi."
@@ -16202,8 +16207,8 @@
     {
       "id": "i5",
       "name": "Cloud, OS, operations",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "cloud",
+      "domainLabel": "Cloud",
       "topics": [
         "AWS",
         "Cloud",
@@ -16218,7 +16223,7 @@
           "level": "M",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Process va thread farqi (backend nuqtai nazaridan)?",
           "explanation": "Go'da bunga qo'shimcha qatlam bor: goroutine'lar runtime tomonidan OS threadlarga taqsimlanadi. Konteynerda resurs cheklovlari (cgroup) aynan process level'ida qo'llanadi. Nginx/Postgres kabi tizimlar turli modellarni tanlagan: Postgres — har connection'ga process, shuning uchun connection'lar qimmat."
@@ -16229,7 +16234,7 @@
           "level": "M",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "UTF-8 haqida qaysi to'g'ri?",
           "explanation": "Go'da: len(s) — baytlar soni, []rune(s) — kod nuqtalari, emoji yoki diakritik belgilar esa bir necha kod nuqtasidan iborat bo'lishi mumkin. Amaliy oqibatlar: DB'da VARCHAR(n) uzunligi (Postgres'da belgi bo'yicha), string kesish (yarim belgi qolmasin), qidiruvda normalizatsiya (NFC) va katta-kichik harf qoidalari tilga bog'liq."
@@ -16240,7 +16245,7 @@
           "level": "S",
           "type": "card",
           "topic": "Ops",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Kubernetes'da servisni deploy qilganda query'lar yo'qolmasligi uchun graceful shutdown qanday qilinadi?",
           "explanation": "Ko'p jamoa buni unutadi va har deployda 502 lar. Readiness va liveness probe farqini ham aytish kerak: liveness faqat 'jarayon osilib qoldi' uchun."
@@ -16251,7 +16256,7 @@
           "level": "St",
           "type": "card",
           "topic": "Cloud",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Infratuzilmani qanday boshqarasiz: IaC, muhitlar va falokatdan tiklanish?",
           "explanation": "Staff/Principal signal: 'terraform bor' emas, jarayon — review, drift, tiklashni isbotlash. Tekshirilmagan DR rejasi — reja emas, taxmin."
@@ -16262,7 +16267,7 @@
           "level": "M",
           "type": "card",
           "topic": "AWS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Foydalanuvchi katta fayl (video) yuklashi kerak. To'g'ri yondashuv?",
           "explanation": "Backend orqali o'tkazish — trafik narxi, memory va timeout muammosi. Pre-signed URL qisqa muddatli va cheklangan (metod, key, hajm shart bilan). Yuklangandan keyingi ishlov (thumbnail, virus scan) — S3 event → SQS/Lambda orqali asinxron.",
@@ -16274,7 +16279,7 @@
           "level": "M",
           "type": "card",
           "topic": "AWS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "SQS standard va FIFO queue farqi?",
           "explanation": "Ko'p holatda standard + idempotent consumer yetarli va arzonroq. Visibility timeout — xabar olingach boshqalarga ko'rinmaydigan vaqt: ishlov shu vaqtdan uzoq bo'lsa, xabar ikkinchi marta ishlanadi (shuning uchun timeoutni ishlov vaqtiga moslash yoki heartbeat bilan uzaytirish). Zaharli xabarlar uchun redrive policy → DLQ."
@@ -16285,7 +16290,7 @@
           "level": "S",
           "type": "card",
           "topic": "AWS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "EKS'dagi Go servisi S3'ga kirishi kerak. Eng xavfsiz usul?",
           "explanation": "Uzoq muddatli access key — sizib chiqish xavfi va rotatsiya og'rig'i. IRSA'da SDK avtomatik STS orqali token oladi. Qo'shimcha: eng kam huquq (faqat kerakli bucket va prefiks), bucket policy, shifrlash (SSE-KMS), CloudTrail audit.",
@@ -16297,7 +16302,7 @@
           "level": "S",
           "type": "card",
           "topic": "AWS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "RDS'da Multi-AZ va read replica farqi?",
           "explanation": "Ikkalasi turli muammoni yechadi: Multi-AZ — mavjudlik, read replica — masshtab. Replicadan o'qishda lag va read-your-writes muammosini hisobga olish kerak (kritik o'qishlar primary'dan). Aurora'da arxitektura boshqacha: umumiy storage, replicalar tez failover qila oladi."
@@ -16308,7 +16313,7 @@
           "level": "St",
           "type": "card",
           "topic": "AWS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Go mikroservisini AWS'da ishga tushirish: ECS, EKS yoki Lambda? Qanday tanlaysiz?",
           "explanation": "Staff signal: 'Kubernetes default emas' — operatsion narxni jamoa hajmi bilan solishtirish va qaytib chiqish (exit) narxini aytish."
@@ -16319,7 +16324,7 @@
           "level": "S",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Production podda latency spike. `top`da CPU past, lekin `iowait` yuqori. Keyingi qadam?",
           "explanation": "iowait — protsessor bloklangan I/O kutib. Tekshirish zanjiri: qaysi qurilma (`iostat`), qaysi jarayon (`pidstat -d`, `biotop`), cloud disk limiti (IOPS/throughput kvota, gp2 burst), fayl tizimi/fsync namunasi (DB WAL, log yozish). Ko'p hollarda sabab — disk kvotasi yoki jurnal yozuvining sinxronligi, kod emas."
@@ -16330,7 +16335,7 @@
           "level": "S",
           "type": "card",
           "topic": "Cloud",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Multi-AZ'da xarajat portladi. Ko'p uchraydigan yashirin sabab?",
           "explanation": "Har GB cross-AZ trafik to'lanadi, chatty microservice arxitekturasida bu katta summa. Choralar: `topologyAwareHints`/zone-aware balansirovka, o'qishni AZ-local replicadan, kesh mahalliy, va batching (chatty chaqiruvlarni kamaytirish). Lekin ishonchlilik bilan muvozanat: AZ-local hamma joyda emas, faqat o'qishda."
@@ -16341,7 +16346,7 @@
           "level": "St",
           "type": "card",
           "topic": "Ops",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Incident: bitta AZ ishdan chiqdi. Servis yiqilmasligi uchun oldindan nima qilingan bo'lishi kerak?",
           "explanation": "Ko'p jamoada nazariy multi-AZ bor, lekin: (a) pod'lar amalda bitta AZ'da yig'ilgan, (b) qolgan AZ'da headroom yo'q — cascading yiqilish, (c) failover qo'lda va sinovdan o'tmagan. Shuning uchun game day / chaos mashqi bilan tekshiriladi va kvota 'N-1 AZ' hisobiga rejalashtiriladi."
@@ -16352,7 +16357,7 @@
           "level": "S",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Jarayon va oqim (thread) farqi, va nega Go goroutine ikkisidan arzon?",
           "explanation": "Go runtime scheduler (G-M-P modeli) kanal yoki tarmoq kutishida goroutine'ni thread'dan yechib qo'yadi — kernel switch bo'lmaydi. Shu sabab 100k goroutine normal, 100k OS thread esa emas. Blokirovka qiluvchi syscall (fayl, cgo) bo'lsa runtime yangi thread ajratadi — bu joy sizib ketishi mumkin (`GOMAXPROCS`dan ko'p thread)."
@@ -16363,7 +16368,7 @@
           "level": "S",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Fayldan o'qishda `page cache` nimani o'zgartiradi?",
           "explanation": "Amaliy natijalar: PostgreSQL `shared_buffers` + OS page cache birga ishlaydi (shuning uchun shared_buffers RAM'ning 25% atrofida); `fsync`ni o'chirish tezlik beradi lekin crash'da ma'lumot yo'qoladi; konteynerda page cache cgroup memory hisobiga kiradi va OOM hisobida ko'rinishi mumkin."
@@ -16374,7 +16379,7 @@
           "level": "S",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "`fork` qilinganda xotira qanday nusxalanadi va bu nega muhim?",
           "explanation": "Redis persistence'dagi klassik incident: `fork` arzon ko'rinadi, lekin yozuv intensiv bo'lsa CoW sahifalari ko'payib OOM bo'ladi (shuning uchun `vm.overcommit_memory=1` tavsiya qilinadi va xotira zapasi qoldiriladi). Xuddi shu mexanizm konteyner image qatlamlari va `vfork`/`posix_spawn` optimizatsiyalarida ham asos."
@@ -16385,7 +16390,7 @@
           "level": "St",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Latency raqamlari (tartib bo'yicha): L1 kesh, RAM, SSD, bir DC ichida tarmoq, kontinentlar orasi?",
           "explanation": "Bu raqamlar dizayn qarorlarini boshqaradi: RAM'dan o'qish diskdan ~1000x tez (shuning uchun kesh), bir DC ichidagi chaqiruv RAM'dan ~5000x sekin (shuning uchun N+1 chaqiruv halokatli), cross-region esa har round-trip 150 ms (shuning uchun cross-region sinxron yozuv qabul qilinmaydi). Aniq raqam emas, kattalik tartibi muhim."
@@ -16396,7 +16401,7 @@
           "level": "S",
           "type": "card",
           "topic": "Cloud",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Terraform'da state fayli nima uchun kritik va qanday boshqariladi?",
           "explanation": "Amaliy qoidalar: state'ni hech qachon qo'lda tahrir qilmaslik (`terraform state mv/rm` komandalari bor), lock bilan parallel `apply`ni bloklash, muhitlarni alohida state'ga ajratish (blast radius), sirlar state'ga tushishini hisobga olish (shifrlash va kirish nazorati), va `import` bilan qo'lda yaratilgan resursni state'ga kiritish."
@@ -16407,7 +16412,7 @@
           "level": "S",
           "type": "card",
           "topic": "AWS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "IAM'da eng kam huquq (least privilege) amalda qanday ta'minlanadi?",
           "explanation": "Amaliy qadamlar: uzoq yashovchi access key'lardan voz kechish (rol + STS), har servisga alohida rol (umumiy rol bo'lsa blast radius katta), `iam:PassRole` va wildcard action'larni ehtiyot bilan berish, va CloudTrail'dan haqiqiy ishlatilgan huquqlar bo'yicha policy'ni qisqartirish. S3'da bucket policy + `BlockPublicAccess` majburiy."
@@ -16418,7 +16423,7 @@
           "level": "St",
           "type": "card",
           "topic": "OS",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "cgroup v2 memory limiti ilovaga qanday ta'sir qiladi?",
           "explanation": "Amaliy natijalar: Go'da `GOMEMLIMIT` ni `memory.max` dan past qo'yish OOMKill o'rniga GC bosimini beradi (jarayon tirik qoladi va diagnostika mumkin); katta fayl o'qiydigan jarayonlar page cache tufayli kutilmaganda o'ldirilishi mumkin; `memory.high` bilan jarayon sekinlashadi lekin o'lmaydi — bu ba'zan afzalroq."
@@ -16429,7 +16434,7 @@
           "level": "S",
           "type": "card",
           "topic": "Ops",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Konteynerda `PID 1` muammosi nima?",
           "explanation": "Ko'rinishi: deploy paytida podlar 30 sekund kutib SIGKILL bilan o'ladi, ochiq so'rovlar uziladi. Tuzatish: `ENTRYPOINT [\"/app/server\"]` (exec form, shell emas) yoki `CMD exec ...`; Go binarlari signalni o'zi ishlaydi (`signal.NotifyContext`), lekin shell wrapper bo'lsa signal yo'qoladi. Zombi jarayonlar uchun `--init`."
@@ -16440,7 +16445,7 @@
           "level": "J",
           "type": "card",
           "topic": "IaC",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Infrastructure as Code (IaC) nima beradi?",
           "explanation": "IaC: git tarixi (kim, qachon, nima o'zgartirdi), PR review, bir xil muhitlar (dev/stage/prod), tez tiklash (disaster recovery). Deklarativ (Terraform, CloudFormation — 'qanday holat kerak') va imperativ (skriptlar — 'qanday qadamlar') yondashuvlar bor."
@@ -16451,7 +16456,7 @@
           "level": "M",
           "type": "card",
           "topic": "IaC",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "`terraform plan` va `terraform apply` farqi?",
           "explanation": "CI'da odatiy oqim: PR'da plan chiqishi komment sifatida ko'rsatiladi, merge'dan keyin saqlangan plan fayl (`plan -out=tfplan`, `apply tfplan`) qo'llanadi — review qilingan va bajarilgan o'zgarish bir xil bo'lishi kafolatlanadi. `-/+` (destroy va qayta yaratish) belgisiga alohida e'tibor: DB kabi resurs uchun bu ma'lumot yo'qolishi."
@@ -16462,7 +16467,7 @@
           "level": "S",
           "type": "card",
           "topic": "IaC",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Ikki muhandis bir vaqtda `terraform apply` qilsa nima bo'ladi va qanday oldini olasiz?",
           "explanation": "Lock state'ni bir vaqtda faqat bitta jarayon yozishini ta'minlaydi. Qo'shimcha: state'ni muhit/komponent bo'yicha bo'lish (blast radius kichik), state ichida sirlar bo'lishi mumkin — shifrlangan backend va cheklangan kirish. `terraform force-unlock` faqat jarayon aniq o'lgan bo'lsa."
@@ -16473,7 +16478,7 @@
           "level": "S",
           "type": "card",
           "topic": "IaC",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Drift nima?",
           "explanation": "Aniqlash: rejali `terraform plan -detailed-exitcode` (exit 2 = farq bor) CI'da, alert bilan. Oldini olish: prod'da konsolga yozish huquqini cheklash, 'break-glass' kirish audit bilan. Qo'lda o'zgarish kerak bo'lsa — keyin albatta kodga qaytariladi yoki `terraform import` qilinadi."
@@ -16484,7 +16489,7 @@
           "level": "M",
           "type": "card",
           "topic": "IaC",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Terraform va Ansible farqi?",
           "explanation": "Ko'p jamoada ular birga ishlatiladi: Terraform VM/tarmoq/DB yaratadi, Ansible ichini sozlaydi. Konteyner va immutable image (Packer) davrida configuration management roli kamaydi — server sozlanmaydi, yangi image bilan almashtiriladi."
@@ -16495,7 +16500,7 @@
           "level": "St",
           "type": "card",
           "topic": "IaC",
-          "domain": "devops",
+          "domain": "cloud",
           "section": "i5",
           "question": "Katta kompaniyada Terraform kodini qanday tashkil qilasan (modullar, muhitlar, state)?",
           "explanation": "Asosiy g'oya: kichik, mustaqil state'lar va hamma o'zgarish PR orqali. Monolit state — har apply butun infratuzilmani xavf ostiga qo'yadi."
@@ -16505,7 +16510,7 @@
     {
       "id": "i7",
       "name": "Linux",
-      "domain": "devops",
+      "domain": "linux",
       "topics": [
         "Linux"
       ],
@@ -16516,7 +16521,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Serverda disk to'lib qoldi. Birinchi qaysi buyruqlar?",
           "explanation": "Klassik tuzoq: log fayl o'chirilgan, lekin jarayon uni hali ochiq ushlab turibdi — joy bo'shamaydi. `lsof +L1` bilan topiladi; jarayonni qayta ishga tushirish yoki `> file` bilan truncate qilish kerak. Oldini olish: logrotate, alert 80%da."
@@ -16527,7 +16532,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`chmod 754 app.sh` qanday ruxsat beradi?",
           "explanation": "Har raqam — r=4, w=2, x=1 yig'indisi: 7=rwx, 5=r-x, 4=r--. Katalog uchun x — ichiga kirish (cd) huquqi, r — ro'yxatni ko'rish. Xavfsizlik: 777 deyarli hech qachon to'g'ri javob emas."
@@ -16538,7 +16543,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Hard link va symbolic link farqi?",
           "explanation": "Ma'lumot inode'da, nom esa katalog yozuvi. Inode link count 0 bo'lib, hech bir jarayon ochib turmaganda disk joyi bo'shaydi. `ls -li` inode raqamini ko'rsatadi."
@@ -16549,7 +16554,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`>` , `>>` va `2>&1` nima qiladi?",
           "explanation": "Tartib muhim: `cmd > out.log 2>&1` ikkalasini faylga yozadi, `cmd 2>&1 > out.log` esa stderr'ni ekranda qoldiradi (u stdout'ning ESKI manziliga ko'chirildi). Bash'da qisqasi: `&> out.log`."
@@ -16560,7 +16565,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Jarayonni terminal yopilgandan keyin ham ishlab turishi uchun?",
           "explanation": "Terminal yopilganda SIGHUP yuboriladi — nohup uni e'tiborsiz qoldiradi. Lekin nohup bilan restart, log, resurs cheklovi yo'q — uzoq yashaydigan servis uchun systemd yoki konteyner orkestratori to'g'ri yo'l."
@@ -16571,7 +16576,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`/proc` katalogi nima?",
           "explanation": "`ps`, `top`, `free` ham ma'lumotni /proc'dan o'qiydi. /proc/<pid>/fd — ochiq fayllar, /proc/<pid>/limits — ulimit'lar, /proc/<pid>/status — VmRSS va h.k. /sys — qurilmalar va cgroups uchun shunga o'xshash."
@@ -16582,7 +16587,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Log fayldan eng ko'p uchragan 10 ta IP'ni qanday chiqarasan?",
           "explanation": "uniq faqat ketma-ket takrorlarni sanaydi — oldin sort shart. Katta fayllarda `sort -S 50% --parallel` yoki awk'da assotsiativ massiv: `awk '{c[$1]++} END {for (i in c) print c[i], i}' | sort -rn | head`. Real vaqtda: `tail -F`."
@@ -16593,7 +16598,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Linux kernel nima va user space'dan farqi?",
           "explanation": "Ajratish CPU darajasida (ring 0 va ring 3). Ilova xatosi faqat o'zini o'ldiradi, kernel xatosi — butun tizimni (kernel panic). 'Linux' so'zi aslida faqat kernel; to'liq OS — kernel + GNU vositalar + distributiv (Ubuntu, RHEL, Alpine)."
@@ -16604,7 +16609,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "System call nima? Misol keltiring.",
           "explanation": "Odatda to'g'ridan-to'g'ri emas, libc orqali chaqiriladi (printf -> write). Syscall — kontekst almashuvi, arzon emas; shuning uchun bufferlash (bufio), batching, io_uring/epoll kabi mexanizmlar. `strace -c ./app` — syscall statistikasi."
@@ -16615,7 +16620,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "sh, bash, zsh, fish farqi?",
           "explanation": "Skript uchun: portable kerak bo'lsa `#!/bin/sh` va faqat POSIX sintaksis; bash xususiyatlari ishlatilsa `#!/usr/bin/env bash`. Alpine konteynerida bash yo'q (busybox ash) — bash skript ishlamaydi. `echo $0` / `echo $SHELL` — joriy shell."
@@ -16626,7 +16631,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Environment variable va shell variable farqi?",
           "explanation": "`VAR=x cmd` — faqat shu buyruq uchun env. Child o'zgartirsa ham parent'ga qaytmaydi. Doimiy qilish: ~/.bashrc (interaktiv), ~/.profile (login), /etc/environment. `env`, `printenv` — ko'rish. `/proc/<pid>/environ` — ishlab turgan jarayon env'i."
@@ -16637,7 +16642,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Linux'da fayl turlari qanday va `ls -l` ning birinchi belgisi nimani bildiradi?",
           "explanation": "'Hamma narsa fayl' — /dev/sda (b), /dev/null va /dev/tty (c), /run/docker.sock (s). Linux kengaytmaga qaramaydi: turni `file` buyrug'i ichki magic bayt bo'yicha aniqlaydi. `stat` — batafsil ma'lumot."
@@ -16648,7 +16653,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "/dev/null, /dev/zero, /dev/urandom nima?",
           "explanation": "Misollar: `cmd > /dev/null 2>&1` — chiqishni o'chirish; `dd if=/dev/zero of=file bs=1M count=100` — 100MB fayl; `head -c 32 /dev/urandom | base64` — token. Zamonaviy Linux'da /dev/random ham bloklanmaydi (5.6+)."
@@ -16659,7 +16664,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Linux'dagi asosiy fayl tizimi turlari?",
           "explanation": "Aniqlash: `df -T`, `lsblk -f`, `findmnt`. Tanlov: DB serverlar uchun ko'pincha XFS yoki ext4; snapshot kerak bo'lsa Btrfs/ZFS yoki LVM snapshot. XFS'ni kichraytirib bo'lmaydi (faqat kengaytirish)."
@@ -16670,7 +16675,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Linux katalog tuzilmasi (FHS): /etc, /var, /usr, /opt, /home nima uchun?",
           "explanation": "FHS — Filesystem Hierarchy Standard. Amaliy natija: /var alohida bo'limda bo'lsa log to'lib ketishi root fayl tizimini to'ldirmaydi. Konteyner image'da /usr immutable, holat /var yoki volume'da."
@@ -16681,7 +16686,7 @@
           "level": "J",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "/bin, /sbin, /lib, /boot, /tmp, /mnt, /media nima saqlaydi?",
           "explanation": "Zamonaviy distributivlarda 'usrmerge': /bin -> /usr/bin, /lib -> /usr/lib symlink. /boot to'lib qolsa (eski kernellar) yangilanish buziladi — `apt autoremove`."
@@ -16692,7 +16697,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Load average 16, CPU foydalanish esa 10%. Nima bo'lishi mumkin?",
           "explanation": "Linux'da load = running + runnable + D-state. Yuqori iowait, to'yingan disk (%util ~100) yoki osilib qolgan tarmoq fayl tizimi odatiy sabablar. Load'ni yadrolar soni bilan solishtiring (`nproc`)."
@@ -16703,7 +16708,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Servis `kill -9` o'rniga `kill -15` (SIGTERM) bilan to'xtatilishi nega muhim?",
           "explanation": "Kubernetes ham avval SIGTERM yuboradi, terminationGracePeriodSeconds (default 30s)dan keyin SIGKILL. Konteynerda PID 1 muammosi: shell-form ENTRYPOINT signalni ilovaga uzatmaydi — exec-form yoki tini ishlating."
@@ -16714,7 +16719,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "systemd servisi crash bo'lsa avtomatik qayta ishga tushishi uchun?",
           "explanation": "`StartLimitIntervalSec`/`StartLimitBurst` cheksiz restart tsiklini to'xtatadi. Resurs cheklovlari ham unit'da: MemoryMax, CPUQuota (cgroups). Xavfsizlik: User=, NoNewPrivileges=yes, ProtectSystem=strict."
@@ -16725,7 +16730,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Qaysi jarayon 8080 portni band qilganini qanday topasan?",
           "explanation": "ss — netstat'ning zamonaviy va tezroq o'rnini bosuvchisi: -l listening, -t TCP, -n raqamli, -p jarayon (boshqa foydalanuvchi jarayoni uchun root kerak). 'address already in use' ko'pincha eski jarayon yoki TIME_WAIT (SO_REUSEADDR yechadi)."
@@ -16736,7 +16741,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Zombie jarayon nima va uni qanday yo'qotasan?",
           "explanation": "Zombie allaqachon o'lik — unga signal ta'sir qilmaydi. Ko'p zombie PID tugashiga olib keladi (pid_max). Konteynerda PID 1 bo'lgan ilova wait() qilmasa zombie yig'iladi — tini yoki `docker run --init` ishlatiladi. Orphan esa — ota-jarayoni o'lgan, lekin o'zi tirik jarayon."
@@ -16747,7 +16752,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`ps aux` dagi STAT ustunidagi `D` holati nimani bildiradi?",
           "explanation": "Boshqa holatlar: R — ishlayapti/navbatda, S — interruptible sleep, T — to'xtatilgan, Z — zombie. Ko'p D-holat jarayonlar load average'ni oshiradi, CPU esa bo'sh turadi. Sabab: sekin disk, osilgan NFS, yadro drayveri."
@@ -16758,7 +16763,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`fork()` va `exec()` farqi?",
           "explanation": "Copy-on-write tufayli fork arzon — sahifalar faqat yozilganda nusxalanadi. Redis BGSAVE shu mexanizmdan foydalanadi (katta yozish yukida xotira ikki barobarga yaqinlashishi mumkin). Dockerfile'da exec-form ENTRYPOINT ilovani to'g'ridan-to'g'ri PID 1 qiladi."
@@ -16769,7 +16774,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`free -m` da `available` kam, `buff/cache` esa katta. Xotira yetishmayaptimi?",
           "explanation": "'Linux ate my RAM' — klassik noto'g'ri tushuncha. `echo 3 > /proc/sys/vm/drop_caches` production'da deyarli hech qachon kerak emas (faqat benchmark). Haqiqiy bosim belgilari: swap in/out (vmstat si/so), PSI (/proc/pressure/memory), OOM killer loglari."
@@ -16780,7 +16785,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "OOM killer nima va qaysi jarayonni tanlaydi?",
           "explanation": "Konteynerda cgroup limiti oshsa, o'sha cgroup ichida OOM bo'ladi (K8s: OOMKilled, exit code 137 = 128+9). Kritik jarayonlarni (sshd) oom_score_adj=-1000 bilan himoyalash mumkin. Go ilovada GOMEMLIMIT'ni konteyner limitidan biroz pastga qo'yish GC'ni ertaroq ishga tushiradi."
@@ -16791,7 +16796,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Disk to'la, `du` esa kam joy ko'rsatyapti. Nega?",
           "snippet": "$ df -h /\n/dev/sda1  50G  50G  0  100% /\n$ du -sh / 2>/dev/null\n12G  /",
@@ -16803,7 +16808,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`No space left on device`, lekin `df -h` 40% bo'sh ko'rsatyapti. Sabab?",
           "explanation": "Inode soni ext4'da format vaqtida belgilanadi. Topish: `find / -xdev -type f | cut -d/ -f2-3 | sort | uniq -c | sort -n | tail`. XFS inode'larni dinamik ajratadi."
@@ -16814,7 +16819,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Serverda minglab `TIME_WAIT` ulanishlar. Muammomi?",
           "explanation": "tcp_tw_recycle NAT ortidagi clientlarni buzardi va Linux 4.12 da olib tashlandi. Haqiqiy belgisi: 'cannot assign requested address' (ephemeral port tugashi, ip_local_port_range). Eng yaxshi yechim — ulanishlarni qayta ishlatish."
@@ -16825,7 +16830,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "DNS muammosini qanday tekshirasan?",
           "explanation": "dig resolv.conf'dan foydalanadi, lekin nsswitch/hosts'ni chetlab o'tadi — getent ilova bilan bir xil yo'ldan yuradi. K8s'da ndots:5 tashqi domenlar uchun ko'p ortiqcha so'rov beradi (FQDN oxiriga nuqta yoki ndots kamaytirish)."
@@ -16836,7 +16841,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "SSH serverni qanday xavfsizlashtirasan?",
           "explanation": "Zamonaviy yondashuv: SSH kalitlar o'rniga qisqa muddatli sertifikatlar (Vault SSH CA, Teleport) yoki umuman SSH'siz boshqaruv (AWS SSM). Port o'zgartirish faqat log shovqinini kamaytiradi, xavfsizlik bermaydi."
@@ -16847,7 +16852,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`sudo` va `setuid` bit: xavfi nima?",
           "explanation": "Topish: `find / -perm -4000 -type f 2>/dev/null`. GTFOBins — qaysi binary'lardan privilege escalation qilish mumkinligi ro'yxati. Minimal huquq: sudoers'da aniq buyruq va argumentlar; capability'lar (setcap cap_net_bind_service) setuid o'rniga."
@@ -16858,7 +16863,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Bu bash skriptda qanday xavf bor?",
           "snippet": "#!/bin/bash\ncd $DEPLOY_DIR\nrm -rf *\ncp -r build/* .",
@@ -16870,7 +16875,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Monolitik va mikrokernel farqi? Linux qaysi biri?",
           "explanation": "Mikrokernel misollari: MINIX, QNX, seL4. Linus–Tanenbaum bahsi (1992) mashhur. Linux'da modular dizayn: `lsmod`, `modprobe`, `/lib/modules/$(uname -r)`."
@@ -16881,7 +16886,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Kernel modul nima va qanday boshqariladi?",
           "explanation": "Modul kernel huquqi bilan ishlaydi — imzolanmagan modul (Secure Boot) xavfli. Blacklist: /etc/modprobe.d/*.conf. `uname -r` — joriy kernel versiyasi; modullar aynan shu versiyaga mos bo'lishi kerak (DKMS avtomatik qayta yig'adi)."
@@ -16892,7 +16897,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Linux scheduler (CFS/EEVDF) va `nice` qiymati nima?",
           "explanation": "Oddiy foydalanuvchi faqat nice'ni oshira oladi (ustunlikni kamaytirish). Real-time siyosatlar: SCHED_FIFO, SCHED_RR (`chrt`). I/O ustunligi alohida: `ionice`. Konteynerlarda cgroup cpu.weight shu mexanizmga ulanadi."
@@ -16903,7 +16908,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Virtual xotira va page fault nima?",
           "explanation": "Noto'g'ri manzilga murojaat esa — segfault (SIGSEGV). Sahifa odatda 4KB; Huge Pages (2MB) TLB miss'ni kamaytiradi (DB'lar uchun), THP ba'zan latency spike beradi. `ps -o min_flt,maj_flt`, `/usr/bin/time -v`."
@@ -16914,7 +16919,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": ".bashrc va .bash_profile qachon o'qiladi?",
           "explanation": "Cron va skriptlar (non-interactive) ikkalasini ham o'qimaydi — 'terminalda ishlaydi, cron'da ishlamaydi' muammosining sababi (PATH, env). Yechim: skriptda to'liq yo'l va kerakli env'ni aniq berish."
@@ -16925,7 +16930,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Natija nima?",
           "snippet": "x=5\necho '$x'\necho \"$x\"\necho $(echo hi)\necho `date +%Y`",
@@ -16937,7 +16942,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Exit code: `$?` nima va 0, 1, 127, 130, 137 nimani bildiradi?",
           "explanation": "128+N — N-signal bilan o'ldirilgan. 126 — bajarish huquqi yo'q, 139 — SIGSEGV (128+11), 143 — SIGTERM. `&&` / `||` exit code'ga qarab zanjir qiladi. Pipe'da $? — oxirgi buyruqniki; hammasi: ${PIPESTATUS[@]} yoki set -o pipefail."
@@ -16948,7 +16953,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`source script.sh` va `./script.sh` farqi?",
           "explanation": "Shuning uchun `.env` fayllar va virtualenv `activate` source qilinadi. `bash script.sh` — +x kerak emas, shebang e'tiborga olinmaydi."
@@ -16959,7 +16964,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Unix domain socket va TCP socket farqi?",
           "explanation": "Misollar: /var/run/docker.sock (unga kirish = host'da root!), PostgreSQL /var/run/postgresql/.s.PGSQL.5432. Konteynerlar o'rtasida sidecar bilan ham ishlatiladi. `ss -xl` — ro'yxat."
@@ -16970,7 +16975,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Fayl ruxsatlaridagi sticky bit, setuid, setgid nima?",
           "explanation": "`ls -l` da: `-rwsr-xr-x` (setuid), `drwxrwsr-x` (setgid), `drwxrwxrwt` (sticky, /tmp). setgid katalog — jamoaviy papkalar uchun qulay. umask (odatda 022) yangi fayl ruxsatlarini belgilaydi."
@@ -16981,7 +16986,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Journaling fayl tizimi nima beradi?",
           "explanation": "Jurnal fayl tizimi izchilligini kafolatlaydi, ilova ma'lumotini emas — ilova baribir fsync qilishi kerak. Btrfs/ZFS jurnal o'rniga copy-on-write ishlatadi (eski blok ustidan yozilmaydi)."
@@ -16992,7 +16997,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "tmpfs nima va qayerda ishlatiladi?",
           "explanation": "tmpfs'ga yozilgan ma'lumot xotira hisoblanadi — konteynerda cgroup memory limitiga kiradi (kutilmagan OOM sababi). Hajm cheklovi: `mount -t tmpfs -o size=512M tmpfs /mnt/x`."
@@ -17003,7 +17008,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`mount` va `/etc/fstab` nima?",
           "explanation": "fstab'da /dev/sdb o'rniga UUID ishlating — qurilma nomi boot'lar orasida o'zgarishi mumkin. Tarmoq disklari uchun `nofail`, `_netdev` — aks holda disk ulanmasa server boot bo'lmaydi. Tekshirish: `mount -a` (reboot'dan oldin!). Xavfsizlik opsiyalari: noexec, nosuid, nodev."
@@ -17014,7 +17019,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "/var/log, /var/lib, /var/run (/run), /var/cache farqi?",
           "explanation": "Docker ma'lumoti /var/lib/docker da — disk to'lishining mashhur sababi (`docker system df`, `docker system prune`). Backup rejasi: /etc va /var/lib (servisga xos), /var/cache emas."
@@ -17025,7 +17030,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Dastur qayerdan topiladi: `PATH` va `which`/`type`?",
           "explanation": "Xavfsizlik: PATH'ga `.` qo'shmang — joriy katalogdagi zararli `ls` ishga tushishi mumkin. Cron'da PATH qisqa (/usr/bin:/bin) — to'liq yo'l ishlating. Kutubxonalar uchun o'xshash: ldconfig, LD_LIBRARY_PATH, `ldd binary`."
@@ -17036,7 +17041,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`ls -l /etc/passwd` buyrug'ini bajarganda nima sodir bo'ladi (shell'dan kernelgacha)?",
           "explanation": "Bu savol kernel, shell, fayl tizimi va jarayon tushunchalarini bitta zanjirda tekshiradi. `strace ls -l /etc/passwd` bilan o'zingiz ko'rib chiqing."
@@ -17047,7 +17052,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Production serverda ilova sekinlashdi. Linux darajasida qanday tekshirasan?",
           "explanation": "Brendan Gregg'ning '60 soniyada Linux tahlili' ro'yxati — intervyuda tizimli yondashuvni ko'rsatish muhim, tasodifiy buyruqlarni emas.",
@@ -17059,7 +17064,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Jarayon osilib qoldi, CPU 0%. Nima qilayotganini qanday ko'rasan?",
           "explanation": "Odatiy topilmalar: futex (lock kutish — deadlock), read on socket (timeout'siz tarmoq chaqiruvi), connect (DNS/firewall), flock. strace production'da ehtiyotkorlik bilan — jarayonni sezilarli sekinlashtiradi; eBPF vositalar (bpftrace, offcputime) yengilroq."
@@ -17070,7 +17075,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Swap production serverda: yoqish kerakmi?",
           "explanation": "Swapping boshlangan servis ko'pincha 'o'lik emas, lekin foydasiz' holatga tushadi — tez o'lib qayta ishga tushish yaxshiroq bo'lishi mumkin. Yangi K8s versiyalarida swap qo'llab-quvvatlash (NodeSwap) bor, lekin ehtiyotkorlik bilan."
@@ -17081,7 +17086,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`fsync` nima uchun kerak va DB'lar uchun nega muhim?",
           "explanation": "Postgres WAL commit'da fsync qiladi (synchronous_commit). 'fsyncgate' (2018): fsync xatosidan keyin qayta urinish xavfsiz emasligi aniqlandi — Postgres endi panic qiladi. Yangi fayl uchun katalogni ham fsync qilish kerak. Atomik yozish: vaqtinchalik faylga yozish, fsync, rename."
@@ -17092,7 +17097,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`curl` sekin — 5 soniya kutib keyin javob beradi. Qayerda yo'qolayotganini qanday aniqlaysan?",
           "explanation": "`curl -o /dev/null -s -w '%{time_namelookup} %{time_connect} %{time_appconnect} %{time_starttransfer}\\n' URL`. Aynan 5s — ko'pincha DNS (AAAA so'rovi javobsiz, resolver timeout 5s) yoki IPv6 ga urinib keyin IPv4 ga o'tish. Chuqurroq: tcpdump."
@@ -17103,7 +17108,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "`iptables`/`nftables` da DROP va REJECT farqi?",
           "explanation": "Ichki tarmoqda REJECT diagnostikani osonlashtiradi va tez fail beradi; tashqi hujumchilarga DROP kam ma'lumot beradi. Debugging: `iptables -L -n -v` hisoblagichlari, `conntrack -L`; to'lgan conntrack jadvali ('nf_conntrack: table full') paketlarni tashlaydi."
@@ -17114,7 +17119,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Konteyner Linux'da qanday izolyatsiya qilinadi?",
           "explanation": "Konteynerlar bitta yadroni bo'lishadi — yadro zaifligi hamma konteynerga ta'sir qiladi (shuning uchun gVisor, Kata, Firecracker). Root konteyner ichida hostda ham root (user namespace ishlatilmasa) — rootless va runAsNonRoot shuning uchun muhim."
@@ -17125,7 +17130,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Konteynerda Go/Java ilova CPU limiti bilan sekin ishlayapti, CPU esa limitgacha yetmayapti. Nima bo'lishi mumkin?",
           "explanation": "Tekshirish: cgroup'dagi cpu.stat (nr_throttled, throttled_usec). Yechim: GOMAXPROCS'ni limitga moslash (Go 1.25+ avtomatik, oldin automaxprocs), limitni oshirish yoki CPU limitini olib tashlab faqat request qo'yish."
@@ -17136,7 +17141,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Server boot bo'lish jarayonini BIOS'dan login'gacha tushuntirib ber.",
           "explanation": "Debugging: `systemd-analyze blame`/`critical-chain` — sekin boot; `journalctl -b -1` — oldingi boot loglari; kernel panic uchun serial console. Bulutda: instance console output/screenshot."
@@ -17147,7 +17152,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Kernel panic va kernel oops farqi?",
           "explanation": "Tahlil: kdump/kexec bilan crash dump yig'ish, `crash` vositasi. Production'da `kernel.panic_on_oops=1` — beqaror holatda ishlashdan ko'ra reboot yaxshiroq. Bulutda serial console loglari muhim."
@@ -17158,7 +17163,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "eBPF nima va nega DevOps'da mashhur?",
           "explanation": "Vositalar: bcc (execsnoop, opensnoop, biolatency, tcpretrans), bpftrace bir qatorli skriptlar. strace'dan farqli — production'da xavfsiz. Kubernetes'da kube-proxy o'rnini (Cilium) iptables'siz bosadi."
@@ -17169,7 +17174,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Pipe (`|`) qanday ishlaydi?",
           "explanation": "`yes | head -1` shu sababli tugaydi (SIGPIPE). Named pipe (FIFO): `mkfifo`. `cmd1 | cmd2` da o'zgaruvchiga yozish subshell'da bo'ladi (bash'da `while read` pipe ichida o'zgaruvchi yo'qolishi) — yechim: `< <(cmd)` process substitution yoki `shopt -s lastpipe`."
@@ -17180,7 +17185,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Overlay fayl tizimi (overlayfs) Docker'da qanday ishlatiladi?",
           "explanation": "Oqibatlar: katta faylni ozgina o'zgartirish ham butun faylni upper qatlamga nusxalaydi; konteyner qatlamiga ko'p yozish sekin — ma'lumot volume'da bo'lishi kerak. Keyingi qatlamda o'chirilgan fayl image hajmidan ketmaydi — build'da bitta RUN ichida tozalash."
@@ -17191,7 +17196,7 @@
           "level": "S",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Inode nima, unda nima saqlanadi va nima saqlanmaydi?",
           "explanation": "ctime — 'creation time' EMAS, metadata o'zgargan vaqt (change time). Yaratilish vaqti (birth) ext4'da statx orqali mavjud. `noatime` mount opsiyasi o'qishdagi ortiqcha yozishni kamaytiradi."
@@ -17202,7 +17207,7 @@
           "level": "St",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
           "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
@@ -17213,7 +17218,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Hard link va soft (symbolic) link'ni chuqur solishtiring: `ln` va `ln -s` qanday ishlaydi, qachon qaysi biri, va 'log faylni o'chirdim, lekin disk bo'shamadi' holati bunga qanday bog'liq?",
           "explanation": "Tekshirish: `ls -li` (inode raqami va link count), `stat`, `find -samefile`, `find -xtype l` (osilgan symlink'lar). `cp` default symlink'ni kuzatadi, `cp -P`/`-a` saqlaydi. Docker COPY va tar ham symlink'ni turlicha qayta ishlaydi — build'dagi 'fayl topilmadi' xatolarining tez-tez sababi."
@@ -17224,7 +17229,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Diskni downtime'siz almashtirish (extent'larni ko'chirish) buyrug'i?",
           "explanation": "Tartib: `vgextend` (yangi) -> `pvmove /dev/old` -> `vgreduce vg0 /dev/old` -> `pvremove`."
@@ -17235,7 +17240,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "XFS'ni kichraytirish mumkinmi?",
           "explanation": "ext4 — unmount qilib kichrayadi (`e2fsck` + `resize2fs`). XFS — faqat `xfs_growfs`; kichraytirish: backup + qayta yaratish."
@@ -17246,7 +17251,7 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Thin pool 100% to'lsa nima bo'ladi?",
           "explanation": "`lvs` da Data% va Meta% monitoring; `thin_pool_autoextend_threshold` sozlash."
@@ -17257,19 +17262,19 @@
           "level": "M",
           "type": "card",
           "topic": "Linux",
-          "domain": "devops",
+          "domain": "linux",
           "section": "i7",
           "question": "Snapshot'dan asl LV'ni qaytarish buyrug'i?",
           "explanation": "LV band bo'lsa merge keyingi aktivatsiyada (reboot) bajariladi."
         }
       ],
-      "domainLabel": "DevOps"
+      "domainLabel": "Linux"
     },
     {
       "id": "t11",
       "name": "Docker & Kubernetes gotchas",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "cont",
+      "domainLabel": "Containers & K8s",
       "topics": [
         "Infra gotcha"
       ],
@@ -17280,7 +17285,7 @@
           "level": "M",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "Konteynerdagi Go ilova SIGTERM'ga javob bermayapti, Kubernetes 30s kutib SIGKILL beryapti. Sabab?",
           "explanation": "`CMD /app` shell form /bin/sh -c orqali ishga tushadi: PID 1 — shell, u signal'ni bolaga uzatmaydi. Yechim: exec form yoki tini kabi init. Go tomonda: signal.NotifyContext(ctx, syscall.SIGTERM, os.Interrupt) va srv.Shutdown(ctx) bilan graceful shutdown; readiness probe'ni oldin false qilib, kutilayotgan so'rovlarni tugatish (preStop hook bilan bir necha soniya kutish LB'dan chiqishga ulguradi)."
@@ -17291,7 +17296,7 @@
           "level": "M",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "CPU limit 1 core bo'lgan podda Go ilova sekin. Nima tekshiriladi?",
           "explanation": "Go runtime cgroup CPU kvotasini ko'rmaydi (Go 1.25 gacha; hozircha uber-go/automaxprocs standart yechim). GOMAXPROCS=64 bo'lsa runtime 64 P yaratadi, ular kvota 1 CPU bo'lgan joyda urishadi va CFS period ichida throttle bo'ladi — p99 latency sakraydi. Tekshiruv: container_cpu_cfs_throttled_seconds_total metrikasi.",
@@ -17303,7 +17308,7 @@
           "level": "M",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "Docker image 900 MB. Eng katta ta'sir qiladigan o'zgarish?",
           "explanation": "Go uchun final image — binary + CA sertifikatlar + (kerak bo'lsa) tzdata. scratch'da: ca-certificates.crt ni ko'chirish yoki `import _ \"time/tzdata\"`. Alpine musl libc bilan cgo muammolari (DNS resolver farqi) beradi. Bonus: kichik image tezroq pull, kamroq CVE, layer keshini to'g'ri tartiblash (go.mod/go.sum avval, keyin kod) build vaqtini keskin kamaytiradi."
@@ -17314,7 +17319,7 @@
           "level": "P",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "Liveness probe noto'g'ri sozlanganda eng xavfli stsenariy?",
           "explanation": "Qoida: liveness — faqat 'jarayon o'zi tirikmi' (deadlock emasmi); tashqi bog'liqliklarni tekshirmaydi. Readiness — 'trafik qabul qila olamanmi' (DB, migratsiya, cache warm-up shu yerda). Startup probe — sekin start uchun, liveness'ni kechiktiradi. Liveness'ga bog'liqlik qo'shish incident paytida restart to'lqini keltiradi."
@@ -17325,7 +17330,7 @@
           "level": "S",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "Konteynerda Go jarayoni `GOMAXPROCS` 64 deb ko'rsatadi, lekin CPU limiti 2. Nima bo'ladi?",
           "explanation": "Go 1.21 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
@@ -17336,7 +17341,7 @@
           "level": "S",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "Pod `Evicted` bo'ldi, log'da OOM yo'q. Ehtimolli sabab?",
           "explanation": "Eviction OOMKilled'dan farq qiladi: OOMKill konteyner cgroup limitida, eviction esa kubelet qarori (`node.kubernetes.io/disk-pressure`). Tekshirish: `kubectl describe node` shartlari va `kubectl describe pod` eventlari. Choralar: `ephemeral-storage` requests/limits, log rotation, `emptyDir.sizeLimit`, va QoS klassi (`Guaranteed` oxirida chiqariladi)."
@@ -17347,7 +17352,7 @@
           "level": "S",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "Dockerfile'da `COPY . .` birinchi qatorlarda turibdi. Nima yomon?",
           "explanation": "Qo'shimcha: `.dockerignore` bo'lmasa `.git`, `node_modules`, test ma'lumotlari ham kontekstga kiradi — build sekinlashadi va maxfiy fayllar image'ga tushishi mumkin. Kesh tartibi qoidasi: kam o'zgaradigan narsa yuqorida, tez-tez o'zgaradigan pastda."
@@ -17358,7 +17363,7 @@
           "level": "S",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "`kubectl apply` bilan deploy qilindi, lekin pod eski image bilan ishlayapti. Sabab?",
           "explanation": "`latest` bilan yana bir xavf: har node turli vaqtda pull qilib turli versiyani ishlatishi mumkin — debug qilib bo'lmaydigan holat. To'g'ri amaliyot: `app:git-<sha>` yoki `@sha256:...`, `imagePullPolicy: IfNotPresent` (digest bilan xavfsiz), va deploy natijasini `kubectl rollout status` bilan tekshirish."
@@ -17369,7 +17374,7 @@
           "level": "St",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "ConfigMap o'zgartirildi, lekin ilova eski konfiguratsiya bilan ishlayapti. Nega?",
           "explanation": "Amaliy yechimlar: konfiguratsiya hash'ini Deployment annotatsiyasiga qo'yish (o'zgarsa rolling update avtomatik bo'ladi), yoki ilovada fayl kuzatuvi (fsnotify) bilan qayta yuklash. Ikkinchisi tez, lekin har sozlamani issiq qayta yuklash xavfsiz emas — qaysi sozlama issiq o'zgarishi mumkinligi aniq belgilanishi kerak."
@@ -17380,7 +17385,7 @@
           "level": "S",
           "type": "card",
           "topic": "Infra gotcha",
-          "domain": "devops",
+          "domain": "cont",
           "section": "t11",
           "question": "Alpine asosidagi Go image'da DNS yoki TLS kutilmagan tarzda ishlamayapti. Sabab?",
           "explanation": "Go'da `CGO_ENABLED=1` bo'lsa tizim resolveri ishlatiladi (`/etc/nsswitch.conf`, musl'da xatti-harakat farq qiladi); `CGO_ENABLED=0` bilan sof Go resolver ishlaydi va natija bashorat qilinadigan bo'ladi. `scratch`/distroless image'da esa `ca-certificates` va timezone ma'lumotlarini aniq ko'chirish kerak (`tzdata` yoki `time/tzdata` import)."
@@ -17390,8 +17395,8 @@
     {
       "id": "t13",
       "name": "Network & latency gotchas",
-      "domain": "devops",
-      "domainLabel": "DevOps",
+      "domain": "net",
+      "domainLabel": "Networking",
       "topics": [
         "Network gotcha"
       ],
@@ -17402,7 +17407,7 @@
           "level": "P",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "TCP connection 'tirik' ko'rinadi, lekin qarshi tomon allaqachon o'lgan. Nega va nima qilinadi?",
           "explanation": "Qarshi tomon crash bo'lsa yoki tarmoq uzilsa FIN/RST kelmaydi — soket ochiq ko'rinadi va o'qish abadiy kutadi. Shuning uchun har doim: SetReadDeadline/SetWriteDeadline, HTTP client'da Timeout, gRPC'da keepalive parametrlari, load balancer idle timeout'idan qisqa ilova idle timeout. Bulutda NAT/LB idle timeout (ko'pincha 60-350s) jimgina ulanishni uzadi — 'birinchi so'rov xato beradi' muammosining sababi shu."
@@ -17413,7 +17418,7 @@
           "level": "P",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "Yuk ostida 'connection reset by peer' va TIME_WAIT ko'payyapti. Sabab?",
           "explanation": "Go'da har so'rovda yangi http.Client yaratish — Transport va ulanish pool'i ham yangi bo'ladi. To'g'risi: bitta Client'ni ulashib ishlatish, MaxIdleConnsPerHost'ni RPS'ga moslash (default 2 — mikroservislar uchun kam), javob Body'sini io.Copy(io.Discard, body) bilan tugatib yopish. TIME_WAIT ulanishni AKTIV yopgan tomonda 2*MSL turadi."
@@ -17424,7 +17429,7 @@
           "level": "M",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "Bir service DNS orqali boshqasini chaqiradi. Deploy paytida eski podlarga trafik ketyapti. Nega?",
           "explanation": "Go'da DNS javobi ulanish o'rnatishda hal qilinadi; pool'dagi tayyor ulanish qayta hal qilinmaydi. Shuning uchun: Service (ClusterIP) orqali yurish — IP barqaror; yoki headless DNS ishlatilsa client-side load balancing (gRPC resolver) kerak; MaxConnLifetime/IdleConnTimeout bilan ulanishlarni davriy yangilash; graceful shutdown bilan eski pod o'zi GOAWAY/FIN yuborishi."
@@ -17435,7 +17440,7 @@
           "level": "P",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "p99 latency 2 sekund, p50 esa 20 ms. Qayerdan boshlaysan?",
           "explanation": "Tail latency alohida hodisa: o'rtacha yuk past bo'lsa ham navbat nazariyasi bo'yicha foydalanish darajasi 70-80% dan oshganda kutish vaqti eksponensial o'sadi. Amaliy vositalar: hedged requests (Google 'The Tail at Scale'), load shedding, konkurentlikni cheklash (adaptive concurrency), per-tenant kvota."
@@ -17446,7 +17451,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "Go'da HTTP client bilan ko'p so'rov qilinadi, `time.Sleep` yo'q, lekin latency vaqti-vaqti bilan portlaydi. Klassik sabab?",
           "explanation": "Ikki eng ko'p uchraydigan xato: (1) `defer resp.Body.Close()` yo'q yoki body to'liq o'qilmagan — keep-alive buziladi va FD leak bo'ladi; (2) per-host idle limit past bo'lgani uchun yuqori parallelizmda har so'rov yangi TCP+TLS. To'g'ri: bitta umumiy `http.Client` (timeout bilan) va sozlangan `Transport`."
@@ -17457,7 +17462,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "`http.Client{}` timeout'siz ishlatilgan. Eng xavfli natija?",
           "explanation": "Default `http.Client` timeout'i yo'q — TCP osilib qolsa goroutine abadiy turadi. Aniq sozlash kerak: umumiy `Timeout`, `DialContext` timeout, `TLSHandshakeTimeout`, `ResponseHeaderTimeout`, va per-request `context.WithTimeout` (deadline propagatsiyasi uchun). Serverda ham `ReadHeaderTimeout`/`WriteTimeout` — Slowloris himoyasi."
@@ -17468,7 +17473,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "Go'da DNS natijalari keshlanmaydi. Bu nimaga olib keladi?",
           "explanation": "Ikkinchi tomoni ham bor: kesh bo'lmagani uchun DNS o'zgarishi (failover, yangi endpoint) tez ko'rinadi — bu afzallik. Muammo faqat ulanishlar qisqa umrli bo'lganda paydo bo'ladi. Uzoq yashovchi ulanishlarda esa teskari xavf: eski IP'ga yopishib qolish (shu sabab `MaxConnectionAge` yoki davriy qayta ulanish)."
@@ -17479,7 +17484,7 @@
           "level": "S",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "Load balancer orqasida barcha so'rovlar bitta IP'dan kelayotgandek ko'rinadi. Oqibati?",
           "explanation": "To'g'ri implementatsiya: ishonchli proksi ro'yxati (`trusted proxies`) va `X-Forwarded-For` zanjirining o'ngdan chapga o'qilishi — client tomonidan qo'shilgan soxta qiymatlar tashlanadi. Aks holda hujumchi `X-Forwarded-For: 1.2.3.4` yuborib rate limit va bloklashni aylanib o'tadi."
@@ -17490,7 +17495,7 @@
           "level": "St",
           "type": "card",
           "topic": "Network gotcha",
-          "domain": "devops",
+          "domain": "net",
           "section": "t13",
           "question": "Servis o'z-o'ziga (ichki Service DNS orqali) so'rov yuboradi va vaqti-vaqti bilan timeout oladi. Klassik sabab?",
           "explanation": "Diagnostika: node'da `conntrack -S` (insert_failed, drop), `dmesg` xabarlari, va `nf_conntrack_max` sozlamasi. Yuqori RPS'li qisqa ulanishlar conntrack jadvalini to'ldiradi — keep-alive bilan ulanish sonini kamaytirish eng samarali chora. Ba'zi holatlarda UDP DNS bilan parallel so'rovlar race'i (`--random-fully` tuzatishi) ham shu simptomni beradi."

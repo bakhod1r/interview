@@ -1,8 +1,8 @@
 {
  "id": "i3",
  "name": "Observability & SRE",
- "domain": "devops",
- "domainLabel": "DevOps",
+ "domain": "obs",
+ "domainLabel": "Observability",
  "topics": [
   "Logging",
   "Metrics",
@@ -17,7 +17,7 @@
    "level": "P",
    "type": "card",
    "topic": "SRE",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "SLO 99.9% (oylik), error budget tugadi. Yetuk tashkilot nima qiladi?",
    "explanation": "99.9% ≈ oyiga 43 daqiqa. Error budget — tezlik va ishonchlilik o'rtasidagi kelishuv; ma'no faqat oqibat bo'lganda. SLO userga ko'rinadigan SLI'ga (success'li query'lar %, p99 latency) asoslanadi, CPU'ga emas."
@@ -28,7 +28,7 @@
    "level": "P",
    "type": "card",
    "topic": "SRE",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
    "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
@@ -39,7 +39,7 @@
    "level": "J",
    "type": "card",
    "topic": "Logging",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Log, metrika va trace farqi?",
    "explanation": "Ishlatish tartibi: metrika 'muammo bor va qayerda' (alert), trace 'qaysi qadam sekin', log 'aniq nima bo'ldi'. Metrika arzon va agregat; log qimmat (hajm); trace odatda sampling bilan. Uchalasini bog'lovchi element — trace_id."
@@ -50,7 +50,7 @@
    "level": "M",
    "type": "card",
    "topic": "Logging",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Mikroservislarda loglarni tekshirishni haqiqatan osonlashtiradigan narsa?",
    "explanation": "Bitta query 6 ta servisdan o'tadi — trace_id'siz ularni bog'lab bo'lmaydi. Har logda: trace_id, service, level, user/tenant id (PII'siz), xabar. Qo'shimcha: sampling va log level'si (debugni prodda yoqmaslik), maxfiy ma'lumotni maskalash, saqlash muddati va narxi."
@@ -61,7 +61,7 @@
    "level": "M",
    "type": "card",
    "topic": "Tracing",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Trace servis chegarasida uzilib qolyapti (har servis alohida trace ko'rsatadi). Sabab?",
    "snippet": "// A servis\nspan = tracer.start_span(\"call_b\")\nresp = http.get(\"http://b/api/items\")   # header yo'q\nspan.end()",
@@ -73,7 +73,7 @@
    "level": "S",
    "type": "card",
    "topic": "Metrics",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Servis uchun qaysi to'plam asosiy metrika sifatida eng foydali (RED metodikasi)?",
    "explanation": "RED — servis uchun (userga ko'rinadigan), USE (Utilization, Saturation, Errors) — resurs uchun. O'rtacha latency yashiradi: 100 ta query'dan 99 tasi 10ms, bittasi 5s bo'lsa o'rtacha 60ms — 'yaxshi', lekin p99 5s. Shuning uchun persentil va histogram; SLO ham persentilga qo'yiladi."
@@ -84,7 +84,7 @@
    "level": "S",
    "type": "card",
    "topic": "Alerting",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Alertlar juda ko'p, jamoa ularga e'tibor bermay qo'ydi. Nima qilasiz?",
    "explanation": "Senior/Staff signal: alert charchashi — texnik emas, jarayon muammosi. O'lchov: haftada nechta page, nechtasi harakatga olib keldi."
@@ -95,7 +95,7 @@
    "level": "St",
    "type": "card",
    "topic": "Metrics",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Metrika tizimi hisobi keskin oshdi (kardinallik portlashi). Sabab va yechim?",
    "explanation": "Staff signal: observability xarajatini mahsulot xarajati sifatida boshqarish — qaysi signal qancha turadi va qancha qiymat beradi."
@@ -106,7 +106,7 @@
    "level": "S",
    "type": "card",
    "topic": "Logging",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Go 1.21+ da strukturaviy loglash uchun nima ishlatiladi?",
    "explanation": "Amaliy qoidalar: har logda trace_id va so'rov konteksti (handler orqali), maxfiy ma'lumotni maskalash, daraja siyosati (debug prodda o'chiq), va xatoni bir marta — eng yuqori qatlamda loglash. slog handler'ini almashtirib, chiqish formatini muhitga qarab o'zgartirish mumkin.",
@@ -118,7 +118,7 @@
    "level": "S",
    "type": "card",
    "topic": "Tracing",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Distributed tracing joriy qilindi, lekin sekin so'rovlar trace'da ko'rinmaydi. Sabab?",
    "explanation": "Head sampling qarorni boshida qabul qiladi — natija noma'lum. Tail-based sampling (OTel Collector) butun trace'ni yig'ib, keyin 'sekin yoki xato bo'lsa saqla' qaroriga keladi. Amalda aralash: 1% baseline + 100% xato/p99 ustidagi. Shuningdek context propagation (traceparent) har hop va queue orqali o'tishi kerak, aks holda trace uzilib qoladi."
@@ -129,7 +129,7 @@
    "level": "S",
    "type": "card",
    "topic": "Metrics",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Prometheus'da p99 latency'ni to'g'ri o'lchash uchun?",
    "explanation": "Summary quantile instansiyalar bo'ylab qo'shib bo'lmaydi (p99'lar o'rtachasi p99 emas) — histogram esa bucket'lar yig'indisi orqali agregatlanadi. Kamchiligi: aniqlik bucket'ga bog'liq, shuning uchun SLO chegarasi (masalan 300ms) bucket bo'lishi kerak. Cardinality: label'da user ID/URL ID qo'yilmaydi — TSDB portlaydi."
@@ -140,7 +140,7 @@
    "level": "S",
    "type": "card",
    "topic": "Alerting",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Alert shovqini ko'p, dejurlik charchagan. To'g'ri qayta qurish?",
    "explanation": "Foydalanuvchi ta'sirini ko'rsatadigan signal page qiladi: 'checkout xato nisbati budjetni 14x tezlikda yeyapti'. Sabab metrikasi (CPU 90%) o'z-o'zidan muammo emas. Multi-window burn rate: tez oyna (5m/1h) darhol page, sekin oyna (6h) ticket. Har alertda runbook havolasi va aniq harakat bo'lishi shart."
@@ -151,7 +151,7 @@
    "level": "S",
    "type": "card",
    "topic": "Logging",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Yuqori RPS'li servisda log xarajati portladi. Nima qilinadi?",
    "explanation": "Log qimmat va qidirish sekin; metrika agregat uchun, trace sababni topish uchun arzonroq. Amaliy chora: request log'ni faqat xato/sekin holatlarda to'liq yozish, `trace_id`ni har log qatoriga qo'yish (log↔trace bog'lanadi), PII maskalash, retention siyosati (7 kun hot, 90 kun arxiv)."
@@ -162,7 +162,7 @@
    "level": "St",
    "type": "card",
    "topic": "SRE",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Yangi servis uchun SLO'ni qanday belgilaysiz va error budget bilan nima qilasiz?",
    "explanation": "Senior'dan kutiladigan asosiy g'oya: SLO — muhandislik qarorlarini boshqaradigan budjet, shunchaki grafik emas. Va o'lchash foydalanuvchi ko'rgan joyda bo'lishi kerak."
@@ -173,7 +173,7 @@
    "level": "S",
    "type": "card",
    "topic": "Metrics",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "RED va USE metodikalari nimani anglatadi?",
    "explanation": "Amaliy qo'llash: har servisda standart RED dashboard (va alert faqat shunga), har resursda (CPU, pool, disk, navbat) USE paneli. Saturation eng ko'p e'tibordan qoladigan signal: DB pool navbati, goroutine kutishi, Kafka lag — utilization 100% ga yetmasa ham saturation muammoni ko'rsatadi."
@@ -184,7 +184,7 @@
    "level": "S",
    "type": "card",
    "topic": "SRE",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Postmortem 'blameless' bo'lishi nima uchun texnik jihatdan muhim?",
    "explanation": "Yaxshi postmortem tarkibi: vaqt chizig'i (aniq timestamp bilan), ta'sir (foydalanuvchi va biznes raqamda), aniqlash vaqti (nega tezroq bilmadik — monitoring bo'shlig'i), tiklanish qadamlari, va action item'lar egasi/muddati bilan. Eng qadrli qism — 'nega bu xato mumkin edi' (guardrail yo'qligi), 'kim bosdi' emas."
@@ -195,7 +195,7 @@
    "level": "S",
    "type": "card",
    "topic": "Tracing",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "OpenTelemetry'da span, trace va context propagation qanday bog'lanadi?",
    "explanation": "Eng ko'p uchraydigan bo'shliq — asinxron chegara: Kafka'ga yozishda `traceparent` xabar headeriga solinmasa trace uziladi va 'ish qayerda sekinlashdi' savoliga javob yo'qoladi. Ikkinchi bo'shliq: log va trace bog'lanmagan (`trace_id` log maydoni sifatida yozilishi kerak). Span atributlari kardinalligi ham nazorat qilinadi."
@@ -206,7 +206,7 @@
    "level": "St",
    "type": "card",
    "topic": "Metrics",
-   "domain": "devops",
+   "domain": "obs",
    "section": "i3",
    "question": "Prometheus'da yuqori kardinallik nega xavfli va qanday nazorat qilinadi?",
    "explanation": "Qoida: metrika — agregat (nima bo'lyapti), trace/log — individual (qaysi so'rovda). Foydali label'lar: servis, endpoint shabloni (`/users/:id`, konkret ID emas), status klassi, metod. Kardinallikni kuzatish uchun `topk(10, count by (__name__)({__name__=~\".+\"}))` kabi so'rovlar va scrape darajasidagi limitlar (`sample_limit`) ishlatiladi."

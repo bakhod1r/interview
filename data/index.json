@@ -23,7 +23,12 @@
     "alg": "Algorithms",
     "soft": "Behavioral",
     "sec": "Security",
-    "devops": "DevOps"
+    "linux": "Linux",
+    "cont": "Containers & K8s",
+    "cicd": "CI/CD",
+    "obs": "Observability",
+    "net": "Networking",
+    "cloud": "Cloud"
   },
   "sections": [
     {
@@ -386,84 +391,84 @@
     {
       "id": "v1",
       "name": "LVM: PV, VG, LV",
-      "domain": "devops",
+      "domain": "linux",
       "count": 24,
       "file": "sections/v1-lvm.json"
     },
     {
       "id": "v2",
       "name": "Linux users, groups, permissions",
-      "domain": "devops",
+      "domain": "linux",
       "count": 15,
       "file": "sections/v2-linux-users.json"
     },
     {
       "id": "v3",
       "name": "Package management",
-      "domain": "devops",
+      "domain": "linux",
       "count": 12,
       "file": "sections/v3-package-management.json"
     },
     {
       "id": "v4",
       "name": "Linux filesystems",
-      "domain": "devops",
+      "domain": "linux",
       "count": 14,
       "file": "sections/v4-linux-filesystems.json"
     },
     {
       "id": "i1",
       "name": "Containers & Kubernetes",
-      "domain": "devops",
+      "domain": "cont",
       "count": 17,
       "file": "sections/i1-containers-kubernetes.json"
     },
     {
       "id": "i2",
       "name": "CI/CD & deploy",
-      "domain": "devops",
+      "domain": "cicd",
       "count": 26,
       "file": "sections/i2-ci-cd-deploy.json"
     },
     {
       "id": "i3",
       "name": "Observability & SRE",
-      "domain": "devops",
+      "domain": "obs",
       "count": 18,
       "file": "sections/i3-observability-sre.json"
     },
     {
       "id": "i4",
       "name": "Networking & protocols",
-      "domain": "devops",
+      "domain": "net",
       "count": 18,
       "file": "sections/i4-networking-protocols.json"
     },
     {
       "id": "i5",
       "name": "Cloud, OS, operations",
-      "domain": "devops",
+      "domain": "cloud",
       "count": 26,
       "file": "sections/i5-cloud-os-operations.json"
     },
     {
       "id": "i7",
       "name": "Linux",
-      "domain": "devops",
+      "domain": "linux",
       "count": 68,
       "file": "sections/i7-linux.json"
     },
     {
       "id": "t11",
       "name": "Docker & Kubernetes gotchas",
-      "domain": "devops",
+      "domain": "cont",
       "count": 10,
       "file": "sections/t11-docker-kubernetes-gotchas.json"
     },
     {
       "id": "t13",
       "name": "Network & latency gotchas",
-      "domain": "devops",
+      "domain": "net",
       "count": 9,
       "file": "sections/t13-network-latency-gotchas.json"
     }

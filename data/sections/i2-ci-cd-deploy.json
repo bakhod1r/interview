@@ -1,8 +1,8 @@
 {
  "id": "i2",
  "name": "CI/CD & deploy",
- "domain": "devops",
- "domainLabel": "DevOps",
+ "domain": "cicd",
+ "domainLabel": "CI/CD",
  "topics": [
   "CI/CD",
   "Deploy",
@@ -17,7 +17,7 @@
    "level": "J",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Continuous Integration nimani anglatadi?",
    "explanation": "CI — branch uzoq yashamasligi haqida. CD ikki ma'noda: Continuous Delivery (har build deploy qilishga tayyor, tugma bosiladi) va Continuous Deployment (avtomatik production'ga). Uzoq feature branch — merge do'zaxi; yechim: kichik PR + feature flag."
@@ -28,7 +28,7 @@
    "level": "M",
    "type": "card",
    "topic": "Deploy",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Blue-green va canary deploy farqi?",
    "explanation": "Blue-green: tez rollback, lekin xato hamma userga birdan tegadi; ikki barobar resurs. Canary: xato ta'siri kichik, lekin trafik bo'lish mexanizmi va avtomatik metrika tahlili kerak; ikki versiya birga ishlaydi — DB sxemasi ikkalasiga mos bo'lishi shart (expand-contract). Uchinchisi — rolling update (Kubernetes default)."
@@ -39,7 +39,7 @@
    "level": "M",
    "type": "card",
    "topic": "Secrets",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Parol, API key va sertifikatlarni qanday boshqarasiz?",
    "explanation": "Amaliy signal: 'git'ga tushib qolsa nima qilasiz?' — javob: darhol revoke/rotate, keyin tarixni tozalash (tozalash yetarli emas, key allaqachon ochiq)."
@@ -50,7 +50,7 @@
    "level": "S",
    "type": "card",
    "topic": "Deploy",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Qaysi yondashuv to'g'ri: artefakt va muhitlar haqida?",
    "explanation": "Build once, deploy many: stage'da test qilingan narsa aynan prod'ga boradi. latest — aniqlikni yo'qotadi (qaysi kod ishlayotgani noma'lum, rollback qiyin); digest yoki semantik versiya bilan teglang. Konfiguratsiya image ichida emas, tashqarida (12-factor)."
@@ -61,7 +61,7 @@
    "level": "S",
    "type": "card",
    "topic": "Deploy",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "DB migratsiyasi deploy pipeline'ining qaysi qadamida bajarilishi kerak?",
    "explanation": "Senior signal: 'migratsiya va kod deploy'i bir atomik qadam emas' degan tushuncha. Ma'lumot o'chirish (DROP COLUMN) odatda bir necha kun/hafta keyin, kuzatuvdan so'ng."
@@ -72,7 +72,7 @@
    "level": "St",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Katta feature'ni uzoq branchda emas, feature flag bilan qilishning asosiy afzalligi?",
    "explanation": "Narxi: flaglar texnik qarz — muddati o'tganini o'chirish tartibi bo'lishi kerak, aks holda kodda o'nlab shart qoladi. Kill switch sifatida ham qimmatli: incidentda deploy'siz o'chirish. Flag holati kuzatiladigan va audit qilinadigan bo'lsin."
@@ -83,7 +83,7 @@
    "level": "St",
    "type": "card",
    "topic": "Deploy",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Feature flag tizimini va bosqichli rollout jarayonini loyihalang.",
    "explanation": "Staff signal: flagni release vositasi sifatida emas, xavfni boshqarish tizimi sifatida ko'rish va texnik qarzni boshqarish rejasini aytish."
@@ -94,7 +94,7 @@
    "level": "S",
    "type": "card",
    "topic": "Deploy",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Sxema o'zgarishi bo'lgan relizni zero-downtime chiqarish tartibi?",
    "explanation": "Rolling deploy paytida eski va yangi kod bir vaqtda ishlaydi — sxema ikkisiga ham mos bo'lishi shart (backward + forward compatible). PostgreSQL detallari: `CREATE INDEX CONCURRENTLY`, `ADD COLUMN` default bilan 11+ da tez, `NOT NULL`ni bosqichma-bosqich (CHECK NOT VALID → VALIDATE), uzun migratsiyalarga `lock_timeout` qo'yish."
@@ -105,7 +105,7 @@
    "level": "S",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Canary deploy qachon avtomatik rollback qilinishi kerak?",
    "explanation": "To'g'ri canary — statistik taqqoslash (baseline vs canary bir xil trafik shartida), mutlaq threshold emas. Argo Rollouts/Flagger shu analizni qiladi. Shart: metrikalar versiya yorlig'i bilan ajratilgan bo'lishi, qaror oynasi yetarli trafik yig'ishi, va rollback yo'li migratsiya bilan ham xavfsiz (shu sabab expand-contract)."
@@ -116,7 +116,7 @@
    "level": "S",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Feature flag va deploy ajratilishi nimani beradi?",
    "explanation": "Trunk-based development'ning kaliti. Narxi: flag qarzi — har flag uchun ega, muddat va tozalash rejasi kerak, aks holda kod branch portlashiga aylanadi. Kritik yo'nalishlarda flag o'qish default xavfsiz qiymat bilan (provider ishlamasa ham servis ishlaydi) va flag holati log/trace'ga yozilishi kerak."
@@ -127,7 +127,7 @@
    "level": "S",
    "type": "card",
    "topic": "Secrets",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Kubernetes'da sirlar: qaysi variant eng mustahkam?",
    "explanation": "K8s `Secret` default holatda etcd'da faqat base64 (shifrlanmagan, agar encryption-at-rest yoqilmagan bo'lsa) va RBAC noto'g'ri bo'lsa o'qiladi. Eng yaxshisi: DB uchun dinamik, qisqa muddatli credential (Vault) — leak bo'lsa ham tez o'lik; aks holda KMS bilan shifrlash, avtomatik rotation, va audit. Sirlar log'da va crash dump'da chiqmasligi tekshiriladi."
@@ -138,7 +138,7 @@
    "level": "St",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "CI 40 daqiqa ketadi, jamoa relizdan qo'rqadi. Qanday tuzatasiz?",
    "explanation": "Relizdan qo'rqish odatda sekin CI + flaky test + og'riqli rollback kombinatsiyasi. Uchtasi ham alohida hal qilinadi; faqat CI tezlashtirish yetmaydi."
@@ -149,7 +149,7 @@
    "level": "S",
    "type": "card",
    "topic": "Deploy",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Blue-green va canary orasidagi tanlov nimaga bog'liq?",
    "explanation": "Amalda ko'pincha canary tanlanadi, chunki bug faqat real trafikda ko'rinadi. Ikkisida ham asosiy cheklov — ma'lumot qatlami: sxema o'zgarishi expand-contract bilan qilinmasa rollback imkonsiz bo'ladi. Stateful servislarda (navbat consumer'lari) trafikni bo'lish qiyin, shuning uchun feature flag bilan boshqarish afzal."
@@ -160,7 +160,7 @@
    "level": "S",
    "type": "card",
    "topic": "Secrets",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "CI pipeline'da sirlar bilan ishlashda nima majburiy?",
    "explanation": "OIDC federatsiyasi (GitHub Actions → AWS/GCP) eng katta yutuq: uzoq yashovchi kalit umuman bo'lmaydi. Qo'shimcha xatarlar: PR'dan kelgan kod sirni chiqarib yuborishi (`pull_request_target` tuzog'i), artefaktlarda qolgan sirlar, va build log'lari. Sir aniqlansa rotation protsedurasi oldindan yozilgan bo'lishi kerak."
@@ -171,7 +171,7 @@
    "level": "St",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Build reproducibility (takrorlanuvchanlik) nega muhim?",
    "explanation": "Amaliy minimum: image tag sifatida commit SHA (mutable `latest` emas), `go.sum` bilan qotirilgan bog'liqliklar, bazaviy image digest bo'yicha (`@sha256:...`), va artefakt imzosi (cosign) + SBOM. Shunda incident paytida 'qaysi kod, qaysi bog'liqliklar' savoli sekundlarda javob topadi."
@@ -182,7 +182,7 @@
    "level": "J",
    "type": "card",
    "topic": "Git",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "`git merge` va `git rebase` farqi?",
    "explanation": "Oltin qoida: umumiy (push qilingan, boshqalar ishlatayotgan) branchni rebase qilmang — boshqalar tarixi buziladi. O'z feature branchingizni main ustiga rebase qilish odatiy. Majburiy push kerak bo'lsa `--force-with-lease` (boshqaning commitini ustidan yozib yubormaydi)."
@@ -193,7 +193,7 @@
    "level": "M",
    "type": "card",
    "topic": "Git",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Tasodifan secret (API kalit) commit qilinib, push bo'ldi. To'g'ri harakat?",
    "explanation": "Tarix tozalansa ham fork, klon, CI keshi, GitHub cache'da qolishi mumkin — shuning uchun rotatsiya birinchi. Oldini olish: pre-commit gitleaks/trufflehog, GitHub push protection, sirlarni .env + .gitignore emas, secret manager'da saqlash."
@@ -204,7 +204,7 @@
    "level": "M",
    "type": "card",
    "topic": "Git",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Qaysi commit bug keltirganini 500 ta commit ichidan tez topish?",
    "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.4.0\n# har qadamda test qilib: git bisect good | bad\n# yoki avtomatik:\ngit bisect run ./test.sh",
@@ -216,7 +216,7 @@
    "level": "S",
    "type": "card",
    "topic": "Git",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Trunk-based development va GitFlow — CI/CD uchun qaysi biri va nega?",
    "explanation": "DORA tadqiqotlari trunk-based'ni yuqori samarali jamoalar bilan bog'laydi. Talab: kuchli avtotestlar, main har doim deploy qilinadigan holatda, branch protection va majburiy CI."
@@ -227,7 +227,7 @@
    "level": "M",
    "type": "card",
    "topic": "GitOps",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "GitOps nima?",
    "explanation": "Afzalliklar: CI'ga klaster kalitlari berilmaydi (pull), audit — git log, rollback — git revert, drift avtomatik tuzatiladi. CI image build qilib, config repo'dagi image tegini yangilaydi; CD'ni agent bajaradi."
@@ -238,7 +238,7 @@
    "level": "M",
    "type": "card",
    "topic": "GitOps",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Helm chart'da `values.yaml` va muhitlar?",
    "explanation": "Alternativa — Kustomize (base + overlays, shablonsiz patch). `helm upgrade --install --atomic` xato bo'lsa o'zi rollback qiladi. Sirlarni values'da ochiq saqlamang: sealed-secrets, external-secrets yoki SOPS."
@@ -249,7 +249,7 @@
    "level": "S",
    "type": "card",
    "topic": "GitOps",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Noldan servis uchun CI/CD pipeline'ni loyihala: commit'dan production'gacha.",
    "explanation": "Intervyuda ta'kidlanadigan jihatlar: immutable artefakt (bir image hamma muhitdan o'tadi), tez rollback, xavfsizlik (supply chain), va o'lchanadigan natija."
@@ -260,7 +260,7 @@
    "level": "S",
    "type": "card",
    "topic": "GitOps",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Docker image'ni `latest` tegi bilan deploy qilishning muammosi?",
    "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
@@ -271,7 +271,7 @@
    "level": "St",
    "type": "card",
    "topic": "GitOps",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
    "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
@@ -283,7 +283,7 @@
    "level": "S",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
    "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
@@ -294,7 +294,7 @@
    "level": "S",
    "type": "card",
    "topic": "CI/CD",
-   "domain": "devops",
+   "domain": "cicd",
    "section": "i2",
    "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
    "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
