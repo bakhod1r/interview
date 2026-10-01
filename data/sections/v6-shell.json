@@ -1,0 +1,153 @@
+{
+  "id": "v6",
+  "name": "Shell",
+  "domain": "linux",
+  "topics": [
+    "Shell"
+  ],
+  "questions": [
+    {
+      "id": 31215,
+      "code": "LS01",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Shell nima? Terminal, console va shell farqi?",
+      "explanation": "Shell — buyruq interpretatori (bash, zsh) — user va kernel orasida. Terminal (emulator) — oyna/qurilma, shell'ni ishga tushiradi. Console — fizik/tizim terminali."
+    },
+    {
+      "id": 31216,
+      "code": "LS02",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Login, interactive va non-interactive shell farqi?",
+      "explanation": "Login — tizimga kirganda (ssh, `bash -l`), `/etc/profile`, `~/.bash_profile` o'qiladi. Interactive non-login — yangi terminal tab, `~/.bashrc`. Non-interactive — skript, hech biri (BASH_ENV dan tashqari)."
+    },
+    {
+      "id": 31217,
+      "code": "LS03",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Shebang (`#!`) nima? `#!/bin/bash` va `#!/usr/bin/env bash` farqi?",
+      "explanation": "Kernel birinchi qatordan interpretatorni oladi. `/usr/bin/env bash` — PATH'dan qidiradi (portable, macOS/NixOS), `/bin/bash` — qat'iy yo'l."
+    },
+    {
+      "id": 31218,
+      "code": "LS04",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Quoting: bitta qo'shtirnoq, qo'sh qo'shtirnoq va qo'shtirnoqsiz farqi?",
+      "explanation": "`'...'` — hech narsa kengaymaydi. `\"...\"` — `$var`, `$(cmd)` kengayadi, lekin word splitting/glob yo'q. Qo'shtirnoqsiz — splitting + glob — bug manbai."
+    },
+    {
+      "id": 31219,
+      "code": "LS05",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Glob (wildcard) va regex farqi? `*`, `?`, `[abc]`, `**`.",
+      "explanation": "Glob — shell fayl nomlarini kengaytiradi (`*.log`), regex — matn pattern (grep). `*` glob'da istalgan belgilar, regex'da oldingi belgining takrori."
+    },
+    {
+      "id": 31220,
+      "code": "LS06",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "`set -euo pipefail` nima qiladi va qanday tuzoqlari bor?",
+      "explanation": "`-e` xatoda chiqish, `-u` aniqlanmagan o'zgaruvchi xato, `pipefail` pipe'dagi har qanday xato. Tuzoq: `-e` if/`&&`/`||` ichida ishlamaydi, subshell va `local x=$(cmd)` xatoni yutadi."
+    },
+    {
+      "id": 31221,
+      "code": "LS07",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "`$@`, `$*`, `$#`, `$0`, `$1`, `$$`, `$!` nima?",
+      "explanation": "`$@` — har argument alohida (\"$@\" qo'shtirnoqda), `$*` — bitta satr, `$#` — soni, `$0` — skript nomi, `$$` — PID, `$!` — oxirgi fon jarayon PID."
+    },
+    {
+      "id": 31222,
+      "code": "LS08",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Subshell nima? `( )`, `$( )`, pipe va `{ }` farqi?",
+      "explanation": "`( )` va `$( )` — alohida jarayon (fork), o'zgaruvchi/`cd` tashqariga chiqmaydi. `{ ...; }` — joriy shell. Pipe'ning har qismi ham subshell (bash'da oxirgisi ham)."
+    },
+    {
+      "id": 31223,
+      "code": "LS09",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Here-doc va here-string nima? `<<EOF` va `<<'EOF'` farqi?",
+      "explanation": "Here-doc — ko'p qatorli stdin. `<<EOF` ichida `$var` kengayadi, `<<'EOF'` — literal. `<<-EOF` boshlang'ich tab'ni olib tashlaydi. Here-string `<<<` — bitta satr."
+    },
+    {
+      "id": 31224,
+      "code": "LS10",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Shell signal'lar va `trap`: skriptda cleanup qanday qilinadi?",
+      "explanation": "`trap 'cleanup' EXIT INT TERM` — chiqishda/signal'da funksiya chaqiriladi. Temp fayl, lock, fon jarayonlarni tozalash. SIGKILL'ni ushlab bo'lmaydi."
+    },
+    {
+      "id": 31225,
+      "code": "LS11",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Konteyner ENTRYPOINT'da shell form va exec form farqi; nega `exec` muhim?",
+      "explanation": "Shell form (`CMD app`) — `/bin/sh -c app`, PID 1 = sh, SIGTERM ilovaga yetmaydi, 10s keyin SIGKILL. Exec form `[\"app\"]` yoki wrapper'da `exec app` — ilova PID 1."
+    },
+    {
+      "id": 31226,
+      "code": "LS12",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Production bash skript uchun qanday standartlar qo'llaysan? Qachon bash emas?",
+      "explanation": "`set -euo pipefail`, quoting, `shellcheck`, `trap` cleanup, idempotentlik, `mktemp`, log + exit code, `--dry-run`. 100+ qator, JSON, murakkab logika — Go/Python."
+    },
+    {
+      "id": 31227,
+      "code": "LS13",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
+      "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
+    }
+  ]
+}

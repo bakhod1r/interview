@@ -1,0 +1,44 @@
+{
+  "31228": {
+    "a": "**Swap** — RAM kengaytmasi emas, *bosim klapani*: kernel kam ishlatiladigan **anonymous** page'larni (heap, stack) diskka chiqaradi, RAM'ni page cache yoki aktiv jarayon uchun bo'shatadi.\n\n- File-backed page (binary, mmap fayl) swap'ga tushmaydi — shunchaki tashlanadi, fayldan qayta o'qiladi.\n- Turlari: swap partition, swap file, zram (siqilgan RAM).\n\n```sh\nswapon --show\nfree -h\n```"
+  },
+  "31229": {
+    "a": "```sh\nfallocate -l 4G /swapfile      # btrfs/eski FS'da: dd if=/dev/zero ...\nchmod 600 /swapfile            # boshqalar o'qimasin (xotira sirlari!)\nmkswap /swapfile\nswapon /swapfile\necho '/swapfile none swap sw 0 0' >> /etc/fstab\nswapon --show\n```\nO'chirish: `swapoff /swapfile` (sahifalar RAM'ga qaytadi — RAM yetmasa OOM).\n\nBtrfs'da swap file uchun NOCOW + bitta subvolume kerak."
+  },
+  "31230": {
+    "a": "| | Partition | File |\n|---|---|---|\n| Yaratish | partitsiyalash | `fallocate` |\n| O'lcham | o'zgartirish qiyin | oson |\n| Tezlik | ~bir xil (2.6+ kernel bloklarni to'g'ridan-to'g'ri map qiladi) | ~bir xil |\n| Hibernate | oson | `resume_offset` kerak |\n\nLVM ustida swap LV — ikkalasining o'rtasi."
+  },
+  "31231": {
+    "a": "`vm.swappiness` (0–200, default 60) — reclaim paytida anon page (swap) vs file page (cache) qaysi biri afzal.\n\n- **0** — swap faqat oxirgi chora (OOM xavfi oshadi).\n- **1–10** — DB (PostgreSQL, Elasticsearch, Kafka): heap swap'ga tushmasin.\n- **60** — umumiy.\n- **100+** — zram bilan (swap arzon).\n\n```sh\nsysctl vm.swappiness\nsysctl -w vm.swappiness=10\necho 'vm.swappiness=10' > /etc/sysctl.d/99-swap.conf\n```\nMif: swappiness=0 swap'ni o'chirmaydi."
+  },
+  "31232": {
+    "a": "```sh\nfree -h                           # Swap used\nvmstat 1                          # si/so: sekundiga swap in/out\ngrep VmSwap /proc/*/status | sort -k2 -n | tail\nsmem -s swap -r | head\ncat /proc/pressure/memory         # PSI: some/full stall %\n```\n**Muhim farq:** *swap used* katta, lekin `si/so ≈ 0` — muammo emas (eski, kerakmas page'lar). `si/so` doimiy yuqori — **thrashing**, latency o'sadi."
+  },
+  "31233": {
+    "a": "**Belgilar:**\n- `vmstat 1`: `si`, `so` doimiy yuzlab/minglab; `wa` yuqori.\n- `/proc/pressure/memory` `full avg10` > 10%.\n- `sar -B`: `majflt/s` yuqori.\n- SSH javob bermaydi, load average baland, CPU user past.\n\n**Hal:** xotira iste'molchini topish (`smem`, `ps --sort -rss`), limit qo'yish (cgroup `memory.max`), RAM qo'shish. Oldini olish: `systemd-oomd`/`earlyoom` — thrashing o'rniga erta kill."
+  },
+  "31234": {
+    "a": "- **zram:** `/dev/zram0` — RAM'dagi siqilgan disk; `mkswap` + `swapon -p 100`. Fedora/Android default. Disk IO yo'q.\n- **zswap:** kernel funksiyasi — disk swap'ga yozishdan oldin page'ni siqib RAM pool'da saqlaydi; pool to'lsa diskka.\n\n**Qachon:** kam RAM'li VM/edge, laptop. Siqish ~2–3x. Trade-off — CPU.\n\nSwap yo'q host'da ham zram yengil bufer beradi."
+  },
+  "31235": {
+    "a": "**Tarixiy sabab:** `memory.limit` + swap = pod limitdan oshsa ham OOM bo'lmay sekinlashadi; scheduler va eviction RAM'ga asoslangan; latency garantiyasi buziladi. Kubelet `--fail-swap-on=true` default.\n\n**Hozir:** `NodeSwap` feature (1.28 beta, 1.30+ yaxshilangan), cgroup v2 talab:\n- `swapBehavior: LimitedSwap` — faqat Burstable pod'lar, limitga proporsional.\n- Guaranteed/BestEffort — swap yo'q.\n\n**Amaliyot:** latency-sensitive workload'li node'da swap o'chiq, swap kerak bo'lsa alohida node pool."
+  },
+  "31236": {
+    "a": "**Swap'siz:** bosimda OOM killer DB'ni o'ldiradi (eng katta RSS) — keskin, lekin aniq.\n**Katta swap:** DB heap swap'ga tushadi — p99 latency soniyalarga, \"tirik, lekin o'lik\" holat; health check o'tadi, foydalanuvchi kutadi.\n\n**Odatdagi kompromiss:**\n- 1–4 GB swap, `vm.swappiness=1..10`.\n- DB buffer'ni RAM'ga mos o'lchash (`shared_buffers`, JVM `-Xmx`), huge pages.\n- Elasticsearch: `bootstrap.memory_lock: true` (mlockall) yoki swap off.\n- Alert: `si/so > 0` uzoq vaqt, PSI memory.\n\nPrincipal fikr: swap — capacity muammosini yashiradi; asosiy yechim — to'g'ri sizing va limitlar."
+  },
+  "31237": {
+    "a": "**Disk quota** — kernel FS darajasida limit:\n- **blocks** — hajm (KB).\n- **inodes** — fayllar soni.\n\nKimga: **user**, **group**, **project** (katalog daraxti — XFS/ext4).\n\nMisol: shared hosting, universitet server `/home`, CI runner'lar, multi-tenant NFS. Quota'siz bitta log loop butun `/` ni to'ldirib, butun tizimni yiqitadi."
+  },
+  "31238": {
+    "a": "- **Hard limit** — absolyut chegara, yozish `Disk quota exceeded` (EDQUOT).\n- **Soft limit** — ogohlantirish chegarasi; oshgach **grace period** boshlanadi.\n- Grace tugasa — soft limit hard'ga aylanadi, user tozalamaguncha yozolmaydi.\n\n```sh\nsetquota -u ali 9G 10G 0 0 /home   # soft hard isoft ihard\nsetquota -t 604800 604800 /home    # grace (sek)\n```"
+  },
+  "31239": {
+    "a": "```sh\n# /etc/fstab\nUUID=... /home ext4 defaults,usrquota,grpquota 0 2\nmount -o remount /home\nquotacheck -cugm /home     # aquota.user/aquota.group\nquotaon -v /home\n\nsetquota -u ali 9G 10G 100000 120000 /home\nedquota -u ali             # interaktiv\nquota -us ali              # user ko'radi\nrepquota -as               # hammasi\n```\nZamonaviy ext4: `tune2fs -O quota` — journaled quota, `quotacheck` kerak emas."
+  },
+  "31240": {
+    "a": "```sh\n# fstab: /data xfs defaults,uquota,pquota 0 0  (remount yetmaydi, umount/mount)\necho '42:/data/tenantA' >> /etc/projects\necho 'tenantA:42'       >> /etc/projid\nxfs_quota -x -c 'project -s tenantA' /data\nxfs_quota -x -c 'limit -p bhard=50g tenantA' /data\nxfs_quota -x -c 'report -pbih' /data\n```\n**Project quota** — katalog bo'yicha: tenant/app papkasi. Docker overlay2 `--storage-opt size=` XFS pquota'ga tayanadi.\n\n`/` root FS'da XFS quota — kernel cmdline `rootflags=uquota`."
+  },
+  "31241": {
+    "a": "| Usul | Nimani cheklaydi | Trade-off |\n|---|---|---|\n| User/group quota | user fayllari | uid umumiy bo'lsa ishlamaydi |\n| Project quota (XFS/ext4) | katalog daraxti | FS-ga bog'liq |\n| Alohida LV/PVC | butun volume | izolyatsiya yaxshi, bo'sh joy isrof |\n| K8s `ephemeral-storage` | pod log + emptyDir + writable layer | limitda evict |\n| cgroup io.max | IO tezligi, hajm emas | — |\n\n**Gotcha:** quota 100% to'lishi ilovada `EDQUOT` xatosi — ENOSPC kabi ishlov berish kerak. Monitoring: limitga 80%da alert."
+  }
+}

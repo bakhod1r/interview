@@ -2,20 +2,7 @@
 
 > **Natija:** user va group nima ekanini, ular qayerda saqlanishini bilish, user yaratish va group'ga qo'shish. Kernel nega nomni emas, UID'ni ko'radi; servis account'lari va eng kam huquq tamoyili; group o'zgarishi nega darhol ishlamaydi; container'da UID muammolari; ko'p server'da user boshqaruvi.
 
-## 1. Muammo — server'da kim nima qila olishini qanday cheklash kerak?
-
-Bitta server'da bir vaqtda ishlaydi:
-- bir necha odam (admin, dasturchi, auditor);
-- o'nlab servis (nginx, postgres, app, cron job'lar).
-
-Savollar:
-- Nginx buzib kirilsa, hujumchi DB fayllarini o'qiy oladimi?
-- Dasturchi prod config'ni o'zgartira oladimi?
-- Kim, qachon, nima qilganini qanday bilamiz?
-
-**Yechim:** har harakat qandaydir **identity** (user) nomidan bajariladi, ruxsatlar shu identity'ga va uning **group**'lariga beriladi. Bu Linux xavfsizlikning birinchi qatlami.
-
-## 2. Kernel user'ni nomi bilan emas, raqami (UID) bilan taniydi
+## 1. Kernel user'ni nomi bilan emas, raqami (UID) bilan taniydi
 
 ```
  Siz ko'rasiz:    ali           Kernel ko'radi:   UID 1001
@@ -39,7 +26,7 @@ Nom -> raqam tarjimasi faqat **user space**'da (`/etc/passwd` orqali) bo'ladi. K
 
 > **Muhim nuqta:** "root" — bu nom emas, **UID 0**. UID 0 bo'lgan istalgan user root'dir. Xavfsizlik audit'da: `awk -F: '$3==0' /etc/passwd` — faqat bitta qator bo'lishi kerak.
 
-## 3. Group — ruxsatni ko'p odamga bir yo'la berish
+## 2. Group — ruxsatni ko'p odamga bir yo'la berish
 
 Ruxsatni har user'ga alohida berish masshtablanmaydi: 20 dasturchi -> 20 ta o'zgarish. Group'ga bersangiz — bitta.
 
@@ -69,7 +56,7 @@ Ubuntu'da har yangi user o'z nomi bilan shaxsiy group oladi (**User Private Grou
 
 > **Xavfsizlik:** user'ni `docker` group'iga qo'shish — unga root berish bilan bir xil. Production'da: rootless Docker / Podman yoki faqat CI uchun cheklangan kirish.
 
-## 4. Kimman?
+## 3. Kimman?
 
 ```bash
 whoami            # -> student (effective user nomi)
@@ -83,7 +70,7 @@ getent passwd ali # NSS orqali (LDAP user'lar ham ko'rinadi)
 
 > **`cat /etc/passwd` vs `getent passwd`:** korporativ server'larda user'lar LDAP / FreeIPA / SSSD'da bo'lishi mumkin — `/etc/passwd`'da ular yo'q. `getent` NSS orqali barcha manbalardan so'raydi. Script'larda `getent` ishlating.
 
-## 5. Saqlanadigan fayllar
+## 4. Saqlanadigan fayllar
 
 ```text
 /etc/passwd
@@ -115,7 +102,7 @@ ali:$y$j9T$...:20000:0:99999:7:::
 
 > **Qoida:** bu fayllarni hech qachon editor bilan to'g'ridan-to'g'ri tahrirlamang. Bitta sintaksis xatosi — hech kim login qila olmaydi. `useradd`, `usermod`, `vipw` / `vigr` (lock va tekshiruv bilan) ishlating.
 
-## 6. User va group yaratish, o'zgartirish, o'chirish
+## 5. User va group yaratish, o'zgartirish, o'chirish
 
 ```bash
 sudo useradd -m -s /bin/bash ali       # -m home yaratadi (past-darajali, script uchun)
@@ -138,7 +125,7 @@ sudo userdel -r ali                    # home bilan o'chirish
 
 > **Muhim:** `usermod -L` faqat **parolni** bloklaydi. SSH kalit bilan kirish ishlayveradi! To'liq bloklash: `chage -E 0` yoki shell'ni `nologin` qilish va `~/.ssh/authorized_keys`'ni olib tashlash.
 
-## 7. Servislar uchun alohida user — eng kam huquq tamoyili
+## 6. Servislar uchun alohida user — eng kam huquq tamoyili
 
 ```bash
 ps -eo user,comm | sort -u | head -20
@@ -169,7 +156,7 @@ sudo useradd --system --no-create-home --shell /usr/sbin/nologin myapp
 - `nologin` — hatto parol topilsa ham interaktiv shell yo'q.
 - Har servisga **alohida** user: bitta `app` user'i bilan 5 servisni ishlatsangiz, bittasi buzilsa — beshala ham.
 
-## 8. Container ichida user va UID tuzoqlari
+## 7. Container ichida user va UID tuzoqlari
 
 Container ichidagi `root` (UID 0) — host'dagi UID 0 bilan **bir xil** (user namespace yoqilmagan bo'lsa). Container'dan qochish (escape) bo'lsa — host'da root.
 
@@ -191,7 +178,7 @@ Yechimlar: host papkasining egasini mos UID'ga o'zgartirish; Kubernetes'da `secu
 
 > Kubernetes'da: `runAsNonRoot: true`, `runAsUser: 10001`, `allowPrivilegeEscalation: false` — xavfsizlik baseline.
 
-## 9. 100 ta server'da user'larni qanday boshqarish kerak
+## 8. 100 ta server'da user'larni qanday boshqarish kerak
 
 | Yondashuv | Qanday | Muammo / qachon |
 |---|---|---|

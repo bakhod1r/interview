@@ -1,0 +1,164 @@
+{
+  "id": "v7",
+  "name": "Swap & disk quotas",
+  "domain": "linux",
+  "topics": [
+    "Swap & quotas"
+  ],
+  "questions": [
+    {
+      "id": 31228,
+      "code": "LW01",
+      "level": "J",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Swap nima va qanday ishlaydi?",
+      "explanation": "Diskdagi joy — RAM to'lganda kam ishlatiladigan anonymous page'lar shu yerga chiqariladi. Swap file yoki partition. RAM'dan 1000x sekin."
+    },
+    {
+      "id": 31229,
+      "code": "LW02",
+      "level": "J",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Swap file qanday yaratiladi va doimiy qilinadi?",
+      "explanation": "`fallocate -l 4G /swapfile; chmod 600; mkswap; swapon` va `/etc/fstab`'ga `/swapfile none swap sw 0 0`."
+    },
+    {
+      "id": 31230,
+      "code": "LW03",
+      "level": "J",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Swap partition va swap file farqi?",
+      "explanation": "Partition — alohida bo'lim, o'lchamni o'zgartirish qiyin. File — moslashuvchan, zamonaviy kernel'da tezligi deyarli bir xil. Cloud VM'da odatda file."
+    },
+    {
+      "id": 31231,
+      "code": "LW04",
+      "level": "M",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "`vm.swappiness` nima? 0, 10, 60, 100 qiymatlari nimani bildiradi?",
+      "explanation": "Kernel anonymous page'ni swap'ga chiqarish va page cache'ni tashlash orasidagi nisbat. 60 default; 0 — iloji boricha swap qilma (lekin OOM oldidan qiladi); DB serverlarda 1-10."
+    },
+    {
+      "id": 31232,
+      "code": "LW05",
+      "level": "M",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Server swap ishlatayotganini qanday ko'rasan va qaysi jarayon swap'da?",
+      "explanation": "`free -h`, `swapon --show`; faol swap bosimi — `vmstat 1` (`si`/`so`), `sar -W`; jarayon bo'yicha — `/proc/<pid>/status` VmSwap, `smem`."
+    },
+    {
+      "id": 31233,
+      "code": "LW06",
+      "level": "M",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Thrashing nima va qanday aniqlanadi?",
+      "explanation": "Ishchi to'plam RAM'ga sig'maydi — kernel doimiy page'larni swap in/out qiladi, CPU iowait'da, tizim deyarli to'xtaydi. `vmstat` si/so, PSI memory full, major fault'lar."
+    },
+    {
+      "id": 31234,
+      "code": "LW07",
+      "level": "M",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "zram va zswap nima?",
+      "explanation": "zram — RAM ichida siqilgan block device, swap sifatida (disk yo'q). zswap — disk swap oldidagi siqilgan cache. Ikkalasi IO'ni kamaytiradi, CPU sarflaydi."
+    },
+    {
+      "id": 31235,
+      "code": "LW08",
+      "level": "S",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Kubernetes node'da swap: nega tarixan o'chirilgan va hozir holat qanday?",
+      "explanation": "Kubelet swap bilan ishga tushmasdi — memory limit/QoS va eviction hisoblari swap'ni hisobga olmasdi, latency oldindan aytib bo'lmasdi. K8s 1.28+ NodeSwap (LimitedSwap, cgroup v2), faqat Burstable pod'lar."
+    },
+    {
+      "id": 31236,
+      "code": "LW09",
+      "level": "S",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Production DB serverda swap: yoqasanmi? Argumentlar.",
+      "explanation": "Kichik swap + past swappiness — tavsiya: OOM kill o'rniga yumshoq bufer, kerakmas page'lar chiqadi. Katta swap — thrashing, latency. Monitoring: si/so alert."
+    },
+    {
+      "id": 31237,
+      "code": "LW10",
+      "level": "J",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Disk quota nima va nega kerak?",
+      "explanation": "User/group (yoki project) uchun FS'da joy va inode limiti. Bitta user butun diskni to'ldirmasligi uchun — shared host, /home, multi-tenant."
+    },
+    {
+      "id": 31238,
+      "code": "LW11",
+      "level": "M",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Soft limit, hard limit va grace period farqi?",
+      "explanation": "Hard — hech qachon oshib bo'lmaydi (EDQUOT). Soft — vaqtincha oshish mumkin, grace period (default 7 kun) davomida; muddat tugasa soft limit hard kabi ishlaydi."
+    },
+    {
+      "id": 31239,
+      "code": "LW12",
+      "level": "M",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "ext4'da user quota qanday yoqiladi va tekshiriladi?",
+      "explanation": "fstab'da `usrquota,grpquota`, remount, `quotacheck -cug`, `quotaon`; limit — `edquota`/`setquota`; hisobot — `repquota -a`, `quota -u`."
+    },
+    {
+      "id": 31240,
+      "code": "LW13",
+      "level": "M",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "XFS quota va project quota nima? ext4'dan farqi?",
+      "explanation": "XFS quota mount paytida yoqiladi (`uquota,pquota`), `xfs_quota` bilan boshqariladi, journaled. Project quota — katalog daraxti uchun limit (user'dan qat'i nazar)."
+    },
+    {
+      "id": 31241,
+      "code": "LW14",
+      "level": "S",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Multi-tenant platformada diskni qanday cheklaysan: quota, LVM, cgroup, K8s?",
+      "explanation": "Variantlar: user/project quota (bitta FS), alohida LV/volume (qattiq izolyatsiya), K8s `ephemeral-storage` limit + PVC o'lchami, loop/overlay `size=`. cgroup disk hajmini emas, IO'ni cheklaydi."
+    }
+  ]
+}

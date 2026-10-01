@@ -2,17 +2,7 @@
 
 > **Natija:** vaziyatga qarab to'g'ri vosita tanlash, jonli log'ni kuzatish, katta fayllar bilan xavfsiz ishlash. Page cache, log rotation strategiyalari, o'chirilgan lekin ochiq fayl, binary va encoding muammolari.
 
-## 1. Muammo — server'da faylni ochib ko'rish nega oddiy ish emas
-
-Noutbukda faylni editor'da ochasiz. Production server'da:
-- log fayl 20 GB bo'lishi mumkin — editor RAM'ni yeb, server'ni sekinlashtiradi;
-- log har soniyada o'sib boradi — sizga jonli oqim kerak;
-- log'lar har kecha **rotate** qilinadi — kuzatayotgan vosita yangi faylni "yo'qotib" qo'yishi mumkin;
-- server yuklangan — sizning debug'ingiz incident'ni og'irlashtirmasligi kerak.
-
-**Asosiy savol:** "Kerakli qismni **minimal resurs** bilan qanday ko'raman?"
-
-## 2. Linux'da hamma narsa fayl ("everything is a file")
+## 1. Linux'da hamma narsa fayl ("everything is a file")
 
 Linux'da text, config, log, device (`/dev/sda`), process ma'lumoti (`/proc`), hatto kernel parametrlari (`/sys`) — hammasi fayl interfeysi orqali o'qiladi. Bir xil vositalar (`cat`, `less`, `grep`) hamma joyda ishlaydi.
 
@@ -25,7 +15,7 @@ cat /proc/loadavg       # kernel'dan jonli ma'lumot, diskda yo'q
 
 > **Tuzoq:** binary faylni `cat` qilmang — terminal'ga control belgilar yuboriladi va u buziladi (g'alati belgilar, kursor yo'qoladi). Tuzatish: `reset`. Binary ichini ko'rish: `xxd file | head` yoki `strings file | less`.
 
-## 3. Qaysi holatda qaysi buyruq
+## 2. Qaysi holatda qaysi buyruq
 
 | Vaziyat | Vosita | Nega |
 |---|---|---|
@@ -50,7 +40,7 @@ sed -n '100,120p' f   # 100–120 qatorlar
 
 `tail` faylni boshidan o'qimaydi: `lseek()` bilan oxiriga sakraydi va orqaga qarab qator qidiradi. `wc -l` esa butun faylni o'qishi shart — 20 GB'da sekin. Vositaning **ichida nima qilishini** bilish — performance intuition'ning asosi.
 
-## 4. `less` — katta fayllarni o'qishning asosiy vositasi
+## 3. `less` — katta fayllarni o'qishning asosiy vositasi
 
 | Key | Vazifa |
 |---|---|
@@ -65,7 +55,7 @@ sed -n '100,120p' f   # 100–120 qatorlar
 
 **Ish tartibi:** `less +F app.log` — jonli kuzatasiz; muammo ko'rinsa `Ctrl+C` — to'xtab, `?ERROR` bilan orqaga qidirasiz; `F` — yana jonli rejimga. `tail -f` bunday qila olmaydi.
 
-## 5. Page cache — nega fayl ikkinchi marta tezroq o'qiladi
+## 4. Page cache — nega fayl ikkinchi marta tezroq o'qiladi
 
 ```
  1-marta: less big.log -> kernel diskdan o'qiydi -> page cache (RAM) -> sizga
@@ -78,7 +68,7 @@ sed -n '100,120p' f   # 100–120 qatorlar
 
 > **Production'dagi nozik jihat:** 50 GB log'ni `cat` / `grep` qilish page cache'ni "ifloslaydi" — DB yoki app'ning issiq data'si cache'dan siqib chiqarilishi mumkin va ular sekinlashadi. Yuklangan prod server'da katta tahlilni `nice -n 19 ionice -c3` bilan yoki log'ni boshqa joyga ko'chirib bajaring.
 
-## 6. Log rotation va `tail -f` bilan `tail -F` farqi
+## 5. Log rotation va `tail -f` bilan `tail -F` farqi
 
 **Muammo:** log cheksiz o'sadi va disk'ni to'ldiradi. **Yechim:** `logrotate` (yoki app'ning o'zi) log'ni muntazam aylantiradi.
 
@@ -106,7 +96,7 @@ Production'da doim `tail -F` (= `--follow=name --retry`).
 
 > **Zamonaviy yondashuv (12-factor):** app log'ni **stdout**'ga yozadi, fayl bilan ishlamaydi. Rotation, saqlash va markazlashtirish — platformaning ishi (systemd-journald, Docker log driver, Kubernetes + Loki/ELK). Bu app'ni soddalashtiradi va disk to'lishi muammosini bir joyda hal qiladi.
 
-## 7. Tuzoq: fayl o'chirildi, lekin disk bo'shamadi
+## 6. Tuzoq: fayl o'chirildi, lekin disk bo'shamadi
 
 **Holat:** disk 100%. Katta log'ni `rm` qildingiz, `df` hali ham 100%.
 
@@ -135,7 +125,7 @@ Yechim variantlari:
 
 > **Qoida:** ishlayotgan servis log'ini `rm` qilmang — **truncate** qiling yoki logrotate'ga topshiring.
 
-## 8. Katta fayllar
+## 7. Katta fayllar
 
 ```bash
 ls -lh big.log; du -h big.log      # hajm (du — diskda haqiqatda egallagan joy)
@@ -150,7 +140,7 @@ split -l 1000000 big.log part_     # bo'laklarga ajratish
 
 **`ls -l` va `du` farqi:** `ls` faylning "mantiqiy" hajmini, `du` diskda egallagan joyni ko'rsatadi. **Sparse fayl**'larda (VM disk image, ba'zi DB fayllar) `ls` 100 GB, `du` 2 GB ko'rsatishi mumkin.
 
-## 9. Kodlash (encoding) va qator oxiri belgilari
+## 8. Kodlash (encoding) va qator oxiri belgilari
 
 - Windows fayllari `\r\n` (CRLF) bilan tugaydi -> script'da `bad interpreter: /bin/bash^M` yoki `$'\r': command not found` xatosi.
 - Tekshirish: `cat -A script.sh` (qator oxirida `^M$`) yoki `file script.sh` (`with CRLF line terminators`).
@@ -166,7 +156,7 @@ iconv -f WINDOWS-1251 -t UTF-8 old.txt > new.txt
 
 > **UTF-8 BOM tuzog'i:** ba'zi Windows editor'lar fayl boshiga ko'rinmas `EF BB BF` baytlarini qo'yadi. Natija: `#!/bin/bash` birinchi qator bo'lib tanilmaydi, JSON parser xato beradi. Tekshirish: `head -c 3 file | xxd`.
 
-## 10. Nima buzilishi mumkin
+## 9. Nima buzilishi mumkin
 
 | Belgi | Sabab | Tekshirish |
 |---|---|---|

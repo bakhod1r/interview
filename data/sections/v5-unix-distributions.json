@@ -1,0 +1,142 @@
+{
+  "id": "v5",
+  "name": "Unix & distributions",
+  "domain": "linux",
+  "topics": [
+    "Unix & distros"
+  ],
+  "questions": [
+    {
+      "id": 31203,
+      "code": "LD01",
+      "level": "J",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Unix nima va Unix-like (Unix-based) OS deganda nima tushuniladi?",
+      "explanation": "Unix — 1969 Bell Labs (Thompson, Ritchie), C'da yozilgan ko'p user'li OS. Unix-like — Unix falsafasi va POSIX API'ni takrorlaydigan OS'lar (Linux, BSD, macOS)."
+    },
+    {
+      "id": 31204,
+      "code": "LD02",
+      "level": "J",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Unix falsafasi nima? Asosiy tamoyillari.",
+      "explanation": "Bitta ish — yaxshi bajar; dasturlar birlashadi (pipe); matn — universal interfeys; hamma narsa fayl."
+    },
+    {
+      "id": 31205,
+      "code": "LD03",
+      "level": "J",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Linux — OS'mi yoki kernel? GNU/Linux nima?",
+      "explanation": "Linux — faqat kernel (Torvalds, 1991). To'liq OS = kernel + GNU userland (bash, coreutils, glibc) + init + paketlar = distributiv."
+    },
+    {
+      "id": 31206,
+      "code": "LD04",
+      "level": "J",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "POSIX nima va nega muhim?",
+      "explanation": "IEEE standarti: shell, utilitlar, C API (fork, exec, open, pthread). POSIX'ga yozilgan skript/kod Linux, BSD, macOS'da ishlaydi."
+    },
+    {
+      "id": 31207,
+      "code": "LD05",
+      "level": "J",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Asosiy Linux distributiv oilalari qaysilar?",
+      "explanation": "Debian (Ubuntu) — apt/.deb; RHEL (Fedora, Rocky, Alma, CentOS Stream) — dnf/.rpm; SUSE — zypper; Arch — pacman; Alpine — apk/musl."
+    },
+    {
+      "id": 31208,
+      "code": "LD06",
+      "level": "M",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "LTS, rolling release va point release farqi? Production uchun qaysi?",
+      "explanation": "LTS/point — barqaror versiya, faqat security fix (Ubuntu LTS 5 yil, RHEL 10 yil). Rolling (Arch) — doim eng yangi, sinish xavfi. Production — LTS."
+    },
+    {
+      "id": 31209,
+      "code": "LD07",
+      "level": "M",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Alpine (musl) vs Debian/Ubuntu (glibc) bazaviy image: qanday farq va gotcha?",
+      "explanation": "Alpine kichik (~5MB), musl libc. Gotcha: glibc'ga bog'langan binary ishlamaydi, DNS resolver farqi, ba'zi workload'da sekin malloc, Python wheel yo'q."
+    },
+    {
+      "id": 31210,
+      "code": "LD08",
+      "level": "M",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Qaysi distributiv ekanini qanday aniqlaysan?",
+      "explanation": "`cat /etc/os-release` (standart), `uname -r` kernel, `hostnamectl`, `lsb_release -a`."
+    },
+    {
+      "id": 31211,
+      "code": "LD09",
+      "level": "M",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Linux, BSD va macOS farqi (DevOps nuqtai nazaridan)?",
+      "explanation": "Linux — kernel + turli userland; BSD — kernel+userland bitta loyiha; macOS — XNU (Mach+BSD). Utilitlar farqi: GNU vs BSD `sed -i`, `date`, `find`."
+    },
+    {
+      "id": 31212,
+      "code": "LD10",
+      "level": "S",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Production uchun distributiv tanlashda qaysi mezonlarga qaraysan?",
+      "explanation": "Support muddati, security patch tezligi, vendor/sertifikat (DB, cloud), jamoa tajribasi, kernel versiyasi (eBPF, cgroup v2), image hajmi, compliance (FIPS, CIS)."
+    },
+    {
+      "id": 31213,
+      "code": "LD11",
+      "level": "S",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Immutable/minimal host OS (Flatcar, Bottlerocket, Talos) nima va nega?",
+      "explanation": "Read-only root, paket menejer yo'q, atomik A/B yangilanish, faqat konteyner ishlatadi. Kichik attack surface, drift yo'q, rollback oson."
+    },
+    {
+      "id": 31214,
+      "code": "LD12",
+      "level": "M",
+      "type": "card",
+      "topic": "Unix & distros",
+      "domain": "linux",
+      "section": "v5",
+      "question": "Kernel versiyasi va distributiv versiyasi nega alohida? `uname -r` nima beradi?",
+      "explanation": "Distro kernel'ni o'zi build qiladi va patch backport qiladi. `5.14.0-427.el9` — RHEL kernel, upstream 5.14 emas, yangi fix'lar bor."
+    }
+  ]
+}

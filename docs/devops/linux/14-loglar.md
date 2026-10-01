@@ -2,16 +2,7 @@
 
 > **Natija:** servis yiqilganda log'dan sababni topish: `/var/log` va `journalctl` bilan ishlash. Log turlari va daraja intizomi, journald va rsyslog arxitekturasi, structured logging, correlation ID, nima log qilinmasligi kerak (secret, PII), retention va markazlashtirish.
 
-## 1. Muammo — server'da nima bo'lganini keyin qanday bilamiz?
-
-Incident paytida siz server'da nima bo'lganini ko'rmagansiz. Faqat **iz** qolgan. Yaxshi log savollarga javob beradi:
-- **Nima** bo'ldi? **Qachon**? **Qayerda** (qaysi servis, host, request)?
-- **Kim** qildi (audit)?
-- **Nega** — oldin nima bo'lgan edi?
-
-Yomon log: `Error occurred`. Yaxshi log: vaqt + servis + daraja + aniq xabar + kontekst (request ID, user ID, kutilgan/haqiqiy qiymat).
-
-## 2. Log qatori qanday qismlardan iborat
+## 1. Log qatori qanday qismlardan iborat
 
 ```text
 2026-10-01T14:03:22.418Z nginx[900]: [error] connect() failed (111: Connection refused) while connecting to upstream, upstream: "http://127.0.0.1:8080/api"
@@ -40,7 +31,7 @@ Yomon log: `Error occurred`. Yaxshi log: vaqt + servis + daraja + aniq xabar + k
 - Server soatlari NTP bilan sinxron bo'lishi shart (`timedatectl`). Soat 2 soniya farq qilsa, ikki servis log'ida "sabab"dan oldin "oqibat" ko'rinadi.
 - Millisekund aniqligi — tez tizimlarda soniya yetmaydi.
 
-## 3. Log'lar qayerga yoziladi: ikki tizim
+## 2. Log'lar qayerga yoziladi: ikki tizim
 
 ```
  App / servis
@@ -65,7 +56,7 @@ Yomon log: `Error occurred`. Yaxshi log: vaqt + servis + daraja + aniq xabar + k
 
 > **Tuzoq:** ba'zi minimal sozlamalarda journal faqat RAM'da (`/run/log/journal`) — reboot'dan keyin oldingi boot log'lari yo'q. Doimiy qilish: `sudo mkdir -p /var/log/journal` yoki `/etc/systemd/journald.conf`'da `Storage=persistent`. Kernel panic'dan keyin "nima bo'ldi?" savoliga javob shu sozlamaga bog'liq.
 
-## 4. `/var/log`
+## 3. `/var/log`
 
 | Fayl | Nima |
 |---|---|
@@ -83,7 +74,7 @@ sudo grep -c "Failed password" /var/log/auth.log
 zgrep error /var/log/syslog.2.gz
 ```
 
-## 5. journalctl
+## 4. journalctl
 
 ```bash
 journalctl -u nginx                 # bitta servis
@@ -106,7 +97,7 @@ sudo journalctl --vacuum-time=14d   # 14 kundan eskisini o'chirish
 
 Retention'ni doimiy sozlash: `/etc/systemd/journald.conf` -> `SystemMaxUse=2G`, `MaxRetentionSec=1month`.
 
-## 6. Tartiblangan (structured) log — nega JSON
+## 5. Tartiblangan (structured) log — nega JSON
 
 ```text
 # Unstructured
@@ -144,7 +135,7 @@ logger.Error("payment failed",
 
 Har so'rovga bitta ID beriladi va **barcha** servislar log'iga yoziladi (HTTP header orqali uzatiladi, masalan `X-Request-ID` yoki W3C `traceparent`). Incident'da bitta ID bo'yicha butun yo'lni ko'rasiz. Busiz 5 ta servis log'ini vaqt bo'yicha taxminiy solishtirasiz.
 
-## 7. Log'ga nimalar yozilmasligi kerak (xavfsizlik)
+## 6. Log'ga nimalar yozilmasligi kerak (xavfsizlik)
 
 | Log'ga tushmasligi kerak | Nega |
 |---|---|
@@ -161,7 +152,7 @@ Har so'rovga bitta ID beriladi va **barcha** servislar log'iga yoziladi (HTTP he
 
 > **Log injection:** user kiritgan matnni to'g'ridan-to'g'ri log'ga yozsangiz, `\n` bilan soxta log qatorlari yaratilishi mumkin ("admin logged in successfully"). Structured logging (JSON escape) buni hal qiladi.
 
-## 8. Log, metric va trace farqi
+## 7. Log, metric va trace farqi
 
 | Signal | Savol | Misol | Narx |
 |---|---|---|---|
@@ -173,7 +164,7 @@ Har so'rovga bitta ID beriladi va **barcha** servislar log'iga yoziladi (HTTP he
 
 > **Masshtab tuzog'i:** DEBUG log'ni prod'da yoqib qo'yish — disk to'lishi va log tizimi narxining portlashi. Har servis uchun log hajmi va retention — budjet qarori.
 
-## 9. Xatoni topish tartibi
+## 8. Xatoni topish tartibi
 
 ```
  1. systemctl status X           -> failed? qachon? exit code / signal?

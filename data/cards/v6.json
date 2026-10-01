@@ -1,0 +1,41 @@
+{
+  "31215": {
+    "a": "- **Shell** — dastur: buyruqni o'qiydi, parse qiladi, `fork+exec` bilan ishga tushiradi. bash, zsh, sh (dash), fish.\n- **Terminal emulator** — iTerm, GNOME Terminal: PTY ochadi, ichida shell.\n- **TTY/console** — kernel terminal qurilmasi (`/dev/tty1`, `/dev/pts/0`).\n\n`echo $0` — joriy shell, `cat /etc/shells` — ruxsat etilgan, `chsh -s /bin/zsh` — default'ni o'zgartirish."
+  },
+  "31216": {
+    "a": "| Tur | Misol | O'qiladi |\n|---|---|---|\n| Login | `ssh host`, `su -` | `/etc/profile`, `~/.bash_profile` (yo'q bo'lsa `~/.profile`) |\n| Interactive non-login | yangi tab, `bash` | `~/.bashrc` |\n| Non-interactive | `bash script.sh`, cron | hech biri (`$BASH_ENV`) |\n\n**Gotcha:** cron'da `PATH` minimal, alias yo'q — skript terminalda ishlaydi, cron'da yo'q. Skriptda to'liq yo'l yoki `PATH` ni o'zing o'rnat.\n\nOdat: `.bash_profile` ichida `. ~/.bashrc`."
+  },
+  "31217": {
+    "a": "`./script.sh` bajarilganda kernel (`execve`) `#!` ni ko'radi va interpretatorni chaqiradi: `/bin/bash ./script.sh`.\n\n- `#!/bin/bash` — aniq yo'l; bash boshqa joyda bo'lsa ishlamaydi.\n- `#!/usr/bin/env bash` — `PATH` dan topadi; macOS'da brew'dagi yangi bash.\n- `#!/bin/sh` — POSIX shell; Debian'da bu `dash` — bash-ism sinadi.\n\nShebang ishlashi uchun `chmod +x` kerak. `bash script.sh` shebang'ni e'tiborsiz qoldiradi."
+  },
+  "31218": {
+    "a": "```sh\nf=\"my file.txt\"\nrm $f        # rm 'my' 'file.txt'  -- XATO\nrm \"$f\"      # rm 'my file.txt'    -- to'g'ri\necho '$HOME' # $HOME (literal)\necho \"$HOME\" # /home/ali\n```\n\n**Qoida:** har doim `\"$var\"` va `\"$@\"`. Qo'shtirnoqsiz o'zgaruvchi bo'sh bo'lsa `rm -rf $DIR/*` = `rm -rf /*`.\n\n`shellcheck` bu xatolarni (SC2086) topadi."
+  },
+  "31219": {
+    "a": "**Glob** (shell, fayl nomlari): `*` — istalgan, `?` — bitta belgi, `[a-c]` — to'plam, `{a,b}` — brace expansion (glob emas), `**` — rekursiv (`shopt -s globstar`).\n\n**Regex** (grep/sed): `.*` — istalgan, `^`, `$`, `+`.\n\n**Gotcha:** moslik bo'lmasa bash pattern'ni literal qoldiradi: `rm *.tmp` — `*.tmp` fayl topilmadi. `shopt -s nullglob` — bo'sh ro'yxat. `grep *.go` — shell avval kengaytiradi!"
+  },
+  "31220": {
+    "a": "```sh\nset -euo pipefail\n```\n- `-e` — buyruq ≠0 qaytarsa skript to'xtaydi.\n- `-u` — `$UNSET` — xato (typo himoya).\n- `-o pipefail` — `false | true` xato hisoblanadi.\n\n**Tuzoqlar:**\n- `if cmd`, `cmd || x`, `cmd && x` — `-e` ishlamaydi.\n- `local v=$(cmd)` — `local` exit code'i 0, xato yo'qoladi. Ajrat: `local v; v=$(cmd)`.\n- `grep` topmasa 1 qaytaradi — pipefail bilan skript to'xtaydi: `grep x f || true`.\n- `-u` + bo'sh array eski bash'da xato.\n\n+ `trap 'echo \"xato $LINENO\"' ERR` — debug."
+  },
+  "31221": {
+    "a": "```sh\n./s.sh \"a b\" c\n$#   # 2\n\"$@\" # \"a b\" \"c\"   -- argumentlarni to'g'ri uzatish\n\"$*\" # \"a b c\"     -- bitta satr\n$$   # joriy shell PID\n$!   # oxirgi & jarayon PID\n$?   # oxirgi exit code\n```\n**Qoida:** wrapper skriptda doim `exec app \"$@\"`. `$@` qo'shtirnoqsiz — bo'shliqli argument bo'linadi."
+  },
+  "31222": {
+    "a": "```sh\n(cd /tmp; x=1); pwd; echo $x   # eski dir, x bo'sh\n{ cd /tmp; x=1; }; pwd          # /tmp, x=1\n\ncount=0\ncat f | while read l; do count=$((count+1)); done\necho $count   # 0 !  while subshell'da\n\nwhile read l; do count=$((count+1)); done < f   # to'g'ri\n```\nBash'da `shopt -s lastpipe` oxirgi qismni joriy shell'da ishlatadi."
+  },
+  "31223": {
+    "a": "```sh\ncat > /etc/app.conf <<EOF\nhost=$HOST\nEOF\n\ncat > run.sh <<'EOF'\necho \"$HOME\"     # literal qoladi\nEOF\n\ngrep foo <<< \"$text\"\n```\nRemote buyruq: `ssh host 'bash -s' <<'EOF' ... EOF` — lokal kengaytirish bo'lmasligi uchun qo'shtirnoqli delimiter."
+  },
+  "31224": {
+    "a": "```sh\ntmp=$(mktemp -d)\ncleanup() { rm -rf \"$tmp\"; kill $(jobs -p) 2>/dev/null; }\ntrap cleanup EXIT\ntrap 'exit 130' INT\ntrap 'exit 143' TERM\n```\n- `EXIT` — har qanday chiqishda (bash pseudo-signal).\n- `kill -9` (SIGKILL) — trap ishlamaydi.\n\n**Konteyner gotcha:** shell PID 1 bo'lsa SIGTERM'ni bola jarayonga uzatmaydi — `exec app \"$@\"` yoki `tini`."
+  },
+  "31225": {
+    "a": "```dockerfile\nCMD node server.js              # sh -c ... -> PID1 = sh\nCMD [\"node\", \"server.js\"]      # PID1 = node\n```\nWrapper skript:\n```sh\n#!/bin/sh\nset -e\n./migrate\nexec ./app \"$@\"   # sh o'rniga app keladi\n```\n**Natija exec'siz:** `docker stop`/K8s rollout'da graceful shutdown yo'q — so'rovlar uziladi, `terminationGracePeriodSeconds` kutiladi.\n\nPID 1 zombie'larni ham yig'ishi kerak — ko'p jarayon bo'lsa `tini` / `--init`."
+  },
+  "31226": {
+    "a": "**Checklist:**\n- `#!/usr/bin/env bash` + `set -euo pipefail`, `IFS=$'\\n\\t'` ehtiyotkor.\n- Har o'zgaruvchi `\"$var\"`; `shellcheck` CI'da.\n- `trap cleanup EXIT`, `mktemp`, `flock` (parallel ishga tushishdan himoya).\n- Idempotent: qayta ishga tushsa ham xavfsiz.\n- Aniq exit code va stderr'ga log.\n- Xavfli amalda `--dry-run`, `rm -rf \"${dir:?}\"/`.\n\n**Qachon bash emas:** murakkab data (JSON — `jq` chegarasi), error handling, test, concurrency, 100-200+ qator. Glue — bash, logika — Go/Python."
+  },
+  "31227": {
+    "a": "Bash qidirish tartibi:\n1. **alias** (`alias ll='ls -l'`)\n2. **keyword** (`if`, `[[`)\n3. **function**\n4. **builtin** (`cd`, `echo`, `read` — `cd` external bo'lolmaydi, chunki jarayon dir'i)\n5. **`PATH`** — chapdan o'ngga; natija `hash` cache'da.\n\n```sh\ntype -a echo   # builtin + /bin/echo\ncommand ls     # alias/function'siz\nhash -r        # cache tozalash (binary ko'chganda)\n```\n**Security:** `PATH` boshida `.` yoki yoziladigan dir — PATH hijacking. sudo `secure_path` shuning uchun."
+  }
+}

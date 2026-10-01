@@ -2,17 +2,7 @@
 
 > **Natija:** `ls -l` natijasini o'qish, `chmod`'ni symbolic va octal usulda ishlatish, `Permission denied`'ni tizimli diagnostika qilish. Kernel tekshiruv algoritmi, papkadagi ruxsatlarning haqiqiy ma'nosi, umask, maxsus bit'lar (SUID, SGID, sticky), ACL va eng kam huquq tamoyili.
 
-## 1. Muammo — kim nimani qila oladi?
-
-9-darsda identity'ni (user, group) ko'rdik. Endi savol: **shu identity aniq bir fayl bilan nima qila oladi?**
-
-- `.env` faylidagi DB parolini kim o'qiy oladi?
-- Deploy script'ini kim ishga tushira oladi?
-- `/var/www`'ga kim yangi fayl qo'sha oladi?
-
-Linux'ning klassik javobi — har faylda 9 bit: **3 ta toifa x 3 ta amal**. Oddiy, tez, 50 yildan beri ishlaydi. Cheklovlari ham bor (7-bo'lim).
-
-## 2. rwx — fayl va papka uchun ma'nosi har xil
+## 1. rwx — fayl va papka uchun ma'nosi har xil
 
 | Belgi | Faylga | Papkaga |
 |---|---|---|
@@ -37,7 +27,7 @@ Bundan kelib chiqadigan, ko'pchilikni hayron qoldiradigan faktlar:
 | Papkada `x` bor, `r` yo'q | Nomni bilsangiz ochasiz, `ls` ishlamaydi | "Yashirin" papka |
 | `/a/b/c/file.txt` | **Yo'ldagi har bir papkada** `x` kerak | Har qadamda jadval orqali o'tiladi |
 
-## 3. Owner / group / other
+## 2. Owner / group / other
 
 ```
  -rwxr-x---  1 ali deploy  script.sh
@@ -69,7 +59,7 @@ Bundan kelib chiqadigan, ko'pchilikni hayron qoldiradigan faktlar:
 
 Root istisnosi: root `r` va `w` tekshiruvlarini chetlab o'tadi, lekin `x` bit'i **hech kimda** bo'lmagan faylni ishga tushira olmaydi.
 
-## 4. Ruxsatni raqam bilan yozish (octal)
+## 3. Ruxsatni raqam bilan yozish (octal)
 
 ```
 r=4  w=2  x=1
@@ -99,7 +89,7 @@ r-- = 4     = 4
 - Ba'zi vositalar xavfli ruxsatni rad etadi: SSH `UNPROTECTED PRIVATE KEY FILE` deb kalitni ishlatmaydi.
 - Haqiqiy savol javobsiz qoladi: "**qaysi** user'ga **qanday** ruxsat kerak edi?"
 
-## 5. chmod
+## 4. chmod
 
 ```bash
 chmod 644 file.txt
@@ -127,7 +117,7 @@ chmod -R u=rwX,g=rX,o= /srv/site
 
 > **Ehtiyot:** `chmod -R` va `chown -R`'ni `/` yoki noto'g'ri papkada ishga tushirish tizimni buzadi (`sudo`, `ssh` ishlamay qoladi). Avval `ls -ld` bilan path'ni tekshiring.
 
-## 6. umask — yangi fayllarning default ruxsati
+## 5. umask — yangi fayllarning default ruxsati
 
 Yangi fayl qanday ruxsat bilan yaratiladi? Dastur so'raydi (fayl uchun odatda `666`, papka uchun `777`), **umask** esa undan bit'larni olib tashlaydi.
 
@@ -148,7 +138,7 @@ umask 077       # shu shell uchun
 - Servis uchun: systemd'da `UMask=0027`.
 - Script maxfiy fayl yaratsa: avval `umask 077`, keyin yozish. `touch` + `chmod 600` — **poyga holati**: ikki buyruq orasida fayl boshqalarga ochiq turadi.
 
-## 7. Qo'shimcha maxsus bit'lar: SUID, SGID, sticky
+## 6. Qo'shimcha maxsus bit'lar: SUID, SGID, sticky
 
 9 bitdan tashqari yana 3 bit bor (to'rtinchi octal raqam):
 
@@ -173,7 +163,7 @@ sudo chmod 2775 /srv/shared       # SGID + rwxrwxr-x
 
 **Sticky — nega `/tmp`'da kerak:** `/tmp` hamma uchun `w` — demak har kim istalgan faylni o'chira olardi (2-bo'lim). Sticky bit buni cheklaydi: faqat egasi (yoki root) o'chiradi.
 
-## 8. Oddiy ruxsatlar yetmaganda: ACL
+## 7. Oddiy ruxsatlar yetmaganda: ACL
 
 9 bit modeli: bitta owner, **bitta** group. Muammo: "`/srv/app/logs`'ni `deploy` group'i yozsin, `audit` group'i faqat o'qisin" — bitta group bilan ifodalab bo'lmaydi.
 
@@ -190,7 +180,7 @@ ls -l   # ruxsat oxirida "+" belgisi: drwxrwx---+  -> ACL bor
 
 Bundan ham yuqori qatlamlar (keyingi mavzular): capabilities (root'ning bo'laklari), SELinux/AppArmor (MAC — hatto root'ni cheklaydi), `chattr +i` (immutable fayl).
 
-## 9. `Permission denied` sababini bosqichma-bosqich topish
+## 8. `Permission denied` sababini bosqichma-bosqich topish
 
 Tasodifiy `chmod` emas — algoritm:
 
@@ -221,7 +211,7 @@ namei -l /srv/app/config/db.yml
 | Ruxsatlar to'g'ri, baribir denied | SELinux/AppArmor; yoki group'ga yangi qo'shilgan (qayta login) |
 | Servis faylni o'qiy olmaydi, siz o'qiysiz | Servis boshqa user nomidan ishlaydi: `ps -o user= -p <PID>` |
 
-## 10. Haqiqiy server'da ruxsatlar qanday qo'yiladi
+## 9. Haqiqiy server'da ruxsatlar qanday qo'yiladi
 
 ```
  /etc/myapp/config.yml   root:myapp  640   <- servis o'qiydi, o'zgartira olmaydi

@@ -2,30 +2,7 @@
 
 > **Natija:** DevOps'ni vosita emas, **delivery system** sifatida tushunish. Darsdan keyin quyidagi savollarga javob bera olasiz: "DevOps qaysi muammoni hal qiladi?", "Jamoada DevOps yaxshi ishlayaptimi — buni qanday o'lchaysiz?", "Qachon DevOps practice'lari foyda emas, zarar keltiradi?"
 
-## 1. Muammo — DevOps paydo bo'lishidan oldin qanday qiyinchiliklar bor edi?
-
-2000-yillarda odatiy kompaniya:
-
-```
-  Dev team                         Ops team
-  +------------------+             +------------------+
-  | maqsad: feature  |   "devor"   | maqsad: stability|
-  | tez chiqarish    | ----------> | hech narsa       |
-  |                  |  release    | o'zgarmasin      |
-  +------------------+  (3 oyda 1) +------------------+
-         ^                                  |
-         |       incident, ayblov           |
-         +----------------------------------+
-```
-
-- Dev "yangi imkoniyatni tez chiqar" deb baholanadi, Ops "server yiqilmasin" deb. **Incentive'lar qarama-qarshi.**
-- Release kamdan-kam bo'lgani uchun **katta** bo'ladi: 3 oylik o'zgarish bir kunda chiqadi. Nimadir buzilsa, qaysi o'zgarish aybdor ekanini topish qiyin.
-- Deploy qo'lda, Word hujjatdagi 40 qadamli instruction bo'yicha. Har deploy — tavakkal, odatda kechasi va dam olish kunida.
-- "Mening noutbukimda ishlaydi" — dev va prod environment'lari farq qiladi.
-
-**Real muammo:** kod yozilganidan to foydalanuvchiga qiymat yetib borguncha bo'lgan yo'l **sekin, xavfli va qo'lda**. Feedback (bu o'zgarish yaxshimi?) oylab keladi.
-
-## 2. Sabab — DevOps nega paydo bo'ldi?
+## 1. Sabab — DevOps nega paydo bo'ldi?
 
 DevOps (2009: Flickr'ning "10+ deploys per day" talk'i, keyin Patrick Debois tashkil qilgan birinchi DevOpsDays) — bu muammoga javob: **dev va ops bitta maqsadga ega bo'lsin — tez VA ishonchli delivery.**
 
@@ -35,7 +12,7 @@ Asosiy g'oya:
 
 Bu intuitiv emas: "kam deploy = kam xavf" tuyuladi. Lekin DORA tadqiqoti (10+ yil, minglab jamoa) ko'rsatadi: eng tez jamoalar eng barqaror jamoalar ham.
 
-## 3. Asosiy g'oya — natijani tezroq ko'rish (feedback loop'ni qisqartirish)
+## 2. Asosiy g'oya — natijani tezroq ko'rish (feedback loop'ni qisqartirish)
 
 ```
   PLAN -> CODE -> BUILD -> TEST -> RELEASE -> DEPLOY -> OPERATE -> MONITOR
@@ -58,7 +35,7 @@ Barcha DevOps practice'lari shu loop'ni qisqartirish uchun:
 
 > **Muhim farq:** **Deploy** — kodni server'ga qo'yish (texnik hodisa). **Release** — foydalanuvchiga ko'rsatish (biznes qarori). Imkoniyat flag ularni ajratadi va xavfni kamaytiradi.
 
-## 4. DevOps haqida noto'g'ri tushunchalar
+## 3. DevOps haqida noto'g'ri tushunchalar
 
 | Noto'g'ri tushuncha | Haqiqat |
 |---|---|
@@ -67,7 +44,7 @@ Barcha DevOps practice'lari shu loop'ni qisqartirish uchun:
 | "DevOps alohida jamoa" | Alohida "DevOps jamoasi" ko'pincha yangi devor bo'lib qoladi. Ideal: "You build it, you run it" yoki platform jamoasi (pastda) |
 | "Ko'proq vosita = yaxshiroq DevOps" | Har vosita — operational cost. Eng sodda yechim yutadi |
 
-## 5. Jamoalar qanday tuziladi — servis uchun kim javob beradi?
+## 4. Jamoalar qanday tuziladi — servis uchun kim javob beradi?
 
 Real kompaniyada savol: **production'dagi servis yiqilsa, kim uyg'onadi?** (ownership)
 
@@ -92,7 +69,7 @@ Real kompaniyada savol: **production'dagi servis yiqilsa, kim uyg'onadi?** (owne
 
 > **Chuqurroq qarash:** Platform'ni **mahsulot** deb qarang — uning foydalanuvchilari dev'lar. Agar dev'lar platform'ni chetlab o'tayotgan bo'lsa, platform yomon, dev'lar emas.
 
-## 6. DevOps'ni o'lchash — DORA metrics
+## 5. DevOps'ni o'lchash — DORA metrics
 
 Senior intervyuda eng ko'p so'raladigan narsa. "Yaxshi ishlayapmiz" — fikr. Metric — fakt.
 
@@ -133,7 +110,7 @@ DORA metric'lari — **jamoa o'zini yaxshilashi uchun**, jamoalarni solishtirish
 
 Avval o'lchang, keyin yaxshilang. O'lchamasdan "yaxshiladik" degan da'vo — taxmin.
 
-## 7. Asosiy tamoyillar — har biri qaysi muammoni hal qiladi
+## 6. Asosiy tamoyillar — har biri qaysi muammoni hal qiladi
 
 | Tamoyil | Muammo | Afzallik va kamchilik / cheklov |
 |---|---|---|
@@ -155,7 +132,7 @@ Avval o'lchang, keyin yaxshilang. O'lchamasdan "yaxshiladik" degan da'vo — tax
 
 > **Nozik jihat:** hamma narsa cattle bo'la olmaydi. Database — data saqlaydi, uni "o'chirib yangisini yaratish" mumkin emas. Shuning uchun stateful qism (DB, queue) va stateless qism (app server'lar) alohida o'ylanadi. Stateless'ni cattle qiling, stateful'ni ehtiyot bilan boshqaring (yoki managed service'ga bering).
 
-## 8. Dasturchi kompyuteri va production server farqi
+## 7. Dasturchi kompyuteri va production server farqi
 
 | | Developer noutbuk | Production server |
 |---|---|---|
@@ -194,7 +171,7 @@ Qaror endi bahs emas, raqam bilan qabul qilinadi.
 
 > **Common mistake:** "100% uptime" maqsad qilish. Bu imkonsiz (foydalanuvchining Wi-Fi'i ham 100% emas) va juda qimmat: har qo'shimcha "9" narxni bir necha barobar oshiradi. To'g'ri savol: "Biznesga qancha ishonchlilik **yetarli**?"
 
-## 9. So'rov brauzerdan server'gacha qanday yo'l bosadi
+## 8. So'rov brauzerdan server'gacha qanday yo'l bosadi
 
 ```
   Browser
@@ -233,7 +210,7 @@ Har bo'g'in — potensial nosozlik point:
 
 > **Xulosa bu bo'limdan:** shu zanjirdagi deyarli hamma narsa Linux'da ishlaydi. Shuning uchun DevOps yo'li Linux'dan boshlanadi.
 
-## 10. DevOps'ni joriy qilishda ko'p uchraydigan muvaffaqiyatsizliklar
+## 9. DevOps'ni joriy qilishda ko'p uchraydigan muvaffaqiyatsizliklar
 
 | Nosozlik | Belgisi | Sabab |
 |---|---|---|
@@ -243,7 +220,7 @@ Har bo'g'in — potensial nosozlik point:
 | **Avtomatlashtirish without understanding** | Pipeline qizil, hech kim nega ekanini bilmaydi | Script'lar ko'chirib olingan, tushunilmagan |
 | **Alert fatigue** | Kuniga 200 alert, hammasi e'tiborsiz | Actionable bo'lmagan alert'lar |
 
-## 11. Qachon kuchli DevOps kerak, qachon oddiy yo'l yetarli
+## 10. Qachon kuchli DevOps kerak, qachon oddiy yo'l yetarli
 
 **Qachon DevOps practice'larini kuchli qo'llash kerak:**
 - Mahsulot tez-tez o'zgaradi, foydalanuvchi feedback'i muhim.

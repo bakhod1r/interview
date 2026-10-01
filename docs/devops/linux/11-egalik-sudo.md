@@ -2,19 +2,7 @@
 
 > **Natija:** fayl egasini o'zgartirish, `sudo`'ni to'g'ri ishlatish va sozlash, eng kam huquq tamoyili tamoyilini amalda qo'llash. Nega faqat root `chown` qila oladi, `sudo` ichkarida qanday ishlaydi, sudoers'dagi "yashirin root" teshiklari, audit va zamonaviy alternativalar.
 
-## 1. Muammo — root huquqini kimga, qanday va qay darajada berish kerak?
-
-Server'da ba'zi ishlar root huquqini talab qiladi: paket o'rnatish, servisni restart qilish, port 80'ni ochish. Variantlar:
-
-| Variant | Muammo |
-|---|---|
-| Hamma root parolini biladi | Kim nima qilganini bilib bo'lmaydi; parolni almashtirish = hammaga xabar berish; bitta xato `rm` — butun server |
-| Hamma root bo'lib ishlaydi (`sudo -i` va shu yerda qoladi) | Har typo root huquqida bajariladi |
-| **sudo**: har buyruq alohida, o'z parolingiz bilan, log bilan | Tavsiya etilgan — lekin to'g'ri sozlansa |
-
-**Asosiy g'oya:** kuch **vaqtincha**, **aniq buyruq uchun** va **iz qoldirib** beriladi.
-
-## 2. Fayl egasi
+## 1. Fayl egasi
 
 Har inode'da ikkita identity: **owner (UID)** va **group (GID)**. 10-darsdagi ruxsatlar shu ikkisiga nisbatan tekshiriladi.
 
@@ -28,7 +16,7 @@ Yangi fayl **yaratgan process'ning** effective UID'iga va (odatda) primary group
 
 > **Production'dagi nozik jihat:** faylni kim yaratganini ko'pincha "siz" emas, **servis** hal qiladi. `sudo` bilan yaratilgan fayl root'niki bo'ladi va keyin servis uni o'qiy/yoza olmaydi — juda ko'p uchraydigan `Permission denied` sababi.
 
-## 3. chown / chgrp
+## 2. chown / chgrp
 
 ```bash
 sudo chown vali report.txt            # owner
@@ -52,7 +40,7 @@ Shuning uchun Linux'da `chown` (owner o'zgarishi) — faqat root (aniqrog'i `CAP
 
 > **Ehtiyot:** `chown -R` symlink'lar bo'ylab yurmaydi (default `-P`), lekin noto'g'ri path'da (`chown -R app: / var/www` — probel!) butun tizim egaligini buzadi. Har doim path'ni qo'shtirnoq ichida va avval `ls -ld` bilan tekshiring.
 
-## 4. sudo qanday ishlaydi
+## 3. sudo qanday ishlaydi
 
 ```
  student: sudo systemctl restart nginx
@@ -93,7 +81,7 @@ sudo visudo -f /etc/sudoers.d/deploy      # drop-in
 
 `visudo` faylni lock qiladi, vaqtinchalik nusxada tahrirlaydi va **saqlashdan oldin sintaksisni tekshiradi**. `/etc/sudoers`'ni `nano` bilan buzsangiz — `sudo` butunlay ishlamaydi va root paroli yo'q server'da (Ubuntu default) tuzatish uchun recovery mode yoki konsol kerak bo'ladi.
 
-## 5. sudoers qoidalarini yozish — xavfli va to'g'ri usul
+## 4. sudoers qoidalarini yozish — xavfli va to'g'ri usul
 
 Sintaksis: `KIM  QAYERDA=(KIM_SIFATIDA)  COMMAND'LAR`
 
@@ -148,7 +136,7 @@ Ko'p buyruqlar **shell ochish yoki fayl yozish** imkonini beradi. Ularga sudo be
 | CI/CD runner, avtomatlashtirish account (parolni kim kiritadi?) | Ha — lekin **aniq buyruqlar** bilan |
 | Odam, interaktiv ish | Yo'q — parol "ikkinchi o'ylash" lahzasi va o'g'irlangan session'dan himoya |
 
-## 6. Ko'p uchraydigan tuzoqlar
+## 5. Ko'p uchraydigan tuzoqlar
 
 ### `sudo echo ... > /etc/file` ishlamaydi
 
@@ -178,7 +166,7 @@ sudo git clone ... /opt/app      # hamma file root'niki
 
 To'g'ri: `sudo -u app git clone ...` yoki papka egasini oldindan to'g'ri qilish.
 
-## 7. Audit — kim nima qildi?
+## 6. Audit — kim nima qildi?
 
 ```bash
 sudo grep sudo /var/log/auth.log | tail             # Ubuntu
@@ -192,7 +180,7 @@ Log'da: `student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/
 
 > **Chuqurroq qarash:** server'dagi log'ni root o'chirib yuborishi mumkin. Haqiqiy audit uchun log'lar **darhol markaziy joyga** (SIEM, log server) yuboriladi — hujumchi u yerga yeta olmaydi.
 
-## 8. Eng kam huquq tamoyili — huquq darajalari
+## 7. Eng kam huquq tamoyili — huquq darajalari
 
 ```
  Eng ko'p kuch                                           Eng kam kuch
@@ -212,7 +200,7 @@ Log'da: `student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/
 
 Eng yaxshi sudo — **ishlatilmaydigan** sudo. Agar o'zgarishlar CI/CD va IaC orqali bo'lsa, odamlarga prod'da sudo kerak emas. Kirish faqat incident uchun ("break-glass"), qisqa muddatli va to'liq yozib olinadi.
 
-## 9. Nima buzilishi mumkin
+## 8. Nima buzilishi mumkin
 
 | Belgi | Asl sabab | Yechim |
 |---|---|---|

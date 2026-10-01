@@ -2,27 +2,7 @@
 
 > **Natija:** fayllarni local <-> remote xavfsiz ko'chirish va vaziyatga qarab vosita tanlash. Rsync delta algoritmi, trailing slash va `--delete` xavflari, atomic deploy, uzilishga chidamlilik, integrity tekshiruvi, va "fayl ko'chirish" qachon to'g'ri deploy usuli emas.
 
-## 1. Muammo — faylni server'ga qanday yetkazish?
-
-Vazifalar:
-- Bitta config'ni server'ga yuborish.
-- 5 GB log'ni tahlil uchun yuklab olish.
-- Sayt papkasini har deploy'da yangilash — faqat o'zgargan fayllar bilan.
-- Backup'ni boshqa server'ga muntazam sinxronlash.
-
-Talablar: **xavfsiz** (shifrlangan, autentifikatsiya), **samarali** (keraksiz baytlarni yubormaslik), **ishonchli** (uzilsa davom etish, buzilmaganini tekshirish).
-
-Hammasi SSH ustida ishlaydi — 17-darsdagi kalit, agent va `~/.ssh/config` (aliaslar, `ProxyJump`) shu yerda ham ishlaydi.
-
-| Vosita | Qachon | Kuchli tomoni |
-|---|---|---|
-| `scp` | 1–2 fayl, bir martalik | Oddiy |
-| `rsync` | Papka, takroriy sinxron, katta hajm | Faqat farqni yuboradi, davom etadi, metadata saqlaydi |
-| `sftp` / FileZilla (SFTP) | Interaktiv ko'rib chiqish, GUI | Qulay |
-
-Yo'l formati: `user@host:/path` — `:` remote ekanini bildiradi. `host:` (path'siz) — remote home.
-
-## 2. scp
+## 1. scp
 
 ```bash
 # Local -> Remote
@@ -41,7 +21,7 @@ scp -3 web1:/etc/app.conf web2:/tmp/
 
 **Cheklovlar:** uzilsa — boshidan; har safar butun faylni yuboradi; o'chirilgan fayllarni sinxronlamaydi. Shuning uchun takroriy ish uchun — `rsync`.
 
-## 3. rsync qanday ishlaydi
+## 2. rsync qanday ishlaydi
 
 ### Faqat o'zgargan qismni yuborish (delta algoritmi)
 
@@ -110,7 +90,7 @@ rsync -a --delete --max-delete=50 "$SRC/" lab:/var/www/site/                    
 
 `--max-delete` — kutilmagan ommaviy o'chirishdan oxirgi himoya. Va 5-darsdagi qoida: `${SRC:?}` / `set -u`.
 
-## 4. Fayl buzilmasdan yetib keldimi — tekshirish
+## 3. Fayl buzilmasdan yetib keldimi — tekshirish
 
 SSH transport'ni himoyalaydi, lekin manba disk xatosi, yarim yozilgan fayl yoki noto'g'ri versiya — boshqa masala.
 
@@ -122,7 +102,7 @@ ssh lab 'cd /tmp && sha256sum -c app.tar.gz.sha256'   # -> app.tar.gz: OK
 
 Artefakt'lar (release, backup) uchun checksum — standart amaliyot. Supply chain uchun — imzo (16-dars g'oyasi).
 
-## 5. Saytni yarim yangilangan holatda qoldirmaslik (atomic deploy)
+## 4. Saytni yarim yangilangan holatda qoldirmaslik (atomic deploy)
 
 **Muammo:** `rsync` ishlayotgan papkaga to'g'ridan-to'g'ri yozsa, bir necha soniya davomida foydalanuvchilar **aralash** holatni ko'radi: yangi HTML, eski JS. Uzilsa — sayt buzilgan holda qoladi.
 
@@ -143,7 +123,7 @@ ssh lab "sudo systemctl reload nginx"
 
 `--link-dest` — o'zgarmagan fayllarni oldingi release'dan **hard link** qiladi (5-dars): har release to'liq ko'rinadi, lekin diskda faqat farq joy egallaydi. Xuddi shu texnika bilan **inkremental backup**'lar quriladi.
 
-## 6. scp, rsync yoki sftp — qaysi birini tanlash
+## 5. scp, rsync yoki sftp — qaysi birini tanlash
 
 | Savol | Tanlov |
 |---|---|
@@ -165,7 +145,7 @@ ssh lab "sudo systemctl reload nginx"
 | `rsync --rsync-path="sudo rsync"` | Bir qadam, lekin user'ga `rsync` uchun sudo kerak — **bu amalda root** (11-dars: rsync orqali istalgan faylni yozish mumkin) |
 | **Papka egasini deploy user'ga berish** (`chown deploy:www-data`, 2775) | To'g'ri: sudo kerak emas, eng kam huquq tamoyili |
 
-## 7. FileZilla (SFTP)
+## 6. FileZilla (SFTP)
 
 1. Fayl -> Site Manager -> New site.
 2. Protocol: **SFTP** — SSH Fayl Transfer Protocol, Port 22.
@@ -178,7 +158,7 @@ ssh lab "sudo systemctl reload nginx"
 
 **GUI'ning cheklovi:** takrorlanmaydi va audit qilinmaydi. Production deploy uchun GUI — anti-usul; o'rganish, ko'rib chiqish va bir martalik ish uchun normal.
 
-## 8. Fayl ko'chirish qachon deploy uchun yetmay qoladi
+## 7. Fayl ko'chirish qachon deploy uchun yetmay qoladi
 
 `rsync` bilan deploy — kursdagi birinchi "CI/CD". Lekin u masshtabda cheklangan:
 
@@ -197,7 +177,7 @@ ssh lab "sudo systemctl reload nginx"
 
 > **Chuqurroq qarash:** har bosqich o'z vaqtida to'g'ri. 1 server va kichik sayt uchun `rsync` + atomic symlink — mukammal va sodda yechim. Kubernetes'ga faqat real constraint'lar talab qilganda o'ting (1-dars: complexity'ni qo'shish oson, olib tashlash qiyin).
 
-## 9. Nima buzilishi mumkin
+## 8. Nima buzilishi mumkin
 
 | Belgi | Asl sabab | Yechim |
 |---|---|---|

@@ -1,0 +1,44 @@
+{
+  "31242": {
+    "a": "```\nFirmware (BIOS/UEFI, POST)\n   v\nBootloader (GRUB2 / systemd-boot)\n   v\nKernel + initramfs (driver, root FS topish)\n   v\nswitch_root -> /sbin/init (systemd, PID 1)\n   v\ndefault.target (multi-user / graphical)\n   v\nservislar, getty/sshd -> login\n```\nTahlil: `systemd-analyze`, `systemd-analyze blame`, `journalctl -b`."
+  },
+  "31243": {
+    "a": "| | BIOS + MBR | UEFI + GPT |\n|---|---|---|\n| Boot kodi | MBR 446 bayt (stage1) | ESP'dagi `.efi` fayl |\n| Disk limit | 2 TiB | ~9.4 ZB |\n| Partition | 4 primary | 128 default |\n| Secure Boot | yo'q | bor |\n| Zaxira jadval | yo'q | GPT backup header |\n\nTekshirish: `[ -d /sys/firmware/efi ] && echo UEFI`. ESP odatda `/boot/efi`."
+  },
+  "31244": {
+    "a": "- `/etc/default/grub` — asosiy sozlama (`GRUB_TIMEOUT`, `GRUB_CMDLINE_LINUX`, `GRUB_DEFAULT`).\n- `/etc/grub.d/` — generator skriptlar.\n- `/boot/grub/grub.cfg` (Debian) yoki `/boot/grub2/grub.cfg` — **generatsiya qilinadi**.\n\n```sh\nupdate-grub                                 # Debian/Ubuntu\ngrub2-mkconfig -o /boot/grub2/grub.cfg      # RHEL\ngrubby --update-kernel=ALL --args=\"...\"     # RHEL usuli\n```"
+  },
+  "31245": {
+    "a": "Kernel root FS'ni o'qish uchun driver kerak, driver esa root FS'da — tovuq-tuxum. **initramfs** shu muammoni hal qiladi:\n- storage modullari, `lvm`, `mdadm`, `cryptsetup` (LUKS parol so'rash), udev.\n- root topiladi, mount, `switch_root`.\n\n```sh\nupdate-initramfs -u        # Debian\ndracut -f                  # RHEL\nlsinitrd / lsinitramfs     # ichini ko'rish\n```\n**Gotcha:** root'ni LVM/yangi controller'ga ko'chirib, initramfs'ni yangilamaslik — `dracut emergency shell`, root topilmadi."
+  },
+  "31246": {
+    "a": "```sh\ncat /proc/cmdline\n# BOOT_IMAGE=/vmlinuz-6.8 root=UUID=... ro quiet splash\n```\nFoydali:\n- `root=UUID=...`, `ro`/`rw`\n- `systemd.unit=rescue.target` / `emergency.target`\n- `init=/bin/bash` — systemd'siz, favqulodda\n- `console=ttyS0,115200` — cloud serial console\n- `systemd.unified_cgroup_hierarchy=1` — cgroup v2\n- `mitigations=off` — xavfli, faqat benchmark\n\nBir martalik: GRUB menyuda `e` bosib tahrirlash. Doimiy: `GRUB_CMDLINE_LINUX`."
+  },
+  "31247": {
+    "a": "| Runlevel | Ma'nosi | systemd target |\n|---|---|---|\n| 0 | o'chirish | `poweroff.target` |\n| 1 (S) | single-user, rescue | `rescue.target` |\n| 2 | multi-user, NFS'siz (Debian'da = 3) | `multi-user.target` |\n| 3 | multi-user + network, text | `multi-user.target` |\n| 4 | foydalanilmaydi | `multi-user.target` |\n| 5 | grafik | `graphical.target` |\n| 6 | reboot | `reboot.target` |\n\n```sh\nrunlevel        # oldingi va joriy\nwho -r\n```"
+  },
+  "31248": {
+    "a": "**SysV:** `/etc/inittab` default runlevel; `/etc/rcN.d/S##name` (start), `K##name` (kill) — raqam tartibida, ketma-ket. Sekin, dependency qo'lda.\n\n**systemd:** unit'lar (`.service`, `.socket`, `.mount`, `.target`), `Requires=/Wants=/After=` — graph, parallel start. Har servis o'z cgroup'ida — to'liq kill, resurs limit.\n\n**Moslik:** `runlevel3.target` -> `multi-user.target` symlink; `telinit 3`, `init 6` hali ishlaydi.\n\n```sh\nls -l /usr/lib/systemd/system/runlevel*.target\n```"
+  },
+  "31249": {
+    "a": "```sh\nsystemctl get-default                       # graphical.target\nsystemctl set-default multi-user.target     # serverga GUI kerak emas\nsystemctl isolate multi-user.target         # hozir o'tish (telinit 3)\nsystemctl list-units --type=target\nsystemctl list-dependencies multi-user.target\n```\n`set-default` — `/etc/systemd/system/default.target` symlink.\n\n`isolate` faqat `AllowIsolate=yes` target'larda — boshqa servislarni to'xtatadi, SSH ustida ehtiyot bo'l."
+  },
+  "31250": {
+    "a": "- **rescue.target** (runlevel 1): `sysinit.target` bajariladi — barcha fstab FS mount, swap; network/servislar yo'q. Servis/config tuzatish uchun.\n- **emergency.target**: faqat root (`ro`), fstab ishlanmagan. Buzilgan `fstab`, fsck muammosi uchun.\n\nGRUB'da `e` -> `linux` qatoriga `systemd.unit=emergency.target`.\n```sh\nmount -o remount,rw /\nvi /etc/fstab\nsystemctl daemon-reload; exit\n```\nRHEL'da root paroli bo'lmasa rescue kirmaydi — `rd.break` kerak."
+  },
+  "31251": {
+    "a": "```\nGRUB menyu -> e -> linux qatori oxiriga: rd.break   (yoki init=/bin/bash)\nCtrl+X\n```\n```sh\nmount -o remount,rw /sysroot\nchroot /sysroot\npasswd root                 # yoki vi /etc/fstab\ntouch /.autorelabel         # SELinux kontekst\nexit; exit\n```\n**fstab tuzog'i:** muhim bo'lmagan disk uchun `nofail`, network FS uchun `_netdev` — yo'q bo'lsa boot emergency'da to'xtaydi.\n\n**Cloud:** konsol yo'q bo'lsa — root diskni detach, yordamchi VM'ga attach, tuzatish, qaytarish.\n\n**Security:** fizik/console kirish = root. GRUB parol, Secure Boot, LUKS — himoya."
+  },
+  "31252": {
+    "a": "**Ishonch zanjiri:**\n```\nUEFI db (Microsoft CA) -> shimx64.efi -> grubx64.efi -> vmlinuz -> kernel modullar\n```\n- **shim** — distro kalitini olib yuradi, MOK (`mokutil`) — user kalitlari.\n- Imzosiz modul (NVIDIA, DKMS) — yuklanmaydi; MOK bilan imzolash kerak.\n- Kernel **lockdown** rejimi — `/dev/mem`, imzosiz kexec bloklanadi.\n\nTekshirish: `mokutil --sb-state`.\n\nKengaytma: **measured boot** (TPM PCR) — LUKS kalitini TPM'ga bog'lash (`systemd-cryptenroll --tpm2`), remote attestation."
+  },
+  "31253": {
+    "a": "```sh\nsystemd-analyze                       # Startup finished in 3s (kernel) + 45s (userspace)\nsystemd-analyze blame | head\nsystemd-analyze critical-chain        # kritik yo'l\nsystemd-analyze plot > boot.svg\njournalctl -b -p warning\n```\n**Tipik aybdorlar:**\n- `systemd-networkd-wait-online` / `NetworkManager-wait-online` — interfeys kutadi.\n- fstab'dagi yo'q disk — 90s `x-systemd.device-timeout`.\n- cloud-init, DNS timeout.\n\n`blame` uzun servis har doim ham aybdor emas — `critical-chain` kim kimni kutganini ko'rsatadi."
+  },
+  "31254": {
+    "a": "```ini\n[Install]\nWantedBy=multi-user.target\n```\n```sh\nsystemctl enable nginx\n# Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service -> ...\nsystemctl enable --now nginx   # enable + start\nsystemctl is-enabled nginx\n```\n- `enable` — boot'da ishga tushadi (hozir emas).\n- `start` — hozir (boot'dan keyin qolmaydi).\n- `mask` — `/dev/null` ga symlink, umuman ishga tushirib bo'lmaydi.\n\n`After=` tartib, `Wants=/Requires=` — bog'liqlik; ular alohida tushunchalar."
+  },
+  "31255": {
+    "a": "**Strategiya:**\n1. **Canary** — 1% node, metrikalar (boot muvaffaqiyati, latency, dmesg xatolar).\n2. **Bir martalik boot:** `grub-reboot <yangi>` — muvaffaqiyatsiz bo'lsa keyingi reboot eski kernel'ga (watchdog bilan).\n3. **Rolling:** K8s'da `kubectl drain` + PDB, kured — avtomatik reboot koordinatori.\n4. **Livepatch** — reboot'siz kritik CVE fix (vaqtinchalik, keyin baribir reboot).\n5. **Kuzatuv:** serial console log, `kdump` crash dump.\n6. **Immutable OS** — A/B partition, atomik rollback.\n\nPrincipal savol: muvaffaqiyatsiz boot qanday aniqlanadi va kim rollback qiladi — inson emas, avtomatika."
+  }
+}

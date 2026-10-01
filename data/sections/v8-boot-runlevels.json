@@ -1,0 +1,164 @@
+{
+  "id": "v8",
+  "name": "Boot loaders & runlevels",
+  "domain": "linux",
+  "topics": [
+    "Boot & runlevels"
+  ],
+  "questions": [
+    {
+      "id": 31242,
+      "code": "LB01",
+      "level": "J",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Linux boot jarayoni bosqichlari qanday?",
+      "explanation": "Firmware (BIOS/UEFI) → bootloader (GRUB2) → kernel + initramfs → init (systemd, PID 1) → target/runlevel → servislar → login."
+    },
+    {
+      "id": 31243,
+      "code": "LB02",
+      "level": "J",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "BIOS va UEFI farqi? MBR va GPT?",
+      "explanation": "BIOS — eski, MBR'dan 446 bayt kod o'qiydi, disk 2TB, 4 primary partition. UEFI — ESP (FAT32) dan .efi fayl, GPT, 128+ partition, Secure Boot."
+    },
+    {
+      "id": 31244,
+      "code": "LB03",
+      "level": "J",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "GRUB2 nima? Konfiguratsiyasi qayerda va qanday o'zgartiriladi?",
+      "explanation": "Bootloader: kernel tanlash menyusi, kernel + initramfs yuklaydi, cmdline uzatadi. `/etc/default/grub` tahrirlanadi, keyin `update-grub` / `grub2-mkconfig -o ...`. `grub.cfg`ni qo'lda tahrirlama."
+    },
+    {
+      "id": 31245,
+      "code": "LB04",
+      "level": "M",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "initramfs (initrd) nima va nega kerak?",
+      "explanation": "Kernel bilan yuklanadigan vaqtinchalik root FS (cpio arxiv): root diskni mount qilish uchun driver/vosita (LVM, RAID, LUKS, NVMe modul). Keyin `switch_root` haqiqiy root'ga."
+    },
+    {
+      "id": 31246,
+      "code": "LB05",
+      "level": "M",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Kernel command line nima? Foydali parametrlar.",
+      "explanation": "Bootloader kernel'ga uzatadigan parametrlar: `root=`, `ro`, `quiet`, `init=`, `systemd.unit=`, `console=`, `mitigations=`, `cgroup` sozlamalari. `/proc/cmdline` da ko'rinadi."
+    },
+    {
+      "id": 31247,
+      "code": "LB06",
+      "level": "J",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Runlevel nima? 0–6 qiymatlari.",
+      "explanation": "SysV init holatlari: 0 halt, 1 single-user, 2–4 multi-user (distroga qarab), 3 multi-user + network (text), 5 graphical, 6 reboot."
+    },
+    {
+      "id": 31248,
+      "code": "LB07",
+      "level": "M",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "SysV init va systemd farqi? Runlevel'lar systemd'da qanday ifodalangan?",
+      "explanation": "SysV — ketma-ket shell skriptlar (`/etc/rc3.d/S20foo`), runlevel. systemd — parallel, dependency graph, unit'lar, target'lar (runlevel o'rnida), socket/cgroup orqali boshqaruv."
+    },
+    {
+      "id": 31249,
+      "code": "LB08",
+      "level": "M",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Default target'ni qanday ko'rasan va o'zgartirasan? Joriy holatda boshqasiga qanday o'tasan?",
+      "explanation": "`systemctl get-default`, `systemctl set-default multi-user.target`; joriy sessiyada — `systemctl isolate rescue.target`."
+    },
+    {
+      "id": 31250,
+      "code": "LB09",
+      "level": "M",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "rescue.target va emergency.target farqi? Qachon qaysi?",
+      "explanation": "rescue — single-user: local FS mount, asosiy servislar, network yo'q, root shell. emergency — eng minimal: root `/` read-only, boshqa hech narsa mount yo'q. FS/fstab buzilganda — emergency."
+    },
+    {
+      "id": 31251,
+      "code": "LB10",
+      "level": "S",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Root parolni unutding yoki fstab xatosi tufayli server boot bo'lmayapti. Qanday tiklaysan?",
+      "explanation": "Console orqali GRUB'da `e`; `rd.break` (RHEL) yoki `init=/bin/bash`; `/sysroot` ni rw remount, `chroot`, `passwd`, SELinux uchun `touch /.autorelabel`. Cloud'da — serial console yoki diskni boshqa VM'ga ulash."
+    },
+    {
+      "id": 31252,
+      "code": "LB11",
+      "level": "S",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Secure Boot nima va boot zanjiri qanday tekshiriladi?",
+      "explanation": "UEFI faqat imzolangan bootloader'ni ishga tushiradi: firmware -> shim (Microsoft imzosi) -> GRUB (distro kaliti) -> kernel -> imzolangan modullar. MOK — o'z kalitlaring. Bootkit/rootkit'dan himoya."
+    },
+    {
+      "id": 31253,
+      "code": "LB12",
+      "level": "S",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Boot sekin. Qaysi servis aybdorligini qanday aniqlaysan?",
+      "explanation": "`systemd-analyze` (firmware/loader/kernel/userspace vaqti), `systemd-analyze blame`, `critical-chain`, `plot > boot.svg`; `journalctl -b` timeout'lar (masalan, network-online, fstab'dagi yo'q disk 90s)."
+    },
+    {
+      "id": 31254,
+      "code": "LB13",
+      "level": "M",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "systemd target'lar va `WantedBy=multi-user.target` nima? `systemctl enable` aslida nima qiladi?",
+      "explanation": "Target — unit'lar guruhi (sinxronizatsiya nuqtasi). `enable` `[Install]` bo'yicha `/etc/systemd/system/multi-user.target.wants/` ga symlink yaratadi — target ishga tushganda servis ham tortiladi."
+    },
+    {
+      "id": 31255,
+      "code": "LB14",
+      "level": "St",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Katta fleet'da kernel yangilash va boot xavfsizligini qanday tashkil qilasan?",
+      "explanation": "Canary/rolling reboot, A/B yoki fallback kernel (`grub-reboot`, `GRUB_DEFAULT=saved`), livepatch (kpatch/Livepatch) kritik CVE uchun, console/serial access, avtomatik health check va rollback, PodDisruptionBudget/drain."
+    }
+  ]
+}

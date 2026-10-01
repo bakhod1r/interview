@@ -2,21 +2,7 @@
 
 > **Natija:** fayl ichidan matnni (`grep`) va diskdan faylni (`find`) topish, pipe bilan vositalarni zanjir qilish, log'dan tez javob olish. Regex turlari, `find` bilan xavfsiz ommaviy amallar, `xargs` va probel bor nomlar, performance, qachon `grep` yetmaydi.
 
-## 1. Muammo — minglab fayl ichidan xatoni qanday topish kerak?
-
-Server'da minglab fayl va millionlab log qatori bor. Incident paytida savollar:
-- "Oxirgi 10 daqiqada qancha 500 xato bo'ldi?"
-- "`PermitRootLogin` qaysi config'da yozilgan?"
-- "Disk'ni qaysi fayl to'ldirdi?"
-
-Ko'z bilan javob topib bo'lmaydi. Ikkita fundamental savol, ikkita vosita:
-
-| Savol | Vosita | Nima bo'yicha qidiradi |
-|---|---|---|
-| Fayl **ichida** nima bor? | `grep` | Mazmun |
-| Fayl **qayerda**? | `find` | Metadata: nom, hajm, vaqt, egasi, turi |
-
-## 2. grep — fayl ichidagi matnni qidirish
+## 1. grep — fayl ichidagi matnni qidirish
 
 ```bash
 grep "error" app.log            # oddiy qidiruv
@@ -60,7 +46,7 @@ if grep -q "ready" /var/log/app.log; then echo "app tayyor"; fi   # -q: hech nar
 
 > **Tuzoq:** `set -e` + `pipefail` bilan `grep` hech narsa topmasa script to'xtaydi (exit 1). Bu ko'pincha xato emas, kutilgan holat: `grep ... || true`.
 
-## 3. find — faylni nomi, hajmi, vaqti bo'yicha qidirish
+## 2. find — faylni nomi, hajmi, vaqti bo'yicha qidirish
 
 ```bash
 find /etc -name "*.conf"                  # nom bo'yicha (pattern qo'shtirnoqda!)
@@ -101,7 +87,7 @@ find /data -name "*.log" -exec gzip {} +                # bir gzip ga ko'p file
 
 > **`-delete` tartibi tuzoq:** `find . -delete -name "*.tmp"` — **hamma narsani** o'chiradi, chunki `find` ifodalarni chapdan o'ngga bajaradi va `-delete` filterdan oldin turibdi. `-delete` doim oxirida. Avval `-delete`siz ishga tushirib natijani ko'ring.
 
-## 4. Pipe (`|`) — buyruqlarni zanjir qilib ulash
+## 3. Pipe (`|`) — buyruqlarni zanjir qilib ulash
 
 Bir vositaning stdout'i keyingisining stdin'i. Har vosita kichik, birgalikda — kuchli.
 
@@ -139,7 +125,7 @@ awk '{print $9}' access.log | sort | uniq -c | sort -nr
 - Katta log'larda `LC_ALL=C grep ...` — locale/UTF-8 ishlovini o'chiradi, bir necha barobar tez bo'lishi mumkin (faqat ASCII qidiruvda).
 - Kodda qidirish uchun `ripgrep` (`rg`) — `.gitignore`'ni hisobga oladi, parallel, juda tez.
 
-## 5. grep yetmay qoladigan holatlar
+## 4. grep yetmay qoladigan holatlar
 
 | Vaziyat | Muammo | Yaxshiroq vosita |
 |---|---|---|
@@ -154,7 +140,7 @@ jq -r 'select(.level=="error") | .msg' app.json.log
 
 > **Chuqurroq qarash:** server'ga SSH qilib `grep` qilish — kichik tizim yoki favqulodda holat uchun. Masshtabda bu ishlamaydi: log'lar markazlashtirilishi, structured (JSON) bo'lishi va correlation ID bilan bog'lanishi kerak. Lekin markaziy tizim ishlamay qolganda (va bu bo'ladi) — `grep`, `awk`, `sort` sizni qutqaradi.
 
-## 6. Xatoni qidirish tartibi
+## 5. Xatoni qidirish tartibi
 
 ```
  1. Scope       qaysi servis? qachondan beri? log qayerda? (journalctl / /var/log / stdout)

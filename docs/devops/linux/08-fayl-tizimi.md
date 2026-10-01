@@ -2,13 +2,7 @@
 
 > **Natija:** asosiy papkalar vazifasini bilish, config, log va data qayerda turishini darhol topish. Nega papkalar aynan shunday bo'lingan, `/proc` va `/sys` virtual filesystem'lari, mount'lar, disk to'lishi incident'lari va app'ni server'ga to'g'ri joylashtirish.
 
-## 1. Muammo — notanish server'da kerakli faylni qanday tez topish kerak?
-
-Yangi server'ga kirdingiz. Nginx ishlamayapti. Config qayerda? Log qayerda? Data qayerda? Agar har bir dastur o'zi xohlagan joyga yozsa — har server'da qidiruv bilan vaqt ketadi.
-
-**Yechim — FHS (Filesystem Hierarchy Standard):** qaysi turdagi fayl qayerda turishi haqidagi kelishuv. Bilsangiz, notanish server'da ham 10 soniyada topasiz.
-
-## 2. Papkalar fayl turiga qarab bo'lingan
+## 1. Papkalar fayl turiga qarab bo'lingan
 
 FHS'ni yodlash shart emas. Ikkita savol bilan tushunsa bo'ladi:
 
@@ -29,7 +23,7 @@ FHS'ni yodlash shart emas. Ikkita savol bilan tushunsa bo'ladi:
 - `/etc`'ni backup qilsangiz — server'ning "shaxsiyati" saqlanadi.
 - `/tmp`, `/var/cache` — backup kerak emas, yo'qolsa qayta yaratiladi.
 
-## 3. Papkalar daraxti
+## 2. Papkalar daraxti
 
 ```
 /
@@ -52,7 +46,7 @@ FHS'ni yodlash shart emas. Ikkita savol bilan tushunsa bo'ladi:
     +-- cache
 ```
 
-## 4. Eng muhim papkalar
+## 3. Eng muhim papkalar
 
 | Papka | Nima | Real misol | Backup? |
 |---|---|---|---|
@@ -71,7 +65,7 @@ FHS'ni yodlash shart emas. Ikkita savol bilan tushunsa bo'ladi:
 
 > **Chuqurroq qarash:** DR (disaster recovery) savoliga javob — "qaysi papkalar yo'qolsa, biz ularni **qayta yarata olmaymiz**?" Odatda bu `/var/lib/<db>` va user data. `/usr` paketdan, `/etc` IaC'dan qayta yaratiladi. Backup strategiyasi shu savoldan boshlanadi.
 
-## 5. Sozlama (config), log va ma'lumot (data) farqi
+## 4. Sozlama (config), log va ma'lumot (data) farqi
 
 | | Config | Log | Data (state) |
 |---|---|---|---|
@@ -95,7 +89,7 @@ FHS'ni yodlash shart emas. Ikkita savol bilan tushunsa bo'ladi:
 
 **Nega drop-in (`*.d/`) papkalar:** asosiy config'ni paket yangilanganda o'zgartiradi. Siz o'z sozlamangizni alohida faylga yozsangiz — paket yangilanishi uni buzmaydi va IaC vositalari uchun bitta faylni boshqarish oson.
 
-## 6. `/proc` va `/sys` — kernel holatini ko'rsatadigan papkalar
+## 5. `/proc` va `/sys` — kernel holatini ko'rsatadigan papkalar
 
 Bu papkalar **diskda yo'q**. Ularni o'qiganingizda kernel javobni o'sha zahoti generatsiya qiladi.
 
@@ -116,7 +110,7 @@ cat /proc/sys/net/ipv4/ip_forward         # kernel parametri (sysctl)
 
 > **Container tuzog'i:** container ichida `/proc/meminfo` va `nproc` ko'pincha **host**'ning RAM va CPU'sini ko'rsatadi, cgroup limit'ini emas. Natija: JVM yoki Go runtime "64 GB bor" deb o'ylaydi, 512 MB limitda OOM bilan o'ladi. Haqiqiy limit: `/sys/fs/cgroup/memory.max`, `/sys/fs/cgroup/cpu.max` (cgroup v2). Zamonaviy runtime'lar (Java 10+, Go 1.25+ GOMAXPROCS uchun) buni o'zi hisobga oladi, eskilari — yo'q.
 
-## 7. Disklar va ularni ulash (mount)
+## 6. Disklar va ularni ulash (mount)
 
 ```bash
 df -h                        # filesystem'lar va bo'sh joy
@@ -147,7 +141,7 @@ sudo du -xh / --max-depth=1 2>/dev/null | sort -rh | head   # nima joy egallagan
 
 > **Tuzoq:** ext4 default bo'yicha disk'ning ~5%'ini root uchun zaxira qoldiradi. Shuning uchun oddiy user `No space` olganda, root hali yoza oladi — tizim tiklanishi uchun. `df` "100%" ko'rsatsa ham, root uchun joy bo'lishi mumkin.
 
-## 8. O'z dasturingizni server'da qayerga joylashtirish kerak
+## 7. O'z dasturingizni server'da qayerga joylashtirish kerak
 
 Siz `myapp` Go servisini deploy qilyapsiz. FHS bo'yicha:
 
@@ -164,7 +158,7 @@ systemd buni avtomatlashtiradi: `StateDirectory=myapp`, `LogsDirectory=myapp`, `
 
 **Anti-usul'lar:** hammasini `/home/ubuntu/app/` ichiga qo'yish; config va data'ni binary yonida saqlash; `/tmp`'da muhim fayl.
 
-## 9. `/dev` — maxsus qurilmalar
+## 8. `/dev` — maxsus qurilmalar
 
 | Qurilma | Vazifa | Misol |
 |---|---|---|

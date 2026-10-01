@@ -2,18 +2,7 @@
 
 > **Natija:** terminal, shell va buyruq qanday ishlashini tushunish; stdin/stdout/stderr va exit kod bilan ishlash; notanish buyruqni mustaqil o'rganish. Shell buyruqni qanday bajaradi (fork + exec), redirect tartibi, pipeline'da xatolar va xavfsiz script yozish asoslari.
 
-## 1. Muammo — server'da nega oyna va sichqoncha (GUI) emas, terminal ishlatiladi?
-
-| GUI | Terminal (CLI) |
-|---|---|
-| Klik — avtomatlashtirib bo'lmaydi | Buyruq — script'ga yoziladi, takrorlanadi |
-| Server'da GUI yo'q (resurs, xavfsizlik) | SSH orqali dunyoning istalgan joyidan |
-| Nima qilinganini yozib bo'lmaydi | History, log, git'dagi script — audit |
-| Bitta server | `for` loop bilan 100 ta server |
-
-**Asosiy g'oya:** terminal — bu **avtomatlashtirish interfeysi**. Qo'lda yozgan har buyrug'ingiz ertaga script, keyin CI/CD pipeline qadami bo'ladi.
-
-## 2. Terminal, shell va TTY — har biri nima ish qiladi
+## 1. Terminal, shell va TTY — har biri nima ish qiladi
 
 ```
  Siz klaviaturada yozasiz
@@ -45,7 +34,7 @@ echo $0             # hozir ishlayotgan shell
 
 > **Tuzoq:** Ubuntu'da `/bin/sh` -> `dash`, `bash` emas. `#!/bin/sh` bilan yozilgan script'da bash'ga xos sintaksis (`[[ ]]`, array'lar, `function`) ishlamaydi yoki boshqacha ishlaydi. Bash'ga xos imkoniyatlarni ishlatsangiz — `#!/usr/bin/env bash` yozing.
 
-## 3. Enter bosilgandan keyin ichkarida nima bo'ladi
+## 2. Enter bosilgandan keyin ichkarida nima bo'ladi
 
 `ls -l /etc` yozib Enter bosdingiz:
 
@@ -63,7 +52,7 @@ Bu nima uchun muhim:
 - **Glob va `$VAR`'ni shell ochadi**, buyruq emas. `ls` hech qachon `*` belgisini ko'rmaydi.
 - **Har buyruq — yangi process.** Loop ichida 10 000 marta `grep` chaqirish = 10 000 fork/exec — sekin. Bitta `grep` + pipe — tez.
 
-## 4. Buyruq qanday qismlardan iborat
+## 3. Buyruq qanday qismlardan iborat
 
 ```
 ls   -l   --human-readable   /etc
@@ -77,7 +66,7 @@ ls   -l   --human-readable   /etc
 - `--` — "option'lar tugadi": `rm -- -file.txt` (`-` bilan boshlangan fayl).
 - Konvensiya, qonun emas: ba'zi vositalar (`find`, `java`, `dd`) boshqacha sintaksis ishlatadi. Shuning uchun `--help` / `man`.
 
-## 5. Buyruq turlari va qidiruv tartibi
+## 4. Buyruq turlari va qidiruv tartibi
 
 ```bash
 type cd        # cd is a shell builtin
@@ -93,7 +82,7 @@ Shell qidiruv tartibi: **alias -> function -> builtin -> `$PATH` ichidagi binary
 
 > **Xavfsizlik tuzog'i:** `$PATH`'ga `.` (joriy papka) yoki boshqalar yoza oladigan papka qo'shmang. Kimdir `/tmp`'ga `ls` nomli zararli fayl qo'ysa, u sizning nomingizdan ishga tushadi.
 
-## 6. Notanish buyruqni o'zingiz qanday o'rganasiz
+## 5. Notanish buyruqni o'zingiz qanday o'rganasiz
 
 Tajribali muhandis bilan yangi boshlovchining farqi — hamma buyruqni yod bilish emas, **notanish buyruqni 2 daqiqada tushunib olish**.
 
@@ -129,7 +118,7 @@ tldr tar            # amaliy misollar (alohida o'rnatiladi)
 
 > **Production qoidasi:** internet'dan ko'chirilgan buyruqni tushunmasdan prod'da ishga tushirmang — ayniqsa `sudo`, `rm`, `dd`, `curl ... | bash`.
 
-## 7. Kirish va chiqish oqimlari: stdin, stdout, stderr
+## 6. Kirish va chiqish oqimlari: stdin, stdout, stderr
 
 Har process 3 ta ochiq **fayl descriptor** bilan boshlanadi:
 
@@ -173,7 +162,7 @@ Shell avval `>` uchun faylni bo'shatadi (truncate), keyin `sort` ishga tushadi v
 
 > Himoya: `set -o noclobber` — mavjud faylga `>` bilan yozishni taqiqlaydi (`>|` bilan majburlash mumkin).
 
-## 8. Exit code — buyruq muvaffaqiyatli tugadimi
+## 7. Exit code — buyruq muvaffaqiyatli tugadimi
 
 Har buyruq tugaganda 0–255 oralig'ida raqam qaytaradi: `0` — success, `0` dan boshqa — xato.
 
@@ -224,7 +213,7 @@ set -euo pipefail
 
 > **Afzallik va kamchilik:** `set -e` sehrli emas — `if`, `&&`, `||` ichida va ba'zi holatlarda ishlamaydi. U xavfsizlik to'ri, lekin muhim joylarda xatoni aniq tekshirish (`if ! cmd; then ...`) baribir kerak. Script murakkablashsa (100+ qator, JSON, retry logika) — Python yoki Go'ga o'ting.
 
-## 9. Klaviatura qisqartmalari va buyruqlar tarixi
+## 8. Klaviatura qisqartmalari va buyruqlar tarixi
 
 | Key | Vazifa |
 |---|---|
@@ -240,7 +229,7 @@ set -euo pipefail
 
 > **Xavfsizlik tuzog'i:** buyruq qatorida yozilgan parol (`mysql -pSecret123`) `~/.bash_history`'ga va `ps aux` ro'yxatiga tushadi (boshqa user'lar ko'radi). Secret'ni env var, fayl yoki interaktiv so'rov orqali bering. Bash'da probel bilan boshlangan buyruq history'ga yozilmaydi (`HISTCONTROL=ignorespace` bo'lsa).
 
-## 10. Xato xabarlarini o'qishni o'rganish
+## 9. Xato xabarlarini o'qishni o'rganish
 
 ```text
 lss: command not found                        -> 127: typo yoki PATH'da yo'q

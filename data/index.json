@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1562,
+  "total": 1615,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -416,11 +416,32 @@
       "file": "sections/z1-algorithm-patterns.json"
     },
     {
+      "id": "v5",
+      "name": "Unix & distributions",
+      "domain": "linux",
+      "count": 12,
+      "file": "sections/v5-unix-distributions.json"
+    },
+    {
+      "id": "v6",
+      "name": "Shell",
+      "domain": "linux",
+      "count": 13,
+      "file": "sections/v6-shell.json"
+    },
+    {
       "id": "v1",
       "name": "LVM: PV, VG, LV",
       "domain": "linux",
       "count": 24,
       "file": "sections/v1-lvm.json"
+    },
+    {
+      "id": "v7",
+      "name": "Swap & disk quotas",
+      "domain": "linux",
+      "count": 14,
+      "file": "sections/v7-swap-quotas.json"
     },
     {
       "id": "v2",
@@ -442,6 +463,13 @@
       "domain": "linux",
       "count": 14,
       "file": "sections/v4-linux-filesystems.json"
+    },
+    {
+      "id": "v8",
+      "name": "Boot loaders & runlevels",
+      "domain": "linux",
+      "count": 14,
+      "file": "sections/v8-boot-runlevels.json"
     },
     {
       "id": "i7",

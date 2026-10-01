@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1562,
+  "total": 1615,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -15149,6 +15149,301 @@
       ]
     },
     {
+      "id": "v5",
+      "name": "Unix & distributions",
+      "domain": "linux",
+      "topics": [
+        "Unix & distros"
+      ],
+      "questions": [
+        {
+          "id": 31203,
+          "code": "LD01",
+          "level": "J",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Unix nima va Unix-like (Unix-based) OS deganda nima tushuniladi?",
+          "explanation": "Unix — 1969 Bell Labs (Thompson, Ritchie), C'da yozilgan ko'p user'li OS. Unix-like — Unix falsafasi va POSIX API'ni takrorlaydigan OS'lar (Linux, BSD, macOS)."
+        },
+        {
+          "id": 31204,
+          "code": "LD02",
+          "level": "J",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Unix falsafasi nima? Asosiy tamoyillari.",
+          "explanation": "Bitta ish — yaxshi bajar; dasturlar birlashadi (pipe); matn — universal interfeys; hamma narsa fayl."
+        },
+        {
+          "id": 31205,
+          "code": "LD03",
+          "level": "J",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Linux — OS'mi yoki kernel? GNU/Linux nima?",
+          "explanation": "Linux — faqat kernel (Torvalds, 1991). To'liq OS = kernel + GNU userland (bash, coreutils, glibc) + init + paketlar = distributiv."
+        },
+        {
+          "id": 31206,
+          "code": "LD04",
+          "level": "J",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "POSIX nima va nega muhim?",
+          "explanation": "IEEE standarti: shell, utilitlar, C API (fork, exec, open, pthread). POSIX'ga yozilgan skript/kod Linux, BSD, macOS'da ishlaydi."
+        },
+        {
+          "id": 31207,
+          "code": "LD05",
+          "level": "J",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Asosiy Linux distributiv oilalari qaysilar?",
+          "explanation": "Debian (Ubuntu) — apt/.deb; RHEL (Fedora, Rocky, Alma, CentOS Stream) — dnf/.rpm; SUSE — zypper; Arch — pacman; Alpine — apk/musl."
+        },
+        {
+          "id": 31208,
+          "code": "LD06",
+          "level": "M",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "LTS, rolling release va point release farqi? Production uchun qaysi?",
+          "explanation": "LTS/point — barqaror versiya, faqat security fix (Ubuntu LTS 5 yil, RHEL 10 yil). Rolling (Arch) — doim eng yangi, sinish xavfi. Production — LTS."
+        },
+        {
+          "id": 31209,
+          "code": "LD07",
+          "level": "M",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Alpine (musl) vs Debian/Ubuntu (glibc) bazaviy image: qanday farq va gotcha?",
+          "explanation": "Alpine kichik (~5MB), musl libc. Gotcha: glibc'ga bog'langan binary ishlamaydi, DNS resolver farqi, ba'zi workload'da sekin malloc, Python wheel yo'q."
+        },
+        {
+          "id": 31210,
+          "code": "LD08",
+          "level": "M",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Qaysi distributiv ekanini qanday aniqlaysan?",
+          "explanation": "`cat /etc/os-release` (standart), `uname -r` kernel, `hostnamectl`, `lsb_release -a`."
+        },
+        {
+          "id": 31211,
+          "code": "LD09",
+          "level": "M",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Linux, BSD va macOS farqi (DevOps nuqtai nazaridan)?",
+          "explanation": "Linux — kernel + turli userland; BSD — kernel+userland bitta loyiha; macOS — XNU (Mach+BSD). Utilitlar farqi: GNU vs BSD `sed -i`, `date`, `find`."
+        },
+        {
+          "id": 31212,
+          "code": "LD10",
+          "level": "S",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Production uchun distributiv tanlashda qaysi mezonlarga qaraysan?",
+          "explanation": "Support muddati, security patch tezligi, vendor/sertifikat (DB, cloud), jamoa tajribasi, kernel versiyasi (eBPF, cgroup v2), image hajmi, compliance (FIPS, CIS)."
+        },
+        {
+          "id": 31213,
+          "code": "LD11",
+          "level": "S",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Immutable/minimal host OS (Flatcar, Bottlerocket, Talos) nima va nega?",
+          "explanation": "Read-only root, paket menejer yo'q, atomik A/B yangilanish, faqat konteyner ishlatadi. Kichik attack surface, drift yo'q, rollback oson."
+        },
+        {
+          "id": 31214,
+          "code": "LD12",
+          "level": "M",
+          "type": "card",
+          "topic": "Unix & distros",
+          "domain": "linux",
+          "section": "v5",
+          "question": "Kernel versiyasi va distributiv versiyasi nega alohida? `uname -r` nima beradi?",
+          "explanation": "Distro kernel'ni o'zi build qiladi va patch backport qiladi. `5.14.0-427.el9` — RHEL kernel, upstream 5.14 emas, yangi fix'lar bor."
+        }
+      ]
+    },
+    {
+      "id": "v6",
+      "name": "Shell",
+      "domain": "linux",
+      "topics": [
+        "Shell"
+      ],
+      "questions": [
+        {
+          "id": 31215,
+          "code": "LS01",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Shell nima? Terminal, console va shell farqi?",
+          "explanation": "Shell — buyruq interpretatori (bash, zsh) — user va kernel orasida. Terminal (emulator) — oyna/qurilma, shell'ni ishga tushiradi. Console — fizik/tizim terminali."
+        },
+        {
+          "id": 31216,
+          "code": "LS02",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Login, interactive va non-interactive shell farqi?",
+          "explanation": "Login — tizimga kirganda (ssh, `bash -l`), `/etc/profile`, `~/.bash_profile` o'qiladi. Interactive non-login — yangi terminal tab, `~/.bashrc`. Non-interactive — skript, hech biri (BASH_ENV dan tashqari)."
+        },
+        {
+          "id": 31217,
+          "code": "LS03",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Shebang (`#!`) nima? `#!/bin/bash` va `#!/usr/bin/env bash` farqi?",
+          "explanation": "Kernel birinchi qatordan interpretatorni oladi. `/usr/bin/env bash` — PATH'dan qidiradi (portable, macOS/NixOS), `/bin/bash` — qat'iy yo'l."
+        },
+        {
+          "id": 31218,
+          "code": "LS04",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Quoting: bitta qo'shtirnoq, qo'sh qo'shtirnoq va qo'shtirnoqsiz farqi?",
+          "explanation": "`'...'` — hech narsa kengaymaydi. `\"...\"` — `$var`, `$(cmd)` kengayadi, lekin word splitting/glob yo'q. Qo'shtirnoqsiz — splitting + glob — bug manbai."
+        },
+        {
+          "id": 31219,
+          "code": "LS05",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Glob (wildcard) va regex farqi? `*`, `?`, `[abc]`, `**`.",
+          "explanation": "Glob — shell fayl nomlarini kengaytiradi (`*.log`), regex — matn pattern (grep). `*` glob'da istalgan belgilar, regex'da oldingi belgining takrori."
+        },
+        {
+          "id": 31220,
+          "code": "LS06",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "`set -euo pipefail` nima qiladi va qanday tuzoqlari bor?",
+          "explanation": "`-e` xatoda chiqish, `-u` aniqlanmagan o'zgaruvchi xato, `pipefail` pipe'dagi har qanday xato. Tuzoq: `-e` if/`&&`/`||` ichida ishlamaydi, subshell va `local x=$(cmd)` xatoni yutadi."
+        },
+        {
+          "id": 31221,
+          "code": "LS07",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "`$@`, `$*`, `$#`, `$0`, `$1`, `$$`, `$!` nima?",
+          "explanation": "`$@` — har argument alohida (\"$@\" qo'shtirnoqda), `$*` — bitta satr, `$#` — soni, `$0` — skript nomi, `$$` — PID, `$!` — oxirgi fon jarayon PID."
+        },
+        {
+          "id": 31222,
+          "code": "LS08",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Subshell nima? `( )`, `$( )`, pipe va `{ }` farqi?",
+          "explanation": "`( )` va `$( )` — alohida jarayon (fork), o'zgaruvchi/`cd` tashqariga chiqmaydi. `{ ...; }` — joriy shell. Pipe'ning har qismi ham subshell (bash'da oxirgisi ham)."
+        },
+        {
+          "id": 31223,
+          "code": "LS09",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Here-doc va here-string nima? `<<EOF` va `<<'EOF'` farqi?",
+          "explanation": "Here-doc — ko'p qatorli stdin. `<<EOF` ichida `$var` kengayadi, `<<'EOF'` — literal. `<<-EOF` boshlang'ich tab'ni olib tashlaydi. Here-string `<<<` — bitta satr."
+        },
+        {
+          "id": 31224,
+          "code": "LS10",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Shell signal'lar va `trap`: skriptda cleanup qanday qilinadi?",
+          "explanation": "`trap 'cleanup' EXIT INT TERM` — chiqishda/signal'da funksiya chaqiriladi. Temp fayl, lock, fon jarayonlarni tozalash. SIGKILL'ni ushlab bo'lmaydi."
+        },
+        {
+          "id": 31225,
+          "code": "LS11",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Konteyner ENTRYPOINT'da shell form va exec form farqi; nega `exec` muhim?",
+          "explanation": "Shell form (`CMD app`) — `/bin/sh -c app`, PID 1 = sh, SIGTERM ilovaga yetmaydi, 10s keyin SIGKILL. Exec form `[\"app\"]` yoki wrapper'da `exec app` — ilova PID 1."
+        },
+        {
+          "id": 31226,
+          "code": "LS12",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Production bash skript uchun qanday standartlar qo'llaysan? Qachon bash emas?",
+          "explanation": "`set -euo pipefail`, quoting, `shellcheck`, `trap` cleanup, idempotentlik, `mktemp`, log + exit code, `--dry-run`. 100+ qator, JSON, murakkab logika — Go/Python."
+        },
+        {
+          "id": 31227,
+          "code": "LS13",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
+          "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
+        }
+      ]
+    },
+    {
       "id": "v1",
       "name": "LVM: PV, VG, LV",
       "domain": "linux",
@@ -15419,6 +15714,170 @@
           "section": "v1",
           "question": "Prod DB serverlar uchun disk qatlamini qanday dizayn qilasan: LVM, RAID, FS, snapshot?",
           "explanation": "Data, WAL, OS — alohida LV; monitoring va tiklash rejasi bilan."
+        }
+      ]
+    },
+    {
+      "id": "v7",
+      "name": "Swap & disk quotas",
+      "domain": "linux",
+      "topics": [
+        "Swap & quotas"
+      ],
+      "questions": [
+        {
+          "id": 31228,
+          "code": "LW01",
+          "level": "J",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Swap nima va qanday ishlaydi?",
+          "explanation": "Diskdagi joy — RAM to'lganda kam ishlatiladigan anonymous page'lar shu yerga chiqariladi. Swap file yoki partition. RAM'dan 1000x sekin."
+        },
+        {
+          "id": 31229,
+          "code": "LW02",
+          "level": "J",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Swap file qanday yaratiladi va doimiy qilinadi?",
+          "explanation": "`fallocate -l 4G /swapfile; chmod 600; mkswap; swapon` va `/etc/fstab`'ga `/swapfile none swap sw 0 0`."
+        },
+        {
+          "id": 31230,
+          "code": "LW03",
+          "level": "J",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Swap partition va swap file farqi?",
+          "explanation": "Partition — alohida bo'lim, o'lchamni o'zgartirish qiyin. File — moslashuvchan, zamonaviy kernel'da tezligi deyarli bir xil. Cloud VM'da odatda file."
+        },
+        {
+          "id": 31231,
+          "code": "LW04",
+          "level": "M",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "`vm.swappiness` nima? 0, 10, 60, 100 qiymatlari nimani bildiradi?",
+          "explanation": "Kernel anonymous page'ni swap'ga chiqarish va page cache'ni tashlash orasidagi nisbat. 60 default; 0 — iloji boricha swap qilma (lekin OOM oldidan qiladi); DB serverlarda 1-10."
+        },
+        {
+          "id": 31232,
+          "code": "LW05",
+          "level": "M",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Server swap ishlatayotganini qanday ko'rasan va qaysi jarayon swap'da?",
+          "explanation": "`free -h`, `swapon --show`; faol swap bosimi — `vmstat 1` (`si`/`so`), `sar -W`; jarayon bo'yicha — `/proc/<pid>/status` VmSwap, `smem`."
+        },
+        {
+          "id": 31233,
+          "code": "LW06",
+          "level": "M",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Thrashing nima va qanday aniqlanadi?",
+          "explanation": "Ishchi to'plam RAM'ga sig'maydi — kernel doimiy page'larni swap in/out qiladi, CPU iowait'da, tizim deyarli to'xtaydi. `vmstat` si/so, PSI memory full, major fault'lar."
+        },
+        {
+          "id": 31234,
+          "code": "LW07",
+          "level": "M",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "zram va zswap nima?",
+          "explanation": "zram — RAM ichida siqilgan block device, swap sifatida (disk yo'q). zswap — disk swap oldidagi siqilgan cache. Ikkalasi IO'ni kamaytiradi, CPU sarflaydi."
+        },
+        {
+          "id": 31235,
+          "code": "LW08",
+          "level": "S",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Kubernetes node'da swap: nega tarixan o'chirilgan va hozir holat qanday?",
+          "explanation": "Kubelet swap bilan ishga tushmasdi — memory limit/QoS va eviction hisoblari swap'ni hisobga olmasdi, latency oldindan aytib bo'lmasdi. K8s 1.28+ NodeSwap (LimitedSwap, cgroup v2), faqat Burstable pod'lar."
+        },
+        {
+          "id": 31236,
+          "code": "LW09",
+          "level": "S",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Production DB serverda swap: yoqasanmi? Argumentlar.",
+          "explanation": "Kichik swap + past swappiness — tavsiya: OOM kill o'rniga yumshoq bufer, kerakmas page'lar chiqadi. Katta swap — thrashing, latency. Monitoring: si/so alert."
+        },
+        {
+          "id": 31237,
+          "code": "LW10",
+          "level": "J",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Disk quota nima va nega kerak?",
+          "explanation": "User/group (yoki project) uchun FS'da joy va inode limiti. Bitta user butun diskni to'ldirmasligi uchun — shared host, /home, multi-tenant."
+        },
+        {
+          "id": 31238,
+          "code": "LW11",
+          "level": "M",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Soft limit, hard limit va grace period farqi?",
+          "explanation": "Hard — hech qachon oshib bo'lmaydi (EDQUOT). Soft — vaqtincha oshish mumkin, grace period (default 7 kun) davomida; muddat tugasa soft limit hard kabi ishlaydi."
+        },
+        {
+          "id": 31239,
+          "code": "LW12",
+          "level": "M",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "ext4'da user quota qanday yoqiladi va tekshiriladi?",
+          "explanation": "fstab'da `usrquota,grpquota`, remount, `quotacheck -cug`, `quotaon`; limit — `edquota`/`setquota`; hisobot — `repquota -a`, `quota -u`."
+        },
+        {
+          "id": 31240,
+          "code": "LW13",
+          "level": "M",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "XFS quota va project quota nima? ext4'dan farqi?",
+          "explanation": "XFS quota mount paytida yoqiladi (`uquota,pquota`), `xfs_quota` bilan boshqariladi, journaled. Project quota — katalog daraxti uchun limit (user'dan qat'i nazar)."
+        },
+        {
+          "id": 31241,
+          "code": "LW14",
+          "level": "S",
+          "type": "card",
+          "topic": "Swap & quotas",
+          "domain": "linux",
+          "section": "v7",
+          "question": "Multi-tenant platformada diskni qanday cheklaysan: quota, LVM, cgroup, K8s?",
+          "explanation": "Variantlar: user/project quota (bitta FS), alohida LV/volume (qattiq izolyatsiya), K8s `ephemeral-storage` limit + PVC o'lchami, loop/overlay `size=`. cgroup disk hajmini emas, IO'ni cheklaydi."
         }
       ]
     },
@@ -15900,6 +16359,170 @@
           "section": "v4",
           "question": "Ko'p node bitta FS'ga yozishi kerak: NFS, CephFS, object storage — qanday tanlaysan?",
           "explanation": "NFS — oddiy, bitta server, lock/cache muammolari. CephFS/GlusterFS — taqsimlangan POSIX. Object storage (S3) — eng scalable, POSIX emas."
+        }
+      ]
+    },
+    {
+      "id": "v8",
+      "name": "Boot loaders & runlevels",
+      "domain": "linux",
+      "topics": [
+        "Boot & runlevels"
+      ],
+      "questions": [
+        {
+          "id": 31242,
+          "code": "LB01",
+          "level": "J",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Linux boot jarayoni bosqichlari qanday?",
+          "explanation": "Firmware (BIOS/UEFI) → bootloader (GRUB2) → kernel + initramfs → init (systemd, PID 1) → target/runlevel → servislar → login."
+        },
+        {
+          "id": 31243,
+          "code": "LB02",
+          "level": "J",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "BIOS va UEFI farqi? MBR va GPT?",
+          "explanation": "BIOS — eski, MBR'dan 446 bayt kod o'qiydi, disk 2TB, 4 primary partition. UEFI — ESP (FAT32) dan .efi fayl, GPT, 128+ partition, Secure Boot."
+        },
+        {
+          "id": 31244,
+          "code": "LB03",
+          "level": "J",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "GRUB2 nima? Konfiguratsiyasi qayerda va qanday o'zgartiriladi?",
+          "explanation": "Bootloader: kernel tanlash menyusi, kernel + initramfs yuklaydi, cmdline uzatadi. `/etc/default/grub` tahrirlanadi, keyin `update-grub` / `grub2-mkconfig -o ...`. `grub.cfg`ni qo'lda tahrirlama."
+        },
+        {
+          "id": 31245,
+          "code": "LB04",
+          "level": "M",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "initramfs (initrd) nima va nega kerak?",
+          "explanation": "Kernel bilan yuklanadigan vaqtinchalik root FS (cpio arxiv): root diskni mount qilish uchun driver/vosita (LVM, RAID, LUKS, NVMe modul). Keyin `switch_root` haqiqiy root'ga."
+        },
+        {
+          "id": 31246,
+          "code": "LB05",
+          "level": "M",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Kernel command line nima? Foydali parametrlar.",
+          "explanation": "Bootloader kernel'ga uzatadigan parametrlar: `root=`, `ro`, `quiet`, `init=`, `systemd.unit=`, `console=`, `mitigations=`, `cgroup` sozlamalari. `/proc/cmdline` da ko'rinadi."
+        },
+        {
+          "id": 31247,
+          "code": "LB06",
+          "level": "J",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Runlevel nima? 0–6 qiymatlari.",
+          "explanation": "SysV init holatlari: 0 halt, 1 single-user, 2–4 multi-user (distroga qarab), 3 multi-user + network (text), 5 graphical, 6 reboot."
+        },
+        {
+          "id": 31248,
+          "code": "LB07",
+          "level": "M",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "SysV init va systemd farqi? Runlevel'lar systemd'da qanday ifodalangan?",
+          "explanation": "SysV — ketma-ket shell skriptlar (`/etc/rc3.d/S20foo`), runlevel. systemd — parallel, dependency graph, unit'lar, target'lar (runlevel o'rnida), socket/cgroup orqali boshqaruv."
+        },
+        {
+          "id": 31249,
+          "code": "LB08",
+          "level": "M",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Default target'ni qanday ko'rasan va o'zgartirasan? Joriy holatda boshqasiga qanday o'tasan?",
+          "explanation": "`systemctl get-default`, `systemctl set-default multi-user.target`; joriy sessiyada — `systemctl isolate rescue.target`."
+        },
+        {
+          "id": 31250,
+          "code": "LB09",
+          "level": "M",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "rescue.target va emergency.target farqi? Qachon qaysi?",
+          "explanation": "rescue — single-user: local FS mount, asosiy servislar, network yo'q, root shell. emergency — eng minimal: root `/` read-only, boshqa hech narsa mount yo'q. FS/fstab buzilganda — emergency."
+        },
+        {
+          "id": 31251,
+          "code": "LB10",
+          "level": "S",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Root parolni unutding yoki fstab xatosi tufayli server boot bo'lmayapti. Qanday tiklaysan?",
+          "explanation": "Console orqali GRUB'da `e`; `rd.break` (RHEL) yoki `init=/bin/bash`; `/sysroot` ni rw remount, `chroot`, `passwd`, SELinux uchun `touch /.autorelabel`. Cloud'da — serial console yoki diskni boshqa VM'ga ulash."
+        },
+        {
+          "id": 31252,
+          "code": "LB11",
+          "level": "S",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Secure Boot nima va boot zanjiri qanday tekshiriladi?",
+          "explanation": "UEFI faqat imzolangan bootloader'ni ishga tushiradi: firmware -> shim (Microsoft imzosi) -> GRUB (distro kaliti) -> kernel -> imzolangan modullar. MOK — o'z kalitlaring. Bootkit/rootkit'dan himoya."
+        },
+        {
+          "id": 31253,
+          "code": "LB12",
+          "level": "S",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Boot sekin. Qaysi servis aybdorligini qanday aniqlaysan?",
+          "explanation": "`systemd-analyze` (firmware/loader/kernel/userspace vaqti), `systemd-analyze blame`, `critical-chain`, `plot > boot.svg`; `journalctl -b` timeout'lar (masalan, network-online, fstab'dagi yo'q disk 90s)."
+        },
+        {
+          "id": 31254,
+          "code": "LB13",
+          "level": "M",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "systemd target'lar va `WantedBy=multi-user.target` nima? `systemctl enable` aslida nima qiladi?",
+          "explanation": "Target — unit'lar guruhi (sinxronizatsiya nuqtasi). `enable` `[Install]` bo'yicha `/etc/systemd/system/multi-user.target.wants/` ga symlink yaratadi — target ishga tushganda servis ham tortiladi."
+        },
+        {
+          "id": 31255,
+          "code": "LB14",
+          "level": "St",
+          "type": "card",
+          "topic": "Boot & runlevels",
+          "domain": "linux",
+          "section": "v8",
+          "question": "Katta fleet'da kernel yangilash va boot xavfsizligini qanday tashkil qilasan?",
+          "explanation": "Canary/rolling reboot, A/B yoki fallback kernel (`grub-reboot`, `GRUB_DEFAULT=saved`), livepatch (kpatch/Livepatch) kritik CVE uchun, console/serial access, avtomatik health check va rollback, PodDisruptionBudget/drain."
         }
       ]
     },

@@ -2,24 +2,7 @@
 
 > **Natija:** kernel va user space chegarasini, system call qanday ishlashini, kernel module'larni va container'lar Linux kernel ustida qanday qurilganini tushunish. Darsdan keyin javob bera olasiz: "Nega container VM emas?", "Process qotib qoldi — ichida nima bo'layotganini qanday bilaman?", "Nega Alpine image'da binary ishlamayapti?"
 
-## 1. Muammo — operatsion tizim (OS) nima uchun kerak?
-
-Tasavvur qiling, OS yo'q. Har bir dastur:
-- disk'ka yozish uchun disk controller'ning registrlarini o'zi boshqaradi;
-- boshqa dasturning memory'sini bemalol o'qiydi va buzadi;
-- CPU'ni egallab olsa, boshqalar hech qachon ishlamaydi.
-
-**OS kernel'i hal qiladigan 3 ta muammo:**
-
-| Muammo | Kernel yechimi |
-|---|---|
-| Hardware har xil, murakkab | **Abstraction**: hamma disk uchun bitta `read()` / `write()` |
-| Dasturlar bir-birini buzadi | **Isolation**: har process o'z virtual memory'sida |
-| Resurs cheklangan (CPU, RAM) | **Scheduling / sharing**: kernel kim qachon ishlashini hal qiladi |
-
-Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, fayl, container, cgroups) shularning biriga xizmat qiladi.
-
-## 2. Qisqa tarix — Linux nega aynan shunday tuzilgan
+## 1. Qisqa tarix — Linux nega aynan shunday tuzilgan
 
 ```
 1969  Unix (Bell Labs) — "everything is a file", kichik tool'lar + pipe
@@ -38,7 +21,7 @@ Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, fayl, con
 
 > **Nega bu muhim:** DevOps avtomatlashtirish shu falsafaga tayanadi. Config — text fayl, log — text stream, vositalar pipe bilan ulanadi. Shuning uchun Linux'ni avtomatlashtirish oson.
 
-## 3. Linux faqat kernel; distribution esa kernel + dasturlar to'plami
+## 2. Linux faqat kernel; distribution esa kernel + dasturlar to'plami
 
 **Distribution** = Linux kernel + userland (GNU coreutils, shell) + **libc** + package manager + init system.
 
@@ -62,7 +45,7 @@ Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, fayl, con
 - Python/Java/Node — Debian-slim yoki distroless (glibc): kamroq sirpriz.
 - Alpine — kichik o'lcham muhim va musl bilan muammo yo'qligi tekshirilgan bo'lsa.
 
-## 4. Linux qanday qatlamlardan iborat
+## 3. Linux qanday qatlamlardan iborat
 
 ```
  +------------------- User space (CPU ring 3) --------------------+
@@ -85,7 +68,7 @@ Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, fayl, con
 - **User space** — har process izolyatsiya qilingan. Bitta app crash bo'lsa (segfault), boshqalar ishlayveradi.
 - **CPU ring** — hardware darajasidagi himoya: ring 3'dagi kod privileged instruction'ni bajara olmaydi. Isolation software va'dasi emas, CPU kafolati.
 
-## 5. System call — dastur kernel'dan qanday yordam so'raydi
+## 4. System call — dastur kernel'dan qanday yordam so'raydi
 
 Siz `cat file.txt` yozasiz. Ichkarida:
 
@@ -130,7 +113,7 @@ ls -l /proc/4321/fd/5
 
 Belgi: "app qotdi". Asl sabab: tashqi servisga timeout'siz so'rov. Yechim: timeout qo'yish. Bu **kuzatish -> taxmin -> asl sabab** zanjiri — taxmin bilan restart qilish emas.
 
-## 6. Kernel turlari: monolithic va microkernel, module'lar
+## 5. Kernel turlari: monolithic va microkernel, module'lar
 
 | Model | Driver qayerda | Afzallik | Kamchilik | Misol |
 |---|---|---|---|---|
@@ -148,7 +131,7 @@ dmesg -T | tail       # kernel log: OOM killer, disk xatolari, driver xabarlari
 
 > **Muhim nuqta:** kernel version muhim. eBPF, cgroups v2, io_uring kabi imkoniyatlar ma'lum kernel versiyasidan boshlab bor. "Bizning prod'da ishlaydimi?" — avval `uname -r`.
 
-## 7. Container — alohida OS emas, kernel imkoniyati
+## 6. Container — alohida OS emas, kernel imkoniyati
 
 Docker container — VM emas. U **oddiy Linux process**, faqat kernel uni izolyatsiya qiladi va cheklaydi:
 
@@ -181,7 +164,7 @@ Docker container — VM emas. U **oddiy Linux process**, faqat kernel uni izolya
 
 > **Xavfsizlik implication:** container **host kernel'ni ulashadi**. Kernel vulnerability (container escape) barcha container'larga ta'sir qiladi. Shuning uchun multi-tenant muhitda (begona kod ishlatilsa) qo'shimcha qatlam: gVisor, Kata Containers, Firecracker microVM. AWS Lambda aynan Firecracker ishlatadi.
 
-## 8. Nega server'da Linux?
+## 7. Nega server'da Linux?
 
 1. **Stability** — oylar davomida reboot'siz ishlaydi (kernel live patching ham bor).
 2. **Avtomatlashtirish** — hamma narsa text fayl va CLI. GUI'ni avtomatlashtirish qiyin.
@@ -191,7 +174,7 @@ Docker container — VM emas. U **oddiy Linux process**, faqat kernel uni izolya
 
 **Qachon Linux emas:** .NET Framework (eski) yoki Active Directory'ga bog'liq legacy tizimlar — Windows Server; ba'zi real-time / embedded tizimlar — RTOS.
 
-## 9. Kernel darajasida nima buzilishi mumkin
+## 8. Kernel darajasida nima buzilishi mumkin
 
 | Belgi | Ehtimoliy sabab | Qayerdan ko'rasiz |
 |---|---|---|

@@ -2,19 +2,7 @@
 
 > **Natija:** env o'zgaruvchilarni o'qish, yaratish, doimiy qilish va `PATH` sababli `command not found`'ni tuzatish. Env qanday meros bo'ladi, shell startup fayllari tartibi, systemd va container'da env, 12-factor config, secret'larni env'da saqlashning xavflari va alternativalari, config validatsiyasi.
 
-## 1. Muammo — bitta dasturni dev, test va prod muhitida qanday sozlash kerak?
-
-Bitta app `dev`, `staging`, `prod`'da ishlaydi. Farqi: DB manzili, log darajasi, API kalitlari. Variantlar:
-
-| Variant | Muammo |
-|---|---|
-| Kodga yozish (`dbHost = "10.0.0.5"`) | Har muhit uchun alohida build; secret git'da |
-| Har muhit uchun config fayl | Yaxshi, lekin faylni qayerga, qanday yetkazish kerak |
-| **Env var** | Kod o'zgarmaydi; platforma (systemd, Docker, K8s) qiymatni beradi |
-
-**12-factor tamoyili:** config (muhitga qarab o'zgaradigan hamma narsa) koddan ajratiladi va env orqali beriladi. **Bitta artefakt** barcha muhitlarga deploy qilinadi — "staging'da test qilingan aynan o'sha binary prod'ga ketadi".
-
-## 2. Env o'zgaruvchilar process bilan birga yashaydi
+## 1. Env o'zgaruvchilar process bilan birga yashaydi
 
 ```
  shell (DB_HOST=localhost, export qilingan)
@@ -32,7 +20,7 @@ Bundan kelib chiqadigan faktlar:
 - Ishlayotgan process'ning env'ini tashqaridan o'zgartirib bo'lmaydi — faqat restart.
 - Process env'i start paytidagi holat: `/proc/<PID>/environ`.
 
-## 3. Env o'zgaruvchilarni ko'rish
+## 2. Env o'zgaruvchilarni ko'rish
 
 ```bash
 env                      # export qilingan hammasi
@@ -55,7 +43,7 @@ tr '\0' '\n' < /proc/<PID>/environ    # boshqa process env'i (root yoki egasi)
 
 > **Tuzoq:** `LANG`/`LC_ALL` vositalar xatti-harakatini o'zgartiradi: `sort` tartibi, `grep` tezligi (7-dars), raqamlardagi vergul/nuqta. Script'lar turli server'da turlicha ishlasa — locale'ni tekshiring. Deterministik natija uchun script'da `LC_ALL=C`.
 
-## 4. Env o'zgaruvchi yaratish
+## 3. Env o'zgaruvchi yaratish
 
 ```bash
 NAME=Ali              # faqat shu shell (oddiy o'zgaruvchi)
@@ -70,7 +58,7 @@ env -i bash --norc    # toza env bilan (debugging uchun)
 
 > **Qo'shtirnoq:** `echo $VAR` — probel va `*` bo'lsa so'zlarga bo'linadi va glob ochiladi. Har doim `"$VAR"`.
 
-## 5. PATH — shell buyruqni qayerdan qidiradi
+## 4. PATH — shell buyruqni qayerdan qidiradi
 
 ```bash
 echo "$PATH"
@@ -101,7 +89,7 @@ hash -r                             # bash command cache'ini tozalash
 - `PATH="$HOME/bin:$PATH"` — sizning versiyangiz tizimnikidan ustun (masalan, yangi `kubectl`).
 - `PATH="$PATH:$HOME/bin"` — tizim buyruqlari ustun, xavfsizroq.
 
-## 6. O'zgaruvchini doimiy qilish — qaysi fayl qachon o'qiladi
+## 5. O'zgaruvchini doimiy qilish — qaysi fayl qachon o'qiladi
 
 | Fayl | Kimga | Qachon o'qiladi |
 |---|---|---|
@@ -127,7 +115,7 @@ source ~/.bashrc      # hozirgi shell'da qo'llash
 
 > **Tuzoq:** `~/.bashrc` boshida odatda "interaktiv bo'lmasa — chiq" qatori bor. Shuning uchun u yerga yozilgan narsa script'larda ko'rinmaydi.
 
-## 7. Servis va container uchun env berish
+## 6. Servis va container uchun env berish
 
 ### systemd
 
@@ -158,7 +146,7 @@ env:
       secretKeyRef: {name: db, key: password}
 ```
 
-## 8. Dastur ichida sozlamalarni o'qish — xato va to'g'ri usul
+## 7. Dastur ichida sozlamalarni o'qish — xato va to'g'ri usul
 
 ```go
 // Naive: yo'q bo'lsa jim bo'sh string, xato kech va noaniq chiqadi
@@ -197,7 +185,7 @@ func loadConfig() (Config, error) {
 
 **Qoidalar:** barcha config **bitta joyda** o'qiladi (kod bo'ylab sochilgan `Getenv` emas); default'lar aniq; start'da config log'ga yoziladi — **secret'larsiz**.
 
-## 9. Parol va kalitlar (secret) — env'da saqlash xavflari
+## 8. Parol va kalitlar (secret) — env'da saqlash xavflari
 
 Env secret uchun keng tarqalgan, lekin xavfsiz emas:
 
@@ -229,7 +217,7 @@ echo ".env" >> .gitignore
 
 > **Agar secret git'ga tushsa:** commit'ni o'chirish yetarli emas — u allaqachon klon'larda va tarixda. **Birinchi qadam — secret'ni bekor qilish (rotate)**, keyin tarixni tozalash. Profilaktika: pre-commit hook va CI'da secret scanner (gitleaks).
 
-## 10. Nima buzilishi mumkin
+## 9. Nima buzilishi mumkin
 
 | Belgi | Asl sabab | Yechim |
 |---|---|---|

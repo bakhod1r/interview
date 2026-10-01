@@ -2,19 +2,7 @@
 
 > **Natija:** ishlaydigan Ubuntu Server 24.04 LTS (kursning qolgan qismi shu server'da o'tadi), snapshot va network mode'lar tushunchasi. Hypervisor turlari, cloud image, cloud-init va "server qo'lda emas, kod bilan yaratiladi" tamoyili.
 
-## 1. Muammo — o'rganish uchun server qayerdan olinadi?
-
-Linux o'rganish uchun Linux kerak. Variantlar:
-
-| Variant | Muammo |
-|---|---|
-| Asosiy noutbukka Linux o'rnatish | Ish muhitini buzish xavfi, qaytarish qiyin |
-| Cloud VM (AWS, Hetzner) | Pul, internet kerak, ochiq port'lar — xavfsizlik xavfi |
-| **Lokal VM** | Bepul, xavfsiz, buzsangiz — snapshot'dan qaytarasiz |
-
-O'rganish uchun eng yaxshi — **lokal VM**: istalgancha buzish va qaytarish mumkin. Lekin production'da hamma narsa boshqacha (7-bo'lim) — buni boshidan bilish kerak.
-
-## 2. Virtualizatsiya — bitta kompyuterda bir nechta OS
+## 1. Virtualizatsiya — bitta kompyuterda bir nechta OS
 
 **Hypervisor** — bitta fizik kompyuterda bir nechta OS'ni ishlatadigan dastur. Har OS o'zini alohida kompyuterda deb o'ylaydi.
 
@@ -38,7 +26,7 @@ O'rganish uchun eng yaxshi — **lokal VM**: istalgancha buzish va qaytarish mum
 
 **Hardware virtualization** (Intel VT-x / AMD-V, Apple Silicon'da Hypervisor.framework): CPU guest kodini to'g'ridan-to'g'ri, deyarli native tezlikda bajaradi. BIOS/UEFI'da o'chiq bo'lsa, VM juda sekin ishlaydi yoki umuman ishga tushmaydi.
 
-## 3. Qaysi Linux versiyasini (image) tanlash kerak
+## 2. Qaysi Linux versiyasini (image) tanlash kerak
 
 | Tanlov | Tavsiya | Sabab |
 |---|---|---|
@@ -59,7 +47,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t app .   # multi-arch i
 
 Mac'da build qilingan `arm64` image `amd64` server'da `exec format error` beradi. Bu klassik "noutbukda ishlaydi, prod'da yo'q" muammosi.
 
-## 4. VM'ni qaysi dastur bilan yaratish kerak
+## 3. VM'ni qaysi dastur bilan yaratish kerak
 
 | Host OS | Vosita | Izoh |
 |---|---|---|
@@ -77,7 +65,7 @@ Mac'da build qilingan `arm64` image `amd64` server'da `exec format error` beradi
 
 **Qaror:** kurs uchun (SSH, systemd, network darslari) — to'liq VM yaxshiroq. WSL2 — Windows'da kundalik dev ishi uchun.
 
-## 5. VM tarmoqqa qanday ulanadi (network mode'lar)
+## 4. VM tarmoqqa qanday ulanadi (network mode'lar)
 
 ```
  NAT                          Bridged                      Host-only
@@ -101,7 +89,7 @@ Mac'da build qilingan `arm64` image `amd64` server'da `exec format error` beradi
 
 Bu aynan production'dagi tushunchalarning kichik modeli: NAT = private subnet + NAT gateway, Bridged = public IP, Host-only = izolyatsiya qilingan VPC.
 
-## 6. O'rnatish
+## 5. O'rnatish
 
 1. ISO: ubuntu.com/download/server (yoki `multipass launch 24.04`).
 2. VM resurslari: **2 vCPU, 2–4 GB RAM, 20+ GB disk**.
@@ -131,7 +119,7 @@ sudo apt update && sudo apt full-upgrade -y
 - `full-upgrade` — kerak bo'lsa dependency'larni o'zgartiradi (kernel yangilanishi uchun kerak bo'lishi mumkin).
 - Kernel yangilangandan keyin **reboot** kerak: `ls /var/run/reboot-required`.
 
-## 7. Snapshot nega backup o'rnini bosmaydi
+## 6. Snapshot nega backup o'rnini bosmaydi
 
 ```
  base disk  <--  snapshot 1  <--  snapshot 2  <--  hozirgi holat
@@ -156,7 +144,7 @@ sudo apt update && sudo apt full-upgrade -y
 
 Ishlayotgan DB'li VM snapshot'i **crash-consistent** bo'ladi: elektr o'chgandek holat. PostgreSQL WAL tufayli odatda tiklanadi, lekin to'g'ri backup — `pg_dump` / `pg_basebackup` yoki managed service'ning o'z backup'i.
 
-## 8. Haqiqiy loyihalarda server qanday yaratiladi: cloud image + cloud-init
+## 7. Haqiqiy loyihalarda server qanday yaratiladi: cloud image + cloud-init
 
 Real hayotda server'ga ISO'dan qo'lda o'rnatilmaydi. Nega?
 
@@ -197,7 +185,7 @@ Har qadam — **afzallik va kamchilik**: ko'proq avtomatlashtirish = ko'proq vos
 
 > **Xavfsizlik tuzog'i:** cloud-init `user-data` ichiga parol yoki secret yozmang — ko'p cloud'larda u metadata service orqali VM ichidan o'qiladi va log'larda qoladi. Secret'lar uchun — secret manager (Vault, AWS Secrets Manager).
 
-## 9. Nima buzilishi mumkin
+## 8. Nima buzilishi mumkin
 
 | Belgi | Sabab | Yechim |
 |---|---|---|

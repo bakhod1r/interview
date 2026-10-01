@@ -2,16 +2,7 @@
 
 > **Natija:** filesystem'da erkin harakat qilish, absolute/relative path, glob, xavfsiz fayl operatsiyalari. Inode, hard link va symlink farqi, `mv` va `cp` ichkarida nima qiladi, atomic yozish, script'larda path bilan bog'liq xavflar.
 
-## 1. Muammo — fayllar qayerda va qanday topiladi?
-
-Server'da GUI fayl manager yo'q. Siz bilishingiz kerak:
-- hozir qayerdaman;
-- kerakli fayl qayerda (config, log, app);
-- uni qanday qilib **xavfsiz** ko'chirish, nusxalash, o'chirish mumkin.
-
-Server'da `rm` xatosi qaytarilmaydi — **Korzina yo'q**. Shuning uchun bu dars nafaqat "qanday", balki "qanday qilib buzmaslik" haqida.
-
-## 2. Linux'da barcha fayllar bitta daraxtda
+## 1. Linux'da barcha fayllar bitta daraxtda
 
 Linux'da hammasi bitta tree, uning root'i — `/`. Disk'lar shu tree'ga **mount** qilinadi (Windows'dagi `C:` / `D:` kabi harflar yo'q).
 
@@ -34,7 +25,7 @@ df -h .          # joriy papka qaysi filesystem'da
 
 > **Nega bu muhim:** `/var/log` to'lsa, bu `/` ham to'ladi degani bo'lishi mumkin (agar ular bitta filesystem'da bo'lsa). Production'da `/var` yoki data papkalari ko'pincha alohida disk'ka chiqariladi — log to'lsa ham OS ishlayveradi.
 
-## 3. Asosiy buyruqlar
+## 2. Asosiy buyruqlar
 
 ```bash
 pwd                   # current (working) directory
@@ -63,7 +54,7 @@ tree -L 2             # tree ko'rinishi (alohida o'rnatiladi)
 
 > **Tuzoq:** `.` bilan boshlangan fayllar (`.bashrc`, `.env`, `.git`) yashirin. `ls` ularni ko'rsatmaydi — `ls -a` kerak. Ko'p "fayl yo'q" degan xatolar aslida yashirin fayl.
 
-## 4. To'liq (absolute) va nisbiy (relative) yo'l
+## 3. To'liq (absolute) va nisbiy (relative) yo'l
 
 | Tur | Boshlanishi | Misol | Qayerda ishlatiladi |
 |---|---|---|---|
@@ -77,7 +68,7 @@ Relative path **har doim joriy directory'ga nisbatan**. Joriy directory esa proc
 > - script o'z papkasiga o'tishi: `cd "$(dirname "$(readlink -f "$0")")"`;
 > - systemd'da `WorkingDirectory=/opt/app`.
 
-## 5. Fayl yaratish, nusxalash, ko'chirish, o'chirish — xavfsiz usullar
+## 4. Fayl yaratish, nusxalash, ko'chirish, o'chirish — xavfsiz usullar
 
 ```bash
 mkdir -p a/b/c                  # nested; mavjud bo'lsa xato bermaydi (idempotent)
@@ -163,7 +154,7 @@ ln -sfn releases/v43 /opt/app/current.tmp && mv -T /opt/app/current.tmp /opt/app
 
 Yangi versiyaga o'tish — bitta atomic rename. Rollback — symlink'ni eski versiyaga qaytarish. Capistrano va ko'p deploy vositalari shunday ishlaydi.
 
-## 6. Glob — `*` va `?` bilan bir nechta faylni tanlash
+## 5. Glob — `*` va `?` bilan bir nechta faylni tanlash
 
 ```bash
 ls *.log             # .log bilan tugaganlar
@@ -181,7 +172,7 @@ Natijalar:
 
 > **Xavfsizlik tuzog'i:** `-rf` nomli fayl yaratilsa, `rm *` uni option deb o'qiydi. Har doim `rm -- *` yoki `rm ./*` yozing.
 
-## 7. inode — fayl diskda aslida qanday saqlanadi
+## 6. inode — fayl diskda aslida qanday saqlanadi
 
 Fayl nomi — faqat **directory entry**. Haqiqiy fayl — **inode**: metadata (owner, permission, size, vaqtlar, data block'lar manzili). **Nom inode ichida yo'q.**
 
@@ -203,7 +194,7 @@ df -i                  # inode'lar ishlatilishi
 2. **Fayl o'chirildi, lekin disk bo'shamadi.** Fayl inode'ni ochiq ushlab turgan process bor (masalan, log yozayotgan app). Data link count 0 bo'lib, **barcha fd'lar yopilgandagina** o'chadi. Topish: `sudo lsof +L1`. Yechim: process'ni restart yoki log'ni o'chirish o'rniga `truncate -s 0 file` (6-darsda chuqurroq).
 3. **`mv` bir filesystem ichida bir zumda** — faqat directory entry o'zgaradi, data ko'chmaydi.
 
-## 8. Hard link va symlink farqi
+## 7. Hard link va symlink farqi
 
 ```bash
 ln file.txt hard.txt        # hard link — o'sha inode'ga yangi nom
@@ -234,7 +225,7 @@ ln -s /etc/nginx cfg        # symlink — path'ni saqlovchi kichik file
 
 > **Xavfsizlik tuzog'i (Staff darajada):** root ishlaydigan script `/tmp/report.txt`'ga yozsa, hujumchi oldindan `/tmp/report.txt -> /etc/passwd` symlink yaratib qo'yishi mumkin (symlink attack). Yechim: `mktemp` ishlating, oldindan ma'lum nomlarni emas.
 
-## 9. Yo'l (path) bilan bog'liq xatolar va ularni topish
+## 8. Yo'l (path) bilan bog'liq xatolar va ularni topish
 
 | Belgi | Sabab | Yechim |
 |---|---|---|

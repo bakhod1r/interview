@@ -2,16 +2,7 @@
 
 > **Natija:** ishlayotgan process'larni ko'rish, resurs yeyayotganini topish, to'g'ri signal bilan to'xtatish. Process qanday tug'iladi (fork/exec), holatlar va load average'ning haqiqiy ma'nosi, RSS va VSZ, zombie va orphan, toza to'xtatish (graceful shutdown), PID 1 muammosi container'da.
 
-## 1. Muammo — server sekinlashdi, sababini qanday topish kerak?
-
-Incident: sayt sekin, CPU 100%. Savollar:
-- Qaysi process CPU'ni yeyapti?
-- U nima qilyapti — hisoblayaptimi yoki disk/network'ni kutyaptimi?
-- Uni qanday to'xtatish kerakki, data buzilmasin?
-
-Bularga javob berish uchun process modelini tushunish kerak.
-
-## 2. Dastur va process farqi
+## 1. Dastur va process farqi
 
 **Dastur** — diskdagi fayl (`/usr/bin/nginx`). **Process** — kernel'dagi ishlayotgan nusxa: o'z virtual memory'si, ochiq fayllari, identity'si (UID), holati.
 
@@ -28,7 +19,7 @@ Bularga javob berish uchun process modelini tushunish kerak.
 
 Hammasini ko'rish mumkin: `ls /proc/<PID>/` (8-dars).
 
-## 3. Yangi process qanday paydo bo'ladi (fork + exec)
+## 2. Yangi process qanday paydo bo'ladi (fork + exec)
 
 ```
  bash (PID 1452)
@@ -64,7 +55,7 @@ ps -o pid,ppid,user,cmd -p $$
 
 **PID 1** (`systemd`) maxsus: u o'lsa — kernel panic. U **orphan**'larni (otasi o'lgan process'lar) asrab oladi va ularning tugashini kutib "tozalaydi".
 
-## 4. Ishlayotgan process'larni ko'rish
+## 3. Ishlayotgan process'larni ko'rish
 
 ```bash
 ps aux                          # hammasi (BSD uslub)
@@ -120,7 +111,7 @@ nproc       # 4
 | `wa` | I/O kutish | Disk sekin |
 | `st` | Steal | Cloud'da qo'shni VM CPU'ni olyapti |
 
-## 5. Signallar — process'ga buyruq yuborish
+## 4. Signallar — process'ga buyruq yuborish
 
 | Signal | Raqam | Ma'no | Tutib olsa bo'ladimi |
 |---|---|---|---|
@@ -174,7 +165,7 @@ if err := srv.Shutdown(shutdownCtx); err != nil {    // yangi so'rov yo'q, eskil
 }
 ```
 
-## 6. Zombie va yetim (orphan) process'lar
+## 5. Zombie va yetim (orphan) process'lar
 
 ```
  Zombie:  child tugadi -> exit code'ini saqlash uchun process jadvalida qoladi
@@ -198,7 +189,7 @@ Container ichida sizning app'ingiz **PID 1** bo'ladi. Natijalar:
 
 Yechim: kichik init — `docker run --init` (tini), yoki app'da signal'larni to'g'ri ishlash. Va Dockerfile'da **exec form**: `CMD ["./app"]`, `CMD ./app` emas — aks holda PID 1 `sh` bo'ladi va signal'ni app'ga uzatmaydi.
 
-## 7. Process'ni fonda ishlatish va terminal yopilganda saqlab qolish
+## 6. Process'ni fonda ishlatish va terminal yopilganda saqlab qolish
 
 ```bash
 sleep 300 &          # fonda
@@ -218,7 +209,7 @@ nohup ./long.sh > out.log 2>&1 &   # SIGHUP'ni e'tiborsiz qoldiradi
 
 > **Anti-usul:** production servisni `nohup ./app &` bilan ishga tushirish. Server reboot bo'lsa — yo'q; crash bo'lsa — hech kim qayta ko'tarmaydi; log'lar tasodifiy faylda.
 
-## 8. Resurslarni cheklash va ustuvorlik
+## 7. Resurslarni cheklash va ustuvorlik
 
 ```bash
 nice -n 10 ./backup.sh          # past CPU ustuvorligi (-20 yuqori ... 19 past)
@@ -230,7 +221,7 @@ cat /proc/1234/limits
 
 Masshtabda: cgroups (systemd `CPUQuota=`, `MemoryMax=`; Kubernetes `requests/limits`).
 
-## 9. "Server sekin" holatida tekshirish tartibi
+## 8. "Server sekin" holatida tekshirish tartibi
 
 ```
  1. uptime            -> load vs nproc; o'syaptimi?

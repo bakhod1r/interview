@@ -2,26 +2,7 @@
 
 > **Natija:** server'ga SSH bilan kalit orqali kirish va `sshd`'ni xavfsiz sozlash. SSH protokoli qanday ishlaydi (host key, key exchange, autentifikatsiya), `known_hosts` va MITM, agent forwarding xavfi, jump host, tunnel'lar, o'zingizni qulflab qo'ymaslik va masshtabda SSH (sertifikatlar, bastion, "SSH'siz" boshqaruv).
 
-## 1. Muammo — server uzoqda turibdi, unga qanday ulanamiz?
-
-Server odatda boshqa binoda — data-markazda yoki cloud'da turadi. Uning yonida monitor ham, klaviatura ham yo'q. Demak, uni faqat **tarmoq orqali**, o'z kompyuteringizdan boshqarasiz.
-
-Ilgari buning uchun **telnet** ishlatilgan. Uning katta kamchiligi bor edi: siz yozgan hamma narsa, **parol ham**, tarmoqdan ochiq matn holida o'tardi. Bir Wi-Fi tarmog'idagi istalgan odam uni o'qiy olardi.
-
-**SSH (Secure Shell)** shu muammoni hal qiladi. U to'rtta narsani kafolatlaydi:
-- **Maxfiylik (confidentiality)** — trafik shifrlangan, begona o'qiy olmaydi.
-- **Server'ning haqiqiyligi (server authentication)** — siz aynan o'zingiz kutgan server'ga ulanyapsiz, o'rtada turgan soxta server'ga (MITM hujumi) emas.
-- **Sizning kimligingiz (user authentication)** — server sizni parol yoki kalit orqali taniydi.
-- **Butunlik (integrity)** — yo'lda hech kim trafikni sezdirmasdan o'zgartira olmaydi.
-
-Port: **22/TCP**.
-
-```
- Client (laptop)                          Server
- ssh  ======= shifrlangan TCP:22 =======>  sshd (daemon, systemd servis)
-```
-
-## 2. SSH ulanishi qadamma-qadam
+## 1. SSH ulanishi qadamma-qadam
 
 ```
  Client                                         Server
@@ -68,7 +49,7 @@ WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
 
 > **Anti-usul:** `StrictHostKeyChecking no` va `UserKnownHostsFile /dev/null` — "ogohlantirish xalaqit beryapti" deb. Bu SSH'ning server autentifikatsiyasini butunlay o'chiradi. Production'da yechim — fingerprint'ni oldindan tarqatish (IaC, cloud-init chiqishi) yoki **host sertifikatlari** (9-bo'lim).
 
-## 3. O'rnatish
+## 2. O'rnatish
 
 ```bash
 sudo apt install openssh-server
@@ -89,7 +70,7 @@ ssh lab 'uptime; df -h /'    # bitta command bajarib chiqish
 exit
 ```
 
-## 4. Parol o'rniga kalit bilan kirish
+## 3. Parol o'rniga kalit bilan kirish
 
 ```
  Client                                      Server
@@ -138,7 +119,7 @@ Endi: `ssh lab`, `ssh prod-db1` (bastion orqali avtomatik).
 
 > **`IdentitiesOnly yes` nega:** agent'da 6+ kalit bo'lsa, client hammasini sinaydi va server `Too many authentication failures` bilan uzadi (`MaxAuthTries`).
 
-## 5. SSH server'ni himoyalash — `/etc/ssh/sshd_config`
+## 4. SSH server'ni himoyalash — `/etc/ssh/sshd_config`
 
 Drop-in ishlating (8-dars): `/etc/ssh/sshd_config.d/10-hardening.conf`
 
@@ -187,7 +168,7 @@ sudo systemctl reload ssh
 | Port o'zgartirish (22 -> 2222) | Bot shovqini kamayadi | Xavfsizlik **emas** (port scanner bir zumda topadi) |
 | MFA (kalit + TOTP) | Ikkinchi omil | Murakkablik, avtomatlashtirish qiyin |
 
-## 6. Oraliq server (bastion) orqali ulanish
+## 5. Oraliq server (bastion) orqali ulanish
 
 **Muammo:** noutbuk -> bastion -> prod server. Prod'ga kalit bilan kirish kerak, lekin private kalitni bastion'ga ko'chirish xavfli.
 
@@ -200,7 +181,7 @@ sudo systemctl reload ssh
                                                              laptop <-> prod o'rtasida, end-to-end
 ```
 
-## 7. SSH tunnel — yopiq port'ga xavfsiz yo'l
+## 6. SSH tunnel — yopiq port'ga xavfsiz yo'l
 
 ```bash
 # Local forward: prod'dagi DB'ga (faqat localhost'da tinglaydi) noutbukdan ulanish
@@ -216,7 +197,7 @@ ssh -D 1080 bastion
 
 > **Xavfsizlik:** tunnel'lar firewall'ni chetlab o'tish vositasi ham. Production server'larda kerak bo'lmasa: `AllowTcpForwarding no`. Kerakli user'lar uchun — `Match` bloki bilan alohida ruxsat.
 
-## 8. Ko'p uchraydigan muammolar va ularni topish
+## 7. Ko'p uchraydigan muammolar va ularni topish
 
 | Muammo | Sabab | Tekshirish |
 |---|---|---|
@@ -237,7 +218,7 @@ sudo /usr/sbin/sshd -d -p 2222              # debug rejimda alohida port'da ishg
 
 **Debug qoidasi:** client xabari ataylab noaniq (`Permission denied`) — hujumchiga ma'lumot bermaslik uchun. Haqiqiy sabab **server log'ida**.
 
-## 9. Ko'p server'li tizimda SSH
+## 8. Ko'p server'li tizimda SSH
 
 | Muammo | 100+ server'da |
 |---|---|

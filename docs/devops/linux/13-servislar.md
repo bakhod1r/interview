@@ -2,23 +2,7 @@
 
 > **Natija:** servisni boshqarish, holatini o'qish va o'z systemd unit faylini yozish. Systemd nima muammoni hal qiladi, unit'lar va dependency'lar, restart siyosati va crash loop, readiness, resource limit va sandboxing, production-grade unit fayl.
 
-## 1. Muammo — dastur doim ishlab turishini qanday ta'minlash kerak?
-
-12-darsda `nohup ./app &` anti-usul ekanini ko'rdik. Production servisga kerak:
-
-| Talab | `nohup` bilan |
-|---|---|
-| Boot'da avtomatik ishga tushish | Yo'q |
-| Crash bo'lsa qayta ko'tarish | Yo'q |
-| To'g'ri tartib (avval network, DB, keyin app) | Yo'q |
-| Log'larni yig'ish | Tasodifiy fayl |
-| Resurs limiti (RAM, CPU) | Yo'q |
-| Xavfsizlik (alohida user, cheklangan fayllar) | Qo'lda |
-| Graceful stop (SIGTERM, timeout, SIGKILL) | Qo'lda |
-
-**systemd** — PID 1 sifatida bularning hammasini **deklarativ** tarzda beradi: siz "nima kerak"ni yozasiz, systemd "qanday"ni bajaradi.
-
-## 2. Oddiy process va servis farqi
+## 1. Oddiy process va servis farqi
 
 | | Process | Service |
 |---|---|---|
@@ -41,7 +25,7 @@
 
 > **Nega cgroup muhim:** eski init tizimlarida servis fork qilib "daemonize" bo'lsa, init uning child'larini yo'qotib qo'yardi. systemd cgroup orqali **hamma** process'larni kuzatadi: `systemctl stop` hech narsani qoldirmaydi.
 
-## 3. systemctl
+## 2. systemctl
 
 ```bash
 systemctl status nginx              # holat + oxirgi log'lar
@@ -75,7 +59,7 @@ systemctl show nginx -p MainPID,Restart,MemoryMax
 
 **Production qoidasi:** reload/restart'dan **oldin** config'ni tekshiring: `nginx -t`, `sshd -t`, `haproxy -c -f ...`. Xato config bilan restart — o'zingiz chaqirgan outage.
 
-## 4. `systemctl status` natijasini o'qish
+## 3. `systemctl status` natijasini o'qish
 
 ```text
 * nginx.service - A high performance web server
@@ -99,7 +83,7 @@ systemctl show nginx -p MainPID,Restart,MemoryMax
 
 Holatlar: `active (running)`, `inactive (dead)`, `failed`, `activating (auto-restart)` — oxirgisi crash loop belgisi.
 
-## 5. Unit fayllar qayerda turadi va qaysi biri ustun
+## 4. Unit fayllar qayerda turadi va qaysi biri ustun
 
 ```
  /usr/lib/systemd/system/   <- paketdan (TAHRIRLAMANG — yangilanishda yo'qoladi)
@@ -113,7 +97,7 @@ sudo systemctl edit --full nginx   # to'liq nusxa (kamdan-kam kerak)
 sudo systemctl daemon-reload       # unit o'zgargandan keyin SHART
 ```
 
-## 6. O'z unit faylimizni yozish: oddiydan to'liq variantgacha
+## 5. O'z unit faylimizni yozish: oddiydan to'liq variantgacha
 
 ### Oddiy variant
 
@@ -212,7 +196,7 @@ systemd-analyze verify myapp.service
 
 `Restart=` — **containment**, yechim emas. Agar servis har 5 soniyada qayta tug'ilayotgan bo'lsa, bu yashirin incident. Monitoring: `NRestarts` (`systemctl show -p NRestarts myapp`) yoki restart'lar soniga alert.
 
-## 7. Timer'lar — cron'ning zamonaviy o'rinbosari
+## 6. Timer'lar — cron'ning zamonaviy o'rinbosari
 
 ```ini
 # /etc/systemd/system/backup.timer
@@ -237,7 +221,7 @@ WantedBy=timers.target
 systemctl list-timers
 ```
 
-## 8. Nima buzilishi mumkin
+## 7. Nima buzilishi mumkin
 
 | Belgi | Asl sabab | Tekshirish |
 |---|---|---|

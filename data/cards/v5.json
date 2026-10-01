@@ -1,0 +1,38 @@
+{
+  "31203": {
+    "a": "**Unix** — 1969, AT&T Bell Labs (Ken Thompson, Dennis Ritchie). C tilida qayta yozilgan birinchi portable OS.\n\n**Unix oilasi:**\n- *Sertifikatlangan UNIX* (Open Group, SUS): macOS, AIX, HP-UX, Solaris.\n- *Unix-like*: Linux, FreeBSD/OpenBSD/NetBSD — kod yoki sertifikat boshqa, lekin xulq-atvor va API bir xil.\n\n**Umumiy belgilar:** hamma narsa fayl, ierarxik FS, process/fork, pipe, ko'p user + ruxsatlar, shell."
+  },
+  "31204": {
+    "a": "**Unix falsafasi (McIlroy):**\n1. Har dastur **bitta ishni** yaxshi bajarsin.\n2. Dasturlar **birga ishlasin** — biri chiqishi boshqasiga kirish (`|`).\n3. **Matn oqimi** — universal interfeys.\n\nQo'shimcha: *hamma narsa fayl* (`/dev`, `/proc`), kichik vositalar, tez prototip.\n\n```sh\ncat access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head\n```\nBesh kichik vosita — bitta analitik so'rov."
+  },
+  "31205": {
+    "a": "**Linux = kernel** (1991, Linus Torvalds): process, memory, driver, FS, network.\n\n**OS bo'lishi uchun kerak:** userland — GNU coreutils (`ls`, `cp`), bash, glibc, init (systemd), paket menejer.\n\nShuning uchun FSF \"GNU/Linux\" deydi. Alpine esa GNU emas — musl + BusyBox, lekin baribir Linux.\n\n**Distributiv** = kernel + userland + paketlar + installer + release siyosati."
+  },
+  "31206": {
+    "a": "**POSIX** (IEEE 1003) — Unix-like OS uchun umumiy interfeys:\n- C API: `fork`, `exec`, `open`, `read`, `signal`, `pthread`.\n- `sh` shell tili va utilitlar (`grep`, `sed`, `awk`).\n\n**Nega muhim:** portability. `#!/bin/sh` + POSIX sintaksis Alpine (ash), Debian (dash), macOS'da ishlaydi. Bash-ism (`[[ ]]`, array) esa `sh`'da sinadi.\n\nLinux to'liq sertifikatlanmagan, amalda deyarli POSIX-mos."
+  },
+  "31207": {
+    "a": "| Oila | Misollar | Paket |\n|---|---|---|\n| Debian | Debian, Ubuntu, Mint | `apt`, `.deb` |\n| Red Hat | RHEL, Fedora, Rocky, Alma, CentOS Stream | `dnf`, `.rpm` |\n| SUSE | SLES, openSUSE | `zypper`, `.rpm` |\n| Arch | Arch, Manjaro | `pacman` |\n| Alpine | Alpine | `apk`, musl libc |\n\nFarq: paket menejer, release sikli, default config yo'llari (`/etc/sysconfig` vs `/etc/default`), SELinux (RHEL) vs AppArmor (Ubuntu)."
+  },
+  "31208": {
+    "a": "- **Point/LTS** (Ubuntu 24.04 LTS, RHEL 9, Debian 12): versiya muzlatiladi, faqat security/bugfix backport. Uzoq support.\n- **Rolling** (Arch, openSUSE Tumbleweed): versiya yo'q, doim eng yangi paketlar.\n- **Upstream/fast** (Fedora): ~6 oy, RHEL'ning sinov maydoni.\n\n**Production:** LTS — oldindan aytib bo'ladigan o'zgarish, uzun patch oynasi, vendor support. Rolling — dev workstation.\n\nGotcha: LTS'da paket eski (masalan, Go/Node) — runtime'ni konteyner yoki vendor repo orqali olish."
+  },
+  "31209": {
+    "a": "**Alpine:** musl libc + BusyBox, ~5MB image.\n\n**Gotcha'lar:**\n- glibc uchun build qilingan binary: `not found` (aslida loader yo'q).\n- musl DNS resolver: `search`/`ndots`, TCP fallback xulqi farqli (K8s'da muammo bo'lgan).\n- malloc ko'p thread'da sekinroq.\n- Python: manylinux wheel ishlamaydi, compile qilish kerak — image kattalashadi.\n\n**Tanlov:** Go static binary — `scratch`/`distroless`. Glibc kerak — `debian-slim`/distroless. Alpine — shell kerak va hammasi musl'ga mos bo'lsa."
+  },
+  "31210": {
+    "a": "```sh\ncat /etc/os-release   # ID=ubuntu, VERSION_ID=\"24.04\", ID_LIKE=debian\nuname -r              # kernel versiyasi\nuname -m              # arxitektura (x86_64, aarch64)\nhostnamectl           # OS + kernel + virtualizatsiya\n```\n\nSkriptlarda `/etc/os-release`'ni `source` qilib `$ID`/`$ID_LIKE` bo'yicha tarmoqlash — eng ishonchli. `/etc/redhat-release`, `/etc/debian_version` — eski usul."
+  },
+  "31211": {
+    "a": "- **Linux:** kernel alohida, userland distributivdan (GNU). cgroups/namespaces — konteynerlar faqat shu yerda native.\n- **BSD (FreeBSD):** kernel + userland bitta repo, jails, ZFS, pf. Litsenziya BSD.\n- **macOS:** XNU (Mach + BSD qism), BSD userland. Docker Desktop VM ichida Linux ishlatadi.\n\n**Klassik gotcha:**\n```sh\nsed -i 's/a/b/' f      # GNU\nsed -i '' 's/a/b/' f   # BSD/macOS\n```\n`date -d` (GNU) vs `date -v` (BSD). CI skriptlar macOS'da sinadi — `gsed`/`coreutils` yoki konteyner."
+  },
+  "31212": {
+    "a": "**Mezonlar:**\n1. **Lifecycle** — EOL sanasi, patch oynasi (RHEL 10 yil, Ubuntu LTS 5+5 ESM).\n2. **Security** — CVE fix tezligi, SELinux/AppArmor, FIPS.\n3. **Ekotizim** — vendor sertifikati (Oracle, SAP), cloud image, driver (GPU).\n4. **Kernel** — cgroup v2, eBPF/BTF, io_uring kerakmi.\n5. **Jamoa** — bilim, runbook, tooling (Ansible role).\n6. **Bir xillik** — fleet'da 1-2 distro; zoo — operational xarajat.\n\nKonteyner davrida host OS minimal (Bottlerocket, Flatcar, Talos) — immutable, faqat container runtime."
+  },
+  "31213": {
+    "a": "**G'oya:** host — faqat container runtime + kubelet. Hamma ilova konteynerda.\n\n**Xususiyatlar:**\n- Root FS read-only, `apt install` yo'q — config drift mumkin emas.\n- **A/B partition** yangilanish: yangi image ikkinchi partition'ga, reboot, muammo bo'lsa eskisiga qaytish.\n- Talos: SSH ham yo'q, faqat API.\n\n**Trade-off:** debug qiyinroq (toolbox/debug konteyner kerak), custom driver/agent qo'yish murakkab. Katta K8s fleet uchun — yutuq; bitta VM'dagi monolit uchun — ortiqcha."
+  },
+  "31214": {
+    "a": "`uname -r` — ishlayotgan kernel: masalan `6.8.0-45-generic` (Ubuntu) yoki `5.14.0-427.el9.x86_64` (RHEL 9).\n\n**Gotcha:** RHEL versiya raqami eski ko'rinadi, lekin yuzlab backport bor — upstream versiya bo'yicha CVE/feature xulosasi noto'g'ri bo'lishi mumkin. Distro changelog/advisory'ga qarash.\n\nKonteyner host kernel'ini ishlatadi: `ubuntu:24.04` image CentOS host'da CentOS kernel bilan ishlaydi."
+  }
+}

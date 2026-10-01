@@ -2,18 +2,7 @@
 
 > **Natija:** dasturni repo'dan o'rnatish, o'chirish, yangilash; `apt` va `dnf` ekvivalentlarini bilish. Paket menejeri qaysi muammoni hal qiladi, dependency resolution, GPG imzo va supply chain, versiya pinning, xavfsiz yangilash strategiyasi, container'da paketlar.
 
-## 1. Muammo — dasturni qanday o'rnatish?
-
-Nginx'ni qo'lda o'rnatish:
-1. Source yoki binary'ni yuklab olish — qayerdan? haqiqiymi?
-2. Unga kerak bo'lgan kutubxonalar (`libssl`, `libpcre`) — ularga ham kerak bo'lganlar...
-3. Fayllarni to'g'ri joyga qo'yish (8-dars FHS), user yaratish, systemd unit.
-4. 3 oydan keyin xavfsizlik patch — hammasini qaytadan, qaysi fayl qaysi dasturniki ekanini eslab.
-5. O'chirish — qaysi fayllar? Hech kim bilmaydi.
-
-**Paket menejeri hal qiladi:** ishonchli manba, avtomatik dependency, ma'lum joylashuv, bir buyruqda yangilash va toza o'chirish.
-
-## 2. Paket va repository nima
+## 1. Paket va repository nima
 
 **Paket** = fayllar arxivi + metadata (nom, versiya, arxitektura, **dependency**'lar, conflict'lar) + o'rnatish script'lari (postinst: user yaratish, servisni yoqish).
 
@@ -34,7 +23,7 @@ Nginx'ni qo'lda o'rnatish:
      +-> /var/lib/dpkg/                       -> "qaysi file qaysi paketniki" bazasi
 ```
 
-## 3. apt
+## 2. apt
 
 ```bash
 sudo apt update              # indeksni yangilash (hech narsa o'rnatmaydi!)
@@ -71,7 +60,7 @@ Distro buni bitta, bir-biriga mos versiyalar to'plamini (release) saqlab hal qil
 
 > **Xavfsizlik audit tuzoq:** scanner "nginx 1.24 — CVE bor" desa, darhol vahima qilmang: distro patch'ni backport qilgan bo'lishi mumkin. Tekshirish: `apt changelog nginx` yoki distro'ning CVE tracker'i.
 
-## 4. apt va dnf buyruqlari solishtirmasi
+## 3. apt va dnf buyruqlari solishtirmasi
 
 | Amal | Ubuntu | Rocky/RHEL |
 |---|---|---|
@@ -85,7 +74,7 @@ Distro buni bitta, bir-biriga mos versiyalar to'plamini (release) saqlab hal qil
 | Paket fayllari | `dpkg -L X` | `rpm -ql X` |
 | Tarix / rollback | `/var/log/apt/history.log` | `dnf history`, `dnf history undo N` |
 
-## 5. O'rnatilayotgan dasturga qanday ishonamiz (supply chain xavfsizlik)
+## 4. O'rnatilayotgan dasturga qanday ishonamiz (supply chain xavfsizlik)
 
 Paket o'rnatganda siz **root huquqi bilan begona kod** ishga tushiryapsiz (postinst script'lar root sifatida ishlaydi). Ishonch zanjiri:
 
@@ -125,7 +114,7 @@ echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.d
 
 Yaxshiroq: yuklab olish -> o'qish -> checksum/imzo tekshirish -> ishga tushirish. Yoki rasmiy paket/repo.
 
-## 6. Versiya va yangilash strategiyasi
+## 5. Versiya va yangilash strategiyasi
 
 ### Versiyani qotirib qo'yish (pinning)
 
@@ -161,7 +150,7 @@ ls /var/run/reboot-required      # kernel yangilangan — reboot kerak
 - dnf: `dnf history undo` — qulayroq.
 - Ishonchli rollback: VM snapshot (3-dars) yoki oldingi image.
 
-## 7. Docker image ichida paket o'rnatish
+## 6. Docker image ichida paket o'rnatish
 
 ```dockerfile
 # Naive: katta image, keraksiz cache, har build'da boshqa versiyalar
@@ -182,7 +171,7 @@ RUN apt-get update \
 | Multi-stage build | Compiler va build vositalar yakuniy image'ga tushmasin |
 | Distroless / scratch (Go) | Paket menejeri umuman yo'q — hujumchi `apt install` qila olmaydi (2-dars) |
 
-## 8. Dastur o'rnatishning boshqa usullari
+## 7. Dastur o'rnatishning boshqa usullari
 
 | Usul | Qachon | Afzallik va kamchilik |
 |---|---|---|
@@ -194,7 +183,7 @@ RUN apt-get update \
 
 > **Tuzoq:** Ubuntu 24.04'da tizim Python'iga `pip install` qilish `externally-managed-environment` xatosi bilan rad etiladi (PEP 668) — bu ataylab: `pip` apt o'rnatgan paketlarni buzmasligi uchun. Yechim: `python3 -m venv`, yoki `pipx` vositalar uchun.
 
-## 9. Nima buzilishi mumkin
+## 8. Nima buzilishi mumkin
 
 | Belgi | Asl sabab | Yechim |
 |---|---|---|
