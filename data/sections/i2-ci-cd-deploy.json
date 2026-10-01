@@ -15,425 +15,265 @@
       "id": 2013,
       "code": "I14",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "Continuous Integration nimani anglatadi?",
-      "options": [
-        "Kodni haftada bir marta merge qilish",
-        "Har commit/PR avtomatik build va testdan o'tadi, kod tez-tez (kuniga) asosiy branchga qo'shiladi — integratsiya muammolari kechikmaydi",
-        "Serverga avtomatik deploy",
-        "Faqat testlarni yozish"
-      ],
-      "answer": 1,
       "explanation": "CI — branch uzoq yashamasligi haqida. CD ikki ma'noda: Continuous Delivery (har build deploy qilishga tayyor, tugma bosiladi) va Continuous Deployment (avtomatik production'ga). Uzoq feature branch — merge do'zaxi; yechim: kichik PR + feature flag."
     },
     {
       "id": 2014,
       "code": "I15",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Deploy",
       "domain": "infra",
       "section": "i2",
       "question": "Blue-green va canary deploy farqi?",
-      "options": [
-        "Bir xil",
-        "Blue-green: ikkita to'liq muhit, trafik bir zumda yangisiga o'tadi (rollback — tezda qaytarish). Canary: yangi versiyaga trafikning kichik qismi (1–5%) beriladi, metrikalar kuzatilib asta oshiriladi",
-        "Canary faqat test muhitida",
-        "Blue-green rollback imkonsiz"
-      ],
-      "answer": 1,
       "explanation": "Blue-green: tez rollback, lekin xato hamma userga birdan tegadi; ikki barobar resurs. Canary: xato ta'siri kichik, lekin trafik bo'lish mexanizmi va avtomatik metrika tahlili kerak; ikki versiya birga ishlaydi — DB sxemasi ikkalasiga mos bo'lishi shart (expand-contract). Uchinchisi — rolling update (Kubernetes default)."
     },
     {
       "id": 2015,
       "code": "I16",
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Secrets",
       "domain": "infra",
       "section": "i2",
       "question": "Parol, API key va sertifikatlarni qanday boshqarasiz?",
-      "modelAnswer": [
-        "Git'da hech qachon — hatto private repoda ham (tarixda qoladi); .gitignore + pre-commit scanner (gitleaks)",
-        "Markazlashgan secret store: Vault, AWS Secrets Manager, GCP Secret Manager",
-        "Kubernetes Secret — default'da faqat base64, shifrlanmagan: etcd encryption yoki External Secrets operator",
-        "Ilovaga yetkazish: env yoki mount; CI logida chop etilmasligi",
-        "Rotatsiya: muddat, avtomatik yangilash, sizib chiqqanda revoke tartibi (runbook)",
-        "Har muhit (dev/stage/prod) uchun alohida key; eng kam huquq prinsipi"
-      ],
       "explanation": "Amaliy signal: 'git'ga tushib qolsa nima qilasiz?' — javob: darhol revoke/rotate, keyin tarixni tozalash (tozalash yetarli emas, key allaqachon ochiq)."
     },
     {
       "id": 2016,
       "code": "I17",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Deploy",
       "domain": "infra",
       "section": "i2",
       "question": "Qaysi yondashuv to'g'ri: artefakt va muhitlar haqida?",
-      "options": [
-        "Har muhit uchun alohida build qilish (dev, stage, prod)",
-        "Bir marta build qilib, o'sha immutable artefaktni (image digest bilan) hamma muhitdan o'tkazish; farq faqat konfiguratsiyada (env, secret)",
-        "Production'da to'g'ridan-to'g'ri kompilyatsiya qilish",
-        "latest tegidan foydalanish"
-      ],
-      "answer": 1,
       "explanation": "Build once, deploy many: stage'da test qilingan narsa aynan prod'ga boradi. latest — aniqlikni yo'qotadi (qaysi kod ishlayotgani noma'lum, rollback qiyin); digest yoki semantik versiya bilan teglang. Konfiguratsiya image ichida emas, tashqarida (12-factor)."
     },
     {
       "id": 2017,
       "code": "I18",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Deploy",
       "domain": "infra",
       "section": "i2",
       "question": "DB migratsiyasi deploy pipeline'ining qaysi qadamida bajarilishi kerak?",
-      "modelAnswer": [
-        "Migratsiya deploy'dan oldin, orqaga mos (backward compatible) holda — eski kod ham ishlashi kerak",
-        "Ikki versiya deploy vaqtida birga ishlaydi (rolling, canary) — bu asosiy cheklov",
-        "Expand-contract: column qo'shish → ikkala kod ishlaydi → eski kod chiqib ketgach tozalash (alohida release)",
-        "Uzoq migratsiya (backfill, index) deploy'dan ajratilgan job sifatida, batch va throttling bilan",
-        "Har migratsiyaga rollback rejasi; ma'lumot o'chiradigan qadamni kechiktirish",
-        "lock_timeout va statement_timeout qo'yish"
-      ],
       "explanation": "Senior signal: 'migratsiya va kod deploy'i bir atomik qadam emas' degan tushuncha. Ma'lumot o'chirish (DROP COLUMN) odatda bir necha kun/hafta keyin, kuzatuvdan so'ng."
     },
     {
       "id": 2018,
       "code": "I19",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "Katta feature'ni uzoq branchda emas, feature flag bilan qilishning asosiy afzalligi?",
-      "options": [
-        "Kod tozaroq bo'ladi",
-        "Kod kichik bo'laklarda main'ga tushadi (merge konflikt kam), release deploy'dan ajraladi: yoqish/o'chirish bir zumda, canary va A/B imkoniyati",
-        "Testlar kerak emas",
-        "Rollback kerak emas"
-      ],
-      "answer": 1,
       "explanation": "Narxi: flaglar texnik qarz — muddati o'tganini o'chirish tartibi bo'lishi kerak, aks holda kodda o'nlab shart qoladi. Kill switch sifatida ham qimmatli: incidentda deploy'siz o'chirish. Flag holati kuzatiladigan va audit qilinadigan bo'lsin."
     },
     {
       "id": 14018,
       "code": "SR19",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Deploy",
       "domain": "infra",
       "section": "i2",
       "question": "Feature flag tizimini va bosqichli rollout jarayonini loyihalang.",
-      "modelAnswer": [
-        "Flag turlari: release (vaqtinchalik), operatsion (kill switch), eksperiment (A/B), ruxsat (entitlement)",
-        "Baholash: client SDK lokal keshda, markaziy konfiguratsiya push/pull bilan; baholash determinantik (user id hash) bo'lsin",
-        "Bosqichlar: ichki → 1% → 10% → 50% → 100%, har bosqichda metrikani kuzatish va avtomatik to'xtash",
-        "Xavfsizlik: flag o'zgarishi audit qilinadi, prod uchun ruxsat cheklangan, kill switch tezda ishlaydi",
-        "Texnik qarz: har flagga muddat va egasi; eskirganlarini o'chirish jarayoni",
-        "Test: ikkala holat uchun ham test; flaglar kombinatsiyasi portlamasligi uchun ularni kam tutish"
-      ],
       "explanation": "Staff signal: flagni release vositasi sifatida emas, xavfni boshqarish tizimi sifatida ko'rish va texnik qarzni boshqarish rejasini aytish."
     },
     {
       "id": 30030,
       "code": "SN31",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Deploy",
       "domain": "infra",
       "section": "i2",
       "question": "Sxema o'zgarishi bo'lgan relizni zero-downtime chiqarish tartibi?",
-      "options": [
-        "Migratsiya va kodni bir vaqtda deploy qilish",
-        "Expand-contract: (1) qo'shimcha qo'shish (nullable kolonka, yangi index concurrently), (2) kod ikki formatni ham o'qiy/yoza oladigan holatda deploy, (3) backfill, (4) keyingi relizda eski ustunni olib tashlash",
-        "Avval eski kolonkani o'chirib keyin kod chiqarish",
-        "Downtime oynasi olish har doim"
-      ],
-      "answer": 1,
       "explanation": "Rolling deploy paytida eski va yangi kod bir vaqtda ishlaydi — sxema ikkisiga ham mos bo'lishi shart (backward + forward compatible). PostgreSQL detallari: `CREATE INDEX CONCURRENTLY`, `ADD COLUMN` default bilan 11+ da tez, `NOT NULL`ni bosqichma-bosqich (CHECK NOT VALID → VALIDATE), uzun migratsiyalarga `lock_timeout` qo'yish."
     },
     {
       "id": 30031,
       "code": "SN32",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "Canary deploy qachon avtomatik rollback qilinishi kerak?",
-      "options": [
-        "Faqat pod crash bo'lsa",
-        "Canary va baseline'ni bir vaqtda solishtiruvchi SLO signal (xato nisbati, p99 latency, biznes metrika) belgilangan chegaradan oshsa — avtomatik abort",
-        "Muhandis qo'lda qaraganida",
-        "Bir soatdan keyin"
-      ],
-      "answer": 1,
       "explanation": "To'g'ri canary — statistik taqqoslash (baseline vs canary bir xil trafik shartida), mutlaq threshold emas. Argo Rollouts/Flagger shu analizni qiladi. Shart: metrikalar versiya yorlig'i bilan ajratilgan bo'lishi, qaror oynasi yetarli trafik yig'ishi, va rollback yo'li migratsiya bilan ham xavfsiz (shu sabab expand-contract)."
     },
     {
       "id": 30032,
       "code": "SN33",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "Feature flag va deploy ajratilishi nimani beradi?",
-      "options": [
-        "Hech narsa, faqat kod murakkablashadi",
-        "Deploy (kod chiqishi) va release (foydalanuvchiga yoqilishi) alohida bo'ladi: rollback sekundda, progressiv yoyish, A/B, va kill switch incident paytida",
-        "Testni almashtiradi",
-        "Migratsiyani keraksiz qiladi"
-      ],
-      "answer": 1,
       "explanation": "Trunk-based development'ning kaliti. Narxi: flag qarzi — har flag uchun ega, muddat va tozalash rejasi kerak, aks holda kod branch portlashiga aylanadi. Kritik yo'nalishlarda flag o'qish default xavfsiz qiymat bilan (provider ishlamasa ham servis ishlaydi) va flag holati log/trace'ga yozilishi kerak."
     },
     {
       "id": 30033,
       "code": "SN34",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Secrets",
       "domain": "infra",
       "section": "i2",
       "question": "Kubernetes'da sirlar: qaysi variant eng mustahkam?",
-      "options": [
-        "`Secret` obyektida base64, git'ga commit",
-        "Tashqi secret manager (Vault/KMS) + qisqa TTL dinamik credential yoki CSI driver bilan mount; git'da faqat shifrlangan (SOPS/sealed-secrets) ma'lumot",
-        "ConfigMap'da saqlash",
-        "Env'ga Dockerfile'da yozish"
-      ],
-      "answer": 1,
       "explanation": "K8s `Secret` default holatda etcd'da faqat base64 (shifrlanmagan, agar encryption-at-rest yoqilmagan bo'lsa) va RBAC noto'g'ri bo'lsa o'qiladi. Eng yaxshisi: DB uchun dinamik, qisqa muddatli credential (Vault) — leak bo'lsa ham tez o'lik; aks holda KMS bilan shifrlash, avtomatik rotation, va audit. Sirlar log'da va crash dump'da chiqmasligi tekshiriladi."
     },
     {
       "id": 30034,
       "code": "SN35",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "CI 40 daqiqa ketadi, jamoa relizdan qo'rqadi. Qanday tuzatasiz?",
-      "modelAnswer": [
-        "O'lchash: qaysi step qancha vaqt oladi (build, test, image, e2e) — taxmin emas, timing hisoboti",
-        "Test piramidasi: ko'p unit (parallel, tez), kamroq integration (testcontainers), juda kam e2e (faqat kritik yo'l)",
-        "Keshlash: Go build cache va modul kesh, Docker layer kesh (buildkit + registry cache), o'zgarmagan modul testini o'tkazib yuborish (affected-only, monorepo'da)",
-        "Parallellik: test shardlari, `go test -p`, flaky testlarni ajratib karantin qilish (flaky = ishonchsizlik = qo'rquv)",
-        "Pipeline bosqichlari: PR'da tez signal (lint+unit ~5 min), merge'dan keyin uzunlari; deploy alohida",
-        "Natijani kuzatish: DORA metrikalari — lead time, deploy chastotasi, change failure rate"
-      ],
       "explanation": "Relizdan qo'rqish odatda sekin CI + flaky test + og'riqli rollback kombinatsiyasi. Uchtasi ham alohida hal qilinadi; faqat CI tezlashtirish yetmaydi."
     },
     {
       "id": 30264,
       "code": "SN265",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Deploy",
       "domain": "infra",
       "section": "i2",
       "question": "Blue-green va canary orasidagi tanlov nimaga bog'liq?",
-      "options": [
-        "Faqat narxga",
-        "Blue-green: to'liq ikkinchi muhit, bir zumda almashtirish va tez rollback — lekin ikki barobar resurs va DB sxemasi ikkisiga mos bo'lishi kerak; canary: trafikning kichik ulushi bilan real signal yig'ish — sekinroq, lekin xatarni ancha kamaytiradi va metrika asosida avtomatlashtiriladi",
-        "Blue-green har doim yaxshi",
-        "Canary rollback qilmaydi"
-      ],
-      "answer": 1,
       "explanation": "Amalda ko'pincha canary tanlanadi, chunki bug faqat real trafikda ko'rinadi. Ikkisida ham asosiy cheklov — ma'lumot qatlami: sxema o'zgarishi expand-contract bilan qilinmasa rollback imkonsiz bo'ladi. Stateful servislarda (navbat consumer'lari) trafikni bo'lish qiyin, shuning uchun feature flag bilan boshqarish afzal."
     },
     {
       "id": 30265,
       "code": "SN266",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Secrets",
       "domain": "infra",
       "section": "i2",
       "question": "CI pipeline'da sirlar bilan ishlashda nima majburiy?",
-      "options": [
-        "Repo'dagi `.env` fayl",
-        "Qisqa muddatli credential (OIDC bilan cloud'ga federatsiya — statik kalit yo'q), sirlarni faqat kerakli step'da ko'rsatish, log'da maskalash, fork PR'lardan sirlarni yashirish, va secret scanning (pre-commit + CI)",
-        "Faqat maskalash",
-        "Sirlarni env'ga global qo'yish"
-      ],
-      "answer": 1,
       "explanation": "OIDC federatsiyasi (GitHub Actions → AWS/GCP) eng katta yutuq: uzoq yashovchi kalit umuman bo'lmaydi. Qo'shimcha xatarlar: PR'dan kelgan kod sirni chiqarib yuborishi (`pull_request_target` tuzog'i), artefaktlarda qolgan sirlar, va build log'lari. Sir aniqlansa rotation protsedurasi oldindan yozilgan bo'lishi kerak."
     },
     {
       "id": 30477,
       "code": "SN478",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "Build reproducibility (takrorlanuvchanlik) nega muhim?",
-      "options": [
-        "Faqat akademik masala",
-        "Bir xil manba bir xil artefakt bersa: keshlash ishonchli, supply chain hujumini aniqlash mumkin (qayta qurib solishtirish), va 'productionda qaysi kod ishlayapti' savoliga aniq javob bo'ladi. Go'da `-trimpath`, qotirilgan versiyalar, va build metadata shu maqsadda",
-        "Faqat Nix'da mumkin",
-        "Docker o'zi ta'minlaydi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy minimum: image tag sifatida commit SHA (mutable `latest` emas), `go.sum` bilan qotirilgan bog'liqliklar, bazaviy image digest bo'yicha (`@sha256:...`), va artefakt imzosi (cosign) + SBOM. Shunda incident paytida 'qaysi kod, qaysi bog'liqliklar' savoli sekundlarda javob topadi."
     },
     {
       "id": 30546,
       "code": "DO12",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Git",
       "domain": "infra",
       "section": "i2",
       "question": "`git merge` va `git rebase` farqi?",
-      "options": [
-        "Bir xil",
-        "merge — ikki tarixni merge commit bilan birlashtiradi (tarix saqlanadi); rebase — commitlarni boshqa bazaga qayta yozadi (chiziqli tarix, lekin hash'lar o'zgaradi)",
-        "rebase faylarni o'chiradi",
-        "merge faqat main uchun"
-      ],
-      "answer": 1,
       "explanation": "Oltin qoida: umumiy (push qilingan, boshqalar ishlatayotgan) branchni rebase qilmang — boshqalar tarixi buziladi. O'z feature branchingizni main ustiga rebase qilish odatiy. Majburiy push kerak bo'lsa `--force-with-lease` (boshqaning commitini ustidan yozib yubormaydi)."
     },
     {
       "id": 30547,
       "code": "DO13",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Git",
       "domain": "infra",
       "section": "i2",
       "question": "Tasodifan secret (API kalit) commit qilinib, push bo'ldi. To'g'ri harakat?",
-      "options": [
-        "Keyingi commitda o'chirish yetarli",
-        "Avvalo kalitni darhol bekor qilish (rotate) — u allaqachon oshkor; keyin tarixdan tozalash (git filter-repo/BFG) ixtiyoriy",
-        "Repo'ni private qilish",
-        "git revert"
-      ],
-      "answer": 1,
       "explanation": "Tarix tozalansa ham fork, klon, CI keshi, GitHub cache'da qolishi mumkin — shuning uchun rotatsiya birinchi. Oldini olish: pre-commit gitleaks/trufflehog, GitHub push protection, sirlarni .env + .gitignore emas, secret manager'da saqlash."
     },
     {
       "id": 30548,
       "code": "DO14",
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Git",
       "domain": "infra",
       "section": "i2",
       "question": "Qaysi commit bug keltirganini 500 ta commit ichidan tez topish?",
       "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.4.0\n# har qadamda test qilib: git bisect good | bad\n# yoki avtomatik:\ngit bisect run ./test.sh",
-      "options": [
-        "Bu ikkilik qidiruv — ~9 qadamda (log2 500) aybdor commit topiladi; `bisect run` skript exit code bo'yicha avtomatlashtiradi",
-        "Bu barcha commitlarni ketma-ket tekshiradi",
-        "Bu faqat merge commitlarni ko'radi",
-        "Bu commitlarni o'chiradi"
-      ],
-      "answer": 0,
       "explanation": "Skript exit 0 = good, 1–127 = bad, 125 = skip (build bo'lmaydigan commit). Tugagach `git bisect reset`. Kichik, atomar commitlar bisect'ni foydali qiladi."
     },
     {
       "id": 30549,
       "code": "DO15",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Git",
       "domain": "infra",
       "section": "i2",
       "question": "Trunk-based development va GitFlow — CI/CD uchun qaysi biri va nega?",
-      "options": [
-        "GitFlow har doim yaxshi",
-        "Trunk-based: qisqa umrli branchlar (1–2 kun), tez-tez main'ga merge, tugallanmagan ish feature flag ortida — continuous delivery'ga mos; GitFlow uzoq branchlar bilan relizli (masalan, box mahsulot) loyihalarga",
-        "Farqi yo'q",
-        "Trunk-based faqat bitta dasturchi uchun"
-      ],
-      "answer": 1,
       "explanation": "DORA tadqiqotlari trunk-based'ni yuqori samarali jamoalar bilan bog'laydi. Talab: kuchli avtotestlar, main har doim deploy qilinadigan holatda, branch protection va majburiy CI."
     },
     {
       "id": 30550,
       "code": "DO16",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "GitOps",
       "domain": "infra",
       "section": "i2",
       "question": "GitOps nima?",
-      "options": [
-        "GitHub'da CI ishlatish",
-        "Kerakli holat (K8s manifestlari) Git'da saqlanadi; klaster ichidagi agent (Argo CD, Flux) uni doimiy ravishda Git bilan solishtirib, farqni o'zi tuzatadi (pull model)",
-        "Git hook'lar bilan deploy",
-        "Faqat Helm ishlatish"
-      ],
-      "answer": 1,
       "explanation": "Afzalliklar: CI'ga klaster kalitlari berilmaydi (pull), audit — git log, rollback — git revert, drift avtomatik tuzatiladi. CI image build qilib, config repo'dagi image tegini yangilaydi; CD'ni agent bajaradi."
     },
     {
       "id": 30551,
       "code": "DO17",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "GitOps",
       "domain": "infra",
       "section": "i2",
       "question": "Helm chart'da `values.yaml` va muhitlar?",
-      "options": [
-        "Har muhitga alohida chart nusxasi",
-        "Bitta chart, muhitga xos values fayllar (`-f values-prod.yaml`); `helm template` / `helm diff` bilan oldindan ko'rish; chart versiyalanadi",
-        "values faqat dev uchun",
-        "Helm muhitlarni qo'llab-quvvatlamaydi"
-      ],
-      "answer": 1,
       "explanation": "Alternativa — Kustomize (base + overlays, shablonsiz patch). `helm upgrade --install --atomic` xato bo'lsa o'zi rollback qiladi. Sirlarni values'da ochiq saqlamang: sealed-secrets, external-secrets yoki SOPS."
     },
     {
       "id": 30552,
       "code": "DO18",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "GitOps",
       "domain": "infra",
       "section": "i2",
       "question": "Noldan servis uchun CI/CD pipeline'ni loyihala: commit'dan production'gacha.",
-      "modelAnswer": "1) PR: lint, unit test, SAST, dependency scan, build. 2) Merge: image build (multi-stage, distroless), tag = git SHA (latest emas), SBOM va imzo (cosign), image scan (trivy), registry'ga push. 3) Integratsiya testlari staging'da, migration'lar oldinga-orqaga mos (expand/contract). 4) Deploy: GitOps — config repo'da tegni yangilash, Argo CD sinxronlaydi. 5) Progressive delivery: canary (Argo Rollouts/Flagger) SLO metrikalari bo'yicha avtomatik analiz va rollback. 6) Prod uchun approval yoki avtomatik (jamoa etukligiga qarab). 7) Kuzatuv: deploy markerlari dashboard'da, DORA metrikalari (deploy chastotasi, lead time, change failure rate, MTTR).",
       "explanation": "Intervyuda ta'kidlanadigan jihatlar: immutable artefakt (bir image hamma muhitdan o'tadi), tez rollback, xavfsizlik (supply chain), va o'lchanadigan natija."
     },
     {
       "id": 30553,
       "code": "DO19",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "GitOps",
       "domain": "infra",
       "section": "i2",
       "question": "Docker image'ni `latest` tegi bilan deploy qilishning muammosi?",
-      "options": [
-        "Muammo yo'q",
-        "Teg o'zgaruvchan — qaysi versiya ishlayotgani noma'lum, rollback qiyin, node'lar turli image olishi mumkin (imagePullPolicy); SHA yoki semver teg, eng ishonchlisi digest (@sha256:...)",
-        "latest sekinroq yuklanadi",
-        "latest faqat Docker Hub'da ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
     },
     {
       "id": 30554,
       "code": "DO20",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "GitOps",
       "domain": "infra",
       "section": "i2",
       "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
-      "modelAnswer": "DevOps — vosita emas, madaniyat: dasturchi va operatsiya umumiy mas'uliyati ('you build it, you run it'), kichik tez-tez relizlar, avtomatlashtirish, fikr-mulohaza tsikllari (monitoring, blameless postmortem). Joriy qilish: 1) DORA metrikalarini o'lchashdan boshlash. 2) Eng og'riqli qo'lda jarayonni avtomatlashtirish (deploy). 3) Platform jamoa — golden path (shablon repo, pipeline, observability tayyor), self-service. 4) On-call dasturchilar bilan, runbook'lar. 5) Blameless postmortem. SRE — Google'ning DevOps'ni amalga oshirish usuli: SLO/SLI, error budget (budget tugasa feature o'rniga ishonchlilik), toil'ni 50%dan kam ushlash.",
       "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
       "source": "https://sre.google/sre-book/table-of-contents/"
     },
@@ -441,36 +281,22 @@
       "id": 30270,
       "code": "SN271",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
-      "options": [
-        "`git reset --hard` va force push",
-        "`git revert <sha>` — yangi commit bilan o'zgarishni bekor qiladi, tarix saqlanadi va boshqa ishlovchilar buzilmaydi; merge commit uchun `-m 1`. `reset --hard` + force push umumiy branch'da boshqalarning ishini yo'qotadi",
-        "`git rebase -i` bilan commit'ni o'chirish",
-        "Faqat yangi fix yozish"
-      ],
-      "answer": 1,
       "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
     },
     {
       "id": 30271,
       "code": "SN272",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "CI/CD",
       "domain": "infra",
       "section": "i2",
       "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
-      "options": [
-        "Qo'lda har commit'ni tekshirish",
-        "`git bisect` — binary search bilan log2(N) qadamda topadi; `git bisect run ./test.sh` bilan avtomatlashtiriladi (test skript exit kodi bilan yaxshi/yomon aniqlanadi)",
-        "`git log --grep`",
-        "`git blame` yetarli"
-      ],
-      "answer": 1,
       "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
     }
   ]

@@ -11,18 +11,11 @@
       "id": 6005,
       "code": "F6",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC nima ustiga qurilgan?",
-      "options": [
-        "HTTP/1.1 va JSON",
-        "HTTP/2 va Protocol Buffers: ikkilik (binary) format, kodni .proto dan generatsiya qilish, to'rt chaqiruv turi — unary, server-stream, client-stream, bidirectional",
-        "WebSocket va XML",
-        "TCP ustida o'z protokoli"
-      ],
-      "answer": 1,
       "explanation": "Afzalliklar: kichik va tez serializatsiya, qat'iy kontrakt, kod generatsiyasi, streaming, deadline va cancel protokol ichida. Kamchiliklar: brauzerdan to'g'ridan-to'g'ri ishlamaydi (gRPC-Web yoki gateway kerak), inson o'qiy olmaydi (debug uchun grpcurl), oraliq proxy'lar HTTP/2 va trailers'ni qo'llashi shart.",
       "source": "https://grpc.io/docs/what-is-grpc/core-concepts/"
     },
@@ -30,18 +23,11 @@
       "id": 6007,
       "code": "F8",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "Protobuf'da orqaga moslikni (backward compatibility) saqlash qoidasi?",
-      "options": [
-        "Maydon nomini o'zgartirmaslik yetarli",
-        "Maydon RAQAMI (tag) kontraktning o'zi: raqamni qayta ishlatmaslik kerak, o'chirilgan maydonlar uchun reserved yozish; yangi maydon qo'shish xavfsiz, majburiy semantika qo'shish esa buzadi. Nomi esa (binar formatda) muhim emas",
-        "Har o'zgarishda yangi versiya kerak",
-        "Maydon tipini bemalol o'zgartirish mumkin"
-      ],
-      "answer": 1,
       "explanation": "Bir raqamni boshqa maydonga berish — eski clientlar ma'lumotni noto'g'ri o'qiydi (jim buziladi, xato bermaydi). Shuning uchun: reserved 5, 7; reserved \"old_name\";. Enum'da ham 0 qiymati default bo'lishi shart. Kontrakt tekshiruvi CI'da avtomatlashtiriladi (buf breaking).",
       "source": "https://protobuf.dev/programming-guides/proto3/"
     },
@@ -49,199 +35,121 @@
       "id": 6008,
       "code": "F9",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC'da timeout qanday ishlaydi?",
-      "options": [
-        "Har servis o'z timeout'ini mustaqil qo'yadi",
-        "Deadline chaqiruv bilan birga uzatiladi: A servis 2s deadline qo'ysa, B va undan keyingi chaqiruvlar qolgan vaqtni biladi va muddat tugaganda hamma zanjir DEADLINE_EXCEEDED bilan to'xtaydi",
-        "Timeout yo'q",
-        "Faqat client tomonda ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Bu oddiy HTTP'dan katta afzallik: deadline tarqaladi va 'yetim' ish qolmaydi. Go'da context bilan tabiiy bog'lanadi: ctx, cancel := context.WithTimeout(...) va shu ctx chaqiruvga uzatiladi. Qoida: har chaqiruvda deadline bo'lsin va ichkariga kirgan sari kamaysin."
     },
     {
       "id": 6009,
       "code": "F10",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC servis Kubernetes'da bitta podga yuk to'plab qolyapti, boshqalari bo'sh. Sabab?",
-      "options": [
-        "gRPC yomon masshtablanadi",
-        "gRPC HTTP/2 da uzoq yashaydigan bitta connection'dan foydalanadi — L4 (TCP) balanslovchi connection'ni bir marta taqsimlaydi va keyingi hamma chaqiruv shu podga tushadi. Yechim: client-side load balancing (DNS/headless service bilan), L7 proxy (Envoy/mesh) yoki connection'ni davriy uzish (MAX_CONNECTION_AGE)",
-        "Pod resurslari kam",
-        "DNS cache"
-      ],
-      "answer": 1,
       "explanation": "Kubernetes Service — L4, shuning uchun gRPC va boshqa uzoq connection'lar (WebSocket) uchun yetarli emas. Amaliy variantlar: grpc-go'da round_robin balanser + headless service, yoki service mesh sidecar'i. Serverda keepalive va MAX_CONNECTION_AGE_GRACE qo'yish yangi podlarga yuk kelishini ta'minlaydi."
     },
     {
       "id": 30000,
       "code": "SN1",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC'da <b>deadline</b> va <b>timeout</b> orasidagi amaliy farq nima?",
-      "options": [
-        "Farqi yo'q, sinonim",
-        "Deadline — absolute vaqt nuqtasi, chaqiruv zanjiri bo'ylab propagate qilinadi; timeout — har hop uchun alohida nisbiy muddat",
-        "Timeout serverda, deadline clientda ishlaydi",
-        "Deadline faqat streaming RPC uchun"
-      ],
-      "answer": 1,
       "explanation": "gRPC wire'da `grpc-timeout` header ketadi, lekin semantikasi deadline: A→B→C zanjirida qolgan budjet kamayib boradi va C o'zi uchun yangi 5s olmaydi. Go'da `context.WithDeadline` interceptor orqali avtomatik uzatiladi. Har servisda mustaqil timeout qo'yilsa — zanjir budjeti ko'payib ketadi (5s+5s+5s) va client allaqachon ketgan bo'lsa ham server ishlashda davom etadi (ishlab chiqarishda 'ghost work')."
     },
     {
       "id": 30001,
       "code": "SN2",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "Protobuf sxemasida maydonni o'chirish kerak. Eng xavfsiz yo'l?",
-      "options": [
-        "Maydonni o'chirib, raqamni keyingi yangi maydonga berish",
-        "Maydonni o'chirib `reserved 5; reserved \"old_field\";` qo'yish",
-        "Maydon turini `bytes` ga o'zgartirish",
-        "Maydonni `optional` qilish yetarli"
-      ],
-      "answer": 1,
       "explanation": "Wire formatda maydon nomi emas, <b>tag raqami</b> muhim. Raqam qayta ishlatilsa eski client yangi ma'noni eski tur deb o'qiydi — jim data corruption. `reserved` compile-time'da qayta ishlatishni bloklaydi. Qo'shimcha qoida: required yo'q (proto3), tur o'zgartirish breaking (int32↔string), enum'ga qiymat qo'shish mumkin lekin default 0 saqlanadi."
     },
     {
       "id": 30002,
       "code": "SN3",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC client Kubernetes'da `Service` (ClusterIP) orqali 10 podga ulangan. Yuklama bitta podga tushib qolgan. Sabab?",
-      "options": [
-        "gRPC UDP ishlatadi",
-        "HTTP/2 bitta uzoq yashovchi TCP ulanishda multiplexing qiladi; L4 ClusterIP faqat ulanishni balanslaydi, request'ni emas",
-        "ClusterIP round-robin qilmaydi umuman",
-        "Pod readiness probe yo'q"
-      ],
-      "answer": 1,
       "explanation": "kube-proxy L4 balanslaydi: bir marta ulanish o'rnatiladi, keyingi barcha request'lar shu TCP orqali ketadi. Yechimlar: (1) client-side balansirovka — `dns:///headless-service:port` + `round_robin`, (2) service mesh yoki L7 proxy (Envoy/Linkerd), (3) `MAX_CONNECTION_AGE` serverda — ulanishlar davriy qayta tarqaladi. Faqat headless Service DNS barcha pod IP'larini qaytaradi."
     },
     {
       "id": 30003,
       "code": "SN4",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC servisda retry siyosatini qanday quramiz — xavfsiz va DDoS'ga aylanmaydigan?",
-      "modelAnswer": [
-        "Faqat idempotent metodlarni retry qilish; mutatsiyalarda idempotency key yoki `SafeToRetry` belgisi",
-        "Retryable status kod ro'yxati: UNAVAILABLE, DEADLINE_EXCEEDED (ehtiyotkorlik bilan), RESOURCE_EXHAUSTED faqat backoff bilan. INVALID_ARGUMENT, NOT_FOUND, PERMISSION_DENIED — hech qachon",
-        "Exponential backoff + jitter; maxAttempts 3-4 dan oshmasin",
-        "Retry budget (mesh darajasida ~10-20% trafik) — cascading retry storm oldini oladi",
-        "Deadline umumiy: retry qolgan budjet ichida bo'lishi kerak, yangi deadline berilmaydi",
-        "Server tomonda `RESOURCE_EXHAUSTED` + backoff hint, va circuit breaker client'da"
-      ],
       "explanation": "Asosiy xato: har qatlamda 3 marta retry — 3 qatlam = 27x amplifikatsiya, sekin servis butunlay o'ladi. gRPC `retryPolicy` service config'da deklarativ beriladi, lekin budjet va idempotentlikni siz kafolatlaysiz."
     },
     {
       "id": 30004,
       "code": "SN5",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "Server-streaming RPC'da client sekin o'qiydi, server tez yozadi. Nima bo'ladi?",
-      "options": [
-        "Ma'lumot yo'qoladi",
-        "HTTP/2 flow control oynasi to'ladi va `Send` bloklanadi — backpressure client'gacha yetadi",
-        "Server panic qiladi",
-        "gRPC avtomatik diskka bufferlaydi"
-      ],
-      "answer": 1,
       "explanation": "HTTP/2 per-stream va per-connection WINDOW_UPDATE mexanizmi bor, shu bilan backpressure tabiiy ishlaydi. Xavf: `Send` bloklangan goroutine context bekor bo'lishini tekshirmasa — goroutine leak. Shuning uchun stream ichida ham `ctx.Done()` kuzatiladi va yozish deadline'ga bog'lanadi."
     },
     {
       "id": 30005,
       "code": "SN6",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "REST'dan gRPC'ga ko'chishda tashqi (public) API uchun asosiy cheklov?",
-      "options": [
-        "gRPC sekinroq",
-        "Brauzer to'g'ridan-to'g'ri gRPC qila olmaydi (grpc-web + proxy kerak), o'tkazuvchi infra HTTP/2 trailer va binary payload'ni har doim qo'llamaydi",
-        "gRPC'da autentifikatsiya yo'q",
-        "gRPC faqat Go'da ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Brauzer fetch API HTTP/2 trailer'larga kira olmaydi — shuning uchun grpc-web va Envoy translation kerak. Qo'shimcha: debugging qiyin (binary), corporate proxy/WAF'lar buzishi mumkin, CDN kesh qilmaydi. Amaliy yechim: ichkarida gRPC, tashqarida REST/JSON gateway (grpc-gateway yoki Connect protokoli)."
     },
     {
       "id": 30440,
       "code": "SN441",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC keepalive sozlamalari nega muhim?",
-      "options": [
-        "Faqat statistika uchun",
-        "Uzun yashovchi HTTP/2 ulanishlar NAT/LB tomonidan jim uzilishi mumkin — client `keepalive.ClientParameters` (Time/Timeout) bilan tirikligini tekshiradi; server tomonda `EnforcementPolicy` juda tez-tez pinglarni rad etadi (`ENHANCE_YOUR_CALM` bilan ulanish uziladi), shuning uchun ikki tomon sozlamalari mos bo'lishi shart",
-        "Keepalive kerak emas",
-        "Faqat streaming uchun"
-      ],
-      "answer": 1,
       "explanation": "Klassik incident: client `Time: 10s` qo'yadi, server `MinTime: 5m` talab qiladi — server ulanishni uzadi, client qayta ulanadi, sikl davom etadi va latency sakraydi. To'g'ri: server `MinTime` client intervalidan kichik, `PermitWithoutStream` ehtiyotkorlik bilan, va `MaxConnectionAge` bilan ulanishlarni davriy qayta tarqatish (balansirovka uchun ham foydali)."
     },
     {
       "id": 30441,
       "code": "SN442",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC xato modeli: status kodlar va boy xato detallari qanday ishlatiladi?",
-      "options": [
-        "Faqat `Internal` qaytarish",
-        "Standart kodlar semantikaga mos tanlanadi (`InvalidArgument` vs `FailedPrecondition` vs `Aborted` — retry xatti-harakati shunga bog'liq), va `google.rpc.ErrorDetails` bilan mashinaga o'qiladigan kontekst (qaysi maydon xato, retry-after, kvota ma'lumoti) qo'shiladi",
-        "HTTP status kodlar ishlatiladi",
-        "Xato matnida JSON yuborish"
-      ],
-      "answer": 1,
       "explanation": "Farqlar muhim: `FailedPrecondition` — holat to'g'rilanmaguncha retry befoyda; `Aborted` — konkurentlik konflikti, retry o'rinli; `Unavailable` — vaqtinchalik, backoff bilan retry. Bu kodlar mijoz kutubxonasining avtomatik retry siyosatini boshqaradi, shuning uchun noto'g'ri kod retry bo'roni yoki jim yo'qotish keltiradi."
     },
     {
       "id": 30526,
       "code": "SN527",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "gRPC",
       "domain": "api",
       "section": "a2",
       "question": "gRPC'da katta fayl yoki katta ro'yxat qanday uzatiladi?",
-      "options": [
-        "Bitta katta xabarda",
-        "Streaming bilan bo'laklarga bo'lib (server/client streaming) — default maksimal xabar hajmi 4 MB va uni cheksiz oshirish xotira xavfi; ro'yxatlar uchun pagination (cursor) yoki server streaming, fayllar uchun esa ko'pincha obyekt saqlash + imzolangan URL to'g'riroq",
-        "Base64 qilib",
-        "Limitni 1 GB qilish"
-      ],
-      "answer": 1,
       "explanation": "Xabar hajmi limitini oshirish (`MaxRecvMsgSize`) vaqtinchalik yechim: bitta so'rov butun heapni yeydi va p99 ni buzadi. Streaming bilan doimiy xotira sarfi bo'ladi; lekin stream davomida xato bo'lsa qisman natija muammosi paydo bo'ladi — shuning uchun chunk'lar idempotent va davom ettiriladigan bo'lishi kerak."
     }
   ]

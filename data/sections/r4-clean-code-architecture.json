@@ -14,72 +14,44 @@
       "id": 6011,
       "code": "F12",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Clean code",
       "domain": "arch",
       "section": "r4",
       "question": "Coupling (bog'lanish) va cohesion (yaxlitlik) haqida to'g'ri gap?",
-      "options": [
-        "Ikkalasi ham yuqori bo'lishi kerak",
-        "Maqsad: past coupling (modullar bir-biriga kam bog'liq) va yuqori cohesion (bitta modul ichidagi kod bitta maqsadga xizmat qiladi)",
-        "Ikkalasi ham past bo'lishi kerak",
-        "Bular bir xil narsa"
-      ],
-      "answer": 1,
       "explanation": "Amaliy o'lchov: bitta biznes o'zgarishi uchun nechta modulga tegish kerak (kam bo'lsa yaxshi), va modul ichidagi narsalar birga o'zgaradimi. Yuqori coupling alomatlari: umumiy 'utils' paketi hamma narsani biladi, modullar bir-birining ichki tuzilmasiga tayanadi, aylanma bog'liqliklar. Go'da import grafigi buni ko'rsatib beradi."
     },
     {
       "id": 6012,
       "code": "F13",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Clean code",
       "domain": "arch",
       "section": "r4",
       "question": "KISS, DRY va YAGNI tamoyillari orasidagi ziddiyat qanday hal qilinadi?",
-      "options": [
-        "DRY har doim column",
-        "DRY'ni ko'r-ko'rona qo'llash noto'g'ri mavhumlik yaratadi: tasodifan o'xshash ikki kod bir xil sabab bilan o'zgarmasa, ularni birlashtirmaslik kerak. Qoida: takrorlanish bilimda (biznes qoidasida) bo'lsa yomon, shaklda bo'lsa bardoshli",
-        "YAGNI faqat startaplarda",
-        "KISS kod qisqa bo'lishini anglatadi"
-      ],
-      "answer": 1,
       "explanation": "Mashhur formulalar: 'duplication is far cheaper than the wrong abstraction' (Sandi Metz) va rule of three — uchinchi takrorda umumlashtirish. YAGNI: kelajakda kerak bo'lishi mumkin degan funksiyani bugun yozmaslik. KISS — soddalik: o'qiydigan odam uchun tushunarli yechim, eng aqlli yechim emas."
     },
     {
       "id": 6013,
       "code": "F14",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Architecture style",
       "domain": "arch",
       "section": "r4",
       "question": "Layered (qatlamli) va hexagonal (ports & adapters) arxitektura farqi?",
-      "options": [
-        "Bir xil narsa",
-        "Qatlamlida bog'liqlik yuqoridan pastga ketadi va domain ko'pincha DB qatlamiga tayanadi. Hexagonal'da domain markazda: u interfeys (port) e'lon qiladi, DB va HTTP esa tashqi adapterlar — bog'liqlik faqat ichkariga qaraydi",
-        "Hexagonal faqat oltita modul degani",
-        "Qatlamli arxitektura testlanmaydi"
-      ],
-      "answer": 1,
       "explanation": "Clean/onion arxitektura ham shu g'oyaning variantlari: dependency inversion orqali domainni infratuzilmadan ajratish. Amaliy foyda: DB yoki transportni almashtirganda biznes qoidalar tegilmaydi va domain testlari infratuzilmasiz ishlaydi. Xavf: kichik CRUD servis uchun ortiqcha qatlam va mapping."
     },
     {
       "id": 6014,
       "code": "F15",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Architecture style",
       "domain": "arch",
       "section": "r4",
       "question": "CQRS nima va qachon oqlanadi?",
-      "options": [
-        "Ma'lumotni shifrlash usuli",
-        "O'qish va yozish modellarini ajratish: yozish tomoni invariantlarni himoya qiladi, o'qish tomoni query'ga moslangan (denormallashgan) model bilan ishlaydi. Oqlanadi: o'qish va yozish yuklari/modellari keskin farq qilganda",
-        "Har loyihada majburiy",
-        "Faqat event sourcing bilan ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "CQRS event sourcing'ni talab qilmaydi — eng sodda ko'rinishi: bir xil DB, lekin alohida read model (view yoki materialized view). To'liq ajratilgan read store bo'lsa — eventual consistency va sinxronizatsiya narxi paydo bo'ladi. Ko'p tizim uchun oddiy repository yetarli; CQRS'ni aniq muammo asoslashi kerak.",
       "source": "https://martinfowler.com/bliki/CQRS.html"
     },
@@ -87,37 +59,22 @@
       "id": 6015,
       "code": "F16",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Architecture style",
       "domain": "arch",
       "section": "r4",
       "question": "Repository va Active Record patternlari farqi?",
-      "options": [
-        "Bir xil",
-        "Active Record: obyekt o'z saqlanishini biladi (user.Save()) — sodda va tez, lekin domain va DB aralashadi. Repository: domain obyekti sof qoladi, saqlash alohida interfeys ortida — testlash va DDD uchun qulay, lekin ko'proq kod",
-        "Repository faqat NoSQL uchun",
-        "Active Record ORM emas"
-      ],
-      "answer": 1,
       "explanation": "Tanlov kontekstga bog'liq: CRUD ko'p bo'lgan ilovada Active Record (Rails, Django) tez natija beradi; murakkab domen qoidalari bo'lsa Repository + Unit of Work afzal. Go'da odatda Repository interfeysi va sqlc/pgx implementatsiyasi ishlatiladi."
     },
     {
       "id": 6016,
       "code": "F17",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "ADR",
       "domain": "arch",
       "section": "r4",
       "question": "Arxitektura qarorini qanday hujjatlashtirasiz?",
-      "modelAnswer": [
-        "ADR (Architecture Decision Record): kontekst, ko'rib chiqilgan variantlar, qaror, oqibatlar va status",
-        "Har ADR qisqa (1 page) va kod bilan birga repo'da saqlanadi (docs/adr/0007-....md)",
-        "Muhimi — nima uchun rad etilganini yozish: keyin jamoa savolni qayta ochmaydi",
-        "Qaror o'zgarsa eski ADR o'chirilmaydi — 'superseded by 0012' deb belgilanadi",
-        "Qarashlarni oldindan kelishish uchun RFC/dizayn hujjati va jamoa review'i",
-        "Katta qarorlar uchun: xavflar, qaytarib olish narxi va o'lchanadigan mezonlar"
-      ],
       "explanation": "Senior/Staff signal: qarorning o'zi emas, jarayon va oqibatlar. Intervyuda 'siz qabul qilgan katta qarorni va uning oqibatlarini ayting' savoliga ADR strukturasi bilan javob berish juda yaxshi ishlaydi.",
       "source": "https://adr.github.io/"
     },
@@ -125,73 +82,44 @@
       "id": 6017,
       "code": "F18",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Architecture style",
       "domain": "arch",
       "section": "r4",
       "question": "Quality attribute'lar (performance, scalability, availability, maintainability, security) o'rtasida ziddiyat bo'lsa nima qilasiz?",
-      "options": [
-        "Hammasini maksimal level'da ta'minlash",
-        "Ular bir-biriga zid bo'lishi mumkin (masalan kuchli konsistentlik ↔ mavjudlik va latency): biznes talabiga qarab ustuvorlikni aniq belgilash, o'lchanadigan mezon qo'yish va trade-off'ni ADR'da yozish",
-        "Texnik jamoa o'zi hal qiladi, biznes bilmaydi",
-        "Doim performance column"
-      ],
-      "answer": 1,
       "explanation": "Amaliy yondashuv: har atribut uchun raqam ('p99 < 300 ms', '99.9% availability', 'yangi feature 2 haftada') va shu raqamlarga arxitekturani moslash. 'Hammasi muhim' degan javob — yetuk bo'lmagan javob; intervyuchi aynan tanlov qila olishingizni ko'radi."
     },
     {
       "id": 6018,
       "code": "F19",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Refactoring",
       "domain": "arch",
       "section": "r4",
       "question": "Legacy kodga yangi feature qo'shish kerak, testlar yo'q. Qanday yondashasiz?",
-      "modelAnswer": [
-        "Avval xulqni muzlatish: mavjud xulq uchun characterization test (hozirgi natijani qayd qiluvchi test) yozish",
-        "Seam topish: o'zgartirmoqchi bo'lgan joyni ajratib olish (interfeys kiritish, bog'liqlikni parametrga chiqarish)",
-        "Kichik, xavfsiz refactoring qadamlari — har qadamdan keyin testlar yashil",
-        "Yangi kodni yangi, toza modulda yozib, eskisiga minimal tegish (strangler)",
-        "Katta qayta yozishni taklif qilishdan oldin: risk, muddat va biznes qiymatini solishtirish",
-        "Monitoring va feature flag bilan bosqichli chiqarish"
-      ],
       "explanation": "Senior signal: 'hammasini qayta yozamiz' emas, xavfni boshqarish. Michael Feathers'ning 'legacy code = testsiz kod' ta'rifini aytish ham yaxshi taassurot qoldiradi."
     },
     {
       "id": 6019,
       "code": "F20",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Clean code",
       "domain": "arch",
       "section": "r4",
       "question": "Technical debt (texnik qarz) haqida qaysi yondashuv to'g'ri?",
-      "options": [
-        "Texnik qarz — har doim yomon kod",
-        "Qarz ongli ham bo'lishi mumkin (muddatga yetish uchun soddalashtirilgan yechim) — muhimi uni ko'rinadigan qilish: backlog'da vazifa, sababi va to'lash rejasi bilan; foizi esa sekinlashuv va incidentlarda ko'rinadi",
-        "Qarzni faqat refactoring sprintida to'lash mumkin",
-        "Qarz haqida biznesga aytmaslik kerak"
-      ],
-      "answer": 1,
       "explanation": "Amaliy usul: har sprintda ma'lum ulush (masalan 10–20%) qarzga ajratish va qarzni biznes tilida tushuntirish ('bu joy tufayli har feature 2 kun ko'p vaqt oladi'). Ko'rinmas qarz — eng qimmati: hech kim uni rejalashtirmaydi, lekin hamma unga to'laydi."
     },
     {
       "id": 6020,
       "code": "F21",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Architecture style",
       "domain": "arch",
       "section": "r4",
       "question": "12-factor app tamoyillaridan qaysi biri to'g'ri?",
-      "options": [
-        "Konfiguratsiya kodga yoziladi",
-        "Konfiguratsiya muhitdan (env) olinadi, jarayonlar stateless va bo'lishadigan holatni backing service'da saqlaydi, loglar stdout'ga oqim sifatida yoziladi, dev va prod muhitlar iloji boricha yaqin",
-        "Har muhit uchun alohida build",
-        "Loglar fayllarga yozilib, o'zi boshqariladi"
-      ],
-      "answer": 1,
       "explanation": "Bu tamoyillar konteyner va Kubernetes bilan tabiiy mos keladi: stateless jarayon — istalgancha nusxalash mumkin; env konfiguratsiya — bitta image hamma muhitda; stdout log — platforma yig'adi. Qo'shimcha muhim band: graceful shutdown (disposability) va admin vazifalarni bir martalik jarayon sifatida bajarish.",
       "source": "https://12factor.net/"
     },
@@ -199,72 +127,44 @@
       "id": 30215,
       "code": "SN216",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Clean code",
       "domain": "arch",
       "section": "r4",
       "question": "Funksiya 200 qator. Uni bo'lishning to'g'ri mezoni nima?",
-      "options": [
-        "Har 20 qatorda yangi funksiya",
-        "Mavhumlik darajasi bo'yicha: bir funksiya bir darajadagi qarorlarni bajarsin, ajratilgan qism mustaqil nom oladigan ma'noga ega bo'lsin; sun'iy bo'lish (faqat qator soni uchun) o'qishni yomonlashtiradi",
-        "Uzunlik muhim emas",
-        "Faqat testlash uchun bo'lish"
-      ],
-      "answer": 1,
       "explanation": "Yaxshi ajratish belgisi: yangi funksiyaga aniq nom topiladi va u 3-4 argumentdan ko'p talab qilmaydi. Yomon ajratish belgisi: `processPart2(a, b, c, d, e, f)` — holat argumentlar orqali sudralib yuradi. Amaliy yondashuv: avval nomlash (nima qilinadi), keyin chegara — shunda kod o'qilishi hikoya kabi bo'ladi."
     },
     {
       "id": 30216,
       "code": "SN217",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "ADR",
       "domain": "arch",
       "section": "r4",
       "question": "ADR (Architecture Decision Record) nimani o'z ichiga olishi kerak?",
-      "options": [
-        "Faqat tanlangan texnologiya nomi",
-        "Kontekst (qanday muammo va cheklovlar), ko'rib chiqilgan variantlar va ularning almashinuvlari, qabul qilingan qaror va sabab, natijalar/oqibatlar, holat (taklif/qabul/bekor) va sana",
-        "UML diagramma",
-        "Kod namunasi"
-      ],
-      "answer": 1,
       "explanation": "ADR'ning qiymati — 'nega' ni saqlash: 6 oydan keyin kelgan odam qarorni takrorlamasdan qayta ko'rib chiqa oladi. Eng ko'p tashlab ketiladigan qism — rad etilgan variantlar va ularning sababi. ADR qisqa (1 sahifa), repo ichida versiyalangan va o'zgarganda yangi ADR bilan bekor qilinadi (tahrir qilinmaydi)."
     },
     {
       "id": 30279,
       "code": "SN280",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Clean code",
       "domain": "arch",
       "section": "r4",
       "question": "Code review'da nimalarga birinchi qaraladi?",
-      "options": [
-        "Formatlash va o'zgaruvchi nomlari",
-        "To'g'rilik va xavfsizlik (race, ruxsat tekshiruvi, SQL/input validatsiya, xato ishlovi), keyin kontrakt/dizayn (API va sxema o'zgarishi mos keladimi, migratsiya xavfsizmi), keyin testlar, keyin o'qilishi; formatlash va uslub linter/formatter zimmasida",
-        "Faqat testlar soni",
-        "Faqat performance"
-      ],
-      "answer": 1,
       "explanation": "Senior review'ning qiymati aynan yuqori qatlamda: bu o'zgarish rollback qilinsa nima bo'ladi, migratsiya qulf oladimi, yangi endpoint ruxsatni tekshiradimi, xato qanday kuzatiladi. Nit'lar `nit:` deb belgilanadi va bloklamaydi; katta dizayn e'tirozi esa PR'da emas, oldindan (ADR/dizayn muhokamasi) aytilishi kerak."
     },
     {
       "id": 30280,
       "code": "SN281",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Refactoring",
       "domain": "arch",
       "section": "r4",
       "question": "Katta legacy modulni xavfsiz refactor qilish strategiyasi?",
-      "options": [
-        "Bir relizda qayta yozish",
-        "Avval xatti-harakatni qotirish (characterization testlar), keyin kichik qadamlar: seam/abstraksiya qo'shish (branch-by-abstraction), yangi implementatsiyani flag ostida yonma-yon ishlatish (shadow/dual-run bilan natijalarni solishtirish), so'ng eskisini o'chirish",
-        "Testlarni keyin yozish",
-        "Faqat yangi kodni yozib eskisini qoldirish"
-      ],
-      "answer": 1,
       "explanation": "Katta 'big bang' qayta yozish deyarli har doim muddatdan chiqadi va bir vaqtda ikki tizimni saqlashga olib keladi. Shadow run (ikkalasini ishlatib natijalarni solishtirish, faqat eskisining javobini qaytarish) — pul yoki hisob-kitobga tegishli modullarda eng xavfsiz usul. Har qadamda deploy qilinadigan holat saqlanadi."
     }
   ]

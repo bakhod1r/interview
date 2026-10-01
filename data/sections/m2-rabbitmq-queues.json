@@ -12,162 +12,99 @@
       "id": 1014,
       "code": "B15",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Queue",
       "domain": "msg",
       "section": "m2",
       "question": "Queue at-least-once yetkazib beradi. Consumer uchun to'g'ri yondashuv?",
-      "options": [
-        "Takrorlar bo'lmaydi deb hisoblash",
-        "Consumer'ni idempotent qilish: message_id bo'yicha dedup (processed table, unique constraint) yoki tabiatan idempotent operatsiyalar",
-        "Ack'ni ishlovdan oldin yuborish",
-        "Faqat bitta consumer ishlatish"
-      ],
-      "answer": 1,
       "explanation": "Ishlovdan oldin ack — at-most-once (xabar yo'qolishi mumkin). Keyin ack — at-least-once (crash bo'lsa takror). Takrorga chidash — idempotentlik. Zaharli xabar uchun max retry + DLQ (dead letter queue)."
     },
     {
       "id": 1019,
       "code": "B20",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Queue",
       "domain": "msg",
       "section": "m2",
       "question": "'Kafka exactly-once' haqida to'g'ri gap?",
-      "options": [
-        "Har qanday tizimda end-to-end exactly-once kafolatlanadi",
-        "Kafka EOS faqat Kafka ichida (read-process-write transaction'lar) ishlaydi; tashqi DB/API'ga side effect uchun baribir idempotentlik yoki outbox kerak",
-        "Exactly-once imkonsiz, shuning uchun Kafka faqat at-most-once",
-        "Consumer group buni avtomatik hal qiladi"
-      ],
-      "answer": 1,
       "explanation": "Network'da yetkazib berish — at-least-once; 'exactly-once' amalda 'effectively-once processing' = at-least-once + idempotentlik. Intervyuda bu farqni aniq aytish kuchli signal."
     },
     {
       "id": 5007,
       "code": "V8",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "Kafka va RabbitMQ o'rtasidagi asosiy farq?",
-      "options": [
-        "Farqi yo'q, ikkalasi ham queue",
-        "Kafka — saqlanadigan log: xabar o'qilgach ham qoladi, qayta o'qish (replay) va ko'p consumer group mumkin. RabbitMQ — klassik broker: xabar ack qilingach queue'dan o'chadi, kuchli routing (exchange, binding), per-message TTL va prioritet bor",
-        "RabbitMQ tezroq va replay qiladi",
-        "Kafka routing uchun mo'ljallangan"
-      ],
-      "answer": 1,
       "explanation": "Tanlov: event streaming, replay, katta throughput, event sourcing → Kafka. Vazifa queue'i (task queue), murakkab marshrutlash, per-message prioritet/TTL, kichik-o'rta yuk → RabbitMQ. Vakansiyada ikkalasi ham bor — farqni aniq aytish kutiladi."
     },
     {
       "id": 5008,
       "code": "V9",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "RabbitMQ'da <code>prefetch</code> (QoS) nima uchun kerak?",
-      "options": [
-        "Xabarlarni siqish uchun",
-        "Consumer bir vaqtda nechta ack qilinmagan xabar olishini cheklaydi — cheklanmasa bitta consumer hamma xabarni tortib olib, yukni notekis taqsimlaydi va memory'ni to'ldiradi",
-        "Xabar tartibini kafolatlaydi",
-        "Queue'ni o'chiradi"
-      ],
-      "answer": 1,
       "explanation": "prefetch=1 — eng adolatli taqsimot (sekin ishlov uchun), lekin round-trip ko'p. Odatda 10–100 orasida sozlanadi. Bog'liq mavzular: manual ack (ishlov tugagach), nack/requeue va cheksiz retry sikli xavfi, Dead Letter Exchange (DLX) va TTL bilan kechiktirilgan retry."
     },
     {
       "id": 5033,
       "code": "V34",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "RabbitMQ'da xabar qayerga yuboriladi?",
-      "options": [
-        "To'g'ridan-to'g'ri queue'ga",
-        "Producer xabarni exchange'ga yuboradi; exchange binding qoidalari bo'yicha uni bir yoki bir nechta queue'ga yo'naltiradi; consumer queue'dan o'qiydi",
-        "Consumer'ga to'g'ridan-to'g'ri",
-        "Broker o'zi tasodifiy tanlaydi"
-      ],
-      "answer": 1,
       "explanation": "Exchange turlari: direct (routing key aynan mos kelsa), topic (order.*.created kabi shablon), fanout (hamma bog'langan queue'ga nusxa), headers (header qiymatlari bo'yicha). Bu Kafka'dan asosiy farq: marshrutlash mantig'i brokerda, consumer'da emas. Hech qaysi queue'ga tushmagan xabar yo'qoladi — agar alternate exchange yoki mandatory bayrog'i qo'yilmagan bo'lsa."
     },
     {
       "id": 5034,
       "code": "V35",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "Consumer xabarni oldi va ishlov paytida crash bo'ldi. Xabar nima bo'ladi?",
-      "options": [
-        "Yo'qoladi",
-        "Agar manual ack ishlatilsa (autoAck=false) va ack yuborilmagan bo'lsa — connection uzilganda xabar queue'ga qaytadi (requeue) va boshqa consumer'ga beriladi. autoAck=true bo'lsa yetkazilishi bilan o'chgan bo'ladi — yo'qoladi",
-        "Broker uni o'chiradi",
-        "Producer'ga qaytadi"
-      ],
-      "answer": 1,
       "explanation": "Qoida: ishlov tugagach ack. Lekin cheksiz sikl xavfi bor — xato xabar qayta-qayta requeue bo'lib aylanaveradi. Shuning uchun basic.nack(requeue=false) bilan Dead Letter Exchange'ga yuborish va urinishlar sonini header'da sanash kerak."
     },
     {
       "id": 5035,
       "code": "V36",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "Broker qayta ishga tushganda xabarlar saqlanib qolishi uchun nima kerak?",
-      "options": [
-        "Hech narsa, hammasi avtomatik saqlanadi",
-        "Uch shart birga: queue durable, xabar persistent (delivery_mode=2) va ideal holda publisher confirms yoqilgan — aks holda xabar faqat memory'da bo'ladi",
-        "Faqat queue'ni durable qilish yetarli",
-        "Faqat xabarni persistent qilish yetarli"
-      ],
-      "answer": 1,
       "explanation": "Publisher confirms — broker xabarni qabul qilganini tasdiqlaydi; tasdiqsiz 'yubordim' degan ishonch yolg'on bo'lishi mumkin. Eslatma: persistent xabar ham diskka yozilgunga qadar qisqa oyna bor — mutlaq kafolat uchun quorum queue va confirms birga ishlatiladi. Persistence tezlikni pasaytiradi — ongli tanlov."
     },
     {
       "id": 5036,
       "code": "V37",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "Dead Letter Exchange (DLX) qachon ishga tushadi?",
-      "options": [
-        "Faqat broker yiqilganda",
-        "Xabar rad etilganda (nack/reject, requeue=false), TTL tugaganda yoki queue uzunligi limitidan oshganda — xabar DLX orqali boshqa queue'ga o'tadi",
-        "Har xabar uchun",
-        "Consumer sekin bo'lganda"
-      ],
-      "answer": 1,
       "explanation": "DLX ikki ishda qo'llaniladi: 1) zaharli xabarlarni tekshirish uchun ajratish; 2) kechiktirilgan retry: xabarni TTL li 'retry' queue'ga yuborib, TTL tugagach DLX orqali asosiy queue'ga qaytarish (exponential backoff uchun bir nechta TTL queue'i). Kuzatuv: DLQ o'lchami bo'yicha alert qo'yish shart."
     },
     {
       "id": 5037,
       "code": "V38",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "Klassik mirrored queue o'rniga hozir nima tavsiya etiladi?",
-      "options": [
-        "Hech narsa, mirrored queue standart",
-        "Quorum queue — Raft konsensusiga asoslangan, ko'pchilik tasdig'i bilan ishonchli replikatsiya; klassik mirrored queue eskirgan va RabbitMQ 4.0 da olib tashlangan",
-        "Faqat bitta node ishlatish",
-        "Stream queue faqat"
-      ],
-      "answer": 1,
       "explanation": "Quorum queue: yuqori ishonchlilik, xabarni yo'qotmaslikka urg'u; narxi — ko'proq disk/memory va biroz sekinroq. Stream — Kafka'ga o'xshash append-only log (replay va ko'p consumer uchun). Tanlov: vazifa queue'i → quorum queue; hodisalar oqimi va qayta o'qish → stream yoki Kafka.",
       "source": "https://www.rabbitmq.com/docs/quorum-queues"
     },
@@ -175,109 +112,66 @@
       "id": 5038,
       "code": "V39",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "RabbitMQ'da queue uzunligi doim o'sib boryapti. Nima qilasiz?",
-      "modelAnswer": [
-        "O'lchash: qaysi queue, publish va deliver tezligi (rate), unacked xabarlar soni",
-        "Consumer sekinmi (tashqi API, DB) yoki consumer soni kammi — prefetch va parallel consumer sonini sozlash",
-        "Xabarlar qayta-qayta requeue bo'lyaptimi (xato xabar sikli) — DLX va urinish limiti",
-        "Backpressure: max-length yoki max-length-bytes bilan queue'ni cheklash — to'lganda eski xabar DLX'ga ketadi yoki publish rad etiladi",
-        "Broker tomoni: flow control (memory/disk alarm) yoqilganmi — publisher'lar sekinlashtirilgan bo'lishi mumkin",
-        "Arxitektura: og'ir ishni bo'lish, batch qilish, kerak bo'lsa Kafka'ga o'tish (juda katta oqim uchun)"
-      ],
       "explanation": "Muhim tushuncha: RabbitMQ queue'i uzoq saqlash uchun emas — u yetkazib berish uchun. Uzun queue memory'ni yeydi va butun brokerni sekinlashtiradi; shuning uchun cheklov va alert kerak."
     },
     {
       "id": 5039,
       "code": "V40",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "Bir nechta consumer bo'lsa, xabarlar tartibi kafolatlanadimi?",
-      "options": [
-        "Ha, doim",
-        "Bitta queue va bitta consumer bo'lsa tartib saqlanadi; bir nechta consumer parallel ishlaganda tartib buziladi (requeue ham tartibni buzadi). Tartib kerak bo'lsa: key bo'yicha alohida queue (consistent hash exchange) yoki bitta consumer",
-        "Faqat quorum queue'da",
-        "Xabar tartibi hech qachon saqlanmaydi"
-      ],
-      "answer": 1,
       "explanation": "Bu Kafka bilan taqqoslash uchun muhim: Kafka'da tartib partition ichida kafolatlanadi va parallellik partition bo'yicha bo'ladi; RabbitMQ'da parallellik consumer bo'yicha — tartibni o'zingiz loyihalashingiz kerak. Ko'pincha to'g'ri yechim: tartibga tayanmaydigan, idempotent ishlov."
     },
     {
       "id": 13005,
       "code": "K6",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Queue",
       "domain": "msg",
       "section": "m2",
       "question": "Message queue (point-to-point) va pub/sub farqi?",
-      "options": [
-        "Bir xil",
-        "Queue — bitta xabarni faqat bitta consumer oladi (ish taqsimoti, competing consumers). Pub/Sub — bitta xabar barcha obunachilarga yetadi (fan-out, bir necha mustaqil iste'molchi)",
-        "Pub/Sub xabarni saqlaydi, queue saqlamaydi",
-        "Queue faqat Kafka'da bor"
-      ],
-      "answer": 1,
       "explanation": "Kafka ikkalasini birlashtiradi: bitta consumer group ichida — queue (partition bitta consumer'ga), turli group'lar uchun — pub/sub (har group hammasini o'qiydi). Dizayn savoli: 'bu hodisani kim iste'mol qiladi va kelajakda yana kim qo'shiladi' — javob fan-out kerakligini aniqlaydi."
     },
     {
       "id": 30227,
       "code": "SN228",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Queue",
       "domain": "msg",
       "section": "m2",
       "question": "PostgreSQL'ni navbat sifatida ishlatish (`SELECT ... FOR UPDATE SKIP LOCKED`) qachon oqlanadi?",
-      "options": [
-        "Hech qachon",
-        "O'rtacha yuklamada (minglab ish/daqiqa) va ish biznes ma'lumoti bilan bir tranzaksiyada bo'lishi kerak bo'lganda — bitta tizim, tranzaksion kafolat, oson kuzatuv va SQL bilan inspektsiya; juda yuqori throughput yoki fan-out kerak bo'lsa broker afzal",
-        "Har doim, broker keraksiz",
-        "Faqat testda"
-      ],
-      "answer": 1,
       "explanation": "Afzalliklari amaliy: outbox bilan tabiiy birlashadi, 'qaysi ish qotib qoldi' savoliga `SELECT` bilan javob beriladi, alohida infra saqlash kerak emas. Cheklovlari: yuqori RPS'da vacuum va bloat (tez o'chirish yoki partition bilan hal qilinadi), pub/sub fan-out yo'q, va uzoq ishlar uchun lease/`visibility timeout` ni o'zingiz yozasiz."
     },
     {
       "id": 30228,
       "code": "SN229",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "RabbitMQ",
       "domain": "msg",
       "section": "m2",
       "question": "RabbitMQ va Kafka o'rtasidagi asosiy model farqi?",
-      "options": [
-        "Faqat tezlik",
-        "RabbitMQ — broker xabarni consumer'ga yetkazadi va ack'dan keyin o'chiradi (smart broker, marshrutlash exchange orqali, per-message ack, prioritet); Kafka — o'zgarmas log, consumer offsetni o'zi boshqaradi, qayta o'ynatish va ko'p mustaqil consumer guruhi tabiiy",
-        "Kafka'da ack yo'q",
-        "RabbitMQ log saqlaydi"
-      ],
-      "answer": 1,
       "explanation": "Tanlov mezoni: murakkab marshrutlash, per-task ack, prioritet va kechiktirilgan yetkazib berish kerak bo'lsa — RabbitMQ; eventlarni saqlash, replay, stream processing va juda yuqori throughput kerak bo'lsa — Kafka. Ko'p tizimda ikkisi birga yashaydi: Kafka — event backbone, RabbitMQ yoki DB navbati — task queue."
     },
     {
       "id": 30446,
       "code": "SN447",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Queue",
       "domain": "msg",
       "section": "m2",
       "question": "RabbitMQ quorum queue va classic mirrored queue farqi?",
-      "options": [
-        "Bir xil",
-        "Quorum queue Raft asosida: kvorum bilan durability, bashorat qilinadigan failover, va poison message uchun `delivery-limit`; classic mirrored queue eskirgan (deprecated) — sinxronizatsiya muammolari va split-brain xatti-harakati bilan mashhur edi",
-        "Classic tezroq va tavsiya etiladi",
-        "Quorum faqat testda"
-      ],
-      "answer": 1,
       "explanation": "Yangi tizimlarda quorum queue standart tanlov (durable, replicated). Cheklovlari: xotira/disk sarfi kattaroq, lazy rejim va juda uzun navbatlar uchun `stream` turi mos; prioritet navbat va ba'zi funksiyalar qo'llanmaydi. Tanlashda: vazifa navbati — quorum queue; katta event oqimi va replay — RabbitMQ Streams yoki Kafka."
     }
   ]

@@ -43,7 +43,7 @@ Run after any change to data or shell.
 
 ## Content conventions
 - Questions, options and explanations are in Uzbek; technical terms stay in English.
-- Types: `mcq` / `code` (have `options` + `answer`), `sql` (`modelAnswer` + `keywords`), `open` (`modelAnswer` list).
+- Type: faqat `card` (flashcard). Javob `data/cards/*.json` da (`{"<id>":{"f":"savol (ixtiyoriy)","a":"javob markdown"}}`); har savolda karta bo'lishi shart (verify `noCard`).
 
 ## Flashcards & glossary
 - `data/cards/*.json` — `{"<id>":{"f":"optional front","a":"Markdown answer"}}`; build.js puts them into `q.f` / `q.b`. Every question should have a card.

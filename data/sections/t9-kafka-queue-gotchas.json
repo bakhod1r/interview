@@ -11,174 +11,110 @@
       "id": 17005,
       "code": "E43",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "Kafka'da partition sonini oshirdingiz. Nima buzildi?",
-      "options": [
-        "Key bo'yicha partition taqsimoti o'zgaradi (hash % partitions) — bir key endi boshqa partition'ga tushadi va tartib kafolati buziladi",
-        "Hech narsa, xavfsiz operatsiya",
-        "Eski xabarlar o'chadi",
-        "Consumer group avtomatik qayta balanslamaydi"
-      ],
-      "answer": 0,
       "explanation": "Tartib faqat partition ichida kafolatlanadi. Partition qo'shilganda eski xabarlar ko'chmaydi, lekin yangi xabarlar boshqa partition'ga borishi mumkin — natijada bir entity uchun eski va yangi eventlar turli partition'larda, ular parallel iste'mol qilinadi. Yechim: boshidan yetarli partition rejalash, yoki yangi topic'ga migratsiya, yoki consumer'da versiya/timestamp bilan eski eventni rad etish. Partition sonini kamaytirib bo'lmaydi."
     },
     {
       "id": 17006,
       "code": "E44",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "Consumer'da bitta 'zaharli' (poison) xabar butun partition'ni to'xtatib qo'ydi. Nima qilasan?",
-      "options": [
-        "Retry limitidan keyin xabarni DLQ'ga (dead letter topic) yuborib, offset'ni commit qilish va davom etish; DLQ'ni alert va qo'lda qayta ishlash bilan kuzatish",
-        "Cheksiz retry qilish",
-        "Offset'ni qo'lda oldinga surib, xabarni jimgina tashlash",
-        "Consumer group'ni o'chirish"
-      ],
-      "answer": 0,
       "explanation": "Kafka'da head-of-line blocking: partition ketma-ket o'qiladi, bitta xabar qayta-qayta yiqilsa lag cheksiz o'sadi. Naqsh: in-memory retry (bir necha marta, backoff bilan) — keyin retry topic (kechikish bilan) — keyin DLQ. DLQ'da xabar bilan birga xato sababi, stack, original offset/partition/timestamp saqlanadi. Muhim: DLQ'ga yuborish ham xato bersa nima bo'lishini hal qilish kerak."
     },
     {
       "id": 17007,
       "code": "E45",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "Consumer group doim rebalance bo'lyapti (lag o'syapti). Eng ehtimolli sabab?",
-      "options": [
-        "Ishlov berish max.poll.interval.ms dan uzoq davom etyapti — broker consumer'ni o'lik deb hisoblab guruhni qayta balanslaydi; batch hajmini kamaytirish yoki ishni asinxron qilish kerak",
-        "Partition soni ko'p",
-        "Xabar hajmi kichik",
-        "Producer acks=all"
-      ],
-      "answer": 0,
       "explanation": "Ikki xil timeout: session.timeout.ms (heartbeat, alohida thread) va max.poll.interval.ms (ikki poll orasidagi maksimal vaqt). Sekin ishlov berish ikkinchisini buzadi. Yechimlar: max.poll.records kamaytirish, ishni worker pool'ga berib offset'ni faqat tugagach commit qilish, incremental cooperative rebalancing (CooperativeStickyAssignor) yoqish — u to'liq stop-the-world rebalance'ni yo'qotadi."
     },
     {
       "id": 17008,
       "code": "E46",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "RabbitMQ'da consumer ack yubormay crash bo'ldi. Xabar nima bo'ladi?",
-      "options": [
-        "Kanal uzilganda xabar requeue qilinadi va boshqa consumer'ga beriladi (manual ack rejimida)",
-        "Xabar yo'qoladi",
-        "Xabar abadiy 'unacked' qoladi",
-        "Avtomatik DLQ'ga ketadi"
-      ],
-      "answer": 0,
       "explanation": "autoAck=false bo'lsa broker ack kutadi; connection/channel yopilganda unacked xabarlar navbatga qaytadi. Tuzoqlar: autoAck=true bilan crash — xabar yo'qoladi; prefetch (QoS) o'rnatilmasa bitta consumer barcha xabarlarni tortib oladi va yuk taqsimlanmaydi; cheksiz requeue looplarni to'xtatish uchun x-death header hisobi bilan DLX ishlatiladi."
     },
     {
       "id": 17009,
       "code": "E47",
       "level": "P",
-      "type": "open",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "Outbox pattern joriy qildingiz, lekin ba'zi eventlar publish bo'lmayapti. Qayerdan qidirasan?",
-      "modelAnswer": "1) Publisher'ning tanlovi: 'FOR UPDATE SKIP LOCKED' bilan bir nechta publisher instansiyasi ishlayaptimi — lock'siz bo'lsa eventlar ikki marta yoki hech qachon olinmasligi mumkin. 2) Status yangilash tranzaksiyasi: publish'dan keyin 'sent' belgilash publish bilan atomik emas — crash bo'lsa qayta yuboriladi (bu at-least-once, normal), lekin publish'dan OLDIN belgilansa event yo'qoladi. 3) Poller intervali va xato holati: broker xatosi retry qilinayaptimi yoki row 'failed' bo'lib qolyaptimi (alert kerak). 4) Tartib: partition key bo'yicha bir entity eventlari ketma-ket yuborilyaptimi. 5) Kuzatuv: outbox'da eng eski 'pending' row yoshi (age) metrikasi va unga alert — bu eng muhim signal. 6) Tozalash job'i yuborilmagan row'ni o'chirib yubormayaptimi.",
       "explanation": "Outbox g'oyasi: biznes o'zgarishi va event bitta DB tranzaksiyasida yoziladi (dual write muammosi yo'q), keyin alohida jarayon (poller yoki CDC/Debezium) brokerga uzatadi. Kafolat — at-least-once, shuning uchun consumer idempotent bo'lishi shart."
     },
     {
       "id": 30166,
       "code": "SN167",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "Consumer xabarni oldi, DB'ga yozdi, keyin ack yuborishdan oldin yiqildi. Nima bo'ladi?",
-      "options": [
-        "Xabar yo'qoladi",
-        "Xabar qayta yetkaziladi va DB yozuvi ikkinchi marta bajariladi — shuning uchun handler idempotent bo'lishi shart (unique kalit yoki inbox jadval)",
-        "Broker o'zi dedupe qiladi",
-        "Tranzaksiya rollback bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Ack va DB commit atomik emas — bu dual-write muammosining ikkinchi yuzi. Yechim: xabar ID'sini biznes tranzaksiyasi ichida `processed_messages` jadvaliga unique yozish (inbox pattern); ikkinchi urinishda konflikt bo'ladi va ish o'tkazib yuboriladi. Teskari tartib (avval ack, keyin yozish) esa ma'lumot yo'qotadi."
     },
     {
       "id": 30167,
       "code": "SN168",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "RabbitMQ'da `prefetch` (QoS) sozlanmagan. Natija?",
-      "options": [
-        "Hech narsa",
-        "Broker consumer'ga cheksiz xabar yuboradi: bitta consumer navbatni o'ziga tortadi, xotira to'ladi va yuk taqsimlanmaydi (sekin consumer boshqalarni kutishga majbur qilmaydi lekin o'zida ushlab qoladi)",
-        "Xabarlar yo'qoladi",
-        "Tartib buziladi"
-      ],
-      "answer": 1,
       "explanation": "`basic.qos(prefetch=N)` — oqim nazorati: N ta ack qilinmagan xabardan ko'p berilmaydi. Kichik N (1-10) adolatli taqsimot va tez failover beradi, katta N throughputni oshiradi. Shu bilan birga `ack` qo'lda bo'lishi (`autoAck=false`) va xato bo'lganda `nack` + DLX (dead letter exchange) sozlanishi kerak."
     },
     {
       "id": 30168,
       "code": "SN169",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "Retry uchun xabar qayta navbatga qo'yiladi (`requeue=true`). Qanday tuzoq bor?",
-      "options": [
-        "Tuzoq yo'q",
-        "Xabar darhol boshiga qaytib cheksiz aylanadi (hot loop, CPU va broker yuki) — kechiktirilgan retry kerak: DLX + TTL bilan 'retry queue' yoki alohida delay navbatlari, va urinish sonini headerda hisoblash",
-        "Xabar o'chib ketadi",
-        "Tartib saqlanadi"
-      ],
-      "answer": 1,
       "explanation": "RabbitMQ'da tabiiy 'delayed retry' yo'q, shuning uchun naqsh: asosiy navbat → nack → DLX → TTL'li retry navbati → qaytib asosiy navbatga. Urinish soni `x-death` yoki o'z headerida saqlanadi va N dan keyin DLQ'ga o'tadi. Kafka'da esa retry topic'lari (`topic.retry.5m`) shu maqsadda ishlatiladi."
     },
     {
       "id": 30502,
       "code": "SN503",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "Consumer xabarni ishlashda tashqi API'ni chaqiradi va u sekin. Nima bo'ladi?",
-      "options": [
-        "Broker tezlashtiradi",
-        "Lag o'sadi va (Kafka'da) `max.poll.interval.ms` oshib rebalance boshlanadi; yechim — parallelizm (partition ichida ham worker pool + tartib kerak bo'lsa kalit bo'yicha), batch chaqiruv, yoki ishni ikki bosqichga bo'lish (qabul qilib navbatga, keyin ishlash)",
-        "Xabarlar yo'qoladi",
-        "Broker xabarni tashlaydi"
-      ],
-      "answer": 1,
       "explanation": "Nozik joy: poll'dan keyin ishni background'ga berib darhol poll qilish lag'ni yashiradi, lekin offset commit mantiqini buzishi mumkin (ish tugamasdan commit — ma'lumot yo'qoladi). To'g'ri: offset faqat ish tugagach commit qilinadi, oqim nazorati `max.poll.records` va ichki navbat hajmi bilan boshqariladi."
     },
     {
       "id": 30503,
       "code": "SN504",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Messaging gotcha",
       "domain": "msg",
       "section": "t9",
       "question": "DLQ to'lib ketdi va hech kim sezmadi. Qanday oldini olinadi?",
-      "options": [
-        "DLQ'ni o'chirish",
-        "DLQ — metrikali va egali obyekt: xabarlar soni/yoshi bo'yicha alert, sabablar bo'yicha guruhlash (top xato turlari), qayta o'ynatish vositasi va davriy ko'rib chiqish jarayoni; aks holda DLQ 'ma'lumot qabristoni' bo'lib qoladi",
-        "Cheksiz retry",
-        "Xabarlarni o'chirib tashlash"
-      ],
-      "answer": 1,
       "explanation": "Amaliy talablar: DLQ xabari original kontekst bilan saqlanadi (topic, partition, offset, headerlar, xato matni, urinishlar soni), replay skripti idempotent (dublikat yaratmaydi), va DLQ'ga tushish sabablari dashboardda ko'rinadi. Alert 'DLQ'da xabar bor' emas, 'DLQ o'smoqda / eng eski xabar N soatdan oshdi' bo'lishi kerak."
     }
   ]

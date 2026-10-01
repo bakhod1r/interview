@@ -15,236 +15,144 @@
       "id": 1000,
       "code": "B1",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP",
       "domain": "api",
       "section": "a1",
       "question": "Qaysi HTTP metodlar <b>idempotent</b>?",
-      "options": [
-        "GET, POST",
-        "GET, PUT, DELETE",
-        "POST, PATCH",
-        "Faqat GET"
-      ],
-      "answer": 1,
       "explanation": "Idempotent: bir xil query'ni N marta yuborish natijasi 1 marta yuborish bilan bir xil. GET, HEAD, PUT, DELETE, OPTIONS — idempotent. POST emas (har safar yangi resurs). PATCH — kafolatlanmagan ('+1' patch idempotent emas). Retry qilish xavfsizligi aynan shunga bog'liq."
     },
     {
       "id": 1001,
       "code": "B2",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP",
       "domain": "api",
       "section": "a1",
       "question": "401 va 403 status kodlari farqi?",
-      "options": [
-        "Farqi yo'q",
-        "401 — kim ekanligingiz noma'lum (autentifikatsiya yo'q/yaroqsiz); 403 — kimligingiz ma'lum, lekin ruxsat yo'q",
-        "401 — server xatosi, 403 — client xatosi",
-        "403 — resurs topilmadi"
-      ],
-      "answer": 1,
       "explanation": "401 Unauthorized aslida 'unauthenticated' — token yo'q yoki muddati o'tgan, qayta login. 403 Forbidden — token to'g'ri, lekin rol yetmaydi. Maxfiy resurs mavjudligini yashirish uchun ba'zan 404 qaytariladi (BOLA himoyasi)."
     },
     {
       "id": 1002,
       "code": "B3",
       "level": "J",
-      "type": "code",
+      "type": "card",
       "topic": "REST",
       "domain": "api",
       "section": "a1",
       "question": "Yangi user success'li yaratildi. Eng to'g'ri javob?",
       "snippet": "POST /users\nContent-Type: application/json\n\n{\"email\": \"ali@x.uz\"}",
-      "options": [
-        "200 OK, bo'sh body",
-        "201 Created + Location: /users/42 header + yaratilgan resurs",
-        "204 No Content",
-        "302 Found → /users/42"
-      ],
-      "answer": 1,
       "explanation": "201 Created — yangi resurs yaratildi; Location header uning URLini beradi. 200 ham ishlaydi, lekin semantik aniq emas. 204 — body yo'q (odatda DELETE/PUT). Validatsiya xatosi — 400/422, email band — 409 Conflict."
     },
     {
       "id": 1003,
       "code": "B4",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "REST",
       "domain": "api",
       "section": "a1",
       "question": "REST resurs nomlashda eng yaxshi variant?",
-      "options": [
-        "POST /createUser",
-        "GET /getUsersList",
-        "GET /users/42/orders",
-        "POST /users/42/deleteOrder?id=7"
-      ],
-      "answer": 2,
       "explanation": "Resurslar — ot, ko'plikda; amal — HTTP metodi. /users/42/orders — 42-userning orderlari. O'chirish: DELETE /orders/7. Fe'l URLda (createUser) — RPC uslubi, REST emas. Istisno: resursga tushmaydigan amallar (POST /orders/7/cancel) — qabul qilinadi."
     },
     {
       "id": 1004,
       "code": "B5",
       "level": "J",
-      "type": "open",
+      "type": "card",
       "topic": "HTTP",
       "domain": "api",
       "section": "a1",
       "question": "Brauzerga URL yozib Enter bosganda nima sodir bo'ladi (backend nuqtai nazaridan)?",
-      "modelAnswer": [
-        "DNS resolve (cache → resolver → IP)",
-        "TCP connection (3-way handshake), TLS handshake (sertifikat, key kelishuvi)",
-        "HTTP query → CDN / load balancer → reverse proxy (nginx) → ilova serveri",
-        "Ilova: routing, middleware (auth, log), biznes logika, DB/cache",
-        "Javob: status, header (cache-control, cookie), body; brauzer render qiladi, qo'shimcha resurslar yuklanadi"
-      ],
       "explanation": "Klassik savol — chuqurlik darajangizni ko'rsatadi. Backend uchun LB, proxy, keep-alive, cache qatlamlarini aytish muhim."
     },
     {
       "id": 1005,
       "code": "B6",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "'Stateless' server nimani anglatadi?",
-      "options": [
-        "Server DB ishlatmaydi",
-        "Har query o'zi uchun kerakli hamma kontekstni (token va h.k.) olib keladi; server query'lar orasida client sessiyasini memory'da saqlamaydi",
-        "Server hech narsa loglamaydi",
-        "Server faqat GET qabul qiladi"
-      ],
-      "answer": 1,
       "explanation": "Stateless servis gorizontal masshtablanadi: har qanday instance har qanday query'ni qabul qiladi, LBda sticky session kerak emas. Holat DB/Redis/token ichida saqlanadi. Stateful (WebSocket, in-memory session) masshtablashni qiyinlashtiradi."
     },
     {
       "id": 1011,
       "code": "B12",
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Katta ro'yxat uchun API pagination'ni qanday loyihalaysiz?",
-      "modelAnswer": [
-        "Offset/limit: oddiy, page'ga sakrash mumkin; katta offsetda sekin, yozishlarda row'lar siljiydi",
-        "Cursor (keyset): ?cursor=opaque_token&limit=20 — barqaror va tez, sakrash yo'q",
-        "Javobda next_cursor / has_more; total count qimmat — ixtiyoriy yoki taxminiy",
-        "limit uchun maksimum (masalan 100)",
-        "Barqaror tartib: sort + unique tie-breaker (id)"
-      ],
       "explanation": "Cursor'ni opaque (base64) qilish ichki strukturani keyin o'zgartirishga imkon beradi. Feed/timeline — cursor; admin table — offset yetarli."
     },
     {
       "id": 1016,
       "code": "B17",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Public API versiyalash va breaking change'ni qanday boshqarasiz?",
-      "modelAnswer": [
-        "Breaking bo'lmaganlar: yangi ixtiyoriy maydon, yangi endpoint — versiyasiz qo'shiladi (client noma'lum maydonlarni e'tiborsiz qoldiradi)",
-        "Breaking: maydonni o'chirish/nomini o'zgartirish, tipini o'zgartirish, majburiy parametr",
-        "Usullar: URL (/v2), header (Accept version), sana bo'yicha (Stripe)",
-        "Deprecation: Deprecation/Sunset header, changelog, foydalanish metrikasi, muddat",
-        "Eski versiyani adapter qatlami bilan qo'llash — ichki kod bitta"
-      ],
       "explanation": "Senior signal: versiyalashdan ko'ra breaking change'dan qochish; va eski versiya kim tomonidan ishlatilayotganini o'lchash."
     },
     {
       "id": 6002,
       "code": "F3",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP",
       "domain": "api",
       "section": "a1",
       "question": "HTTP/1.1, HTTP/2 va HTTP/3 farqi?",
-      "options": [
-        "Faqat tezlik raqami",
-        "HTTP/1.1 — bitta connection'da queue bilan (head-of-line blocking, brauzer 6 ta connection ochadi). HTTP/2 — bitta TCP connection'da multiplekslash va header siqish, lekin TCP darajasidagi HOL saqlanadi. HTTP/3 — QUIC (UDP) ustida: oqimlar mustaqil, connection tezroq o'rnatiladi va IP o'zgarganda ham saqlanadi",
-        "HTTP/2 shifrlanmagan",
-        "HTTP/3 TCP ustida ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy natija: HTTP/2'da ko'p kichik query arzonlashadi (domain sharding va fayllarni birlashtirish kerakmas bo'lib qoldi). gRPC aynan HTTP/2 ustida qurilgan. HTTP/3 mobil network'larda (paket yo'qolishi ko'p) sezilarli yutuq beradi."
     },
     {
       "id": 6004,
       "code": "F5",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP",
       "domain": "api",
       "section": "a1",
       "question": "Load balancer ortidagi servis vaqti-vaqti bilan 502/504 beryapti, loglarda panic yo'q. Tipik sabab?",
-      "options": [
-        "Kod xatosi",
-        "Timeout va keep-alive mos emas: LB idle timeout serverning keep-alive timeout'idan uzun bo'lsa, server connection'ni yopgan paytda LB o'sha connection'dan foydalanib 502 oladi. Server timeout'ini LB'nikidan biroz UZUN qilish kerak",
-        "Sertifikat eskirgan",
-        "DNS ishlamayapti"
-      ],
-      "answer": 1,
       "explanation": "AWS ALB uchun klassik maslahat: server (Go'da http.Server.IdleTimeout) qiymati ALB idle timeout'idan katta bo'lsin. 504 — LB backend'dan javob kutib timeout bo'lgani. Bu turdagi failure'lar 'tasodifiy' ko'rinadi, shuning uchun timeout zanjirini yozib chiqish kerak: client → LB → servis → DB."
     },
     {
       "id": 6006,
       "code": "F7",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "API design",
       "domain": "api",
       "section": "a1",
       "question": "REST, gRPC va GraphQL — qachon qaysi biri?",
-      "options": [
-        "gRPC har doim yaxshi",
-        "REST — public API, brauzer, keshlash va soddalik kerak bo'lsa. gRPC — ichki servislararo aloqa: past latency, qat'iy kontrakt, streaming. GraphQL — client turli shakldagi ma'lumotni o'zi tanlashi kerak bo'lsa (mobil/frontend, ko'p manbani birlashtirish)",
-        "GraphQL faqat ma'lumotlar bazasi uchun",
-        "REST eskirgan"
-      ],
-      "answer": 1,
       "explanation": "Ko'p kompaniyada aralash: tashqariga REST/GraphQL, ichkarida gRPC. GraphQL narxi: N+1 resolver muammosi (DataLoader), keshlash qiyin, query murakkabligini cheklash kerak. Tanlovni 'moda' emas, iste'molchi va talab belgilaydi."
     },
     {
       "id": 6010,
       "code": "F11",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "HTTP",
       "domain": "api",
       "section": "a1",
       "question": "'API sekin' degan shikoyat keldi. Network level'ida qanday diagnostika qilasiz?",
-      "modelAnswer": [
-        "Bosqichlarni ajratish: DNS → TCP connect → TLS → query yuborish → TTFB (birinchi bayt) → yuklab olish; curl -w '%{time_namelookup} %{time_connect} %{time_appconnect} %{time_starttransfer} %{time_total}'",
-        "TTFB katta bo'lsa — server tomonidagi ishlov (DB, tashqi chaqiruv); download uzoq bo'lsa — javob hajmi yoki kanal",
-        "Client va server metrikasini solishtirish: server p99 yaxshi, client yomon bo'lsa — network, LB, DNS yoki queueing",
-        "Connection qayta ishlatilyaptimi (keep-alive), pool hajmi, TLS handshake har query'da takrorlanmayaptimi",
-        "Geografiya: RTT va CDN; katta javoblar uchun siqish (gzip/br) va pagination",
-        "Chuqurroq: tcpdump/ss bilan retransmit va queue'larni ko'rish, tracing bilan servis ichidagi qadamlar"
-      ],
       "explanation": "Kuchli javob — 'qayerda vaqt ketyapti' savolini bosqichlarga bo'lib o'lchash. Ko'p hollarda sabab: keep-alive yo'qligi, N+1 chaqiruvlar yoki katta javob hajmi."
     },
     {
       "id": 11000,
       "code": "M1",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP methods",
       "domain": "api",
       "section": "a1",
       "question": "Qaysi metodlar <b>safe</b> (server holatini o'zgartirmaydi) hisoblanadi?",
-      "options": [
-        "GET, POST",
-        "GET, HEAD, OPTIONS (va TRACE) — ular faqat o'qiydi; POST, PUT, PATCH, DELETE holatni o'zgartiradi",
-        "Faqat GET",
-        "Hammasi safe"
-      ],
-      "answer": 1,
       "explanation": "Safe metodlarni brauzer, proxy va crawler'lar erkin chaqirishi mumkin — shuning uchun GET bilan ma'lumot o'chiradigan endpoint (/delete?id=5) xavfli: prefetch yoki crawler uni chaqirib qo'yadi. Safe ≠ idempotent: har safe metod idempotent, lekin har idempotent metod safe emas (DELETE idempotent, lekin safe emas).",
       "source": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"
     },
@@ -252,108 +160,66 @@
       "id": 11001,
       "code": "M2",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP methods",
       "domain": "api",
       "section": "a1",
       "question": "PUT va PATCH farqi?",
-      "options": [
-        "Bir xil, faqat nomi boshqa",
-        "PUT — resursni to'liq almashtiradi (yuborilmagan maydonlar o'chadi yoki default bo'ladi) va idempotent; PATCH — qisman o'zgartirish va umumiy holda idempotent emas",
-        "PATCH resursni yaratadi",
-        "PUT faqat yangi resurs uchun"
-      ],
-      "answer": 1,
       "explanation": "Amaliy tuzoq: PUT bilan faqat bitta maydon yuborib, qolganini nechtaligini bilmay o'chirib yuborish. PATCH formatlari: JSON Merge Patch (RFC 7386 — oddiy, null bilan o'chirish) va JSON Patch (RFC 6902 — op/path/value, massiv bilan ishlash uchun). PATCH'ni idempotent qilish mumkin, agar operatsiya 'qiymatni o'rnat' bo'lsa; 'increment' bo'lsa — yo'q."
     },
     {
       "id": 11002,
       "code": "M3",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP methods",
       "domain": "api",
       "section": "a1",
       "question": "Bir xil resursni ikki foydalanuvchi bir vaqtda tahrirlamoqda. HTTP darajasida qanday himoya bor?",
-      "options": [
-        "Hech qanday, faqat DB lock",
-        "Shartli so'rovlar: server ETag beradi, client keyingi yozishda <code>If-Match: \"etag\"</code> yuboradi — resurs o'zgargan bo'lsa server 412 Precondition Failed qaytaradi (optimistic locking)",
-        "POST ishlatish kerak",
-        "Faqat WebSocket bilan"
-      ],
-      "answer": 1,
       "explanation": "Bu — HTTP darajasidagi optimistic concurrency. Yangi resurs yaratishda takrorni to'sish uchun If-None-Match: *. ETag versiya ustuni yoki kontent hash'idan olinadi. Keshlashda ham ishlatiladi: client If-None-Match yuboradi, o'zgarmagan bo'lsa 304 Not Modified (tanasiz javob)."
     },
     {
       "id": 11003,
       "code": "M4",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP methods",
       "domain": "api",
       "section": "a1",
       "question": "HEAD va OPTIONS nima uchun kerak?",
-      "options": [
-        "Ular eskirgan",
-        "HEAD — GET bilan bir xil, lekin faqat header qaytadi (hajm, ETag, mavjudlikni tekshirish uchun). OPTIONS — qo'llab-quvvatlanadigan metodlar va CORS preflight uchun",
-        "HEAD faqat brauzerlarda",
-        "OPTIONS resursni o'chiradi"
-      ],
-      "answer": 1,
       "explanation": "CORS preflight aynan OPTIONS bilan ketadi va u autentifikatsiyasiz o'tishi kerak — auth middleware OPTIONS so'rovini 401 bilan to'ssa, brauzerdan hech qanday cross-origin so'rov ishlamaydi. Bu 'CORS ishlamayapti' shikoyatining ko'p uchraydigan sababi."
     },
     {
       "id": 11004,
       "code": "M5",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP methods",
       "domain": "api",
       "section": "a1",
       "question": "Server 405 va 501 statuslarini qachon qaytaradi?",
-      "options": [
-        "Ikkalasi ham 'topilmadi' degani",
-        "405 Method Not Allowed — resurs mavjud, lekin bu metod unga ruxsat etilmagan (javobda Allow header bo'lishi shart); 501 Not Implemented — server bu metodni umuman qo'llab-quvvatlamaydi",
-        "405 — server xatosi",
-        "501 — client xatosi"
-      ],
-      "answer": 1,
       "explanation": "To'g'ri status kodlar client uchun muhim: 4xx — client tuzatishi kerak, 5xx — retry qilish mantiqiy. Yana: 404 va 403 tanlovi (resurs mavjudligini yashirish kerakmi), 409 Conflict (holat to'qnashuvi), 422 (validatsiya), 429 (rate limit)."
     },
     {
       "id": 11005,
       "code": "M6",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "HTTP methods",
       "domain": "api",
       "section": "a1",
       "question": "Katta qidiruv filtrlari GET query string'ga sig'maydi. To'g'ri yechim qaysi?",
-      "options": [
-        "GET body bilan yuborish",
-        "POST /search bilan yuborish (tan olingan amaliyot, lekin keshlash yo'qoladi) yoki filtrni saqlab qisqa id bilan GET qilish; GET body esa ko'p proxy va client tomonidan e'tiborsiz qoldiriladi",
-        "URL uzunligi cheksiz, muammo yo'q",
-        "DELETE ishlatish"
-      ],
-      "answer": 1,
       "explanation": "URL uzunligi standartda cheklanmagan, lekin amalda brauzer/proxy/server limitlari bor (~2–8 KB). GET so'rovida body texnik jihatdan taqiqlanmagan, ammo xulq aniqlanmagan — ishlatmang. Keshlash muhim bo'lsa: filtrni normalizatsiya qilib hash bilan GET /search/{hash}."
     },
     {
       "id": 13000,
       "code": "K1",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "REST",
       "domain": "api",
       "section": "a1",
       "question": "REST va 'RESTful' farqi nima (Richardson maturity model)?",
-      "options": [
-        "Bir xil narsa",
-        "REST — Roy Fielding ta'riflagan arxitektura uslubi va uning cheklovlari; 'RESTful' esa amalda shu cheklovlarga qanchalik rioya qilinganini bildiradi. Richardson modeli: 0-daraja — bitta endpoint (RPC), 1 — resurslar, 2 — HTTP metodlari va status kodlari, 3 — HATEOAS (javobda keyingi harakat havolalari)",
-        "RESTful faqat JSON ishlatadi",
-        "REST — protokol, RESTful — kutubxona"
-      ],
-      "answer": 1,
       "explanation": "Amalda ko'p 'REST API'lar 2-darajada to'xtaydi va bu normal deb qabul qilingan; HATEOAS kamdan-kam qo'llanadi. REST cheklovlari: client-server, stateless, cacheable, uniform interface, layered system va ixtiyoriy code-on-demand. Intervyuda kuchli javob: darajalarni aytib, 'bizning API 2-darajada, chunki HATEOAS qiymatdan ko'ra murakkablik qo'shardi' deb asoslash.",
       "source": "https://martinfowler.com/articles/richardsonMaturityModel.html"
     },
@@ -361,183 +227,110 @@
       "id": 13007,
       "code": "K8",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Sinxron va asinxron aloqa: qachon qaysi biri?",
-      "options": [
-        "Asinxron har doim yaxshi",
-        "Sinxron — foydalanuvchi natijani darhol kutayotganda va javob kerak bo'lganda (o'qish, validatsiya). Asinxron — natija darhol kerak bo'lmasa (email, hisobot, integratsiya), yuk cho'qqisini tekislash va bog'liqlik nosozligidan ajralish uchun",
-        "Sinxron ishonchliroq",
-        "Asinxron faqat Kafka bilan bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Asinxronning narxi: eventual consistency, kuzatuv va debug murakkabligi, holatni kuzatish uchun qo'shimcha UI/API (job status). Amaliy naqsh: so'rovni qabul qilib 202 Accepted va status havolasini qaytarish. Sinxron zanjirni uzaytirish esa mavjudlikni ko'paytiradi (0.99^n)."
     },
     {
       "id": 13011,
       "code": "K12",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Polling va webhook: qaysi birini tanlaysiz?",
-      "options": [
-        "Polling har doim oddiy va yaxshi",
-        "Webhook — hodisa yuz berganda darhol xabar (kam kechikish, kam so'rov), lekin siz endpoint ochishingiz, imzo tekshirishingiz va takrorlarga chidashingiz kerak. Polling — boshqarish oson va nosozlikka chidamli, lekin kechikish va keraksiz so'rovlar ko'p",
-        "Webhook faqat ichki tizimlarda",
-        "Polling real vaqt beradi"
-      ],
-      "answer": 1,
       "explanation": "Ishonchli integratsiya ko'pincha ikkalasini birga ishlatadi: webhook tezlik uchun, davriy reconciliation esa yo'qolgan hodisalarni yopish uchun. Webhook uchun majburiy: imzo, idempotentlik, tez 2xx javob va og'ir ishni navbatga qo'yish."
     },
     {
       "id": 14011,
       "code": "SR12",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API design",
       "domain": "api",
       "section": "a1",
       "question": "GraphQL API'ni og'ir so'rovlardan qanday himoya qilasiz?",
-      "options": [
-        "Himoya kerak emas, client o'zi biladi",
-        "Query chuqurligi va murakkabligi (complexity/cost) bo'yicha limit, persisted queries (faqat oldindan ro'yxatdan o'tgan so'rovlar), timeout, va resolver darajasida DataLoader bilan batching",
-        "Faqat rate limit yetarli",
-        "Introspection'ni yoqib qo'yish"
-      ],
-      "answer": 1,
       "explanation": "GraphQL'da bitta so'rov o'nlab jadvalga N+1 query yasashi mumkin — shuning uchun DataLoader majburiy. Public API'da introspection va xato tafsilotlarini o'chirish, mutation'larga alohida limit. REST'dagi endpoint bo'yicha rate limit bu yerda yetarli emas: narx so'rov shakliga bog'liq."
     },
     {
       "id": 14012,
       "code": "SR13",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Idempotency qatlamini alohida subsystem sifatida loyihalang (senior intervyuda tez-tez so'raladi).",
-      "modelAnswer": [
-        "Kontrakt: client Idempotency-Key yuboradi; kalit + endpoint + so'rov hash birga saqlanadi",
-        "Saqlash: idempotency_keys(key PK, status, response, created_at) — INSERT ... ON CONFLICT DO NOTHING bilan 'birinchi' aniqlanadi",
-        "Holatlar: in_progress (parallel takror → 409 yoki kutish), completed (saqlangan javob qaytariladi), failed (retry ruxsat)",
-        "Bir xil kalit, boshqa body → 422: bu client xatosi",
-        "TTL va tozalash (masalan 24 soat), saqlash hajmini nazorat qilish",
-        "Tashqi provayderga ham o'sha kalitni uzatish; webhook va retry bilan birga ishlashi"
-      ],
       "explanation": "L5+ intervyularda katta tizim o'rniga aynan shunday kichik subsystem so'ralishi mumkin. Kuchli javob poyga holatini unique constraint bilan yopadi va 'in_progress' stsenariysini aniq aytadi."
     },
     {
       "id": 14015,
       "code": "SR16",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Uzoq davom etadigan operatsiya (hisobot, import) uchun API'ni qanday loyihalaysiz?",
-      "modelAnswer": [
-        "So'rov qabul qilinadi va darhol 202 Accepted + job_id va status havolasi qaytadi",
-        "Status endpoint: holat (queued/running/succeeded/failed), progress, natija havolasi, xato sababi",
-        "Bajarilish: navbat + worker; idempotentlik (bir xil kirish uchun takror job yaratmaslik)",
-        "Bekor qilish va qayta urinish API'si; timeout va maksimal davomiylik",
-        "Natija: obyekt saqlashda vaqtinchalik havola (pre-signed), katta natija uchun stream/bo'laklash",
-        "Xabar berish: webhook yoki push, lekin polling ham qo'llab-quvvatlansin"
-      ],
       "explanation": "Sinxron HTTP so'rovda 5 daqiqalik ishni bajarish — klassik xato: timeout'lar, retry va yo'qolgan natijalar. 202 + status pattern'i barcha yirik API'larda (Stripe, AWS) shu tarzda."
     },
     {
       "id": 14016,
       "code": "SR17",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Yuqori yukda fayl yuklash oqimini loyihalang (100 MB gacha fayllar).",
-      "modelAnswer": [
-        "Client to'g'ridan-to'g'ri obyekt saqlashga yuklaydi (pre-signed URL) — backend trafikni o'tkazmaydi",
-        "Katta fayllar uchun multipart/resumable upload; tarmoq uzilsa davom ettirish",
-        "Validatsiya: hajm limiti, MIME/kontent tekshiruvi (kengaytmaga ishonmaslik), virus skan — yuklangandan keyin async",
-        "Metadata DB'da: status (pending → ready), egalik, checksum; faqat ready bo'lgach foydalanishga ruxsat",
-        "Tozalash: yarim qolgan yuklamalar uchun lifecycle qoidasi",
-        "Xavfsizlik: pre-signed URL qisqa muddatli va cheklangan (metod, kalit, hajm shart)"
-      ],
       "explanation": "Kuchli javob backend orqali o'tkazmaslikni birinchi aytadi va 'yuklandi' bilan 'foydalanishga tayyor' holatlarini ajratadi."
     },
     {
       "id": 14019,
       "code": "SR20",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API",
       "domain": "api",
       "section": "a1",
       "question": "Ommaviy (bulk) API'ni qanday loyihalaysiz — 10 000 yozuvni bir so'rovda yaratish?",
-      "options": [
-        "Oddiy POST bilan hammasini bitta tranzaksiyada",
-        "Chegaralangan partiya (masalan 500 tagacha), qisman muvaffaqiyat natijasi (har element uchun status), idempotentlik kaliti, va juda katta hajm uchun async job (202 + status)",
-        "Har yozuvni alohida so'rov bilan",
-        "Cheksiz hajm, timeout'ni oshirish"
-      ],
-      "answer": 1,
       "explanation": "Muhim qaror: 'hammasi yoki hech narsa' (atomik) yoki 'qisman muvaffaqiyat'. Atomik bo'lsa katta tranzaksiya va lock muammosi; qisman bo'lsa client uchun aniq natija formati kerak (index → xato). Har ikkala holatda ham partiya hajmi cheklanadi."
     },
     {
       "id": 30281,
       "code": "SN282",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API design",
       "domain": "api",
       "section": "a1",
       "question": "API versiyalash: qaysi yondashuv va breaking change'ni qanday boshqarasiz?",
-      "options": [
-        "Hech qachon o'zgartirmaslik",
-        "URL yoki header bilan major versiya (`/v2`), lekin asosiy intizom — additive o'zgarishlar (yangi maydon majburiy emas), eski versiyani deprecation muddati bilan qo'llab-turish (`Deprecation`/`Sunset` header, mijozlarga xabar, ishlatilishni metrikada kuzatish)",
-        "Har o'zgarishda yangi versiya",
-        "Faqat frontendni yangilash"
-      ],
-      "answer": 1,
       "explanation": "Ko'p versiyani parallel ushlash qimmat — shuning uchon maqsad versiyalarni kamaytirish: yangi maydon qo'shish, ixtiyoriy parametrlar, va xatti-harakatni flag bilan boshqarish. Eski versiyani o'chirishdan oldin haqiqiy ishlatilishni o'lchash shart (kim, qancha) — aks holda jim buzilish bo'ladi."
     },
     {
       "id": 30282,
       "code": "SN283",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API design",
       "domain": "api",
       "section": "a1",
       "question": "Ro'yxat endpoint'i uchun cursor va offset pagination tanlovi?",
-      "options": [
-        "Offset har doim qulay",
-        "Cursor (keyset): barqaror natija, chuqurlikda ham tez — oqim/cheksiz scroll uchun to'g'ri; offset: sahifa raqami va umumiy soni kerak bo'lgan admin UI uchun qulay, lekin chuqurlikda sekin va ma'lumot o'zgarganda qatorlar surilib ketadi",
-        "Cursor faqat Kafka'da",
-        "Farqi yo'q"
-      ],
-      "answer": 1,
       "explanation": "Amaliy kelishuv: public API va mobil ro'yxatlarda cursor (opaque token — ichida sort kaliti va yo'nalish, imzolangan bo'lsa yaxshi), admin panelda offset lekin chuqurlik limiti bilan. Umumiy `total` soni qimmat bo'lsa taxminiy qiymat berish yoki umuman bermaslik — bu ham API kontrakti qarori."
     },
     {
       "id": 30283,
       "code": "SN284",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API design",
       "domain": "api",
       "section": "a1",
       "question": "Bulk/batch endpoint dizaynida qanday qarorlar kerak?",
-      "options": [
-        "Faqat massiv qabul qilish yetarli",
-        "Qisman muvaffaqiyat semantikasi (hammasi-yoki-hech narsa yoki per-element natija va status ro'yxati), element soni limiti, idempotency key butun batch va/yoki har element uchun, va javobda har element bo'yicha xato sababi",
-        "Har doim tranzaksion bo'lishi kerak",
-        "Batch kerak emas"
-      ],
-      "answer": 1,
       "explanation": "Eng ko'p unutiladigan qism — qisman xato. `207`/`200` bilan per-element natija qaytarish mijozga qayta urinish imkonini beradi (faqat yiqilganlarini). Tranzaksion 'hammasi-yoki-hech narsa' oddiy, lekin katta batch'da bitta noto'g'ri yozuv butun ishni to'xtatadi — shuning uchun tanlov biznes talabidan kelib chiqadi va hujjatlashtiriladi."
     }
   ]

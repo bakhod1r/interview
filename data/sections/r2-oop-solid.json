@@ -12,217 +12,132 @@
       "id": 6021,
       "code": "F22",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "OOP",
       "domain": "arch",
       "section": "r2",
       "question": "OOP'ning to'rt asosiy tushunchasi nima?",
-      "options": [
-        "Sinf, funksiya, o'zgaruvchi, sikl",
-        "Inkapsulyatsiya (holatni yashirish va nazorat qilingan interfeys), abstraksiya (muhimini ko'rsatib, tafsilotni yashirish), meros (umumiy xulqni kengaytirish), polimorfizm (bir interfeys — turli implementatsiya)",
-        "Massiv, ro'yxat, table, daraxt",
-        "Kompilyatsiya, bajarilish, test, deploy"
-      ],
-      "answer": 1,
       "explanation": "Go'da klassik meros yo'q — o'rniga embedding (kompozitsiya) va implicit interfeyslar bor; polimorfizm interfeys orqali ishlaydi. Shuning uchun intervyuda ta'rifni ayting va 'Go'da bu qanday ifodalanadi' deb davom eting — bu tilni tushunganingizni ko'rsatadi."
     },
     {
       "id": 6022,
       "code": "F23",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "OOP",
       "domain": "arch",
       "section": "r2",
       "question": "'Composition over inheritance' nimani anglatadi?",
-      "options": [
-        "Meros umuman ishlatilmaydi",
-        "Xulqni chuqur meros iyerarxiyasi orqali emas, obyektlarni birlashtirib (has-a) qurish afzal: bog'liqlik zaifroq, o'zgartirish oson, 'mo'rt asosiy sinf' muammosi yo'q",
-        "Kompozitsiya tezroq ishlaydi",
-        "Faqat Go'da to'g'ri"
-      ],
-      "answer": 1,
       "explanation": "Chuqur meros muammosi: ota sinfdagi kichik o'zgarish hamma avlodni buzadi; xulqni ishlatish uchun ortiqcha bog'liqlik ham meros bilan keladi. Kompozitsiya + kichik interfeyslar testni ham osonlashtiradi (bog'liqlikni almashtirish). Go bu yondashuvni tilga singdirgan."
     },
     {
       "id": 6023,
       "code": "F24",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "Single Responsibility Principle (S) nimani talab qiladi?",
-      "options": [
-        "Har sinfda faqat bitta metod bo'lsin",
-        "Modul o'zgarishining faqat bitta sababi bo'lsin — ya'ni u bitta manfaatdor tomon/vazifaga xizmat qilsin (masalan hisob-kitob mantig'i, formatlash va DB'ga yozish bir joyda bo'lmasin)",
-        "Har fayl 100 row'dan oshmasin",
-        "Har funksiya bitta argument olsin"
-      ],
-      "answer": 1,
       "explanation": "Amaliy mezon: 'bu kodni o'zgartirishni kim so'raydi?' Agar javob ikki xil (moliyachi va dizayner) bo'lsa — ajratish kerak. Buzilish alomati: bitta struct ichida validatsiya, SQL, HTTP javob formati va biznes qoidasi aralash. Haddan oshirish ham zarar: har narsani bitta metodli sinflarga bo'lib tashlash o'qishni qiyinlashtiradi."
     },
     {
       "id": 6024,
       "code": "F25",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "Open/Closed Principle (O) misoli qaysi?",
-      "options": [
-        "Har yangi to'lov turi uchun switch/if zanjiriga yangi shart qo'shish",
-        "PaymentMethod interfeysi bo'lib, yangi to'lov turi yangi implementatsiya sifatida qo'shiladi — mavjud kod o'zgarmaydi",
-        "Hamma maydonlarni public qilish",
-        "Funksiyalarni doim o'zgartirib turish"
-      ],
-      "answer": 1,
       "explanation": "Kengaytirishga ochiq, o'zgartirishga yopiq. Go'da bu interfeys + registry/strategiya bilan tabiiy chiqadi. Lekin mavhumlikni oldindan qurmang: ikki-uchinchi holat paydo bo'lganda ajratish (rule of three) — birinchi kundanoq 'kelajak uchun' interfeys yozish ko'pincha ortiqcha murakkablik."
     },
     {
       "id": 6025,
       "code": "F26",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "Liskov Substitution Principle (L) buzilishiga misol?",
-      "options": [
-        "Interfeysda ko'p metod bo'lishi",
-        "Square sinfi Rectangle'dan meros olib, setWidth qilganda balandlikni ham o'zgartiradi — Rectangle kutayotgan kod (kenglikni o'zgartirsam balandlik saqlanadi) buziladi; ya'ni avlod ota kontraktini buzadi",
-        "Sinf nomining uzunligi",
-        "Ko'p konstruktor bo'lishi"
-      ],
-      "answer": 1,
       "explanation": "Boshqa tipik buzilishlar: avlod metodi ota ruxsat bermagan xato (exception) tashlashi, shartlarni kuchaytirishi yoki 'not implemented' qaytarishi (masalan ReadOnlyList.Add). Mezon: ota tipini kutayotgan kod avlodni bilmasdan ishlatganda to'g'ri ishlashi kerak."
     },
     {
       "id": 6026,
       "code": "F27",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "Interface Segregation (I) nimani aytadi?",
-      "options": [
-        "Interfeys ko'p metodli bo'lishi kerak",
-        "Client o'ziga keraksiz metodlarga bog'lanmasin — katta interfeysni kichik, maqsadli interfeyslarga bo'lish kerak",
-        "Interfeys faqat bitta bo'lsin",
-        "Har sinf interfeys implement qilsin"
-      ],
-      "answer": 1,
       "explanation": "Go bu tamoyilning eng yaxshi namunasi: io.Reader, io.Writer — bittadan metod, va ular istalgancha birlashtiriladi (io.ReadWriter). Amaliy foyda: testda faqat kerakli metodni mock qilasiz. 'Accept interfaces, return structs' shiori ham shu bilan bog'liq."
     },
     {
       "id": 6027,
       "code": "F28",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "Dependency Inversion (D) va Dependency Injection farqi?",
-      "options": [
-        "Bir xil narsa",
-        "DIP — tamoyil: yuqori darajadagi modul konkret implementatsiyaga emas, mavhumlikka (interfeys) bog'lansin va interfeys iste'molchiga tegishli bo'lsin. DI — shu bog'liqlikni tashqaridan (konstruktor/parametr orqali) uzatish texnikasi",
-        "DI faqat framework bilan mumkin",
-        "DIP faqat Java'da"
-      ],
-      "answer": 1,
       "explanation": "Go'da: application qatlami OrderRepository interfeysini o'zi e'lon qiladi, postgres paketi uni implement qiladi, main esa ulaydi (qo'lda yoki wire bilan). Natija: domain kodni DB'siz test qilish mumkin va DB'ni almashtirish domainga tegmaydi. Framework shart emas — konstruktor yetarli."
     },
     {
       "id": 6028,
       "code": "F29",
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "SOLID'ni klasssiz tilda (Go) qanday qo'llaysiz?",
-      "modelAnswer": [
-        "S: paket va struct bitta vazifaga; HTTP handler, biznes qoida va SQL alohida",
-        "O: yangi xulq yangi tip sifatida qo'shiladi (interfeys implementatsiyasi), mavjud funksiya o'zgarmaydi",
-        "L: interfeys kontraktini buzmaslik — 'not implemented' qaytaradigan implementatsiya alomat",
-        "I: kichik interfeyslar (1–3 metod), iste'molchi paketda e'lon qilinadi",
-        "D: konstruktorga interfeys uzatish, konkret tipni main'da ulash",
-        "Go'ga xos: embedding bilan xulqni birlashtirish, lekin meros iyerarxiyasi qurmaslik"
-      ],
       "explanation": "Intervyuda kuchli javob — tamoyilni ta'riflash emas, kodda qanday ko'rinishini va qachon ortiqcha bo'lishini aytish."
     },
     {
       "id": 30213,
       "code": "SN214",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "Dependency Inversion amalda Go'da qanday ko'rinadi?",
-      "options": [
-        "Har joyda interfeys yaratish",
-        "Yuqori qatlam (use case) o'ziga kerakli interfeysni e'lon qiladi, past qatlam (Postgres adapter) uni implement qiladi — bog'liqlik yo'nalishi ichkariga qaraydi va domain infrastrukturani bilmaydi; ulash `main`/wiring'da",
-        "DI freymvork o'rnatish",
-        "Global o'zgaruvchilar"
-      ],
-      "answer": 1,
       "explanation": "Muhim farq: DI (bog'liqlikni tashqaridan berish) va DIP (abstraksiyaga bog'lanish) — bir narsa emas. Go'da freymvork kerak emas: konstruktorlar va `main`da yig'ish yetarli. Signal: `domain` paketi `database/sql` yoki `net/http`ni import qilmasligi kerak — buni hatto linter qoidasi bilan majburlash mumkin."
     },
     {
       "id": 30214,
       "code": "SN215",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "OOP",
       "domain": "arch",
       "section": "r2",
       "question": "Composition va inheritance: Go'da nega embedding ham ehtiyotkorlik talab qiladi?",
-      "options": [
-        "Embedding = inheritance, muammo yo'q",
-        "Embedding metodlarni yuqoriga ko'taradi — tashqi turning API'si kutilmaganda kengayadi (ichki turning barcha public metodlari oqib chiqadi) va keyinchalik ichki turni almashtirish breaking bo'ladi; aniq delegatsiya xavfsizroq",
-        "Embedding sekin",
-        "Faqat interfeyslarda ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Misol: `struct{ sync.Mutex }` embed qilinsa `Lock`/`Unlock` tashqariga chiqadi va tashqi kod ichki qulfni boshqaradi. Shuning uchun `mu sync.Mutex` nomli maydon afzal. Embedding mos keladigan joy — haqiqiy 'is-a' emas, balki interfeys implementatsiyasini qayta ishlatish yoki dekorator qurish."
     },
     {
       "id": 30472,
       "code": "SN473",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "OOP",
       "domain": "arch",
       "section": "r2",
       "question": "Anemic domain model nima va qachon maqbul?",
-      "options": [
-        "Har doim yomon",
-        "Ma'lumot va xatti-harakat ajralgan (getter/setter'li struct + service'da barcha mantiq). Murakkab invariantli domenlarda yomon (qoidalar tarqalib ketadi, invariantni kim saqlashi noaniq), lekin oddiy CRUD yoki ma'lumot o'tkazuvchi servislarda ortiqcha abstraksiyadan ko'ra sodda va maqbul",
-        "Har doim yaxshi",
-        "Faqat Java'da"
-      ],
-      "answer": 1,
       "explanation": "Qaror mezoni — invariantlar soni va murakkabligi. 'Buyurtma faqat `paid` holatida jo'natilishi mumkin' kabi qoidalar bo'lsa, ular entity ichida bo'lishi kerak (holatni o'zgartiruvchi metodlar). Oddiy ma'lumot o'tkazuvchi (CRUD) servisda esa DDD to'liq apparati ortiqcha — bu ham senior darajadagi to'g'ri javob."
     },
     {
       "id": 30473,
       "code": "SN474",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "SOLID",
       "domain": "arch",
       "section": "r2",
       "question": "Liskov substitution printsipi buzilishining amaliy belgisi?",
-      "options": [
-        "Ko'p interfeys",
-        "Subtip kutilmagan xatti-harakat keltiradi: kuchliroq old shart talab qiladi, zaifroq natija beradi yoki kutilmagan xato tashlaydi — natijada chaqiruvchi kod `if type == X` bilan tekshira boshlaydi (bu belgi)",
-        "Ko'p meros",
-        "Interfeys kichik"
-      ],
-      "answer": 1,
       "explanation": "Go'da tipik misol: `io.Writer` implementatsiyasi qisman yozib xato qaytarmaydi yoki `Close`dan keyin ham yozishga ruxsat beradi — chaqiruvchi shartnomaga tayana olmaydi. Amaliy tekshiruv: bir xil test to'plamini barcha implementatsiyaga qo'llash (contract test) — o'tmasa LSP buzilgan."
     }
   ]

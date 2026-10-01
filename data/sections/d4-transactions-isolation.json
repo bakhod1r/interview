@@ -16,694 +16,426 @@
       "id": 7,
       "code": 8,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "ACID dagi <b>A</b> nimani anglatadi?",
-      "options": [
-        "Availability — tizim doim ishlaydi",
-        "Atomicity — transaction yo to'liq bajariladi, yo umuman bajarilmaydi",
-        "Authorization — ruxsat tekshiriladi",
-        "Asynchrony — asinxron yozish"
-      ],
-      "answer": 1,
       "explanation": "Atomicity: hammasi yoki hech narsa (pul o'tkazmasida debit va credit birga). C — Consistency (constraintlar buzilmaydi), I — Isolation (parallel transaction'lar bir-birini ko'rmaydi), D — Durability (commit bo'lgan narsa crashdan keyin ham qoladi, WAL orqali). Availability — bu CAP dan, ACID dan emas."
     },
     {
       "id": 15,
       "code": 16,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Qaysi eng past isolation level'si <b>non-repeatable read</b> ni oldini oladi?",
-      "options": [
-        "READ UNCOMMITTED",
-        "READ COMMITTED",
-        "REPEATABLE READ",
-        "Hech biri, faqat SERIALIZABLE"
-      ],
-      "answer": 2,
       "explanation": "Dirty read — READ COMMITTED da yo'q. Non-repeatable read (bir row'ni ikki marta o'qisang boshqa qiymat) — REPEATABLE READ da yo'q. Phantom — standart bo'yicha SERIALIZABLE da, lekin Postgres REPEATABLE READ (snapshot) phantomni ham oldini oladi. Postgres default: READ COMMITTED; MySQL InnoDB default: REPEATABLE READ."
     },
     {
       "id": 21,
       "code": 22,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "<code>SELECT ... FOR UPDATE</code> qaysi yondashuvga misol?",
-      "options": [
-        "Optimistic locking",
-        "Pessimistic locking — row o'qilganda lock olinadi, boshqa yozuvchilar kutadi",
-        "MVCC snapshot",
-        "Advisory lock"
-      ],
-      "answer": 1,
       "explanation": "Pessimistic: konflikt ko'p bo'lganda (masalan inventar kamaytirish). Optimistic: version column'i, UPDATE ... WHERE id=? AND version=? — 0 row yangilansa retry. Konflikt kam, o'qish ko'p bo'lsa optimistic. FOR UPDATE SKIP LOCKED — queue (job queue) uchun klassik pattern."
     },
     {
       "id": 22,
       "code": 23,
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "Deadlock nima, DB uni qanday aniqlaydi va siz qanday oldini olasiz?",
-      "modelAnswer": [
-        "Ikki transaction bir-birining lockini kutadi: T1 A→B, T2 B→A",
-        "DB wait-for graph orqali aniqlaydi va birini abort qiladi (Postgres deadlock_timeout)",
-        "Oldini olish: resurslarni doim bir xil tartibda lock qilish (masalan id bo'yicha sort)",
-        "Transaction'ni qisqa qilish, tashqi HTTP chaqiruvni transaction ichida qilmaslik",
-        "Ilovada deadlock/serialization xatosini retry qilish"
-      ],
       "explanation": "Deadlockni butunlay yo'q qilib bo'lmaydi — shuning uchun retry logika majburiy. Pul o'tkazmada: ikki hisobni doim kichik id birinchi tartibda lock qilish klassik javob."
     },
     {
       "id": 28,
       "code": 29,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MVCC",
       "domain": "db",
       "section": "d4",
       "question": "PostgreSQL MVCC da <code>UPDATE</code> ichkarida nima qiladi?",
-      "options": [
-        "Row'ni joyida o'zgartiradi",
-        "Yangi tuple versiyasini yozadi, eskisini 'dead' deb belgilaydi; VACUUM keyin tozalaydi",
-        "Row'ni o'chirib, undo logga yozadi",
-        "Butun page'ni nusxalaydi"
-      ],
-      "answer": 1,
       "explanation": "Postgres UPDATE = DELETE + INSERT (xmin/xmax). Oqibatlari: tez-tez yangilanadigan table'da bloat, autovacuum tuning muhim; har yangi versiya barcha indexlarni yangilaydi (HOT update bundan istisno — indexlangan column o'zgarmasa va page'da joy bo'lsa, fillfactor). MySQL InnoDB esa joyida yangilaydi, eski versiya undo logda."
     },
     {
       "id": 30,
       "code": 31,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Ikki shifokor navbatchilikdan chiqadi: har biri 'kamida bitta navbatchi qolyaptimi?' deb tekshiradi, ikkalasi ham ha deb ko'radi va o'zini olib tashlaydi. Natijada 0 navbatchi. Bu anomaliya va uni kafolatli oldini oladigan level?",
-      "options": [
-        "Dirty read — READ COMMITTED",
-        "Lost update — REPEATABLE READ",
-        "Write skew — SERIALIZABLE (yoki tekshirilgan row'larni FOR UPDATE bilan lock qilish)",
-        "Phantom read — READ UNCOMMITTED"
-      ],
-      "answer": 2,
       "explanation": "Write skew: ikki transaction bir xil to'plamni o'qiydi, turli row'larni yozadi — snapshot isolation (Postgres REPEATABLE READ) buni ushlamaydi. Postgres SERIALIZABLE (SSI) konfliktni aniqlab bittasini serialization failure bilan abort qiladi — ilova retry qilishi shart."
     },
     {
       "id": 31,
       "code": 32,
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "db",
       "section": "d4",
       "question": "Ikki query bir vaqtda ishlaydi, boshlang'ich balans 100. READ COMMITTED. Yakuniy balans va to'g'ri tuzatish?",
       "snippet": "-- ilova kodi (ikkala query'da bir xil)\nbal = SELECT balance FROM accounts WHERE id = 1;   -- 100\nUPDATE accounts SET balance = :bal - 10 WHERE id = 1;",
-      "options": [
-        "80 — hammasi to'g'ri",
-        "90 (lost update). Tuzatish: UPDATE accounts SET balance = balance - 10 WHERE id=1 (atomik) yoki SELECT ... FOR UPDATE",
-        "90, tuzatish: indexni qo'shish",
-        "Deadlock bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Read-modify-write ilova tomonida — klassik lost update. Atomik UPDATE balance = balance - 10 row'ni lock qilib, commit bo'lgan oxirgi qiymatni qayta o'qiydi. Qo'shimcha himoya: CHECK (balance >= 0) yoki WHERE balance >= 10 va yangilangan row'lar sonini tekshirish."
     },
     {
       "id": 44,
       "code": 45,
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Idempotency",
       "domain": "db",
       "section": "d4",
       "question": "To'lov API'sini idempotent qiling: client timeout olib qayta yuboradi — ikki marta yechilmasligi kerak. DB level'ida dizayn?",
-      "modelAnswer": [
-        "Client Idempotency-Key yuboradi (UUID)",
-        "idempotency_keys(key PK, request_hash, status, response, created_at) table'i",
-        "Transaction: INSERT key ON CONFLICT DO NOTHING — kim birinchi kiritsa o'sha bajaradi",
-        "Takror query: saqlangan javobni qaytarish; key bir xil, body boshqa bo'lsa — 422",
-        "'in_progress' holatini boshqarish (parallel takror → 409 yoki kutish); TTL bilan tozalash",
-        "Tashqi provayderga ham o'sha key'ni uzatish"
-      ],
       "explanation": "Asosiy fikr: idempotentlikni unique constraint kafolatlaydi, ilovadagi 'avval tekshir, keyin yoz' emas (race condition). Business-level unique (order_id bo'yicha bitta payment) qo'shimcha himoya."
     },
     {
       "id": 46,
       "code": 47,
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "MVCC",
       "domain": "db",
       "section": "d4",
       "question": "Postgres'da 'transaction ID wraparound' xavfi nima va nima uning oldini oladi?",
-      "options": [
-        "Disk to'lishi; oldini olish — TRUNCATE",
-        "32-bit XID tugaydi, eski row'lar 'kelajakdagi' bo'lib ko'rinadi; himoya uchun DB yozishni to'xtatadi. Oldini olish — autovacuum freeze ishlashini ta'minlash",
-        "Replica sinxronligi yo'qoladi",
-        "Indexlar buziladi, REINDEX kerak"
-      ],
-      "answer": 1,
       "explanation": "VACUUM FREEZE eski tuple'larni 'frozen' deb belgilaydi. Uzoq ochiq transaction'lar, unutilgan replication slot yoki prepared transaction vacuum'ni bloklaydi — age(datfrozenxid) monitoringi kerak. Real incidentlar (Sentry, Mailchimp) aynan shu bilan bo'lgan."
     },
     {
       "id": 111,
       "code": 112,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "<b>Dirty read</b> nima?",
-      "options": [
-        "Diskdan buzilgan ma'lumot o'qish",
-        "Boshqa transaction hali COMMIT qilmagan o'zgarishni o'qish — u keyin ROLLBACK bo'lsa, siz hech qachon mavjud bo'lmagan ma'lumotni ko'rgan bo'lasiz",
-        "Eski index'dan o'qish",
-        "Cache'dan o'qish"
-      ],
-      "answer": 1,
       "explanation": "Misol: T1 balansni 100 → 1000 qildi (commit yo'q). T2 1000 ni ko'rib kredit berdi. T1 rollback. T2 'xayoliy' pul asosida qaror qildi. Faqat READ UNCOMMITTED ruxsat beradi — Postgres'da umuman yo'q (READ UNCOMMITTED ham READ COMMITTED kabi ishlaydi)."
     },
     {
       "id": 112,
       "code": 113,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Non-repeatable read va phantom read farqi?",
-      "options": [
-        "Bir xil narsa",
-        "Non-repeatable: <b>bitta row'ni</b> qayta o'qisangiz qiymati o'zgargan (UPDATE). Phantom: <b>shart bo'yicha to'plamni</b> qayta o'qisangiz yangi row'lar paydo bo'lgan/yo'qolgan (INSERT/DELETE)",
-        "Phantom faqat indexlarda bo'ladi",
-        "Non-repeatable faqat DELETE da bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Non-repeatable: SELECT balance WHERE id=1 → 100, boshqasi yangilab commit qildi, qayta → 200. Phantom: SELECT COUNT(*) WHERE dept=5 → 10, boshqasi yangi xodim qo'shdi, qayta → 11. Eslab qolish: non-repeatable — mavjud row o'zgardi; phantom — to'plam tarkibi o'zgardi."
     },
     {
       "id": 113,
       "code": 114,
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Postgres. T1 va T2 parallel. T1 ning ikkinchi SELECT'i nima qaytaradi: (a) READ COMMITTED da, (b) REPEATABLE READ da?",
       "snippet": "-- boshida: accounts(id=1).balance = 100\nT1: BEGIN;\nT1: SELECT balance FROM accounts WHERE id = 1;   -- 100\n        T2: BEGIN;\n        T2: UPDATE accounts SET balance = 200 WHERE id = 1;\n        T2: COMMIT;\nT1: SELECT balance FROM accounts WHERE id = 1;   -- ?\nT1: COMMIT;",
-      "options": [
-        "(a) 100, (b) 100",
-        "(a) 200, (b) 100",
-        "(a) 200, (b) 200",
-        "(a) 100, (b) 200"
-      ],
-      "answer": 1,
       "explanation": "Asosiy farq — snapshot qachon olinadi. READ COMMITTED: har <b>query</b> boshida yangi snapshot — T2 commit qilgani ko'rinadi (200). REPEATABLE READ: transaction'dagi <b>birinchi query'da</b> snapshot olinadi va oxirigacha o'sha — 100. Bu MVCC tufayli: eski versiya hali mavjud, T1 uni o'qiydi, hech kim bloklanmaydi."
     },
     {
       "id": 114,
       "code": 115,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Postgres REPEATABLE READ. T1 row'ni o'qidi, T2 o'sha row'ni yangilab commit qildi, endi T1 ham o'sha row'ni UPDATE qilmoqchi. Nima bo'ladi?",
-      "options": [
-        "T1 T2 ning o'zgarishini ustidan yozadi (lost update)",
-        "T1 xato oladi: 'could not serialize access due to concurrent update' — ilova transaction'ni boshidan retry qilishi kerak",
-        "T1 abadiy kutadi",
-        "T2 rollback bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "REPEATABLE READ lost update'ni oldini oladi — lekin xato orqali. Shuning uchun REPEATABLE READ / SERIALIZABLE ishlatsangiz, ilova SQLSTATE 40001 ni ushlab, butun transaction'ni qayta bajarishi SHART. READ COMMITTED da esa T1 kutadi, keyin T2 ning yangi qiymati ustida UPDATE'ni qayta baholaydi."
     },
     {
       "id": 115,
       "code": 116,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "SQL standarti bo'yicha table'da qaysi row to'g'ri? (✗ = anomaliya mumkin emas, ✓ = mumkin)",
-      "options": [
-        "READ COMMITTED: dirty ✓, non-repeatable ✗, phantom ✗",
-        "REPEATABLE READ: dirty ✗, non-repeatable ✗, phantom ✓",
-        "SERIALIZABLE: phantom ✓",
-        "READ UNCOMMITTED: hammasi ✗"
-      ],
-      "answer": 1,
       "explanation": "Yodlash table'i (standart):\n• READ UNCOMMITTED: dirty ✓, non-rep ✓, phantom ✓\n• READ COMMITTED: dirty ✗, non-rep ✓, phantom ✓\n• REPEATABLE READ: dirty ✗, non-rep ✗, phantom ✓\n• SERIALIZABLE: hammasi ✗ (+ write skew ham yo'q)\nHar pog'ona bitta anomaliyani yopadi. Postgres farqi: REPEATABLE READ phantom'ni ham yopadi (snapshot), lekin write skew'ni emas. Default'lar: Postgres — READ COMMITTED, MySQL — REPEATABLE READ."
     },
     {
       "id": 116,
       "code": 117,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Nega hamma joyda SERIALIZABLE ishlatilmaydi?",
-      "options": [
-        "Postgres'da mavjud emas",
-        "Konflikt ko'p bo'lganda transaction'lar tez-tez serialization failure bilan abort bo'ladi — retry kerak, throughput tushadi; qo'shimcha kuzatuv (predicate lock) xarajati bor",
-        "U dirty read'ga ruxsat beradi",
-        "Faqat o'qish uchun ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy yondashuv: default READ COMMITTED + kritik joylarda aniq himoya — atomik UPDATE (balance = balance - 10), SELECT ... FOR UPDATE, unique/check constraint. SERIALIZABLE — invariant bir nechta row'ga bog'liq va boshqa himoya murakkab bo'lganda (write skew). Intervyuda: 'kerakli joyda, retry logika bilan' deyish."
     },
     {
       "id": 117,
       "code": 118,
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Omborda 1 ta mahsulot qoldi. READ COMMITTED da ikki xaridor bir vaqtda sotib oladi. Natija va tuzatish?",
       "snippet": "BEGIN;\nSELECT stock FROM products WHERE id = 7;      -- ikkalasi 1 ko'radi\n-- ilova: if stock > 0 ...\nUPDATE products SET stock = stock - 1 WHERE id = 7;\nINSERT INTO orders ...;\nCOMMIT;",
-      "options": [
-        "Faqat bittasi sotib oladi — DB o'zi himoya qiladi",
-        "Ikkalasi sotib oladi, stock = -1 (oversell). Tuzatish: UPDATE ... SET stock = stock - 1 WHERE id = 7 AND stock > 0 va yangilangan row'lar sonini tekshirish (0 bo'lsa — tugagan); yoki SELECT ... FOR UPDATE; yoki CHECK (stock >= 0)",
-        "Deadlock bo'ladi",
-        "Ikkinchisi xato oladi"
-      ],
-      "answer": 1,
       "explanation": "'Tekshir-keyin-yoz' (check-then-act) ilovada — race condition. Eng sodda va tez yechim: shartni UPDATE ichiga qo'yish — DB row'ni lock qilib, commit bo'lgan oxirgi qiymat bilan shartni qayta tekshiradi. CHECK (stock >= 0) — oxirgi himoya chizig'i."
     },
     {
       "id": 118,
       "code": 119,
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "4 ta isolation level'ini va har biri qaysi anomaliyani yopishini memory'dan tushuntiring (table ko'rinishida).",
-      "modelAnswer": [
-        "READ UNCOMMITTED — hech narsani yopmaydi (dirty read mumkin)",
-        "READ COMMITTED — dirty read yopiq; har query yangi snapshot (Postgres default)",
-        "REPEATABLE READ — non-repeatable read yopiq; transaction bitta snapshot (MySQL default); Postgres'da phantom ham yopiq",
-        "SERIALIZABLE — hammasi + write skew; natija qandaydir ketma-ket bajarilishga teng; retry kerak",
-        "Trade-off: level oshgan sari konsistentlik oshadi, parallellik/throughput tushadi"
-      ],
       "explanation": "Bu savolga 1 daqiqada aniq javob berish Middle level'ning minimumi. Mashq: table'ni qog'ozga 3 marta memory'dan chizing, keyin har anomaliyaga bittadan misol ayting."
     },
     {
       "id": 119,
       "code": 120,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "<code>BEGIN</code> yozilmasa, Postgres'da har bir query qanday bajariladi?",
-      "options": [
-        "Hech qachon commit bo'lmaydi",
-        "Autocommit: har query o'zi alohida transaction — success'li bo'lsa darhol commit",
-        "Keyingi BEGIN gacha kutadi",
-        "Faqat SELECT ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Autocommit rejimida 3 ta alohida UPDATE — 3 ta alohida transaction: ikkinchisi yiqilsa, birinchisi allaqachon saqlangan. Bir-biriga bog'liq amallar (pul o'tkazish: debit + credit) bitta BEGIN ... COMMIT ichida bo'lishi shart. Diqqat: psql/driver sozlamasi autocommit'ni o'chirishi mumkin (Python psycopg2 default — autocommit OFF)."
     },
     {
       "id": 120,
       "code": 121,
       "level": "J",
-      "type": "code",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Natijada <code>accounts</code> table'ida nima qoladi?",
       "snippet": "BEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;  -- OK\nUPDATE accounts SET balance = balance + 100 WHERE id = 99; -- 0 row (id=99 yo'q)\nCOMMIT;",
-      "options": [
-        "Hech narsa o'zgarmaydi — 0 row xato hisoblanadi, rollback bo'ladi",
-        "id=1 dan 100 yechildi, hech kimga qo'shilmadi — pul 'yo'qoldi'",
-        "Xato chiqadi",
-        "DB avtomatik id=99 ni yaratadi"
-      ],
-      "answer": 1,
       "explanation": "0 row yangilash — xato EMAS, shuning uchun transaction commit bo'ladi. Atomicity faqat xato bo'lganda ishlaydi. Ilova har UPDATE'ning ta'sir qilgan row'lar sonini (rowcount) tekshirib, kutilmagan bo'lsa o'zi ROLLBACK qilishi kerak. FK/constraint bo'lsa ham bu holatni ushlamaydi — mantiqiy tekshiruv ilovada."
     },
     {
       "id": 121,
       "code": 122,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Postgres'da transaction ichida bitta query xato berdi (masalan unique violation). Keyingi query'lar nima bo'ladi?",
-      "options": [
-        "Odatdagidek davom etadi",
-        "Transaction 'aborted' holatga o'tadi: 'current transaction is aborted, commands ignored until end of transaction block' — faqat ROLLBACK (yoki SAVEPOINT'ga qaytish) mumkin",
-        "Faqat xato bergan query bekor bo'ladi, qolganlari commit bo'ladi",
-        "DB avtomatik retry qiladi"
-      ],
-      "answer": 1,
       "explanation": "Postgres xatodan keyin butun transaction'ni yaroqsiz deb biladi (MySQL esa faqat o'sha statement'ni bekor qilib, davom etishga ruxsat beradi). Qisman davom etish kerak bo'lsa — SAVEPOINT sp; ... ROLLBACK TO SAVEPOINT sp; yoki INSERT ... ON CONFLICT bilan xatoning oldini olish."
     },
     {
       "id": 122,
       "code": 123,
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "SAVEPOINT bilan natija: qaysi row'lar saqlanadi?",
       "snippet": "BEGIN;\nINSERT INTO logs VALUES (1);\nSAVEPOINT a;\nINSERT INTO logs VALUES (2);\nROLLBACK TO SAVEPOINT a;\nINSERT INTO logs VALUES (3);\nCOMMIT;",
-      "options": [
-        "1, 2, 3",
-        "1, 3",
-        "Faqat 1",
-        "Hech narsa"
-      ],
-      "answer": 1,
       "explanation": "ROLLBACK TO SAVEPOINT faqat savepoint'dan keyingi o'zgarishlarni bekor qiladi, transaction davom etadi. ORM'lardagi 'nested transaction' (Django atomic() ichida atomic(), Rails requires_new) aslida savepoint'lar. Postgres'da haqiqiy nested transaction yo'q. Ko'p savepoint — performance narxi bor (subtransaction SLRU muammosi)."
     },
     {
       "id": 123,
       "code": 124,
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Uzoq davom etadigan (yoki 'idle in transaction') transaction'lar nima uchun xavfli?",
-      "modelAnswer": [
-        "Lock'larni ushlab turadi — boshqa query'lar queue'da kutadi, zanjir bo'lib butun servis to'xtashi mumkin",
-        "MVCC: VACUUM eski row versiyalarini tozalay olmaydi — table va index shishadi (bloat), query'lar sekinlashadi",
-        "Connection pool'dan connection'ni band qiladi",
-        "Replica'da hot_standby_feedback bilan primary'ga ham ta'sir",
-        "Himoya: idle_in_transaction_session_timeout, statement_timeout, lock_timeout; transaction ichida tashqi HTTP chaqiruv qilmaslik; pg_stat_activity monitoringi"
-      ],
       "explanation": "Klassik incident: kimdir psql'da BEGIN yozib, tushlikka ketdi. Transaction ichida tashqi API chaqiruv (to'lov provayder 30s javob bermaydi) — eng ko'p uchraydigan sabab. Qoida: transaction faqat DB ishini qamrab olsin, qisqa bo'lsin."
     },
     {
       "id": 124,
       "code": 125,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "COMMIT qaytgandan keyin server elektr o'chib ketdi. Ma'lumot saqlanganmi va nima orqali?",
-      "options": [
-        "Yo'q, ma'lumot faqat memory'da edi",
-        "Ha — COMMIT WAL (write-ahead log) diskka fsync qilinganidan keyin qaytadi; qayta ishga tushganda WAL qayta o'ynaladi (redo)",
-        "Faqat checkpoint bo'lgan bo'lsa",
-        "Faqat replica bo'lsa"
-      ],
-      "answer": 1,
       "explanation": "Durability = WAL. Ma'lumot page'lari keyinroq (checkpoint'da) diskka yoziladi, lekin WAL darhol. synchronous_commit = off — commit tezroq, lekin crash'da oxirgi bir necha yuz ms yo'qolishi mumkin (DB buzilmaydi, faqat oxirgi commitlar). Log/analitika uchun qabul qilinadi, to'lov uchun yo'q."
     },
     {
       "id": 125,
       "code": 126,
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Bu kodning muammosi nima?",
       "snippet": "with db.transaction():\n    order = db.insert_order(cart)\n    payment = stripe.charge(card, order.total)   # HTTP, 2–30 s\n    db.mark_paid(order.id, payment.id)\n    email.send(user, \"Rahmat!\")",
-      "options": [
-        "Muammo yo'q",
-        "Transaction ichida tashqi chaqiruvlar: lock va connection uzoq band; charge o'tib, keyin DB rollback bo'lsa — pul yechilgan, order yo'q; email rollback'dan keyin ham ketgan bo'ladi",
-        "Faqat email async bo'lishi kerak",
-        "stripe.charge ikki marta chaqirilishi kerak"
-      ],
-      "answer": 1,
       "explanation": "Tashqi side effect'ni rollback qilib bo'lmaydi. To'g'ri oqim: 1) order'ni 'pending' holatda commit qilish; 2) transaction'dan tashqarida idempotency key bilan charge; 3) yangi qisqa transaction'da 'paid' + outbox'ga 'send_email' event; 4) worker email yuboradi. Tiklash uchun 'pending' qolib ketganlarni tekshiruvchi job."
     },
     {
       "id": 126,
       "code": 127,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Two-phase commit (2PC) ning asosiy muammosi?",
-      "options": [
-        "Juda tez ishlaydi",
-        "Koordinator prepare'dan keyin yiqilsa, qatnashchilar 'in-doubt' holatda lock ushlab qoladi (blocking protocol); latency oshadi, har qatnashchi mavjud bo'lishi shart",
-        "Atomiklikni kafolatlamaydi",
-        "Faqat bitta DB bilan ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "2PC: prepare (hamma 'tayyorman' deydi va diskka yozadi) → commit. Koordinator o'rtada o'lsa — hamma kutadi. Postgres'da PREPARE TRANSACTION bor, lekin unutilgan prepared tx VACUUM'ni bloklaydi. Mikroservislarda odatda 2PC o'rniga saga + outbox."
     },
     {
       "id": 127,
       "code": 128,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Postgres'da DDL (ALTER TABLE, CREATE INDEX) transaction ichida qanday ishlaydi?",
-      "options": [
-        "DDL implicit commit qiladi (MySQL kabi)",
-        "Postgres'da DDL tranzaksion — BEGIN; ALTER ...; ROLLBACK; o'zgarishni to'liq bekor qiladi (CREATE INDEX CONCURRENTLY va ba'zi buyruqlar bundan mustasno)",
-        "DDL transaction'da taqiqlangan",
-        "Faqat superuser uchun tranzaksion"
-      ],
-      "answer": 1,
       "explanation": "Migratsiya uchun katta afzallik: ko'p qadamli migratsiya yarmida yiqilsa, hammasi qaytadi. MySQL/Oracle'da DDL implicit commit — yarim bajarilgan migratsiya qoladi. Ogohlantirish: ALTER ACCESS EXCLUSIVE lock oladi va transaction oxirigacha ushlab turadi — migratsiya transaction'sini qisqa qiling, lock_timeout qo'ying."
     },
     {
       "id": 128,
       "code": 129,
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Transaction chegarasini (boundary) qayerda qo'yasiz — repository, service yoki controller? DDD kontekstida tushuntiring.",
-      "modelAnswer": [
-        "Chegara — use case (application service) level'ida: bitta biznes amal = bitta transaction",
-        "Repository o'zi commit qilmaydi — aks holda bir nechta repository'ni atomik birlashtirib bo'lmaydi (Unit of Work pattern)",
-        "Controller/HTTP qatlamida emas — transaction kerakidan uzun va tashqi chaqiruvlarni qamrab oladi",
-        "DDD: bitta transaction'da bitta aggregate'ni o'zgartirish; boshqa aggregate'lar — domain event orqali, eventual",
-        "Tashqi side effect'lar commit'dan keyin (outbox)"
-      ],
       "explanation": "Senior signal: 'bitta transaction — bitta aggregate' qoidasi va nega (lock contention, masshtab). Unit of Work — ORM session (SQLAlchemy Session, EF DbContext)."
     },
     {
       "id": 129,
       "code": 130,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "<b>Read skew</b> (inconsistent read) qaysi holat?",
-      "options": [
-        "Bir row'ni ikki marta o'qish",
-        "T1 hisob A ni o'qiydi (500), T2 A dan B ga 100 o'tkazib commit qiladi, T1 endi B ni o'qiydi (yangi, 600) — T1 jami 1100 ko'radi, aslida 1000",
-        "Indexdan noto'g'ri o'qish",
-        "Replica'dan o'qish"
-      ],
-      "answer": 1,
       "explanation": "READ COMMITTED da har query yangi snapshot — shuning uchun turli row'lar turli vaqt holatidan o'qiladi. Hisobot, backup, balans yig'indisi uchun xavfli. Yechim: REPEATABLE READ (bitta snapshot) yoki hammasini bitta query'da o'qish. pg_dump aynan shuning uchun REPEATABLE READ ishlatadi."
     },
     {
       "id": 130,
       "code": 131,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Snapshot isolation nimani anglatadi?",
-      "options": [
-        "DB diskining nusxasi",
-        "Transaction boshlangan paytdagi commit bo'lgan holatni ko'radi; o'quvchilar yozuvchilarni, yozuvchilar o'quvchilarni bloklamaydi (MVCC)",
-        "Hamma query'lar ketma-ket bajariladi",
-        "Faqat o'qish uchun rejim"
-      ],
-      "answer": 1,
       "explanation": "'Readers don't block writers, writers don't block readers' — MVCC'ning asosiy afzalligi. Postgres REPEATABLE READ = snapshot isolation. U dirty, non-repeatable, phantom, lost update'ni yopadi, lekin write skew'ni emas. Oracle 'SERIALIZABLE' deb atagani aslida snapshot isolation."
     },
     {
       "id": 131,
       "code": 132,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "<code>FOR UPDATE</code> va <code>FOR SHARE</code> farqi?",
-      "options": [
-        "Farqi yo'q",
-        "FOR SHARE — boshqalar ham FOR SHARE olishi mumkin, lekin o'zgartira olmaydi; FOR UPDATE — eksklyuziv, boshqa FOR UPDATE/SHARE va UPDATE/DELETE kutadi",
-        "FOR SHARE table'ni lock qiladi",
-        "FOR UPDATE o'qishni ham bloklaydi"
-      ],
-      "answer": 1,
       "explanation": "Oddiy SELECT hech qanday row lock kutmaydi (MVCC). FOR SHARE: 'men o'qiyotganimda bu row o'zgarmasin' (masalan FK tekshiruvi). FOR UPDATE: 'men buni o'zgartiraman'. Postgres'da yengilroq variantlar: FOR NO KEY UPDATE (FK'larni bloklamaydi), FOR KEY SHARE."
     },
     {
       "id": 132,
       "code": 133,
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "10 ta worker bir table'dan job oladi. Qaysi variant to'g'ri va nima uchun?",
       "snippet": "-- A\nSELECT * FROM jobs WHERE status='pending'\nORDER BY id LIMIT 1 FOR UPDATE;\n\n-- B\nSELECT * FROM jobs WHERE status='pending'\nORDER BY id LIMIT 1 FOR UPDATE SKIP LOCKED;\n\n-- C\nSELECT * FROM jobs WHERE status='pending'\nORDER BY id LIMIT 1 FOR UPDATE NOWAIT;",
-      "options": [
-        "A — eng xavfsiz",
-        "B — band row'ni o'tkazib yuborib keyingi bo'sh job'ni oladi; A'da hamma worker bitta row'ni kutib queue'ga turadi; C band bo'lsa darhol xato beradi",
-        "C — eng tez",
-        "Uchalasi bir xil"
-      ],
-      "answer": 1,
       "explanation": "SKIP LOCKED — Postgres'da queue (queue) qurishning standart usuli: parallel worker'lar bir-birini kutmaydi. NOWAIT — 'kutmayman, darhol xato' (user interfeysda 'boshqa kishi tahrirlayapti' deyish uchun). Job'ni olgach status='running' qilib commit qiling yoki transaction ichida bajaring."
     },
     {
       "id": 133,
       "code": 134,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "MySQL InnoDB REPEATABLE READ phantom'ni qanday oldini oladi (locking read'larda)?",
-      "options": [
-        "Hech qanday — phantom bo'ladi",
-        "Next-key lock (record lock + gap lock): indexdagi row va undan oldingi 'bo'shliq'ni lock qiladi — boshqalar shu oraliqqa INSERT qila olmaydi",
-        "Table'ni to'liq lock qiladi",
-        "Snapshot bilan, lock'siz"
-      ],
-      "answer": 1,
       "explanation": "Oddiy SELECT — snapshot (MVCC). SELECT ... FOR UPDATE / UPDATE — next-key lock. Oqibat: index bo'lmagan column bo'yicha UPDATE WHERE butun table'ni lock qilishi mumkin, gap lock'lar kutilmagan deadlock'lar beradi. Ko'p kompaniyalar MySQL'da READ COMMITTED'ga o'tadi — gap lock'lar yo'qoladi."
     },
     {
       "id": 134,
       "code": 135,
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "SERIALIZABLE bilan ishlaganda ilova kodi qanday bo'lishi kerak? Qaysi variant to'g'ri?",
       "snippet": "# A\ntry:\n    with tx(isolation=\"serializable\"):\n        transfer(a, b, 100)\nexcept SerializationFailure:\n    log.error(\"xato\")\n\n# B\nfor attempt in range(5):\n    try:\n        with tx(isolation=\"serializable\"):\n            transfer(a, b, 100)\n        break\n    except SerializationFailure:   # SQLSTATE 40001\n        sleep(backoff(attempt))\nelse:\n    raise",
-      "options": [
-        "A — xatoni loglash yetarli",
-        "B — butun transaction'ni boshidan (qayta o'qish bilan) retry qilish, backoff va chegara bilan",
-        "Ikkalasi ham noto'g'ri — SERIALIZABLE xato bermaydi",
-        "A, chunki retry ikki marta o'tkazadi"
-      ],
-      "answer": 1,
       "explanation": "40001 (serialization_failure) va 40P01 (deadlock) — 'normal' xatolar, qayta urinsa o'tadi. Muhim: faqat oxirgi query'ni emas, butun transaction'ni qayta bajarish (ma'lumotni qayta o'qish). Transaction ichida tashqi side effect bo'lmasligi kerak — aks holda retry uni takrorlaydi."
     },
     {
       "id": 135,
       "code": 136,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MVCC",
       "domain": "db",
       "section": "d4",
       "question": "Postgres row versiyasi transaction'ga ko'rinadimi-yo'qligini qanday aniqlaydi?",
-      "options": [
-        "Timestamp column'i orqali",
-        "Har tuple'da xmin (yaratgan tx ID) va xmax (o'chirgan/yangilagan tx ID); snapshot'dagi faol transaction'lar ro'yxati bilan solishtiriladi: xmin commit bo'lgan va snapshot'dan oldin, xmax esa yo'q yoki hali ko'rinmas bo'lsa — ko'rinadi",
-        "Index orqali",
-        "Lock table'i orqali"
-      ],
-      "answer": 1,
       "explanation": "SELECT xmin, xmax, * FROM t; — o'zingiz ko'ring. Snapshot = (xmin, xmax, faol tx ro'yxati). Shuning uchun uzoq transaction eski versiyalarni 'tirik' ushlab turadi — VACUUM ularni o'chira olmaydi. Bu isolation, VACUUM va bloat'ni bitta mexanizmga bog'laydi — senior intervyuda juda yaxshi signal."
     },
     {
       "id": 136,
       "code": 137,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "Production'da <code>ALTER TABLE users ADD COLUMN x int;</code> bir soniyalik operatsiya, lekin butun sayt 2 daqiqa to'xtadi. Sabab?",
-      "options": [
-        "ADD COLUMN butun table'ni qayta yozadi",
-        "ALTER ACCESS EXCLUSIVE lock kutdi (uzoq SELECT ushlab turgan edi); navbatdagi ALTER o'zidan keyin kelgan HAMMA query'larni ham bloklaydi — lock queue. Yechim: SET lock_timeout = '3s' va retry",
-        "Index qayta qurildi",
-        "Disk to'ldi"
-      ],
-      "answer": 1,
       "explanation": "Lock queue — eng ko'p tushunilmaydigan mexanizm: kutayotgan eksklyuziv lock query'i keyingi oddiy SELECT'larni ham o'zidan o'tkazmaydi. Shuning uchun migratsiyalarda doim lock_timeout + retry. Postgres 11+ ADD COLUMN ... DEFAULT (volatile bo'lmagan) table'ni qayta yozmaydi."
     },
     {
       "id": 137,
       "code": 138,
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "Bir nechta servis instance'i bitta cron job'ni bir vaqtda bajarmasligi kerak. DB'da yengil yechim?",
-      "options": [
-        "Har instance'da boolean o'zgaruvchi",
-        "pg_try_advisory_lock(job_id) — kim olsa bajaradi, qolganlar false oladi va o'tkazib yuboradi; session tugasa lock avtomatik bo'shaydi",
-        "Table'ni LOCK TABLE bilan lock qilish",
-        "sleep(random) qo'yish"
-      ],
-      "answer": 1,
       "explanation": "Advisory lock — Postgres'ning ilova darajasidagi mutex'i, table row'lariga bog'liq emas. Session-level va transaction-level (pg_advisory_xact_lock) turlari bor. PgBouncer transaction mode'da session-level advisory lock ishonchsiz — xact variantini ishlating. Ko'p node'li umumiy lock uchun alternativ — Redis/etcd lease."
     },
     {
       "id": 138,
       "code": 139,
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "Bank tizimi uchun isolation strategiyasini loyihalang: qaysi operatsiyaga qaysi level va mexanizm?",
-      "modelAnswer": [
-        "Default READ COMMITTED — ko'p o'qish/yozish uchun yetarli va tez",
-        "Pul o'tkazish: atomik UPDATE balance = balance - x WHERE balance >= x, ikkala hisobni id tartibida lock (deadlock yo'q), CHECK (balance >= 0)",
-        "Ko'p row'li invariantlar (limit, 'jami qarz ≤ N'): SERIALIZABLE + retry yoki umumiy row'ni FOR UPDATE bilan lock",
-        "Hisobot/reconciliation: REPEATABLE READ READ ONLY (bir xil snapshot) yoki replica",
-        "Ledger modeli: balansni UPDATE emas, append-only yozuvlar (double-entry) — audit va konkurentlik soddalashadi",
-        "Idempotency key har to'lov query'iga"
-      ],
       "explanation": "Staff signal: 'hammasiga SERIALIZABLE' emas — har operatsiya uchun eng arzon yetarli mexanizm. Append-only ledger lost update muammosining o'zini yo'q qiladi."
     },
     {
       "id": 13001,
       "code": "K2",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "ACID va BASE farqi?",
-      "options": [
-        "BASE — ACID ning yangi nomi",
-        "ACID (Atomicity, Consistency, Isolation, Durability) — an'anaviy relatsion DB: har transaction qat'iy kafolat bilan. BASE (Basically Available, Soft state, Eventual consistency) — taqsimlangan NoSQL yondashuvi: mavjudlikni ustun qo'yib, konsistentlikni vaqt o'tib ta'minlaydi",
-        "ACID faqat NoSQL uchun",
-        "BASE tranzaksiyalarni umuman qo'llamaydi"
-      ],
-      "answer": 1,
       "explanation": "CAP bilan bog'liqlik: ACID tizimlar odatda CP tomonda (partition paytida yozishni rad etadi), BASE tizimlar AP tomonda. Bu ikkilik emas — bugungi ko'p NoSQL (MongoDB, DynamoDB) tranzaksiya va kuchli o'qishni qo'llaydi, Postgres esa replikada eventual consistency beradi. Tanlov: pul/inventar — ACID; feed, hisoblagich, katalog — BASE maqbul.",
       "source": "https://www.hellointerview.com/learn/system-design/core-concepts/cap-theorem"
     },
@@ -711,144 +443,88 @@
       "id": 30210,
       "code": "SN211",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MVCC",
       "domain": "db",
       "section": "d4",
       "question": "PostgreSQL MVCC'da uzoq ochiq tranzaksiya nega xavfli?",
-      "options": [
-        "Faqat qulf ushlaydi",
-        "Eski qator versiyalari (dead tuple) tozalanmaydi: `VACUUM` `xmin` horizontidan o'tolmaydi — jadval va indeks shishadi (bloat), query sekinlashadi, og'ir holatda transaction ID wraparound xavfi paydo bo'ladi",
-        "Xotira oshadi faqat",
-        "WAL to'xtaydi"
-      ],
-      "answer": 1,
       "explanation": "Shu sabab `idle in transaction` sessiyalar kuzatiladi (`pg_stat_activity`) va `idle_in_transaction_session_timeout` qo'yiladi. Xuddi shu ta'sirni uzoq ishlayotgan replica query'lari (`hot_standby_feedback`) va to'xtagan replication slot'lar ham beradi. Amaliy qoida: tranzaksiya ichida tashqi HTTP chaqiruv yoki foydalanuvchi kutishi bo'lmasligi kerak."
     },
     {
       "id": 30211,
       "code": "SN212",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "`REPEATABLE READ` (PostgreSQL) qanday anomaliyani yechmaydi?",
-      "options": [
-        "Hech qanday, hammasini yechadi",
-        "Write skew: ikki tranzaksiya bir-birining o'qigan ma'lumotiga tayanib turli qatorlarni o'zgartiradi (masalan 'kamida bitta shifokor navbatchi bo'lishi kerak' qoidasi ikki tomondan buziladi); buni `SERIALIZABLE` yoki aniq qulf (`SELECT ... FOR UPDATE`) yechadi",
-        "Dirty read",
-        "Lost update"
-      ],
-      "answer": 1,
       "explanation": "PostgreSQL `REPEATABLE READ` snapshot izolyatsiyasi: dirty/non-repeatable read va phantom yo'q, lekin write skew qoladi. Yechimlar: `SERIALIZABLE` (SSI — konflikt bo'lsa `40001` bilan rollback, demak retry mantiqi kerak), yoki invariantni bitta qatorga jamlab qulflash, yoki DB constraint bilan ifodalash."
     },
     {
       "id": 30212,
       "code": "SN213",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "Deadlock'ni kamaytirish uchun eng samarali amaliyot?",
-      "options": [
-        "Retry qo'shish yetarli",
-        "Qulflarni har joyda bir xil tartibda olish (masalan ID bo'yicha o'sish), tranzaksiyani qisqa ushlash, kerakli minimal qatorni qulflash, va `lock_timeout` bilan uzoq kutishni kesish; ustiga `40P01` uchun retry",
-        "Izolyatsiyani pasaytirish",
-        "Indeksni o'chirish"
-      ],
-      "answer": 1,
       "explanation": "Deadlock ko'pincha teskari tartibdan kelib chiqadi: A→B va B→A. Tartibni normallashtirish (`ORDER BY id` bilan `SELECT ... FOR UPDATE`) muammoni ildizdan yechadi. DB deadlock'ni aniqlab bittasini bekor qiladi, shuning uchun ilova `40P01`/`40001` da idempotent retry qilishi kerak — lekin retry sababni yashirmasligi uchun metrikada sanalishi lozim."
     },
     {
       "id": 30398,
       "code": "SN399",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Idempotency",
       "domain": "db",
       "section": "d4",
       "question": "Advisory lock (`pg_advisory_xact_lock`) qachon to'g'ri vosita?",
-      "options": [
-        "Har doim qator qulfi o'rniga",
-        "Qator mavjud bo'lmagan yoki jadvalga bog'lanmagan mantiqiy resursni qulflashda: 'bitta tenant uchun bir vaqtda bitta import', 'leader election', 'bitta cron bir instansiyada' — kalit hash orqali beriladi",
-        "Tranzaksiya o'rniga",
-        "Faqat read uchun"
-      ],
-      "answer": 1,
       "explanation": "`xact` variantida qulf commit/rollback bilan avtomatik bo'shaydi (sessiya variantini qo'lda bo'shatish kerak — leak xavfi). Bu Redis-lock'dan afzal tomoni: DB bilan bir xil tranzaksion kontekst va failover'da holat aniq. Cheklovi — qulflar bitta DB node'da, shuning uchun u DB availability'siga bog'liq."
     },
     {
       "id": 30427,
       "code": "SN428",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "MVCC",
       "domain": "db",
       "section": "d4",
       "question": "PostgreSQL snapshot izolyatsiyasi ichkarida qanday ishlaydi?",
-      "options": [
-        "Qulflar bilan",
-        "Har qator versiyasida `xmin` (yaratgan tranzaksiya) va `xmax` (o'chirgan) bor; snapshot — `xmin` chegarasi, `xmax` chegarasi va faol tranzaksiyalar ro'yxati. Qator ko'rinadi, agar uni yaratgan tranzaksiya snapshot uchun tugagan bo'lsa va o'chirgani ko'rinmasa",
-        "Har o'qishda qulf olinadi",
-        "Faqat `SERIALIZABLE`da"
-      ],
-      "answer": 1,
       "explanation": "Shu sabab o'qish yozuvni bloklamaydi va aksincha (readers don't block writers). Amaliy oqibatlar: eski versiyalar vacuum'gacha saqlanadi (bloat), uzoq tranzaksiya barcha eski versiyalarni ushlab turadi, va `SELECT`lar ham `xmin` horizontiga ta'sir qiladi. `SERIALIZABLE` esa ustiga SSI konflikt kuzatuvini qo'shadi."
     },
     {
       "id": 30428,
       "code": "SN429",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Isolation",
       "domain": "db",
       "section": "d4",
       "question": "`SERIALIZABLE` (SSI) PostgreSQL'da qanday amalga oshirilgan?",
-      "options": [
-        "Barcha tranzaksiyani ketma-ket bajaradi",
-        "Optimistik: predicate qulflari (SIRead) bilan o'qish-yozish bog'liqliklari kuzatiladi; xavfli naqsh (dangerous structure) aniqlansa tranzaksiyalardan biri `40001` bilan bekor qilinadi — shuning uchun ilova retry qilishi shart",
-        "Har doim bloklaydi",
-        "Faqat bitta ulanishda"
-      ],
-      "answer": 1,
       "explanation": "Afzalligi: write skew kabi anomaliyalar to'liq yo'qoladi va qo'lda qulf qo'yish kerak emas. Narxi: yuqori konkurentlikda rollback chastotasi oshadi (retry mantiqi va idempotentlik majburiy), SIRead qulflari xotira yeydi, va uzoq tranzaksiyalar konflikt ehtimolini oshiradi. Retry — eksponensial backoff bilan va cheklangan urinish."
     },
     {
       "id": 30429,
       "code": "SN430",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Locking",
       "domain": "db",
       "section": "d4",
       "question": "`FOR UPDATE`, `FOR NO KEY UPDATE`, `FOR SHARE`, `FOR KEY SHARE` farqi?",
-      "options": [
-        "Faqat nom farqi",
-        "Qulf kuchi bo'yicha: `FOR UPDATE` eng kuchli (boshqa har qanday qator qulfini bloklaydi), `FOR NO KEY UPDATE` kalit bo'lmagan ustunlarni yangilash uchun (FK tekshiruvlari bilan kamroq to'qnashadi), `FOR SHARE`/`FOR KEY SHARE` o'qish uchun — FK bo'yicha ota qator o'chirilmasligini kafolatlaydi",
-        "Faqat `FOR UPDATE` ishlaydi",
-        "Hammasi teng"
-      ],
-      "answer": 1,
       "explanation": "Amaliy muammo: foreign key mavjud bo'lsa bola jadvalga insert ota qatorga `FOR KEY SHARE` qulfini oladi — bu ota qatorni `FOR UPDATE` bilan qulflagan jarayon bilan to'qnashadi va kutilmagan bloklanish beradi. Shu sabab agregat qatorni faqat kerakli darajada qulflash (`FOR NO KEY UPDATE`) contention'ni kamaytiradi."
     },
     {
       "id": 30430,
       "code": "SN431",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Transactions",
       "domain": "db",
       "section": "d4",
       "question": "Tranzaksiya ichida tashqi HTTP chaqiruv qilish nega yomon?",
-      "options": [
-        "Ishlaydi, muammo yo'q",
-        "Qulflar va snapshot tashqi servis javobini kutib turadi: vacuum to'xtaydi, boshqa yozuvlar bloklanadi, pool tugaydi; tashqi chaqiruv timeout bo'lsa tranzaksiya uzoq ochiq qoladi. To'g'ri: tranzaksiyani yopib, keyin chaqiruv, natijani outbox/statusga yozish",
-        "Faqat sekin",
-        "HTTP tranzaksiyani buzadi"
-      ],
-      "answer": 1,
       "explanation": "Bu eng ko'p uchraydigan 'DB sekinlashdi' sababi. To'g'ri naqsh: (1) DB tranzaksiyasida intent + outbox yozuvi, commit; (2) tashqi chaqiruv; (3) natijani alohida qisqa tranzaksiyada yozish; noma'lum holat uchun reconcile. Xuddi shu qoida uzoq hisob-kitob va foydalanuvchi kutishiga ham tegishli."
     }
   ]

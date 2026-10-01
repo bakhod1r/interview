@@ -14,36 +14,22 @@
       "id": 7002,
       "code": "D3",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consistency",
       "domain": "dist",
       "section": "s1",
       "question": "N=3 nusxa, W=2 va R=2 (quorum). Bu nima beradi?",
-      "options": [
-        "Hech qanday kafolat",
-        "R + W > N bo'lgani uchun o'qish to'plami yozish to'plami bilan kamida bitta node'da kesishadi — eng so'nggi yozilgan qiymatni ko'rish kafolati kuchayadi",
-        "Faqat tezlik oshadi",
-        "Ma'lumot uch marta o'qiladi"
-      ],
-      "answer": 1,
       "explanation": "Sozlash: W=1 (tez yozish, zaif o'qish kafolati), R=1 va W=N (tez o'qish, sekin yozish). Bu — Dynamo uslubidagi leaderless replikatsiya modeli (Cassandra, Riak). Diqqat: quorum ham hamma anomaliyani yopmaydi (konkurent yozishlar, sloppy quorum) — versiya (vector clock) yoki LWW bilan konflikt hal qilinadi."
     },
     {
       "id": 7003,
       "code": "D4",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consensus",
       "domain": "dist",
       "section": "s1",
       "question": "Raft qanday ishlaydi?",
-      "options": [
-        "Hamma node teng, lider yo'q",
-        "Node'lar leader saylaydi (term va ovoz berish orqali); barcha yozuvlar leader log'iga tushadi va follower'larga replikatsiya qilinadi; yozuv ko'pchilik tasdiqlagach commit bo'ladi. Ko'pchilik yo'qolsa tizim yozishni to'xtatadi (konsistentlikni mavjudlikdan column qo'yadi)",
-        "Har node mustaqil qaror qiladi",
-        "Faqat ikki node kerak"
-      ],
-      "answer": 1,
       "explanation": "Shuning uchun konsensus klasterlari toq sonda bo'ladi (3, 5): 3 node 1 ta yo'qotishga, 5 node 2 ta yo'qotishga chidaydi. Ishlatilishi: etcd (Kubernetes), Consul, CockroachDB, Kafka KRaft. Konsensus qimmat — uni har yozishga emas, metadata va liderlik kabi kam sonli qarorlarga qo'llash kerak.",
       "source": "https://raft.github.io/"
     },
@@ -51,235 +37,143 @@
       "id": 7005,
       "code": "D6",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Clocks",
       "domain": "dist",
       "section": "s1",
       "question": "Taqsimlangan tizimda hodisalar tartibini aniqlash uchun nega oddiy timestamp yetarli emas?",
-      "options": [
-        "Timestamp juda katta joy oladi",
-        "Serverlar soati bir xil emas (clock skew, NTP sakrashlari, hatto orqaga siljish) — shuning uchun 'kechroq timestamp = kechroq hodisa' deb bo'lmaydi. Sabab-oqibat tartibi uchun Lamport yoki vector clock, aniqlik kerak bo'lsa TrueTime kabi cheklangan noaniqlik",
-        "Timestamp doim aniq",
-        "Faqat replikatsiyada muammo"
-      ],
-      "answer": 1,
       "explanation": "Amaliy oqibatlar: LWW (last write wins) konflikt hal qilish soatga ishonadi va yozuv 'yo'qolishi' mumkin; TTL/token muddati soat siljishida noto'g'ri hisoblanadi. Monotonic clock (Go'da time.Since) — davomiylikni o'lchash uchun; wall clock — sana ko'rsatish uchun."
     },
     {
       "id": 7006,
       "code": "D7",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consistency",
       "domain": "dist",
       "section": "s1",
       "question": "Eventual consistency amalda nimani anglatadi?",
-      "options": [
-        "Ma'lumot hech qachon mos kelmaydi",
-        "Yangi yozuv bo'lmasa, nusxalar oxir-oqibat bir xil qiymatga keladi — lekin 'oxir-oqibat' qancha ekani kafolatlanmagan va oraliqda turli client turli qiymat ko'rishi mumkin",
-        "Yozish sekin bo'ladi",
-        "Faqat NoSQL'da bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Yaqinlashtiruvchi mexanizmlar: read repair, anti-entropy (Merkle tree bilan solishtirish), hinted handoff. Foydalanuvchi uchun yumshatish: o'z yozganini ko'rish (read-your-writes), monotonic reads (bir sessiya orqaga ketmasin) va UI'da optimistik ko'rsatish. Qaysi ma'lumot eventual bo'lishi mumkinligi — biznes qarori."
     },
     {
       "id": 7007,
       "code": "D8",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Replication",
       "domain": "dist",
       "section": "s1",
       "question": "Leader-based va leaderless replikatsiya farqi?",
-      "options": [
-        "Farqi yo'q",
-        "Leader-based: hamma yozuv bitta leader orqali — tartib sodda, failover kerak (Postgres, MySQL, Kafka partition). Leaderless: har node yozuvni qabul qiladi, quorum va konflikt hal qilish bilan (Dynamo, Cassandra) — yozish mavjudligi yuqori, lekin konflikt va versiyalash murakkab",
-        "Leaderless doim tezroq",
-        "Leader-based konsistent emas"
-      ],
-      "answer": 1,
       "explanation": "Uchinchi model — multi-leader (region bo'yicha), offline-first ilovalar va multi-region yozish uchun; konflikt hal qilish (CRDT, LWW, qo'lda) majburiy. Tanlov: yozish qayerdan keladi, konflikt qanchalik ehtimoliy va uni biznes qanday hal qiladi."
     },
     {
       "id": 7009,
       "code": "D10",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consensus",
       "domain": "dist",
       "section": "s1",
       "question": "FLP impossibility natijasi nimani aytadi?",
-      "options": [
-        "Taqsimlangan tizim umuman ishlamaydi",
-        "To'liq asinxron network'da hatto bitta node ishdan chiqsa ham, har doim tugashi kafolatlangan deterministik konsensus algoritmi mavjud emas",
-        "Konsensus faqat ikki node bilan mumkin",
-        "Timeout ishlatish taqiqlangan"
-      ],
-      "answer": 1,
       "explanation": "Amalda buni timeout va tasodifiylik bilan chetlab o'tiladi: Raft/Paxos security'ni (safety — noto'g'ri qaror bo'lmaydi) doim saqlaydi, lekin tirikligini (liveness — qaror qabul qilinadi) faqat network 'yetarlicha yaxshi' bo'lganda kafolatlaydi. Shuning uchun leader election timeout'lari va jitter muhim."
     },
     {
       "id": 7013,
       "code": "D14",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Consensus",
       "domain": "dist",
       "section": "s1",
       "question": "Taqsimlangan tizimda leader election qachon kerak va qanday tuzoqlari bor?",
-      "modelAnswer": [
-        "Kerak bo'ladigan holatlar: bitta joyda bajarilishi shart bo'lgan ish (cron, kompaksiya, shard egaligi, sxema migratsiyasi)",
-        "Amalga oshirish: etcd/Consul/ZooKeeper lease yoki Kubernetes Lease obyekti; Redis lock — faqat 'optimizatsiya' level'ida",
-        "Tuzoq 1: eski leader o'zini leader deb o'ylashda davom etadi (GC, network) — fencing token bilan himoya",
-        "Tuzoq 2: lease TTL juda qisqa bo'lsa tez-tez almashinuv (flapping), uzun bo'lsa failover sekin",
-        "Tuzoq 3: leader bo'lish bilan ish boshlanmaydi — avvalgi holatni tiklash va yarim bajarilgan ishni yakunlash kerak",
-        "Muqobil: ishni partition bo'yicha bo'lish (har node o'z bo'lagiga egalik qiladi) — leader umuman kerak bo'lmasligi mumkin"
-      ],
       "explanation": "Staff signal: 'leader election kerakmi?' degan savoldan boshlash. Ko'p holatda idempotent ish + partitionlash liderlikdan sodda va ishonchli."
     },
     {
       "id": 30058,
       "code": "SN59",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consistency",
       "domain": "dist",
       "section": "s1",
       "question": "Read replica'dan o'qiganda foydalanuvchi o'z yozuvini ko'rmaydi. Qanday tuzatiladi?",
-      "options": [
-        "Faqat primary'dan o'qish (boshqa yo'l yo'q)",
-        "Read-your-writes: yozuvdan keyin qisqa muddat primary'dan o'qish (sticky), yoki LSN/WAL pozitsiyasini olib replica shu nuqtaga yetganini kutish (`pg_wal_lsn_diff` / `wait_for_lsn`)",
-        "Replikani ko'paytirish",
-        "Keshni tozalash"
-      ],
-      "answer": 1,
       "explanation": "Monoton kafolatlar app darajasida quriladi. Amaliy naqsh: yozuvda `pg_current_wal_lsn()` olinadi va sessiyaga (cookie/Redis) yoziladi; o'qishda replica LSN kichik bo'lsa primary'ga yo'naltiriladi. Oddiyroq variant — yozuvdan keyin N sekund sticky-primary. Muhim: bu qaror endpoint bo'yicha bo'ladi, hammasi uchun emas."
     },
     {
       "id": 30059,
       "code": "SN60",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consensus",
       "domain": "dist",
       "section": "s1",
       "question": "Raft klasterida 5 nodedan 2 tasi yo'qolgan. Nima bo'ladi? 3 tasi yo'qolsa?",
-      "options": [
-        "Ikki holatda ham ishlaydi",
-        "2 yo'qolsa quorum (3) bor — yozuv davom etadi; 3 yo'qolsa quorum yo'q — yozuv to'xtaydi (availability yo'qoladi, lekin consistency saqlanadi)",
-        "Ikki holatda ham to'xtaydi",
-        "Ma'lumot yo'qoladi"
-      ],
-      "answer": 1,
       "explanation": "Raft N/2+1 quorum talab qiladi: 5 node → 3. Quorum yo'qolganda yangi leader saylanmaydi va commit bo'lmaydi — bu ataylab qilingan tanlov (CP). Shuning uchun toq son (3/5) tanlanadi va nodelar failure domainlar (AZ) bo'ylab tarqatiladi; 2 AZ'ga 5 node qo'yish AZ yo'qolganda quorumni yo'qotish xavfini beradi."
     },
     {
       "id": 30060,
       "code": "SN61",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Clocks",
       "domain": "dist",
       "section": "s1",
       "question": "Ikki servis eventlarni `time.Now()` bilan tartiblaydi. Qanday xato kutiladi?",
-      "options": [
-        "Hech qanday",
-        "Clock skew va NTP sakrashi tufayli tartib buziladi (hatto orqaga ketadi); yechim — monoton hisoblagich, logik/Lamport soat yoki hybrid logical clock, va sabab-natija uchun versiya/sequence",
-        "Faqat yozuv sekinlashadi",
-        "UTC ishlatilsa muammo yo'q"
-      ],
-      "answer": 1,
       "explanation": "Wall clock sinxronlashtirilgan bo'lsa ham millisekundlar farq qiladi; VM'da sakrash mumkin. Last-write-wins wall clock bilan — jim ma'lumot yo'qolishi. To'g'ri yo'llar: bitta manbadan sequence (DB sequence/Kafka offset), HLC (CockroachDB), yoki versiya vektori bilan konflikt aniqlash. Go'da o'lchash uchun `time.Since` monoton o'qishni ishlatadi."
     },
     {
       "id": 30061,
       "code": "SN62",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Replication",
       "domain": "dist",
       "section": "s1",
       "question": "PostgreSQL'da sinxron replikatsiya (`synchronous_commit = on`, `synchronous_standby_names`) qanday narxga ega?",
-      "options": [
-        "Narxi yo'q, har doim yoqilsin",
-        "Har commit standby ack'ini kutadi — yozuv latency RTT'ga bog'lanadi; standby yo'qolsa yozuv to'xtaydi (agar `ANY 1` / kvorum sozlanmagan bo'lsa)",
-        "Faqat disk hajmi oshadi",
-        "O'qish sekinlashadi"
-      ],
-      "answer": 1,
       "explanation": "Tanlov: RPO=0 (ma'lumot yo'qotmaslik) uchun latency va availability qurbon qilinadi. Amaliy o'rta yo'l: `ANY 1 (s1, s2)` — ikki standbydan biri yetarli, shunda bitta node yiqilsa yozuv to'xtamaydi. Bundan tashqari `remote_write` va `remote_apply` darajalari farq qiladi: `remote_apply` o'qishda ham ko'rinishini kafolatlaydi, lekin eng sekin."
     },
     {
       "id": 30451,
       "code": "SN452",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consensus",
       "domain": "dist",
       "section": "s1",
       "question": "Raft'da leader almashganda log qanday moslashtiriladi?",
-      "options": [
-        "Barcha log o'chiriladi",
-        "Yangi leader o'z log'ini haqiqat deb hisoblaydi: har follower bilan `nextIndex` orqasiga qadam tashlab mos keladigan nuqta topiladi, keyin follower'ning mos kelmaydigan yozuvlari kesiladi va leaderning yozuvlari ko'chiriladi; commit qilingan yozuv hech qachon yo'qolmaydi (saylov cheklovi buni kafolatlaydi)",
-        "Follower leader bo'ladi",
-        "Ma'lumot yo'qoladi"
-      ],
-      "answer": 1,
       "explanation": "Saylov cheklovi (election restriction): faqat eng to'liq log'ga ega nomzod ovoz oladi — shuning uchun commit qilingan yozuv har doim yangi leaderda bo'ladi. Amaliy oqibat: commit qilinmagan, lekin diskka yozilgan yozuvlar yo'qolishi mumkin — shuning uchun client uchun 'commit' faqat kvorum tasdig'idan keyin."
     },
     {
       "id": 30452,
       "code": "SN453",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consensus",
       "domain": "dist",
       "section": "s1",
       "question": "Raft'da linearizable o'qish qanday ta'minlanadi (va nega leaderdan o'qish yetarli emas)?",
-      "options": [
-        "Leaderdan o'qish har doim to'g'ri",
-        "Eski leader tarmoq bo'linishida o'zini hali leader deb o'ylashi mumkin — shuning uchun ReadIndex (o'qishdan oldin kvorumdan heartbeat tasdig'i) yoki leader lease ishlatiladi; follower'dan o'qish uchun esa ReadIndex'gacha log qo'llanishi kutiladi",
-        "Har o'qishni log'ga yozish",
-        "O'qish hech qachon linearizable bo'lmaydi"
-      ],
-      "answer": 1,
       "explanation": "Bu etcd/Consul/CockroachDB'da real qo'llanadigan mexanizm. Lease variant tezroq (kvorum round-trip yo'q), lekin soat farqiga tayanadi — shuning uchun lease muddati konservativ tanlanadi. Amaliy xulosa: 'leaderdan o'qiyapman, demak eng yangi' degan taxmin taqsimlangan tizimda xavfli."
     },
     {
       "id": 30453,
       "code": "SN454",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Replication",
       "domain": "dist",
       "section": "s1",
       "question": "Kvorum formulasi `R + W > N` nimani beradi?",
-      "options": [
-        "Tezlikni",
-        "O'qish va yozish kvorumlari kesishadi — demak har o'qish kamida bitta eng yangi nusxani ko'radi (Dynamo uslubidagi tizimlarda kuchli izchillikka yaqinlik). `W=N` yozuvni qimmat, `R=1` o'qishni tez qiladi — sozlash workload'ga qarab",
-        "Ma'lumot yo'qolmasligini",
-        "Faqat 3 node uchun"
-      ],
-      "answer": 1,
       "explanation": "Misol: N=3, W=2, R=2 — tipik konfiguratsiya (bitta node yiqilsa ham ishlaydi). Lekin bu 'linearizable' degani emas: konkurent yozuvlarda konflikt bo'lishi mumkin (vaqt belgisi yoki versiya vektori bilan hal qilinadi), va sloppy quorum/hinted handoff ishlatilsa kafolat yanada bo'shashadi. Cassandra'da bu `QUORUM`/`LOCAL_QUORUM` darajalari bilan sozlanadi."
     },
     {
       "id": 30454,
       "code": "SN455",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Consistency",
       "domain": "dist",
       "section": "s1",
       "question": "CRDT turlari va ularning chegarasi?",
-      "options": [
-        "CRDT har qanday ma'lumot uchun ishlaydi",
-        "G-Counter/PN-Counter (hisoblagich), G-Set/OR-Set (to'plam), LWW-Register, RGA/sequence (matn) — birlashtirish kommutativ, assotsiativ va idempotent bo'lgani uchun koordinatsiyasiz konvergensiya beradi. Chegara: 'balans manfiy bo'lmasin' kabi global invariantni CRDT kafolatlay olmaydi",
-        "CRDT konsensus o'rnini bosadi",
-        "Faqat matn tahririda"
-      ],
-      "answer": 1,
       "explanation": "Shuning uchun pul/inventar kabi invariantli domenlarda CRDT yolg'iz yetmaydi — koordinatsiya (kvorum, rezervatsiya, escrow naqshi) kerak. CRDT ideal joylari: offline-first mobil ilova, birgalikda tahrirlash, presence, 'like' hisoblagichi. Narxi — metadata o'sishi (tombstone) va murakkab semantika (masalan o'chirish-qo'shish raqobati)."
     }
   ]

@@ -168,20 +168,6 @@ button{font:inherit;color:inherit}
 .qtext code,.opt code,.exp code{font-family:var(--mono);font-size:.86em;background:var(--accent-soft);padding:1px 6px;border-radius:5px;font-weight:600}
 pre{background:var(--code-bg);color:var(--code-ink);font:13px/1.65 var(--mono);padding:16px 18px;border-radius:14px;overflow-x:auto;margin:0 0 18px;white-space:pre}
 .opts{display:grid;gap:10px}
-.opt{display:grid;grid-template-columns:30px 1fr;gap:14px;align-items:start;text-align:left;border:1.5px solid var(--line);background:var(--card);font-weight:500;font-size:15px;line-height:1.5;padding:14px 16px;border-radius:14px;cursor:pointer;transition:border-color .12s,background .12s,transform .12s}
-.opt:hover:not([disabled]){border-color:var(--faint);transform:translateX(2px)}
-.opt .k{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font:700 13px var(--mono);background:var(--bg-2);color:var(--muted)}
-.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
-.opt.sel .k{background:var(--accent);color:#fff}
-.opt.right{border-color:var(--ok);background:var(--ok-soft)}
-.opt.right .k{background:var(--ok);color:#fff}
-.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
-.opt.wrong .k{background:var(--bad);color:#fff}
-.opt[disabled]{cursor:default}
-.opt.dim{opacity:.55}
-textarea{width:100%;min-height:150px;resize:vertical;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--ink);font:15px/1.6 var(--sans);padding:14px 16px;outline:none}
-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
-textarea.sql{font:13.5px/1.6 var(--mono)}
 .bar-act{display:flex;gap:10px;align-items:center;margin-top:20px;flex-wrap:wrap}
 .bar-act .sp{flex:1}
 .hint{font-size:12px;color:var(--faint)}
@@ -329,8 +315,6 @@ body:after{background:var(--accent-2);right:-16vmax;bottom:-18vmax;animation:blo
 .pbar i{transition:width .5s cubic-bezier(.3,1.2,.5,1)}
 .pbar i.a{background-size:200% 100%;background-image:linear-gradient(90deg,var(--accent),var(--accent-2),var(--accent));animation:flow 2.5s linear infinite}
 @keyframes flow{to{background-position:-200% 0}}
-.opt{transition:border-color .15s,background .15s,transform .2s cubic-bezier(.3,1.6,.5,1),opacity .3s}
-.opt.sel .k{animation:pop .3s cubic-bezier(.3,1.8,.5,1)}
 .show-btn:after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-100%);animation:sweep 3s ease-in-out 1s infinite}
 @keyframes sweep{40%,to{transform:translateX(100%)}}
 .sheet{animation:fade .2s}
@@ -346,17 +330,13 @@ body:after{background:var(--accent-2);right:-16vmax;bottom:-18vmax;animation:blo
 @keyframes pop{from{opacity:0;transform:scale(.6)}}
 .anim .qcard{animation:cardIn .45s cubic-bezier(.2,1,.3,1) both}
 @keyframes cardIn{from{opacity:0;transform:translateX(40px) rotate(1.5deg) scale(.97)}}
-.anim .qcard .opt{animation:rise .4s cubic-bezier(.2,.9,.3,1.1) both;animation-delay:calc(120ms + var(--i,0)*55ms)}
 .qcard.out{animation:cardOut .2s ease-in forwards!important}
 @keyframes cardOut{to{opacity:0;transform:translateX(-60px) rotate(-2deg) scale(.96)}}
 .anim .flip,.anim-rev .flip{animation:rise .4s ease-out both}
 .anim-rev .verdict{animation:pop .45s cubic-bezier(.3,1.7,.5,1) both}
 .anim-rev .verdict .ic{animation:spin .6s cubic-bezier(.3,1.5,.5,1)}
-.anim-rev .opt.right{animation:glow 1s ease-out}
 @keyframes glow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}to{box-shadow:0 0 0 14px transparent}}
-.anim-rev .opt.wrong{animation:shake .45s}
 @keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
-.anim-rev .opt.dim{transition:opacity .5s}
 .anim-rev .exp h5,.anim-rev .exp p,.anim-rev .exp ul,.anim-rev .exp pre,.anim-rev .keys{animation:rise .45s ease-out both;animation-delay:calc(200ms + var(--i,0)*60ms)}
 .anim-rev .ease button,.anim .ease button{animation:bounceIn .5s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(250ms + var(--i,0)*60ms)}
 @keyframes bounceIn{from{opacity:0;transform:translateY(24px) scale(.8)}}
@@ -399,8 +379,6 @@ body:before,body:after{opacity:.22}
 .btn.primary{background-size:200% 100%;background-image:linear-gradient(110deg,var(--accent),var(--accent-2),var(--accent));transition:background-position .6s,transform .15s cubic-bezier(.3,1.6,.5,1),box-shadow .2s}
 .btn.primary:hover:not([disabled]){background-position:100% 0}
 .dk.l0 .ico{box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 40%,transparent)}
-.opt{background:var(--glass)}
-.opt:hover:not([disabled]){box-shadow:0 6px 18px -8px color-mix(in srgb,var(--accent) 50%,transparent)}
 .sheet{backdrop-filter:blur(6px)}
 @media (prefers-reduced-motion:reduce){.qcard{transform:none}}
 .deep{margin-top:14px;border:1px solid var(--line,#8884);border-radius:12px;overflow:hidden}
@@ -419,7 +397,6 @@ body:before,body:after{opacity:.22}
 <div class="page" id="app"></div>
 <script>
 const LV={J:"Junior",M:"Middle",S:"Senior",St:"Staff",P:"Principal"};
-const TY={mcq:"ABC",code:"Kod",sql:"SQL yoz",open:"Ochiq"};
 const QD=[];
 const secOf=q=>Object.keys(SEC).find(k=>SEC[k][2]===q.d&&SEC[k][1].includes(q.tp));
 const GRP={"backend":["Backend","⚙︎",["go","db","nosql","msg","api","arch","sec","fin","soft","tricky"]],"devops":["DevOps","☁︎",["infra"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]]};
@@ -440,7 +417,7 @@ if(S.theme)document.documentElement.dataset.theme=S.theme;
 
 // ---------- sozlamalar ----------
 if(!S.cfg||typeof S.cfg!=="object")S.cfg={};
-S.cfg={newDay:20,ret:.9,...S.cfg};S.cfg.fc=true; // doim flashcard: variantlar ko'rsatilmaydi, bitta javob
+S.cfg={newDay:20,ret:.9,...S.cfg};
 if(!Array.isArray(S.open))S.open=[];
 if(S.sess&&(!S.sess.rev||!S.sess.done))S.sess=null;
 if(!S.nt||typeof S.nt!=="object")S.nt={day:"",n:0,extra:0};
@@ -512,7 +489,6 @@ const dayKey=(t=now())=>{const d=new Date(t-4*36e5);return d.getFullYear()+"-"+S
 const lvlOk=q=>!S.lvl.length||S.lvl.includes(q.l);
 const newLeft=()=>{if(S.nt.day!==dayKey())S.nt={day:dayKey(),n:0,extra:0};return Math.max(0,S.cfg.newDay+S.nt.extra-S.nt.n);};
 function streak(){const set=new Set(S.days);let d=now(),n=0;if(!set.has(dayKey(d)))d-=DAY;while(set.has(dayKey(d))){n++;d-=DAY;}return n;}
-function hits(q,txt){const u=txt.toUpperCase().replace(/\s+/g," ");return q.k.map(k=>({k:k.split("|")[0],hit:k.split("|").some(p=>u.includes(p.toUpperCase()))}));}
 function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.id="toast";t.style.cssText="position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:700;z-index:99;box-shadow:var(--shadow-lg);transition:opacity .3s";document.body.appendChild(t);}
   t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2200);}
 
@@ -547,11 +523,10 @@ function queue(qs){qs=qs.filter(lvlOk);const t=now();
 
 // ---------- routing ----------
 let V={view:S.sess?"study":"decks",deck:"",search:""};
-let draft={};
 function go(view,extra={}){V={...V,view,...extra};closeSheet();render();window.scrollTo({top:0});}
 function startSession(title,ids,deck,mode){
   if(!ids.length){toast("Bu tanlovda karta yo'q"+(S.lvl.length?" (daraja filtri yoqilgan)":""));return;}
-  S.sess={title,ids,i:0,done:{},rev:{},deck,mode};S.undo=null;draft={};save();go("study",{deck});
+  S.sess={title,ids,i:0,done:{},rev:{},deck,mode};S.undo=null;save();go("study",{deck});
 }
 const study=id=>startSession(DECK[id].name,queue(DECK[id].qs),id,"std");
 
@@ -639,7 +614,7 @@ function searchView(){
 function studyView(){
   const s=S.sess;if(!s)return decksView();
   if(s.i>=s.ids.length)return finishView();
-  const q=QBY[s.ids[s.i]],rv=s.rev[s.i],sel=rv?rv.v:draft[q.id];
+  const q=QBY[s.ids[s.i]],rv=s.rev[s.i];
   // qolgan kartalar (Anki: ko'k/qizil/yashil)
   const rest={new:0,learn:0,rev:0};new Set(s.ids.slice(s.i)).forEach(id=>rest[cat(QBY[id])]++);
   const cc=cat(q),back=s.deck&&DECK[s.deck]?()=>go("overview",{deck:s.deck}):()=>go("decks");
@@ -647,48 +622,26 @@ function studyView(){
     ${S.undo?`<button class="btn ghost sm" ${act(undo)} title="Bekor qilish (Z)">↶</button>`:""}
     <span class="cts"><span class="c-new ${cc==="new"?"cur":""}">${rest.new}</span><span class="c-learn ${cc==="learn"?"cur":""}">${rest.learn}</span><span class="c-rev ${cc==="rev"?"cur":""}">${rest.rev}</span></span></div>
     <div class="pbar"><i class="a" style="width:${s.i/s.ids.length*100}%"></i></div></div><div class="stage">`;
-  h+=`<div class="card qcard"><div class="tags"><span class="tag lv">${LV[q.l]}</span><span class="tag">${TY[q.t]}</span><span class="tag">${esc(SEC[secOf(q)][0])} · ${esc(q.tp)}</span><span class="n">#${esc(q.n)}</span></div>
+  h+=`<div class="card qcard"><div class="tags"><span class="tag lv">${LV[q.l]}</span><span class="tag">${esc(SEC[secOf(q)][0])} · ${esc(q.tp)}</span><span class="n">#${esc(q.n)}</span></div>
     <p class="qtext">${q.f?inline(q.f):q.q}</p>${q.c?`<pre>${esc(q.c)}</pre>`:""}`;
-  if(S.cfg.fc&&!rv){}
-  else if(q.o&&S.cfg.fc){}
-  else if(q.o){
-    h+=`<div class="opts" role="radiogroup">`+q.o.map((o,i)=>{let c="opt";
-      if(rv){if(i===q.a)c+=" right";else if(i===rv.v)c+=" wrong";else c+=" dim";}else if(sel===i)c+=" sel";
-      return `<button class="${c}" ${rv?"disabled":act(()=>{draft[q.id]=i;render();})} role="radio" aria-checked="${sel===i}"><span class="k">${"ABCD"[i]}</span><span>${inline(o)}</span></button>`;}).join("")+`</div>`;
-  }else h+=`<textarea id="ta" class="${q.t==="sql"?"sql":""}" placeholder="${q.t==="sql"?"SELECT … (ixtiyoriy)":"Javobni o'ylang yoki yozing (ixtiyoriy)…"}" ${rv?"readonly":""}>${esc(rv?rv.v:(draft[q.id]||""))}</textarea>`;
   if(!rv)h+=`<button class="btn primary show-btn" id="show" ${act(()=>reveal(q))}>Javobni ko'rsatish <span class="hint" style="color:inherit;opacity:.7">Space</span></button></div>`;
   else h+=answerView(q,rv)+`</div>`+easeBar(q,rv);
   return h+`</div>`;
 }
 function answerView(q,rv){
   let h=`<div class="flip">`;
-  if(q.b&&S.cfg.fc){
     h+=`<h5>Javob</h5><div class="ans">${md(q.b)}</div>`;
     if(q.g&&typeof GLO!=="undefined")h+=`<details class="glo" open><summary>📖 Atamalar</summary><ul>${q.g.map(i=>`<li><b>${esc(GLO[i][0])}</b> — ${inline(GLO[i][1])}</li>`).join("")}</ul></details>`;
     h+=`<div class="exp"><details class="deep"><summary>Batafsil tushuntirish</summary><div class="deep-in">${q.x?md(q.x):`<p>${inline(q.e)}</p>`}</div></details>`;
     if(q.src)h+=`<div class="src">Manba: <a href="${esc(q.src)}" target="_blank" rel="noopener noreferrer">${esc(q.src.replace(/^https?:\/\//,"").split("/")[0])}</a></div>`;
-    return h+`</div></div>`;}
-  if(q.o&&S.cfg.fc)h+=`<h5>Javob</h5><div class="verdict ok">${inline(q.o[q.a])}</div>`;
-  else if(q.o)h+=rv.v===q.a?`<div class="verdict ok"><span class="ic">✓</span>To'g'ri!</div>`:`<div class="verdict bad"><span class="ic">✕</span>${rv.v==null?"Javob tanlanmadi":"Noto'g'ri"} — to'g'ri javob ${"ABCD"[q.a]}</div>`;
-  h+=`<div class="exp">`;
-  if(q.t==="sql")h+=`${S.cfg.fc?"":`<h5>Kalit elementlar</h5><div class="keys">${hits(q,rv.v||"").map(x=>`<span class="${x.hit?"hit":"miss"}">${esc(x.k)}</span>`).join("")}</div>`}<h5>Namuna yechim</h5><pre>${esc(q.m)}</pre>`;
-  if(q.t==="open")h+=`<h5>Kuchli javobda bo'lishi kerak</h5><ul>${q.m.map(x=>`<li>${inline(x)}</li>`).join("")}</ul>`;
-  h+=`<h5>Izoh</h5><p>${inline(q.e)}</p>`;
-  if(q.x)h+=`<details class="deep"><summary>Batafsil tushuntirish</summary><div class="deep-in">${md(q.x)}</div></details>`;
-  if(q.src)h+=`<div class="src">Manba: <a href="${esc(q.src)}" target="_blank" rel="noopener noreferrer">${esc(q.src.replace(/^https?:\/\//,"").split("/")[0])}</a></div>`;
-  return h+`</div></div>`;
+    return h+`</div></div>`;
 }
 function easeBar(q,rv){
   const p=S.srs[q.id]||null;
   return `<div class="ease" role="group" aria-label="Qanchalik esladingiz?">`+EASE.map(([e,l],i)=>`<button class="e-${e} ${rv.sug===e?"sug":""}" data-e="${e}" ${act(()=>answer(q,e))}><small>${ivLabel(sched(p,e).due-now())}</small>${l}<kbd>${i+1}</kbd></button>`).join("")+`</div>`;
 }
 function reveal(q){
-  const s=S.sess;let v,sug="";
-  if(S.cfg.fc)v=null;
-  else if(q.o){v=draft[q.id]??null;sug=v===q.a?"good":"again";}
-  else{v=(draft[q.id]||"").trim();
-    if(q.t==="sql"&&v){const hs=hits(q,v),n=hs.filter(x=>x.hit).length;sug=n===hs.length?"good":n>=hs.length/2?"hard":"again";}}
-  s.rev[s.i]={v,sug};delete draft[q.id];save();render();
+  const s=S.sess;s.rev[s.i]={v:null,sug:""};save();render();
 }
 let busy=false;
 function answer(q,e){
@@ -771,7 +724,6 @@ function render(){
   if(bar&&window.requestAnimationFrame){const w=bar.style.width;if(!RM()){bar.style.width=lastPct+"%";requestAnimationFrame(()=>requestAnimationFrame(()=>bar.style.width=w));}lastPct=parseFloat(w)||0;}
   if(navAnim&&!RM()){app.querySelectorAll(".today .v,.ov-counts b,.tri b").forEach(countUp);if(app.querySelector(".done"))confetti();}
   const sq=$("#sq");if(sq)sq.oninput=e=>{V.search=e.target.value;const pos=e.target.selectionStart;render();const n=$("#sq");n.focus();n.setSelectionRange(pos,pos);};
-  const ta=$("#ta");if(ta&&!ta.readOnly)ta.oninput=()=>draft[S.sess.ids[S.sess.i]]=ta.value;
 }
 document.addEventListener("keydown",e=>{
   const tag=e.target.tagName;
@@ -785,7 +737,6 @@ document.addEventListener("keydown",e=>{
   const show=$("#show");
   if(show){
     if(e.key===" "||e.key==="Enter"){e.preventDefault();show.click();return;}
-    if(/^[1-4]$/.test(e.key)){const b=document.querySelectorAll(".opt:not([disabled])")[+e.key-1];b&&b.click();}
     return;}
   if(/^[1-4]$/.test(e.key)){const b=document.querySelector(`.ease [data-e="${EASE[+e.key-1][0]}"]`);b&&b.click();}
   else if(e.key===" "||e.key==="Enter"){e.preventDefault();const b=document.querySelector(".ease .sug")||document.querySelector('.ease [data-e="good"]');b&&b.click();}

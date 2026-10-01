@@ -11,18 +11,11 @@
       "id": 9000,
       "code": "S1",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Parollarni saqlashning to'g'ri usuli?",
-      "options": [
-        "SHA-256 bilan hash qilish",
-        "Parolga mo'ljallangan sekin algoritm: Argon2id (yoki bcrypt/scrypt) — har parol uchun alohida salt va sozlanadigan narx (cost) bilan",
-        "AES bilan shifrlash va key'ni saqlash",
-        "Base64 bilan kodlash"
-      ],
-      "answer": 1,
       "explanation": "SHA-256 juda tez — GPU bilan sekundiga milliardlab urinish qilinadi. Argon2id xotira va vaqtni ataylab sarflaydi. Salt rainbow table'ga qarshi, har foydalanuvchida alohida. Shifrlash noto'g'ri: kalit sizsa hamma parol ochiladi, hash esa qaytarilmaydi. Qo'shimcha: parol uzunligiga urg'u (12+), buzilgan parollar ro'yxati bilan tekshirish, login'ga rate limit.",
       "source": "https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html"
     },
@@ -30,55 +23,34 @@
       "id": 9001,
       "code": "S2",
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Bu kodda qanday zaiflik bor?",
       "snippet": "query := \"SELECT * FROM users WHERE email = '\" + email + \"'\"\nrows, _ := db.Query(query)",
-      "options": [
-        "Zaiflik yo'q",
-        "SQL injection: email ichidagi tirnoq query'ni buzadi (' OR '1'='1). Yechim — parametrli query: db.Query(\"SELECT ... WHERE email = $1\", email)",
-        "Faqat performance muammosi",
-        "XSS"
-      ],
-      "answer": 1,
       "explanation": "Qochirish (escaping) funksiyasini o'zingiz yozish ham yechim emas — drayverning parametr mexanizmi ishlatiladi, u qiymatni query matnidan butunlay ajratadi. Dinamik bo'lishi kerak bo'lgan qismlar (table/column nomi, ORDER BY yo'nalishi) parametr bo'la olmaydi — ular uchun faqat allowlist. ORM ishlatganda ham raw query joylariga alohida e'tibor."
     },
     {
       "id": 9002,
       "code": "S3",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "JWT tekshirishda eng xavfli xato?",
-      "options": [
-        "Token'ni cookie'da saqlash",
-        "Header'dagi <code>alg</code> ga ishonish: <code>alg: none</code> yoki RS256 o'rniga HS256 ga almashtirish hujumi — server kutilgan algoritmni QATTIQ belgilashi va public key'ni HMAC siri sifatida ishlatmasligi kerak",
-        "Token muddatini qo'yish",
-        "Payload'da user_id saqlash"
-      ],
-      "answer": 1,
       "explanation": "Boshqa majburiy tekshiruvlar: exp/nbf, iss va aud, kalit identifikatori (kid) — faqat o'z kalitlaringiz ro'yxatidan. Payload shifrlanmagan (faqat imzolangan) — maxfiy ma'lumot solmang. Kutubxonani o'zingiz yozmang, tekshirilgan kutubxona ishlating."
     },
     {
       "id": 9003,
       "code": "S4",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Broken Access Control (IDOR) nima va qanday yopiladi?",
-      "options": [
-        "Parolni zaif qo'yish",
-        "<code>/invoices/1042</code> ni boshqa foydalanuvchi ochib ko'rishi — ruxsat har so'rovda, ma'lumot egaligiga qarab tekshirilmagani uchun. Yechim: har query'ga tenant/user sharti, markaziy authorization qatlami va testlar",
-        "Brauzer keshi",
-        "Eski kutubxona"
-      ],
-      "answer": 1,
       "explanation": "'ID'ni UUID qilish' — himoya emas, faqat topishni qiyinlashtiradi. Ishonchli yondashuvlar: repository darajasida majburiy scope (WHERE user_id = :me), Postgres RLS, va CI'da avtomatik test: B foydalanuvchining tokeni bilan A resursiga so'rov — 403 bo'lishi shart. OWASP Top 10 da birinchi o'rinda turadi.",
       "source": "https://owasp.org/Top10/A01_2021-Broken_Access_Control/"
     },
@@ -86,308 +58,187 @@
       "id": 9004,
       "code": "S5",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "SSRF (Server Side Request Forgery) nima?",
-      "options": [
-        "Client brauzerida skript ishlatish",
-        "Foydalanuvchi bergan URL'ga server o'zi so'rov yuboradi — hujumchi uni ichki tarmoqqa (169.254.169.254 metadata, localhost, ichki admin panel) yo'naltiradi",
-        "Parolni o'g'irlash",
-        "DNS hujumi"
-      ],
-      "answer": 1,
       "explanation": "Bulutda ayniqsa xavfli: metadata endpoint orqali IAM credential o'g'irlanadi (IMDSv2 buni yumshatadi). Himoya: allowlist (faqat ruxsat etilgan domenlar), DNS'ni tekshirgandan keyin IP'ni qayta tekshirish (DNS rebinding'ga qarshi), private IP diapazonlarini bloklash, redirect'larni kuzatmaslik, chiquvchi trafik uchun alohida proxy va tarmoq qoidalari."
     },
     {
       "id": 9005,
       "code": "S6",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "XSS'dan himoyaning asosiy qoidasi?",
-      "options": [
-        "Kirishda barcha < va > belgilarini o'chirish",
-        "Chiqishda kontekstga mos qochirish (HTML, atribut, JS, URL uchun turlicha) — odatda shablon dvigateli avtomatik qiladi; qo'shimcha qatlam sifatida Content-Security-Policy",
-        "Faqat HTTPS ishlatish",
-        "Cookie'ni o'chirish"
-      ],
-      "answer": 1,
       "explanation": "Kirishni 'tozalash' yetarli emas: bir xil qiymat HTML matnida xavfsiz, JS ichida xavfli bo'lishi mumkin. Xavfli naqshlar: innerHTML, dangerouslySetInnerHTML, foydalanuvchi bergan URL'ni href'ga qo'yish (javascript:). Cookie'ga HttpOnly qo'yish token o'g'irlanishini qiyinlashtiradi, lekin XSS'ning o'zini yo'q qilmaydi."
     },
     {
       "id": 9006,
       "code": "S7",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Cookie asosidagi sessiyada CSRF'dan qanday himoyalanasiz?",
-      "options": [
-        "HTTPS yetarli",
-        "SameSite=Lax/Strict cookie + holat o'zgartiruvchi so'rovlarga CSRF token (yoki double submit); GET faqat o'qish uchun bo'lsin",
-        "Faqat POST ishlatish",
-        "CORS ni ochib qo'yish"
-      ],
-      "answer": 1,
       "explanation": "Nima uchun bu ishlaydi: hujumchi sayti so'rov yubora oladi, lekin token qiymatini o'qiy olmaydi (same-origin policy). Bearer token'ni header'da yuboradigan API'larda CSRF odatda muammo emas — chunki brauzer header'ni avtomatik qo'shmaydi. SameSite=None bo'lsa Secure majburiy."
     },
     {
       "id": 9007,
       "code": "S8",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Foydalanuvchi ma'lumotlarini shifrlashda kalitlarni qanday boshqarasiz?",
-      "options": [
-        "Kalitni kod ichida konstanta sifatida saqlash",
-        "KMS/HSM (AWS KMS, Vault): ma'lumot kaliti (DEK) bilan shifrlanadi, DEK esa master kalit (KEK) bilan o'raladi — envelope encryption; master kalit hech qachon ilovaga chiqmaydi va rotatsiya qilinadi",
-        "Kalitni DB'ning o'zida saqlash",
-        "Har foydalanuvchiga bitta doimiy kalit"
-      ],
-      "answer": 1,
       "explanation": "Rotatsiya uchun shifrlangan qiymat bilan birga kalit versiyasini saqlang — eski ma'lumotni bir vaqtning o'zida qayta shifrlash shart emas. Diskni shifrlash (at rest) faqat o'g'irlangan disk holatidan himoya qiladi — ilova darajasidagi maxfiy maydonlar (karta, pasport) alohida shifrlanadi. Nima shifrlanganini va kim ochishi mumkinligini hujjatlashtiring."
     },
     {
       "id": 9008,
       "code": "S9",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Audit log uchun qaysi talab to'g'ri?",
-      "options": [
-        "Oddiy ilova logi yetarli",
-        "Kim, nima, qachon, qaysi resurs ustida va natija — o'zgartirib bo'lmaydigan (append-only, alohida saqlash, cheklangan ruxsat) tarzda; maxfiy qiymatlar (parol, token, karta) loglanmaydi",
-        "Faqat xatolarni yozish",
-        "Loglarni 1 kun saqlash"
-      ],
-      "answer": 1,
       "explanation": "Audit log — hodisadan keyin tergov va compliance uchun yagona manba. Talablar: aniq vaqt manbai (NTP), o'zgartirishni aniqlash (hash zanjiri yoki WORM saqlash), saqlash muddati (ko'pincha 1–7 yil), va loglarga kirishning o'zi ham audit qilinishi. PII loglash — alohida xavf: GDPR bo'yicha o'chirish talabini bajarish qiyinlashadi."
     },
     {
       "id": 9009,
       "code": "S10",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Ta'minot zanjiri (supply chain) xavfini qanday kamaytirasiz?",
-      "options": [
-        "Faqat mashhur kutubxonalarni ishlatish",
-        "Versiyalarni lock fayl bilan qotirish va checksum'ni tekshirish, avtomatik zaiflik skani (govulncheck, Dependabot), SBOM, build'ni ishonchli muhitda qilish va artefaktni imzolash (Sigstore), yangilanishlarni review bilan",
-        "Har kuni hamma paketni yangilash",
-        "Vendor papkaga ko'chirish yetarli"
-      ],
-      "answer": 1,
       "explanation": "Real hujumlar: buzilgan paket versiyasi (event-stream), typosquatting, CI credential o'g'irlanishi (Codecov). Go'da module proxy va checksum DB (sum.golang.org) allaqachon kuchli himoya beradi. Qo'shimcha: CI'da sirlarni minimal huquq bilan berish va pull request'lardan sirlarga kirishni bloklash."
     },
     {
       "id": 9010,
       "code": "S11",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Login endpoint'ini brute force'dan qanday himoya qilasiz?",
-      "options": [
-        "Faqat murakkab parol talab qilish",
-        "Ko'p qatlam: IP va akkaunt bo'yicha rate limit (exponential backoff), bir necha urinishdan keyin CAPTCHA yoki vaqtinchalik bloklash, buzilgan parollar ro'yxati, MFA; javoblar bir xil bo'lsin — 'user topilmadi' va 'parol xato' farqlanmasin",
-        "Login'ni yashirish",
-        "Faqat CAPTCHA"
-      ],
-      "answer": 1,
       "explanation": "Aniq xabar (user enumeration) hujumchiga mavjud akkauntlar ro'yxatini beradi. Credential stuffing (boshqa saytdan o'g'irlangan parollar) uchun rate limit kam — MFA va buzilgan parol tekshiruvi kuchliroq. Shuningdek: parolni tiklash oqimi ham bir xil himoyalanishi kerak (ko'pincha unutiladi)."
     },
     {
       "id": 9011,
       "code": "S12",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Ichki servislar orasidagi aloqani qanday himoyalaysiz (zero trust)?",
-      "options": [
-        "Ichki tarmoq ishonchli — himoya kerak emas",
-        "Har chaqiruv autentifikatsiya qilinadi: mTLS yoki imzolangan servis token'lari, eng kam huquq bilan avtorizatsiya, vaqtinchalik credential (rotatsiya avtomatik), tarmoq siyosati (NetworkPolicy) bilan qo'shimcha cheklov",
-        "Faqat VPN yetarli",
-        "IP allowlist yetarli"
-      ],
-      "answer": 1,
       "explanation": "'Perimetr ichida ishonch' modeli bitta buzilgan pod butun tizimga kirish demakligini anglatadi. Amaliy qadamlar: servis identifikatori (SPIFFE/IRSA), sirlarni Vault/KMS orqali qisqa muddatga berish, audit, va lateral harakatni cheklash uchun segmentatsiya."
     },
     {
       "id": 9012,
       "code": "S13",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Production'da sir (API key) git repozitoriyga tushib ketdi. Qadamlaringiz?",
-      "modelAnswer": [
-        "Birinchi navbatda kalitni bekor qilish va yangisini chiqarish (rotatsiya) — tarixni tozalash ikkinchi darajali, chunki kalit allaqachon oshkor",
-        "Ta'sirni baholash: kalit nimaga kirish berardi, loglarda suiiste'mol bormi (auth loglari, g'ayrioddiy trafik)",
-        "Repo public bo'lganmi, qancha vaqt turgan, forklar va CI keshlari",
-        "Tarixni tozalash (git filter-repo) va ochiq fork/kesh egalari bilan ishlash",
-        "Oldini olish: pre-commit secret scanner, CI'da skan, sirlarni faqat secret manager orqali berish",
-        "Incident sifatida hujjatlashtirish va postmortem"
-      ],
       "explanation": "Eng ko'p uchraydigan xato — faqat commit'ni o'chirib 'hal bo'ldi' deb hisoblash. Kalit oshkor bo'lgan lahzadan boshlab ishonchsiz. Tezlik muhim: public repoda sirlar bir necha daqiqada avtomatik skanerlar tomonidan topiladi."
     },
     {
       "id": 9013,
       "code": "S14",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Mahsulotga xavfsizlikni qanday tizimli singdirasiz (jarayon sifatida)?",
-      "modelAnswer": [
-        "Threat modeling: yangi feature uchun 'kim, nimani, qanday buzishi mumkin' (STRIDE) — dizayn bosqichida",
-        "Guardrail'lar: xavfsiz default'lar, markaziy auth kutubxonasi, shablon servis (paved road)",
-        "Avtomatlashtirish: SAST/DAST, dependency skan, secret skan, IaC skan — CI'da bloklovchi qoidalar bilan",
-        "Ruxsatlar: eng kam huquq, vaqtinchalik kirish (JIT), muntazam ruxsat auditi",
-        "Tayyorgarlik: incident response plani, bug bounty yoki tashqi pentest, xavfsizlik incidentlari bo'yicha postmortem",
-        "O'lchov: kritik zaifliklarni tuzatish vaqti (MTTR), qoplangan servislar ulushi"
-      ],
       "explanation": "Staff/Principal signal: xavfsizlikni bitta jamoaning 'darvozaboni' emas, muhandislik jarayonining bir qismi sifatida ko'rish. Eng samarali chora — xavfli narsani qilish qiyin, xavfsizini oson qilib qo'yish."
     },
     {
       "id": 30219,
       "code": "SN220",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Fayl yuklash funksiyasi bor. Xavfsizlik nazorati ro'yxati?",
-      "options": [
-        "Kengaytmani tekshirish yetarli",
-        "Hajm va tur cheklovi (mazmun bo'yicha sniffing, kengaytmaga ishonmaslik), fayl nomini normalizatsiya (path traversal), alohida domen/bucket'da saqlash va `Content-Disposition: attachment` bilan berish, `X-Content-Type-Options: nosniff`, antivirus/sandbox skan, imzolangan URL bilan kirish",
-        "Faqat hajmni cheklash",
-        "Faqat autentifikatsiya"
-      ],
-      "answer": 1,
       "explanation": "Eng xavfli ssenariylar: SVG/HTML yuklab XSS (shuning uchun alohida domen yoki attachment), `../../etc/passwd` bilan traversal, ZIP bomb (dekompressiya limiti), va rasm parseridagi zaifliklar. Fayl app serveridan emas, obyekt saqlashdan imzolangan URL bilan berilishi kerak — bu ham xavfsizlik, ham miqyos jihatidan to'g'ri."
     },
     {
       "id": 30220,
       "code": "SN221",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Parol tiklash (reset) oqimini xavfsiz qanday quriladi?",
-      "options": [
-        "Email'ga parolni yuborish",
-        "Bir martalik, tasodifiy (128+ bit) token — DB'da hash holida, qisqa TTL (15-60 daqiqa), ishlatilgach bekor qilinadi; javob har doim bir xil ('agar email mavjud bo'lsa yuborildi'), rate limit, tiklashdan keyin barcha sessiyalar bekor qilinadi",
-        "Xavfsizlik savoli bilan",
-        "Token'ni URL'da `user_id` bilan birga yuborish yetarli"
-      ],
-      "answer": 1,
       "explanation": "Detallar muhim: token DB'da ochiq saqlansa DB leak'da hisoblar egallanadi (shuning uchun hash); javob farq qilsa foydalanuvchi mavjudligi oshkor bo'ladi (enumeration); sessiyalar bekor qilinmasa hujumchi kirishda qoladi. Bundan tashqari email o'zgartirishda eski manzilga ogohlantirish yuborilishi kerak."
     },
     {
       "id": 30221,
       "code": "SN222",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Ichki admin panel faqat VPN orqasida. Bu yetarlimi?",
-      "options": [
-        "Ha, ichki tarmoq ishonchli",
-        "Yo'q — zero trust: autentifikatsiya va avtorizatsiya har so'rovda, MFA, harakatlar audit log'i, kritik amallarga ikki kishi tasdig'i (four-eyes), va eng kam huquq; VPN faqat qo'shimcha qatlam",
-        "Faqat IP allowlist yetarli",
-        "Faqat HTTPS yetarli"
-      ],
-      "answer": 1,
       "explanation": "VPN kompromis bo'lgan ishchi noutbuki yoki ichki hujumchini to'xtatmaydi, shuningdek SSRF orqali ichki panelga so'rov yuborilishi mumkin. Admin harakatlari (mablag' o'zgartirish, foydalanuvchi ma'lumoti ko'rish) audit qilinishi va PII ko'rish sababini so'rashi kerak — bu compliance talabi ham."
     },
     {
       "id": 30273,
       "code": "SN274",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "OWASP Top 10'dagi 'Broken Access Control' backend kodida qanday tizimli yopiladi?",
-      "options": [
-        "Frontendda tugmalarni yashirish",
-        "Default-deny: har endpoint uchun aniq ruxsat talabi (middleware/policy), obyekt egaligini ma'lumot qatlamida majburiy filtr bilan tekshirish, ID'ni tokendan olish, va avtotestlar (A foydalanuvchi B resursiga kirishga urinishi)",
-        "Faqat JWT tekshirish",
-        "Faqat rate limit"
-      ],
-      "answer": 1,
       "explanation": "Eng ko'p uchraydigan real zaiflik turi. Amaliy qadamlar: yangi route qo'shilganda ruxsat talabini majburiy qilish (framework darajasida 'auth yo'q' aniq belgilanishi kerak), repository'da tenant filtri, admin endpoint'larini alohida guruhga ajratish, va har PR'da ruxsat testlari. Ko'rish (read) ham access control — ko'pincha faqat yozuv tekshiriladi."
     },
     {
       "id": 30274,
       "code": "SN275",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Bog'liqliklardagi zaifliklarni (supply chain) qanday boshqarasiz?",
-      "options": [
-        "Yiliga bir marta yangilash",
-        "Doimiy skan (`govulncheck`, Dependabot/Renovate), lockfile va hash bilan qotirilgan versiyalar, SBOM generatsiyasi, konteyner image skani, va yangilanishni avtomatik PR + CI testi bilan kichik qadamlarda qilish",
-        "Faqat productionda tekshirish",
-        "Barcha bog'liqliklarni o'zi yozish"
-      ],
-      "answer": 1,
       "explanation": "Muhim farq: 'zaiflik bor' va 'zaiflik chaqirilyapti' — `govulncheck` faqat haqiqatda ishlatiladigan yo'llarni ko'rsatadi, shuning uchun shovqin kam va prioritet aniq. Qo'shimcha xatarlar: typosquatting paketlar, `go install` bilan noma'lum manba, va build vaqtidagi skriptlar. Bazaviy image'larni muntazam yangilash ham shu ishning bir qismi."
     },
     {
       "id": 30275,
       "code": "SN276",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Log'larda shaxsiy ma'lumot (PII) va sirlar bo'lmasligini qanday ta'minlanadi?",
-      "options": [
-        "Ishonch bilan — dasturchilar yozmaydi",
-        "Strukturaviy logger'da maydon darajasida maskalash (karta, token, parol, email siyosatga qarab), `String()`/`MarshalJSON` metodlarida maxfiy maydonlarni yashirish, request/response body'ni to'liq log qilmaslik, va CI'da sirlarni aniqlash skani",
-        "Log'larni butunlay o'chirish",
-        "Faqat production'da maskalash"
-      ],
-      "answer": 1,
       "explanation": "Amaliy usul: maxfiy turlar uchun maxsus tip (`type Token string` + `func (t Token) String() string { return \"[REDACTED]\" }`) — tasodifiy `%v` bilan chiqib ketmaydi. Shuningdek xato matnlariga query parametrlari va URL'dagi tokenlar tushishini tekshirish, retention siyosati va log'larga kirish nazorati (GDPR talablari)."
     },
     {
       "id": 30476,
       "code": "SN477",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "AppSec",
       "domain": "sec",
       "section": "x1",
       "question": "Ko'p tenant'li tizimda ma'lumot izolyatsiyasini qanday isbotlaysiz (nafaqat ta'minlaysiz)?",
-      "options": [
-        "Kod review yetarli",
-        "Avtomatlashtirilgan tekshiruvlar: har endpoint uchun cross-tenant test (A tokeni bilan B resursi — 404/403), RLS yoqilganini migratsiya testi bilan tekshirish, query loglarida tenant filtri yo'q so'rovlarni aniqlash, va davriy ma'lumot auditi (tenant bo'yicha qatorlar sanog'i)",
-        "Faqat penetration test",
-        "Faqat WAF"
-      ],
-      "answer": 1,
       "explanation": "Isbot muhim, chunki bitta yangi endpoint butun izolyatsiyani buzadi. Amaliy vositalar: repository qatlamida tenant kontekstisiz query'ni kompilyatsiya/runtime'da bloklash, PostgreSQL RLS (`FORCE ROW LEVEL SECURITY`), va CI'dagi 'tenant matrix' testlari. Bu SOC2/ISO auditlarida ham talab qilinadigan dalil."
     }
   ]

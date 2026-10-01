@@ -12,18 +12,11 @@
       "id": 78,
       "code": 79,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "OAuth2 authorization code flow qanday ishlaydi?",
-      "options": [
-        "Client foydalanuvchi parolini olib API'ga yuboradi",
-        "Foydalanuvchi provayderda (Google) autentifikatsiyadan o'tadi → client qisqa muddatli authorization code oladi → server o'sha code'ni o'z client_secret'i bilan token'ga almashtiradi. Brauzer/mobil ilova uchun PKCE qo'shiladi",
-        "Token URL'da ochiq uzatiladi",
-        "Faqat backend servislar uchun"
-      ],
-      "answer": 1,
       "explanation": "Nima uchun code almashinuvi: token brauzer tarixida va log'da qolmasligi uchun. Public client (SPA, mobil) client_secret saqlay olmaydi — shuning uchun PKCE majburiy. Boshqa grant'lar: client_credentials (servis-servis), refresh_token. Implicit flow eskirgan va tavsiya etilmaydi.",
       "source": "https://datatracker.ietf.org/doc/html/rfc6749"
     },
@@ -31,18 +24,11 @@
       "id": 79,
       "code": 80,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security",
       "domain": "api",
       "section": "a4",
       "question": "OWASP nuqtai nazaridan qaysi juftlik to'g'ri?",
-      "options": [
-        "SQL injection — faqat eski tizimlarda",
-        "Injection — parametrlangan query'lar bilan; Broken Access Control (IDOR) — har query'da obyekt egaligini tekshirish; XSS — chiqishda kontekstga mos qochirish va CSP; SSRF — chiquvchi query'larni allowlist bilan cheklash",
-        "XSS — bu server xatosi",
-        "CSRF JSON API'da doim bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Eng ko'p uchraydigan real bug — Broken Access Control: /orders/123 ni boshqa foydalanuvchi ochishi. Uni framework o'zi hal qilmaydi — har query'da tenant/egalik tekshiruvi va test kerak. Qo'shimcha: sirlarni kodda saqlamaslik, bog'liqliklarni yangilash (SCA), xavfsiz default sozlamalar.",
       "source": "https://owasp.org/www-project-top-ten/"
     },
@@ -50,271 +36,165 @@
       "id": 1007,
       "code": "B8",
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "JWT: qayerda saqlaysiz va uni qanday bekor qilasiz (revoke)?",
-      "modelAnswer": [
-        "Access token qisqa muddatli (5–15 daq), refresh token uzoq",
-        "Brauzerda: HttpOnly + Secure + SameSite cookie (XSS o'g'irlay olmaydi); localStorage XSSga ochiq",
-        "JWT stateless — o'z-o'zidan bekor qilib bo'lmaydi",
-        "Revoke: refresh tokenni DBda saqlash va o'chirish; rotation + reuse detection; kerak bo'lsa jti denylist (Redis, TTL = token muddati)",
-        "Cookie ishlatilsa CSRF himoyasi (SameSite, CSRF token)"
-      ],
       "explanation": "Middle signal: JWTning 'bekor qilib bo'lmaslik' kamchiligini bilish. Ko'p ilovalar uchun oddiy server session (Redis) JWTdan soddaroq va xavfsizroq."
     },
     {
       "id": 1009,
       "code": "B10",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security",
       "domain": "api",
       "section": "a4",
       "question": "Frontend app.uz, API api.uz. Brauzer 'blocked by CORS policy' xatosi berdi. To'g'ri tushuncha?",
-      "options": [
-        "CORS — server xavfsizligi, query serverga yetib bormaydi",
-        "CORS — brauzer mexanizmi; server Access-Control-Allow-Origin: https://app.uz qaytarishi kerak; curl/Postmanda CORS yo'q",
-        "Frontendda mode:'no-cors' qo'yish yechim",
-        "Access-Control-Allow-Origin: * credentials bilan ham ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "CORS serverni himoya qilmaydi — brauzerdagi foydalanuvchini himoya qiladi. Oddiy bo'lmagan query'larda (PUT, JSON, custom header) avval OPTIONS preflight ketadi. Cookie/credentials bilan * ishlamaydi — aniq origin kerak. no-cors — javobni o'qib bo'lmaydigan opaque qiladi."
     },
     {
       "id": 13002,
       "code": "K3",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "Authentication va authorization farqi?",
-      "options": [
-        "Bir xil narsaning ikki nomi",
-        "Authentication — 'siz kimsiz' (login, token tekshiruvi). Authorization — 'sizga nimaga ruxsat bor' (rol, egalik, siyosat). Token yaroqli bo'lishi bu amalga ruxsat degani EMAS",
-        "Authorization avval bajariladi",
-        "Authentication faqat parol bilan bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Ikkisini aralashtirish — eng ko'p uchraydigan xavfsizlik bug'i (Broken Access Control). Modellar: RBAC (rol bo'yicha), ABAC (atributlar: tenant, egalik, vaqt), ACL (resurs bo'yicha ro'yxat). Amaliy qoida: authorization ma'lumotga eng yaqin joyda (query darajasida) ham tekshirilsin, faqat middleware'ga tayanmasin."
     },
     {
       "id": 13008,
       "code": "K9",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "Server session va token (JWT) asosidagi autentifikatsiya farqi?",
-      "options": [
-        "Token har doim yaxshiroq",
-        "Session: holat serverda (Redis/DB), cookie'da faqat id — bekor qilish oson, lekin umumiy saqlash kerak. JWT: holat token ichida — masshtablash oson, lekin bekor qilish qiyin va token o'lchami katta",
-        "Session stateless",
-        "JWT shifrlangan bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy tanlov: bitta mahsulot va brauzer mijozi bo'lsa — server session (Redis) soddaroq va xavfsizroq. Ko'p servis/mobil/uchinchi tomon uchun — qisqa muddatli JWT + refresh token rotatsiyasi. JWT payload shifrlanmagan — faqat imzolangan; maxfiy ma'lumot solmang."
     },
     {
       "id": 30012,
       "code": "SN13",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "Access token 15 daqiqa yashaydi, foydalanuvchi bloklandi. Qanday qilib darhol kirishni to'xtatamiz?",
-      "options": [
-        "Kutamiz, 15 daqiqada o'zi tugaydi",
-        "Revocation qatlami: `jti`/session ID'ni deny-list (Redis, TTL=token qolgan muddati) yoki `token_version` claim — har request'da tekshiriladi",
-        "JWT secret'ni almashtiramiz",
-        "Refresh token'ni o'chirish yetarli"
-      ],
-      "answer": 1,
       "explanation": "Stateless JWT'ning asosiy narxi — bekor qilish qiyinligi. Amaliy yechimlar: (1) qisqa TTL + refresh rotation, (2) `sid`/`jti` deny-list Redis'da faqat bekor qilinganlar uchun (kichik hajm), (3) user'da `token_version` — token'dagi versiya mos kelmasa rad etiladi. Secret rotation hammani logout qiladi — bu blunt instrument. Muhim resurslarda (pul o'tkazish) har doim serverda holat tekshiriladi."
     },
     {
       "id": 30013,
       "code": "SN14",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "Refresh token rotation'da <b>reuse detection</b> nima qiladi?",
-      "options": [
-        "Token'ni uzaytiradi",
-        "Bir marta ishlatilgan refresh token qayta kelsa — o'g'irlangan deb hisoblab, butun token family/session'ni bekor qiladi",
-        "Har request'da yangi access beradi",
-        "Token hajmini kamaytiradi"
-      ],
-      "answer": 1,
       "explanation": "Rotation: har refresh'da yangi refresh beriladi, eskisi ishlatilgan deb belgilanadi. Eski token qayta kelishi ikki holatni bildiradi — o'g'ri yoki tarmoq retry. Ikkinchisini yumshatish uchun kichik grace oyna (bir necha sekund, bir xil javobni qaytarish) qo'yiladi, aks holda barcha family bekor qilinib foydalanuvchi logout bo'ladi va xavfsizlik hodisasi log'lanadi."
     },
     {
       "id": 30014,
       "code": "SN15",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "JWT'ni tekshirishda qaysi xato eng xavfli?",
-      "options": [
-        "`exp`ni tekshirmaslik",
-        "Token'ning o'z `alg` headeriga ishonish (`none` yoki RS256→HS256 confusion) va `iss`/`aud`ni tekshirmaslik",
-        "Token juda uzun bo'lishi",
-        "Payload'da user ID saqlash"
-      ],
-      "answer": 1,
       "explanation": "Klassik hujum: RS256 uchun public key bilan HS256 imzolangan token yuborish — kutubxona `alg`ga ishonsa, public key HMAC siri bo'lib qoladi. To'g'ri: kutilayotgan algoritmni kodda qattiq belgilash, `kid`ni ishonchli JWKS bilan moslash, `iss`, `aud`, `exp`, `nbf` va kerakli `scope`ni tekshirish. `none` algoritmi har doim o'chirilgan bo'lsin."
     },
     {
       "id": 30015,
       "code": "SN16",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "Servis-servis autentifikatsiyasi uchun senior tanlovi?",
-      "options": [
-        "Umumiy statik API key barcha servislarda",
-        "mTLS (SPIFFE/mesh identity) yoki qisqa muddatli imzolangan token — har servisga alohida identity va avtomatik rotation",
-        "IP allowlist yetarli",
-        "Basic auth ichki tarmoqda xavfsiz"
-      ],
-      "answer": 1,
       "explanation": "Statik umumiy sir: rotation amalda qilinmaydi, kim nima qilganini bilib bo'lmaydi, leak bo'lsa hamma yoqda. mTLS har workload'ga sertifikat beradi (mesh avtomatik rotate qiladi), yoki OAuth2 client credentials bilan qisqa TTL token. Ustiga authorization: har chaqiruvga ruxsat berilgan metod ro'yxati (least privilege), ichki tarmoq 'ishonchli' deb hisoblanmaydi (zero trust)."
     },
     {
       "id": 30016,
       "code": "SN17",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security",
       "domain": "api",
       "section": "a4",
       "question": "Ko'p tenant'li API'da eng ko'p uchraydigan jiddiy zaiflik (OWASP API #1) va uning tizimli yechimi?",
-      "options": [
-        "Rate limit yo'qligi — nginx qo'yish",
-        "BOLA/IDOR: obyekt egaligini tekshirmaslik. Yechim — har query'ga tenant/owner filtri (repository qatlamida majburiy), ID'ni URL'dan emas, sessiyadan olish",
-        "XSS — output escaping",
-        "SQL injection — ORM ishlatish"
-      ],
-      "answer": 1,
       "explanation": "`GET /orders/1042` — token to'g'ri, lekin order boshqa tenantga tegishli. Bitta joyda tekshirish yetmaydi, chunki yangi endpoint yozilganda esdan chiqadi. Tizimli yo'l: `WHERE tenant_id = $current` ni repository/DAO darajasida yoki PostgreSQL RLS bilan majburiy qilish, tashqi ID'larni taxmin qilinmas (UUID/ULID) qilish, va avtotest: A tenant token bilan B resursiga so'rov 404 qaytarishi kerak."
     },
     {
       "id": 30017,
       "code": "SN18",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Security",
       "domain": "api",
       "section": "a4",
       "question": "Public API'da API key'lar leak bo'lgani ma'lum bo'ldi (GitHub'da topildi). Qanday harakat qilasiz?",
-      "modelAnswer": [
-        "Darhol: leak bo'lgan kalitlarni revoke qilish, ta'sir doirasini aniqlash — audit log bo'yicha kalit bilan qilingan so'rovlar, IP va hajm anomaliyasi",
-        "Mijozlarga yangi kalit chiqarish yo'li (dual-key: eski va yangi bir vaqtda ishlaydi, so'ng eski o'chiriladi) — downtime'siz rotation",
-        "Kalit formatiga prefiks qo'shish (`sk_live_...`) — GitHub secret scanning va o'z scanner'imiz avtomatik topadi",
-        "Kalit hash'da saqlanadi (plaintext emas), scope va IP cheklovi, per-key rate limit",
-        "Log va error'larda kalit maskalash; kalitni query string'da emas, headerda qabul qilish",
-        "Postmortem: nega leak bo'ldi (CI log, commit), pre-commit hook + CI secret scan, va kalit o'rniga OAuth/mTLS'ga o'tish rejasi"
-      ],
       "explanation": "Bu incident + dizayn savoli birga. Intervyuda kutiladigan tartib: containment (revoke) → impact assessment (audit) → mijozga ta'sir (rotation yo'li) → sistemali profilaktika. Faqat 'kalitni o'chiraman' javobi senior darajaga yetmaydi."
     },
     {
       "id": 30018,
       "code": "SN19",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security",
       "domain": "api",
       "section": "a4",
       "question": "OAuth2'da SPA (brauzer) uchun to'g'ri flow va token saqlash joyi?",
-      "options": [
-        "Implicit flow, token localStorage'da",
-        "Authorization Code + PKCE; token'ni memory'da ushlash, refresh'ni HttpOnly+Secure+SameSite cookie yoki BFF orqali",
-        "Resource Owner Password Credentials",
-        "Client secret'ni JS bundle'ga qo'yish"
-      ],
-      "answer": 1,
       "explanation": "Implicit flow eskirgan (token URL fragment'da leak bo'ladi), ROPC ham tavsiya etilmaydi. PKCE authorization code'ni ushlab olishdan himoya qiladi (public client secret saqlay olmaydi). localStorage XSS'da to'liq o'qiladi; eng mustahkam yo'l — BFF pattern: token serverda, brauzerda faqat HttpOnly session cookie + CSRF himoyasi."
     },
     {
       "id": 30019,
       "code": "SN20",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "RBAC yetmay qoldi: 'menejer faqat o'z filialining buyurtmalarini ko'radi'. Qanday model?",
-      "options": [
-        "Yana bir nechta rol qo'shish",
-        "ABAC/ReBAC: qaror atributlar (tenant, filial, resurs egasi) yoki munosabatlar grafi bo'yicha; policy markazlashtiriladi (OPA/Cedar/Zanzibar uslubi) va ma'lumot qatlamida filtr sifatida ham qo'llanadi",
-        "Har endpoint'da qo'lda if yozish",
-        "Faqat frontendda yashirish"
-      ],
-      "answer": 1,
       "explanation": "Rol portlashi (role explosion) — RBAC'ning klassik cheklovi. ABAC/ReBAC'da ruxsat resurs atributiga bog'lanadi. Muhim amaliy nuqta: ro'yxat endpoint'larida ruxsatni 'tekshirish' emas, 'filtrlash' kerak (aks holda pagination va count buziladi) — shuning uchun policy'dan ma'lumot filtri (masalan ruxsat berilgan branch ID'lari) chiqarilishi kerak."
     },
     {
       "id": 30459,
       "code": "SN460",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "JWKS bilan kalit rotatsiyasi qanday to'g'ri qilinadi?",
-      "options": [
-        "Kalitni almashtirib darhol eskisini o'chirish",
-        "Yangi kalit JWKS'ga qo'shiladi (ikki kalit birga) → yangi tokenlar yangi `kid` bilan imzolanadi → eski tokenlar muddati tugagach eski kalit olib tashlanadi; resurs server JWKS'ni keshlaydi va noma'lum `kid` kelsa cheklangan chastotada qayta yuklaydi",
-        "Har so'rovda JWKS yuklash",
-        "Kalitni koddan o'qish"
-      ],
-      "answer": 1,
       "explanation": "Ikki tuzoq: (1) eski kalitni erta o'chirish — muddati tugamagan tokenlar yaroqsiz bo'ladi va foydalanuvchilar chiqib ketadi; (2) JWKS'ni har noma'lum `kid` da qayta yuklash — hujumchi tasodifiy `kid` bilan so'rov yuborib identity provayderni DDoS qilishi mumkin (shuning uchun rate limit va negative cache)."
     },
     {
       "id": 30460,
       "code": "SN461",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Auth",
       "domain": "api",
       "section": "a4",
       "question": "OAuth2 grant turlari: qaysi holatda qaysi biri?",
-      "options": [
-        "Har doim password grant",
-        "Authorization Code + PKCE — foydalanuvchi ishtirokidagi ilovalar (web, mobil, SPA); Client Credentials — servis-servis (foydalanuvchi yo'q); Device Code — klaviaturasiz qurilma (TV, CLI); Refresh Token — sessiyani uzaytirish. Password (ROPC) va Implicit eskirgan",
-        "Client credentials foydalanuvchi uchun",
-        "Device code xavfsiz emas"
-      ],
-      "answer": 1,
       "explanation": "Backend nuqtai nazaridan muhim farq: client credentials'da token subyekti — servis (`sub` = client_id), shuning uchun foydalanuvchi huquqlari tekshirilmaydi; foydalanuvchi nomidan ish qilish kerak bo'lsa token exchange yoki on-behalf-of naqshi ishlatiladi. Aks holda 'confused deputy' — servis o'z keng huquqlari bilan foydalanuvchi so'ragan ishni tekshirmay bajaradi."
     },
     {
       "id": 30461,
       "code": "SN462",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security",
       "domain": "api",
       "section": "a4",
       "question": "Ko'p tenant'li tizimda 'confused deputy' muammosi qanday oldini olinadi?",
-      "options": [
-        "Servisga to'liq huquq berish",
-        "So'rovni boshlagan sub'ekt kontekstini oxirigacha olib borish (token exchange / on-behalf-of yoki imzolangan so'rov konteksti) va har qatlamda ruxsatni shu sub'ekt bo'yicha tekshirish — ichki servis o'z admin huquqi bilan tekshiruvsiz ish bajarmasligi kerak",
-        "Faqat gateway'da tekshirish",
-        "IP bo'yicha ajratish"
-      ],
-      "answer": 1,
       "explanation": "Tipik zaiflik: gateway foydalanuvchini tekshiradi, ichkarida esa servislar bir-biriga 'ishonadi' va faqat `user_id` parametrini oladi — bitta ichki endpoint ochilib qolsa istalgan foydalanuvchi ma'lumotini olish mumkin. To'g'ri yondashuv: ichki chaqiruvlarda ham subyekt tokeni (yoki imzolangan kontekst) va tenant tekshiruvi — zero trust."
     }
   ]

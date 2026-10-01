@@ -11,36 +11,22 @@
       "id": 92,
       "code": 93,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB ma'lumotni qanday saqlaydi?",
-      "options": [
-        "Table va row'larda, qat'iy sxema bilan",
-        "Collection ichidagi hujjatlarda (BSON — binar JSON): sxema moslashuvchan, bitta collection'dagi hujjatlar turli maydonlarga ega bo'lishi mumkin",
-        "Faqat key-qiymat juftliklarida",
-        "Graf tugunlarida"
-      ],
-      "answer": 1,
       "explanation": "'Sxema yo'q' emas — sxema ilovaga ko'chgan. Amalda sxema baribir bor, faqat uni DB tekshirmaydi; shuning uchun MongoDB'da schema validation (JSON Schema) yoqish tavsiya etiladi. Har hujjatda _id bor va unga avtomatik unique index yaratiladi."
     },
     {
       "id": 93,
       "code": 94,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "Ma'lumotni embed qilish (ichiga joylash) yoki reference (havola) — qanday tanlanadi?",
-      "options": [
-        "Doim embed qilish kerak",
-        "Birga o'qiladigan, cheklangan hajmdagi va bola obyekt mustaqil yashamaydigan bo'lsa — embed (bitta o'qishda hammasi keladi). Ro'yxat cheksiz o'sadigan, mustaqil so'raladigan yoki ko'p joyda takrorlanadigan bo'lsa — reference",
-        "Doim reference",
-        "Farqi yo'q"
-      ],
-      "answer": 1,
       "explanation": "MongoDB'da modellashtirish query shablonidan boshlanadi (normalizatsiyadan emas). Anti-pattern: cheksiz o'suvchi massiv (masalan postga barcha kommentlar) — hujjat 16MB limitiga urilади va har yangilanishda butun hujjat qayta yoziladi. Yechim: kommentlar alohida collection, postda oxirgi 5 tasi embed qilingan (gibrid).",
       "source": "https://www.mongodb.com/docs/manual/data-modeling/"
     },
@@ -48,18 +34,11 @@
       "id": 94,
       "code": 95,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "Compound index <code>{a: 1, b: 1}</code> qaysi query'larni qo'llaydi?",
-      "options": [
-        "Faqat a va b birga ishlatilganini",
-        "Prefiks qoidasi (SQL'dagi kabi): {a}, {a,b} bo'yicha query'larni qo'llaydi; faqat {b} bo'yicha samarali emas. ESR qoidasi: Equality, Sort, Range tartibida column'larni joylash",
-        "Hamma query'ni",
-        "Faqat sort uchun ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Tekshirish: explain(\"executionStats\") — totalKeysExamined va totalDocsExamined qaytarilgan hujjatlar soniga yaqin bo'lishi kerak; COLLSCAN ko'rinsa index yo'q. ESR: avval tenglik maydonlari, keyin sort maydoni, oxirida diapazon — bu Mongo hujjatidagi rasmiy tavsiya.",
       "source": "https://www.mongodb.com/docs/manual/tutorial/equality-sort-range-guideline/"
     },
@@ -67,18 +46,11 @@
       "id": 95,
       "code": 96,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "<code>writeConcern: {w: 1}</code> va <code>{w: \"majority\"}</code> farqi?",
-      "options": [
-        "Farqi yo'q",
-        "w:1 — faqat primary tasdiqlaydi: primary yiqilsa, replikaga yetmagan yozuv yo'qolishi mumkin (rollback). w:\"majority\" — ko'pchilik a'zo yozgach tasdiq, failover'da saqlanadi (sekinroq)",
-        "w:1 ishonchliroq",
-        "majority faqat sharding bilan ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "To'lov va buyurtma uchun w:\"majority\" (va kerak bo'lsa journal: true). O'qish tomonida readConcern: \"majority\" — faqat ko'pchilik tasdiqlagan ma'lumotni ko'rsatadi. MongoDB 5.0 dan beri default write concern majority. Read preference secondary bo'lsa — eskirgan ma'lumot kelishi mumkin.",
       "source": "https://www.mongodb.com/docs/manual/reference/write-concern/"
     },
@@ -86,36 +58,22 @@
       "id": 96,
       "code": 97,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB'da transaction'lar haqida qaysi to'g'ri?",
-      "options": [
-        "Umuman yo'q",
-        "Bitta hujjatga yozish har doim atomik; ko'p hujjatli ACID transaction'lar 4.0 dan (replica set) va 4.2 dan (sharded klaster) mavjud, lekin qimmat — shuning uchun model ko'pincha 'bitta hujjat = bitta transaction chegarasi' bo'ladigan qilib quriladi",
-        "Faqat bitta collection ichida ishlaydi",
-        "Transaction tezroq ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Transaction'larni doimiy ishlatish MongoDB'ning kuchli tomonini yo'qotadi. Dizayn maslahati: birga o'zgarishi kerak bo'lgan ma'lumotni bitta hujjatga joylang. Transaction kerak bo'lsa qisqa ushlang (default 60 soniya limiti bor) va TransientTransactionError uchun retry yozing."
     },
     {
       "id": 97,
       "code": 98,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "Shard key tanlashda eng tipik xato?",
-      "options": [
-        "Juda ko'p maydon olish",
-        "Monoton o'suvchi key (ObjectId yoki timestamp) — barcha yangi yozuvlar bitta shardga tushadi (hot shard). Yechim: hashed shard key yoki yuqori kardinallikdagi tabiiy key (tenant_id, user_id) bilan kombinatsiya",
-        "Hashed key ishlatish",
-        "tenant_id ni ishlatish"
-      ],
-      "answer": 1,
       "explanation": "Yaxshi shard key: yuqori kardinallik, tekis taqsimot, va ko'p query'larda mavjud (aks holda hamma shardga scatter-gather query ketadi). MongoDB 5.0+ da shard key'ni o'zgartirish (resharding) mumkin, lekin qimmat — oldindan to'g'ri tanlash arzonroq.",
       "source": "https://www.mongodb.com/docs/manual/core/sharding-choose-a-shard-key/"
     },
@@ -123,180 +81,110 @@
       "id": 98,
       "code": 99,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "Aggregation pipeline'ni optimallashtirishning asosiy qoidasi?",
-      "options": [
-        "$lookup ni birinchi qo'yish",
-        "$match va $project ni imkon qadar boshiga qo'yish — hujjatlar soni va hajmi erta kamayadi va $match index'dan foydalana oladi; $sort katta natijada memory limitiga urilishi mumkin (allowDiskUse)",
-        "Bosqichlar tartibi ahamiyatsiz",
-        "Har doim $group bilan boshlash"
-      ],
-      "answer": 1,
       "explanation": "$lookup — SQL JOIN emas: sharded muhitda va katta collectionlarda qimmat; ko'pincha ma'lumotni embed qilish yoki ilovada birlashtirish afzal. explain bilan pipeline rejasini ko'rish mumkin. Og'ir hisobotlar uchun analitik nusxa (secondary yoki data warehouse) ishlatiladi."
     },
     {
       "id": 99,
       "code": 100,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "Replica set'da primary yiqilsa nima bo'ladi?",
-      "options": [
-        "Klaster to'xtaydi va qo'lda aralashuv kerak",
-        "A'zolar ovoz berib yangi primary saylaydi (odatda bir necha soniya); shu oraliqda yozish qabul qilinmaydi. Ko'pchilik bo'lmasa (masalan 3 tadan 2 tasi yo'qolsa) — primary saylanmaydi",
-        "Secondary avtomatik yozishni qabul qiladi",
-        "Ma'lumot butunlay yo'qoladi"
-      ],
-      "answer": 1,
       "explanation": "Shuning uchun a'zolar soni toq bo'ladi (3, 5) yoki arbiter qo'shiladi (lekin arbiter ma'lumot saqlamaydi — majority write bilan birga muammo tug'dirishi mumkin, shuning uchun tavsiya etilmaydi). Client driver failover'ni o'zi kutadi — retryable writes yoqilgan bo'lsa yozuv qayta yuboriladi."
     },
     {
       "id": 100,
       "code": 101,
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB'ni qachon tanlaysiz, qachon PostgreSQL (JSONB bilan)?",
-      "modelAnswer": [
-        "MongoDB: hujjat tabiatli ma'lumot, tez o'zgaruvchan sxema, gorizontal sharding boshidanoq kerak, query'lar asosan bitta hujjat/agregat bo'yicha",
-        "PostgreSQL: bir nechta obyekt o'rtasida murakkab JOIN va transaction'lar, kuchli konsistentlik, ad-hoc analitik query'lar, hisobotlar",
-        "Postgres JSONB + GIN — moslashuvchan maydonlar uchun ko'p hollarda yetarli: bir tizimda ham relatsion, ham hujjat modeli",
-        "Jamoa tajribasi va operatsion narx (managed variantlar ikkalasida ham bor)",
-        "Amaliy yondashuv: default Postgres; MongoDB'ni aniq access pattern va masshtab talabi asoslaganda tanlash"
-      ],
       "explanation": "Intervyuda kuchli javob 'qaysi yaxshi' emas, 'qaysi access pattern uchun' tarzida bo'ladi. Ikkalasini ham noto'g'ri ishlatish mumkinligini aytish (Mongo'da JOIN qilishga urinish, Postgres'ni sxemasiz saqlash omboriga aylantirish) — yetuklik belgisi."
     },
     {
       "id": 30051,
       "code": "SN52",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB'da embed qilish va reference orasida qanday tanlanadi?",
-      "options": [
-        "Har doim embed",
-        "Kirish namunasi bo'yicha: birga o'qiladigan, cheklangan (bounded) va birga o'zgaradigan ma'lumot embed; cheksiz o'sadigan yoki mustaqil so'raladigan ma'lumot reference (16MB document limiti va yozuv konkurentligini hisobga olib)",
-        "Har doim reference",
-        "Ixtiyoriy, farqi yo'q"
-      ],
-      "answer": 1,
       "explanation": "Anti-pattern: postga cheksiz kommentlarni embed qilish — document o'sib ko'chadi, 16MB'ga urinadi, bitta kommentga yozish butun documentga lock/oqim. Kompromis: eng yangi N'ni embed (extended reference), qolganini alohida kolleksiya. Modellash o'qish query'laridan boshlanadi, normal formalardan emas."
     },
     {
       "id": 30052,
       "code": "SN53",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "Mongo'da `w:1` yozuv va primary failover bo'lganda nima yuz beradi?",
-      "options": [
-        "Ma'lumot kafolatlangan",
-        "Ack olingan yozuv replikatsiya qilinmagan bo'lsa rollback bo'lishi mumkin — durability uchun `w:\"majority\"` (va o'qishda `readConcern: majority`) kerak",
-        "Yozuv ikki marta qo'llanadi",
-        "Failover bo'lmaydi"
-      ],
-      "answer": 1,
       "explanation": "`w:1` faqat primary xotirasidagi/jurnaldagi yozuvni tasdiqlaydi; yangi primary bu oplog yozuvini bilmasa, eski primary qaytganda rollback qiladi. Pul yoki buyurtmaga tegishli yozuvlarda `w:\"majority\", j:true`. Narxi — latency; shuning uchun kritik bo'lmagan telemetriya uchun `w:1` maqbul bo'lishi mumkin."
     },
     {
       "id": 30053,
       "code": "SN54",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "Shard key tanlashda eng katta xato?",
-      "options": [
-        "Kompozit kalit olish",
-        "Monoton o'sadigan kalit (timestamp/ObjectId) — barcha yozuv oxirgi chunkga tushadi (hotspot); yoki low-cardinality kalit — jumbo chunk va cross-shard query",
-        "Hashed kalit ishlatish",
-        "Kalitni o'zgartirmaslik"
-      ],
-      "answer": 1,
       "explanation": "Yaxshi shard key: yuqori cardinality, teng taqsimlanish, va eng ko'p query'lar shu kalitni o'z ichiga oladi (aks holda scatter-gather). Monoton kalitda `hashed` yoki kompozit (`tenant_id, ts`) qo'llanadi. Eslatma: shard keyni keyin o'zgartirish (resharding) qimmat operatsiya — dizaynda hal qilinadi."
     },
     {
       "id": 30247,
       "code": "SN248",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB'da tranzaksiyalar bor, lekin qachon ishlatmaslik kerak?",
-      "options": [
-        "Har doim ishlatish kerak",
-        "Multi-document tranzaksiya qimmat (oplog, lock, 60s default limit) — agar doimiy kerak bo'lsa, bu ko'pincha model xatosi: birga o'zgaradigan ma'lumot bitta documentda bo'lishi kerak (document darajasidagi atomiklik bepul)",
-        "Tranzaksiya yo'q",
-        "Faqat shardlangan klasterda"
-      ],
-      "answer": 1,
       "explanation": "Mongo'da bitta documentga yozuv har doim atomik — shuning uchun agregat chegarasini to'g'ri tanlash tranzaksiya ehtiyojini yo'q qiladi. Tranzaksiya kerak bo'lgan haqiqiy holatlar: pul o'tkazish kabi ikki entity orasidagi invariant. Ular uchun `w:\"majority\"`, retryable write va konflikt retry mantiqi ham kerak."
     },
     {
       "id": 30510,
       "code": "SN511",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB'da `$lookup` (join) qachon muammo?",
-      "options": [
-        "Hech qachon",
-        "Katta kolleksiyalarda va indeks bo'lmasa juda qimmat — Mongo relyatsion join uchun optimallashtirilmagan; agar `$lookup` tez-tez kerak bo'lsa model noto'g'ri (denormalizatsiya yoki relyatsion DB kerak)",
-        "Faqat sharding'da",
-        "`$lookup` yo'q"
-      ],
-      "answer": 1,
       "explanation": "Shardlangan klasterda `$lookup` cheklovlari va narxi yanada oshadi. Amaliy qoida: o'qish naqshiga qarab denormalizatsiya (kerakli maydonlarni nusxalash — 'extended reference'), nusxa ma'lumotni yangilash mantiqi bilan birga. Agar ma'lumot tabiatan relyatsion va ko'p join talab qilsa — bu Mongo tanlovining o'zi noto'g'ri degani."
     },
     {
       "id": 30511,
       "code": "SN512",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB'da indeks qanday tanlanadi va `ESR` qoidasi nima?",
-      "options": [
-        "Indeks avtomatik",
-        "ESR: Equality → Sort → Range — kompozit indeksda avval tenglik shartlari, keyin saralash maydoni, oxirida diapazon; shunda indeks ham filtr, ham sortni qoplaydi va `SORT` bosqichi (xotirada saralash, 32MB limiti) yo'qoladi",
-        "Faqat alifbo tartibida",
-        "Har maydonga alohida indeks"
-      ],
-      "answer": 1,
       "explanation": "Tekshirish: `explain(\"executionStats\")` da `IXSCAN` bormi, `totalKeysExamined` va `nReturned` nisbati (katta farq — indeks samarasiz), va `SORT` bosqichi yo'qligi. Xotirada saralash 32MB dan oshsa query yiqiladi — bu productionda kutilmagan xato sifatida chiqadi."
     },
     {
       "id": 30512,
       "code": "SN513",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "MongoDB",
       "domain": "nosql",
       "section": "n2",
       "question": "MongoDB change streams nima va cheklovlari?",
-      "options": [
-        "Oddiy polling",
-        "Oplog asosidagi o'zgarish oqimi (`watch`): resume token bilan uzilishdan keyin davom etish mumkin; cheklovlar — oplog oynasi (juda uzoq to'xtash resume tokenni yaroqsiz qiladi), replica set talabi, va katta hujjatlarda yuk",
-        "Faqat sharding'siz",
-        "Tranzaksiyalarni qo'llamaydi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy qo'llanish: kesh invalidatsiyasi, qidiruv indeksiga sinxronlash, event chiqarish (Kafka'ga ko'prik). Ishonchlilik uchun resume token doimiy saqlanadi va oplog oynasi tiklanish vaqtidan katta bo'lishi kerak — aks holda to'liq qayta sinxronlash rejasi bo'lishi shart."
     }
   ]

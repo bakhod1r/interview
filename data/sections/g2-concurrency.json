@@ -14,37 +14,23 @@
       "id": 3006,
       "code": "G7",
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "Natija?",
       "snippet": "func main() {\n    ch := make(chan int)   // buffersiz\n    ch <- 1\n    fmt.Println(<-ch)\n}",
-      "options": [
-        "1 chop etadi",
-        "fatal error: all goroutines are asleep - deadlock!",
-        "0 chop etadi",
-        "Kompilyatsiya xatosi"
-      ],
-      "answer": 1,
       "explanation": "Buffersiz kanalda jo'natish qabul qiluvchi tayyor bo'lguncha bloklaydi. Bu yerda bitta goroutine bor — o'zi jo'natib, o'zi qabul qila olmaydi. Runtime hamma goroutine bloklanganini aniqlab deadlock beradi. Tuzatish: qabul qilishni alohida goroutine'da qilish yoki make(chan int, 1) — bufer bilan."
     },
     {
       "id": 3007,
       "code": "G8",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "Yopilgan (closed) kanal bilan ishlaganda qaysi row to'g'ri?",
-      "options": [
-        "Yopilgan kanaldan o'qish panic beradi",
-        "Yopilgan kanaldan o'qish darhol nol qiymat qaytaradi (v, ok := <-ch da ok=false); yopilgan kanalga jo'natish panic; ikki marta close ham panic",
-        "Yopilgan kanalga jo'natish e'tiborsiz qoldiriladi",
-        "close faqat buffersiz kanallarda ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Qoida: kanalni jo'natuvchi yopadi, qabul qiluvchi emas — aks holda 'send on closed channel' panic xavfi. Ko'p jo'natuvchi bo'lsa: alohida done kanal yoki context, yoki sync.WaitGroup tugagach bitta joyda close. range ch — kanal yopilganda tabiiy tugaydi.",
       "source": "https://go.dev/ref/spec#Close"
     },
@@ -52,36 +38,22 @@
       "id": 3008,
       "code": "G9",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "<code>select</code> ichidagi <code>default</code> nima beradi?",
-      "options": [
-        "Xatoni ushlaydi",
-        "Hech bir case tayyor bo'lmasa darhol default bajariladi — bloklanmaydigan (non-blocking) jo'natish/qabul qilish",
-        "Birinchi case'ni tanlaydi",
-        "Timeout qo'yadi"
-      ],
-      "answer": 1,
       "explanation": "default'siz select biror case tayyor bo'lguncha kutadi; bir nechta tayyor bo'lsa tasodifiy tanlaydi (adolat uchun). Timeout uchun: case <-time.After(2*time.Second) yoki yaxshisi case <-ctx.Done(). Non-blocking jo'natish metrika/telemetriya kanalini to'ldirmaslik uchun qulay."
     },
     {
       "id": 3009,
       "code": "G10",
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Goroutine leak nima, qanday yuzaga keladi va qanday aniqlaysiz?",
-      "modelAnswer": [
-        "Goroutine hech qachon tugamaydigan operatsiyada bloklanib qoladi — kanalda kutadi, qabul qiluvchi yo'q",
-        "Tipik sabablar: natijani hech kim o'qimaydigan buffersiz kanal, context'siz cheksiz kutish, abandon qilingan HTTP query, to'xtatilmagan ticker (time.Ticker.Stop qilinmagan)",
-        "Har goroutine stack memory ushlaydi — asta-sekin memory va planner yuki o'sadi",
-        "Aniqlash: runtime.NumGoroutine() metrikasi va o'sish tendensiyasi, net/http/pprof dagi /debug/pprof/goroutine, testda goleak (go.uber.org/goleak)",
-        "Oldini olish: har goroutine'ga tugash yo'li — context, done kanal, WaitGroup; jo'natishda select bilan ctx.Done()"
-      ],
       "explanation": "Go'da goroutine'ni tashqaridan o'ldirib bo'lmaydi — u o'zi qaytishi kerak. Shuning uchun 'kim bu goroutine'ni to'xtatadi?' savoli har yaratishda berilishi kerak.",
       "source": "https://github.com/uber-go/goleak"
     },
@@ -89,19 +61,12 @@
       "id": 3010,
       "code": "G11",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Bu kodda nima xato?",
       "snippet": "var wg sync.WaitGroup\nfor _, url := range urls {\n    go func(u string) {\n        wg.Add(1)\n        defer wg.Done()\n        fetch(u)\n    }(url)\n}\nwg.Wait()",
-      "options": [
-        "Xato yo'q",
-        "wg.Add goroutine ichida chaqirilgan — Wait() Add'dan oldin ishga tushib, hech narsa kutmasdan o'tib ketishi mumkin (race). Add goroutine yaratishdan OLDIN, tashqarida chaqirilishi kerak",
-        "defer wg.Done() noto'g'ri",
-        "url'ni parametr sifatida uzatish shart emas"
-      ],
-      "answer": 1,
       "explanation": "To'g'risi: wg.Add(1) ni 'go' dan oldin yozish (yoki sikldan oldin wg.Add(len(urls))). Sabab: goroutine qachon ishga tushishi kafolatlanmagan — Wait() hisoblagich 0 ko'rib darhol qaytadi. Go 1.25 dan boshlab wg.Go(func(){...}) helperi bor — Add/Done ni o'zi boshqaradi. Yana: WaitGroup'ni qiymat sifatida nusxalash mumkin emas (pointer bilan uzating).",
       "source": "https://pkg.go.dev/sync#WaitGroup"
     },
@@ -109,18 +74,11 @@
       "id": 3011,
       "code": "G12",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "<code>ctx, cancel := context.WithTimeout(parent, 2*time.Second)</code> dan keyin <code>defer cancel()</code> yozilmasa nima bo'ladi?",
-      "options": [
-        "Hech narsa, timeout baribir ishlaydi",
-        "Context va uning timer'i parent bilan bog'liq holda timeout tugaguncha saqlanadi — resurs (timer va ota context'dagi bola ro'yxati) sizadi; go vet 'lostcancel' deb ogohlantiradi",
-        "Kod kompilyatsiya bo'lmaydi",
-        "Timeout 2 barobar uzayadi"
-      ],
-      "answer": 1,
       "explanation": "cancel() ishni erta tugatganda ham resursni bo'shatadi. Qoida: context query doirasida (request-scoped) bo'ladi, struct maydonida saqlanmaydi, funksiyaning birinchi parametri sifatida uzatiladi. context.Value faqat query metadata'si uchun (trace_id), majburiy parametrlar uchun emas.",
       "source": "https://pkg.go.dev/context"
     },
@@ -128,18 +86,11 @@
       "id": 3012,
       "code": "G13",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Map'ga bir vaqtda ikki goroutine yozsa nima bo'ladi?",
-      "options": [
-        "Oxirgi yozuv qoladi",
-        "Runtime 'fatal error: concurrent map writes' bilan dasturni o'ldiradi (recover qilib bo'lmaydi) — sync.Mutex yoki sync.Map kerak",
-        "Ma'lumot buziladi, lekin dastur ishlaydi",
-        "Go avtomatik lock qo'yadi"
-      ],
-      "answer": 1,
       "explanation": "Bu panic emas, fatal error — recover ushlamaydi. Odatiy yechim: mutex bilan o'ralgan struct. sync.Map faqat ikki stsenariyda foydali: key bir marta yozilib ko'p o'qilsa yoki turli goroutine'lar turli key'lar bilan ishlasa. Poyga holatlarini topish: go test -race, prod'ga yaqin yuk bilan.",
       "source": "https://go.dev/doc/articles/race_detector"
     },
@@ -147,19 +98,11 @@
       "id": 3016,
       "code": "G17",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Cheklangan parallellikda worker pool yozing: N worker, graceful shutdown, xatolarni yig'ish. Qanday quraysiz?",
-      "modelAnswer": [
-        "Jobs kanali (buffered) + N ta worker goroutine + sync.WaitGroup",
-        "Har worker: for job := range jobs { select ctx.Done() bilan tekshirish; natijani results kanaliga }",
-        "Jo'natuvchi ishni tugatgach close(jobs); worker'lar range tugab chiqadi; wg.Wait() dan keyin close(results)",
-        "Xatolar: golang.org/x/sync/errgroup — birinchi xatoda context bekor qilinadi, g.SetLimit(N) bilan parallellik cheklanadi",
-        "Graceful shutdown: signal.NotifyContext(os.Interrupt) → ctx bekor bo'ladi → workerlar joriy ishni tugatib chiqadi, deadline bilan",
-        "Backpressure: kanal buferini cheklash — cheksiz queue memory'ni yeydi"
-      ],
       "explanation": "Staff signal: errgroup'ni bilish va 'kim kanalni yopadi' qoidasini aniq aytish. Yana: worker soni — CPU-bound ish uchun ≈ GOMAXPROCS, I/O-bound uchun ko'proq, lekin tashqi tizim limitiga qarab.",
       "source": "https://pkg.go.dev/golang.org/x/sync/errgroup"
     },
@@ -167,110 +110,68 @@
       "id": 3020,
       "code": "G21",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Goroutine va OS thread farqi?",
-      "options": [
-        "Bir xil narsa",
-        "Goroutine — Go runtime boshqaradigan yengil bajarilish birligi: boshlang'ich stack ~2KB va o'sib boradi, runtime ularni M:N sxemada OS threadlarga taqsimlaydi; minglab-millionlab goroutine normal. OS thread — yadro obyekti, stack odatda 1–8MB",
-        "Goroutine — bu jarayon",
-        "Har goroutine uchun bitta OS thread yaratiladi"
-      ],
-      "answer": 1,
       "explanation": "Planner (scheduler) goroutine bloklanganda (kanal, network) boshqasini o'sha threadda ishga tushiradi — shuning uchun I/O ko'p bo'lgan servislar Go'da yaxshi masshtablanadi. Bloklovchi syscall bo'lsa runtime yangi thread ajratadi. GOMAXPROCS — bir vaqtda Go kodini bajaradigan threadlar soni."
     },
     {
       "id": 3021,
       "code": "G22",
       "level": "J",
-      "type": "code",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Nima chop etiladi?",
       "snippet": "func main() {\n    go fmt.Println(\"salom\")\n}",
-      "options": [
-        "salom",
-        "Hech narsa — main goroutine tugashi bilan dastur to'xtaydi, goroutine ishga tushishga ulgurmasligi mumkin",
-        "panic",
-        "Deadlock"
-      ],
-      "answer": 1,
       "explanation": "main qaytsa, butun dastur tugaydi — qolgan goroutine'lar 'o'ldiriladi' (ularga hech qanday signal berilmaydi, defer'lari ham ishlamaydi). Kutish uchun sync.WaitGroup yoki kanal. time.Sleep bilan 'kutish' — testda ham, prodda ham noto'g'ri: kafolat bermaydi va sekinlashtiradi."
     },
     {
       "id": 3022,
       "code": "G23",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "<code>make(chan int, 3)</code> — buferli kanalda jo'natish qachon bloklanadi?",
-      "options": [
-        "Hech qachon",
-        "Bufer to'lganda (3 ta o'qilmagan element bo'lsa); qabul qilish esa bufer bo'sh bo'lganda bloklanadi",
-        "Har jo'natishda",
-        "Faqat kanal yopilganda"
-      ],
-      "answer": 1,
       "explanation": "Bufer — vaqtinchalik notekislikni yumshatish uchun, cheksiz queue emas. Bufer hajmini o'ylab tanlash kerak: katta bufer muammoni yashiradi (backpressure yo'qoladi, memory o'sadi, crashda ma'lumot yo'qoladi). len(ch) — hozirgi elementlar soni, cap(ch) — sig'im."
     },
     {
       "id": 3023,
       "code": "G24",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "<code>select</code> ichidagi <code>nil</code> kanal nima qiladi?",
-      "options": [
-        "panic beradi",
-        "Nil kanaldagi jo'natish/qabul abadiy bloklanadi — shuning uchun select'da o'sha case hech qachon tanlanmaydi; bu case'ni 'o'chirish' uchun ataylab ishlatiladi",
-        "Darhol nol qiymat qaytaradi",
-        "Case'ni birinchi tanlaydi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy pattern: ikkita manbadan o'qiyotganda biri tugasa (kanal yopilsa), o'sha o'zgaruvchini nil qilib qo'yasiz — aks holda yopilgan kanal doim 'tayyor' bo'lib, select cheksiz aylanadi va CPU yeydi. Bu fan-in kodidagi klassik xatoning yechimi."
     },
     {
       "id": 3024,
       "code": "G25",
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Bu kod qanday natija beradi?",
       "snippet": "counter := 0\nvar wg sync.WaitGroup\nfor i := 0; i < 1000; i++ {\n    wg.Add(1)\n    go func() { defer wg.Done(); counter++ }()\n}\nwg.Wait()\nfmt.Println(counter)",
-      "options": [
-        "Doim 1000",
-        "1000 dan kichik va har safar boshqacha — counter++ atomik emas (o'qish-qo'shish-yozish); bu data race, go test -race aniqlaydi. Tuzatish: sync.Mutex yoki atomic.Int64",
-        "panic",
-        "Kompilyatsiya xatosi"
-      ],
-      "answer": 1,
       "explanation": "Data race — aniqlanmagan xulq: natija noto'g'ri bo'lishi ham, kompilyator optimizatsiyasi tufayli yanada g'alati ko'rinishi ham mumkin. Yechimlar: var mu sync.Mutex bilan o'rash, yoki var counter atomic.Int64 va counter.Add(1) (Go 1.19+ tipli atomiklar). Har goroutine natijani kanalga yuborib, bitta joyda yig'ish ham to'g'ri yondashuv."
     },
     {
       "id": 3025,
       "code": "G26",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Mutex va kanal — qachon qaysi biri?",
-      "options": [
-        "Doim kanal, mutex eskirgan",
-        "Mutex — umumiy holatni (struct maydoni, cache, hisoblagich) himoya qilish uchun sodda va tez. Kanal — egalikni uzatish, ish taqsimlash va bosqichlarni bog'lash (pipeline) uchun",
-        "Doim mutex",
-        "Ikkalasi ham bir xil ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "'Share memory by communicating' — shior, qat'iy qoida emas; Go jamoasining o'z maslahati: oddiy holat himoyasi uchun mutex ishlating. sync.RWMutex — o'qish juda ko'p, yozish kam bo'lganda (lekin qisqa kritik bo'limda oddiy Mutex tezroq bo'lishi mumkin). Qoida: lock ushlab turganda tashqi chaqiruv (HTTP, DB) qilmang.",
       "source": "https://go.dev/doc/effective_go#concurrency"
     },
@@ -278,55 +179,34 @@
       "id": 3026,
       "code": "G27",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "Worker'ni to'g'ri to'xtatish uchun qaysi variant to'g'ri?",
       "snippet": "// A\nfor job := range jobs {\n    process(job)\n}\n\n// B\nfor {\n    select {\n    case job, ok := <-jobs:\n        if !ok { return }\n        process(ctx, job)\n    case <-ctx.Done():\n        return\n    }\n}",
-      "options": [
-        "A — soddaroq va yetarli",
-        "B — kanal yopilishini ham, context bekor qilinishini ham hisobga oladi: shutdown signalida worker joriy siklni tugatib chiqadi",
-        "Ikkalasi bir xil",
-        "A tezroq, shuning uchun to'g'ri"
-      ],
-      "answer": 1,
       "explanation": "A varianti faqat kanal yopilganda tugaydi — graceful shutdown'da jo'natuvchi bloklangan bo'lsa, worker abadiy kutishi mumkin. Muhim tafsilot: process(ctx, job) — context ichkariga ham uzatiladi, aks holda uzoq DB query'i baribir kutadi. Shutdown deadline: context.WithTimeout bilan cheklab, tugamaganini majburan tark etish."
     },
     {
       "id": 3027,
       "code": "G28",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Uzoq ishlaydigan siklda <code>case &lt;-time.After(1*time.Second):</code> ishlatishning muammosi?",
-      "options": [
-        "Muammo yo'q",
-        "Har iteratsiyada yangi Timer yaratiladi va u ishlab bo'lguncha (yoki GC yig'guncha) resurs ushlaydi — yuqori chastotali siklda sezilarli yuk; o'rniga time.NewTimer/NewTicker yaratib, Reset va Stop bilan boshqarish kerak",
-        "time.After noto'g'ri vaqt beradi",
-        "Faqat testda muammo"
-      ],
-      "answer": 1,
       "explanation": "Eslatma: Go 1.23 dan boshlab timer'lar ishlatilmasa ham GC uchun erishiladigan bo'lib qolmaydi — bu eski 'time.After leak' muammosini ancha yumshatdi, lekin yuqori chastotali kodda Timer'ni qayta ishlatish baribir afzal. Ticker'ni to'xtatmaslik esa har doim leak: defer ticker.Stop()."
     },
     {
       "id": 3028,
       "code": "G29",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "<code>errgroup.Group</code> qanday ishlaydi?",
-      "options": [
-        "Hamma xatolarni ro'yxat qilib qaytaradi",
-        "g.Go(fn) bilan goroutine'lar ishga tushadi; g.Wait() hammasini kutib, birinchi qaytgan xatoni qaytaradi. WithContext bilan yaratilgan bo'lsa, birinchi xatoda context bekor qilinadi va qolgan ishlar to'xtaydi; SetLimit(n) bilan parallellik cheklanadi",
-        "Xatolarni yutib yuboradi",
-        "WaitGroup bilan bir xil, farqi yo'q"
-      ],
-      "answer": 1,
       "explanation": "Tipik ishlatish: bir nechta tashqi servisga parallel query — biri yiqilsa qolganlarini bekor qilish. Diqqat: g.Wait() faqat BIRINCHI xatoni qaytaradi, hammasini yig'ish kerak bo'lsa o'zingiz to'plang (yoki Go 1.20+ errors.Join). Har goroutine ichida ctx.Err() ni tekshirish kerak, aks holda bekor qilish ta'sir qilmaydi.",
       "source": "https://pkg.go.dev/golang.org/x/sync/errgroup"
     },
@@ -334,55 +214,34 @@
       "id": 3029,
       "code": "G30",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Fan-in: bu kodda nima bo'ladi?",
       "snippet": "results := make(chan int)      // buffersiz\nvar wg sync.WaitGroup\nfor _, j := range jobs {\n    wg.Add(1)\n    go func(j Job) { defer wg.Done(); results <- run(j) }(j)\n}\nwg.Wait()\nclose(results)\nfor r := range results { fmt.Println(r) }",
-      "options": [
-        "To'g'ri ishlaydi",
-        "Deadlock: buffersiz kanalga hech kim o'qimayapti — goroutine'lar jo'natishda bloklanadi, wg.Wait() esa hech qachon qaytmaydi. Tuzatish: yig'ishni alohida goroutine'ga olish (go func(){ wg.Wait(); close(results) }()) va keyin range qilish",
-        "panic: close of closed channel",
-        "Natijalar tartibsiz chiqadi, xolos"
-      ],
-      "answer": 1,
       "explanation": "Qoida: kanalni to'ldiruvchi va bo'shatuvchi bir vaqtda ishlashi kerak. To'g'ri shablon: goroutine'lar yozadi → alohida goroutine wg.Wait() dan keyin close qiladi → asosiy goroutine range bilan o'qiydi. Muqobil: results ni len(jobs) hajmda buferli qilish (lekin bu memory va backpressure masalasi)."
     },
     {
       "id": 3030,
       "code": "G31",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "<code>sync/atomic</code> va <code>sync.Mutex</code> — qachon qaysi biri?",
-      "options": [
-        "Atomic doim yaxshi",
-        "Atomic — bitta o'zgaruvchi ustida oddiy amal (hisoblagich, flag, pointer almashtirish) uchun: lock'siz va tez. Mutex — bir nechta maydonni birga izchil o'zgartirish yoki murakkab kritik bo'lim uchun",
-        "Mutex doim tezroq",
-        "Atomic faqat 32-bit tizimlarda"
-      ],
-      "answer": 1,
       "explanation": "Go 1.19 dan tipli atomiklar bor: atomic.Int64, atomic.Bool, atomic.Pointer[T] — eski atomic.AddInt64(&x, 1) shakliga nisbatan xavfsizroq (eski shaklda 32-bit platformalarda hizalanish talabi bor edi). Atomiklardan 'mini-lock' yasashga urinmang: bir nechta atomik amal birgalikda atomik emas."
     },
     {
       "id": 3031,
       "code": "G32",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Go memory modeli (memory model) bo'yicha qaysi to'g'ri?",
-      "options": [
-        "Bitta goroutine yozgan qiymatni boshqasi darhol ko'radi",
-        "Sinxronizatsiyasiz (kanal, mutex, atomic, WaitGroup) yozuvni boshqa goroutine hech qachon ko'rmasligi ham mumkin — kompilyator va protsessor qayta tartiblashi va cache'da ushlab turishi mumkin",
-        "for sikli bilan kutish (busy wait) yetarli",
-        "volatile key so'zi kerak"
-      ],
-      "answer": 1,
       "explanation": "Shuning uchun 'flag bool' ni sinxronizatsiyasiz tekshirib kutish — buzuq kod (cheksiz sikl bo'lishi mumkin). To'g'ri yo'llar: kanal, mutex, atomic.Bool, context. 'Bizda ishladi' — kafolat emas: xulq arxitektura va kompilyator versiyasiga qarab o'zgaradi.",
       "source": "https://go.dev/ref/mem"
     },
@@ -390,54 +249,33 @@
       "id": 3032,
       "code": "G33",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "HTTP handler'da foydalanuvchi query'i bekor qilinganda (client uzildi) fon ishini davom ettirish kerak bo'lsa nima qilasiz?",
-      "options": [
-        "r.Context() ni to'g'ridan-to'g'ri goroutine'ga uzatish",
-        "Query context'i client uzilganda bekor bo'ladi — fon ishi darhol to'xtaydi. Kerak bo'lsa: context.WithoutCancel(ctx) (Go 1.21+) yoki yangi context yaratib, faqat qiymatlarni (trace_id) ko'chirish va o'z timeout'ini qo'yish",
-        "context.Background() ni ishlatib, timeout qo'ymaslik",
-        "Goroutine'ni context'siz ishga tushirish"
-      ],
-      "answer": 1,
       "explanation": "Ikki xato ham xavfli: birinchisi ishni yarimda to'xtatadi, ikkinchisi (timeout'siz) goroutine leak beradi. Yaxshiroq arxitektura: uzoq ishni HTTP query'idan butunlay ajratib, queue'ga (outbox/Kafka/SQS) qo'yish — shunda qayta urinish va kuzatuv ham bo'ladi."
     },
     {
       "id": 13016,
       "code": "K17",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "<code>sync.Once</code> nima uchun kerak?",
-      "options": [
-        "Goroutine'ni bir marta ishga tushirish",
-        "Initsializatsiyani bir marta va konkurent xavfsiz bajarish (lazy singleton, ulanish yaratish): birinchi chaqiruv funksiyani bajaradi, qolganlari u tugaguncha kutadi va keyin darhol qaytadi",
-        "Mutex o'rnini bosadi",
-        "Faqat testda ishlatiladi"
-      ],
-      "answer": 1,
       "explanation": "Tuzoq: Once ichida xato bo'lsa, u qayta urinmaydi — xato qaytaradigan initsializatsiya uchun o'zingiz holatni saqlab, kerak bo'lsa qayta urinish mantig'ini yozing (yoki Go 1.21+ sync.OnceValue/OnceValues). Global holatni kamaytirish uchun ko'pincha yaxshiroq yo'l — konstruktorda yaratib, bog'liqlik sifatida uzatish."
     },
     {
       "id": 14021,
       "code": "SR22",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Bir xil kalit uchun bir vaqtda 1000 ta kesh miss bo'ldi. Go'da qanday yechim eng mos?",
-      "options": [
-        "Har biri o'z query'sini yuborsin",
-        "golang.org/x/sync/singleflight: bir xil kalit uchun faqat bitta chaqiruv bajariladi, qolganlari uning natijasini kutadi (thundering herd'ga qarshi)",
-        "Mutex bilan butun keshni qulflash",
-        "Retry qo'shish"
-      ],
-      "answer": 1,
       "explanation": "singleflight lokal (bitta process) darajada ishlaydi — ko'p pod bo'lsa har podda bittadan chaqiruv bo'ladi; to'liq himoya uchun Redis lock yoki stale-while-revalidate qo'shiladi. Diqqat: singleflight natijani barcha kutuvchilarga bir xil qaytaradi — xato ham umumiy bo'ladi.",
       "source": "https://pkg.go.dev/golang.org/x/sync/singleflight"
     },
@@ -445,36 +283,22 @@
       "id": 14022,
       "code": "SR23",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Worker pool o'lchamini qanday tanlaysiz?",
-      "options": [
-        "Goroutine arzon, cheklash shart emas",
-        "Ish turiga qarab: CPU-bound uchun ≈ GOMAXPROCS; I/O-bound uchun ko'proq, lekin pastdagi resurs limiti (DB pool, tashqi API rate limit) bilan cheklanadi — o'lchab sozlanadi",
-        "Har doim 100",
-        "Foydalanuvchilar soniga teng"
-      ],
-      "answer": 1,
       "explanation": "Cheklanmagan goroutine — Go'dagi eng ko'p uchraydigan yuk muammosi: DB pool tugaydi, xotira o'sadi, tashqi servis 429 qaytaradi. Amaliy naqsh: bounded channel yoki errgroup.SetLimit, va navbat uzunligi bo'yicha backpressure (to'lsa so'rovni rad etish)."
     },
     {
       "id": 15001,
       "code": "GS2",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Konfiguratsiyani ishlash vaqtida qayta yuklash (hot reload) uchun Go'da eng mos mexanizm?",
-      "options": [
-        "Global o'zgaruvchini mutexsiz yangilash",
-        "<code>atomic.Pointer[Config]</code> (yoki atomic.Value): o'quvchilar lock'siz Load qiladi, yangilanishda esa YANGI struct yaratilib Store qilinadi — mavjud struct joyida o'zgartirilmaydi",
-        "Har o'qishda faylni qayta o'qish",
-        "sync.Once bilan"
-      ],
-      "answer": 1,
       "explanation": "Bu copy-on-write naqshi: o'qish juda ko'p, yozish kam bo'lgan holat uchun ideal (RWMutex'dan ham yengil). Muhim shart: Store qilingan qiymat o'zgarmas (immutable) bo'lsin — aks holda o'quvchilar yarim yangilangan holatni ko'radi. atomic.Value bir xil konkret tipni talab qiladi va Store'dan keyin nusxalanmasligi kerak.",
       "source": "https://pkg.go.dev/sync/atomic#Pointer"
     },
@@ -482,37 +306,23 @@
       "id": 15002,
       "code": "GS3",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Bir vaqtda ko'pi bilan 10 ta ish bajarilsin. Kanal bilan qanday yoziladi?",
       "snippet": "sem := make(chan struct{}, 10)\nfor _, job := range jobs {\n    sem <- struct{}{}          // ?\n    go func(j Job) {\n        defer func() { <-sem }()\n        process(j)\n    }(job)\n}",
-      "options": [
-        "Bu kod noto'g'ri",
-        "To'g'ri: buferli kanal semafor sifatida ishlaydi — bufer to'lsa yangi goroutine ishga tushmay kutadi. Lekin oxirida hamma tugashini kutish uchun WaitGroup ham kerak, va xatolarni yig'ish uchun errgroup.SetLimit(10) soddaroq",
-        "struct{} o'rniga bool bo'lishi kerak",
-        "Semafor uchun mutex ishlatiladi"
-      ],
-      "explanation": "struct{} nol bayt egallaydi — signal uchun ideal. errgroup.SetLimit(n) shu naqshni va xato tarqatishni birga beradi. Diqqat: sem'ga yozish goroutine ICHIDA bo'lsa cheklash ishlamaydi — barcha goroutine'lar darhol yaratiladi.",
-      "answer": 1
+      "explanation": "struct{} nol bayt egallaydi — signal uchun ideal. errgroup.SetLimit(n) shu naqshni va xato tarqatishni birga beradi. Diqqat: sem'ga yozish goroutine ICHIDA bo'lsa cheklash ishlamaydi — barcha goroutine'lar darhol yaratiladi."
     },
     {
       "id": 15003,
       "code": "GS4",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "Ota context'da 2 soniyalik deadline bor. Bolada <code>context.WithTimeout(parent, 10*time.Second)</code> qilindi. Nima bo'ladi?",
-      "options": [
-        "Bola 10 soniya ishlaydi",
-        "Bola baribir 2 soniyada bekor bo'ladi — deadline faqat qisqartiriladi, uzaytirilmaydi; zanjirdagi eng erta muddat yutadi",
-        "Ota context uzayadi",
-        "Xato qaytadi"
-      ],
-      "answer": 1,
       "explanation": "Shuning uchun ichki chaqiruvlar uchun timeout tashqisidan kichik bo'lishi mantiqiy — kattasini yozish samarasiz. Muddatni haqiqatan uzaytirish kerak bo'lsa (fon ishi so'rovdan uzoq yashashi kerak): context.WithoutCancel(ctx) (Go 1.21+) yoki yangi context yaratib, faqat kerakli qiymatlarni ko'chirish.",
       "source": "https://pkg.go.dev/context"
     },
@@ -520,93 +330,58 @@
       "id": 15004,
       "code": "GS5",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "<code>context.WithValue</code> uchun kalit sifatida nima ishlatiladi?",
       "snippet": "// A\nctx = context.WithValue(ctx, \"userID\", id)\n\n// B\ntype ctxKey struct{}\nctx = context.WithValue(ctx, ctxKey{}, id)",
-      "options": [
-        "A — oddiyroq",
-        "B: eksport qilinmagan o'z tipingiz — string kalit boshqa paket kaliti bilan to'qnashishi mumkin va go vet buni ogohlantiradi. Qiymatni olishda ham tip tekshiriladi",
-        "Ikkalasi bir xil",
-        "Kalit int bo'lishi shart"
-      ],
-      "answer": 1,
       "explanation": "context.Value faqat so'rov doirasidagi metadata uchun (trace_id, user, locale) — majburiy parametrlarni u orqali uzatmang: kompilyator tekshirmaydi va kod o'qilishi qiyinlashadi. Qiymat olish uchun tipli yordamchi funksiya yozing: func UserFrom(ctx) (User, bool)."
     },
     {
       "id": 15022,
       "code": "GS23",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "<code>sync.Cond</code> qachon kerak bo'ladi?",
-      "options": [
-        "Har qanday kutish uchun",
-        "Kamdan-kam: bir nechta goroutine umumiy holat o'zgarishini kutayotganda (masalan bounded buffer 'bo'sh emas' bo'lguncha). Go'da ko'pincha kanal yoki context bilan yozish soddaroq va xavfsizroq",
-        "Mutex o'rniga",
-        "Kanal ishlamaganda"
-      ],
-      "answer": 1,
       "explanation": "Cond bilan ishlash xatoga moyil: Wait() lock'ni bo'shatadi va uyg'ongach qayta oladi, shuning uchun shart doim for siklida tekshiriladi (spurious wakeup va poyga). Intervyuda 'bilaman, lekin odatda kanal ishlataman' degan javob yetuklik belgisi."
     },
     {
       "id": 18013,
       "code": "GR14",
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "`select` da `default` nima qiladi?",
       "snippet": "select {\ncase v := <-ch:\n    use(v)\ndefault:\n    // ...\n}",
-      "options": [
-        "Hech bir case tayyor bo'lmasa bloklanmasdan darhol default bajariladi (non-blocking o'qish/yozish)",
-        "Boshqa case'lardan keyin ishlaydi",
-        "Timeout beradi",
-        "Kompilyatsiya xatosi"
-      ],
-      "answer": 0,
       "explanation": "Non-blocking naqsh. Ogohlantirish: default'li select'ni loop ichiga qo'ysangiz busy-wait (CPU 100%) hosil bo'ladi — o'rniga time.After yoki ticker qo'shing. Timeout uchun: case <-time.After(d) (har iteratsiyada yangi timer allokatsiyasi) yoki yaxshiroq — case <-ctx.Done(). Bir nechta case tayyor bo'lsa, tanlov tasodifiy."
     },
     {
       "id": 18014,
       "code": "GR15",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "Buffered va unbuffered channel qachon tanlanadi?",
-      "options": [
-        "Unbuffered — sinxronizatsiya nuqtasi (yuborish va qabul qilish bir vaqtda, happens-before kafolati); buffered — producer'ni qisqa portlashlarda bloklamaslik uchun, hajmi ataylab tanlanadi",
-        "Buffered har doim tezroq, doim ishlating",
-        "Farqi yo'q",
-        "Unbuffered xabarlarni yo'qotadi"
-      ],
-      "answer": 0,
       "explanation": "Buffer — backpressure'ni yo'qotmaydi, faqat kechiktiradi: to'lgach baribir bloklaydi. Katta buffer muammoni yashiradi (xotira o'sadi, latency ko'rinmaydi, crash'da ma'lumot yo'qoladi). Tanlov qoidasi: buffer hajmi ma'lum bir sababga ega bo'lsin (masalan worker soni yoki bitta batch), 'ehtiyot uchun 1000' emas."
     },
     {
       "id": 18015,
       "code": "GR16",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Bu qanday naqsh?",
       "snippet": "func merge(chs ...<-chan int) <-chan int {\n    out := make(chan int)\n    var wg sync.WaitGroup\n    for _, c := range chs {\n        wg.Add(1)\n        go func(c <-chan int){ defer wg.Done(); for v := range c { out <- v } }(c)\n    }\n    go func(){ wg.Wait(); close(out) }()\n    return out\n}",
-      "options": [
-        "Fan-in: bir nechta channel'ni bittaga birlashtirish; close alohida goroutine'da barcha producer'lar tugagach chaqiriladi",
-        "Fan-out",
-        "Pipeline stage",
-        "Worker pool"
-      ],
-      "answer": 0,
       "explanation": "Fan-out — bitta manbadan ko'p worker o'qiydi (yukni bo'lish). Fan-in — ko'p natijani bittaga yig'ish. Pipeline — stage'lar zanjiri, har biri channel qaytaradi. Muhim qoida: channel'ni faqat YOZUVCHI yopadi, va bu yerda ko'p yozuvchi bo'lgani uchun close WaitGroup ortida turadi. Yana: iste'molchi erta to'xtasa goroutine'lar `out <- v` da osilib qoladi — shuning uchun done/ctx kanali bilan chiqish yo'li kerak.",
       "source": "https://go.dev/blog/pipelines"
     },
@@ -614,56 +389,35 @@
       "id": 18016,
       "code": "GR17",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Worker pool'da natijalarni qanday yig'asan?",
       "snippet": "jobs := make(chan Job)\nresults := make(chan Result, len(all))\nfor i := 0; i < n; i++ {\n    go func(){ for j := range jobs { results <- process(j) } }()\n}",
-      "options": [
-        "jobs'ni to'ldirib close qilish (worker'lar range'dan chiqadi), keyin natijalarni len(all) marta o'qish yoki WaitGroup bilan results'ni yopish",
-        "Worker'lar o'zi to'xtaydi, close kerak emas",
-        "results buffersiz bo'lishi shart",
-        "Har job uchun yangi goroutine ochish shart"
-      ],
-      "answer": 0,
       "explanation": "Kanonik shakl: producer jobs'ni yozadi va close(jobs) qiladi; har worker `for j := range jobs` bilan tugaydi; go func(){ wg.Wait(); close(results) }() va asosiy goroutine `for r := range results`. Zamonaviy alternativa — errgroup.Group + SetLimit(n): birinchi xatoda ctx bekor qilinadi va Wait() xatoni qaytaradi."
     },
     {
       "id": 18017,
       "code": "GR18",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "`sync.RWMutex` qachon Mutex'dan yomonroq?",
-      "options": [
-        "Kritik seksiya juda qisqa bo'lsa — RWMutex qimmatroq (ko'proq atomik operatsiya) va yozuvchi ko'p bo'lsa reader'lar navbati sababli yomonlashadi; o'qish ustunlik qilganda va seksiya uzun bo'lganda foyda beradi",
-        "Har doim yaxshiroq",
-        "Hech qachon ishlatilmaydi",
-        "Faqat map bilan ishlaydi"
-      ],
-      "answer": 0,
       "explanation": "RWMutex Lock kutayotganda yangi RLock'lar bloklanadi (yozuvchi ochlikdan himoyalangan). Ko'p yadroda RLock kesh qatorlari bo'ylab urishishi mumkin. Alternativalar: atomic.Pointer bilan copy-on-write (deyarli o'zgarmaydigan konfiguratsiya uchun ideal), sharded map, yoki sync.Map (faqat 'bir marta yoziladi, ko'p o'qiladi' yoki disjoint kalitlar holati uchun)."
     },
     {
       "id": 19019,
       "code": "RT20",
       "level": "P",
-      "type": "code",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Bu kod 32-bit ARM'da nega panic berishi mumkin edi?",
       "snippet": "type Counter struct {\n    flag  bool\n    total int64\n}\natomic.AddInt64(&c.total, 1)",
-      "options": [
-        "Eski atomic funksiyalari 64-bit argumentdan 8 baytga moslangan manzil talab qiladi; 32-bit platformada struct ichidagi int64 4 baytga tushib qolishi mumkin — yechim: atomic.Int64 tipini ishlatish (u alignment'ni o'zi kafolatlaydi)",
-        "32-bit da atomic umuman yo'q",
-        "bool maydon atomic'ni buzadi",
-        "Faqat Windows'da muammo"
-      ],
-      "answer": 0,
       "explanation": "Go 1.19 dan atomic.Int64/Uint64/Pointer tiplari bor: ular alignment'ni kafolatlaydi, nusxalanishdan himoyalaydi (noCopy) va API tipli. Yangi kodda &x bilan ishlaydigan eski funksiyalar o'rniga shu tiplarni ishlating.",
       "source": "https://pkg.go.dev/sync/atomic#Int64"
     },
@@ -671,311 +425,192 @@
       "id": 30169,
       "code": "SN170",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "`ctx` bekor bo'lgach `errgroup`dagi qolgan goroutine'lar avtomatik to'xtaydimi?",
-      "options": [
-        "Ha, avtomatik",
-        "Yo'q — `errgroup.WithContext` faqat ctx'ni bekor qiladi; har goroutine o'zi `ctx.Done()`ni yoki ctx'ni qabul qiluvchi chaqiruvlarni (DB, HTTP) tekshirishi kerak, aks holda ish davom etadi",
-        "Faqat `SetLimit` bilan",
-        "Panic bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Go'da cancellation kooperativ: hech kim goroutine'ni majburan to'xtata olmaydi. Shuning uchun uzun tsikllarda `select { case <-ctx.Done(): return ctx.Err(); default: }` yoki I/O chaqiruvlariga ctx uzatish kerak. `errgroup.Wait` birinchi xatoni qaytaradi, lekin qolganlarini kutadi — leak shu yerdan chiqadi."
     },
     {
       "id": 30170,
       "code": "SN171",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Bu kodda qanday xato bor?",
       "snippet": "type Counter struct {\n    mu sync.RWMutex\n    m  map[string]int\n}\n\nfunc (c *Counter) Inc(k string) {\n    c.mu.RLock()\n    defer c.mu.RUnlock()\n    c.m[k]++\n}",
-      "options": [
-        "`RWMutex` o'rniga `Mutex` kerak emas, kod to'g'ri",
-        "`RLock` yozuvni himoya qilmaydi — bir necha goroutine bir vaqtda `RLock` oladi va map'ga yozadi: `concurrent map writes` panic yoki buzilgan sanoq",
-        "`defer` sekin",
-        "`map` nil"
-      ],
-      "answer": 1,
       "explanation": "`RLock` faqat o'qishlar uchun va ular o'zaro bloklanmaydi. Yozuvda `Lock` kerak. Bu bug yuk ostida tasodifiy panic beradi va testda chiqmaydi — shuning uchun CI'da `go test -race` majburiy. Yuqori konkurentlikda `atomic.Int64` yoki shardlangan hisoblagich mutex'dan tez bo'ladi."
     },
     {
       "id": 30171,
       "code": "SN172",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Channels",
       "domain": "go",
       "section": "g2",
       "question": "Worker pool'da natija kanali buferlanmagan va konsumer xato bo'lib chiqib ketdi. Nima bo'ladi?",
-      "options": [
-        "Hech narsa",
-        "Yozuvchi goroutine'lar abadiy bloklanadi — goroutine leak; shuning uchun yozish `select`da `ctx.Done()` bilan birga bo'lishi yoki konsumer kanalni oxirigacha drenaj qilishi kerak",
-        "Kanal avtomatik yopiladi",
-        "Xabarlar tashlanadi"
-      ],
-      "answer": 1,
       "explanation": "Klassik leak: `results <- r` bloklangan, funksiya `return` qilmaydi, `wg.Wait()` ham abadiy kutadi. Naqsh: `select { case results <- r: case <-ctx.Done(): return }`. Qoida — kanalga yozish har doim bekor qilinishi mumkin bo'lgan operatsiya sifatida yozilsin; kanalni yopish esa faqat yozuvchi tomonning vazifasi."
     },
     {
       "id": 30172,
       "code": "SN173",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "10k tashqi HTTP chaqiruvni parallel qilish kerak. To'g'ri yondashuv?",
-      "options": [
-        "10k goroutine bir vaqtda",
-        "Konkurentlikni cheklash: `errgroup` + `SetLimit(N)` yoki semaphore; N tashqi servis limitiga va o'z resursiga qarab tanlanadi, ustiga per-request timeout, retry budget va umumiy ctx deadline",
-        "`GOMAXPROCS`ni oshirish",
-        "Kanalsiz `sync.WaitGroup`"
-      ],
-      "answer": 1,
       "explanation": "Goroutine arzon, lekin har biri TCP ulanish, xotira buferi va downstream yukini keltiradi — 10k parallel so'rov tashqi servisni yoki o'z FD limitini o'ldiradi. N ni empirik tanlash kerak (latency × N ≈ throughput, Little's law). Qo'shimcha: natijalarni tartibli yig'ish uchun indeksli slice, kanalga yozishdan ko'ra oddiyroq."
     },
     {
       "id": 30412,
       "code": "SN413",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "`sync.Mutex` normal va starvation rejimlari nima?",
-      "options": [
-        "Faqat bitta rejim bor",
-        "Normal rejimda yangi kelgan goroutine navbatda kutganlarni ortda qoldirishi mumkin (throughput uchun); kutish 1 ms dan oshsa mutex starvation rejimiga o'tadi va qulf navbat bo'yicha beriladi — adolat ta'minlanadi, lekin throughput pasayadi",
-        "Faqat FIFO",
-        "Faqat spin"
-      ],
-      "answer": 1,
       "explanation": "Bu gibrid dizayn: qisqa kritik bo'limlarda spin + darhol olish tez, lekin cheksiz starvation bo'lmasligi kafolatlanadi. Amaliy xulosa: mutex ostidagi ish qisqa bo'lishi kerak (I/O hech qachon qulf ostida emas); yuqori raqobatda `RWMutex` ham yordam bermasligi mumkin (o'quvchi hisoblagichi ham umumiy kesh qatori) — shardlash yoki `atomic`ga o'tiladi."
     },
     {
       "id": 30413,
       "code": "SN414",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "`atomic.Value`/`atomic.Pointer` qaysi naqsh uchun ideal?",
-      "options": [
-        "Hisoblagich uchun",
-        "Kam o'zgaradigan, ko'p o'qiladigan konfiguratsiya/ma'lumot snapshot'i uchun: o'qish qulfsiz (copy-on-write — yangi nusxa tayyorlanib pointer atomik almashtiriladi), eski nusxani hali o'qiyotganlar xotirasi GC bilan tozalanadi",
-        "Kanal o'rniga",
-        "Faqat testda"
-      ],
-      "answer": 1,
       "explanation": "Misollar: feature flag jadvali, routing jadvali, narx ro'yxati — sekundiga millionlab o'qish, daqiqada bir yangilanish. `RWMutex` bilan ham ishlaydi, lekin atomik pointer almashtirish nolga yaqin o'qish narxini beradi. Shart: saqlanayotgan struktura almashtirilgandan keyin o'zgartirilmasligi kerak (immutable)."
     },
     {
       "id": 30414,
       "code": "SN415",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "`context.WithValue` ni qanday to'g'ri ishlatiladi?",
-      "options": [
-        "Funksiya argumentlarini uzatish uchun",
-        "Faqat so'rov doirasidagi kesishuvchi ma'lumot uchun (trace ID, request ID, auth subject); kalit eksport qilinmagan maxsus tur bo'lishi kerak (kolliziya bo'lmasligi uchun), va majburiy biznes parametrlari kontekst orqali emas, aniq argument bilan uzatiladi",
-        "Har qanday ma'lumot uchun",
-        "Global holat uchun"
-      ],
-      "answer": 1,
       "explanation": "Anti-pattern: kontekstga `userID` solib, chuqur qatlamda o'qish — kompilyator tekshirmaydi, yo'qolsa runtime'da bilinadi va testlash qiyin. Trace ID esa aynan mos keladi: u har qatlamga kerak lekin biznes mantiqiga tegishli emas. Kalit sifatida `type ctxKey struct{}` ishlatiladi, `string` emas."
     },
     {
       "id": 30415,
       "code": "SN416",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "Fan-in/fan-out pipeline'da 'graceful' to'xtatish qanday quriladi?",
-      "options": [
-        "Kanallarni yopmasdan qoldirish",
-        "Har bosqich: yozuvchi tugagach o'z chiqish kanalini yopadi (faqat yozuvchi yopadi), o'quvchi `range` bilan tugaydi; bekor qilish uchun barcha bosqichda `ctx.Done()` bilan `select`; fan-in'da `sync.WaitGroup` tugagach birlashgan kanal yopiladi",
-        "Har bosqichda `panic`",
-        "Kanalni o'quvchi yopadi"
-      ],
-      "answer": 1,
       "explanation": "Ikki qoida yetarli: (1) kanalni faqat unga yozuvchi yopadi, (2) har bloklanuvchi operatsiya `ctx.Done()` bilan birga `select`da. Aks holda erta chiqishda yozuvchilar abadiy bloklanadi (goroutine leak) yoki yopilgan kanalga yozib panic bo'ladi. Testda `goleak` bilan tekshiriladi."
     },
     {
       "id": 30694,
       "code": "GX94",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Go memory model bo'yicha qaysi gap to'g'ri?",
-      "options": [
-        "Sinxronizatsiyasiz bir goroutine yozgan qiymatni boshqasi ko'rishi kafolatlanmaydi; happens-before faqat kanal send/receive, Mutex Unlock/Lock, sync.Once, atomic operatsiyalar orqali o'rnatiladi",
-        "Bir yadroli mashinada data race bo'lmaydi",
-        "int'ga yozish har doim atomik, shuning uchun sinxronizatsiya kerak emas",
-        "time.Sleep happens-before beradi"
-      ],
-      "answer": 0,
       "explanation": "Go 1.19 memory model: race'siz dastur ketma-ket izchil (DRF-SC). Race bo'lsa kompilyator va CPU tartibni o'zgartirishi mumkin — `for !done {}` flag'i abadiy loop bo'lishi mumkin (qiymat registrda qoladi). `time.Sleep` sinxronizatsiya emas. `go test -race` race'larni runtime'da topadi — CI'da majburiy bo'lishi kerak."
     },
     {
       "id": 30695,
       "code": "GX95",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "`atomic.Int64` (Go 1.19+) eski `atomic.AddInt64(&x, 1)` dan nimasi bilan yaxshi?",
-      "options": [
-        "Tezroq ishlaydi",
-        "Tip darajasida himoya: maydonni tasodifan atomiksiz o'qish/yozish mumkin emas; 32-bit platformalarda 64-bit alignment avtomatik kafolatlanadi; noCopy bilan vet nusxalashni ushlaydi",
-        "Mutex'ni to'liq almashtiradi",
-        "Faqat 64-bit tizimlarda ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Eski API'da `x++` va `atomic.AddInt64(&x,1)` aralashib ketishi oson — bu race. 32-bit ARM/386 da int64 8-baytga tekislanmagan bo'lsa atomic panic berardi. `atomic.Pointer[T]` konfiguratsiyani lock'siz almashtirish (copy-on-write) uchun qulay. Bir nechta maydonni birga o'zgartirish kerak bo'lsa — atomic emas, Mutex."
     },
     {
       "id": 30696,
       "code": "GX96",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Juda ko'p o'qiladigan, kamdan-kam yangilanadigan konfiguratsiya uchun eng yaxshi pattern?",
-      "options": [
-        "sync.RWMutex har doim eng tez",
-        "Global o'zgaruvchi, sinxronizatsiyasiz",
-        "atomic.Pointer[Config]: o'quvchilar Load() qiladi (lock yo'q), yozuvchi yangi Config nusxasini yaratib Store() qiladi; Config yaratilgandan keyin o'zgartirilmaydi (immutable)",
-        "Har o'qishda kanal orqali so'rash"
-      ],
-      "answer": 2,
       "explanation": "RWMutex ko'p yadroda RLock'dagi umumiy counter tufayli cache-line contention beradi — o'quvchilar ko'p bo'lsa sekinlashadi. atomic.Pointer bilan o'qish deyarli bepul. Shart: Store'dan keyin eski obyektni hech kim o'zgartirmasligi (aks holda race). sync.Map faqat kalitlar to'plami asosan o'sib boradigan yoki goroutine'lar alohida kalitlar bilan ishlaydigan holatlar uchun."
     },
     {
       "id": 30697,
       "code": "GX97",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Bu kod qanday ishlaydi?\n\n```go\ntype Stats struct {\n    hits   atomic.Int64\n    misses atomic.Int64\n}\n// 64 ta goroutine to'xtovsiz hits.Add(1) va misses.Add(1) qiladi\n```\n\nProfil `atomic.Add` da ko'p vaqt ko'rsatyapti. Sabab?",
-      "options": [
-        "atomic noto'g'ri ishlatilgan",
-        "Go'da atomic sekin, Mutex yaxshiroq",
-        "GC bosimi",
-        "False sharing: ikkala counter bitta 64-baytlik cache line'da — har yadro yozganda boshqalarning keshi bekor bo'ladi; yechim — padding yoki har yadroga/shard'ga alohida counter, keyin yig'ish"
-      ],
-      "answer": 3,
       "explanation": "Tekshirish: benchmark'da `_ [56]byte` padding qo'shib farqni ko'rish. Yuqori yozuvli counterlar uchun sharding (masalan GOMAXPROCS ta slot, har birini cache line'ga tekislab) — o'qishda yig'iladi. Prometheus client ham ichida shunga o'xshash yondashuvdan foydalanadi."
     },
     {
       "id": 30747,
       "code": "SN561",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "Natija?",
       "snippet": "ctx, cancel := context.WithCancelCause(context.Background())\ncancel(errors.New(\"db down\"))\nfmt.Println(ctx.Err(), context.Cause(ctx))",
-      "options": [
-        "`db down db down`",
-        "`context canceled db down` — `Err()` standart qoladi, sabab `context.Cause` orqali olinadi",
-        "`<nil> db down`",
-        "`context canceled <nil>`"
-      ],
-      "answer": 1,
       "explanation": "Go 1.20: `WithCancelCause`, 1.21: `WithDeadlineCause`/`WithTimeoutCause`. `ctx.Err()` API mosligi uchun doim `Canceled`/`DeadlineExceeded` qaytaradi — `errors.Is(err, context.Canceled)` kodlari buzilmaydi. `context.Cause(ctx)` haqiqiy sababni beradi (sabab berilmagan bo'lsa `Err()` bilan bir xil). Foyda: loglarda \"context canceled\" o'rniga \"client disconnected\" yoki \"upstream X timeout\" ko'rinadi."
     },
     {
       "id": 30748,
       "code": "SN562",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "HTTP handler javobdan keyin audit yozishni fon goroutine'ga beradi. Nima chiqadi?",
       "snippet": "p, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)\ndefer cancel()\nd := context.WithoutCancel(p)\ntime.Sleep(20 * time.Millisecond)\n_, hasDeadline := d.Deadline()\nfmt.Println(p.Err(), d.Err(), hasDeadline)",
-      "options": [
-        "`context deadline exceeded context deadline exceeded true`",
-        "`context deadline exceeded <nil> false` — `WithoutCancel` ota bekor bo'lishini ham, deadline'ni ham uzadi, lekin value'lar saqlanadi",
-        "`<nil> <nil> false`",
-        "panic"
-      ],
-      "answer": 1,
       "explanation": "Go 1.21 `context.WithoutCancel` — request context'dagi trace ID, user kabi qiymatlarni saqlab, bekor qilinishni uzadi. Klassik bug: `go audit(r.Context())` — handler qaytishi bilan ctx bekor bo'ladi va audit yozilmaydi. Lekin endi deadline yo'q — fon ishiga o'z timeout'ini qo'ying: `context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)`."
     },
     {
       "id": 30749,
       "code": "SN563",
       "level": "St",
-      "type": "code",
+      "type": "card",
       "topic": "Context",
       "domain": "go",
       "section": "g2",
       "question": "`after` chop etiladimi?",
       "snippet": "ctx, cancel := context.WithCancel(context.Background())\nstop := context.AfterFunc(ctx, func() { fmt.Println(\"after\") })\nfmt.Println(stop())\ncancel()",
-      "options": [
-        "Ha, `true` dan keyin `after`",
-        "Yo'q — `stop()` funksiya ishga tushmasdan uni ro'yxatdan chiqardi va `true` qaytardi",
-        "Ha, darhol",
-        "panic"
-      ],
-      "answer": 1,
       "explanation": "Go 1.21 `context.AfterFunc(ctx, f)` — ctx bekor bo'lganda `f` ni alohida goroutine'da chaqiradi, har bir kutish uchun goroutine ochib `<-ctx.Done()` kutishdan arzonroq. `stop()` `true` qaytarsa `f` ishga tushmaydi; `false` — allaqachon ishga tushgan yoki to'xtatilgan. Qo'llanish: ctx bekor bo'lganda bloklangan I/O ni uzish (`conn.SetDeadline(time.Now())`), `sync.Cond`ni uyg'otish. `f` tugashini kutmaydi — kerak bo'lsa o'zingiz sinxronlang."
     },
     {
       "id": 30750,
       "code": "SN564",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Sync",
       "domain": "go",
       "section": "g2",
       "question": "Natija?",
       "snippet": "n := 0\nf := sync.OnceValue(func() int { n++; return n * 10 })\nfmt.Println(f(), f(), n)\n\ng := sync.OnceFunc(func() { panic(\"x\") })\n// g() ikki marta recover bilan chaqirildi",
-      "options": [
-        "`10 20 2`, ikkinchi `g()` jim o'tadi",
-        "`10 10 1`; `g()` har chaqiruvda qayta panic qiladi (bir xil qiymat bilan)",
-        "`10 10 1`, ikkinchi `g()` jim o'tadi",
-        "Kompilyatsiya xatosi"
-      ],
-      "answer": 1,
       "explanation": "Go 1.21 `sync.OnceFunc`/`OnceValue`/`OnceValues` — `sync.Once` + natija saqlash naqshining xavfsiz versiyasi (lazy config, client init). Muhim farq: `f` panic qilsa, `sync.Once.Do` keyingi chaqiruvlarda jim o'tib ketadi (yarim initsializatsiya holatida qolasiz), `OnceFunc` esa har chaqiruvda o'sha panic'ni qaytaradi. Xato qaytarish uchun `OnceValues(func() (T, error))`."
     },
     {
       "id": 30751,
       "code": "SN565",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Concurrency",
       "domain": "go",
       "section": "g2",
       "question": "`testing/synctest` (Go 1.25 da stabil) qanday muammoni hal qiladi?",
-      "options": [
-        "Race'larni topadi",
-        "Vaqtga bog'liq concurrent kodni sohta soat bilan deterministik testlaydi: bubble ichidagi hamma goroutine bloklansa vaqt darhol oldinga suriladi, `synctest.Wait` barcha goroutine'lar to'xtashini kutadi",
-        "Goroutine leak'ni production'da topadi",
-        "Testlarni parallel qiladi"
-      ],
-      "answer": 1,
       "explanation": "`synctest.Test(t, func(t *testing.T){...})` izolyatsiyalangan \"bubble\" yaratadi, ichida `time.Now`, `time.Sleep`, timer'lar sohta soatda ishlaydi. `time.Sleep(time.Hour)` test'ni bir zumda o'tkazadi, `time.Sleep(10*time.Millisecond)` bilan \"kutib ko'rish\" kabi flaky testlar yo'qoladi. Cheklov: bubble'dan tashqaridagi I/O (haqiqiy tarmoq) \"durable blocking\" hisoblanmaydi — `net.Pipe` kabi in-memory fake ishlatiladi. Go 1.24 da `GOEXPERIMENT=synctest` bilan `synctest.Run` edi."
     }
   ]

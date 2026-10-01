@@ -11,37 +11,23 @@
       "id": 17000,
       "code": "E38",
       "level": "P",
-      "type": "code",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Bu funksiya nega xotira ushlab qoladi?",
       "snippet": "func firstLine(data []byte) []byte {\n    i := bytes.IndexByte(data, '\\n')\n    return data[:i]\n}\n// data — 10 MB fayl",
-      "options": [
-        "Qaytgan slice asosiy 10 MB massivga ishora qiladi — GC butun massivni ozod qila olmaydi; yechim: bytes.Clone yoki append([]byte(nil), data[:i]...)",
-        "Hech qanday muammo yo'q, GC kesilgan qismni ozod qiladi",
-        "panic: slice bounds",
-        "Faqat string bilan muammo bo'ladi"
-      ],
-      "answer": 0,
       "explanation": "Slice — massivga ishora qiluvchi header. Kichik sub-slice ham butun backing array'ni tirik ushlaydi. Xuddi shu holat: katta slice'dan bitta elementni struct'da saqlash, yoki []byte'dan sub-slice'ni cache'ga qo'yish. Yechim — nusxa olish (Go 1.20+ da bytes.Clone / slices.Clone)."
     },
     {
       "id": 17001,
       "code": "E39",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Slice'dan element o'chirganda pointer'lar nima bo'ladi?",
-      "options": [
-        "s = append(s[:i], s[i+1:]...) oxirgi slot'da eski pointer nusxasini qoldiradi — u tirik qoladi; oxirgi elementga nil berish kerak",
-        "Go avtomatik tozalaydi",
-        "append pointer bilan ishlamaydi",
-        "Faqat map'da muammo bor"
-      ],
-      "answer": 0,
       "explanation": "len kamayadi, lekin backing array'ning [len] pozitsiyasidagi eski pointer saqlanib qoladi va obyektni GC'dan himoya qiladi (memory leak). To'g'ri: s[len(s)-1] = nil; s = s[:len(s)-1] yoki Go 1.21+ da slices.Delete (u ortiqcha slot'larni nol qiladi).",
       "source": "https://go.dev/wiki/SliceTricks"
     },
@@ -49,36 +35,22 @@
       "id": 17002,
       "code": "E40",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Go'da map'dan ko'p element o'chirilgandan keyin xotira qaytmayapti. Nega?",
-      "options": [
-        "Map bucket'lari hech qachon qisqarmaydi — delete faqat slot'ni bo'shatadi; xotirani qaytarish uchun yangi map qurib ko'chirish kerak",
-        "GC buzilgan",
-        "delete xotirani darhol qaytaradi, muammo boshqa joyda",
-        "Faqat sync.Map'da shunday"
-      ],
-      "answer": 0,
       "explanation": "Go runtime map'ni shrink qilmaydi: 10M element qo'shib hammasini o'chirsangiz, bucket massivi joyida qoladi. Katta vaqtinchalik map'lar uchun: ishdan keyin map'ni nil qilish yoki yangisini yaratish. Shuningdek map[string]BigStruct o'rniga map[string]*BigStruct pointer skanini oshiradi — katta map'larda GC vaqtiga ta'sir qiladi."
     },
     {
       "id": 17003,
       "code": "E41",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Konteynerda Go servis OOMKilled bo'lyapti, lekin heap profili kichik. Birinchi nima tekshirasan?",
-      "options": [
-        "GOMEMLIMIT o'rnatilganmi — konteyner limitini Go bilmaydi, GOGC=100 heap'ni ikki barobarga o'stiradi; yana goroutine stack'lari va cgo/mmap xotirasi heap profilida ko'rinmaydi",
-        "Darhol GOGC=10 qo'yish",
-        "Xotira limitini olib tashlash",
-        "Faqat pod replikasini oshirish"
-      ],
-      "answer": 0,
       "explanation": "Go 1.19+ GOMEMLIMIT — soft limit: unga yaqinlashganda GC tez-tez ishlaydi. Amaliy sozlash: GOMEMLIMIT ≈ konteyner limitining 80-90%, GOGC o'chirilmasin (off qilish xavfli). RSS heap'dan katta bo'lishining sabablari: goroutine stack'lari, runtime metadata, OS'ga hali qaytarilmagan sahifalar (MADV_FREE), cgo allocatsiyalari. Tekshiruv: runtime/metrics, GODEBUG=gctrace=1.",
       "source": "https://go.dev/doc/gc-guide"
     },
@@ -86,184 +58,114 @@
       "id": 17004,
       "code": "E42",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Qaysi kod escape to'g'ri tushuntiradi?",
       "snippet": "func newUser() *User { u := User{}; return &u }",
-      "options": [
-        "u heap'ga escape qiladi — Go'da stack'dagi o'zgaruvchiga pointer qaytarish xavfsiz, kompilyator escape analysis bilan joyni tanlaydi",
-        "Dangling pointer, undefined behavior",
-        "Kompilyatsiya xatosi",
-        "Har doim stack'da qoladi"
-      ],
-      "answer": 0,
       "explanation": "C'dan farqli o'laroq Go'da bu xavfsiz. Kompilyator `go build -gcflags='-m'` bilan qarorni ko'rsatadi: 'moved to heap: u'. Escape sabablari: pointer qaytarish, interface'ga solish, closure'da ushlash, fmt.Println kabi interface{} qabul qiluvchi chaqiruvlar. Hot path'da allokatsiyani kamaytirish uchun shu chiqishga qarab optimizatsiya qilinadi."
     },
     {
       "id": 30164,
       "code": "SN165",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Bu kod nega xotira ushlab qoladi?",
       "snippet": "func firstLine(data []byte) []byte {\n    i := bytes.IndexByte(data, '\\n')\n    return data[:i]   // data 10MB bo'lsin\n}",
-      "options": [
-        "Ushlamaydi, faqat kichik qism qaytadi",
-        "Qaytgan slice 10MB backing array'ni ushlab turadi — GC butun massivni bo'shatmaydi; `append([]byte(nil), data[:i]...)` yoki `bytes.Clone` bilan nusxa olinadi",
-        "Panic bo'ladi",
-        "GC darhol tozalaydi"
-      ],
-      "answer": 1,
       "explanation": "Slice — (ptr, len, cap): kichik oyna ham katta massivga havola. Bu naqsh HTTP javobini o'qib bir bo'lagini keshda saqlaganda haqiqiy leak keltiradi (kesh 100 element × 10MB). Xuddi shunday `string(bigBytes[:10])` esa nusxa oladi — string konversiyasi allocation qiladi."
     },
     {
       "id": 30165,
       "code": "SN166",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "`sync.Pool` bilan ishlashda klassik xato?",
-      "options": [
-        "Pool ishlatmaslik",
-        "Buferni pool'ga qaytarishdan oldin tozalamaslik (eski ma'lumot boshqa so'rovga oqadi) yoki juda katta buferlarni qaytarish (pool xotirani ushlab qoladi); shuningdek pool'dagi obyektga havolani saqlab qo'yish",
-        "`Get` nil qaytaradi",
-        "Pool goroutine-safe emas"
-      ],
-      "answer": 1,
       "explanation": "Xavfsizlik nuqtasi: ma'lumot oqishi (bir foydalanuvchi javobi boshqasiga) — real incident turi. To'g'ri naqsh: `buf.Reset()` qaytarishdan oldin, hajm chegarasidan katta buferlarni umuman qaytarmaslik, va pool'dan olingan slice'ga tashqi havola qoldirmaslik. `sync.Pool` GC paytida tozalanadi — kesh emas, faqat allocation pressure'ni kamaytirish vositasi."
     },
     {
       "id": 30272,
       "code": "SN273",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Go GC bor — unda memory leak qanday ko'rinishda bo'ladi?",
-      "options": [
-        "Go'da leak bo'lmaydi",
-        "GC faqat erishib bo'lmaydigan obyektlarni tozalaydi; leak — hali ham havola qilinayotgan, lekin kerak bo'lmagan ma'lumot: cheksiz o'sayotgan map/kesh (TTL yo'q), bloklangan goroutine'lar va ularning stack'i, `sync.Pool`da ushlangan katta buferlar, katta slice'ning kichik bo'lagini saqlash, yopilmagan `resp.Body` va `time.Ticker`",
-        "Faqat cgo'da",
-        "Faqat `unsafe` bilan"
-      ],
-      "answer": 1,
       "explanation": "Bu savol intervyularda aynan shu shaklda so'raladi. Diagnostika: `/debug/pprof/heap` (inuse_space) ikki snapshot farqi kerak bo'lmagan ushlanishni ko'rsatadi, `/debug/pprof/goroutine` bloklanganlarni, RSS va `MemStats` esa Go tashqarisidagi o'sishni. Eng ko'p uchraydigan sabab — chegarasiz kesh (map) va goroutine leak."
     },
     {
       "id": 30494,
       "code": "SN495",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Xotirada cheksiz o'sadigan kesh (`map[string]T`) qanday to'g'rilanadi?",
-      "options": [
-        "`GOGC` ni kamaytirish",
-        "Chegara qo'yish: LRU (`hashicorp/golang-lru`) yoki TTL bilan tozalanadigan kesh, element soni/bayt hajmi limiti va metrikada kuzatuv; chegarasiz map — GC uchun leak emas (havola bor) lekin amalda leak",
-        "`sync.Map` ishlatish",
-        "Kesh o'rniga global o'zgaruvchi"
-      ],
-      "answer": 1,
       "explanation": "`sync.Map` konkurentlikni hal qiladi, o'sishni emas. Yana bir tuzoq: kalit sifatida katta string yoki struct ishlatish (masalan butun so'rov matni) — kardinallik portlaydi. Amaliy qoida: har keshga maksimal hajm, TTL va hit/miss/evict metrikalari majburiy."
     },
     {
       "id": 30495,
       "code": "SN496",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Bu kodda qanday xotira muammosi bor?",
       "snippet": "func handler(w http.ResponseWriter, r *http.Request) {\n    body, _ := io.ReadAll(r.Body)\n    var req Request\n    json.Unmarshal(body, &req)\n    // ...\n}",
-      "options": [
-        "Muammo yo'q",
-        "Body hajmi cheklanmagan — katta payload bilan xotira to'ldiriladi (DoS); `http.MaxBytesReader(w, r.Body, 1<<20)` bilan cheklash va `json.NewDecoder` bilan oqimda o'qish kerak; bundan tashqari `Unmarshal` xatosi tekshirilmagan",
-        "`io.ReadAll` eskirgan",
-        "`json` sekin"
-      ],
-      "answer": 1,
       "explanation": "Ikki alohida muammo: (1) hajm limiti yo'q — bitta so'rov bilan OOM qilish mumkin; (2) xato e'tiborsiz qoldirilgan — noto'g'ri JSON bilan `req` nol qiymatlar bilan qolib, biznes mantiqi jim noto'g'ri ishlaydi. Server tomonida `MaxBytesReader` + `ReadHeaderTimeout` standart himoya."
     },
     {
       "id": 30752,
       "code": "SN566",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Go 1.24 `runtime.AddCleanup` `runtime.SetFinalizer`dan nimasi bilan yaxshi?",
-      "options": [
-        "Tezroq ishlaydi, boshqa farq yo'q",
-        "Obyektni qayta tiriltirmaydi (cleanup obyektning o'zini olmaydi), bir obyektga bir nechta cleanup qo'yish mumkin, siklik referensli obyektlarni ham yig'adi, ichki pointerga ham qo'yiladi",
-        "Deterministik — obyekt ketishi bilan darhol chaqiriladi",
-        "Faqat cgo uchun"
-      ],
-      "answer": 1,
       "explanation": "`SetFinalizer(obj, f)` — `f` obyektning o'zini oladi va uni tiriltiradi: xotira bir GC siklga kechikadi, sikl ichidagi finalizerli obyektlar hech qachon yig'ilmaydi (leak). `AddCleanup(ptr, fn, arg)` — `fn(arg)`; `arg` `ptr`ga ishora qilsa cleanup hech qachon ishlamaydi (tuzoq!). Ikkalasi ham kafolatlanmagan va kechikkan — fayl/connection yopishning asosiy mexanizmi emas, faqat zaxira (`Close()` baribir kerak)."
     },
     {
       "id": 30753,
       "code": "SN567",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "`weak.Pointer[T]` (Go 1.24) bilan kanonikalash (dedup) keshi yozildi. Qaysi gap to'g'ri?",
-      "options": [
-        "Weak pointer obyektni tirik ushlaydi",
-        "`wp.Value()` obyekt yig'ilgan bo'lsa `nil` qaytaradi; map'dagi yozuvni o'zingiz tozalashingiz kerak (odatda `runtime.AddCleanup` bilan) — aks holda map bo'sh weak pointer'lar bilan o'sadi",
-        "Weak pointer'lar faqat string uchun",
-        "`weak.Make` nusxa yaratadi"
-      ],
-      "answer": 1,
       "explanation": "Weak pointer — GC uchun ko'rinmas referens: obyekt faqat weak'lar bilan qolsa yig'iladi. Bir xil obyekt uchun `weak.Make` teng pointer'lar qaytaradi — map kaliti sifatida ishlatish mumkin. Standart misol — `unique.Make` (Go 1.23) aynan shu asosda qurilgan interning. Klassik xato: kalit/qiymatni kesh tozalanishiga bog'lamaslik — obyektlar ketadi, lekin map yozuvlari qoladi (asta leak)."
     },
     {
       "id": 30754,
       "code": "SN568",
       "level": "St",
-      "type": "code",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Bu kodda qanday muammo bor?",
       "snippet": "func key(b []byte) string {\n    return unsafe.String(&b[0], len(b)) // nusxasiz\n}\n\nbuf := make([]byte, 0, 64)\nbuf = append(buf, \"user:42\"...)\nm[key(buf)] = v\nbuf = buf[:0]\nbuf = append(buf, \"user:77\"...)",
-      "options": [
-        "Muammo yo'q, tezroq",
-        "Map kaliti `buf` xotirasiga ishora qiladi; `buf` qayta yozilganda map ichidagi kalit jim o'zgaradi — immutability buzildi, map korrupt (noto'g'ri bucket'da noto'g'ri kalit)",
-        "Kompilyatsiya xatosi",
-        "Faqat GC muammo"
-      ],
-      "answer": 1,
       "explanation": "`unsafe.String`/`unsafe.StringData`/`unsafe.Slice` (Go 1.20) nusxasiz konversiya beradi, lekin shart: string mavjud bo'lgan butun muddat davomida bayt'lar o'zgarmasligi kerak. Map kaliti, kesh, boshqa goroutine'ga berilgan string — hammasi uzoq yashaydi. Kompilyator o'zi xavfsiz holatlarda nusxani olib tashlaydi: `m[string(b)]` lookup'da va `string(b) == \"x\"` taqqoslashda allocation yo'q — `unsafe` kerak emas. Qo'shimcha: `len(b)==0` bo'lsa `&b[0]` panic."
     },
     {
       "id": 30755,
       "code": "SN569",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Memory gotcha",
       "domain": "go",
       "section": "t8",
       "question": "Nega `reflect` yoki `fmt.Println(x)` ga uzatilgan lokal o'zgaruvchi ko'pincha heap'ga ko'chadi?",
-      "options": [
-        "reflect har doim nusxa oladi",
-        "Qiymat `any` (interfeys) sifatida uzatiladi va kompilyator chaqirilgan funksiya uni qayerda saqlashini isbotlay olmaydi — escape analysis konservativ ravishda heap'ga chiqaradi",
-        "fmt global buffer ishlatadi",
-        "Stack'da interfeys bo'lmaydi"
-      ],
-      "answer": 1,
       "explanation": "`go build -gcflags=-m` natijasi: `x escapes to heap` — `fmt.Println(x)`, `log.Printf(\"%v\", x)`, `json.Marshal(x)` sabab. Hot path'da debug log shu sabab allocation manbai bo'ladi: log darajasi o'chiq bo'lsa ham argumentlar interfeysga o'raladi. Yechim: `slog` bilan `slog.Int(\"k\", v)` kabi tipli atributlar, `if logger.Enabled(...)`, yoki `strconv.AppendInt` bilan qo'lda formatlash."
     }
   ]

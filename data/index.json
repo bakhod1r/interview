@@ -9,10 +9,7 @@
     "P": "Principal"
   },
   "types": {
-    "mcq": "Multiple choice",
-    "code": "Code",
-    "sql": "Write SQL",
-    "open": "Open"
+    "card": "Flashcard"
   },
   "domains": {
     "go": "Go",

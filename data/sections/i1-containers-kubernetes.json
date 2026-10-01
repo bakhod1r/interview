@@ -12,308 +12,189 @@
       "id": 2006,
       "code": "I7",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Docker",
       "domain": "infra",
       "section": "i1",
       "question": "Konteyner va virtual mashina farqi?",
-      "options": [
-        "Konteyner o'z operatsion tizim yadrosini yuklaydi",
-        "Konteyner host yadrosini bo'lishadi va faqat jarayonni izolyatsiya qiladi (namespace, cgroup) — soniyalarda ishga tushadi, kam resurs; VM to'liq OS va yadro bilan, kuchliroq izolyatsiya",
-        "VM tezroq ishga tushadi",
-        "Farqi yo'q"
-      ],
-      "answer": 1,
       "explanation": "Konteyner — o'ralgan jarayon, 'kichik VM' emas. Oqibatlari: yadro umumiy (security chegarasi zaifroq — shuning uchun ko'p tenantli muhitda gVisor/Firecracker), host yadrosiga bog'liqlik (Linux image Windows yadrosida ishlamaydi). Image — qatlamli fayl tizimi, konteyner esa shu image'dan ishga tushgan jarayon."
     },
     {
       "id": 2007,
       "code": "I8",
       "level": "J",
-      "type": "code",
+      "type": "card",
       "topic": "Docker",
       "domain": "infra",
       "section": "i1",
       "question": "Nega har kod o'zgarishida build 5 daqiqa ketadi? Tuzatish?",
       "snippet": "FROM node:20\nWORKDIR /app\nCOPY . .\nRUN npm ci\nRUN npm run build\nCMD [\"node\", \"dist/main.js\"]",
-      "options": [
-        "npm sekin, chora yo'q",
-        "COPY . . hamma faylni oldin nusxalaydi — har o'zgarishda keyingi qatlamlar cache'dan tushadi. Avval package*.json ni COPY qilib npm ci ni bajarish, keyin qolgan kodni COPY qilish kerak",
-        "FROM ni o'zgartirish kerak",
-        "CMD ni ENTRYPOINT qilish kerak"
-      ],
-      "answer": 1,
       "explanation": "Docker qatlamlarni keshlaydi: qatlam inputi o'zgarmasa qayta bajarilmaydi. To'g'ri tartib: kam o'zgaradigan narsa yuqorida. Yana: .dockerignore (node_modules, .git), multi-stage build bilan yakuniy image'da faqat dist va production bog'liqliklar, root bo'lmagan user, aniq versiyali base image (node:20.11-alpine, latest emas)."
     },
     {
       "id": 2008,
       "code": "I9",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Docker",
       "domain": "infra",
       "section": "i1",
       "question": "Production image hajmini kamaytirishning eng samarali yo'li?",
-      "options": [
-        "Fayllarni gzip qilish",
-        "Multi-stage build: builder bosqichida kompilyatsiya, yakuniy bosqichga faqat artefakt ko'chiriladi (build toollari, dev bog'liqliklar, cache qolmaydi)",
-        "RUN buyruqlarini ko'paytirish",
-        "Image'ni tez-tez qayta build qilish"
-      ],
-      "answer": 1,
       "explanation": "Katta image — sekin deploy, sekin autoscaling, katta hujum yuzasi. Qo'shimcha: slim/alpine yoki distroless base, RUN'larni birlashtirib cache'ni o'chirish (apt-get clean), .dockerignore. Go uchun yakuniy image scratch/distroless'da bir necha MB bo'lishi mumkin."
     },
     {
       "id": 2009,
       "code": "I10",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Liveness va readiness probe farqi?",
-      "options": [
-        "Bir xil, ikkita nom",
-        "Readiness — pod trafik qabul qilishga tayyormi (tayyor bo'lmasa Service'dan chiqariladi); Liveness — jarayon osilib qolganmi (fail bo'lsa konteyner qayta ishga tushiriladi)",
-        "Liveness faqat startda ishlaydi",
-        "Readiness podni o'chiradi"
-      ],
-      "answer": 1,
       "explanation": "Tipik xato: liveness probe'ni DB'ga bog'lash — DB bir daqiqa sekinlashса, Kubernetes hamma podlarni restart qilib incidentni kuchaytiradi. Qoida: liveness faqat 'jarayon tirikmi' (yengil, bog'liqliksiz), readiness bog'liqliklarni tekshirishi mumkin. Sekin startlar uchun startupProbe."
     },
     {
       "id": 2010,
       "code": "I11",
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Pod tez-tez OOMKilled bo'lyapti va latency sakrayapti. Bu manifestda nima muammo?",
       "snippet": "resources:\n  requests:\n    cpu: \"2\"\n    memory: \"2Gi\"\n  limits:\n    cpu: \"2\"\n    memory: \"256Mi\"",
-      "options": [
-        "Hech qanday muammo yo'q",
-        "memory limit (256Mi) request'dan (2Gi) kichik — konteyner limitga yetib OOMKill bo'ladi; CPU limit = request bo'lsa ham throttling bo'lishi mumkin. Memory limit ≈ request qilib real o'lchangan qiymatga qo'yish kerak",
-        "CPU juda kam",
-        "requests olib tashlash kerak"
-      ],
-      "answer": 1,
       "explanation": "CPU — siqiladigan resurs: limitdan oshsa throttle (sekinlashadi). Memory — siqilmaydi: limitdan oshsa OOMKill. Amaliyot: memory request = limit (Guaranteed QoS), CPU request qo'yib limitni ko'pincha qo'ymaslik (throttling'dan qochish). Qiymatlarni taxmin emas, real profil (VPA yoki metrika) asosida."
     },
     {
       "id": 2011,
       "code": "I12",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Rolling update paytida qisqa uzilishlar bo'lyapti. Qaysi to'plam buni yopadi?",
-      "options": [
-        "replicas sonini oshirish",
-        "readinessProbe (tayyor bo'lmaguncha trafik yo'q) + preStop hook va graceful shutdown (SIGTERM'da joriy query'larni tugatish) + maxUnavailable: 0 + PodDisruptionBudget",
-        "Faqat maxSurge: 5",
-        "livenessProbe'ni o'chirish"
-      ],
-      "answer": 1,
       "explanation": "Uzilishning ikki sababi: 1) yangi pod tayyor bo'lmasdan trafik oldi (readiness yo'q), 2) eski pod query o'rtasida o'ldirildi (graceful shutdown yo'q). PDB node drain/cluster upgrade paytida bir vaqtda qancha pod yo'qolishini cheklaydi. terminationGracePeriodSeconds shutdown vaqtidan katta bo'lsin."
     },
     {
       "id": 2012,
       "code": "I13",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Deployment va StatefulSet farqi? Postgres'ni Kubernetes'da ishlatasizmi?",
-      "modelAnswer": [
-        "Deployment — o'zaro almashinadigan (stateless) podlar, tasodifiy nom, umumiy yoki hech qanday volume",
-        "StatefulSet — barqaror nom (db-0, db-1), har podga o'z PersistentVolume'i, tartibli ishga tushish/o'chish",
-        "Stateful workload: storage tezligi, failover, backup, versiya yangilash — hammasi o'zingizda",
-        "Amaliy qaror: jamoada Kubernetes operator tajribasi bo'lmasa — managed DB (RDS/Cloud SQL)",
-        "Ishlatilsa — yetuk operator (CloudNativePG, Zalando), tekshirilgan backup va failover mashqlari"
-      ],
       "explanation": "Senior javob: 'mumkin, lekin kerakmi?' Konteyner DB'ni sekinlashtirmaydi — murakkablik operatsiyada. Test/dev muhit uchun — bemalol."
     },
     {
       "id": 30025,
       "code": "SN26",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Go servis podda deploy paytida 5xx beradi, keyin tinchiydi. Eng ehtimolli sabab va yechim?",
-      "options": [
-        "CPU limit kichik",
-        "Pod Service endpoint'iga qo'shilgan, lekin `readinessProbe` hali tayyor emasligini bildirmaydi; yoki eski pod SIGTERM olgach darhol yopilib, LB hali uni ro'yxatdan chiqarmagan",
-        "Image juda katta",
-        "DNS ishlamayapti"
-      ],
-      "answer": 1,
       "explanation": "Ikki tomonli muammo: (1) start — readiness probe haqiqiy dependency tayyorligini (DB pool, migratsiya, kesh warm) tekshirishi kerak; (2) stop — `preStop` sleep (5-15s) + graceful shutdown: SIGTERM'da yangi ulanish qabul qilinmaydi, mavjudlari tugatiladi, `terminationGracePeriodSeconds` shundan katta. Endpoint propagatsiyasi asinxron — shuning uchun sleep kerak."
     },
     {
       "id": 30026,
       "code": "SN27",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Go servisga `limits.memory: 512Mi` qo'yilgan, OOMKilled bo'lyapti. To'g'ri chora?",
-      "options": [
-        "Limitni ikki barobar oshirish va tinchlanish",
-        "`GOMEMLIMIT` (yoki GC tuning) limitdan ~20% pastga qo'yish — GC heap o'sishini cheklaydi; bundan tashqari haqiqiy profil (pprof heap) bilan leak/ katta bufferlarni tekshirish",
-        "GOGC=off",
-        "GC'ni qo'lda `runtime.GC()` chaqirish"
-      ],
-      "answer": 1,
       "explanation": "Go GC default soft limitni bilmaydi: heap 2x o'sib limitdan oshadi va cgroup OOM killer o'ldiradi (Go panic ham bermaydi). `GOMEMLIMIT=400MiB` soft limit — GC agressivlashadi. `GOGC` bilan birga ishlatiladi. Ustiga `GOMAXPROCS` CPU limitga moslanishi kerak (automaxprocs), aks holda throttling va latency."
     },
     {
       "id": 30027,
       "code": "SN28",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "CPU `limits` qo'yilgan podda p99 latency portlaydi, CPU ishlatish esa 40%. Sabab?",
-      "options": [
-        "Node sekin",
-        "CFS quota throttling: 100ms period ichida kvota tugab, qolgan vaqt pod to'xtatiladi (burst yuklamada). `cpu.throttled` metrikasi ko'rsatadi",
-        "Memory yetishmaydi",
-        "Network MTU"
-      ],
-      "answer": 1,
       "explanation": "O'rtacha ishlatish past bo'lishi mumkin, lekin burst paytda kvota tugaydi. Yechimlar: limitni oshirish yoki latency-sezgir servisda CPU limitni olib tashlash (faqat `requests` + to'g'ri sizing), GOMAXPROCS'ni kvotaga moslash, goroutine parallelizmini kamaytirish. `container_cpu_cfs_throttled_seconds_total` — asosiy dalil."
     },
     {
       "id": 30028,
       "code": "SN29",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "HPA CPU bo'yicha skale qiladi, lekin Kafka consumer lag o'sib ketyapti. To'g'ri yondashuv?",
-      "options": [
-        "CPU target'ni 30% qilish",
-        "Custom/external metrika bo'yicha skale (KEDA — consumer group lag); parallelizm partition soni bilan cheklanganini hisobga olish",
-        "Replicani qo'lda 50 ga chiqarish",
-        "HPA'ni o'chirib qo'yish"
-      ],
-      "answer": 1,
       "explanation": "Consumer I/O'ga bog'liq bo'lishi mumkin — CPU signal bermaydi. KEDA lag'ni to'g'ridan-to'g'ri o'qib skale qiladi. Muhim cheklov: consumer'lar soni partition sonidan oshsa foyda yo'q (ortiqchasi bo'sh turadi) — demak partition soni oldindan rejalashtiriladi va rebalance narxi (stop-the-world) hisobga olinadi."
     },
     {
       "id": 30029,
       "code": "SN30",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Docker",
       "domain": "infra",
       "section": "i1",
       "question": "Go servis uchun production image: qaysi qurilish to'g'ri?",
-      "options": [
-        "`FROM golang:1.22` va shu image'da ishga tushirish",
-        "Multi-stage: build stage'da kompilyatsiya (`CGO_ENABLED=0`, `-trimpath`, ldflags bilan versiya), runtime — `distroless`/`scratch`, nonroot user, read-only rootfs",
-        "Alpine + `apk add` barcha vositalar",
-        "Ubuntu + kompilyator qoldirish"
-      ],
-      "answer": 1,
       "explanation": "Toolchain'li image: 1GB+ hajm, ko'p CVE, ichida kompilyator va shell — hujum yuzasi. Distroless/scratch bilan bir necha o'n MB. Eslatmalar: `scratch`da TLS uchun `ca-certificates` va zone ma'lumotlari ko'chiriladi, `CGO_ENABLED=0` static bo'lishi uchun, layer keshi uchun `go mod download` alohida qatlamda."
     },
     {
       "id": 30261,
       "code": "SN262",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "`requests` va `limits` farqi va QoS klasslariga ta'siri?",
-      "options": [
-        "Bir xil narsa",
-        "`requests` — rejalashtirish uchun kafolatlangan minimal (scheduler shunga qaraydi), `limits` — maksimal chegara (CPU'da throttling, xotirada OOMKill). Guaranteed (requests=limits) eviction'da oxirgi, Burstable o'rtada, BestEffort (hech narsa qo'yilmagan) birinchi chiqariladi",
-        "`limits` rejalashtiradi",
-        "QoS yo'q"
-      ],
-      "answer": 1,
       "explanation": "Amaliy siyosat: xotirada `requests = limits` (Guaranteed) — chunki xotira siqilmaydigan resurs va OOM keladi; CPU'da `requests` aniq, `limits` ehtiyotkorlik bilan (latency-sezgir servisda throttling zarar qiladi). Klaster sig'imini rejalashtirishda `requests` yig'indisi muhim, `limits` esa overcommit darajasini belgilaydi."
     },
     {
       "id": 30262,
       "code": "SN263",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "`livenessProbe` va `readinessProbe` ni noto'g'ri sozlash qanday incident keltiradi?",
-      "options": [
-        "Hech qanday",
-        "Liveness DB'ga bog'liq qilinsa: DB sekinlashganda barcha podlar qayta ishga tushadi va vaziyat yomonlashadi (restart bo'roni). Readiness esa dependency'ga bog'liq bo'lishi mumkin — pod trafikdan chiqadi lekin o'ldirilmaydi",
-        "Probe'lar keraksiz",
-        "Faqat startup muhim"
-      ],
-      "answer": 1,
       "explanation": "Qoida: liveness — 'jarayon o'zini tiklay olmaydigan holatda qotib qoldimi' (deadlock) uchun, faqat mahalliy tekshiruv; readiness — 'hozir trafik qabul qila olamanmi'; startupProbe — sekin ishga tushish uchun (liveness'ni erta o'ldirmasligi uchun). `failureThreshold` va `periodSeconds` real ish vaqtiga moslanadi."
     },
     {
       "id": 30263,
       "code": "SN264",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Deploy paytida 100% mavjudlikni saqlash uchun qaysi obyektlar birga kerak?",
-      "options": [
-        "Faqat `Deployment` yetarli",
-        "RollingUpdate strategiyasi (`maxUnavailable: 0`, `maxSurge`), to'g'ri readiness probe, `preStop` + graceful shutdown, `PodDisruptionBudget` (node drain'da), bir necha replica va `topologySpreadConstraints` (AZ/node bo'ylab)",
-        "Faqat PDB",
-        "Faqat replica soni"
-      ],
-      "answer": 1,
       "explanation": "PDB ayniqsa muhim: klaster avtoskaler yoki node yangilanishi bir vaqtda ko'p podni chiqarib tashlamasligi uchun. `maxUnavailable: 0` bilan yangi pod tayyor bo'lgach eskisi o'chadi. Bularsiz 'rolling update' amalda qisqa downtime yoki 5xx to'lqini beradi — eng ko'p uchraydigan 'sababsiz xatolar' manbasi."
     },
     {
       "id": 30447,
       "code": "SN448",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Service trafikni podlarga qanday yetkazadi (kube-proxy)?",
-      "options": [
-        "DNS orqali to'g'ridan-to'g'ri",
-        "iptables rejimida har Service uchun NAT qoidalari yoziladi va tasodifiy pod tanlanadi (qoidalar soni o'sganda yangilanish sekinlashadi); IPVS rejimida yadro ichidagi yuk balansirovkasi (O(1) qidiruv, bir necha algoritm); eBPF (Cilium) esa kube-proxy'ni butunlay almashtiradi",
-        "Faqat Ingress orqali",
-        "Har so'rov API serverga boradi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy oqibatlar: iptables rejimida minglab Service bo'lsa qoidalarni yangilash sekundlarga cho'ziladi (endpoint o'zgarishi kech yetadi — deploy paytida 5xx); IPVS/eBPF kattaroq klasterlarda barqarorroq. Balansirovka L4 darajasida — HTTP/2/gRPC uchun yetarli emas (ulanish darajasida taqsimlanadi), shuning uchun client-side LB yoki mesh kerak."
     },
     {
       "id": 30448,
       "code": "SN449",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Kubernetes",
       "domain": "infra",
       "section": "i1",
       "question": "Service mesh (sidecar) qanday narxga ega va qachon oqlanadi?",
-      "options": [
-        "Narxsiz, har doim kerak",
-        "Har podda qo'shimcha proxy: latency (~0.5-2ms har hop), CPU/xotira, va operatsion murakkablik (versiya, sertifikat, debugging); oqlanadi — mTLS, yagona retry/timeout/circuit breaker siyosati, L7 balansirovka va batafsil telemetriya ko'p tilli o'nlab servislarda kerak bo'lsa",
-        "Faqat Istio bilan",
-        "Mesh latency'ni kamaytiradi"
-      ],
-      "answer": 1,
       "explanation": "Kichik tizimda (3-5 servis, bitta til) kutubxona darajasidagi yechim (gRPC interceptor + OTel) arzonroq va shaffofroq. Mesh'ning haqiqiy qiymati — siyosatni koddan ajratish va ko'p jamoada bir xil xatti-harakat. Sidecarsiz variantlar (ambient mesh, eBPF) narxni kamaytiradi, lekin yetuklik darajasi tekshirilishi kerak."
     }
   ]

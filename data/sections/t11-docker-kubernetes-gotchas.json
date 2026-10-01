@@ -11,36 +11,22 @@
       "id": 17014,
       "code": "E52",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "Konteynerdagi Go ilova SIGTERM'ga javob bermayapti, Kubernetes 30s kutib SIGKILL beryapti. Sabab?",
-      "options": [
-        "Ilova PID 1 emas yoki shell orqali ishga tushirilgan (shell form CMD) — signal jarayonga yetib bormaydi; exec form CMD [\"/app\"] ishlatish kerak",
-        "Kubernetes signal yubormaydi",
-        "Go signal'ni qo'llab-quvvatlamaydi",
-        "terminationGracePeriodSeconds kichik"
-      ],
-      "answer": 0,
       "explanation": "`CMD /app` shell form /bin/sh -c orqali ishga tushadi: PID 1 — shell, u signal'ni bolaga uzatmaydi. Yechim: exec form yoki tini kabi init. Go tomonda: signal.NotifyContext(ctx, syscall.SIGTERM, os.Interrupt) va srv.Shutdown(ctx) bilan graceful shutdown; readiness probe'ni oldin false qilib, kutilayotgan so'rovlarni tugatish (preStop hook bilan bir necha soniya kutish LB'dan chiqishga ulguradi)."
     },
     {
       "id": 17015,
       "code": "E53",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "CPU limit 1 core bo'lgan podda Go ilova sekin. Nima tekshiriladi?",
-      "options": [
-        "GOMAXPROCS host CPU soniga (masalan 64) teng bo'lib qoladi — ortiqcha kontekst almashinuvi va CFS throttling; automaxprocs bilan cgroup limitiga moslash kerak",
-        "Go konteynerda ishlamaydi",
-        "GC o'chirilgan",
-        "Faqat tarmoq muammosi"
-      ],
-      "answer": 0,
       "explanation": "Go runtime cgroup CPU kvotasini ko'rmaydi (Go 1.25 gacha; hozircha uber-go/automaxprocs standart yechim). GOMAXPROCS=64 bo'lsa runtime 64 P yaratadi, ular kvota 1 CPU bo'lgan joyda urishadi va CFS period ichida throttle bo'ladi — p99 latency sakraydi. Tekshiruv: container_cpu_cfs_throttled_seconds_total metrikasi.",
       "source": "https://github.com/uber-go/automaxprocs"
     },
@@ -48,144 +34,88 @@
       "id": 17016,
       "code": "E54",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "Docker image 900 MB. Eng katta ta'sir qiladigan o'zgarish?",
-      "options": [
-        "Multi-stage build: kompilyatsiya golang image'da, natija distroless/scratch'ga ko'chiriladi (CGO_ENABLED=0 statik binary) — o'nlab MB qoladi",
-        "Faqat .dockerignore qo'shish",
-        "Alpine'ga o'tish yetarli",
-        "Layer'larni birlashtirish"
-      ],
-      "answer": 0,
       "explanation": "Go uchun final image — binary + CA sertifikatlar + (kerak bo'lsa) tzdata. scratch'da: ca-certificates.crt ni ko'chirish yoki `import _ \"time/tzdata\"`. Alpine musl libc bilan cgo muammolari (DNS resolver farqi) beradi. Bonus: kichik image tezroq pull, kamroq CVE, layer keshini to'g'ri tartiblash (go.mod/go.sum avval, keyin kod) build vaqtini keskin kamaytiradi."
     },
     {
       "id": 17017,
       "code": "E55",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "Liveness probe noto'g'ri sozlanganda eng xavfli stsenariy?",
-      "options": [
-        "Probe DB'ga bog'liq bo'lsa — DB sekinlashganda barcha podlar 'sog'lom emas' deb qayta ishga tushadi va yuk yanada yomonlashadi (cascading restart)",
-        "Probe juda tez ishlaydi",
-        "Probe HTTP o'rniga TCP",
-        "Probe port noto'g'ri"
-      ],
-      "answer": 0,
       "explanation": "Qoida: liveness — faqat 'jarayon o'zi tirikmi' (deadlock emasmi); tashqi bog'liqliklarni tekshirmaydi. Readiness — 'trafik qabul qila olamanmi' (DB, migratsiya, cache warm-up shu yerda). Startup probe — sekin start uchun, liveness'ni kechiktiradi. Liveness'ga bog'liqlik qo'shish incident paytida restart to'lqini keltiradi."
     },
     {
       "id": 30103,
       "code": "SN104",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "Konteynerda Go jarayoni `GOMAXPROCS` 64 deb ko'rsatadi, lekin CPU limiti 2. Nima bo'ladi?",
-      "options": [
-        "Hech narsa, Go o'zi tushunadi",
-        "Runtime node CPU'sini ko'radi: ortiqcha parallelizm, kontekst almashinish va CFS throttling — latency oshadi. `automaxprocs` yoki aniq `GOMAXPROCS` qo'yiladi",
-        "Jarayon ishga tushmaydi",
-        "Xotira oshadi faqat"
-      ],
-      "answer": 1,
       "explanation": "Go 1.21 gacha (va cgroup'ni bilmagan holatlarda) runtime `nproc`ga qaraydi. Natija: 64 P, 64 goroutine parallel ishlashga urinadi, kvota 200ms/period — throttle. `go.uber.org/automaxprocs` cgroup kvotasini o'qib to'g'rilaydi. Xuddi shunday `GOMEMLIMIT` memory limitga moslanadi."
     },
     {
       "id": 30104,
       "code": "SN105",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "Pod `Evicted` bo'ldi, log'da OOM yo'q. Ehtimolli sabab?",
-      "options": [
-        "Faqat CPU yetishmasligi",
-        "Node darajasida resurs siqilishi (disk/ephemeral-storage yoki memory pressure) — kubelet eviction; `requests` past yoki log/tmp fayllar diskni to'ldirgan (emptyDir limitsiz)",
-        "Image topilmadi",
-        "Probe xato"
-      ],
-      "answer": 1,
       "explanation": "Eviction OOMKilled'dan farq qiladi: OOMKill konteyner cgroup limitida, eviction esa kubelet qarori (`node.kubernetes.io/disk-pressure`). Tekshirish: `kubectl describe node` shartlari va `kubectl describe pod` eventlari. Choralar: `ephemeral-storage` requests/limits, log rotation, `emptyDir.sizeLimit`, va QoS klassi (`Guaranteed` oxirida chiqariladi)."
     },
     {
       "id": 30482,
       "code": "SN483",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "Dockerfile'da `COPY . .` birinchi qatorlarda turibdi. Nima yomon?",
-      "options": [
-        "Hech narsa",
-        "Har kod o'zgarishida keyingi barcha qatlamlar keshdan tushadi — `go mod download` qayta ishlaydi va build daqiqalarga cho'ziladi; avval `go.mod`/`go.sum` ko'chirilib bog'liqliklar yuklanadi, keyin manba",
-        "Xotira ko'p ketadi",
-        "Image ishlamaydi"
-      ],
-      "answer": 1,
       "explanation": "Qo'shimcha: `.dockerignore` bo'lmasa `.git`, `node_modules`, test ma'lumotlari ham kontekstga kiradi — build sekinlashadi va maxfiy fayllar image'ga tushishi mumkin. Kesh tartibi qoidasi: kam o'zgaradigan narsa yuqorida, tez-tez o'zgaradigan pastda."
     },
     {
       "id": 30483,
       "code": "SN484",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "`kubectl apply` bilan deploy qilindi, lekin pod eski image bilan ishlayapti. Sabab?",
-      "options": [
-        "Kubernetes bug'i",
-        "`latest` kabi mutable tag ishlatilgan va `imagePullPolicy` mos emas — manifest o'zgarmagani uchun Deployment yangi ReplicaSet yaratmaydi; yechim — image tagida commit SHA yoki digest",
-        "Node xotirasi",
-        "Namespace xato"
-      ],
-      "answer": 1,
       "explanation": "`latest` bilan yana bir xavf: har node turli vaqtda pull qilib turli versiyani ishlatishi mumkin — debug qilib bo'lmaydigan holat. To'g'ri amaliyot: `app:git-<sha>` yoki `@sha256:...`, `imagePullPolicy: IfNotPresent` (digest bilan xavfsiz), va deploy natijasini `kubectl rollout status` bilan tekshirish."
     },
     {
       "id": 30484,
       "code": "SN485",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "ConfigMap o'zgartirildi, lekin ilova eski konfiguratsiya bilan ishlayapti. Nega?",
-      "options": [
-        "ConfigMap ishlamaydi",
-        "Env sifatida ulangan ConfigMap pod ishga tushganda o'qiladi — yangilanish uchun pod qayta yaratilishi kerak; volume sifatida ulansa fayl yangilanadi (kechikish bilan), lekin ilova uni qayta o'qishi shart",
-        "Faqat Secret yangilanadi",
-        "Restart avtomatik bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy yechimlar: konfiguratsiya hash'ini Deployment annotatsiyasiga qo'yish (o'zgarsa rolling update avtomatik bo'ladi), yoki ilovada fayl kuzatuvi (fsnotify) bilan qayta yuklash. Ikkinchisi tez, lekin har sozlamani issiq qayta yuklash xavfsiz emas — qaysi sozlama issiq o'zgarishi mumkinligi aniq belgilanishi kerak."
     },
     {
       "id": 30485,
       "code": "SN486",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Infra gotcha",
       "domain": "infra",
       "section": "t11",
       "question": "Alpine asosidagi Go image'da DNS yoki TLS kutilmagan tarzda ishlamayapti. Sabab?",
-      "options": [
-        "Alpine buzuq",
-        "musl libc va glibc farqi (cgo bilan qurilganda DNS resolver xatti-harakati boshqacha), hamda `ca-certificates` paketi yo'qligi — TLS sertifikat tekshiruvi yiqiladi. Yechim: `CGO_ENABLED=0` bilan sof Go resolver, distroless image yoki `ca-certificates` o'rnatish",
-        "Faqat DNS muammosi",
-        "Alpine TLS'ni qo'llamaydi"
-      ],
-      "answer": 1,
       "explanation": "Go'da `CGO_ENABLED=1` bo'lsa tizim resolveri ishlatiladi (`/etc/nsswitch.conf`, musl'da xatti-harakat farq qiladi); `CGO_ENABLED=0` bilan sof Go resolver ishlaydi va natija bashorat qilinadigan bo'ladi. `scratch`/distroless image'da esa `ca-certificates` va timezone ma'lumotlarini aniq ko'chirish kerak (`tzdata` yoki `time/tzdata` import)."
     }
   ]

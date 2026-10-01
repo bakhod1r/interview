@@ -11,185 +11,110 @@
       "id": 5027,
       "code": "V28",
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Obuna (subscription) billing tizimini modellashtiring: nimalarni hisobga olasiz?",
-      "modelAnswer": [
-        "Model: Plan (narx, davr), Subscription (holat: trialing/active/past_due/canceled), Invoice, Payment, PaymentAttempt",
-        "Davriy hisob-kitob: keyingi billing sanasi, vaqt zonasi va oy oxiri holatlari (31-yanvar → fevral)",
-        "Plan o'zgarishi: proration (qolgan davr uchun qayta hisob), upgrade darhol / downgrade davr oxirida",
-        "Success'siz to'lov: dunning — retry table'i, grace period, keyin to'xtatish; hodisalar bo'yicha email",
-        "Idempotentlik: har invoice/charge uchun idempotency key — takroriy yechishning oldini olish",
-        "Pul: butun son (tiyin/cent), valyuta bilan birga; hech qachon float; soliq va chegirmalar alohida qatlam",
-        "Audit: har holat o'zgarishi hodisa sifatida saqlanadi (moliyaviy tekshiruv uchun)"
-      ],
       "explanation": "Vakansiyada 'subscription-based business' yozilgan — bu savol katta ehtimol bilan beriladi. Eng kuchli signal: pulni integer saqlash, idempotentlik va past_due oqimini aytish."
     },
     {
       "id": 5028,
       "code": "V29",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Cheklangan qoldiqli mahsulotni sotishda oversell'ning oldini olish uchun eng to'g'ri yondashuv?",
-      "options": [
-        "Faqat cache'dagi qoldiqqa ishonish",
-        "Qoldiqni DB'da atomik kamaytirish (UPDATE ... SET qty = qty - 1 WHERE id=? AND qty >= 1) va yangilangan row'lar sonini tekshirish; savatga qo'yishda vaqtinchalik reservation (TTL bilan)",
-        "Yozishdan oldin SELECT qilib tekshirish yetarli",
-        "Har buyurtmani qo'lda tasdiqlash"
-      ],
-      "answer": 1,
       "explanation": "SELECT-keyin-UPDATE — race condition. Cache faqat ko'rsatish uchun; haqiqat DB'da. Reservation muddati tugasa avtomatik bo'shaydi (job yoki TTL). Yuqori yuk (flash sale) uchun: queue orqali seriyalashtirish yoki Redis'da atomik dekrement + keyin DB bilan yarashtirish (reconciliation)."
     },
     {
       "id": 5029,
       "code": "V30",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Pul miqdorini kodda va DB'da qanday saqlash kerak?",
-      "options": [
-        "float64 / double",
-        "Eng kichik birlikda butun son (masalan cent/tiyin) yoki DECIMAL/NUMERIC; valyuta kodi bilan birga; yaxlitlash qoidasi aniq belgilangan bo'lishi kerak",
-        "string sifatida",
-        "Har ikkalasi ham farq qilmaydi"
-      ],
-      "answer": 1,
       "explanation": "float ikkilik kasr — 0.1 + 0.2 ≠ 0.3; moliyada bu xato jamlanadi va hisobot mos kelmaydi. Go'da: int64 (minor units) yoki shopspring/decimal. Postgres'da NUMERIC (float emas). Valyutani miqdordan ajratmaslik: Money{Amount int64, Currency string} — turli valyutani qo'shib yuborish xatosini kompilyatsiya/tip level'ida oldini oladi."
     },
     {
       "id": 30087,
       "code": "SN88",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "E-commerce'da inventar rezervi: 1000 kishi bitta oxirgi mahsulotga uriladi. Qanday qilasiz?",
-      "options": [
-        "Optimistik tekshirish app'da: avval `SELECT`, keyin `UPDATE`",
-        "Atomik dekrement constraint bilan: `UPDATE stock SET qty = qty - 1 WHERE sku=$1 AND qty >= 1` va ta'sirlangan qator 0 bo'lsa rad etish; yoki Redis'da atomik hisoblagich + DB'da yakuniy tasdiq",
-        "`SELECT FOR UPDATE` butun jadvalga",
-        "Transaksiyasiz ishlash"
-      ],
-      "answer": 1,
       "explanation": "Read-then-write race klassik oversell sababi. Shartli `UPDATE` bitta atomik operatsiyada tekshiradi va o'zgartiradi. Yuqori RPS'da hot row bo'ladi — chora: Redis/Lua bilan tez rad etish (arzon 'sotilib ketdi' javobi), rezervga TTL (to'lov bo'lmasa qaytariladi), va idempotency key bilan retry'da ikki marta rezerv qilinmasligi."
     },
     {
       "id": 30088,
       "code": "SN89",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Buyurtma holatlari (`created → paid → shipped → delivered`) bilan ishlashda to'g'ri model?",
-      "options": [
-        "`status` ustunini har joyda `UPDATE` qilish",
-        "Aniq holat mashinasi: ruxsat etilgan o'tishlar kodda (va DB constraint/audit jadvalida), har o'tish sababi va vaqti bilan yozib boriladi, teskari o'tishlar taqiqlanadi",
-        "Status'ni frontend belgilaydi",
-        "Har holat uchun alohida jadval"
-      ],
-      "answer": 1,
       "explanation": "Status erkin `UPDATE` bo'lsa: kechikkan webhook `paid` ni `created` ga qaytaradi, dublikat event ikki marta jo'natma yaratadi. Holat mashinasi + `WHERE status = $expected` shartli update (optimistik) noto'g'ri o'tishni bloklaydi; o'tishlar jurnali esa qo'llab-quvvatlash va audit uchun zarur."
     },
     {
       "id": 30089,
       "code": "SN90",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Obuna (subscription) billing servisini loyihalang: davriy to'lov, proration, upgrade/downgrade, chek.",
-      "modelAnswer": [
-        "Domain modeli: Plan (narx, interval), Subscription (holat, current_period_start/end), Invoice (qatorlari bilan), Payment, Ledger yozuvlari",
-        "Davriy hisoblash: scheduler emas, balki idempotent 'billing run' — `next_billing_at <= now` bo'yicha tanlab oladi, har obuna uchun `(subscription_id, period)` unique kaliti bilan invoice yaratadi (ikki marta yaratilmaydi)",
-        "Proration: o'rta muddatda plan o'zgarsa — ishlatilmagan qism krediti va yangi plan qismi alohida invoice qatorlari sifatida; hisob kunlarda (yoki sekundda) aniq va yaxlitlash qoidasi yozilgan",
-        "To'lov: PSP asinxron — invoice `open → paid/failed`; dunning siyosati (retry jadvali 1/3/5 kun, keyin obuna `past_due → canceled`)",
-        "Downgrade odatda davr oxirida, upgrade darhol — biznes qoidasi aniq belgilanadi",
-        "Soliq/valyuta: summalar minor unit'da, valyuta invoice darajasida qat'iy; soliq alohida qator",
-        "Idempotentlik va audit: har tashqi chaqiruvda idempotency key, har pul harakati ledger'da double-entry, hisobotlar ledger'dan olinadi (status ustunidan emas)",
-        "Vaqt zonasi va oy uzunligi edge case'lari: 31-yanvar + 1 oy = 28/29-fevral qoidasi, DST"
-      ],
       "explanation": "Bu yerda baholanadigan narsa — takroriy jarayonni idempotent qilish, pulni ledger bilan ifodalash va kalendar edge case'larini oldindan ko'rish. 'Cron yozaman va UPDATE qilaman' javobi yetarli emas."
     },
     {
       "id": 30468,
       "code": "SN469",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Savat (cart) narxini qachon hisoblash kerak — ko'rsatishda yoki buyurtmada?",
-      "options": [
-        "Faqat ko'rsatishda hisoblab saqlash",
-        "Ikkalasida: ko'rsatishda joriy narx hisoblanadi, buyurtma yaratilganda narx snapshot qilinadi (mahsulot, chegirma, soliq, valyuta kursi bilan) — chunki narx keyin o'zgarishi mumkin va hisob-faktura qayta tiklanishi kerak",
-        "Faqat buyurtmada",
-        "Narx o'zgarmaydi deb hisoblash"
-      ],
-      "answer": 1,
       "explanation": "Buyurtma qatoriga narx, chegirma qoidasi ID'si va soliq stavkasi yoziladi — keyin katalog o'zgarsa ham eski hisob o'zgarmaydi (audit va qaytarish uchun majburiy). Qo'shimcha nozik joy: savatda ko'rsatilgan narx bilan to'lovdagi narx farq qilsa foydalanuvchiga aniq ko'rsatish (narx o'zgardi) — jim o'zgartirish ishonchni buzadi va huquqiy muammo."
     },
     {
       "id": 30469,
       "code": "SN470",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Qaytarish (refund) va bekor qilish (cancel) domen modelida qanday farqlanadi?",
-      "options": [
-        "Bir xil operatsiya",
-        "Cancel — capture'gacha, hech qanday pul harakati bo'lmaydi (hold bo'shatiladi), buyurtma `canceled` holatiga o'tadi; refund — capture'dan keyin teskari pul harakati, qisman bo'lishi mumkin, komissiya qaytmasligi mumkin va ledgerda alohida yozuv + soliq/hisobot ta'siri bor",
-        "Refund har doim to'liq",
-        "Ikkisi ham buyurtmani o'chiradi"
-      ],
-      "answer": 1,
       "explanation": "Modelda ikkisi alohida hodisa sifatida saqlanadi (sabab, initsiator, summa, PSP referensi bilan). Qisman refund bo'lsa buyurtma qatorlari darajasida hisoblanadi (qaysi mahsulot qaytdi — inventar va analitika uchun). Buyurtma 'o'chirilmaydi' — holat va hodisalar tarixi saqlanadi, aks holda moliyaviy hisobot va qo'llab-quvvatlash ishlamaydi."
     },
     {
       "id": 30515,
       "code": "SN516",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Chegirma va promo-kodlar mantiqini qayerga joylashtirasiz?",
-      "options": [
-        "Har joyda if bilan",
-        "Alohida pricing/promotion domeniga: qoidalar (shart, chegirma turi, cheklovlar, davr) ma'lumot sifatida, hisoblash esa sof funksiya — natija buyurtmaga snapshot qilib yoziladi (qaysi qoida qo'llanganini ko'rsatib); shunda audit, A/B va qayta hisoblash mumkin",
-        "Frontendda hisoblash",
-        "DB triggerida"
-      ],
-      "answer": 1,
       "explanation": "Nozik biznes qoidalari: chegirmalarning birlashishi (stacking) ruxsat etiladimi, tartib qanday (foiz avvalmi yoki fiksirlangan), soliq chegirmadan oldinmi yoki keyin, va bir martalik kod bir vaqtda ikki buyurtmada ishlatilmasligi (atomik 'redeem' unique constraint bilan). Bu savol amalda ko'p bug keltiradigan joy."
     },
     {
       "id": 30521,
       "code": "SN522",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Domain",
       "domain": "arch",
       "section": "r6",
       "question": "Buyurtma va inventar alohida servislarda. 'Sotuvda yo'q' holatini qanday boshqarasiz?",
-      "options": [
-        "Buyurtmadan oldin sinxron tekshirish yetarli",
-        "Rezervatsiya naqshi: buyurtma yaratilganda inventar servisida TTL'li rezerv olinadi (atomik), to'lov tasdiqlangach rezerv iste'molga aylanadi, bekor bo'lsa yoki TTL o'tsa bo'shaydi; sinxron 'bormi?' tekshiruvi race'ni yopmaydi",
-        "Ortiqcha sotib keyin uzr so'rash",
-        "Inventarni buyurtma servisida saqlash"
-      ],
-      "answer": 1,
       "explanation": "Sinxron tekshirish + keyin yozish — klassik TOCTOU race. Rezerv esa atomik operatsiya bo'lib, 'kim birinchi bo'lsa' aniqlanadi. Biznes qarori ham kerak: oversell umuman mumkin emasmi (chipta) yoki kichik ehtimol maqbulmi (tez to'ldiriladigan tovar) — bu texnik murakkablikni belgilaydi."
     }
   ]

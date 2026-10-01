@@ -11,234 +11,143 @@
       "id": 88,
       "code": 89,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Elasticsearch va Solr — ikkalasi ham Lucene ustida. Amalda qanday tanlanadi?",
-      "options": [
-        "Solr har doim tezroq",
-        "Ikkalasining yadro imkoniyatlari o'xshash (Lucene); tanlov ekotizim va operatsiyaga qarab: Elasticsearch — kengroq jamoa, Kibana/Beats bilan log analitikasi, bulutdagi managed variantlar; Solr — Apache ekotizimi, ZooKeeper bilan SolrCloud, mavjud tajriba bo'lsa",
-        "Solr JSON qo'llamaydi",
-        "Elasticsearch faqat loglar uchun"
-      ],
-      "answer": 1,
       "explanation": "Intervyuda 'qaysi biri yaxshi' emas, 'nima uchun shu' javobi kutiladi: jamoa tajribasi, managed servis mavjudligi, litsenziya masalalari (Elastic litsenziya o'zgarishi va OpenSearch forki) va operatsion qo'llab-quvvatlash. Texnik farqlar ko'p hollarda hal qiluvchi emas."
     },
     {
       "id": 5009,
       "code": "V10",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Elasticsearch'da <code>text</code> va <code>keyword</code> tiplari farqi?",
-      "options": [
-        "Bir xil, faqat nomi boshqa",
-        "text — analiz qilinadi (tokenlarga bo'linadi, lowercase): to'liq matnli qidiruv uchun. keyword — analiz qilinmaydi, to'liq qiymat: aniq moslik, filtr, agregatsiya va saralash uchun",
-        "keyword faqat raqamlar uchun",
-        "text saralash uchun ishlatiladi"
-      ],
-      "answer": 1,
       "explanation": "Tipik dizayn: bitta maydonni ikkala tipda saqlash (title va title.keyword — multi-field). Xato mapping keyin tuzatilmaydi — reindex kerak, shuning uchun index shablonini oldindan aniq yozish muhim. Agregatsiya va saralashni text maydonda qilish xato beradi (fielddata)."
     },
     {
       "id": 5010,
       "code": "V11",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Mahsulot katalogi PostgreSQL'da, qidiruv Elasticsearch'da. To'g'ri arxitektura?",
-      "options": [
-        "Ma'lumotni faqat Elasticsearch'da saqlash",
-        "PostgreSQL — source of truth; ES — hosila (derived) index: o'zgarishlar outbox/CDC (Debezium) yoki event orqali ES'ga sinxronlanadi, ES'ni istalgan paytda qayta qurish mumkin",
-        "ES'dan Postgres'ga yozish",
-        "Ikkalasiga ilovadan parallel yozish, sinxronizatsiyasiz"
-      ],
-      "answer": 1,
       "explanation": "ES — qidiruv indeksi, tranzaksion DB emas (yaqin real vaqt, transaction yo'q). Ikkalasiga mustaqil yozish — dual write muammosi: biri yiqilsa ma'lumot farq qiladi. Reindex pipeline'i har doim tayyor turishi kerak: mapping o'zgarsa yoki ES buzilsa, Postgres'dan to'liq qayta qurish."
     },
     {
       "id": 5011,
       "code": "V12",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Hujjat indekslangach darhol qidiruvda topilmadi. Sabab?",
-      "options": [
-        "Xato bo'lgan",
-        "ES — near real-time: hujjat refresh (default 1s) dan keyin qidiruvda ko'rinadi. Katta bulk yuklashda refresh_interval'ni vaqtincha oshirish/o'chirish tezlikni oshiradi",
-        "Indeks buzilgan",
-        "Faqat qayta ishga tushirgandan keyin ko'rinadi"
-      ],
-      "answer": 1,
       "explanation": "Kerak bo'lsa ?refresh=wait_for (query refresh'gacha kutadi) — lekin har yozishda refresh=true qilish juda qimmat. Bulk indekslash maslahatlari: bulk API, refresh_interval=-1, replica=0, tugagach qaytarish."
     },
     {
       "id": 5012,
       "code": "V13",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Chuqur pagination (<code>from=100000&size=10</code>) nega yomon va o'rniga nima ishlatiladi?",
-      "options": [
-        "Yomon emas",
-        "Har shard from+size hujjatni yig'ib koordinatorga yuboradi — memory va CPU portlaydi (default limit 10 000). O'rniga: search_after + Point In Time (PIT), yoki eksport uchun scroll/slice",
-        "size ni oshirish kerak",
-        "Faqat replica qo'shish kerak"
-      ],
-      "answer": 1,
       "explanation": "Bu Postgres'dagi OFFSET muammosining aynan o'zi — yechim ham o'xshash: keyset (search_after) pagination, barqaror tartib uchun tie-breaker (_shard_doc yoki unikal id). Cheksiz scroll UI uchun search_after tabiiy mos."
     },
     {
       "id": 5013,
       "code": "V14",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Qidiruv natijalari sifatini qanday yaxshilaysiz?",
-      "modelAnswer": [
-        "query (ball beradi, relevance) va filter (ball bermaydi, keshlanadi) kontekstini ajratish — kategoriya/narx filtrlari filterda",
-        "Analyzer sozlash: til uchun stemming, synonym, edge n-gram (autocomplete), xato yozuvga fuzziness",
-        "Maydonlarga og'irlik (title^3, description^1), BM25 parametrlari, function_score bilan biznes signali (mashhurlik, mavjudlik)",
-        "O'lchash: click-through, zero-result query'lar ro'yxati, A/B test",
-        "Sekin query'larni profil qilish (profile API), shard soni va mapping'ni qayta ko'rib chiqish"
-      ],
       "explanation": "Senior signal: relevance'ni his-tuyg'u bilan emas, o'lchov bilan sozlash va filter/query farqini bilish (cache va tezlik uchun muhim)."
     },
     {
       "id": 14017,
       "code": "SR18",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "DB va qidiruv indeksi (Elasticsearch) o'rtasida ma'lumot mos kelmay qoldi. Eng ishonchli tuzilma qaysi?",
-      "options": [
-        "Ilovadan ikkalasiga parallel yozish",
-        "Bitta haqiqat manbai (DB) + outbox/CDC orqali indeksga bir tomonlama oqim; to'liq reindex skripti doim tayyor va davriy ishlatiladi; farqlarni aniqlaydigan tekshiruv (checksum/count) bilan",
-        "Har kecha ES'ni tozalab, qo'lda to'ldirish",
-        "ES'ni haqiqat manbai qilish"
-      ],
-      "answer": 1,
       "explanation": "Dual write — mos kelmaslikning asosiy sababi. CDC bilan tartib va kafolat yaxshilanadi, lekin indeks sxemasi o'zgarganda reindex baribir kerak — shuning uchun u bir martalik skript emas, qo'llab-quvvatlanadigan vosita bo'lishi kerak."
     },
     {
       "id": 30054,
       "code": "SN55",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Elasticsearch'da qidiruv natijasi yozuvdan keyin darhol ko'rinmaydi. Nega?",
-      "options": [
-        "Indeks buzilgan",
-        "ES near-real-time: yozuv refresh (`refresh_interval`, default 1s) dan keyin qidirishga tushadi; `?refresh=wait_for` bilan kutish mumkin, lekin har yozuvda refresh qilish juda qimmat",
-        "Replica yo'q",
-        "Query xato"
-      ],
-      "answer": 1,
       "explanation": "Yozuv avval in-memory buffer + translog'ga tushadi, refresh yangi segment yaratadi. Bulk indeksatsiya paytida `refresh_interval: -1` qilinadi va oxirida qaytariladi (tezlik bir necha barobar). `wait_for` faqat kam sonli 'read-your-write' holatlarda; aks holda app tomonda o'z keshidan ko'rsatiladi."
     },
     {
       "id": 30055,
       "code": "SN56",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "`from: 10000, size: 10` pagination sekin va xato beradi. To'g'ri yechim?",
-      "options": [
-        "`size`ni oshirish",
-        "`search_after` (sort qiymati + tie-breaker) yoki PIT bilan kursor; chuqur `from` har shardda from+size natijani yig'adi — xotira va CPU portlaydi",
-        "`max_result_window`ni 1 mln qilish",
-        "Scroll'ni UI pagination uchun ishlatish"
-      ],
-      "answer": 1,
       "explanation": "Deep paging koordinator nodeda 10010 × shard hujjatni saralashni talab qiladi. `search_after` holatsiz kursor beradi (foydalanuvchi pagination uchun ideal), `scroll` esa eksport uchun (snapshot ushlaydi, resursni band qiladi). UI'da ko'pincha 'keyingi sahifa' modeliga o'tish kerak."
     },
     {
       "id": 30056,
       "code": "SN57",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Mapping'da `text` va `keyword` farqi amalda nimaga ta'sir qiladi?",
-      "options": [
-        "Faqat hajmga",
-        "`text` analiz qilinadi (tokenlar, full-text match, aggregation/sort uchun yaroqsiz), `keyword` aynan saqlanadi (term query, agregatsiya, saralash) — shuning uchun ko'pincha multi-field ishlatiladi",
-        "`keyword` full-text qidiruv uchun",
-        "Farqi yo'q, ES o'zi tanlaydi"
-      ],
-      "answer": 1,
       "explanation": "Klassik xato: `status` maydonini `text` qilib qo'yib, agregatsiya ishlamasligi yoki `term` query mos kelmasligi (analiz tufayli lowercase). Yechim: `\"status\": {\"type\":\"keyword\"}` yoki `text` + `.keyword` sub-field. Dinamik mapping productionda o'chiriladi (`strict`) — aks holda bitta noto'g'ri hujjat mapping'ni buzadi."
     },
     {
       "id": 30057,
       "code": "SN58",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "ES klaster sekinlashdi: shardlar juda ko'p (30k). Nima muammo?",
-      "options": [
-        "Ko'p shard yaxshi, muammo emas",
-        "Har shard — alohida Lucene indeks: heap, fayl deskriptor, cluster state va query fan-out narxi. Kam sonli kattaroq shard (10-50GB) + ILM bilan rollover to'g'ri",
-        "Shard sonini yana oshirish kerak",
-        "Replicani 0 qilish yetarli"
-      ],
-      "answer": 1,
       "explanation": "Har kunga alohida kichik indeks yaratish — eng ko'p uchraydigan sabab. Tavsiya: shard hajmi 10-50GB, 1GB heap'ga ~20 shard chegarasi, vaqt seriyali ma'lumot uchun ILM (rollover hajm bo'yicha, keyin shrink/forcemerge, so'ng cold/delete). Data stream'lar shu naqshni avtomatlashtiradi."
     },
     {
       "id": 30248,
       "code": "SN249",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "Elasticsearch'da relevantlik (`_score`) qanday hisoblanadi va qanday boshqariladi?",
-      "options": [
-        "Tasodifiy",
-        "BM25: term chastotasi, teskari hujjat chastotasi va maydon uzunligi normalizatsiyasi; boshqarish — maydon `boost`, `function_score`/`rank_feature` (yangilik, mashhurlik), va `bool` ichida `should` bilan signal qo'shish",
-        "Faqat alifbo tartibi",
-        "Faqat yaratilgan vaqt"
-      ],
-      "answer": 1,
       "explanation": "Amaliy muhandislik nuqtalari: biznes signallari (sotuv, reyting, yangilik) `rank_feature` yoki `function_score` bilan qo'shiladi; `explain: true` bilan nega shu tartib chiqqani tekshiriladi; `filter` konteksti skorga ta'sir qilmaydi va keshlanadi (shuning uchun aniq shartlar `filter`ga, matn qidiruvi `must`ga qo'yiladi)."
     },
     {
       "id": 30249,
       "code": "SN250",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Elasticsearch",
       "domain": "nosql",
       "section": "n3",
       "question": "PostgreSQL'dan Elasticsearch'ga ma'lumot sinxronlashning eng ishonchli yo'li?",
-      "options": [
-        "Har yozuvda ikkisiga parallel yozish",
-        "Bitta manba (PostgreSQL) + outbox/CDC orqali asinxron indeksatsiya: at-least-once, versiya (`_version`/external version) bilan eski yozuv yangisini bosib ketmasligi, va to'liq qayta indeksatsiya (reindex) skripti bo'lishi",
-        "Kunlik to'liq reindex yetarli",
-        "ES'ni asosiy baza qilish"
-      ],
-      "answer": 1,
       "explanation": "Dual write ikki tizim orasida nomuvofiqlik keltiradi (biri yozildi, ikkinchisi yo'q). CDC/outbox bilan tartib va qayta o'ynatish imkoni bo'ladi. Muhim operatsion detal: mapping o'zgarganda joyida o'zgartirib bo'lmaydi — yangi indeks yaratib alias'ni atomik almashtirish (`_aliases` actions) standart naqsh."
     }
   ]

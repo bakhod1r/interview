@@ -11,262 +11,154 @@
       "id": 5030,
       "code": "V31",
       "level": "J",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Tell me about yourself' — bu rol uchun javobni qanday tuzasiz (ingliz tilida)?",
-      "modelAnswer": [
-        "2 daqiqa, uch qism: hozirgi rol va mas'uliyat → eng mos 1–2 yutuq (raqam bilan) → nega aynan shu vakansiya",
-        "Vakansiya tiliga moslash: Go, microservices, Kafka, PostgreSQL, AWS, event-driven",
-        "Yutuqni STAR bilan qisqa: Situation, Task, Action, Result (masalan 'p99 latency 800ms dan 120ms ga tushdi')",
-        "Butun karyerani boshidan sanamaslik; oxirgi 3–5 yilga fokus",
-        "Ingliz tilida oldindan ovoz chiqarib mashq qilish — bu yerda C1 talabi bor"
-      ],
       "explanation": "Bu savol deyarli har intervyuda birinchi bo'ladi va ingliz tili darajangiz shu yerda baholanadi. Yodlab olingan matn emas, tayyorlangan struktura kerak."
     },
     {
       "id": 5031,
       "code": "V32",
       "level": "M",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "Junior muhandisga mentorlik va code review'ni qanday qilasiz?",
-      "modelAnswer": [
-        "Review'da muammoni odamdan ajratish: 'bu funksiya...' deyish, 'sen...' emas",
-        "Kommentlarni darajalash: bloklovchi (bug, security) va ixtiyoriy (nit) — aniq belgilab qo'yish",
-        "Sabab tushuntirish va havola berish — shunda review o'rgatadi, faqat tuzatmaydi",
-        "Katta o'zgarishni oldin dizayn bo'yicha kelishish — 300 row'dan keyin arxitektura bahsi kech",
-        "Mentorlik: juftlikda ishlash, o'sib boruvchi murakkablikdagi vazifalar, muntazam 1:1 va aniq fikr-mulohaza",
-        "O'lchov: junior mustaqil yetkazadigan ish hajmi va review'dagi takroriy xatolar kamayishi"
-      ],
       "explanation": "Vakansiyada 'mentorship' va 'code review' aniq yozilgan. Kuchli javob — konkret amaliyot va misol, umumiy gap emas."
     },
     {
       "id": 5032,
       "code": "V33",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "Product Owner muddati siqilgan feature so'rayapti, sizning texnik baholashingiz boshqacha. Qanday gaplashasiz?",
-      "modelAnswer": [
-        "Avval maqsadni tushunish: nega shu sana, qanday biznes natija kutilyapti",
-        "Variantlarni narx bilan taqdim etish: to'liq yechim (X hafta), qisqartirilgan qamrov (Y hafta), vaqtinchalik yechim + texnik qarz (Z, keyin to'lash rejasi bilan)",
-        "Xavflarni aniq aytish: nima buziladi, qanday ehtimol, qanday yumshatish (feature flag, canary)",
-        "Qarorni PO qabul qiladi — lekin yozma qayd etiladi (ADR yoki ticket kommenti)",
-        "Kelishilgan qarzni backlog'ga aniq vazifa sifatida qo'yish va muddatini belgilash"
-      ],
       "explanation": "Baholanadigan narsa — 'yo'q' deyish emas, tanlovni ko'rsatish. Ingliz tilida bu suhbatni mashq qiling: 'Here are three options with trade-offs...' — customer-facing kommunikatsiya talabi shu yerda tekshiriladi."
     },
     {
       "id": 30097,
       "code": "SN98",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Tell me about a production incident you handled' — javobni qanday tuzasiz (ingliz tilida)?",
-      "modelAnswer": [
-        "STAR: Situation (tizim, trafik, ta'sir — raqam bilan: '12% of checkout requests failing for 25 minutes')",
-        "Task: sizning roli — incident commander, debugger, communicator (aniq ayting)",
-        "Action: gipoteza va o'lchash ketma-ketligi ('metrics showed p99 spike only on writes → checked pg_stat_activity → lock contention from a migration')",
-        "Mitigation avval, root cause keyin — bu senior signal: 'we rolled back the migration first, investigated after service recovered'",
-        "Result: MTTR, keyin nima o'zgardi (alert, runbook, lock_timeout, CI check) — takrorlanmasligi uchun tizimli tuzatish",
-        "Nimani o'rgandingiz va nimani boshqacha qilardingiz — ayblashsiz (blameless)"
-      ],
       "explanation": "Intervyuer qidiradi: o'lchashga asoslangan debugging, mitigation va root cause'ni ajratish, muloqot (stakeholder'ga xabar), va follow-up. Faqat 'qahramonlik' hikoyasi (bir kechada tuzatdim) zaif signal."
     },
     {
       "id": 30098,
       "code": "SN99",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Tell me about a technical decision you disagreed with' — qanday javob beriladi?",
-      "modelAnswer": [
-        "Kontekst qisqa: qanday qaror, kim qabul qildi, nega siz qo'shilmadingiz (texnik sabab, taxmin emas)",
-        "Sizning harakati: dalil yig'ish (benchmark, prototip, incident ma'lumoti), yozma taqqoslash (trade-off jadvali), to'g'ri odam bilan suhbat",
-        "Natija ikki variantda halol bo'lsin: (a) qaror o'zgardi — qanday dalil ishonch berdi, (b) o'zgarmadi — 'disagree and commit', siz to'liq bajardingiz va xatarni monitoring bilan yopdingiz",
-        "Nimani o'rgandingiz: eskalatsiya vaqti, qarorni hujjatlashtirish (ADR) qiymati"
-      ],
       "explanation": "Baholanadigan xususiyat — ego emas, dalil bilan ishlash va jamoada harakat qilish qobiliyati. 'Men to'g'ri edim, ular bilmadi' javobi salbiy signal; 'disagree and commit' aytilishi esa kuchli."
     },
     {
       "id": 30099,
       "code": "SN100",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'How do you mentor and review code?' — senior/staff darajada kutilgan javob?",
-      "modelAnswer": [
-        "Review'da prioritet: to'g'rilik va xavfsizlik → dizayn/kontrakt → o'qilishi → uslub (uslubni linter/formatter avtomatlashtiradi, odam vaqtini yemaydi)",
-        "Kommentlar savol va sabab bilan ('bu joyda retry idempotent emas — dublikat to'lov bo'lishi mumkin'), blokirovka va tavsiyani ajratish (nit/blocking belgilash)",
-        "Kichik PR va tez javob madaniyati; katta o'zgarishda avval dizayn muhokamasi (ADR) — review'da arxitektura bahsi kech",
-        "Mentorlik: javob bermay yo'l ko'rsatish, juftlikda debugging, o'sish uchun aniq maqsad va fikr-mulohaza (feedback) muntazam",
-        "O'lchov: review kutish vaqti, PR hajmi, incident'dan keyingi takroriy xatolar kamayishi"
-      ],
       "explanation": "Staff darajada kutiladigani — jamoaning umumiy chiqishini oshirish, o'z kodini emas. Konkret misol va o'lchov bilan aytilsa kuchli javob bo'ladi."
     },
     {
       "id": 30284,
       "code": "SN285",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Walk me through a system you designed and owned end to end' — javobni qanday tuzasiz?",
-      "modelAnswer": [
-        "Kontekst raqamlar bilan: 'payments service, Go + PostgreSQL, ~80k transactions/day, 3 engineers, I owned the design and the on-call'",
-        "Muammo va cheklovlar: nima uchun qurildi, qanday talablar (latency, izchillik, compliance) va nimani ataylab qilmadik (scope)",
-        "Arxitektura qisqa: asosiy komponentlar va ma'lumot oqimi — 2-3 gapda, keyin eng qiyin qismga chuqurlashish (masalan 'the hardest part was retry semantics with the third-party processor')",
-        "Almashinuvlar: qanday variantlar bor edi, nega shuni tanladingiz, nimani qurbon qildingiz (masalan eventual consistency)",
-        "Natija raqamda: latency, xato nisbati, xarajat, incident soni — va keyin nima o'zgardi (o'sganda nima buzildi)",
-        "Egalik belgilari: on-call, monitoring va runbook'ni siz qurganingiz, migratsiyani qanday xavfsiz o'tkazganingiz",
-        "Nimani boshqacha qilardingiz — halol va aniq bitta narsa"
-      ],
       "explanation": "Intervyuerlar aynan shu yerda 'buzzword zichligi' ni tekshiradi: Kafka, gRPC, Kubernetes, mesh, OTel deb sanab, hech birini shaxsan shippingga bog'lay olmaslik — salbiy signal. Raqam, cheklov va bitta chuqur qiyin qism eng kuchli javob strukturasi."
     },
     {
       "id": 30285,
       "code": "SN286",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Tell me about a time you made a technical mistake in production' — qanday javob beriladi?",
-      "modelAnswer": [
-        "Haqiqiy, o'lchovli misol tanlash (kichik emas, lekin karyerani buzmaydigan): masalan migratsiya qulf olib 4 daqiqa yozuvlarni to'sib qo'ygani",
-        "Nima bo'lganini aniq ayting: ta'sir raqamda, qancha davom etgani, foydalanuvchi qanday ko'rgan",
-        "Sizning harakati: qanday aniqlandi (alert bormi yoki mijoz aytdimi — bu ham halol signal), qanday to'xtatdingiz, kim bilan muloqot qildingiz",
-        "Root cause: nega bu mumkin edi — tizimda guardrail yo'qligi (`lock_timeout` qo'yilmagani, staging'da real hajm yo'qligi)",
-        "Tizimli tuzatish: nima qo'shildi (migratsiya checklisti, CI tekshiruvi, alert), shundan keyin takrorlanmagani",
-        "O'zingiz haqida xulosa: nimani endi boshqacha qilasiz — bir gapda",
-        "Ayblashsiz va mudofaasiz ohang; 'menda xato bo'lmagan' javobi eng yomon variant"
-      ],
       "explanation": "Baholanadigan narsa — mas'uliyatni olish va xatoni tizimli tuzatishga aylantirish. Aniqlash vaqti va monitoring bo'shlig'ini aytish senior signal: siz nafaqat tuzatgan, balki 'nega tezroq bilmadik' savolini bergan bo'lasiz."
     },
     {
       "id": 30286,
       "code": "SN287",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'How do you handle competing priorities and push back on scope?' — kutilgan javob?",
-      "modelAnswer": [
-        "Prioritetni ma'lumotga bog'lash: ta'sir (foydalanuvchi/biznes), xatar, va narx — his-tuyg'u emas",
-        "Shaffof qilish: hozirgi ish ro'yxati va sig'im ko'rinadigan bo'lsin; yangi ish qo'shilganda nima kechikadi degan savolni aniq qo'yish ('bu kirsa, X keyingi sprintga suriladi — shu maqbulmi?')",
-        "Texnik qarzni biznes tiliga o'girish: 'bu refactor kechikish emas, deploy vaqti 40 daqiqadan 10 ga tushadi va incident chastotasi kamayadi'",
-        "Muzokara varianti: to'liq scope o'rniga bosqichli yetkazish (MVP + keyingi bosqich), yoki vaqtincha yechim + reja",
-        "Yozma qaror: kelishuvni yozib qo'yish (ticket/ADR) — keyin 'biz bunday kelishmaganmiz' bahsi bo'lmaydi",
-        "Eskalatsiya: kelishilmasa menejer bilan ochiq muhokama, lekin qaror chiqqach to'liq bajarish"
-      ],
       "explanation": "Senior'dan kutiladigani — 'yo'q' demaslik yoki hammasiga 'ha' deyish emas, balki almashinuvni ko'rinadigan qilish. Texnik qarzni biznes metrikasiga o'girib gapirish eng kuchli ko'nikma."
     },
     {
       "id": 30287,
       "code": "SN288",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Do you have any questions for us?' — nima so'raladi (va bu nega baholanadi)?",
-      "modelAnswer": [
-        "Muhandislik amaliyoti: deploy chastotasi, CI vaqti, rollback qanday, on-call rotatsiyasi va incident madaniyati (blameless postmortem bormi)",
-        "Texnik holat: eng katta texnik qarz nima, monolit yoki servislar, test qoplami va migratsiyalarni qanday qilasiz",
-        "Rol va kutilma: bu rol uchun ilk 3-6 oyda muvaffaqiyat nimada o'lchanadi, kim bilan ishlaymiz, qarorlar qanday qabul qilinadi",
-        "Jamoa: kod review madaniyati, mentorlik, o'sish yo'li (senior'dan keyin nima)",
-        "Mahsulot: eng katta muammo nima va nega hozir shu rol ochildi",
-        "So'rash kerak bo'lmagani: faqat maosh/ta'til (birinchi bosqichda) yoki umuman savol bermaslik — qiziqish yo'qligi signali"
-      ],
       "explanation": "Bu savol baholanadi: siz jamoa sifatini tekshiradigan muhandismi yoki shunchaki ishga muhtojmi. Deploy/rollback/on-call haqidagi savollar siz production bilan ishlaganingizni ko'rsatadi — bu bilvosita eng kuchli signal."
     },
     {
       "id": 30478,
       "code": "SN479",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Design suhbatida intervyuer sizni noto'g'ri deb turibdi, lekin siz haqsiz' — nima qilasiz?",
-      "modelAnswer": [
-        "Avval tushunishga harakat: 'sizni to'g'ri tushundimmi — X holatda bu ishlamaydi deyapsizmi?' — ko'pincha farq taxminlarda, faktda emas",
-        "Taxminlarni ochiq qilish: 'men 10k RPS va eventual consistency maqbul deb faraz qildim; agar kuchli izchillik talab bo'lsa mening yechimim noto'g'ri'",
-        "Dalil keltirish qisqa va texnik: mexanizm darajasida (nega kvorum kerak, nega bu retry amplifikatsiya beradi), shaxsiy emas",
-        "Ikkinchi yo'lni ham ko'rsatish: 'sizning yondashuvingiz bilan ham ishlaydi, almashinuvi shu — men buni tanladim chunki...'",
-        "Vaqtni behuda sarflamaslik: kelishmovchilik cho'zilsa 'keling sizning variantingiz bilan davom etaman' deb suhbatni oldinga surish — bu moslashuvchanlik signali",
-        "Intervyu doirasida ko'pincha bu ataylab qilingan bosim testi: baholanadigan narsa — mudofaaga o'tasizmi yoki dalil bilan muloqot qilasizmi"
-      ],
       "explanation": "Kutiladigan xatti-harakat: taxminni ochish, dalilni mexanizm darajasida aytish, keyin kerak bo'lsa moslashish. Qat'iy turib olish ham, darhol taslim bo'lish ham salbiy signal."
     },
     {
       "id": 30479,
       "code": "SN480",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Eng qiyin texnik muammo qaysi edi?' — qanday tanlaysiz va aytasiz?",
-      "modelAnswer": [
-        "Tanlov mezoni: sabab darhol ko'rinmagan, bir necha gipoteza tekshirilgan va yechim tizimli bo'lgan muammo (oddiy 'ko'p ish qildim' emas)",
-        "Struktura: simptom va ta'sir (raqam bilan) → nima uchun qiyin edi (noaniqlik, takrorlanmaydigan, bir necha tizim chegarasi) → qanday toraytirdingiz (o'lchov, binary search, izolyatsiya) → topilgan sabab → tuzatish va profilaktika",
-        "Texnik chuqurlik ko'rsatish: bitta mexanizmni oxirigacha tushuntirish (masalan ulanish pooli tugashi va kutish navbati, yoki GC assist), yuzaki sanab o'tmaslik",
-        "Jamoaviy tomoni: kim bilan ishladingiz, qanday xabar berdingiz, qaror qanday qabul qilindi",
-        "Natijadan keyingi o'zgarish: alert, test, runbook, arxitektura tuzatishi — takrorlanmaganini ayting",
-        "Hikoya 3-5 daqiqa; intervyuer chuqurlashtirsa detallar tayyor bo'lsin (raqamlar, komandalar, nomlar)"
-      ],
       "explanation": "Bu savolda chuqurlik yuza kengligidan muhimroq. Bitta muammoni mexanizm darajasida (nega aynan shunday bo'ldi) tushuntira olish — senior va middle orasidagi eng aniq farqlovchi signal."
     },
     {
       "id": 30529,
       "code": "SN530",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Nega ish joyingizni o'zgartiryapsiz?' — qanday javob beriladi?",
-      "modelAnswer": [
-        "Oldinga qaragan ramka: nimani izlayapsiz (masshtab, domen, texnik chuqurlik, egalik darajasi), nega bu joy shuni beradi — konkret va shu kompaniyaga bog'langan",
-        "Hozirgi joy haqida hurmat bilan va faktga tayanib: 'jamoa 3 kishi, mahsulot barqaror bosqichda, yangi texnik muammolar kam' — bu tanqid emas, bosqich ta'rifi",
-        "Salbiy narsalarni shaxsiylashtirmaslik: menejer/hamkasblarni ayblash eng yomon signal (intervyuer keyingi joyda siz ular haqida shunday gapirishingizni tasavvur qiladi)",
-        "Agar chiqib ketish sababi noqulay bo'lsa (qisqartirish, konflikt) — qisqa, halol va aybsiz formulirovka, so'ng oldinga burish",
-        "Izchillik: rezyumedagi qisqa muddatlar bo'lsa oldindan tushuntirish tayyor bo'lsin"
-      ],
       "explanation": "Baholanadigan narsa — motivatsiya va yetuklik. Javob 'nimadan qochyapman' emas, 'nimaga intilyapman' bo'lishi kerak, va u konkret vakansiya bilan bog'lansa ishonarli bo'ladi."
     },
     {
       "id": 30530,
       "code": "SN531",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "Behavioral",
       "domain": "soft",
       "section": "b1",
       "question": "'Jamoada past natija ko'rsatayotgan muhandis bor' — nima qilasiz (senior/lead nuqtai nazaridan)?",
-      "modelAnswer": [
-        "Avval sababni aniqlash, taxmin qilmaslik: ko'nikma bo'shlig'imi, kontekst yetishmaydimi, noaniq talablarmi, motivatsiya yoki shaxsiy holatmi — 1:1 da ochiq savol bilan",
-        "Konkret va kuzatiladigan fikr-mulohaza: 'oxirgi uch PR review'da shu naqsh takrorlandi' — umumiy 'sifat past' emas",
-        "Qo'llab-quvvatlash rejasi: juftlikda ishlash, kichikroq va aniqroq vazifalar, kod review'da mentorlik, kutilmalarni yozma qilish va muddat belgilash",
-        "Tizimni ham tekshirish: onboarding, hujjat, test qoplami, noaniq arxitektura — ko'pincha muammo odamda emas, kontekstda",
-        "Natijani kuzatish: belgilangan muddatda yaxshilanish bo'lmasa menejer bilan birga keyingi qadam (rol o'zgarishi va h.k.) — lekin bu menejerning qarori, senior'ning emas",
-        "Jamoaga ta'sirini boshqarish: ishni qayta taqsimlash va relizni xavf ostiga qo'ymaslik"
-      ],
       "explanation": "Staff/lead darajasida kutilgani: sababni tekshirish, konkret fikr-mulohaza, tizimli omillarni ko'rish va chegarani bilish (HR/menejer hududiga o'tib ketmaslik)."
     }
   ]

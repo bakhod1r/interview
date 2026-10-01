@@ -11,18 +11,11 @@
       "id": 17018,
       "code": "E56",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "JWT tekshirishda eng xavfli xato qaysi?",
-      "options": [
-        "Token'dagi `alg` header'iga ishonish — hujumchi alg=none yoki HS256 (public key'ni secret sifatida) yuborishi mumkin; kutilgan algoritm serverda qat'iy belgilanadi",
-        "exp'ni tekshirmaslik",
-        "Token'ni log qilish",
-        "Uzun token"
-      ],
-      "answer": 0,
       "explanation": "Kutubxonaga algoritmni o'zi tanlashiga ruxsat bermang: jwt.WithValidMethods([]string{\"RS256\"}) kabi cheklov qo'ying. Yana tekshirilishi kerak: exp, nbf, iss, aud, kid (key rotation), va imzo kaliti manbai (JWKS keshlash + TTL). Muhim: JWT'ni bekor qilib bo'lmaydi — logout/ban uchun qisqa TTL + refresh token yoki jti deny-list kerak.",
       "source": "https://datatracker.ietf.org/doc/html/rfc8725"
     },
@@ -30,37 +23,23 @@
       "id": 17019,
       "code": "E57",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "Bu kod nega noto'g'ri?",
       "snippet": "if userToken == storedToken {\n    allow()\n}",
-      "options": [
-        "Oddiy `==` string taqqoslash erta chiqadi — timing attack orqali sir bayt-bayt topilishi mumkin; hmac.Equal yoki subtle.ConstantTimeCompare kerak",
-        "Xato yo'q",
-        "crypto/md5 kerak",
-        "Faqat parol uchun muhim"
-      ],
-      "answer": 0,
       "explanation": "API kaliti, HMAC imzosi, CSRF token kabi sirlar constant-time solishtiriladi: hmac.Equal(a, b). Parol uchun esa umuman boshqa: Argon2id yoki bcrypt bilan hash va o'sha kutubxonaning tekshiruv funksiyasi (u allaqachon constant-time). Webhook imzosini tekshirishda ham hmac.Equal + timestamp tolerance (replay himoyasi)."
     },
     {
       "id": 17020,
       "code": "E58",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "Foydalanuvchi bergan URL'ga so'rov yuboradigan feature (webhook, avatar import). Asosiy xavf?",
-      "options": [
-        "SSRF — ichki tarmoq va cloud metadata endpoint'iga (169.254.169.254) kirish; DNS rebinding sababli faqat URL tekshiruvi yetarli emas, IP'ni ulanish paytida tekshirish va redirect'larni cheklash kerak",
-        "XSS",
-        "SQL injection",
-        "CSRF"
-      ],
-      "answer": 0,
       "explanation": "To'liq himoya: allow-list domenlar; ruxsat etilmagan IP diapazonlari (RFC1918, loopback, link-local, IPv6 mapped) ni DialContext ichida (Control funksiyasi) tekshirish — chunki DNS javobi tekshiruvdan keyin o'zgarishi mumkin (rebinding); redirect'ni o'chirish yoki har hop'ni qayta tekshirish; alohida tarmoq segmenti/egress proxy; IMDSv2 talab qilish. Javob mazmunini foydalanuvchiga qaytarish ham ma'lumot sizishi (blind emas) demak.",
       "source": "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html"
     },
@@ -68,108 +47,66 @@
       "id": 17021,
       "code": "E59",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "ORM ishlatyapsiz — SQL injection mumkinmi?",
-      "options": [
-        "Ha: raw query, string bilan qurilgan ORDER BY / jadval nomi / IN ro'yxati parametrlashtirib bo'lmaydigan joylar; ular allow-list bilan tekshiriladi",
-        "Yo'q, ORM to'liq himoyalaydi",
-        "Faqat MySQL'da",
-        "Faqat eski ORM'larda"
-      ],
-      "answer": 0,
       "explanation": "Parametr faqat QIYMAT o'rnida ishlaydi — identifikator (ustun/jadval nomi) va yo'nalish (ASC/DESC) uchun emas. Ular uchun qat'iy allow-list (ruxsat etilgan ustunlar map'i) ishlatiladi. Go'da: `db.Query(\"... WHERE id = $1\", id)` to'g'ri; fmt.Sprintf bilan qurish xato. `IN` uchun pq.Array/pgx'da = ANY($1) ishlatiladi."
     },
     {
       "id": 30105,
       "code": "SN106",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "Parol taqqoslash `if hmac == expected` (string ==) bilan yozilgan. Muammo?",
-      "options": [
-        "Muammo yo'q",
-        "Timing attack: `==` birinchi farqda to'xtaydi va vaqt farqi sirni bit-bit tiklashga yo'l beradi; `hmac.Equal`/`subtle.ConstantTimeCompare` ishlatiladi",
-        "Faqat uzunlik tekshirilmagan",
-        "Unicode muammosi"
-      ],
-      "answer": 1,
       "explanation": "Amaliyotda tarmoq shovqini hujumni qiyinlashtiradi, lekin bu himoya emas — mahalliy yoki ko'p o'lchovli hujumda ishlaydi. Qoida: har qanday sir/token/HMAC taqqoslashda constant-time funksiya. Parol uchun esa taqqoslash umuman boshqacha: `bcrypt/argon2.CompareHashAndPassword` (hash ichida solt va narx)."
     },
     {
       "id": 30106,
       "code": "SN107",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "Servis foydalanuvchi bergan URL'ga so'rov qiladi (webhook test, rasm yuklash). Qanday zaiflik va himoya?",
-      "options": [
-        "XSS — escaping",
-        "SSRF: ichki tarmoq va cloud metadata (169.254.169.254) ga kirish. Himoya — allowlist domen, DNS resolutsiyadan keyin IP tekshirish (private/link-local blok), redirect'larni qayta tekshirish, alohida egress proxy, IMDSv2",
-        "CSRF — token",
-        "SQL injection"
-      ],
-      "answer": 1,
       "explanation": "Ko'p uchraydigan xato: URL'ni faqat matn sifatida tekshirish — DNS rebinding yoki `http://127.0.0.1.nip.io` bilan aylanib o'tiladi. Shuning uchun tekshiruv aslida ulanadigan IP ustida bo'lishi kerak (`Control`/custom dialer), har redirect uchun takrorlanadi, va tarmoq darajasida egress cheklovi qo'yiladi — bu eng ishonchli qatlam."
     },
     {
       "id": 30486,
       "code": "SN487",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "Xato xabarida `err.Error()` to'g'ridan-to'g'ri foydalanuvchiga qaytarilmoqda. Xavf?",
-      "options": [
-        "Xavf yo'q, foydali",
-        "Ichki ma'lumot oqadi: SQL matni, jadval/ustun nomlari, fayl yo'llari, ichki xost nomlari va kutubxona versiyalari — bu rekognossirovka uchun material. Tashqariga umumiy xabar + `trace_id`, batafsil xato esa faqat logga",
-        "Faqat sekinlashadi",
-        "Faqat 500 xatolarda"
-      ],
-      "answer": 1,
       "explanation": "To'g'ri naqsh: domen xatolarini foydalanuvchiga tushunarli kodga xaritalash (`ERR_INSUFFICIENT_FUNDS`), kutilmagan xatolarga esa `\"internal error\", trace_id: ...` qaytarish. Qo'shimcha: xato matni bo'yicha foydalanuvchi mavjudligini aniqlash mumkin bo'lmasin (enumeration), va stack trace hech qachon javobga tushmasin."
     },
     {
       "id": 30487,
       "code": "SN488",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "Fayl yo'lini foydalanuvchi kiritmasi bilan qurish: `filepath.Join(dir, userInput)`. Yetarlimi?",
-      "options": [
-        "Ha, `Join` tozalaydi",
-        "Yetarli emas: `..` bilan yuqoriga chiqish mumkin (`Join` `Clean` qiladi lekin natija baribir `dir` tashqarisiga chiqishi mumkin) — natijani `filepath.Abs` bilan hisoblab `dir` prefiksini tekshirish, yoki nomni allowlist/UUID bilan almashtirish kerak; symlink ham hisobga olinadi",
-        "`Clean` yetarli",
-        "Faqat Windows'da muammo"
-      ],
-      "answer": 1,
       "explanation": "Ishonchli yondashuv: foydalanuvchi bergan nomni umuman ishlatmaslik — serverda UUID nom berib, asl nomni metadata sifatida DB'da saqlash. Agar kerak bo'lsa: `rel, err := filepath.Rel(base, abs)` va `strings.HasPrefix(rel, \"..\")` tekshiruvi; Go 1.24'da `os.Root` bilan katalogdan chiqmaydigan fayl operatsiyalari mavjud."
     },
     {
       "id": 30488,
       "code": "SN489",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Security gotcha",
       "domain": "sec",
       "section": "t12",
       "question": "`math/rand` bilan parol tiklash tokeni generatsiya qilingan. Nima xato?",
-      "options": [
-        "Sekin ishlaydi",
-        "Kriptografik xavfsiz emas: generator holati oldingi natijalar bo'yicha tiklanishi mumkin va tokenlar bashorat qilinadi — `crypto/rand` ishlatilishi shart (token, sessiya ID, sir, sol)",
-        "Uzunligi yetarli emas faqat",
-        "Faqat eski Go'da"
-      ],
-      "answer": 1,
       "explanation": "Go 1.20+ da `math/rand` global seed tasodifiy bo'ldi, lekin bu uni kriptografik qilmaydi — algoritm baribir bashorat qilinadi. Qoida: xavfsizlikka aloqador har qanday tasodifiylik `crypto/rand` dan; token uzunligi kamida 128 bit entropiya va base64url bilan kodlanadi."
     }
   ]

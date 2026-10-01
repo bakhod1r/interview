@@ -18,399 +18,247 @@
       "id": 1,
       "code": 2,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "JOIN",
       "domain": "db",
       "section": "d1",
       "question": "Chap table'dagi <b>barcha</b> row'larni, o'ngda mos kelmasa ham, qaytaradigan JOIN?",
-      "options": [
-        "INNER JOIN",
-        "LEFT JOIN",
-        "RIGHT JOIN",
-        "CROSS JOIN"
-      ],
-      "answer": 1,
       "explanation": "LEFT JOIN chap tomonning hamma row'ini qaytaradi; o'ngda mos yo'q bo'lsa o'ng column'lar NULL bo'ladi. INNER faqat mos kelganlarini, CROSS Dekart ko'paytmani beradi. Tipik tuzoq: LEFT JOINdan keyin WHERE da o'ng table column'ini filtrlash uni amalda INNER JOINga aylantiradi — shartni ON ga qo'yish kerak."
     },
     {
       "id": 2,
       "code": 3,
       "level": "J",
-      "type": "code",
+      "type": "card",
       "topic": "NULL",
       "domain": "db",
       "section": "d1",
       "question": "Natija nima bo'ladi?",
       "snippet": "CREATE TABLE t(x int);\nINSERT INTO t VALUES (1),(NULL),(3);\n\nSELECT COUNT(*), COUNT(x), SUM(x), AVG(x) FROM t;",
-      "options": [
-        "3, 3, 4, 1.33",
-        "3, 2, 4, 2",
-        "2, 2, 4, 2",
-        "3, 2, NULL, NULL"
-      ],
-      "answer": 1,
       "explanation": "COUNT(*) row'larni sanaydi (3). COUNT(x), SUM, AVG kabi aggregatlar NULLni e'tiborsiz qoldiradi: COUNT(x)=2, SUM=4, AVG=4/2=2. Intervyuda ko'p so'raladi: AVG NULLni 0 deb hisoblamaydi — kerak bo'lsa AVG(COALESCE(x,0))."
     },
     {
       "id": 3,
       "code": 4,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "SQL",
       "domain": "db",
       "section": "d1",
       "question": "WHERE va HAVING farqi?",
-      "options": [
-        "Farqi yo'q",
-        "WHERE guruhlashdan oldin row'larni, HAVING guruhlashdan keyin guruhlarni filtrlaydi",
-        "HAVING faqat JOIN bilan ishlaydi",
-        "WHERE aggregat funksiyalar bilan ishlaydi, HAVING ishlamaydi"
-      ],
-      "answer": 1,
       "explanation": "Mantiqiy tartib: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. Shuning uchun WHERE ichida COUNT(*) yozib bo'lmaydi, HAVING da esa mumkin. Performance maslahati: aggregatsiz shartni HAVING emas WHERE ga qo'ying — kamroq row guruhlanadi."
     },
     {
       "id": 4,
       "code": 5,
       "level": "J",
-      "type": "sql",
+      "type": "card",
       "topic": "GROUP BY",
       "domain": "db",
       "section": "d1",
       "question": "<code>employees(id, name, department_id, salary)</code>. 5 tadan ko'p xodimi bor bo'limlarni va xodimlar sonini qaytaring.",
-      "modelAnswer": "SELECT department_id, COUNT(*) AS cnt\nFROM employees\nGROUP BY department_id\nHAVING COUNT(*) > 5;",
-      "keywords": [
-        "GROUP BY",
-        "HAVING",
-        "COUNT"
-      ],
       "explanation": "Guruh bo'yicha shart — HAVING. Ko'p xato: WHERE COUNT(*) > 5 — bu xato beradi. Qo'shimcha: bo'lim nomi kerak bo'lsa departments bilan JOIN qilib, GROUP BY ga d.id, d.name qo'shiladi."
     },
     {
       "id": 6,
       "code": 7,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "NULL",
       "domain": "db",
       "section": "d1",
       "question": "<code>SELECT NULL = NULL;</code> nima qaytaradi?",
-      "options": [
-        "TRUE",
-        "FALSE",
-        "NULL (unknown)",
-        "Xato"
-      ],
-      "answer": 2,
       "explanation": "SQL uch qiymatli mantiqda ishlaydi: TRUE/FALSE/UNKNOWN. NULL bilan har qanday taqqoslash NULL beradi. Shuning uchun IS NULL / IS DISTINCT FROM ishlatiladi. WHERE faqat TRUE row'larni o'tkazadi — UNKNOWN tushib qoladi."
     },
     {
       "id": 8,
       "code": 9,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "SQL",
       "domain": "db",
       "section": "d1",
       "question": "DELETE, TRUNCATE, DROP farqi bo'yicha qaysi to'g'ri?",
-      "options": [
-        "Uchalasi ham faqat ma'lumotni o'chiradi",
-        "DELETE row'larni WHERE bilan o'chiradi (trigger ishlaydi); TRUNCATE hamma row'ni tez o'chiradi, struktura qoladi; DROP table'ni butunlay o'chiradi",
-        "TRUNCATE table strukturasini o'chiradi",
-        "DROP ni rollback qilib bo'lmaydi, DELETE ni ham"
-      ],
-      "answer": 1,
       "explanation": "DELETE qatorma-row, loglanadi, ROW triggerlar ishlaydi, sekin. TRUNCATE page'larni tashlaydi — tez, lekin kuchli lock oladi. DROP — table, index, constraint hammasi yo'q. Postgresda TRUNCATE va DROP ham transaction ichida rollback qilinadi (MySQLda DDL implicit commit)."
     },
     {
       "id": 9,
       "code": 10,
       "level": "J",
-      "type": "sql",
+      "type": "card",
       "topic": "Subquery",
       "domain": "db",
       "section": "d1",
       "question": "<code>employees(salary)</code> dan ikkinchi eng katta maoshni toping (takror maoshlar bo'lishi mumkin).",
-      "modelAnswer": "SELECT MAX(salary) FROM employees\nWHERE salary < (SELECT MAX(salary) FROM employees);\n\n-- yoki\nSELECT DISTINCT salary FROM employees\nORDER BY salary DESC OFFSET 1 LIMIT 1;",
-      "keywords": [
-        "MAX|DENSE_RANK|OFFSET",
-        "DISTINCT|<|DENSE_RANK"
-      ],
       "explanation": "Klassik savol. DISTINCT'siz ORDER BY ... OFFSET 1 xato beradi agar top maosh ikki kishida bo'lsa. N-chi uchun eng umumiy yechim: DENSE_RANK() OVER (ORDER BY salary DESC) = N. Ikkinchi maosh bo'lmasa MAX variant NULL qaytaradi — bu odatda kerakli xulq."
     },
     {
       "id": 11,
       "code": 12,
       "level": "J",
-      "type": "code",
+      "type": "card",
       "topic": "NULL",
       "domain": "db",
       "section": "d1",
       "question": "PostgreSQLda natija tartibi qanday?",
       "snippet": "-- names: 'Ali', NULL, 'Bek'\nSELECT name FROM users ORDER BY name;",
-      "options": [
-        "NULL, Ali, Bek",
-        "Ali, Bek, NULL",
-        "Ali, NULL, Bek",
-        "Xato: NULL tartiblanmaydi"
-      ],
-      "answer": 1,
       "explanation": "Postgres NULLni eng katta qiymat deb hisoblaydi: ASC da oxirida, DESC da boshida. MySQL/SQLite aksincha (NULL eng kichik). Aniq boshqarish: ORDER BY name NULLS FIRST / NULLS LAST. Index ham shu tartibda bo'lishi kerak, aks holda index ishlatilmasligi mumkin."
     },
     {
       "id": 13,
       "code": 14,
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "SQL",
       "domain": "db",
       "section": "d1",
       "question": "UNION va UNION ALL farqi?",
-      "options": [
-        "UNION ALL dublikatlarni olib tashlaydi",
-        "UNION dublikatlarni olib tashlaydi (sort/hash qiladi), UNION ALL hammasini qaytaradi va tezroq",
-        "Ikkalasi ham bir xil",
-        "UNION faqat ikki table bilan ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "UNION = UNION ALL + DISTINCT, ya'ni qo'shimcha sort yoki hash. Dublikat bo'lmasligini bilsangiz (masalan turli sanalar oralig'i) doim UNION ALL — arzonroq."
     },
     {
       "id": 16,
       "code": 17,
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Window",
       "domain": "db",
       "section": "d1",
       "question": "<code>salary</code>: 100, 100, 90, 80. Natija column'lari (rn, rk, drk)?",
       "snippet": "SELECT salary,\n  ROW_NUMBER() OVER (ORDER BY salary DESC) rn,\n  RANK()       OVER (ORDER BY salary DESC) rk,\n  DENSE_RANK() OVER (ORDER BY salary DESC) drk\nFROM emp;",
-      "options": [
-        "rn:1,2,3,4 · rk:1,1,3,4 · drk:1,1,2,3",
-        "rn:1,1,2,3 · rk:1,1,3,4 · drk:1,2,3,4",
-        "rn:1,2,3,4 · rk:1,1,2,3 · drk:1,1,3,4",
-        "rn:1,2,3,4 · rk:1,2,3,4 · drk:1,1,2,3"
-      ],
-      "answer": 0,
       "explanation": "ROW_NUMBER — doim unikal ketma-ketlik (tenglarda tartib aniqlanmagan!). RANK — tenglarga bir xil raqam, keyin sakrash (1,1,3). DENSE_RANK — sakrashsiz (1,1,2). 'Top-N per group' da tenglar ham kirishi kerak bo'lsa DENSE_RANK."
     },
     {
       "id": 17,
       "code": 18,
       "level": "M",
-      "type": "sql",
+      "type": "card",
       "topic": "Window",
       "domain": "db",
       "section": "d1",
       "question": "Har bir bo'limdan eng ko'p maosh oladigan 3 xodimni qaytaring. <code>employees(id, name, department_id, salary)</code>",
-      "modelAnswer": "SELECT id, name, department_id, salary\nFROM (\n  SELECT e.*,\n         DENSE_RANK() OVER (PARTITION BY department_id\n                            ORDER BY salary DESC) AS r\n  FROM employees e\n) x\nWHERE r <= 3;",
-      "keywords": [
-        "OVER",
-        "PARTITION BY",
-        "ORDER BY",
-        "RANK|ROW_NUMBER"
-      ],
       "explanation": "Window funksiyani WHERE da to'g'ridan-to'g'ri ishlatib bo'lmaydi (WHERE SELECTdan oldin bajariladi) — shuning uchun subquery/CTE. Postgresda alternativ: LATERAL join bilan har bo'limga LIMIT 3 — (department_id, salary DESC) index bo'lsa juda tez."
     },
     {
       "id": 23,
       "code": 24,
       "level": "M",
-      "type": "sql",
+      "type": "card",
       "topic": "GROUP BY",
       "domain": "db",
       "section": "d1",
       "question": "<code>users(id, email)</code> da takrorlangan emaillarni va necha marta takrorlanganini toping (katta-kichik harf farqsiz).",
-      "modelAnswer": "SELECT LOWER(email) AS email, COUNT(*) AS n\nFROM users\nGROUP BY LOWER(email)\nHAVING COUNT(*) > 1\nORDER BY n DESC;",
-      "keywords": [
-        "GROUP BY",
-        "HAVING",
-        "COUNT",
-        "LOWER"
-      ],
       "explanation": "Keyingi savol ko'pincha: 'dublikatlarni o'chiring, eng eskisini qoldiring' — ROW_NUMBER() OVER (PARTITION BY LOWER(email) ORDER BY id) > 1 bo'lganlarni DELETE. Keyin UNIQUE INDEX ON users(LOWER(email)) qo'yib muammoni ildizdan yopish."
     },
     {
       "id": 25,
       "code": 26,
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "NULL",
       "domain": "db",
       "section": "d1",
       "question": "<code>banned(user_id)</code> da bitta NULL qiymat bor. Natija?",
       "snippet": "SELECT * FROM users\nWHERE id NOT IN (SELECT user_id FROM banned);",
-      "options": [
-        "Banned bo'lmagan hamma userlar",
-        "Bo'sh natija — hech qanday row",
-        "Xato",
-        "Faqat NULL id'li userlar"
-      ],
-      "answer": 1,
       "explanation": "id NOT IN (1, NULL) ≡ id<>1 AND id<>NULL → ... AND UNKNOWN → hech qachon TRUE emas. Mashhur tuzoq. Yechim: NOT EXISTS (SELECT 1 FROM banned b WHERE b.user_id = u.id) — NULL xavfsiz va odatda anti-join sifatida yaxshi rejalanadi."
     },
     {
       "id": 35,
       "code": 36,
       "level": "S",
-      "type": "sql",
+      "type": "card",
       "topic": "Pagination",
       "domain": "db",
       "section": "d1",
       "question": "<code>posts(id, created_at, ...)</code> — OFFSET 100000 sekin. Keyset (cursor) pagination bilan keyingi 20 ta postni oling (oxirgi ko'rilgan: :last_created, :last_id).",
-      "modelAnswer": "SELECT id, created_at, title\nFROM posts\nWHERE (created_at, id) < (:last_created, :last_id)\nORDER BY created_at DESC, id DESC\nLIMIT 20;\n\n-- index: CREATE INDEX ON posts (created_at DESC, id DESC);",
-      "keywords": [
-        "WHERE",
-        "<|>",
-        "ORDER BY",
-        "LIMIT",
-        "id"
-      ],
       "explanation": "OFFSET N hali ham N row'ni o'qib tashlaydi — O(N). Keyset indexdan to'g'ridan-to'g'ri joyga sakraydi — O(log n). id tie-breaker shart, aks holda bir xil created_at'li row'lar tushib qoladi yoki takrorlanadi. Kamchilik: ixtiyoriy page'ga sakrab bo'lmaydi."
     },
     {
       "id": 45,
       "code": 46,
       "level": "St",
-      "type": "code",
+      "type": "card",
       "topic": "Upsert",
       "domain": "db",
       "section": "d1",
       "question": "<code>key</code> allaqachon mavjud bo'lsa, bu query nima qaytaradi?",
       "snippet": "INSERT INTO idempotency_keys(key, status)\nVALUES ('abc', 'in_progress')\nON CONFLICT (key) DO NOTHING\nRETURNING key;",
-      "options": [
-        "'abc' — mavjud row qaytadi",
-        "Hech qanday row (0 rows) — shu orqali 'men birinchi emasman' deb bilinadi",
-        "Unique violation xatosi",
-        "Row yangilanadi va qaytadi"
-      ],
-      "answer": 1,
       "explanation": "DO NOTHING konfliktda row qaytarmaydi — bu 'lock olish' signali sifatida qulay. Mavjud row'ni ham olish kerak bo'lsa: DO UPDATE SET key = EXCLUDED.key RETURNING ... (lekin bu keraksiz yozish/dead tuple yaratadi) yoki keyin alohida SELECT."
     },
     {
       "id": 49,
       "code": 50,
       "level": "St",
-      "type": "sql",
+      "type": "card",
       "topic": "Upsert",
       "domain": "db",
       "section": "d1",
       "question": "<code>page_views(page_id PK, views)</code> — bir vaqtda minglab query keladi. Hisoblagichni atomik oshiring (row bo'lmasa yarating).",
-      "modelAnswer": "INSERT INTO page_views(page_id, views)\nVALUES (:id, 1)\nON CONFLICT (page_id)\nDO UPDATE SET views = page_views.views + 1;",
-      "keywords": [
-        "INSERT",
-        "ON CONFLICT",
-        "DO UPDATE",
-        "+ 1|+1"
-      ],
       "explanation": "SELECT → UPDATE/INSERT ilovada race condition beradi. Upsert atomik. Staff davomi: juda hot row'da bitta row lock contention'ga aylanadi — yechim: counter'ni N ta shard row'ga bo'lib SUM qilish, yoki Redis INCR + davriy flush."
     },
     {
       "id": 30231,
       "code": "SN232",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Window",
       "domain": "db",
       "section": "d1",
       "question": "Har foydalanuvchining oxirgi buyurtmasini olish uchun eng samarali usul (PostgreSQL)?",
-      "options": [
-        "`GROUP BY user_id` bilan `MAX(created_at)` va keyin qayta JOIN",
-        "`DISTINCT ON (user_id) ... ORDER BY user_id, created_at DESC` (PostgreSQL-specific, index bilan juda tez) yoki window funksiya `ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY created_at DESC) = 1`; ko'p foydalanuvchi uchun `LATERAL` bilan index skip scan naqshi",
-        "Korrelyatsiyalangan subquery har doim",
-        "Barchasini olib app'da filtrlash"
-      ],
-      "answer": 1,
       "explanation": "`(user_id, created_at DESC)` indeksi bo'lsa `DISTINCT ON` har guruhdan faqat birinchi qatorni o'qiydi. `MAX` + JOIN ikki marta skan qiladi va teng timestamp'larda dublikat beradi. Juda ko'p guruh bo'lsa `LATERAL` bilan 'loose index scan' (har user uchun LIMIT 1) eng tez variant bo'ladi."
     },
     {
       "id": 30232,
       "code": "SN233",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Upsert",
       "domain": "db",
       "section": "d1",
       "question": "`INSERT ... ON CONFLICT DO UPDATE` da qanday nozik xatarlar bor?",
-      "options": [
-        "Xatar yo'q",
-        "Unique indeks aynan konflikt maqsadiga mos bo'lishi kerak (aks holda xato yoki kutilmagan yozuv), yuqori konkurentlikda deadlock/`tuple concurrently updated` bo'lishi mumkin, va `EXCLUDED` bilan yozilgan qiymat eski qiymatni shartsiz bosib ketishi (yaxshisi `WHERE` sharti bilan)",
-        "Faqat sekin ishlaydi",
-        "Faqat PostgreSQL 9'da"
-      ],
-      "answer": 1,
       "explanation": "Amaliy naqshlar: `ON CONFLICT (tenant_id, email) DO UPDATE SET ... WHERE excluded.updated_at > t.updated_at` — kechikkan yozuv yangi qiymatni buzmaydi (last-write-wins'ni vaqt bilan boshqarish). Idempotentlik uchun ko'pincha `DO NOTHING` + keyin `SELECT` yetarli, va bu deadlock ehtimolini kamaytiradi."
     },
     {
       "id": 30399,
       "code": "SN400",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "NULL",
       "domain": "db",
       "section": "d1",
       "question": "Unique constraint'da NULL qanday ishlaydi (PostgreSQL)?",
-      "options": [
-        "NULL ham unique tekshiriladi, ikkinchi NULL rad etiladi",
-        "Default holatda har NULL o'ziga xos deb hisoblanadi — bir necha NULL qator qo'shilishi mumkin; PostgreSQL 15+ da `UNIQUE NULLS NOT DISTINCT` bilan bu xatti-harakat o'zgartiriladi",
-        "NULL umuman indekslanmaydi",
-        "Barcha DB'larda bir xil"
-      ],
-      "answer": 1,
       "explanation": "Klassik bug: `UNIQUE (user_id, deleted_at)` bilan soft delete qilinsa, `deleted_at IS NULL` bo'lgan bir necha qator o'tib ketadi (dublikat faol yozuvlar). To'g'ri yechim — partial unique index: `CREATE UNIQUE INDEX ... ON t (user_id) WHERE deleted_at IS NULL`. Bu xulq DB'lar orasida farq qiladi, shuning uchun migratsiyada tekshiriladi."
     },
     {
       "id": 30400,
       "code": "SN401",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "SQL",
       "domain": "db",
       "section": "d1",
       "question": "CTE (`WITH`) va subquery orasida ishlash farqi bormi (PostgreSQL)?",
-      "options": [
-        "CTE har doim tezroq",
-        "12-versiyagacha CTE optimizatsiya chegarasi edi (har doim materiallashtirilgan); 12+ da oddiy CTE inline qilinadi, lekin `MATERIALIZED`/`NOT MATERIALIZED` bilan boshqarish mumkin — rekursiv yoki bir necha marta ishlatilgan CTE materiallashtirish foydali",
-        "CTE va subquery aynan bir xil",
-        "CTE faqat rekursiya uchun"
-      ],
-      "answer": 1,
       "explanation": "Amaliy natija: eski loyihalarda 'CTE bilan optimizatsiya qildim' degan hiyla (planner'ni to'xtatish) 12+ da ishlamay qolishi mumkin va plan o'zgaradi. Agar CTE natijasi bir marta hisoblanishi kerak bo'lsa (qimmat agregat, keyin ikki joyda ishlatilsa) — `MATERIALIZED` aniq yoziladi."
     },
     {
       "id": 30434,
       "code": "SN435",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Window",
       "domain": "db",
       "section": "d1",
       "question": "Window funksiya va `GROUP BY` farqi nimada?",
-      "options": [
-        "Bir xil natija",
-        "`GROUP BY` qatorlarni birlashtiradi (natija qatorlari kamayadi); window funksiya har qatorni saqlab, uning yonida oyna bo'yicha agregatni beradi (`SUM(...) OVER (PARTITION BY ... ORDER BY ...)`) — running total, reyting, oldingi/keyingi qiymat (`LAG`/`LEAD`) uchun",
-        "Window sekinroq va foydasiz",
-        "`GROUP BY` faqat sonlar uchun"
-      ],
-      "answer": 1,
       "explanation": "Amaliy misollar: hisobdagi yurituvchi qoldiq (ledger `SUM() OVER (ORDER BY id)`), foydalanuvchi bo'yicha reyting, ikki hodisa orasidagi vaqt (`LEAD(ts) - ts`). Ishlash: window funksiya sort talab qiladi — mos indeks (`PARTITION BY` + `ORDER BY` ustunlari) bo'lsa sort tashlab ketiladi. Frame ta'rifi (`ROWS` vs `RANGE`) natijani o'zgartiradi — teng qiymatlarda `RANGE` hammasini qamrab oladi."
     },
     {
       "id": 30435,
       "code": "SN436",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "SQL",
       "domain": "db",
       "section": "d1",
       "question": "`LATERAL` join qanday holatda kerak?",
-      "options": [
-        "Hech qachon",
-        "O'ng tomondagi subquery chap tomondagi qatorga bog'liq bo'lganda: har mijoz uchun oxirgi 3 buyurtma, har kategoriya uchun top mahsulot — ya'ni 'per-group LIMIT' naqshi",
-        "Faqat `CROSS JOIN` o'rniga",
-        "Faqat window bilan"
-      ],
-      "answer": 1,
       "explanation": "Oddiy JOIN'da 'har guruhdan N ta' ni ifodalash qiyin: window funksiya bilan ham butun to'plam skanerlanadi, `LATERAL` esa har guruh uchun indeks bo'yicha faqat N qator o'qiydi — katta jadvalda bir necha tartib tez. Sintaksis: `FROM customers c, LATERAL (SELECT ... WHERE o.customer_id = c.id ORDER BY created_at DESC LIMIT 3) o`."
     }
   ]

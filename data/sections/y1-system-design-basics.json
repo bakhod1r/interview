@@ -11,37 +11,22 @@
       "id": 75,
       "code": 76,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Servis 99.9% SLA va'da qilgan. Bu oyiga qancha uzilish?",
-      "options": [
-        "Taxminan 5 daqiqa",
-        "Taxminan 43 daqiqa (30 kunlik oyda). 99.99% ≈ 4.3 daqiqa, 99% ≈ 7.2 soat",
-        "Taxminan 7 soat",
-        "Uzilish umuman bo'lmaydi"
-      ],
-      "answer": 1,
       "explanation": "Zanjirdagi bog'liqliklar ko'paysa mavjudlik ko'paytiriladi: 99.9% bo'lgan 4 ta ketma-ket bog'liqlik ≈ 99.6%. Shuning uchun yuqori SLA uchun: ortiqchalik (redundancy), degradatsiya (bog'liqlik yiqilsa qisman ishlash), cache'dan eski javob berish. SLA — tashqi va'da, SLO — ichki maqsad (odatda qattiqroq), SLI — o'lchov."
     },
     {
       "id": 76,
       "code": 77,
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Capacity estimation: 10 mln kunlik aktiv foydalanuvchili ilova uchun QPS va saqlashni qanday baholaysiz?",
-      "modelAnswer": [
-        "Foydalanuvchi xatti-harakatidan boshlash: kuniga o'rtacha nechta amal (masalan 20 query) → 200 mln query/kun",
-        "O'rtacha QPS = 200M / 86 400 ≈ 2 300; peak odatda 2–5x → ~10 000 QPS",
-        "Saqlash: har yozuv hajmi × kunlik yozuvlar soni × saqlash muddati (+ index va replikatsiya koeffitsienti ~2–3x)",
-        "Bandlik: javob hajmi × QPS (masalan 10 KB × 10 000 = 100 MB/s)",
-        "Memory: issiq ma'lumot ulushi (80/20 qoidasi) — cache'ga sig'adimi",
-        "Raqamlarni yaxlitlash va taxminlarni ovoz chiqarib aytish; aniqlik emas, kattalik tartibi muhim"
-      ],
       "explanation": "Intervyuda maqsad — arifmetika emas, mantiq. Har farazni aytib boring ('20 query deb olamiz'), shunda intervyuchi kerak bo'lsa tuzatadi.",
       "source": "https://github.com/donnemartin/system-design-primer"
     },
@@ -49,108 +34,66 @@
       "id": 77,
       "code": 78,
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Block, file va object storage farqi?",
-      "options": [
-        "Faqat narxda",
-        "Block (EBS) — xom disk bloklari, DB va OS uchun, past latency. File (NFS/EFS) — papka-fayl iyerarxiyasi, umumiy kirish. Object (S3) — key + metadata, HTTP API, deyarli cheksiz masshtab, rasm/video/backup uchun",
-        "Object storage DB o'rnini bosadi",
-        "File storage eng tez"
-      ],
-      "answer": 1,
       "explanation": "Tanlov qoidasi: tez-tez qisman o'zgaradigan ma'lumot (DB fayllari) — block; ko'p mashina bir vaqtda o'qiydigan umumiy fayllar — file; katta, o'zgarmas fayllar va CDN bilan tarqatish — object. Object storage'da fayl 'o'zgartirilmaydi', qayta yoziladi; kataloglar esa faqat prefiks illyuziyasi."
     },
     {
       "id": 83,
       "code": 84,
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Monolit, modular monolit, SOA, mikroservis va serverless — tanlovda asosiy mezon nima?",
-      "options": [
-        "Eng zamonaviysini tanlash",
-        "Jamoa hajmi va mustaqil deploy ehtiyoji, yuk profili, operatsion imkoniyat: kichik jamoa — modular monolit; ko'p jamoa va turlicha masshtab — mikroservis; hodisaga asoslangan, notekis yuk — serverless",
-        "Har doim mikroservis",
-        "Serverless har doim arzon"
-      ],
-      "answer": 1,
       "explanation": "Intervyuda kuchli javob — bitta arxitekturani 'to'g'ri' deb e'lon qilmaslik, balki mezonlarni va o'tish yo'lini (modular monolitdan servislarni ajratib chiqish) aytish. Har variantning operatsion narxini nomlash ham muhim."
     },
     {
       "id": 1022,
       "code": "B23",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "URL shortener (kuniga 100M yangi link, o'qish 100x ko'p) loyihalang.",
-      "modelAnswer": [
-        "Hisob: 100M/kun ≈ 1.2K yozish/s, ~120K o'qish/s; 5 yilda ~180B link",
-        "ID: base62 7 belgi (62^7 ≈ 3.5T); counter/ID-range allocator yoki Snowflake — kolliziyasiz",
-        "Saqlash: key-value (DynamoDB/Cassandra) yoki shardlangan Postgres; code → url",
-        "O'qish: CDN + Redis cache (qizg'in linklar), 301 vs 302 (analitika uchun 302)",
-        "Analitika: kliklarni async (Kafka) → OLAP; abuse himoyasi, TTL"
-      ],
       "explanation": "Klassik system design. Staff signal: raqamlar bilan boshlash, ID generatsiyada kolliziya muammosini hal qilish, o'qish yo'lini asosiy qilish."
     },
     {
       "id": 1026,
       "code": "B27",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Query 100 ta backend'ga parallel fan-out qiladi, har birining p99 = 10ms. Umumiy query'ning taxminiy xulqi?",
-      "options": [
-        "p99 ≈ 10ms",
-        "Deyarli har query kamida bitta sekin javobni kutadi: 1 − 0.99^100 ≈ 63% query'lar p99 dan sekin — tail latency kuchayadi",
-        "p99 ≈ 1000ms (100 × 10)",
-        "Parallel bo'lgani uchun p50 ga teng"
-      ],
-      "answer": 1,
       "explanation": "'Tail at scale' (Dean & Barroso). Yechimlar: hedged requests (sekin bo'lsa ikkinchi replikaga), tied requests, fan-out'ni kamaytirish, partial results bilan javob. Principal level'da p99'ni arxitektura muammosi sifatida ko'rish."
     },
     {
       "id": 1029,
       "code": "B30",
       "level": "P",
-      "type": "open",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Sinxron REST zanjiridan (A→B→C→D) event-driven arxitekturaga o'tish kerakmi? Qanday qaror qilasiz?",
-      "modelAnswer": [
-        "Muammo: sinxron zanjirda availability ko'paytiriladi (0.99^4 ≈ 96%), latency qo'shiladi",
-        "Event-driven: temporal decoupling, mustaqil masshtab; lekin eventual consistency, debugging qiyin, event sxemasi kontrakt",
-        "Hamma narsani emas: user darhol javob kutadigan query'lar — sinxron; side effect'lar (email, analitika) — async",
-        "Asoslar: outbox, idempotent consumer, schema registry, distributed tracing",
-        "Bosqichli: eng og'riqli zanjirdan boshlash va natijani o'lchash"
-      ],
       "explanation": "Principal signal: 'yoki-yoki' emas — har o'zaro ta'sir uchun consistency va latency talabiga qarab tanlash; operatsion narxni tan olish."
     },
     {
       "id": 13003,
       "code": "K4",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Load balancing algoritmlaridan qaysi biri qachon mos?",
-      "options": [
-        "Faqat round robin ishlatiladi",
-        "Round robin — bir xil quvvatli serverlar va qisqa so'rovlar uchun; weighted round robin — quvvat har xil bo'lsa; least connections — so'rov davomiyligi turlicha bo'lsa; least response time — moslashuvchan, lekin qimmatroq; power of two choices — katta masshtabda oddiy va samarali; consistent hashing / sticky — sessiya yoki kesh lokalligi kerak bo'lsa",
-        "Har doim least connections eng yaxshi",
-        "IP hash universal yechim"
-      ],
-      "answer": 1,
       "explanation": "Stateless servis bo'lsa oddiy round robin yetarli — sticky session gorizontal masshtabni buzadi va deploy paytida muammo beradi. Health check bilan birga ishlashi shart: o'lik yoki sekin (outlier) instance'ni chiqarib tashlash. Uzoq yashaydigan ulanishlar (gRPC, WebSocket) uchun L4 balanslash yetarli emas.",
       "source": "https://algomaster.io/learn/system-design/load-balancing-algorithms"
     },
@@ -158,311 +101,187 @@
       "id": 13006,
       "code": "K7",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Vertikal va gorizontal masshtablash farqi?",
-      "options": [
-        "Bir xil",
-        "Vertikal — bitta mashinani kuchaytirish (oddiy, kod o'zgarmaydi, lekin chegarasi va yagona nosozlik nuqtasi bor). Gorizontal — mashina qo'shish (deyarli cheksiz, lekin servis stateless bo'lishi va ma'lumot taqsimlanishi kerak)",
-        "Gorizontal har doim arzonroq",
-        "Vertikal masshtablash imkonsiz"
-      ],
-      "answer": 1,
       "explanation": "Amaliy tartib: avval o'lchash va optimallashtirish, keyin vertikal (tez va arzon), keyin o'qish uchun replikalar va kesh, oxirida gorizontal/sharding. Ko'p jamoa bu tartibni buzib, erta sharding qilib operatsion murakkablikni sotib oladi."
     },
     {
       "id": 13010,
       "code": "K11",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Latency va throughput farqi?",
-      "options": [
-        "Bir xil o'lchov",
-        "Latency — bitta so'rovga ketgan vaqt (masalan p99 200 ms). Throughput — birlik vaqtdagi ishlangan so'rovlar soni (RPS). Ular bog'liq, lekin bir-birini almashtirmaydi: batching throughput'ni oshirib, latency'ni yomonlashtirishi mumkin",
-        "Latency oshsa throughput ham oshadi",
-        "Throughput faqat tarmoqqa tegishli"
-      ],
-      "answer": 1,
       "explanation": "Little qonuni: parallel ishlar soni ≈ throughput × latency. Amaliy xulosa: tizim to'yinganda latency keskin o'sadi (navbat), shuning uchun yuk testida ikkalasini birga o'lchash kerak. O'rtacha emas, persentillarga qarang."
     },
     {
       "id": 30062,
       "code": "SN63",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Kuniga 50 mln event qabul qiladigan 'notification' servisini loyihalang (email/SMS/push).",
-      "modelAnswer": [
-        "Hisob: 50M/kun ≈ 580 RPS o'rtacha, peak x5 ≈ 3k RPS. Payload ~1KB → ~50GB/kun raw",
-        "Ingest: API/Kafka topic, faqat qabul qilib tasdiqlaydi (fast ack), qayta ishlash asinxron; idempotency key bilan dublikat bloklanadi",
-        "Fan-out: user preference va kanal bo'yicha yo'naltirish, per-kanal alohida topic/worker (SMS provayder sekin, push tez)",
-        "Provider chaqiruvi: rate limit (provayder kvotasi), retry + backoff, circuit breaker, DLQ; holat mashinasi (queued→sent→delivered→failed)",
-        "Deduplication va throttling: foydalanuvchini bombardimon qilmaslik — per-user window, digest/aggregation, quiet hours",
-        "Template va lokalizatsiya alohida servis; render natijasi keshlanadi",
-        "Saqlash: hodisa jurnali (Kafka retention) + status DB (partitionlangan sana bo'yicha), analitika uchun kolonkali ombor",
-        "Kuzatuv: kanal bo'yicha delivery rate, provayder latency, lag, DLQ hajmi; SLO kritik (OTP) va kritik bo'lmagan (marketing) uchun alohida yo'nalish"
-      ],
       "explanation": "Intervyuda kutiladigan ketma-ketlik: hisob-kitob → ingest/async ajratish → fan-out va prioritet → tashqi provayder ishonchsizligi (retry/DLQ/idempotency) → throttling → kuzatuv. OTP va marketing bir yo'lda ketmasligi — eng ko'p baholanadigan detal."
     },
     {
       "id": 30063,
       "code": "SN64",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Ko'p o'qishli feed uchun 'fan-out on write' va 'fan-out on read' orasida qanday tanlanadi?",
-      "options": [
-        "Har doim on write",
-        "On write (har follower uchun oldindan yozish) — o'qish tez, lekin mashhur akkaunt (millionlab follower) yozuvni portlatadi; on read — yozish arzon, o'qish qimmat. Amalda gibrid: oddiy foydalanuvchiga on write, celebrity'ga on read",
-        "Har doim on read",
-        "Farqi yo'q, kesh hal qiladi"
-      ],
-      "answer": 1,
       "explanation": "Twitter klassik keysi. Gibridda mashhur akkaunt tweetlari o'qish vaqtida qo'shiladi, qolgani oldindan tarqatiladi. Qo'shimcha detallar: timeline Redis'da cheklangan uzunlikda (masalan oxirgi 800), sovuq foydalanuvchi uchun lazy qayta qurish, va yozuv asinxron (queue) — post qilish latency'si fan-out'ga bog'lanmaydi."
     },
     {
       "id": 30064,
       "code": "SN65",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "URL shortener'da 100k RPS o'qish. Asosiy dizayn qarorlari?",
-      "options": [
-        "Bitta PostgreSQL yetarli",
-        "Kalit-qiymat o'qish: CDN/edge + Redis kesh (hot kalitlar), asosiy saqlash KV/DB, kalit generatsiyasi — oldindan ajratilgan diapazon (counter blok) yoki tasodifiy + unique tekshirish; 301/302 semantikasi va analitika asinxron",
-        "Har o'qishda DB'ga borish",
-        "Kalit sifatida URL hash'ini to'g'ridan-to'g'ri ishlatish"
-      ],
-      "answer": 1,
       "explanation": "O'qish/yozuv nisbati juda katta (100:1+) — kesh markazda. Muhim detallar: 301 brauzerda muddatsiz keshlanadi (analitika yo'qoladi, o'zgartirish imkonsiz), shuning uchun ko'pincha 302 + qisqa TTL. Kalit generatsiyasi markazlashtirilgan counter'dan blok olish bilan koordinatsiyasiz bo'ladi; cache miss uchun negative caching (mavjud emas) ham kerak."
     },
     {
       "id": 30123,
       "code": "SN124",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Kesh pattern'lari: `cache-aside`, `write-through`, `write-behind` — qaysi biri ma'lumot yo'qotish xavfini keltiradi?",
-      "options": [
-        "Cache-aside",
-        "Write-behind: yozuv avval keshga tushadi va DB'ga asinxron yoziladi — kesh node yiqilsa tasdiqlangan yozuv yo'qoladi",
-        "Write-through",
-        "Hech biri"
-      ],
-      "answer": 1,
       "explanation": "Write-behind eng tez, lekin durability'ni qurbon qiladi (navbat yo'qolsa ma'lumot ham). Cache-aside eng ko'p ishlatiladi (o'qishda miss → DB → keshga yozish), lekin stale va race muammosi bor: yozuvda keshni o'chirish (invalidate) qiymatni yangilashdan ishonchliroq, chunki parallel oqimda eski qiymat keshga qaytib qolishi mumkin."
     },
     {
       "id": 30124,
       "code": "SN125",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Consistent hashing nima muammoni yechadi va 'virtual node' nimaga kerak?",
-      "options": [
-        "Hash kolliziyasini yechadi",
-        "Node qo'shilganda/o'chganda kalitlarning faqat kichik ulushi ko'chadi (oddiy `hash % N` da deyarli hammasi); virtual node'lar esa taqsimotni tekislaydi va heterogen node sig'imini hisobga oladi",
-        "Kalitlarni siqadi",
-        "Replikatsiyani almashtiradi"
-      ],
-      "answer": 1,
       "explanation": "`% N` bilan bitta node qo'shilsa deyarli butun kesh/shard qayta joylashadi — ommaviy miss va migratsiya. Ring'da har node bir necha yuz virtual nuqta oladi: tasodifiy taqsimot notekisligi kamayadi va kuchli mashinaga ko'proq nuqta berish mumkin. Dinamo uslubidagi tizimlar (Cassandra, Riak) shu asosda qurilgan."
     },
     {
       "id": 30125,
       "code": "SN126",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Back-of-envelope: 10 mln foydalanuvchi, har biri kuniga 20 rasm ko'radi, rasm 200KB. CDN'siz chiquvchi trafik qancha?",
-      "options": [
-        "~4 GB/kun",
-        "10M × 20 × 200KB = 40 TB/kun ≈ 3.7 Gbit/s o'rtacha, peak x3 ≈ 11 Gbit/s — demak CDN majburiy",
-        "~400 GB/kun",
-        "~4 PB/kun"
-      ],
-      "answer": 1,
       "explanation": "Hisob: 200M so'rov/kun ≈ 2.3k RPS, hajm 40TB. Cloud'da chiquvchi trafik narxi eng katta xarajat bandiga aylanadi, shuning uchun CDN nafaqat latency uchun. Intervyuda shu tartibli hisobni ovoz chiqarib qilish — talab qilinadigan ko'nikma; aniq raqam emas, kattalik tartibi muhim."
     },
     {
       "id": 30126,
       "code": "SN127",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Servis 500 RPS ni 200ms latency bilan ishlaydi. Little's law bo'yicha qancha parallel ishlov kerak?",
-      "options": [
-        "500",
-        "L = λ × W = 500 × 0.2 = 100 parallel so'rov — demak kamida 100 ta konkurent ishlov (goroutine/ulanish) va shunga mos DB pool kerak",
-        "200",
-        "20"
-      ],
-      "answer": 1,
       "explanation": "Little's law sig'imni rejalashtirishning eng tez vositasi. Amaliy natija: agar DB pool 20 ulanish bo'lsa, ishlov navbatda kutadi va latency o'sadi (navbat kutishi latency'ga qo'shiladi). Teskari yo'nalishda ham ishlatiladi: pool 20 va DB query 10ms bo'lsa maksimal throughput 2000 RPS."
     },
     {
       "id": 30127,
       "code": "SN128",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Yuk oshganda latency chiziqli emas, keskin portlaydi. Nazariy sabab?",
-      "options": [
-        "Kod yomon yozilgan",
-        "Navbat nazariyasi: utilizatsiya 1 ga yaqinlashganda kutish vaqti 1/(1-ρ) bo'yicha portlaydi — 80% da ~5x, 95% da ~20x. Shuning uchun headroom (odatda 50-70% target) qoldiriladi",
-        "Tarmoq MTU",
-        "GC"
-      ],
-      "answer": 1,
       "explanation": "Shu sabab 'CPU 90% lekin hali joy bor' xato mulohaza: kichik burst ham navbatni portlatadi. Amaliy natijalar: autoscaling chegarasi 50-70%, o'zgaruvchanlik (variance) katta bo'lsa ko'proq headroom, va tail latency uchun hedged request yoki load shedding qo'llaniladi."
     },
     {
       "id": 30128,
       "code": "SN129",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Har chaqiruv p99 = 10ms. 100 ta parallel chaqiruvdan eng sekinini kutamiz. Natija p99 qancha bo'ladi?",
-      "options": [
-        "Baribir 10ms",
-        "Deyarli hamma so'rov 10ms dan oshadi: 100 chaqiruvdan kamida bittasining sekin bo'lish ehtimoli 1-0.99^100 ≈ 63% — bu 'tail amplification', shuning uchun fan-out kamaytiriladi yoki hedging/timeout qo'llaniladi",
-        "1ms",
-        "Aniqlash mumkin emas"
-      ],
-      "answer": 1,
       "explanation": "Google'ning 'The Tail at Scale' ishidagi asosiy kuzatuv. Choralar: fan-out darajasini kamaytirish, qisman natija bilan javob berish (degradatsiya), hedged request (ikkinchi nusxaga p95'dan keyin yuborish), va tail'ni tuzatish (GC pauza, sovuq kesh, hot shard)."
     },
     {
       "id": 30129,
       "code": "SN130",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Idempotent bo'lmagan 'POST /orders' foydalanuvchi ikki marta bosdi. Eng ishonchli himoya qatlami qaysi?",
-      "options": [
-        "Frontendda tugmani o'chirish",
-        "Serverda tabiiy biznes kaliti bo'yicha unique constraint (masalan `unique(cart_id, checkout_attempt)`) yoki client bergan idempotency key — DB darajasidagi cheklov",
-        "Nginx rate limit",
-        "Kesh"
-      ],
-      "answer": 1,
       "explanation": "Frontend himoyasi retry, tarmoq takrori va bot uchun ishlamaydi; rate limit tezkor ikki bosishni to'xtatmaydi. Yagona ishonchli joy — ma'lumotlar bazasidagi unique cheklov, chunki u parallel ikki tranzaksiyada ham bittasini rad etadi. Qolgan qatlamlar foydalanuvchi tajribasi uchun."
     },
     {
       "id": 30130,
       "code": "SN131",
       "level": "St",
-      "type": "open",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Monolitdan mikroservislarga ajratish so'raldi. Qanday yondashasiz?",
-      "modelAnswer": [
-        "Avval sabab: nima muammoni yechmoqchimiz (deploy tezligi, jamoa mustaqilligi, alohida skale)? Agar sabab 'modali' bo'lsa — ajratmaslik to'g'ri javob",
-        "Chegara: bounded context bo'yicha, ma'lumot egaligi bilan — bitta jadvalni ikki servis yozsa bu mikroservis emas, taqsimlangan monolit",
-        "Ketma-ketlik: modulli monolit (ichkarida aniq modul chegaralari va interfeyslar) → eng og'riqli moduldan boshlab ajratish (masalan og'ir yuklamali qism yoki tez o'zgaradigan qism)",
-        "Migratsiya naqshlari: strangler fig (yangi trafikni yangi servisga yo'naltirish), branch-by-abstraction, DB'ni ajratishda avval o'qish, keyin yozish, keyin ma'lumot ko'chirish",
-        "Nima qo'shiladi: tarmoq xatolari, izchillik eventual, tracing/monitoring majburiy, deploy va kontrakt versiyalash — bu narx oldindan aytiladi",
-        "O'lchov: har qadamdan keyin DORA metrikalari va incident soni — yaxshilanmasa yondashuv qayta ko'riladi",
-        "Birinchi ajratmaydigan narsalar: umumiy DB sxemasi va autentifikatsiya kabi kesishuvchi qismlar oxirida (yoki platforma sifatida) qilinadi"
-      ],
       "explanation": "Kutiladigan signal — texnologiya emas, sabab va bosqichlilik. 'Modulli monolit avval' va 'ma'lumot egaligi chegara belgilaydi' — ikki eng kuchli gap."
     },
     {
       "id": 30236,
       "code": "SN237",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Dizayn suhbatida birinchi 5 daqiqada nima qilinishi kerak?",
-      "options": [
-        "Darhol arxitektura chizish",
-        "Talablarni aniqlashtirish: funksional (nima kerak, nima kerak emas), nofunksional (RPS, ma'lumot hajmi, latency maqsadi, izchillik talabi, SLA), keyin kattalik tartibida hisob-kitob — shundan keyingina komponentlar",
-        "Texnologiyalarni sanash",
-        "Ma'lumotlar bazasi tanlash"
-      ],
-      "answer": 1,
       "explanation": "Intervyuerlar eng ko'p baholaydigan signal — noaniq talabni o'zi aniqlab, doirani cheklash (scoping). Hisob-kitob (QPS, hajm, band kenglik) keyingi barcha qarorlarni oqlaydi: 100 RPS uchun bitta PostgreSQL yetarli, 100k RPS uchun butunlay boshqa arxitektura. Texnologiya nomlari eng oxirida keladi."
     },
     {
       "id": 30237,
       "code": "SN238",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "'Bu tizimni 10x yuklamaga qanday chidamli qilasiz?' savoliga javob strukturasi?",
-      "options": [
-        "Kubernetes replicani oshirish",
-        "Bo'g'izni aniqlash tartibi: o'lchash (qaysi resurs to'yingan) → arzon g'alabalar (kesh, N+1 yo'q qilish, batching, indeks) → gorizontal skale (stateless qatlam) → ma'lumot qatlami (read replica, partition, sharding) → arxitektura o'zgarishi (asinxron qilish, CQRS) — va har qadamda narx/murakkablik almashinuvi",
-        "Hammasini qayta yozish",
-        "Faqat DB'ni kattalashtirish"
-      ],
-      "answer": 1,
       "explanation": "Yaxshi javob tartibli va o'lchovga tayanadi: 'nima to'yingan?' savolisiz har qanday optimizatsiya taxmin. Odatda eng katta g'alaba arzon qismda bo'ladi (bitta N+1 query yoki keshning yo'qligi), sharding esa oxirgi chora — chunki u operatsion murakkablikni keskin oshiradi."
     },
     {
       "id": 30531,
       "code": "SN532",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Dizayn suhbatida ma'lumotlar bazasini qanday tanlaysiz?",
-      "options": [
-        "Eng mashhurini aytish",
-        "Kirish naqshidan boshlash: query shakllari, izchillik talabi, yozuv/o'qish nisbati, hajm va o'sish, tranzaksiya chegarasi — shundan keyin turi (relyatsion / KV / hujjat / kolonkali / vaqt seriyasi) va nihoyat konkret mahsulot; standart javob 'PostgreSQL, agar X talab bo'lsa Y'",
-        "NoSQL zamonaviyroq",
-        "Har servisga alohida DB turi"
-      ],
-      "answer": 1,
       "explanation": "Kuchli signal — PostgreSQL'ni default deb aytib, qachon undan chiqish kerakligini asoslash (masalan 1 mln yozuv/sek time-series, yoki full-text relevantlik, yoki graf traversal). Zaif signal — mahsulot nomlarini talabdan oldin sanash. Operatsion narx (kim boqadi, backup, monitoring) ham tanlov mezonlaridan."
     },
     {
       "id": 30532,
       "code": "SN533",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "System design",
       "domain": "sys",
       "section": "y1",
       "question": "Dizaynni qanday yakunlaysiz (oxirgi 5 daqiqa)?",
-      "options": [
-        "Diagrammani chizib tugatish",
-        "Zaif nuqtalarni o'zingiz sanash: yagona nosozlik nuqtalari, bo'g'izlar va ular qachon uriladi, izchillik kompromislari, operatsion masalalar (deploy, migratsiya, monitoring), va keyingi bosqich rejasi (10x o'sishda nima o'zgaradi)",
-        "Hech narsa qo'shmaslik",
-        "Barcha detalni takrorlash"
-      ],
-      "answer": 1,
       "explanation": "Tizimning cheklovlarini o'zi ko'rsata olish — yetuklik signali. Qo'shimcha kuchli yakun: 'birinchi versiyada buni qilmayman, chunki hozircha kerak emas; qachon kerak bo'lishini shu metrika ko'rsatadi' — bu haddan tashqari muhandislikdan qochish qobiliyatini ko'rsatadi."
     }
   ]

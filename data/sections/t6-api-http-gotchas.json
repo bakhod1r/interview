@@ -11,36 +11,22 @@
       "id": 16027,
       "code": "E28",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "Client timeout bilan uzildi, lekin server buyurtmani yaratib bo'lgan edi. Client retry qiladi. Nima kerak?",
-      "options": [
-        "Idempotency-Key: client generatsiya qilgan kalit, server natijani kalit bo'yicha saqlaydi va takrorda o'shani qaytaradi",
-        "POST'ni GET'ga almashtirish",
-        "Retry'ni butunlay o'chirish",
-        "Faqat timeout'ni oshirish"
-      ],
-      "answer": 0,
       "explanation": "Tarmoq xatosi 'bajarilmadi' degani emas — javob yo'qolgan bo'lishi mumkin. Idempotency kaliti unique constraint bilan saqlanadi: birinchi so'rov natijani yozadi, takrorlanganida o'sha javob qaytariladi (Stripe modeli). Kalit request body hash'i bilan bog'lanadi — bir xil kalit boshqa body bilan kelsa 422 qaytariladi. TTL odatda 24 soat."
     },
     {
       "id": 16028,
       "code": "E29",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "Retry qilish xavfsiz bo'lgan HTTP holatlar qaysi?",
-      "options": [
-        "408, 429, 502, 503, 504 va tarmoq xatolari (idempotent so'rovda); 400/401/403/404/409 — retry foydasiz",
-        "Har qanday 5xx, shu jumladan 501",
-        "Faqat 500",
-        "Hammasini retry qilish mumkin"
-      ],
-      "answer": 0,
       "explanation": "5xx ichida 501 Not Implemented va 505 doimiy xato — retry mantiqsiz. 429 va 503 Retry-After header'ini berishi mumkin — unga bo'ysuning. Har doim exponential backoff + full jitter, retry budjeti (masalan so'rovlarning 10%) va circuit breaker bilan birga; aks holda retry storm downstream'ni o'ldiradi.",
       "source": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"
     },
@@ -48,139 +34,89 @@
       "id": 16029,
       "code": "E30",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "gRPC'da deadline berilmasa nima bo'ladi?",
-      "options": [
-        "So'rov cheksiz kutadi — server resursi va goroutine to'planadi; har chaqiruvda context.WithTimeout majburiy",
-        "Default 30s qo'llaniladi",
-        "Kanal avtomatik yopiladi",
-        "Client darhol xato qaytaradi"
-      ],
-      "answer": 0,
       "explanation": "gRPC default deadline yo'q. Deadline metadata sifatida zanjir bo'ylab uzatiladi — A 500ms bersa, B ham qolgan vaqtni oladi va kech javobni hisoblamaydi. Server tomonda ctx.Err() == context.DeadlineExceeded bo'lsa ishni to'xtatish kerak (DB query'ga ham shu ctx uzatiladi). Qoida: deadline chaqiruvchida o'rnatiladi, ichkarida faqat qisqartiriladi."
     },
     {
       "id": 16030,
       "code": "E31",
       "level": "S",
-      "type": "code",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "Bu handler'da qanday muammo bor?",
       "snippet": "func h(w http.ResponseWriter, r *http.Request) {\n    if err := do(r); err != nil {\n        w.Write([]byte(\"error\"))\n        w.WriteHeader(500)\n        return\n    }\n}",
-      "options": [
-        "WriteHeader Write'dan KEYIN chaqirilgan — birinchi Write allaqachon 200 yuboradi, 500 e'tiborsiz qoladi ('superfluous WriteHeader call' log'i)",
-        "500 o'rniga 400 kerak",
-        "Content-Type yetishmayapti, qolgani to'g'ri",
-        "Hech qanday muammo yo'q"
-      ],
-      "answer": 0,
       "explanation": "net/http birinchi Write chaqirilganda header'larni flush qiladi. To'g'ri tartib: header'larni o'rnatish, WriteHeader(code), keyin Write. Shuningdek: status yozilgandan keyin xato yuz bersa kodni o'zgartirib bo'lmaydi — shuning uchun javobni oldin buferlab, keyin yozish naqshi (yoki handler'dan error qaytarib, markazda yozish) ishlatiladi."
     },
     {
       "id": 16031,
       "code": "E32",
       "level": "P",
-      "type": "open",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "Public API'da yangi majburiy maydon qo'shish kerak. Eski clientlarni buzmasdan qanday chiqarasan?",
-      "modelAnswer": "1) Maydonni avval IXTIYORIY qilib qo'shish, server default bilan to'ldiradi. 2) Telemetriya: nechta so'rov maydonsiz kelayapti, qaysi client versiyasi/API kaliti — metrika va log. 3) Deprecation e'loni: changelog, Deprecation/Sunset header'lari (RFC 8594), email. 4) Migratsiya davri (odatda 3-6 oy), integratorlarga yordam. 5) Trafik nolga yaqinlashgach majburiy qilish, yoki yangi versiyada (/v2 yoki media type versioning) majburiy, eskisi default bilan qolaveradi. Hech qachon: jimgina majburiy qilish, yoki bir kechada 400 qaytarishni yoqish.",
       "explanation": "Backward compatibility qoidalari: maydon qo'shish — mos (client noma'lumni e'tiborsiz qoldirsa); maydon o'chirish/nomini o'zgartirish/tipini o'zgartirish/majburiy qilish/enum qiymat qo'shish (client strict bo'lsa) — mos emas. Protobuf'da ham xuddi shu: field raqamini qayta ishlatmang, `reserved` qiling."
     },
     {
       "id": 30158,
       "code": "SN159",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "JSON'da `PATCH` bilan maydonni `null` ga o'rnatish va maydonni yubormaslikni qanday ajratasiz (Go)?",
-      "options": [
-        "Ajratish kerak emas",
-        "Pointer (`*string`) yoki `json.RawMessage`/maxsus `Optional[T]` tur — `nil` pointer 'yuborilmagan', `pointer to nil`/mavjud kalit 'null ga o'rnat' degani; yoki JSON Merge Patch semantikasini aniq hujjatlashtirish",
-        "`omitempty` hal qiladi",
-        "Har doim to'liq PUT ishlatish"
-      ],
-      "answer": 1,
       "explanation": "Oddiy struct bilan `\"\"` va 'yubormadi' farqlanmaydi — natijada PATCH tasodifan maydonni tozalaydi. Amaliy yechimlar: pointerlar, `map[string]json.RawMessage` bilan mavjud kalitlar to'plamini olish, yoki JSON Patch (RFC 6902) ishlatish. `omitempty` faqat serializatsiyaga ta'sir qiladi, deserializatsiyaga emas."
     },
     {
       "id": 30159,
       "code": "SN160",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "Go'da JSON'ga katta `int64` ID yuborilgan, frontendda qiymat buzildi. Nega?",
-      "options": [
-        "Go bug'i",
-        "JavaScript `Number` — IEEE 754 double: 2^53 dan katta butun sonlar aniqligini yo'qotadi; ID'lar string sifatida yuborilishi kerak",
-        "JSON `int64`ni qo'llamaydi",
-        "Encoding muammosi"
-      ],
-      "answer": 1,
       "explanation": "Snowflake uslubidagi 64-bit ID'lar aynan shu chegaradan oshadi va oxirgi raqamlar o'zgaradi — jim bug (noto'g'ri yozuv ochiladi). Shuning uchun API kontraktida ID string (`\"id\": \"7231...\"`), yoki `json:\",string\"` tegi. Xuddi shu muammo pul miqdorini float bilan yuborishda ham chiqadi."
     },
     {
       "id": 30160,
       "code": "SN161",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "Go'da `json.Unmarshal` bilan validatsiya qilinmagan payload qanday xatarga olib keladi?",
-      "options": [
-        "Faqat xato qaytadi",
-        "Mass assignment: kutilmagan maydonlar (`is_admin`, `balance`) struct'ga tushadi va keyin DB'ga yoziladi; yechim — alohida DTO (faqat ruxsat etilgan maydonlar), `DisallowUnknownFields`, va domain darajasidagi validatsiya",
-        "Panic",
-        "Xotira oshadi faqat"
-      ],
-      "answer": 1,
       "explanation": "ORM entity'sini to'g'ridan-to'g'ri request body'ga bind qilish — OWASP API ro'yxatidagi klassik zaiflik. To'g'ri qatlamlar: request DTO → validatsiya → domain obyektiga aniq maydonlar bilan o'girish. Bonus: `DisallowUnknownFields` client xatolarini erta ko'rsatadi, lekin forward compatibility'ni cheklaydi — public API'da ehtiyotkorlik bilan."
     },
     {
       "id": 30498,
       "code": "SN499",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "Go'da `http.Get` bilan 404 kelganda `err` nil. Nega va nima qilish kerak?",
-      "options": [
-        "Bug",
-        "`err` faqat tarmoq/transport xatolarida to'ladi; HTTP status alohida tekshiriladi (`resp.StatusCode`). Ko'p kod 4xx/5xx ni muvaffaqiyat deb qabul qiladi va bo'sh/xato javobni parse qiladi",
-        "404 xato emas",
-        "`err` har doim to'ladi"
-      ],
-      "answer": 1,
       "explanation": "To'g'ri client naqshi: status tekshirish, xato holatida body'ni o'qib (cheklangan hajmda) xato modeliga xaritalash, `defer resp.Body.Close()` va body'ni oxirigacha o'qib (yoki `io.Copy(io.Discard, ...)`) ulanishni poolga qaytarish. Retry qarori ham status bo'yicha: 5xx/429 — ha, 4xx — yo'q."
     },
     {
       "id": 30499,
       "code": "SN500",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "API gotcha",
       "domain": "api",
       "section": "t6",
       "question": "REST API'da `PUT` bilan qisman yangilash qilinmoqda. Muammo?",
-      "options": [
-        "Muammo yo'q",
-        "`PUT` — to'liq almashtirish semantikasi: yuborilmagan maydonlar nolga tushishi kerak. Qisman yangilash `PATCH` bilan qilinadi; aralashtirilsa mijozlar maydonlarni tasodifan tozalaydi va idempotentlik kutilmasi buziladi",
-        "`PATCH` eskirgan",
-        "`PUT` faqat yaratish uchun"
-      ],
-      "answer": 1,
       "explanation": "Amalda ko'p jamoa `PUT`ni 'merge' semantikasi bilan yozadi va buni hujjatlashtirmaydi — natijada eski clientlar yangi maydonlarni bilmay yuborishdan tashlab qo'yadi va ma'lumot yo'qoladi. Yechim: aniq semantika tanlash, hujjatlashtirish, va PATCH uchun JSON Merge Patch yoki JSON Patch standartini ishlatish."
     }
   ]

@@ -11,18 +11,11 @@
       "id": 16032,
       "code": "E33",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Redis'dagi distributed lock TTL tugadi, lekin ish hali tugamagan. Nima yuz beradi?",
-      "options": [
-        "Ikkinchi worker lock'ni oladi — ikkita worker bir vaqtda ishlaydi; lock o'zi safety kafolatlamaydi, ish idempotent bo'lishi yoki fencing token ishlatilishi kerak",
-        "Redis lock'ni avtomatik uzaytiradi",
-        "Birinchi worker to'xtatiladi",
-        "Hech narsa, TTL faqat maslahat"
-      ],
-      "answer": 0,
       "explanation": "Bu Kleppmann'ning Redlock tanqidining asosi: GC pauza yoki tarmoq kechikishi lock egasini 'muzlatadi', TTL tugaydi, boshqa egasi paydo bo'ladi, keyin birinchisi uyg'onib yozadi. Yechim — fencing token: lock bilan monoton o'suvchi raqam beriladi, storage eski tokenli yozuvni rad etadi. Amalda: ishni idempotent qilish + lock'ni faqat optimizatsiya (ortiqcha ishni kamaytirish) deb qarash.",
       "source": "https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html"
     },
@@ -30,156 +23,99 @@
       "id": 16033,
       "code": "E34",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Kafka consumer at-least-once ishlayapti. Xabar ikki marta yetib keldi. Kim aybdor?",
-      "options": [
-        "Hech kim — at-least-once dizayni shunaqa (rebalance, offset commit'dan oldin crash); consumer idempotent bo'lishi kerak",
-        "Broker buzuq",
-        "Producer acks=0 qo'yilgan",
-        "Partition soni kam"
-      ],
-      "answer": 0,
       "explanation": "Dublikat manbalari: offset commit'gacha crash; rebalance paytida in-flight xabarlar; producer retry (idempotent producer yoqilmagan bo'lsa). Yechim qatlamlari: producer'da enable.idempotence=true; consumer'da natija jadvalida unique key (message_id yoki business key) bilan ON CONFLICT DO NOTHING; yoki transactional outbox + dedup jadval. 'Exactly-once' faqat Kafka ichida (read-process-write transaction) mavjud, tashqi tizimga yozishda emas."
     },
     {
       "id": 16034,
       "code": "E35",
       "level": "P",
-      "type": "open",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Service A dan B ga so'rov timeout bo'ldi. A retry qildi. B esa ikkala so'rovni ham bajardi. Bunday holatni tizim darajasida qanday oldini olasan?",
-      "modelAnswer": "Qatlamlar: 1) B tomonda idempotency — Idempotency-Key yoki business key bo'yicha unique constraint; natija saqlanadi va takrorda qaytariladi. 2) A tomonda: timeout < B'ning ishlash vaqti bo'lmasin; deadline propagation orqali B qolgan vaqtni bilib, kech bo'lsa ishni boshlamasin. 3) Retry budjeti + exponential backoff + jitter; circuit breaker. 4) Yon ta'siri pul/tashqi API bo'lsa — ishni ikki bosqichga bo'lish (reserve/confirm) yoki outbox orqali asinxron qilish. 5) Kuzatuv: trace ID bilan dublikatni topish, duplicate_requests metrikasi.",
       "explanation": "Bu 'two generals' muammosining amaliy ko'rinishi: javob yo'qolganda chaqiruvchi natijani bila olmaydi. Yagona ishonchli yechim — operatsiyani idempotent qilish yoki natijani so'rab bilish imkoni (GET /operations/{key})."
     },
     {
       "id": 16035,
       "code": "E36",
       "level": "P",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Read replica'dan o'qiganda foydalanuvchi o'zi yaratgan yozuvni ko'rmayapti. Eng to'g'ri yechim?",
-      "options": [
-        "Read-your-writes: yozgandan keyin qisqa muddat (yoki LSN/timestamp taqqoslash bilan) shu foydalanuvchi so'rovlarini primary'ga yo'naltirish",
-        "Replikatsiyani sinxron qilish (butun tizim uchun)",
-        "Cache TTL ni oshirish",
-        "Replica'ni o'chirish"
-      ],
-      "answer": 0,
       "explanation": "Asinxron replikatsiyada lag normal (ms dan sekundlargacha). Amaliy naqshlar: (a) sticky-to-primary N sekund yoki sessiyadagi oxirgi write LSN'ni saqlab, replica shu LSN'ga yetganini tekshirish (Postgres: pg_last_wal_replay_lsn); (b) yozuv natijasini javobda qaytarib, UI'da optimistik ko'rsatish. Butun tizimni sinxron replikatsiyaga o'tkazish yozuv latency'sini va nosozlik ta'sirini oshiradi."
     },
     {
       "id": 16036,
       "code": "E37",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Cache invalidatsiyasida 'thundering herd' nima va qanday yopiladi?",
-      "options": [
-        "Mashhur kalit muddati tugaganda minglab so'rov bir vaqtda DB'ga uriladi; yechim: singleflight/mutex bilan bitta qayta hisob, jitterli TTL, stale-while-revalidate",
-        "Cache to'lib qolishi; yechim LRU",
-        "Redis cluster rebalance",
-        "Faqat cold start muammosi"
-      ],
-      "answer": 0,
       "explanation": "Go'da golang.org/x/sync/singleflight bir kalit uchun bir vaqtda faqat bitta hisoblashni bajaradi, qolganlar shu natijani oladi. Qo'shimcha: TTL'ga tasodifiy jitter (masalan ±10%) bir vaqtda muddati tugashini yoyadi; stale qiymatni qaytarib, fon'da yangilash (stale-while-revalidate) latency spike'ni yo'qotadi; probabilistic early expiration (XFetch) ham shu muammoni yechadi."
     },
     {
       "id": 30161,
       "code": "SN162",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Two-phase commit (2PC) mikroservislarda nega kamdan-kam ishlatiladi?",
-      "options": [
-        "Sekin bo'lgani uchun faqat",
-        "Koordinator yiqilsa qatnashchilar resurslarni qulflab noma'lum holatda qoladi (blocking protokol), availability barcha qatnashchilarning ko'paytmasiga teng bo'lib pasayadi, va ko'p servis/API 2PC'ni qo'llamaydi — shuning uchun saga + idempotentlik tanlanadi",
-        "Faqat eski texnologiya",
-        "Ma'lumot yo'qotadi"
-      ],
-      "answer": 1,
       "explanation": "2PC atomiklikni beradi, lekin ishlash muddatida barcha qatnashchi tirik bo'lishini talab qiladi. Amalda tanlov: bir DB ichida — oddiy tranzaksiya; servislar orasida — saga/outbox bilan eventual izchillik va biznes darajasidagi compensation. Aytish kerak bo'lgan nuqta: 2PC noto'g'ri emas, shunchaki availability narxi yuqori."
     },
     {
       "id": 30162,
       "code": "SN163",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Servis A, B, C zanjirida retry'lar bor. Nega 'retry amplification' xavfli?",
-      "options": [
-        "Xavfli emas",
-        "Har qatlam 3 marta urinsa 3×3×3 = 27 chaqiruv — sekinlashgan pastki servis butunlay yiqiladi; faqat eng chetdagi qatlam (yoki budjet bilan) retry qilishi kerak",
-        "Faqat log ko'payadi",
-        "Latency o'zgarmaydi"
-      ],
-      "answer": 1,
       "explanation": "Qoida: retry bir joyda — foydalanuvchiga eng yaqin nuqtada yoki eng ichkarida, lekin barcha qatlamlarda emas. Qo'shimcha nazorat: retry budget (trafikning ~10%), `Retry-After` hurmat qilish, va serverdan 'retryable emas' signali (429/400 farqi). Incident'da birinchi choralardan biri — retry'ni vaqtincha o'chirish."
     },
     {
       "id": 30163,
       "code": "SN164",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Kesh va DB o'rtasida izchillik: `DB'ni yangilash → keshni yangilash` ketma-ketligi nega xavfli?",
-      "options": [
-        "Xavfli emas",
-        "Parallel oqimda eski qiymat keshga keyin yozilib qolishi mumkin (race) — natijada kesh jim ravishda eskirgan bo'lib qoladi; xavfsizroq: keshni o'chirish (invalidate), TTL bilan chegaralash, yoki versiyalangan yozuv",
-        "Kesh har doim to'g'ri",
-        "DB yozuvi yo'qoladi"
-      ],
-      "answer": 1,
       "explanation": "Ssenariy: T1 DB'ga yangi qiymat yozdi, T2 eski qiymatni o'qib turgan edi va keshga yozdi — kesh eski. `DELETE`+TTL bu oynani ancha qisqartiradi; to'liqroq yechim — yozuvda versiya/timestamp bilan CAS (faqat yangiroq qiymat keshga tushadi) yoki keshni CDC/outbox eventidan yangilash."
     },
     {
       "id": 30500,
       "code": "SN501",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "Ikki servis bir-birini sinxron chaqiradi (A→B va B→A). Qanday xatar?",
-      "options": [
-        "Xatar yo'q",
-        "Aylanma bog'liqlik: deadlock kabi kutish (ikkisi bir-birini kutadi va pool tugaydi), cascading failure, hamda alohida deploy qilib bo'lmaslik. Yechim — chegarani qayta chizish, event bilan asinxronlashtirish yoki umumiy ma'lumotni egalik bo'yicha ajratish",
-        "Faqat sekinlashadi",
-        "Retry bilan hal bo'ladi"
-      ],
-      "answer": 1,
       "explanation": "Belgisi: incident paytida ikki servis birga yiqiladi va qaysi biri sabab ekanini aniqlab bo'lmaydi. Vaqtinchalik yumshatish — timeout va breaker; haqiqiy yechim esa domen chegarasini to'g'rilash (ko'pincha ma'lumot noto'g'ri joyda yoki bitta jarayon ikki servisga bo'lingan)."
     },
     {
       "id": 30501,
       "code": "SN502",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Distributed gotcha",
       "domain": "dist",
       "section": "t7",
       "question": "'Fallacies of distributed computing' ro'yxatidan qaysi biri kodda eng ko'p buziladi?",
-      "options": [
-        "Tarmoq tez",
-        "'Tarmoq ishonchli' va 'latency nol': chaqiruvlar mahalliy funksiya kabi yoziladi — timeout yo'q, xato yo'li yo'q, N+1 uzoq chaqiruv, va qisman nosozlik (partial failure) holati modellashtirilmagan",
-        "Bandwidth cheksiz",
-        "Topologiya o'zgarmaydi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy tekshiruv: har tashqi chaqiruvda timeout, retry siyosati, xato holatidagi xatti-harakat (degradatsiya) va idempotentlik bormi. Qisman nosozlik eng qiyin qismi: chaqiruv 'noma'lum' holatda tugashi mumkin — bu holat kodda aniq ifodalanishi kerak (`pending` + reconcile), aks holda ma'lumot nomuvofiqligi paydo bo'ladi."
     }
   ]

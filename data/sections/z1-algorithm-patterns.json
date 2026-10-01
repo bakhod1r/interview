@@ -26,18 +26,11 @@
       "id": 4000,
       "code": "A1",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Arrays",
       "domain": "alg",
       "section": "z1",
       "question": "Two Sum (massivda yig'indisi target bo'lgan ikki indeks). Eng yaxshi vaqt murakkabligi va usul?",
-      "options": [
-        "O(n²) — ikki sikl, boshqa yo'l yo'q",
-        "O(n) — hash map'da 'target - x' ni qidirish (bitta o'tishda), memory O(n)",
-        "O(log n) — binary search",
-        "O(n log n) — saralash shart"
-      ],
-      "answer": 1,
       "explanation": "Bitta o'tish: har x uchun map'da target-x bormi deb qaraysiz, bo'lmasa x ni map'ga qo'yasiz. Massiv saralangan bo'lsa — ikki ko'rsatkich (two pointers) bilan O(n) vaqt va O(1) memory. Bu savol 'vaqt va memory almashuvi'ni tushunasizmi degan tekshiruv.",
       "source": "https://neetcode.io/practice/practice/blind75"
     },
@@ -45,18 +38,11 @@
       "id": 4001,
       "code": "A2",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Linked list",
       "domain": "alg",
       "section": "z1",
       "question": "Bog'langan ro'yxatda sikl (cycle) bor-yo'qligini O(1) qo'shimcha memory bilan qanday aniqlaysiz?",
-      "options": [
-        "Hamma tugunlarni set'ga yig'ib (O(n) memory)",
-        "Floyd's cycle detection: sekin (1 qadam) va tez (2 qadam) ko'rsatkichlar — uchrashsa sikl bor; vaqt O(n), memory O(1)",
-        "Ro'yxatni saralab",
-        "Rekursiya bilan"
-      ],
-      "answer": 1,
       "explanation": "'Toshbaqa va quyon'. Siklning boshlanish tugunini topish uchun: uchrashgandan keyin bitta ko'rsatkichni boshga qaytarib, ikkalasini 1 qadamdan yurgizasiz — yana uchrashgan joy sikl boshi. Set bilan yechim ham to'g'ri, lekin intervyuda O(1) memory kutiladi.",
       "source": "https://neetcode.io/practice/practice/blind75"
     },
@@ -64,18 +50,11 @@
       "id": 4002,
       "code": "A3",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sliding window",
       "domain": "alg",
       "section": "z1",
       "question": "Takrorlanmaydigan belgilardan iborat eng uzun substring uzunligi. Samarali yechim?",
-      "options": [
-        "Hamma substringlarni tekshirish — O(n³)",
-        "Sliding window: o'ng chegarani surib, takror uchrasa chap chegarani oxirgi uchrash joyidan keyingi pozitsiyaga ko'chirish; har belgi ko'pi bilan ikki marta ko'riladi — O(n)",
-        "Saralash — O(n log n)",
-        "Binary search — O(log n)"
-      ],
-      "answer": 1,
       "explanation": "Oyna patterni belgilari: uzluksiz (contiguous) bo'lak, 'eng uzun/eng qisqa', va shart oyna kengayganda buziladi. map[byte]int oxirgi indeksni saqlaydi. Alifbo cheklangan bo'lsa memory O(min(n, alifbo)).",
       "source": "https://neetcode.io/practice/practice/neetcode150"
     },
@@ -83,18 +62,11 @@
       "id": 4003,
       "code": "A4",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Intervals",
       "domain": "alg",
       "section": "z1",
       "question": "Oraliqlarni birlashtirish (merge intervals) algoritmi va murakkabligi?",
-      "options": [
-        "O(n) — saralashsiz ham mumkin",
-        "Boshlanish nuqtasi bo'yicha saralash, keyin ketma-ket yurib kesishganlarini birlashtirish: O(n log n) vaqt (saralash hisobiga), O(n) natija uchun",
-        "O(n²) — har juftni solishtirish shart",
-        "O(log n)"
-      ],
-      "answer": 1,
       "explanation": "Kesishish sharti: keyingi.start <= joriy.end. Bu pattern kalendar/booking masalalarida qayta ishlatiladi: 'yig'ilish xonalari soni' (min-heap yoki sweep line bilan), 'yangi oraliq qo'shish'. Intervyuda chegara holatlari muhim: teginib turgan oraliqlar ([1,2] va [2,3]) birlashadimi — savol berish kerak.",
       "source": "https://neetcode.io/practice/practice/neetcode150"
     },
@@ -102,18 +74,11 @@
       "id": 4004,
       "code": "A5",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Heap",
       "domain": "alg",
       "section": "z1",
       "question": "n elementdan eng ko'p uchraydigan K ta elementni topish. Eng yaxshi yondashuv?",
-      "options": [
-        "Hammasini saralash — O(n log n) va boshqa yo'l yo'q",
-        "Chastotalarni sanab, o'lchami K bo'lgan min-heap bilan O(n log K); yoki bucket sort bilan O(n) — chastota indeks sifatida ishlatiladi",
-        "Binary search bilan O(log n)",
-        "Faqat brute force"
-      ],
-      "answer": 1,
       "explanation": "K kichik bo'lganda heap yechimi to'liq saralashdan yaxshi. Bucket sort varianti: chastota 1..n oralig'ida bo'lgani uchun har chastota uchun ro'yxat tutib, oxiridan K ta olinadi — O(n). Intervyuda ikkala yechimni aytib, trade-off'ni tushuntirish yaxshi.",
       "source": "https://neetcode.io/practice/practice/neetcode150"
     },
@@ -121,18 +86,11 @@
       "id": 4005,
       "code": "A6",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Graphs",
       "domain": "alg",
       "section": "z1",
       "question": "Og'irliksiz grafda eng qisqa yo'lni topish uchun qaysi algoritm?",
-      "options": [
-        "DFS — u ham eng qisqa yo'lni beradi",
-        "BFS — qatlamma-qatlam yurgani uchun birinchi yetib borish eng qisqa yo'l; O(V+E)",
-        "Dijkstra — faqat shu holatda ishlaydi",
-        "Binary search"
-      ],
-      "answer": 1,
       "explanation": "DFS yo'l topadi, lekin eng qisqasini kafolatlamaydi. Og'irliklar bo'lsa: manfiy bo'lmasa — Dijkstra (O((V+E) log V)), manfiy og'irlik bo'lsa — Bellman-Ford (O(V·E), manfiy sikl ham aniqlaydi). Matritsadagi masalalar (orollar, eng qisqa yo'l) — grafning yashirin ko'rinishi.",
       "source": "https://neetcode.io/practice/practice/neetcode150"
     },
@@ -140,19 +98,12 @@
       "id": 4006,
       "code": "A7",
       "level": "M",
-      "type": "code",
+      "type": "card",
       "topic": "Binary search",
       "domain": "alg",
       "section": "z1",
       "question": "Bu binary search'da qanday nozik xatolar bor?",
       "snippet": "lo, hi = 0, len(a)\nwhile lo < hi:\n    mid = (lo + hi) / 2      # 1\n    if a[mid] == target: return mid\n    elif a[mid] < target: lo = mid    # 2\n    else: hi = mid\nreturn -1",
-      "options": [
-        "Xato yo'q",
-        "(1) butun bo'lmagan bo'lish — mid = (lo + hi) // 2 bo'lishi kerak (ba'zi tillarda lo + (hi-lo)//2, overflow uchun); (2) lo = mid cheksiz siklga olib keladi — lo = mid + 1 bo'lishi kerak",
-        "Faqat return -1 noto'g'ri",
-        "while sharti > bo'lishi kerak"
-      ],
-      "answer": 1,
       "explanation": "lo = mid bo'lsa, lo va hi qo'shni bo'lganda mid doim lo ga teng bo'lib, sikl to'xtamaydi. Chegara masalalari (birinchi/oxirgi uchrash, lower_bound) uchun bitta shablonni yodlab olish va unga sodiq qolish eng ishonchli yo'l. Java/Go'da (lo+hi)/2 katta massivda overflow berishi mumkin — mashhur JDK bug'i.",
       "source": "https://neetcode.io/practice/practice/blind75"
     },
@@ -160,18 +111,11 @@
       "id": 4007,
       "code": "A8",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "DP",
       "domain": "alg",
       "section": "z1",
       "question": "Zinapoyaga chiqish (har qadamda 1 yoki 2 pog'ona) — n pog'ona uchun necha xil yo'l bor va qanday hisoblanadi?",
-      "options": [
-        "n² — ichma-ich sikl kerak",
-        "Fibonachchi rekurrensiyasi f(n) = f(n-1) + f(n-2); memoizatsiya yoki pastdan yuqoriga: O(n) vaqt, ikki o'zgaruvchi bilan O(1) memory",
-        "2^n — hamma variantni sanash shart",
-        "n log n"
-      ],
-      "answer": 1,
       "explanation": "DP belgilari: optimal substructure va qayta-qayta takrorlanadigan qism masalalar. Naiv rekursiya O(2^n) — memoizatsiya uni O(n) ga tushiradi. Ko'p DP masalasi shu bosqichlar bilan yechiladi: rekursiya → memoizatsiya (top-down) → table (bottom-up) → memory'ni siqish.",
       "source": "https://neetcode.io/practice/practice/blind75"
     },
@@ -179,18 +123,11 @@
       "id": 4008,
       "code": "A9",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Design",
       "domain": "alg",
       "section": "z1",
       "question": "LRU cache'ni O(1) get va put bilan qanday quraysiz?",
-      "options": [
-        "Faqat hash map bilan",
-        "Hash map (key → tugun) + ikki tomonlama bog'langan ro'yxat (eng yangi boshda): get — tugunni boshga ko'chirish, put — to'lgan bo'lsa oxirgisini o'chirish; ikkalasi ham O(1)",
-        "Massiv va saralash bilan",
-        "Min-heap bilan"
-      ],
-      "answer": 1,
       "explanation": "Nega aynan doubly linked list: tugunni O(1) da uzib olish uchun oldingi element kerak. Ko'p tillarda tayyor bor (Java LinkedHashMap, Go container/list). Kengaytma savollari: thread-safe qilish (mutex yoki shardlangan lock), TTL qo'shish, LFU bilan farqi.",
       "source": "https://neetcode.io/practice/practice/neetcode150"
     },
@@ -198,37 +135,22 @@
       "id": 4009,
       "code": "A10",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sorting",
       "domain": "alg",
       "section": "z1",
       "question": "Quicksort, mergesort va heapsort haqida qaysi to'g'ri?",
-      "options": [
-        "Uchalasi ham har doim O(n log n)",
-        "Quicksort — o'rtacha O(n log n), eng yomon O(n²) (yomon pivot), memory O(log n), joyida; mergesort — kafolatlangan O(n log n), barqaror (stable), O(n) qo'shimcha memory; heapsort — kafolatlangan O(n log n), joyida, lekin barqaror emas",
-        "Mergesort eng tez",
-        "Heapsort barqaror"
-      ],
-      "answer": 1,
       "explanation": "Amalda: ko'p kutubxonalar gibrid ishlatadi — introsort (quicksort + chuqurlik oshsa heapsort), Timsort (mergesort + insertion, barqaror). Barqarorlik muhim: ikki mezon bo'yicha ketma-ket saralaganda. Tashqi (diskdagi) saralash uchun — merge asosidagi yondashuv."
     },
     {
       "id": 4010,
       "code": "A11",
       "level": "S",
-      "type": "open",
+      "type": "card",
       "topic": "Approach",
       "domain": "alg",
       "section": "z1",
       "question": "Intervyuda ko'rmagan algoritm masalangizni qanday yechasiz (qadamlar)?",
-      "modelAnswer": [
-        "Savolni aniqlashtirish: kirish hajmi, tiplar, chegara holatlari, takrorlanuvchi elementlar, memory chekloviu",
-        "Misolni qo'lda ishlab ko'rish — namuna topish",
-        "Avval brute force yechimni aytish va murakkabligini baholash — keyin optimallashtirish (hash, ikki ko'rsatkich, saralash, oyna, DP)",
-        "Kod yozishdan oldin rejani ovoz chiqarib aytish va kelishib olish",
-        "Kodni yozib, misol bilan qatorma-row tekshirish; chegara holatlari (bo'sh, bitta element, toshib ketish)",
-        "Vaqt va memory murakkabligini aytish, yaxshilash yo'lini taklif qilish"
-      ],
       "explanation": "Baholanadigan narsa — jim o'tirib to'g'ri javob topish emas, fikrlashni ko'rsatish. Tiqilib qolsangiz: ovoz chiqarib nimani sinayotganingizni ayting va yo'naltiruvchi savol bering — bu minus emas.",
       "source": "https://www.techinterviewhandbook.org/coding-interview-prep/"
     },
@@ -236,594 +158,363 @@
       "id": 13022,
       "code": "K23",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Arrays",
       "domain": "alg",
       "section": "z1",
       "question": "Massiv (array) va bog'langan ro'yxat (linked list) farqi?",
-      "options": [
-        "Bir xil, faqat sintaksis boshqa",
-        "Massiv: indeks bo'yicha O(1), xotirada ketma-ket (kesh uchun yaxshi), o'rtaga qo'shish O(n). Linked list: boshiga qo'shish O(1), indeks bo'yicha kirish O(n), har element uchun qo'shimcha pointer va kesh uchun yomon",
-        "Linked list har doim tezroq",
-        "Massivda qidiruv O(1)"
-      ],
-      "answer": 1,
       "explanation": "Amalda zamonaviy protsessorlarda kesh lokalligi tufayli dinamik massiv (slice, vector) ko'p holatda linked list'dan tezroq — hatto o'rtaga qo'shishda ham (ko'chirish arzon). Linked list mantiqan kerak bo'ladigan joylar: LRU cache (doubly linked), navbat implementatsiyasi, tez-tez splice qilinadigan ro'yxatlar."
     },
     {
       "id": 13023,
       "code": "K24",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Hash tables",
       "domain": "alg",
       "section": "z1",
       "question": "Hash map ichkarida qanday ishlaydi?",
-      "options": [
-        "Saralangan daraxt sifatida",
-        "Kalitdan hash hisoblanadi → bucket indeksi; to'qnashuvlar zanjir (chaining) yoki ochiq adreslash bilan hal qilinadi; elementlar ko'payib load factor oshsa jadval kattalashtirilib qayta joylashtiriladi (rehash). O'rtacha O(1), eng yomon holatda O(n)",
-        "Kalitlar tartibda saqlanadi",
-        "Hash funksiya har doim unikal qiymat beradi"
-      ],
-      "answer": 1,
       "explanation": "Intervyuda davomi: nega amortized O(1) (rehash kamdan-kam va tarqatilgan), yomon hash yoki hash flooding hujumi natijasida O(n) ga tushishi (shuning uchun Go va boshqa tillarda hash urug'i tasodifiy), va kalit o'zgarmas bo'lishi shartligi. Go map'da tartib kafolatlanmaydi — bu ataylab."
     },
     {
       "id": 13024,
       "code": "K25",
       "level": "J",
-      "type": "mcq",
+      "type": "card",
       "topic": "Heap",
       "domain": "alg",
       "section": "z1",
       "question": "Stack va queue qanday tanlanadi?",
-      "options": [
-        "Bir xil struktura",
-        "Stack — LIFO (oxirgi kirgan birinchi chiqadi): rekursiya, orqaga qaytish (undo), qavslarni tekshirish, DFS. Queue — FIFO: navbat bilan ishlov, BFS, buferlash. Priority queue (heap) — eng muhim element birinchi",
-        "Queue LIFO ishlaydi",
-        "Stack faqat xotira uchun"
-      ],
-      "answer": 1,
       "explanation": "Amaliy misollar: monotonic stack ('keyingi kattaroq element' masalalari), deque (ikki tomonlama navbat — sliding window maksimumi), min-heap (top-K, Dijkstra, scheduler). Go'da: slice bilan stack/queue, container/heap bilan priority queue."
     },
     {
       "id": 13025,
       "code": "K26",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Approach",
       "domain": "alg",
       "section": "z1",
       "question": "Big-O bo'yicha qaysi qator to'g'ri?",
-      "options": [
-        "Hash map qidiruvi O(log n), binary search O(1)",
-        "Hash map o'rtacha O(1); saralangan massivda binary search O(log n); saralash O(n log n); ichma-ich ikki sikl O(n²); balanslangan daraxtda qidiruv/qo'shish O(log n)",
-        "Saralash har doim O(n)",
-        "Binary search saralanmagan massivda ham ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Intervyuda faqat vaqt emas, xotira murakkabligini ham ayting. Yana: Big-O konstantani yashiradi — kichik n da O(n²) yechim O(n log n) dan tez bo'lishi mumkin; amalda kesh lokalligi ham muhim. 'Amortized' (dinamik massivga qo'shish) va 'eng yomon holat' farqini bilish ham kutiladi."
     },
     {
       "id": 13026,
       "code": "K27",
       "level": "M",
-      "type": "mcq",
+      "type": "card",
       "topic": "Approach",
       "domain": "alg",
       "section": "z1",
       "question": "Rekursiya va iteratsiya tanlovida nimaga e'tibor berasiz?",
-      "options": [
-        "Rekursiya har doim chiroyliroq, shuning uchun afzal",
-        "Rekursiya daraxt/graf va bo'lib-hal qilish masalalarida tabiiy, lekin chuqurlik katta bo'lsa stack overflow xavfi bor. Iteratsiya (o'z stack'ingiz bilan) xotirani boshqarish imkonini beradi; ba'zi tillarda tail call optimizatsiyasi yo'q (Go'da ham yo'q)",
-        "Rekursiya har doim tezroq",
-        "Iteratsiya faqat sikl uchun"
-      ],
-      "answer": 1,
       "explanation": "Go'da goroutine stack'i dinamik o'sadi (1 GB gacha default limit), shuning uchun panic 'stack overflow' bilan tugaydi. Chuqur daraxt yoki foydalanuvchi bergan ma'lumot bo'yicha rekursiya — DoS vektori: chuqurlikni cheklang yoki iterativ yozing."
     },
     {
       "id": 13027,
       "code": "K28",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Graphs",
       "domain": "alg",
       "section": "z1",
       "question": "Binary tree, BST, balanslangan daraxt va B-tree farqi?",
-      "options": [
-        "Hammasi bir xil",
-        "Binary tree — har tugunda 2 tagacha bola. BST — chapda kichik, o'ngda katta (qidiruv O(h)), lekin tartiblangan ma'lumot kiritilsa ro'yxatga aylanib O(n) bo'ladi. AVL/Red-Black — balanslangan, O(log n) kafolati. B-tree — bitta tugunda ko'p kalit: disk/sahifa o'qishni kamaytiradi, shuning uchun DB indekslarida ishlatiladi",
-        "B-tree faqat xotirada ishlaydi",
-        "BST har doim balanslangan"
-      ],
-      "answer": 1,
       "explanation": "Nima uchun DB'da B-tree (B+tree): disk I/O sahifa bilan o'lchanadi, keng tugun daraxt balandligini keskin kamaytiradi (milliardlab qator uchun 3–4 daraja). Xotiradagi indekslar uchun esa balanslangan ikkilik daraxt yoki skip list (Redis ZSET) ham yetarli."
     },
     {
       "id": 30136,
       "code": "SN137",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Design",
       "domain": "alg",
       "section": "z1",
       "question": "LRU kesh O(1) get/put bilan qanday tuziladi?",
-      "options": [
-        "Faqat hash map",
-        "Hash map (kalit → node) + ikki tomonlama bog'langan ro'yxat (foydalanish tartibi): get'da node boshga ko'chiriladi, to'lganda oxirgisi o'chiriladi",
-        "Saralangan massiv",
-        "Heap"
-      ],
-      "answer": 1,
       "explanation": "Ro'yxat O(1) ko'chirish va o'chirish beradi (node havolasi map'da), map O(1) qidiruv. Go'da `container/list` bilan yoziladi. Amaliy qo'shimchalar: konkurent kesh uchun shardlangan qulf (yoki `sync.Map` + shard), va real tizimlarda LRU o'rniga LRU-K/TinyLFU — bir martalik skan keshni yuvib ketmasligi uchun."
     },
     {
       "id": 30137,
       "code": "SN138",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Design",
       "domain": "alg",
       "section": "z1",
       "question": "Oqimdagi 'top-K eng ko'p uchraydigan element'ni cheklangan xotirada qanday topamiz?",
-      "options": [
-        "Hammasini map'ga yig'ib saralash",
-        "Count-Min Sketch (yoki Space-Saving/Misra-Gries) bilan taxminiy sanoq + kichik min-heap top-K uchun — xotira O(K), aniqlik ma'lum xato chegarasi ichida",
-        "Bloom filter",
-        "Binary search"
-      ],
-      "answer": 1,
       "explanation": "Aniq sanoq uchun barcha unikal element kerak (millionlab kalitda xotira yetmaydi). Count-Min Sketch bir necha hash qatori bilan sanoqni yuqoridan cheklab baholaydi (overestimate, underestimate emas), heap esa eng kattalarini ushlaydi. Amaliy misol: Redis `TOPK` (RedisBloom), yoki trending hashtag hisoblash."
     },
     {
       "id": 30138,
       "code": "SN139",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Design",
       "domain": "alg",
       "section": "z1",
       "question": "1 mlrd URL ichida 'bu URL avval ko'rilganmi?' savoliga tez javob kerak. Xotira kam.",
-      "options": [
-        "Hash set (aniq, lekin har URL uchun 50+ bayt)",
-        "Bloom filter: ~10 bit/element (1 mlrd ≈ 1.2 GB bit = ~150 MB), false positive bor, false negative yo'q",
-        "Saralangan fayl va binary search har so'rovda",
-        "Trie"
-      ],
-      "answer": 1,
       "explanation": "Aniq hash set 1 mlrd URL uchun o'n gigabaytlarga chiqadi. Bloom filter 1% false positive uchun ~10 bit/element sarflaydi — ya'ni ~150 MB. 'Ehtimol ko'rilgan' javobida aniq tekshiruv (DB/KV) qilinadi, 'ko'rilmagan' esa 100% ishonchli. Element o'chirish qo'llanmaydi — buning uchun counting bloom yoki cuckoo filter."
     },
     {
       "id": 30139,
       "code": "SN140",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Design",
       "domain": "alg",
       "section": "z1",
       "question": "Sliding window rate limiter'ni kam xotirada qanday aniq qilamiz?",
-      "options": [
-        "Har so'rov timestamp'ini ro'yxatda saqlash (aniq, lekin xotira O(N))",
-        "Ikki oyna interpolatsiyasi: joriy va oldingi fixed window sanoqlari bilan taxminiy sliding qiymat — O(1) xotira, kichik xato; yoki token bucket bilan tekis cheklov",
-        "Bloom filter",
-        "Heap"
-      ],
-      "answer": 1,
       "explanation": "Sliding log aniq lekin har kalit uchun timestamp ro'yxati (yuqori RPS'da qimmat, Redis'da `ZREMRANGEBYSCORE` bilan tozalash kerak). Interpolatsiyalangan variant: `prev_count × (oyna qolgan ulushi) + cur_count` — amalda ko'p tizimlar (Cloudflare) shuni ishlatadi. Token bucket esa burst siyosatini tabiiy ifodalaydi."
     },
     {
       "id": 30185,
       "code": "SN186",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Approach",
       "domain": "alg",
       "section": "z1",
       "question": "Amortizatsiyalangan murakkablik nima? Dinamik massivga `append` misolida.",
-      "options": [
-        "O'rtacha holat murakkabligi (average case)",
-        "N ta operatsiyaning umumiy narxini N ga bo'lish: har `append` O(1) amortizatsiyalangan, chunki cap tugaganda O(n) ko'chirish bo'ladi, lekin u har 2x o'sishda bir marta — jami O(n) ish N operatsiyaga taqsimlanadi",
-        "Eng yomon holat O(1)",
-        "Tasodifiy ma'lumotdagi tezlik"
-      ],
-      "answer": 1,
       "explanation": "Average case ma'lumot taqsimotiga tayanadi, amortizatsiya esa hech qanday ehtimollik talab qilmaydi — bu kafolat. Muhim amaliy natija: real-time tizimda amortizatsiya yetmaydi, chunki bitta operatsiya O(n) bo'lib latency spike beradi (shu sabab GC va rehash pauzalari). Ikki barobar o'sish siyosati aynan shu amortizatsiyani ta'minlaydi; 1.25x o'sish xotirani tejaydi, lekin ko'chirishlar ko'payadi."
     },
     {
       "id": 30186,
       "code": "SN187",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Hash tables",
       "domain": "alg",
       "section": "z1",
       "question": "Hash jadvalining eng yomon holati O(n) bo'lishi qanday hujumga aylanadi?",
-      "options": [
-        "Hujum bo'lolmaydi",
-        "Hash collision DoS: hujumchi bir xil bucket'ga tushadigan kalitlar yuboradi (JSON kalitlari, HTTP parametrlari) va har operatsiya O(n) bo'lib CPU tugaydi; himoya — tasodifiy seed bilan hash (Go map shunday qiladi) yoki SipHash",
-        "Faqat xotira oshadi",
-        "Faqat eski tillarda"
-      ],
-      "answer": 1,
       "explanation": "2011-2012 yillarda PHP/Java/Python veb-freymvorklari shu bilan yiqitilgan. Go map har jarayonda tasodifiy seed ishlatadi, shuning uchun kalitlarni oldindan tanlab bo'lmaydi (shu sababdan map iteratsiya tartibi ham har safar boshqa). Qo'shimcha himoya — kirish o'lchamini cheklash (parametrlar soni, JSON kalitlari soni)."
     },
     {
       "id": 30187,
       "code": "SN188",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Hash tables",
       "domain": "alg",
       "section": "z1",
       "question": "Open addressing (linear probing) va chaining farqi amalda nimada?",
-      "options": [
-        "Faqat kod uzunligi",
-        "Chaining: har bucket'da ro'yxat — yuqori load factor'da ham ishlaydi, lekin pointer sakrashlari (kesh miss); open addressing: elementlar massivda ketma-ket — kesh uchun juda yaxshi, lekin load factor ~0.7 dan oshsa clustering va o'chirish murakkab (tombstone)",
-        "Chaining har doim tezroq",
-        "Open addressing kolliziyasiz"
-      ],
-      "answer": 1,
       "explanation": "Zamonaviy implementatsiyalar (Go map, Swiss table, abseil `flat_hash_map`) kesh lokalligi uchun ochiq adreslash yoki bucket ichida bir necha slot ishlatadi — CPU'da kesh miss narxi hash hisoblashdan qimmatroq. Bu 'nazariy bir xil O(1)' bo'lsa ham amalda 2-5x farq beradigan klassik misol."
     },
     {
       "id": 30188,
       "code": "SN189",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sorting",
       "domain": "alg",
       "section": "z1",
       "question": "Barqaror (stable) saralash qachon majburiy?",
-      "options": [
-        "Har doim",
-        "Ko'p kalit bo'yicha ketma-ket saralaganda (avval ism, keyin yosh — teng yoshlarda ism tartibi saqlanishi kerak) va pagination/UI'da barqaror tartib talab qilinganda; `sort.Slice` barqaror emas, `sort.SliceStable` barqaror",
-        "Faqat kichik massivda",
-        "Faqat butun sonlarda"
-      ],
-      "answer": 1,
       "explanation": "Go'da `sort.Slice` pdqsort (barqaror emas) — teng elementlar tartibi kafolatlanmaydi va har ishga tushirishda farq qilishi mumkin. Barqarorlik narxi: qo'shimcha xotira yoki sekinroq ishlash. DB'da ham xuddi shu tamoyil: `ORDER BY` unique bo'lmasa tartib barqaror emas, tie-breaker kerak."
     },
     {
       "id": 30189,
       "code": "SN190",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Sorting",
       "domain": "alg",
       "section": "z1",
       "question": "100 GB faylni 8 GB RAM bilan saralash kerak. Qanday?",
-      "options": [
-        "Hammasini xotiraga yuklab `sort`",
-        "External merge sort: fayl xotiraga sig'adigan bo'laklarga bo'linadi, har biri saralanib diskka yoziladi (run), keyin k-way merge (min-heap bilan) bitta o'tishda birlashtiriladi — I/O O(n log_k n) blokda",
-        "Quicksort diskda",
-        "Faqat ClickHouse ishlatish"
-      ],
-      "answer": 1,
       "explanation": "Bu PostgreSQL `work_mem` yetmaganda qiladigan ish (disk-based sort) va MapReduce shuffle bosqichining asosi. Amaliy detallar: blok kattaligi ketma-ket o'qishni maksimallashtirish uchun tanlanadi, k (bir vaqtda ochiladigan run soni) fayl deskriptorlari va buferga bog'liq, va siqish I/O ni kamaytiradi."
     },
     {
       "id": 30190,
       "code": "SN191",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Heap",
       "domain": "alg",
       "section": "z1",
       "question": "N elementdan eng katta K tasini topish: qaysi yondashuv samarali?",
-      "options": [
-        "Hammasini saralash — O(n log n)",
-        "Hajmi K bo'lgan min-heap bilan bitta o'tish — O(n log k) va xotira O(k); oqim (stream) uchun ham ishlaydi. Quickselect esa O(n) o'rtacha, lekin butun massiv xotirada bo'lishi kerak",
-        "Har doim quickselect",
-        "Bubble sort K marta"
-      ],
-      "answer": 1,
       "explanation": "K << N bo'lganda heap yondashuvi aniq g'olib, ayniqsa ma'lumot oqimda kelsa (barchasini saqlash imkonsiz). Quickselect (`nth_element`) bir martalik in-memory holat uchun eng tez. Taqsimlangan variantda: har node o'zining top-K sini beradi, keyin natijalar birlashtiriladi — bu 'top-K exact' uchun to'g'ri, chunki K dan tashqaridagi element global top-K ga kira olmaydi."
     },
     {
       "id": 30191,
       "code": "SN192",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Graphs",
       "domain": "alg",
       "section": "z1",
       "question": "BFS va Dijkstra qachon ekvivalent, qachon Dijkstra shart?",
-      "options": [
-        "Har doim bir xil",
-        "Barcha qirralar vazni teng (yoki 1) bo'lsa BFS eng qisqa yo'lni beradi — O(V+E); turli musbat vaznlarda Dijkstra (priority queue) kerak — O(E log V). Manfiy vazn bo'lsa Bellman-Ford yoki SPFA",
-        "BFS har doim tezroq va to'g'ri",
-        "Dijkstra manfiy vaznda ham ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Dijkstra manfiy qirrada buziladi, chunki u 'bir marta yopilgan node qayta yaxshilanmaydi' taxminiga tayanadi. Amaliy misollar: sotsial graf masofasi — BFS; yo'l/latency marshruti — Dijkstra; valyuta arbitraji (manfiy log vazn) — Bellman-Ford bilan sikl aniqlash. 0-1 vaznlarda esa deque bilan 0-1 BFS O(V+E) beradi."
     },
     {
       "id": 30192,
       "code": "SN193",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Graphs",
       "domain": "alg",
       "section": "z1",
       "question": "Topologik saralash qanday amaliy muammoni yechadi va qachon imkonsiz?",
-      "options": [
-        "Faqat o'quv masalasi",
-        "Bog'liqliklarni tartibga solish: build tizimi, migratsiya tartibi, task scheduler, paket o'rnatish. Sikl bo'lsa imkonsiz — Kahn algoritmi qolgan tugunlar orqali siklni aniqlaydi (aylanma bog'liqlik xatosi)",
-        "Har doim mumkin",
-        "Faqat daraxtda ishlaydi"
-      ],
-      "answer": 1,
       "explanation": "Kahn: in-degree 0 bo'lgan tugunlardan boshlab navbat bilan olib boriladi; oxirida qolgan tugunlar sikl tarkibida. DFS varianti orqa qirra (back edge) bilan siklni topadi. Mikroservis arxitekturasida ham shu vosita: bog'liqlik grafida sikl bo'lsa deploy tartibi aniqlanmaydi — bu dizayn xatosi belgisi."
     },
     {
       "id": 30193,
       "code": "SN194",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Graphs",
       "domain": "alg",
       "section": "z1",
       "question": "Union-Find (DSU) qanday muammolarda eng mos?",
-      "options": [
-        "Eng qisqa yo'l",
-        "Dinamik ulanish: komponentlarni birlashtirish va 'bir komponentdami?' savoli — path compression + union by rank bilan deyarli O(1) (amortizatsiyalangan α(n)); misollar: Kruskal MST, dedupe/klasterlash, akkauntlarni birlashtirish (identity resolution)",
-        "Saralash",
-        "Hash jadval o'rniga"
-      ],
-      "answer": 1,
       "explanation": "DSU faqat birlashtirishga imkon beradi — ajratish (undo) qo'llanmaydi, buning uchun offline dinamik algoritmlar kerak. Amaliy backend misoli: bir xil foydalanuvchini turli signal bo'yicha (email, qurilma, karta) bitta identitetga yig'ish — bu tabiiy union-find masalasi va uni DB'da `root_id` bilan saqlash mumkin."
     },
     {
       "id": 30194,
       "code": "SN195",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "DP",
       "domain": "alg",
       "section": "z1",
       "question": "Masala DP bilan yechiladimi — qanday aniqlanadi?",
-      "options": [
-        "Har optimizatsiya masalasi DP",
-        "Ikki shart: optimal substructure (butun yechim qism yechimlardan quriladi) va overlapping subproblems (bir xil qism yechim qayta hisoblanadi). Ikkinchisi bo'lmasa — divide and conquer; greedy to'g'ri bo'lsa (exchange argument bilan isbot) DP keraksiz",
-        "Faqat massivlarda",
-        "Faqat rekursiv kodda"
-      ],
-      "answer": 1,
       "explanation": "Amaliy tartib: rekursiv formulani yozish (holat va o'tish), keyin memoizatsiya (top-down), keyin kerak bo'lsa tabulyatsiya va xotirani qisqartirish (faqat oxirgi qator). Intervyu signali — holatni to'g'ri ta'riflash: 'dp[i][j] = ... ma'nosi' aniq aytilsa, qolgani mexanik."
     },
     {
       "id": 30195,
       "code": "SN196",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Binary search",
       "domain": "alg",
       "section": "z1",
       "question": "'Javob bo'yicha binary search' (parametric search) qanday ishlaydi?",
-      "options": [
-        "Faqat saralangan massivda qidirish",
-        "Monoton predikat ustida: `can(x)` rost bo'lsa barcha kattalarida ham rost bo'lsa — minimal x ni log(diapazon) qadamda topamiz. Misollar: minimal sig'im/tezlik, deadline'ga sig'adigan worker soni, rate limit sozlash",
-        "Faqat butun sonlarda",
-        "Har doim O(1)"
-      ],
-      "answer": 1,
       "explanation": "Kalit shart — monotonlik; uni isbotlash yoki kamida aniq aytish kerak. Backend misoli: 'N ta faylni K worker bilan T vaqtda ko'chirish mumkinmi?' — `can(T)` monoton, demak minimal T binary search bilan topiladi. Capacity planning masalalarida ham shu naqsh ishlatiladi."
     },
     {
       "id": 30196,
       "code": "SN197",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Intervals",
       "domain": "alg",
       "section": "z1",
       "question": "Ko'p intervalni birlashtirish (merge intervals) va 'eng ko'p bir vaqtda faol' masalasi qanday yechiladi?",
-      "options": [
-        "Har juftlikni solishtirish — O(n²)",
-        "Boshlanish bo'yicha saralab bitta o'tish (merge) — O(n log n); 'bir vaqtda faol maksimum' uchun sweep line: boshlanishga +1, tugashga -1 qo'yib saralangan hodisalar bo'yicha prefiks maksimumi",
-        "Heap majburiy",
-        "DP kerak"
-      ],
-      "answer": 1,
       "explanation": "Sweep line amaliyotda ko'p uchraydi: bir vaqtdagi maksimal ulanish soni, xona/resurs bandligi, rate limit oynasi, monitoringda concurrency hisoblash. Nozik joyi — teng koordinatalarda tartib: tugash boshlanishdan oldin qo'llanadimi (yopiq/ochiq interval semantikasi) — buni aniq belgilash kerak, aks holda off-by-one bug chiqadi."
     },
     {
       "id": 30197,
       "code": "SN198",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Linked list",
       "domain": "alg",
       "section": "z1",
       "question": "Amaliyotda bog'langan ro'yxat massivdan qachon afzal?",
-      "options": [
-        "Deyarli har doim",
-        "Kamdan-kam: kesh lokalligi yo'q (har node alohida joyda) — iteratsiya massivdan ancha sekin. Afzal holatlar: o'rtaga O(1) qo'shish/o'chirish node havolasi bo'lganda (LRU ro'yxati), yoki ko'chirish qimmat bo'lgan katta elementlar",
-        "Xotira kam ishlatadi",
-        "Saralash tezroq"
-      ],
-      "answer": 1,
       "explanation": "Nazariy murakkablik teng bo'lsa ham amalda massiv/slice g'olib chiqadi, chunki CPU ketma-ket xotirani oldindan o'qiydi (prefetch). Shuning uchun LRU keshda ham ro'yxat faqat tartib uchun, qidiruv map bilan. Bu 'big-O hamma narsani aytmaydi' tamoyilining eng aniq misoli."
     },
     {
       "id": 30198,
       "code": "SN199",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Approach",
       "domain": "alg",
       "section": "z1",
       "question": "Ikkita katta fayl (har biri 50 GB) ichida umumiy satrlarni topish kerak. Xotira 4 GB.",
-      "options": [
-        "Ikkisini xotiraga yuklash",
-        "Hash bo'yicha shardlash: har satrni `hash(line) % K` bilan K ta bo'lakka yozib chiqish (ikki fayl uchun ham) — bir xil satr bir xil bo'lakka tushadi, keyin har juft bo'lakni xotirada set bilan solishtirish",
-        "Faqat `sort | uniq -d`",
-        "Bloom filter yetarli (aniq natija uchun)"
-      ],
-      "answer": 1,
       "explanation": "Bu MapReduce join'ning mohiyati: 'katta masalani hash bo'yicha mustaqil bo'laklarga ajratish'. Alternativa — ikkisini external sort qilib merge (`sort | comm`), I/O ko'proq lekin xotira kam. Bloom filter tez oldindan filtrlash uchun yaxshi (false positive bor), shuning uchun aniq natija uchun keyin tekshirish kerak."
     },
     {
       "id": 30199,
       "code": "SN200",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Design",
       "domain": "alg",
       "section": "z1",
       "question": "Trie (prefix tree) hash jadvaldan qachon afzal?",
-      "options": [
-        "Har doim tezroq",
-        "Prefiks bo'yicha so'rovlar kerak bo'lganda (autocomplete, IP routing/longest prefix match, lug'at tekshiruvi) va umumiy prefikslar xotirani tejaganda; aniq kalit qidiruvida hash jadval odatda tezroq",
-        "Xotira kam ishlatadi",
-        "Kolliziyasiz bo'lgani uchun"
-      ],
-      "answer": 1,
       "explanation": "Trie qidiruvi O(kalit uzunligi) va hash hisoblashni talab qilmaydi, lekin node'lar tarqoq joylashgani uchun kesh miss ko'p. Amaliy optimizatsiyalar: radix/patricia tree (bir bolali zanjirlarni siqish), DAWG (qo'shimcha siqish), yoki oddiygina prefiks→natija xaritasi (oldindan hisoblangan) — ko'p tizimda eng arzon yechim shu."
     },
     {
       "id": 30253,
       "code": "SN254",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Bits",
       "domain": "alg",
       "section": "z1",
       "question": "`x & (x-1)` nima qiladi va qayerda ishlatiladi?",
-      "options": [
-        "Ikkiga bo'ladi",
-        "Eng o'ngdagi 1 bitni o'chiradi — shuning uchun `x & (x-1) == 0` tekshiruvi 'ikkining darajasimi' degan savolga javob beradi, va bit sanash (popcount) tsikli shu bilan qisqartiriladi",
-        "Belgini o'zgartiradi",
-        "Har doim 0 beradi"
-      ],
-      "answer": 1,
       "explanation": "Amaliy backend qo'llanishi: hash jadval va bufer o'lchamlari ikkining darajasi qilinadi, shunda `hash % n` o'rniga `hash & (n-1)` ishlatiladi (bo'lish operatsiyasi bit AND'dan ancha sekin — Kafka partitioner, Go map bucket'lari shunga tayanadi). Popcount esa bitmap indekslar va HyperLogLog hisob-kitobida ishlatiladi."
     },
     {
       "id": 30254,
       "code": "SN255",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Bits",
       "domain": "alg",
       "section": "z1",
       "question": "Bitmap (bitset) qachon eng samarali ma'lumot strukturasi?",
-      "options": [
-        "Har doim set o'rniga",
-        "Zich (dense) butun son ID'lari to'plami uchun: 1 mln foydalanuvchi faolligi 125 KB, AND/OR/XOR bilan to'plam operatsiyalari juda tez (Redis `SETBIT`/`BITCOUNT`/`BITOP`); siyrak (sparse) ma'lumotda esa xotira bekorga ketadi — roaring bitmap yoki set afzal",
-        "Faqat matnda",
-        "Faqat C'da"
-      ],
-      "answer": 1,
       "explanation": "Tipik misollar: kunlik faol foydalanuvchi (`SETBIT dau:2026-09-29 <user_id> 1`), feature flag ro'yxatlari, ruxsat maskalari, va analitik tizimlarda filtrlar (ClickHouse/Elasticsearch ichkarida roaring bitmap ishlatadi). Siyrak ID'larda (UUID) bitmap yaramaydi."
     },
     {
       "id": 30255,
       "code": "SN256",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Numbers",
       "domain": "alg",
       "section": "z1",
       "question": "`0.1 + 0.2 == 0.3` nega false?",
-      "options": [
-        "Til bug'i",
-        "IEEE 754 ikkilik kasr: 0.1 va 0.2 ikkilik sanoq sistemasida aniq ifodalanmaydi — yig'indi 0.30000000000000004; solishtirish epsilon bilan yoki umuman butun son (minor unit) / decimal turlari bilan qilinadi",
-        "Yaxlitlash xatosi faqat katta sonlarda",
-        "Faqat float32'da"
-      ],
-      "answer": 1,
       "explanation": "Backend uchun amaliy xulosa: pul, soliq, kvota kabi qiymatlar `numeric`/`decimal` yoki eng kichik birlikdagi butun son bilan saqlanadi. Float faqat ilmiy/o'lchov ma'lumotlari uchun. Qo'shimcha tuzoqlar: float yig'indisi tartibga bog'liq (assotsiativ emas), `NaN != NaN`, va katta butun sonlar float'da aniqlikni yo'qotadi (2^53)."
     },
     {
       "id": 30256,
       "code": "SN257",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Encoding",
       "domain": "alg",
       "section": "z1",
       "question": "Go'da `len(\"salom\")` va foydalanuvchi ko'rgan belgi soni nega farq qiladi?",
-      "options": [
-        "Farq qilmaydi",
-        "`len` baytlar sonini beradi (UTF-8), belgi (rune) soni `utf8.RuneCountInString`; bundan tashqari grafema klasterlari (emoji, kombinatsiyalangan harflar) bir necha rune bo'lishi mumkin — foydalanuvchi ko'rgan 'belgi' uchun grafema hisoblash kerak",
-        "Go Unicode'ni qo'llamaydi",
-        "Faqat emoji'da"
-      ],
-      "answer": 1,
       "explanation": "Amaliy natijalar: DB'da `VARCHAR(50)` bayt yoki belgi cheklovi ekanini bilish kerak (PostgreSQL'da belgi, MySQL'da kodlashga bog'liq); string'ni indeks bo'yicha kesish UTF-8 ketma-ketligini buzishi mumkin; validatsiyada 'ism 50 belgidan oshmasin' talabi rune bo'yicha tekshiriladi. Normalizatsiya (NFC) ham muhim — bir xil ko'rinadigan matn turlicha kodlanishi mumkin."
     },
     {
       "id": 30257,
       "code": "SN258",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Encoding",
       "domain": "alg",
       "section": "z1",
       "question": "Base64 nima uchun ishlatiladi va nima narxi bor?",
-      "options": [
-        "Shifrlash uchun",
-        "Binary ma'lumotni matnli kanalda (JSON, URL, email header) xavfsiz uzatish uchun — shifrlash emas; hajmi ~33% oshadi, shuning uchun katta fayllar uchun multipart yoki alohida binary kanal afzal",
-        "Siqish uchun",
-        "Hash uchun"
-      ],
-      "answer": 1,
       "explanation": "Intervyu tuzog'i: base64'ni xavfsizlik chorasi deb aytish. Amaliy detallar: URL'da `base64url` variant (`-`, `_`) kerak, JWT aynan shuni ishlatadi; rasm'ni JSON ichida base64 bilan yuborish 33% ortiqcha trafik va parse narxi beradi — presigned URL bilan to'g'ridan-to'g'ri yuklash to'g'ri yechim."
     },
     {
       "id": 30258,
       "code": "SN259",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Trees",
       "domain": "alg",
       "section": "z1",
       "question": "B-tree va binary search tree (AVL/red-black) farqi nimada va nega DB B-tree'ni tanlaydi?",
-      "options": [
-        "Farqi yo'q",
-        "BST node'ida bitta kalit — chuqurlik log2(N), har daraja alohida xotira/disk sakrashi; B-tree node'i yuzlab kalitni bir sahifada saqlaydi — chuqurlik log_k(N) (3-4 daraja), demak disk o'qishlari minimal. Xotiradagi indekslar uchun esa BST/skip list maqbul",
-        "B-tree balanslanmaydi",
-        "AVL diskda tezroq"
-      ],
-      "answer": 1,
       "explanation": "Asosiy g'oya — xotira ierarxiyasi: disk/SSD blok bilan o'qiladi (4-8 KB), shuning uchun tugun blok o'lchamiga moslanadi. Shu sabab LSM-tree (RocksDB, Cassandra) yozuvga optimallashgan alternativa: ketma-ket yozish va keyin compaction — yozuv og'ir workload'da B-tree'dan tez, lekin o'qishda amplifikatsiya beradi."
     },
     {
       "id": 30259,
       "code": "SN260",
       "level": "St",
-      "type": "mcq",
+      "type": "card",
       "topic": "Trees",
       "domain": "alg",
       "section": "z1",
       "question": "LSM-tree (RocksDB/Cassandra) va B-tree o'rtasidagi almashinuv?",
-      "options": [
-        "LSM har doim tezroq",
-        "LSM: yozuv ketma-ket (memtable → SSTable), yozuv amplifikatsiyasi kam, siqish yaxshi — lekin o'qishda bir necha darajaga qarash (bloom filter bilan yumshatiladi) va compaction fon yuki/latency spike; B-tree: o'qish barqaror va predictable, yozuvda tasodifiy I/O va page split",
-        "LSM o'qishda tez",
-        "B-tree siqmaydi"
-      ],
-      "answer": 1,
       "explanation": "Tanlov workload bo'yicha: yozuv-og'ir, vaqt seriyali, append-only ma'lumot — LSM (Cassandra, ClickHouse, RocksDB); murakkab tranzaksion o'qish, indeks bo'yicha diapazon, MVCC — B-tree (PostgreSQL, MySQL). Compaction operatsion ta'siri (disk hajmi vaqtincha 2x, I/O spike) senior darajada aytilishi kerak."
     },
     {
       "id": 30260,
       "code": "SN261",
       "level": "S",
-      "type": "mcq",
+      "type": "card",
       "topic": "Approach",
       "domain": "alg",
       "section": "z1",
       "question": "P, NP va NP-complete amaliy muhandislikda nimani bildiradi?",
-      "options": [
-        "Faqat akademik masala",
-        "Masala NP-hard bo'lsa aniq optimal yechim katta kirishda amalda topilmaydi — shuning uchun heuristika, approximation yoki cheklangan holatga soddalashtirish tanlanadi (masalan kuryer marshruti = TSP, jadvallashtirish, bin packing = resurs joylashtirish)",
-        "Har NP masala yechilmaydi",
-        "Faqat kriptografiyada"
-      ],
-      "answer": 1,
       "explanation": "Backend misollari: dostavka marshruti (TSP/VRP) — greedy + local search yoki tashqi solver; podlarni node'larga joylash (bin packing) — Kubernetes scheduler heuristikasi; smena jadvali — constraint solver. Intervyuda to'g'ri javob 'optimal emas, lekin yetarlicha yaxshi va vaqt chegarasida' yechimni taklif qilish."
     }
   ]
