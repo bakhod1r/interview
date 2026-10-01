@@ -1,0 +1,87 @@
+{
+  "id": "n6",
+  "name": "Elasticsearch gotchas",
+  "domain": "elastic",
+  "topics": [
+    "Elastic gotcha"
+  ],
+  "questions": [
+    {
+      "id": 31157,
+      "code": "ESG1",
+      "level": "S",
+      "type": "card",
+      "topic": "Elastic gotcha",
+      "domain": "elastic",
+      "section": "n6",
+      "question": "Dynamic mapping ochiq, log'lar har xil kalit bilan keladi. Bir haftada nima bo'ladi?",
+      "explanation": "Mapping explosion: minglab maydon, cluster state shishadi, `Limit of total fields [1000]` xatosi, klaster sekinlashadi."
+    },
+    {
+      "id": 31158,
+      "code": "ESG2",
+      "level": "S",
+      "type": "card",
+      "topic": "Elastic gotcha",
+      "domain": "elastic",
+      "section": "n6",
+      "question": "`term` query `{\"term\": {\"title\": \"Redis Cache\"}}` hech narsa topmayapti. Nega?",
+      "explanation": "title `text` — indekslashda analyzer kichik harfga va so'zlarga bo'lgan; term esa analiz qilinmaydi va aniq \"Redis Cache\" ni qidiradi."
+    },
+    {
+      "id": 31159,
+      "code": "ESG3",
+      "level": "S",
+      "type": "card",
+      "topic": "Elastic gotcha",
+      "domain": "elastic",
+      "section": "n6",
+      "question": "Har hujjatdan keyin `?refresh=true` qo'shildi (testlar o'tishi uchun). Production'da nima bo'ladi?",
+      "explanation": "Har so'rov yangi mayda segment yaratadi; merge yuki va CPU oshadi, indekslash throughput keskin tushadi."
+    },
+    {
+      "id": 31160,
+      "code": "ESG4",
+      "level": "S",
+      "type": "card",
+      "topic": "Elastic gotcha",
+      "domain": "elastic",
+      "section": "n6",
+      "question": "Elasticsearch asosiy (source of truth) DB sifatida ishlatildi. Qanday xavf?",
+      "explanation": "Transaction yo'q, yozuv tasdiqlanishi to'liq durable emas (translog sozlamasi), mapping o'zgarishi reindex talab qiladi; yo'qolsa tiklash manbai yo'q."
+    },
+    {
+      "id": 31161,
+      "code": "ESG5",
+      "level": "St",
+      "type": "card",
+      "topic": "Elastic gotcha",
+      "domain": "elastic",
+      "section": "n6",
+      "question": "`terms` aggregation top-10 natijasida son noto'g'ri chiqdi. Sabab?",
+      "explanation": "Har shard o'z top-N ini qaytaradi, coordinator birlashtiradi; shardlar bo'ylab notekis taqsimotda hisob taxminiy."
+    },
+    {
+      "id": 31162,
+      "code": "ESG6",
+      "level": "St",
+      "type": "card",
+      "topic": "Elastic gotcha",
+      "domain": "elastic",
+      "section": "n6",
+      "question": "JVM heap 64GB qilib qo'yildi, ES sekinroq ishlay boshladi. Nega?",
+      "explanation": "32GB dan oshganda compressed oops o'chadi — pointerlar 8 bayt bo'ladi, samarali xotira kamayadi; OS page cache'ga joy qolmaydi."
+    },
+    {
+      "id": 31163,
+      "code": "ESG7",
+      "level": "M",
+      "type": "card",
+      "topic": "Elastic gotcha",
+      "domain": "elastic",
+      "section": "n6",
+      "question": "Sinonimlar, stop so'zlar o'zgardi, lekin eski hujjatlarda qidiruv natijasi o'zgarmadi. Nega?",
+      "explanation": "Index-time analyzer o'zgarishi faqat yangi indekslangan hujjatlarga ta'sir qiladi; eski hujjatlarni reindex qilish kerak."
+    }
+  ]
+}

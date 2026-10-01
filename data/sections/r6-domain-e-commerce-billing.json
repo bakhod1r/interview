@@ -1,8 +1,7 @@
 {
   "id": "r6",
   "name": "Domain: e-commerce & billing",
-  "domain": "arch",
-  "domainLabel": "Architecture & OOP",
+  "domain": "fin",
   "topics": [
     "Domain"
   ],
@@ -13,7 +12,7 @@
       "level": "M",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Obuna (subscription) billing tizimini modellashtiring: nimalarni hisobga olasiz?",
       "explanation": "Vakansiyada 'subscription-based business' yozilgan — bu savol katta ehtimol bilan beriladi. Eng kuchli signal: pulni integer saqlash, idempotentlik va past_due oqimini aytish."
@@ -24,7 +23,7 @@
       "level": "S",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Cheklangan qoldiqli mahsulotni sotishda oversell'ning oldini olish uchun eng to'g'ri yondashuv?",
       "explanation": "SELECT-keyin-UPDATE — race condition. Cache faqat ko'rsatish uchun; haqiqat DB'da. Reservation muddati tugasa avtomatik bo'shaydi (job yoki TTL). Yuqori yuk (flash sale) uchun: queue orqali seriyalashtirish yoki Redis'da atomik dekrement + keyin DB bilan yarashtirish (reconciliation)."
@@ -35,7 +34,7 @@
       "level": "S",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Pul miqdorini kodda va DB'da qanday saqlash kerak?",
       "explanation": "float ikkilik kasr — 0.1 + 0.2 ≠ 0.3; moliyada bu xato jamlanadi va hisobot mos kelmaydi. Go'da: int64 (minor units) yoki shopspring/decimal. Postgres'da NUMERIC (float emas). Valyutani miqdordan ajratmaslik: Money{Amount int64, Currency string} — turli valyutani qo'shib yuborish xatosini kompilyatsiya/tip level'ida oldini oladi."
@@ -46,7 +45,7 @@
       "level": "S",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "E-commerce'da inventar rezervi: 1000 kishi bitta oxirgi mahsulotga uriladi. Qanday qilasiz?",
       "explanation": "Read-then-write race klassik oversell sababi. Shartli `UPDATE` bitta atomik operatsiyada tekshiradi va o'zgartiradi. Yuqori RPS'da hot row bo'ladi — chora: Redis/Lua bilan tez rad etish (arzon 'sotilib ketdi' javobi), rezervga TTL (to'lov bo'lmasa qaytariladi), va idempotency key bilan retry'da ikki marta rezerv qilinmasligi."
@@ -57,7 +56,7 @@
       "level": "S",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Buyurtma holatlari (`created → paid → shipped → delivered`) bilan ishlashda to'g'ri model?",
       "explanation": "Status erkin `UPDATE` bo'lsa: kechikkan webhook `paid` ni `created` ga qaytaradi, dublikat event ikki marta jo'natma yaratadi. Holat mashinasi + `WHERE status = $expected` shartli update (optimistik) noto'g'ri o'tishni bloklaydi; o'tishlar jurnali esa qo'llab-quvvatlash va audit uchun zarur."
@@ -68,7 +67,7 @@
       "level": "St",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Obuna (subscription) billing servisini loyihalang: davriy to'lov, proration, upgrade/downgrade, chek.",
       "explanation": "Bu yerda baholanadigan narsa — takroriy jarayonni idempotent qilish, pulni ledger bilan ifodalash va kalendar edge case'larini oldindan ko'rish. 'Cron yozaman va UPDATE qilaman' javobi yetarli emas."
@@ -79,7 +78,7 @@
       "level": "S",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Savat (cart) narxini qachon hisoblash kerak — ko'rsatishda yoki buyurtmada?",
       "explanation": "Buyurtma qatoriga narx, chegirma qoidasi ID'si va soliq stavkasi yoziladi — keyin katalog o'zgarsa ham eski hisob o'zgarmaydi (audit va qaytarish uchun majburiy). Qo'shimcha nozik joy: savatda ko'rsatilgan narx bilan to'lovdagi narx farq qilsa foydalanuvchiga aniq ko'rsatish (narx o'zgardi) — jim o'zgartirish ishonchni buzadi va huquqiy muammo."
@@ -90,7 +89,7 @@
       "level": "St",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Qaytarish (refund) va bekor qilish (cancel) domen modelida qanday farqlanadi?",
       "explanation": "Modelda ikkisi alohida hodisa sifatida saqlanadi (sabab, initsiator, summa, PSP referensi bilan). Qisman refund bo'lsa buyurtma qatorlari darajasida hisoblanadi (qaysi mahsulot qaytdi — inventar va analitika uchun). Buyurtma 'o'chirilmaydi' — holat va hodisalar tarixi saqlanadi, aks holda moliyaviy hisobot va qo'llab-quvvatlash ishlamaydi."
@@ -101,7 +100,7 @@
       "level": "S",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Chegirma va promo-kodlar mantiqini qayerga joylashtirasiz?",
       "explanation": "Nozik biznes qoidalari: chegirmalarning birlashishi (stacking) ruxsat etiladimi, tartib qanday (foiz avvalmi yoki fiksirlangan), soliq chegirmadan oldinmi yoki keyin, va bir martalik kod bir vaqtda ikki buyurtmada ishlatilmasligi (atomik 'redeem' unique constraint bilan). Bu savol amalda ko'p bug keltiradigan joy."
@@ -112,7 +111,7 @@
       "level": "S",
       "type": "card",
       "topic": "Domain",
-      "domain": "arch",
+      "domain": "fin",
       "section": "r6",
       "question": "Buyurtma va inventar alohida servislarda. 'Sotuvda yo'q' holatini qanday boshqarasiz?",
       "explanation": "Sinxron tekshirish + keyin yozish — klassik TOCTOU race. Rezerv esa atomik operatsiya bo'lib, 'kim birinchi bo'lsa' aniqlanadi. Biznes qarori ham kerak: oversell umuman mumkin emasmi (chipta) yoki kichik ehtimol maqbulmi (tez to'ldiriladigan tovar) — bu texnik murakkablikni belgilaydi."

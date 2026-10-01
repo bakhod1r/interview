@@ -2,7 +2,6 @@
   "id": "t7",
   "name": "Distributed gotchas",
   "domain": "dist",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Distributed gotcha"
   ],

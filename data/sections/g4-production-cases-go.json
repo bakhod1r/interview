@@ -1,8 +1,7 @@
 {
   "id": "g4",
-  "name": "Production cases (Go)",
+  "name": "Go production cases",
   "domain": "go",
-  "domainLabel": "Go",
   "topics": [
     "Go case"
   ],

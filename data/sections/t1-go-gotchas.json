@@ -2,7 +2,6 @@
   "id": "t1",
   "name": "Go gotchas",
   "domain": "go",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Go gotcha"
   ],

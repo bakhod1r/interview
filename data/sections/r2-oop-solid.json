@@ -2,7 +2,6 @@
   "id": "r2",
   "name": "OOP & SOLID",
   "domain": "arch",
-  "domainLabel": "Architecture & OOP",
   "topics": [
     "OOP",
     "SOLID"

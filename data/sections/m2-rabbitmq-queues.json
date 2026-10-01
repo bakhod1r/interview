@@ -1,8 +1,7 @@
 {
   "id": "m2",
   "name": "RabbitMQ & queues",
-  "domain": "msg",
-  "domainLabel": "Kafka & messaging",
+  "domain": "rabbit",
   "topics": [
     "RabbitMQ",
     "Queue"
@@ -14,7 +13,7 @@
       "level": "S",
       "type": "card",
       "topic": "Queue",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Queue at-least-once yetkazib beradi. Consumer uchun to'g'ri yondashuv?",
       "explanation": "Ishlovdan oldin ack — at-most-once (xabar yo'qolishi mumkin). Keyin ack — at-least-once (crash bo'lsa takror). Takrorga chidash — idempotentlik. Zaharli xabar uchun max retry + DLQ (dead letter queue)."
@@ -25,7 +24,7 @@
       "level": "St",
       "type": "card",
       "topic": "Queue",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "'Kafka exactly-once' haqida to'g'ri gap?",
       "explanation": "Network'da yetkazib berish — at-least-once; 'exactly-once' amalda 'effectively-once processing' = at-least-once + idempotentlik. Intervyuda bu farqni aniq aytish kuchli signal."
@@ -36,7 +35,7 @@
       "level": "M",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Kafka va RabbitMQ o'rtasidagi asosiy farq?",
       "explanation": "Tanlov: event streaming, replay, katta throughput, event sourcing → Kafka. Vazifa queue'i (task queue), murakkab marshrutlash, per-message prioritet/TTL, kichik-o'rta yuk → RabbitMQ. Vakansiyada ikkalasi ham bor — farqni aniq aytish kutiladi."
@@ -47,7 +46,7 @@
       "level": "S",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "RabbitMQ'da <code>prefetch</code> (QoS) nima uchun kerak?",
       "explanation": "prefetch=1 — eng adolatli taqsimot (sekin ishlov uchun), lekin round-trip ko'p. Odatda 10–100 orasida sozlanadi. Bog'liq mavzular: manual ack (ishlov tugagach), nack/requeue va cheksiz retry sikli xavfi, Dead Letter Exchange (DLX) va TTL bilan kechiktirilgan retry."
@@ -58,7 +57,7 @@
       "level": "J",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "RabbitMQ'da xabar qayerga yuboriladi?",
       "explanation": "Exchange turlari: direct (routing key aynan mos kelsa), topic (order.*.created kabi shablon), fanout (hamma bog'langan queue'ga nusxa), headers (header qiymatlari bo'yicha). Bu Kafka'dan asosiy farq: marshrutlash mantig'i brokerda, consumer'da emas. Hech qaysi queue'ga tushmagan xabar yo'qoladi — agar alternate exchange yoki mandatory bayrog'i qo'yilmagan bo'lsa."
@@ -69,7 +68,7 @@
       "level": "M",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Consumer xabarni oldi va ishlov paytida crash bo'ldi. Xabar nima bo'ladi?",
       "explanation": "Qoida: ishlov tugagach ack. Lekin cheksiz sikl xavfi bor — xato xabar qayta-qayta requeue bo'lib aylanaveradi. Shuning uchun basic.nack(requeue=false) bilan Dead Letter Exchange'ga yuborish va urinishlar sonini header'da sanash kerak."
@@ -80,7 +79,7 @@
       "level": "M",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Broker qayta ishga tushganda xabarlar saqlanib qolishi uchun nima kerak?",
       "explanation": "Publisher confirms — broker xabarni qabul qilganini tasdiqlaydi; tasdiqsiz 'yubordim' degan ishonch yolg'on bo'lishi mumkin. Eslatma: persistent xabar ham diskka yozilgunga qadar qisqa oyna bor — mutlaq kafolat uchun quorum queue va confirms birga ishlatiladi. Persistence tezlikni pasaytiradi — ongli tanlov."
@@ -91,7 +90,7 @@
       "level": "S",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Dead Letter Exchange (DLX) qachon ishga tushadi?",
       "explanation": "DLX ikki ishda qo'llaniladi: 1) zaharli xabarlarni tekshirish uchun ajratish; 2) kechiktirilgan retry: xabarni TTL li 'retry' queue'ga yuborib, TTL tugagach DLX orqali asosiy queue'ga qaytarish (exponential backoff uchun bir nechta TTL queue'i). Kuzatuv: DLQ o'lchami bo'yicha alert qo'yish shart."
@@ -102,7 +101,7 @@
       "level": "S",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Klassik mirrored queue o'rniga hozir nima tavsiya etiladi?",
       "explanation": "Quorum queue: yuqori ishonchlilik, xabarni yo'qotmaslikka urg'u; narxi — ko'proq disk/memory va biroz sekinroq. Stream — Kafka'ga o'xshash append-only log (replay va ko'p consumer uchun). Tanlov: vazifa queue'i → quorum queue; hodisalar oqimi va qayta o'qish → stream yoki Kafka.",
@@ -114,7 +113,7 @@
       "level": "S",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "RabbitMQ'da queue uzunligi doim o'sib boryapti. Nima qilasiz?",
       "explanation": "Muhim tushuncha: RabbitMQ queue'i uzoq saqlash uchun emas — u yetkazib berish uchun. Uzun queue memory'ni yeydi va butun brokerni sekinlashtiradi; shuning uchun cheklov va alert kerak."
@@ -125,7 +124,7 @@
       "level": "S",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Bir nechta consumer bo'lsa, xabarlar tartibi kafolatlanadimi?",
       "explanation": "Bu Kafka bilan taqqoslash uchun muhim: Kafka'da tartib partition ichida kafolatlanadi va parallellik partition bo'yicha bo'ladi; RabbitMQ'da parallellik consumer bo'yicha — tartibni o'zingiz loyihalashingiz kerak. Ko'pincha to'g'ri yechim: tartibga tayanmaydigan, idempotent ishlov."
@@ -136,7 +135,7 @@
       "level": "M",
       "type": "card",
       "topic": "Queue",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "Message queue (point-to-point) va pub/sub farqi?",
       "explanation": "Kafka ikkalasini birlashtiradi: bitta consumer group ichida — queue (partition bitta consumer'ga), turli group'lar uchun — pub/sub (har group hammasini o'qiydi). Dizayn savoli: 'bu hodisani kim iste'mol qiladi va kelajakda yana kim qo'shiladi' — javob fan-out kerakligini aniqlaydi."
@@ -147,7 +146,7 @@
       "level": "S",
       "type": "card",
       "topic": "Queue",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "PostgreSQL'ni navbat sifatida ishlatish (`SELECT ... FOR UPDATE SKIP LOCKED`) qachon oqlanadi?",
       "explanation": "Afzalliklari amaliy: outbox bilan tabiiy birlashadi, 'qaysi ish qotib qoldi' savoliga `SELECT` bilan javob beriladi, alohida infra saqlash kerak emas. Cheklovlari: yuqori RPS'da vacuum va bloat (tez o'chirish yoki partition bilan hal qilinadi), pub/sub fan-out yo'q, va uzoq ishlar uchun lease/`visibility timeout` ni o'zingiz yozasiz."
@@ -158,7 +157,7 @@
       "level": "S",
       "type": "card",
       "topic": "RabbitMQ",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "RabbitMQ va Kafka o'rtasidagi asosiy model farqi?",
       "explanation": "Tanlov mezoni: murakkab marshrutlash, per-task ack, prioritet va kechiktirilgan yetkazib berish kerak bo'lsa — RabbitMQ; eventlarni saqlash, replay, stream processing va juda yuqori throughput kerak bo'lsa — Kafka. Ko'p tizimda ikkisi birga yashaydi: Kafka — event backbone, RabbitMQ yoki DB navbati — task queue."
@@ -169,10 +168,43 @@
       "level": "S",
       "type": "card",
       "topic": "Queue",
-      "domain": "msg",
+      "domain": "rabbit",
       "section": "m2",
       "question": "RabbitMQ quorum queue va classic mirrored queue farqi?",
       "explanation": "Yangi tizimlarda quorum queue standart tanlov (durable, replicated). Cheklovlari: xotira/disk sarfi kattaroq, lazy rejim va juda uzun navbatlar uchun `stream` turi mos; prioritet navbat va ba'zi funksiyalar qo'llanmaydi. Tanlashda: vazifa navbati — quorum queue; katta event oqimi va replay — RabbitMQ Streams yoki Kafka."
+    },
+    {
+      "id": 17008,
+      "code": "E46",
+      "level": "S",
+      "type": "card",
+      "topic": "RabbitMQ",
+      "domain": "rabbit",
+      "section": "m2",
+      "question": "RabbitMQ'da consumer ack yubormay crash bo'ldi. Xabar nima bo'ladi?",
+      "explanation": "autoAck=false bo'lsa broker ack kutadi; connection/channel yopilganda unacked xabarlar navbatga qaytadi. Tuzoqlar: autoAck=true bilan crash — xabar yo'qoladi; prefetch (QoS) o'rnatilmasa bitta consumer barcha xabarlarni tortib oladi va yuk taqsimlanmaydi; cheksiz requeue looplarni to'xtatish uchun x-death header hisobi bilan DLX ishlatiladi."
+    },
+    {
+      "id": 30167,
+      "code": "SN168",
+      "level": "S",
+      "type": "card",
+      "topic": "RabbitMQ",
+      "domain": "rabbit",
+      "section": "m2",
+      "question": "RabbitMQ'da `prefetch` (QoS) sozlanmagan. Natija?",
+      "explanation": "`basic.qos(prefetch=N)` — oqim nazorati: N ta ack qilinmagan xabardan ko'p berilmaydi. Kichik N (1-10) adolatli taqsimot va tez failover beradi, katta N throughputni oshiradi. Shu bilan birga `ack` qo'lda bo'lishi (`autoAck=false`) va xato bo'lganda `nack` + DLX (dead letter exchange) sozlanishi kerak."
+    },
+    {
+      "id": 30168,
+      "code": "SN169",
+      "level": "St",
+      "type": "card",
+      "topic": "RabbitMQ",
+      "domain": "rabbit",
+      "section": "m2",
+      "question": "Retry uchun xabar qayta navbatga qo'yiladi (`requeue=true`). Qanday tuzoq bor?",
+      "explanation": "RabbitMQ'da tabiiy 'delayed retry' yo'q, shuning uchun naqsh: asosiy navbat → nack → DLX → TTL'li retry navbati → qaytib asosiy navbatga. Urinish soni `x-death` yoki o'z headerida saqlanadi va N dan keyin DLQ'ga o'tadi. Kafka'da esa retry topic'lari (`topic.retry.5m`) shu maqsadda ishlatiladi."
     }
   ]
 }

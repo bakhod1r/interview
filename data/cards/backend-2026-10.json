@@ -1,0 +1,221 @@
+{
+ "31130": {
+  "a": "**`_id` — hujjatning primary key'i; berilmasa `ObjectId` avtomatik yaratiladi.**\n\n- `ObjectId` 12 bayt: 4 bayt timestamp + 5 bayt tasodifiy + 3 bayt counter.\n- Vaqt bo'yicha taxminan tartiblangan — `_id` dan yaratilgan vaqtni olish mumkin.\n- `_id` ga avtomatik unique index qo'yiladi, uni o'chirib bo'lmaydi.\n- O'z kalitingiz (masalan UUID, email) ham `_id` bo'la oladi."
+ },
+ "31131": {
+  "a": "**Insert, find, update, delete — `One` va `Many` variantlari bilan.**\n\n```js\ndb.users.insertOne({name: \"Ali\", age: 30})\ndb.users.find({age: {$gt: 18}}, {name: 1})   // filter + projection\ndb.users.updateOne({_id: id}, {$set: {age: 31}, $inc: {visits: 1}})\ndb.users.deleteMany({active: false})\n```\n\n- `update` da operator (`$set`, `$inc`, `$push`) ishlatilmasa — hujjat almashtiriladi (`replaceOne`).\n- `upsert: true` — topilmasa yaratadi."
+ },
+ "31132": {
+  "a": "**IXSCAN mi yoki COLLSCAN, va qancha hujjat ko'rildi.**\n\n- `db.c.find(q).explain(\"executionStats\")`.\n- `COLLSCAN` — butun collection o'qildi, indeks yo'q.\n- `totalDocsExamined` ≫ `nReturned` — indeks selektiv emas.\n- `SORT` bosqichi (in-memory sort) — indeks sortni qoplamayapti; 100MB limitga urilishi mumkin.\n- `totalKeysExamined` ≈ `nReturned` — ideal."
+ },
+ "31133": {
+  "a": "**Date maydon bo'yicha hujjatlarni avtomatik o'chiradigan index.**\n\n```js\ndb.sessions.createIndex({createdAt: 1}, {expireAfterSeconds: 3600})\n```\n\n- Fon jarayoni ~60 sekundda bir ishlaydi — o'chirish aniq vaqtda emas.\n- Faqat bitta maydonli index bo'lishi kerak.\n- Session, token, vaqtinchalik log uchun qulay.\n- Katta hajmda o'chirish yukni oshiradi — juda ko'p hujjat bir vaqtda eskirsa, sekinlashuv."
+ },
+ "31134": {
+  "a": "**O'qish qaysi node'dan bo'lishini tanlash.**\n\n- `primary` (default) — eng yangi ma'lumot.\n- `primaryPreferred` / `secondaryPreferred` — zaxira variant bilan.\n- `secondary` — yukni bo'ladi, lekin replication lag sababli **eski** ma'lumot.\n- `nearest` — eng past latency'li node.\n- 💡 \"O'zim yozganimni o'qish\" kerak bo'lsa — primary yoki causal consistency session."
+ },
+ "31135": {
+  "a": "**O'qilgan ma'lumot rollback bo'lishi mumkinmi — shuni boshqaradi.**\n\n- `local` — node'dagi eng yangi, lekin failover'da rollback bo'lishi mumkin.\n- `majority` — ko'pchilik node'ga yozilgan, rollback bo'lmaydi.\n- `linearizable` — primary'dan, eng kuchli, sekin.\n- `snapshot` — transaction ichida izchil ko'rinish.\n- Write concern `majority` + read concern `majority` = mustahkam juftlik."
+ },
+ "31136": {
+  "a": "**`$jsonSchema` validator — DB darajasida sxema nazorati.**\n\n```js\ndb.createCollection(\"users\", {validator: {$jsonSchema: {\n  required: [\"email\"], properties: {email: {bsonType: \"string\"}}\n}}, validationAction: \"error\"})\n```\n\n- \"Sxemasiz\" DB ham amalda sxemaga muhtoj — har xil versiyadagi kod turli shakl yozadi.\n- `validationLevel: moderate` — eski noto'g'ri hujjatlarga tegmaydi.\n- `validationAction: warn` — avval log, keyin `error`."
+ },
+ "31137": {
+  "a": "**Default engine: document-level concurrency, compression, cache.**\n\n- Lock hujjat darajasida — parallel yozuvlar bir-birini kam to'sadi.\n- Snappy/zstd compression — disk tejaladi.\n- Ichki cache ≈ (RAM − 1GB) × 50%; qolgani OS page cache.\n- Checkpoint har 60 sekundda + journal (WAL) — crash'dan tiklanish.\n- Working set (faol ma'lumot + indekslar) cache'ga sig'masa — disk I/O va keskin sekinlashuv."
+ },
+ "31138": {
+  "a": "**Hashed — tekis yozuv; ranged — tez diapazon so'rovlari.**\n\n- **Hashed** (`{userId: \"hashed\"}`): monoton kalit (vaqt, ObjectId) ham tekis tarqaladi. Range query — scatter-gather.\n- **Ranged**: `created_at` bo'yicha qidiruv bitta shardga boradi, lekin yangi yozuvlar doim oxirgi chunk'ka — **hot shard**.\n- Compound kalit (`{tenantId: 1, createdAt: 1}`) — ko'pincha eng yaxshi kompromiss.\n- Kalitni keyin o'zgartirish qimmat (5.0+ da `reshardCollection` bor, lekin og'ir)."
+ },
+ "31139": {
+  "a": "**Ko'p kichik yozuvni bitta hujjatga guruhlash.**\n\n```js\n{sensor: 7, hour: ISODate(\"2026-10-01T10:00Z\"), count: 3,\n readings: [{t: 0, v: 21.3}, {t: 60, v: 21.4}, ...]}\n```\n\n- Index yozuvlari soni 60–1000 marta kam.\n- Hujjat 16MB limitiga yetmasligi uchun bucket hajmi cheklanadi.\n- 5.0+ da tayyor **time series collection** shu g'oyani ichkarida qiladi."
+ },
+ "31140": {
+  "a": "**Unbounded array — anti-pattern: 16MB limit va sekinlashuv.**\n\n- Hujjat maksimal 16MB — oxiri `BSONObjectTooLarge`.\n- Har o'zgarishda katta hujjat qayta yoziladi, cache'ni to'ldiradi.\n- Massivdagi multikey index ham shishadi.\n- ✅ Yechim: izohlar alohida collection (`postId` bilan) yoki bucket pattern; hujjatda faqat oxirgi N tasi (`$slice`)."
+ },
+ "31141": {
+  "a": "**`w:1` — faqat primary tasdiqlaydi; failover'da rollback.**\n\n1. Primary yozdi va `ok` qaytardi.\n2. Replication'dan oldin primary yiqildi.\n3. Secondary yangi primary bo'ldi — u bu yozuvni ko'rmagan.\n4. Eski primary qaytganda yozuv `rollback/` papkaga chiqariladi.\n\n- ✅ Muhim ma'lumot uchun `w: \"majority\"` (5.0+ da default)."
+ },
+ "31142": {
+  "a": "**`skip` — o'tkazilgan hujjatlar ham o'qiladi.**\n\n- Sahifa raqami oshgan sari so'rov sekinroq.\n- ✅ Keyset (range) pagination: oxirgi ko'rilgan qiymatdan davom.\n\n```js\ndb.posts.find({createdAt: {$lt: lastSeen}}).sort({createdAt: -1}).limit(20)\n```\n\n- Tie bo'lmasligi uchun `{createdAt, _id}` juftligi."
+ },
+ "31143": {
+  "a": "**Indeks faqat prefix regex uchun samarali.**\n\n- `/^ali/` — index range scan ✅.\n- `/ali/` yoki `/^ali/i` — har kalit tekshiriladi, amalda scan.\n- ✅ Case-insensitive: collation index (`strength: 2`) yoki kichik harfli maydon (`nameLower`).\n- To'liq matn qidiruvi: Atlas Search yoki Elasticsearch."
+ },
+ "31144": {
+  "a": "**Index bepul emas: yozuv narxi, RAM va planner o'zgarishi.**\n\n- Har insert/update barcha indexlarni yangilaydi.\n- Indekslar WiredTiger cache'ga sig'masa — disk I/O.\n- Query planner yangi indeksni tanlab, yomonroq plan olgan bo'lishi mumkin — `explain`, `$planCacheStats`.\n- ✅ `$indexStats` bilan ishlatilmaydigan indekslarni topib o'chirish; zarur bo'lsa `hint()`."
+ },
+ "31145": {
+  "a": "**Optimistic concurrency: bir hujjatga parallel yozuv = abort.**\n\n- Transaction'da o'zgargan hujjatni boshqasi ham o'zgartirsa — `WriteConflict`, retry kerak.\n- 60 sekund default limit; uzun transaction WiredTiger cache'ni bosadi.\n- ✅ Hot hujjat (umumiy counter)dan qochish, transaction'ni qisqa qilish.\n- ✅ Ko'p hollarda bitta hujjatli atomik update (`$inc`, `findOneAndUpdate`) yetarli — sxemani shunga moslash."
+ },
+ "31146": {
+  "a": "**Sana `Date` (BSON date) bo'lishi kerak, string emas.**\n\n- String taqqoslash formatga bog'liq: `\"2026-9-1\" > \"2026-10-01\"`.\n- TTL index faqat `Date` bilan ishlaydi.\n- Aggregation date operatorlari ishlamaydi.\n- Timezone yo'qoladi.\n- ✅ UTC `Date` saqlab, ko'rsatishda lokal vaqtga o'tkazish."
+ },
+ "31147": {
+  "a": "**Term → hujjatlar ro'yxati jadvali.**\n\n```\n\"redis\" → [doc1, doc7]\n\"kafka\" → [doc2, doc7, doc9]\n```\n\n- Kitob oxiridagi indeksga o'xshaydi.\n- Qidiruv: so'z bo'yicha ro'yxatni topish va kesishtirish — butun matnni skan qilmaslik.\n- Har segment o'z inverted index'iga ega (Lucene)."
+ },
+ "31148": {
+  "a": "**Index shardlarga bo'linadi, shardlar replica bilan takrorlanadi.**\n\n- **Index** — DB'dagi jadvalga o'xshash mantiqiy to'plam.\n- **Primary shard** — ma'lumot bo'lagi, alohida Lucene index. Soni yaratishda belgilanadi.\n- **Replica** — shard nusxasi, boshqa node'da; node yiqilsa ishlaydi, qidiruvni ham bajaradi.\n- Replica sonini keyin o'zgartirish oson, primary sonini — reindex/split kerak."
+ },
+ "31149": {
+  "a": "**Matnni indekslanadigan term'larga aylantiruvchi zanjir.**\n\n1. **Char filter** — HTML olib tashlash va h.k.\n2. **Tokenizer** — so'zlarga bo'lish (`standard`, `whitespace`).\n3. **Token filter** — `lowercase`, `stop`, `stemmer`, `synonym`.\n\n- Indekslashda va qidiruvda bir xil (yoki mos) analyzer bo'lishi kerak.\n- Tekshirish: `POST _analyze {\"analyzer\":\"standard\",\"text\":\"...\"}`."
+ },
+ "31150": {
+  "a": "**`must` score hisoblaydi, `filter` — yo'q (va keshlanadi).**\n\n```json\n{\"bool\": {\n  \"must\":   [{\"match\": {\"title\": \"redis cache\"}}],\n  \"filter\": [{\"term\": {\"status\": \"published\"}},\n             {\"range\": {\"date\": {\"gte\": \"now-30d\"}}}]\n}}\n```\n\n- Ha/yo'q shartlar (status, sana, tenant) — doim `filter`.\n- `should` — ixtiyoriy, score'ni oshiradi; `must_not` — chiqarib tashlaydi."
+ },
+ "31151": {
+  "a": "**Bucket — guruhlash, metric — hisoblash.**\n\n```json\n\"aggs\": {\"by_day\": {\"date_histogram\": {\"field\": \"ts\", \"calendar_interval\": \"day\"},\n  \"aggs\": {\"avg_price\": {\"avg\": {\"field\": \"price\"}}}}}\n```\n\n- `terms` — top-N guruh (aniq emas, shardlar bo'yicha taxminiy).\n- `cardinality` — HyperLogLog, taxminiy unique son.\n- Aggregation faqat `keyword`/raqam (doc_values) maydonlarda."
+ },
+ "31152": {
+  "a": "**Ilova doim alias bilan ishlaydi — index almashishi ko'rinmaydi.**\n\n1. `products_v2` yangi mapping bilan yaratiladi.\n2. `POST _reindex {source: products_v1, dest: products_v2}`.\n3. Reindex paytidagi yozuvlarni ham yetkazish (ikki marta yozish yoki qayta sinxron).\n4. `POST _aliases` — bitta so'rovda `remove v1` + `add v2` (atomik).\n\n- Mapping o'zgarishi (maydon turi) faqat reindex orqali."
+ },
+ "31153": {
+  "a": "**Bulk API + kam refresh + vaqtincha replica'siz.**\n\n- `_bulk` — bir so'rovda minglab hujjat (5–15MB).\n- `refresh_interval: -1` yuklash vaqtida, keyin qaytarish.\n- Dastlabki yuklashda `number_of_replicas: 0`, keyin oshirish.\n- Bir nechta parallel client; `429` kelsa backoff.\n- Avtomatik `_id` — mavjudlik tekshiruvi yo'q, tezroq."
+ },
+ "31154": {
+  "a": "**`object` massivni yassilaydi — `nested` element chegarasini saqlaydi.**\n\n```json\n\"users\": [{\"first\": \"Ali\", \"last\": \"Karimov\"}, {\"first\": \"Vali\", \"last\": \"Saidov\"}]\n```\n\n- `object` da: `first: [Ali, Vali]`, `last: [Karimov, Saidov]` — \"Ali Saidov\" qidiruvi ham topiladi ❌.\n- `nested` + `nested` query — to'g'ri natija.\n- Narxi: har element alohida Lucene hujjat, sekinroq; ko'p bo'lsa — denormalizatsiya."
+ },
+ "31155": {
+  "a": "**Log indekslari yoshiga qarab arzon qatlamga ko'chadi va o'chadi.**\n\n- **Hot** — yangi yozuvlar, SSD, ko'p CPU.\n- **Warm** — faqat o'qish, `forcemerge`, kam replica.\n- **Cold/frozen** — arzon disk yoki snapshot (searchable snapshot).\n- **Delete** — retention tugaganda.\n- Rollover: hajm (masalan 50GB) yoki yosh bo'yicha yangi index, data stream alias orqali."
+ },
+ "31156": {
+  "a": "**Shard ~10–50GB; ko'p mayda shard — oversharding.**\n\n- Har shard — alohida Lucene index: heap, thread, cluster state.\n- Node'da taxminan heap GB'iga ≤ 20 shard (eski qo'llanma).\n- Juda katta shard — sekin recovery va relocation.\n- Primary soni o'zgarmas — o'sishni rollover/ILM bilan hal qilish.\n- `_split` / `_shrink` — mavjud index'ni qayta bo'lish."
+ },
+ "31157": {
+  "a": "**Mapping explosion — maydonlar soni cheksiz o'sadi.**\n\n- Har yangi kalit yangi maydon → cluster state shishadi, master sekin.\n- `index.mapping.total_fields.limit` (1000) ga urilib yozuvlar rad etiladi.\n- ✅ `dynamic: strict` yoki `false`, kerakli maydonlarni aniq mapping.\n- ✅ Erkin kalit-qiymat uchun `flattened` tur."
+ },
+ "31158": {
+  "a": "**`term` analiz qilinmaydi, `text` maydon esa analiz qilingan.**\n\n- Indexda: `redis`, `cache` (lowercase, alohida).\n- `term` aynan `Redis Cache` ni qidiradi — yo'q.\n- ✅ `text` uchun `match`; aniq qiymat uchun `title.keyword` + `term`."
+ },
+ "31159": {
+  "a": "**Majburiy refresh — mayda segmentlar va throughput qulashi.**\n\n- Har refresh yangi segment; ular keyin merge qilinadi — CPU/IO.\n- ✅ Production'da default (1s) yoki `refresh=wait_for` — kerak joyda.\n- ✅ \"Yozdim — darhol ko'rsat\" talabini UI darajasida hal qilish."
+ },
+ "31160": {
+  "a": "**ES — qidiruv indeksi, asosiy DB emas.**\n\n- ACID transaction yo'q, constraint yo'q.\n- Split-brain/node yo'qotishda ma'lumot yo'qolish tarixi bor.\n- Mapping o'zgarishi — reindex, manba kerak.\n- ✅ Haqiqiy ma'lumot Postgres/Mongo'da, ES — CDC/outbox orqali to'ldiriladigan nusxa; istalgan payt qayta qurish mumkin."
+ },
+ "31161": {
+  "a": "**Taqsimlangan top-N — taxminiy.**\n\n- Har shard `shard_size` ta eng yaxshisini yuboradi; boshqa shardda pastroq bo'lgan termlar tushib qoladi.\n- Javobdagi `doc_count_error_upper_bound` — xato chegarasi.\n- ✅ `shard_size` ni oshirish, aniq hisob kerak bo'lsa `composite` aggregation bilan to'liq aylanish."
+ },
+ "31162": {
+  "a": "**Heap ≤ ~31GB va RAM'ning ≤ 50%.**\n\n- ~32GB dan katta heap'da compressed oops o'chadi — 64GB heap amalda ~40GB dek ishlaydi.\n- Katta heap — uzunroq GC pauzalari.\n- Lucene OS page cache'ga tayanadi — RAM'ning qolgan yarmi unga kerak.\n- ✅ Ko'proq resurs kerak bo'lsa — ko'proq node."
+ },
+ "31163": {
+  "a": "**Index-time analiz — eski hujjatlar eski term'lar bilan qolgan.**\n\n- Analyzer o'zgarishi mavjud inverted index'ni qayta qurmaydi.\n- ✅ Reindex (alias orqali almashtirib).\n- ✅ Sinonimlarni **search-time** analyzer'ga qo'yish — reindex'siz yangilanadi (`updateable: true`)."
+ },
+ "31164": {
+  "a": "**Ustunli OLAP DB — katta hajmdagi analitik so'rovlar uchun.**\n\n- Ma'lumot ustun bo'yicha saqlanadi va siqiladi.\n- Vektorlashtirilgan bajarish — sekundiga milliardlab qator.\n- Mos: dashboard, product analytics, log/metrika, clickstream.\n- Mos emas: OLTP (tez-tez point update/delete, transaction)."
+ },
+ "31165": {
+  "a": "**OLTP — ko'p kichik yozuv/o'qish; OLAP — katta hajm ustida agregatsiya.**\n\n| | OLTP | OLAP |\n|---|---|---|\n| So'rov | `WHERE id=?` | `GROUP BY` milliard qator |\n| Saqlash | row-oriented | column-oriented |\n| Yozuv | point update | batch insert |\n| Misol | Postgres, MySQL | ClickHouse, BigQuery |\n\n- Odatda ikkalasi birga: OLTP → CDC/ETL → OLAP."
+ },
+ "31166": {
+  "a": "**Faqat kerakli ustunlar o'qiladi va ular yaxshi siqiladi.**\n\n- 100 ustunli jadvaldan `sum(price)` — faqat `price` ustuni diskdan o'qiladi.\n- Bir xil turdagi ketma-ket qiymatlar — LZ4/ZSTD, delta, dictionary bilan 5–20x siqiladi.\n- Ustun bloklari bo'yicha SIMD hisob.\n- Narxi: bitta qatorni o'qish/yozish qimmat (barcha ustun fayllariga teginadi)."
+ },
+ "31167": {
+  "a": "**Insert — yangi saralangan part; fonda merge.**\n\n- Har `INSERT` diskda alohida part (ustun fayllari + sparse index).\n- Part ichida ma'lumot `ORDER BY` kaliti bo'yicha saralangan.\n- Fon jarayoni kichik partlarni kattasiga birlashtiradi (LSM'ga o'xshash).\n- Shu sabab: kam, katta batch insert — yaxshi; ko'p mayda insert — `Too many parts`."
+ },
+ "31168": {
+  "a": "**Sparse index: unique emas, granule'larni o'tkazib yuborish uchun.**\n\n- Default `PRIMARY KEY` = `ORDER BY`.\n- Har granule (8192 qator) boshidagi kalit qiymati xotirada.\n- `WHERE` ORDER BY'ning chap prefiksiga mos — kam granule o'qiladi.\n- Tartib: past kardinallikdan yuqoriga — `ORDER BY (tenant_id, event_type, ts)`.\n- Duplikatlar bemalol yoziladi — unique kafolat yo'q."
+ },
+ "31169": {
+  "a": "**Partition — boshqaruv birligi (retention, drop), tezlik vositasi emas.**\n\n```sql\nENGINE = MergeTree PARTITION BY toYYYYMM(ts) ORDER BY (tenant_id, ts)\n```\n\n- `ALTER TABLE ... DROP PARTITION 202501` — bir zumda.\n- Partlar faqat bitta partition ichida merge bo'ladi.\n- ❌ `PARTITION BY user_id` — minglab partition, `Too many parts`.\n- Qoida: odatda oy yoki kun, jami yuzlab partition atrofida."
+ },
+ "31170": {
+  "a": "**Kam va katta batch — har qatorni alohida insert qilmaslik.**\n\n- Har insert yangi part → ko'p mayda insert = merge bosimi.\n- Tavsiya: sekundiga ≈1 insert, har biri minglab qator.\n- `async_insert=1` — server o'zi to'playdi.\n- Kafka engine + materialized view — oqimdan avtomatik batch.\n- Ilovada buffer (masalan 1s yoki 10k qator)."
+ },
+ "31171": {
+  "a": "**Insert trigger: yangi batch → transform → target jadval.**\n\n```sql\nCREATE MATERIALIZED VIEW mv_daily TO daily_stats AS\nSELECT toDate(ts) d, tenant_id, count() c FROM events GROUP BY d, tenant_id;\n```\n\n- Faqat **yangi** insertlarni ko'radi — mavjud ma'lumot uchun alohida backfill.\n- Har batch alohida agregatlanadi → target ko'pincha `SummingMergeTree`/`AggregatingMergeTree`.\n- Kafka engine'dan o'qish uchun ham asosiy usul."
+ },
+ "31172": {
+  "a": "**Merge paytida ishlaydigan maxsus engine'lar.**\n\n- **ReplacingMergeTree(ver)** — ORDER BY bir xil qatorlardan eng katta `ver` qoladi (upsert taqlidi).\n- **SummingMergeTree** — raqamli ustunlarni yig'adi.\n- **AggregatingMergeTree** — `uniqState`, `avgState` kabi holatlar; o'qishda `uniqMerge`.\n- ⚠️ Merge qachon bo'lishi noma'lum — so'rovda `FINAL` yoki `GROUP BY` bilan yakunlash kerak."
+ },
+ "31173": {
+  "a": "**Mutation — og'ir fon operatsiyasi; tez-tez update uchun mo'ljallanmagan.**\n\n- `ALTER TABLE t DELETE WHERE ...` — tegishli partlar to'liq qayta yoziladi, asinxron.\n- `DELETE FROM t WHERE ...` (lightweight) — qatorni yashirin belgilaydi, keyin merge'da tozalanadi.\n- O'zgaruvchan ma'lumot: `ReplacingMergeTree` + versiya, yoki `CollapsingMergeTree` (sign ±1).\n- GDPR o'chirish — partition'ni hisobga olgan holda rejalash."
+ },
+ "31174": {
+  "a": "**O'ng jadval xotiraga sig'ishi kerak — kichigi o'ngga.**\n\n- `A JOIN B` — B to'liq hash table'ga.\n- Katta-katta join: `join_algorithm = 'partial_merge'`/`grace_hash` — sekinroq, lekin xotirani tejaydi.\n- Ma'lumotnoma (users, products) uchun **Dictionary** + `dictGet()` — tez lookup.\n- Analitikada keng (denormalized) jadval — odatiy yondashuv."
+ },
+ "31175": {
+  "a": "**RAM'dagi kalit-qiymat ma'lumotnoma — JOIN o'rniga.**\n\n```sql\nSELECT dictGet('users_dict', 'country', user_id) AS country, count()\nFROM events GROUP BY country;\n```\n\n- Manba: ClickHouse jadvali, Postgres, MySQL, HTTP, fayl.\n- `LIFETIME(MIN 300 MAX 600)` — davriy yangilanish.\n- Layout: `flat`, `hashed`, `range_hashed` (vaqtga bog'liq qiymat)."
+ },
+ "31176": {
+  "a": "**Odatiy yo'l: CDC → Kafka → ClickHouse.**\n\n1. Debezium Postgres WAL'ni o'qiydi → Kafka topic.\n2. ClickHouse `Kafka` engine jadvali topic'ni o'qiydi.\n3. Materialized view → `ReplacingMergeTree` (update/delete'larni versiya bilan).\n\n- Muqobil: soatlik/kunlik batch ETL (Airflow, dbt).\n- `postgresql()` table function — bir martalik ko'chirish uchun.\n- Kechikish va idempotentlikni (qayta o'qish) hisobga olish."
+ },
+ "31177": {
+  "a": "**ReplicatedMergeTree + Keeper: part darajasida replikatsiya.**\n\n- Har insert (part) haqida yozuv Keeper'ga tushadi, boshqa replika partni yuklab oladi.\n- Istalgan replikaga yozish mumkin (multi-master).\n- Insert deduplikatsiyasi — bir xil blok qayta yuborilsa o'tkazib yuboriladi (blok hash).\n- Keeper ishlamasa — jadvallar read-only.\n- Asinxron: `insert_quorum` bilan sinxronroq qilish mumkin."
+ },
+ "31178": {
+  "a": "**Distributed — shardlar ustidagi 'proxy' jadval.**\n\n- Har shardda lokal `ReplicatedMergeTree` jadval.\n- `Distributed(cluster, db, local_table, sharding_key)`.\n- SELECT — barcha shardga parallel, keyin birlashtirish.\n- INSERT — `sharding_key` bo'yicha (masalan `cityHash64(user_id)`); yaxshiroq: lokal jadvallarga to'g'ridan-to'g'ri yozish.\n- `GLOBAL IN/JOIN` — o'ng tomon har shardga yuboriladi."
+ },
+ "31179": {
+  "a": "**Ma'lumot turiga mos kodek — disk va I/O 2–10x kam.**\n\n```sql\nts DateTime CODEC(DoubleDelta, ZSTD),\nvalue Float64 CODEC(Gorilla, ZSTD),\nstatus LowCardinality(String)\n```\n\n- `LZ4` — tez, default.\n- `ZSTD(1..22)` — yaxshiroq siqish, CPU ko'proq.\n- `LowCardinality(String)` — < ~10k xil qiymat uchun dictionary encoding."
+ },
+ "31180": {
+  "a": "**Merge yaratishdan sekin — mayda insertlar yoki ortiqcha partition.**\n\nSabablar:\n- Har qator/kichik batch alohida insert.\n- `PARTITION BY` juda mayda (user, soat).\n- Bitta insert ko'p partition'ga tegadi.\n\nYechim:\n- Batch ≥ 10k qator, sekundiga ~1 insert; `async_insert=1`.\n- Partitionni oy/kunga o'zgartirish.\n- `system.parts`, `system.merges` ni kuzatish."
+ },
+ "31181": {
+  "a": "**ORDER BY'ga mos kelmaydigan so'rovlarni tezlashtirish vositalari.**\n\n- **Projection** — boshqa `ORDER BY` yoki oldindan `GROUP BY`; insertda avtomatik to'ldiriladi, so'rovda avtomatik ishlatiladi. Narxi: disk + insert sekinroq.\n- **Skip index**: `minmax`, `set(N)`, `bloom_filter`, `tokenbf_v1` — granule'ni o'tkazib yuborish uchun.\n\n```sql\nINDEX idx_trace trace_id TYPE bloom_filter GRANULARITY 4\n```\n\n- Skip index faqat ma'lumot qisman tartiblangan/klasterlangan bo'lsa foydali."
+ },
+ "31182": {
+  "a": "**Bitta keng events jadvali + agregat MV'lar.**\n\n```sql\nCREATE TABLE events (\n  tenant_id UInt32, event LowCardinality(String), user_id UInt64,\n  ts DateTime64(3), props Map(String, String)\n) ENGINE = MergeTree\nPARTITION BY toYYYYMM(ts)\nORDER BY (tenant_id, event, ts)\nTTL ts + INTERVAL 13 MONTH;\n```\n\n- Dashboard'lar uchun `AggregatingMergeTree` MV (kunlik/soatlik).\n- Unique foydalanuvchi — `uniqState`/`uniqMerge` (HLL).\n- Ingest: Kafka engine yoki batch."
+ },
+ "31183": {
+  "a": "**So'rov vaqtidagi merge — to'g'ri, lekin qimmat.**\n\n- `ReplacingMergeTree` da hali merge bo'lmagan dublikatlar bor — `FINAL` ularni olib tashlaydi.\n- Ko'p partlar bo'lsa sezilarli sekin (yangi versiyalarda parallellashtirilgan).\n- Muqobil: `argMax(col, version) ... GROUP BY key`.\n- `OPTIMIZE TABLE ... FINAL` — majburiy merge, juda og'ir, prod'da muntazam emas."
+ },
+ "31184": {
+  "a": "**Tanlov: hajm, so'rov shakli, jamoa va xarajat.**\n\n- < ~100M qator, oddiy dashboard — Postgres (+ indeks, materialized view) yetarli.\n- Ops resursi yo'q — BigQuery/Snowflake/ClickHouse Cloud.\n- Sub-sekund ko'p tenantli real-time analitika — ClickHouse, Druid, Pinot.\n- Ko'p update, transaction, constraint — OLTP DB.\n- Qo'shimcha DB = qo'shimcha sinxronizatsiya va on-call — buni hisobga olish."
+ },
+ "31185": {
+  "a": "**Takrorlanuvchi stringlar uchun dictionary encoding.**\n\n- Ichkarida: unique qiymatlar lug'ati + har qatorda kichik raqam.\n- Mos: status, country, event_type, browser (< ~10k xil qiymat).\n- `GROUP BY`, filtr va siqish tezlashadi.\n- Yuqori kardinallik (user_id, url) — foydasiz, hatto zarar."
+ },
+ "31186": {
+  "a": "**Key → partition: bir entity xabarlari tartibda.**\n\n- Default partitioner: `murmur2(key) % partitions`.\n- `orderId` key — bitta buyurtma event'lari tartibda.\n- Key `null` — sticky/round-robin, tartib kafolati yo'q.\n- ❌ Hot key (bitta katta tenant) — bitta partition to'lib ketadi.\n- Partition sonini o'zgartirsa — key→partition xaritasi buziladi."
+ },
+ "31187": {
+  "a": "**Retry dublikatlarini broker darajasida yo'q qiladi.**\n\n- Har producer'ga PID, har batch'ga sequence raqami.\n- Broker ko'rgan sequence'ni qayta qabul qilmaydi.\n- `acks=all`, `max.in.flight ≤ 5` bilan ishlaydi; Kafka 3.0+ da default yoqiq.\n- Faqat bitta producer sessiyasi va partition ichida — end-to-end exactly-once uchun transaction + consumer idempotentligi kerak."
+ },
+ "31188": {
+  "a": "**Sekin ishlov — consumer guruhdan haydaladi.**\n\n- `max.poll.interval.ms` (default 5 daq) — ikki `poll()` orasidagi maksimal vaqt.\n- Oshib ketsa — consumer o'lik deb hisoblanadi, rebalance, xabarlar qayta o'qiladi.\n- `max.poll.records` (500) — bir poll'da nechta xabar.\n- ✅ Batch kichikroq, ishlovni tezlashtirish yoki alohida worker pool (offset'ni ehtiyot bilan commit)."
+ },
+ "31189": {
+  "a": "**Producer va consumer o'rtasidagi kontrakt — versiya va moslik bilan.**\n\n- Xabarda 5 baytli header: magic byte + schema ID.\n- Yangi sxema yozilishida moslik tekshiriladi: `BACKWARD` (default), `FORWARD`, `FULL`.\n- Mos kelmaydigan o'zgarish (maydon turini o'zgartirish) — producer deploy'da rad etiladi.\n- Ko'p jamoali topiclar uchun deyarli majburiy."
+ },
+ "31190": {
+  "a": "**Kafka o'z metadata'sini Raft bilan boshqaradi — ZooKeeper'siz.**\n\n- Controller kvorumi (3 yoki 5) metadata log'ni saqlaydi (`__cluster_metadata`).\n- Bitta tizim — deploy va monitoring sodda.\n- Controller failover sekundlar emas, millisekundlar.\n- Millionlab partition'gacha miqyos.\n- Kafka 4.0 — faqat KRaft; migratsiya eski klasterlar uchun alohida bosqich."
+ },
+ "31191": {
+  "a": "**Eski segmentlar S3'da, yangilari lokal diskda.**\n\n- Uzoq retention (oylar) arzon narxda.\n- Broker diskida faqat \"hot\" ma'lumot — rebalance va yangi broker qo'shish tez.\n- Eski ma'lumotni o'qish sekinroq (S3 latency).\n- Compacted topic'lar uchun cheklovlar bor."
+ },
+ "31192": {
+  "a": "**Unary va uch xil streaming.**\n\n```proto\nrpc Get(Req) returns (Resp);                    // unary\nrpc List(Req) returns (stream Item);           // server streaming\nrpc Upload(stream Chunk) returns (Resp);       // client streaming\nrpc Chat(stream Msg) returns (stream Msg);     // bidi\n```\n\n- Hammasi bitta HTTP/2 stream ustida.\n- Streaming — uzun ro'yxat, fayl, real-time oqim uchun."
+ },
+ "31193": {
+  "a": "**gRPC middleware — har chaqiruv atrofida umumiy logika.**\n\n```go\nfunc logUnary(ctx context.Context, req any, info *grpc.UnaryServerInfo,\n    h grpc.UnaryHandler) (any, error) {\n    start := time.Now()\n    resp, err := h(ctx, req)\n    log.Printf(\"%s %v %s\", info.FullMethod, time.Since(start), status.Code(err))\n    return resp, err\n}\ngrpc.NewServer(grpc.ChainUnaryInterceptor(recovery, auth, logUnary))\n```\n\n- Server va client tomonida bor.\n- Tartib muhim: recovery tashqarida, auth erta."
+ },
+ "31194": {
+  "a": "**gRPC'dagi header'lar — kalit-qiymat juftliklar.**\n\n```go\nctx = metadata.AppendToOutgoingContext(ctx, \"authorization\", \"Bearer \"+tok)\n// serverda\nmd, _ := metadata.FromIncomingContext(ctx)\n```\n\n- Kalitlar kichik harfda; `-bin` bilan tugasa — base64 binar.\n- Header (boshida) va trailer (oxirida, status bilan) bor.\n- Tracing (`traceparent`) odatda interceptor orqali avtomatik."
+ },
+ "31195": {
+  "a": "**Standart Health servisi — K8s probe uni chaqiradi.**\n\n- `grpc.health.v1.Health/Check` — `SERVING` / `NOT_SERVING`.\n- K8s: `livenessProbe: grpc: {port: 9090}` (1.24+).\n- Graceful shutdown: avval `NOT_SERVING`, so'ng `GracefulStop()`.\n- Load balancer'lar (Envoy) ham shu servisdan foydalanadi."
+ },
+ "31196": {
+  "a": "**Brauzer to'g'ridan-to'g'ri gRPC (HTTP/2 trailer) qila olmaydi — ko'prik kerak.**\n\n- **grpc-gateway** — `google.api.http` annotatsiyalaridan REST/JSON endpoint va OpenAPI.\n- **gRPC-Web** — maxsus client + Envoy proxy.\n- **Connect** (buf) — bitta server gRPC, gRPC-Web va oddiy HTTP/JSON'ni qo'llaydi.\n- Tashqi public API — ko'pincha REST, ichki — gRPC."
+ },
+ "31197": {
+  "a": "**Postgres uchun — `pgx` (pgxpool); `lib/pq` maintenance rejimida.**\n\n- `pgx` native interfeysi: tezroq, binar protokol, `CopyFrom`, `SendBatch`, `LISTEN/NOTIFY`, `jsonb`, massivlar.\n- `pgx/stdlib` — `database/sql` orqali ham ishlatish mumkin (ORM/kutubxonalar bilan moslik).\n- `database/sql` — DB'dan mustaqil abstraksiya, lekin Postgres imkoniyatlarining bir qismi."
+ },
+ "31198": {
+  "a": "**Ko'p jamoalarda: sqlc (yoki pgx + qo'lda SQL).**\n\n- **sqlc**: `.sql` fayldan type-safe funksiyalar; xato compile vaqtida; SQL ko'rinib turadi.\n- **GORM**: tez boshlash, lekin murakkab query'da sehr, N+1, yashirin `SELECT *`.\n- **Qo'lda**: to'liq nazorat, `Scan` boilerplate.\n- Dinamik filtrlar uchun query builder (squirrel) qo'shimcha sifatida."
+ },
+ "31199": {
+  "a": "**`COPY` — bulk yuklashning eng tez yo'li.**\n\n```go\nn, err := pool.CopyFrom(ctx, pgx.Identifier{\"events\"},\n    []string{\"id\", \"ts\", \"payload\"}, pgx.CopyFromRows(rows))\n```\n\n- Bitta-bitta INSERT — har biri round-trip.\n- `pgx.Batch` — bir round-trip'da ko'p so'rov.\n- Juda katta yuklash: indekslarni keyin yaratish, bo'laklab (100k) commit."
+ },
+ "31200": {
+  "a": "**Mock emas — haqiqiy Postgres konteynerda.**\n\n- `testcontainers-go` — `postgres:16` konteynerini testdan oldin ko'taradi.\n- `TestMain` da bir marta ko'tarish + migratsiyalar.\n- Izolyatsiya: har test `BEGIN ... ROLLBACK`, yoki template DB'dan nusxa (`CREATE DATABASE t1 TEMPLATE base`).\n- SQL mock'lar so'rov to'g'riligini tekshirmaydi — haqiqiy DB tekshiradi."
+ },
+ "31201": {
+  "a": "**Yengil signal mexanizmi — ishonchli navbat emas.**\n\n```go\nconn, _ := pool.Acquire(ctx)\nconn.Exec(ctx, \"LISTEN orders\")\nn, err := conn.Conn().WaitForNotification(ctx)\n```\n\n- Ulanish pool'dan uzoq muddatga olinadi (alohida ajratish).\n- Payload ≤ 8000 bayt; faqat commit'dan keyin yetkaziladi.\n- Ulanish uzilsa — o'tkazib yuborilgan xabarlar yo'qoladi; qayta ulanib holatni DB'dan o'qish kerak.\n- PgBouncer transaction mode bilan ishlamaydi."
+ },
+ "31202": {
+  "a": "**Pool'dagi ulanishlar qayerda band — shuni topish.**\n\n- `pool.Stat()`: `AcquiredConns`, `EmptyAcquireCount`, `AcquireDuration` — metrikaga chiqarish.\n- Leak: `rows.Close()` yoki `tx.Rollback()` chaqirilmagan yo'llar.\n- Transaction ichida HTTP/Kafka chaqiruvi — ulanishni uzoq ushlab turadi.\n- Postgres tomonda: `pg_stat_activity` (`idle in transaction`).\n- Pool hajmini oshirish oxirgi chora — DB `max_connections` va CPU chegarasi."
+ }
+}

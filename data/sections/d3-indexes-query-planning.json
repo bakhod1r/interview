@@ -2,7 +2,6 @@
   "id": "d3",
   "name": "Indexes & query planning",
   "domain": "db",
-  "domainLabel": "PostgreSQL & SQL",
   "topics": [
     "Index",
     "Planner",

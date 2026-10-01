@@ -2,7 +2,6 @@
   "id": "g2",
   "name": "Concurrency",
   "domain": "go",
-  "domainLabel": "Go",
   "topics": [
     "Concurrency",
     "Channels",

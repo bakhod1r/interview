@@ -22,7 +22,7 @@ Run after any change to data or shell.
 - Question ids must be unique across all sections.
 
 ## UI (shell-v9)
-- Decks: direction (`GRP`: Backend / System Design / Algorithms) › domain › section. A domain belongs to exactly one direction in `GRP`.
+- Decks: direction › (group) › domain › section. `GRP` list items are a domain key or `[groupId, name, [domains]]` (Backend DB/Cache/MQ groups). A domain belongs to exactly one place in `GRP`. Single-domain direction (Architecture, Algorithms, Soft skills) shows sections directly.
 - Spaced repetition: FSRS-5 (default weights, `S.cfg.ret` target retention 0.9; old SM-2 `srs` entries converted lazily), 4 buttons (Qayta / Qiyin / Yaxshi / Oson), learning steps 1m/6m, daily new-card limit (`S.cfg.newDay`, default 20), day rolls over at 04:00.
 - State lives in `localStorage` key `dbdrill.v1` (`res`, `srs`, `days`, `sess`, `cfg`, `nt`). Keep it backward-compatible; old `res` entries are migrated into `srs` on load.
 - Older shells (`shell-v7.html`, `shell-v8.html`) are backups only.
@@ -32,10 +32,14 @@ Run after any change to data or shell.
 - Target: Senior-level coverage. When asked "to'liqmi?" — audit gaps per topic, then add questions to thin sections ("yupqalariga qo'sh").
 - New topic/subtopic (e.g. inode, hardlink/softlink, LVM, kernel, shell, filesystem types) → add enough questions (mix mcq/code/open, J→P levels), place in the right section, sync `index.json` counts.
 - "Edge cases & gotchas" live in `t*` sections, spread by domain (Go, SQL, Kafka, Redis, K8s, security…) — not one big bucket.
-- Catalog structure: directions Backend / System Design / Algorithms. **DevOps** direction, split into folder domains: `linux` (v1–v4, i7), `cont` (i1, t11), `cicd` (i2), `obs` (i3), `net` (i4, t13), `cloud` (i5). Sections: `v1` LVM, `v2` Linux users, `v3` package management, `v4` filesystems, plus former infra sections re-added 2026-10-01 at user request (i1–i5, i7, t11, t13 — domain changed to `devops`; i7 LVM questions live in v1). `i6` file is an old duplicate — keep out of catalog. **Backend** folder domains (order): `go`, `db`, `redis` (n4, n1, t10), `mongo` (n2), `elastic` (n3), `msg`, `api`, `sec`, `arch`, `fin` (p1–p3), `soft`. Old `nosql` bucket split 2026-10-01 — keep each tech its own folder. Section order in `questions.json`/`index.json` = UI order: basics first, `t*` gotchas last in each folder.
+- Catalog structure: directions Backend / Architecture / System Design / Algorithms / DevOps / Soft skills. **DevOps** direction, split into folder domains: `linux` (v1–v4, i7), `cont` (i1, t11), `cicd` (i2), `obs` (i3), `net` (i4, t13), `cloud` (i5). Sections: `v1` LVM, `v2` Linux users, `v3` package management, `v4` filesystems, plus former infra sections re-added 2026-10-01 at user request (i1–i5, i7, t11, t13 — domain changed to `devops`; i7 LVM questions live in v1). `i6` file is an old duplicate — keep out of catalog. **Backend** (2026-10-01 tree): `go`; **DB** group = `db` PostgreSQL (d1–d6, t2; d6 Go+DB), `mongo` (n2, n5 gotchas), `elastic` (n3, n6 gotchas), `ch` ClickHouse (c1); **Cache** group = `redis` (n4, n1, t10); **MQ** group = `kafka` (m1, t9), `rabbit` (m2), `evt` (m3); then `api` (a1–a3, a5, t6), `sec` (x1, a4, t12), `fin` (p1–p3, r6). `arch` (r1–r5) = Architecture direction, `soft` (b1) = Soft skills direction. Each tech its own domain — no mixed buckets (`nosql`, `msg` removed). Section order in `questions.json`/`index.json` = UI order: basics first, `t*` gotchas last in each folder.
 - Study UX = AnkiDroid style: flashcards, closed (hidden-answer) questions, FSRS. UI must stay premium: smooth animations, easy navigation.
 - Deploy: GitHub Pages serves `interview.html`. Push only when the user explicitly allows it in that session.
 - Always finish with `node build/build.js && node build/verify.js` green.
+
+## Docs (standalone notes)
+- `docs/*.md` — qisqa Uzbek konspektlar, ASCII diagrammalar bilan (build'ga kirmaydi).
+- `docs/linux-user-group-permission.md` — user/UID, group, rwx/octal, kernel tekshiruv tartibi, SUID/SGID/sticky, umask, sudo, ACL, interview gotchalar (2026-10-01).
 
 ## Deep explanations
 - Each question may have `deep` (string, Markdown): step-by-step Uzbek explanation why the answer is right and why others are wrong, with a fenced code block when code helps and an inline `<svg>` diagram when a picture helps (flows, memory layout, timelines). Keep `explanation` as the short version.

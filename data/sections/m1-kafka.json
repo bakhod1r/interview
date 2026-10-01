@@ -1,8 +1,7 @@
 {
   "id": "m1",
-  "name": "Kafka",
-  "domain": "msg",
-  "domainLabel": "Kafka & messaging",
+  "name": "Kafka basics",
+  "domain": "kafka",
   "topics": [
     "Kafka"
   ],
@@ -13,7 +12,7 @@
       "level": "M",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Kafka'da xabarlar tartibi qay level'da kafolatlanadi?",
       "explanation": "Partition — parallellik va tartib birligi. Agar order_id ni key qilsangiz, o'sha buyurtmaning hamma hodisalari bitta partitionda va tartibda bo'ladi. Global tartib kerak bo'lsa — bitta partition, lekin u throughput'ni cheklaydi. Partition sonini keyin oshirish key→partition taqsimotini o'zgartiradi — tartib kafolati buziladi, shuning uchun oldindan rejalashtiriladi.",
@@ -25,7 +24,7 @@
       "level": "M",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Consumer group va partition munosabati?",
       "explanation": "Consumer qo'shsangiz ham partitiondan ko'p bo'lsa, ortiqchalari bo'sh turadi. Turli group'lar bir xil xabarlarni mustaqil o'qiydi (fan-out). Consumer qo'shilishi/chiqishi rebalance'ga olib keladi — bu paytda iste'mol to'xtaydi; uzoq ishlov (max.poll.interval.ms dan oshsa) consumer'ni group'dan chiqarib yuboradi va cheksiz rebalance sikli boshlanadi."
@@ -36,7 +35,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Producer'da <code>acks=1</code> va <code>acks=all</code> farqi?",
       "explanation": "To'lov/buyurtma hodisalari uchun: acks=all, min.insync.replicas=2, replication.factor=3, enable.idempotence=true (takror yozishni oldini oladi va retry xavfsiz bo'ladi). Analitika/telemetriya uchun acks=1 maqbul. Yana: retries + max.in.flight.requests.per.connection idempotence bilan birga tartibni saqlaydi.",
@@ -48,7 +47,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Consumer'da auto-commit yoqilgan (<code>enable.auto.commit=true</code>). Qanday xavf bor?",
       "explanation": "Tartib muhim: o'qish → ishlov → commit. Bu at-least-once beradi (crash bo'lsa takror), shuning uchun dedup kerak: message_id yoki biznes key'i bo'yicha unique constraint. Teskarisi (avval commit) at-most-once — yo'qotishga yo'l qo'yadi. 'Exactly-once' faqat Kafka ichidagi transaction'larda, tashqi DB uchun idempotentlik zarur."
@@ -59,7 +58,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Consumer lag o'sib ketdi (millionlab xabar orqada). Sabablarni va yechimlarni ayting.",
       "explanation": "Intervyuda kutiladi: avval o'lchash va sababni ajratish, keyin chora. 'Consumer sonini oshiraman' — partition soni yetmasa foyda bermaydi."
@@ -70,7 +69,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Log compaction (<code>cleanup.policy=compact</code>) nima qiladi?",
       "explanation": "Oddiy retention (delete) — vaqt yoki hajm bo'yicha o'chiradi. Compact — CDC/state uchun: yangi consumer topicni boshidan o'qib joriy holatni tiklay oladi. O'chirish uchun tombstone (key bilan null qiymat) yoziladi. Ikkalasini birga ishlatish ham mumkin (compact,delete)."
@@ -81,7 +80,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Kafka'da 'exactly-once' amalda nimani bildiradi?",
       "explanation": "Kafka EOS Kafka→Kafka oqimida ishlaydi: producer idempotent (PID + sequence), transaksiya offset commit bilan bir atomikada. DB yoki tashqi API'ga yozganda transaksiya Kafka'dan tashqariga chiqmaydi — shuning uchun consumer o'zi idempotent bo'ladi: `unique(message_id)` yoki `ON CONFLICT DO NOTHING`, yoki outbox/inbox jadval. Amaliy formulasi: at-least-once + idempotent handler."
@@ -92,7 +91,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Consumer group doimiy rebalance qilyapti (`Rebalancing` loop), lag o'syapti. Sabab?",
       "explanation": "`session.timeout.ms` heartbeat uchun (alohida thread), `max.poll.interval.ms` esa ishlov berish vaqti uchun. Sekin handler — klassik sabab. Choralar: `max.poll.records`ni kamaytirish, ishni background worker'ga berib poll'ni bo'shatish (offset faqat tugagach commit qilinadi), timeoutni realga moslash, cooperative sticky assignor bilan rebalance narxini pasaytirish."
@@ -103,7 +102,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Xabarlar tartibi qanday kafolatlanadi va nima uni buzadi?",
       "explanation": "Partition sonini oshirish kalit→partition moslashuvini o'zgartiradi — bir entity eventlari ikki partitionda qoladi va tartib buziladi (shu sabab oldindan zapas partition olinadi). Consumer tomonda tartib kerak bo'lsa parallelizm partition darajasida bo'ladi yoki entity kaliti bo'yicha in-order worker (key-based queue)."
@@ -114,7 +113,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "`acks=all` bilan ham ma'lumot yo'qolishi mumkin bo'lgan holat?",
       "explanation": "Durability uchun uchlik birga sozlanadi: `replication.factor=3`, `min.insync.replicas=2`, `acks=all`, `unclean.leader.election.enable=false`, va producer'da `enable.idempotence=true` + cheksiz retry. Aks holda konfiguratsiya 'kafolat bordek' ko'rinadi, lekin yo'q."
@@ -125,7 +124,7 @@
       "level": "St",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Poison message (parse bo'lmaydigan xabar) partitionni to'sib qo'ydi. To'g'ri strategiya?",
       "explanation": "Bitta xabar butun partitionni to'xtatib qo'yishi — Kafka'ning eng ko'p uchraydigan operatsion muammosi. DLQ'dan tashqari kerak: alert (DLQ hajmi), replay skripti (tuzatilgandan keyin), va xabar sxemasini oldinga/orqaga mos qilish (schema registry, compatibility qoidalari) — poison ko'pincha sxema o'zgarishidan keladi."
@@ -136,7 +135,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Consumer lag 10 mln xabarga chiqdi. Qanday tiklaysiz?",
       "explanation": "Birinchi savol — bottleneck qayerda: bir partition hot (kalit taqsimoti yomon) yoki handler sekin (N+1 DB query, sinxron HTTP). Consumer'ni partitiondan ko'p qo'yish foyda bermaydi. Tez g'alaba ko'pincha batching (DB'ga bitta `COPY`/bulk insert) va kerak bo'lmagan sinxron chaqiruvni olib tashlash."
@@ -147,7 +146,7 @@
       "level": "St",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Servisda DB yozuvi va Kafka'ga event yuborish atomik bo'lishi kerak. Qanday qilasiz?",
       "explanation": "Intervyuda 'distributed transaction/2PC' javobi kutilmaydi — outbox amaliy standart. Muhim nuqta: atomiklik DB ichida hal qilinadi, tashqarida esa idempotentlik bilan."
@@ -158,7 +157,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Log compaction qachon ishlatiladi?",
       "explanation": "Compacted topic — cheksiz holat jurnali: yangi consumer noldan o'qib to'liq joriy holatni qurishi mumkin (Kafka Streams KTable shunga tayanadi). Cheklov: tarix yo'qoladi (audit uchun yaroqsiz), tombstone `delete.retention.ms` davomida saqlanadi, va compaction fon jarayoni — darhol bo'lmaydi."
@@ -169,7 +168,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Real-time event distribution (yengil pub/sub) tizimini loyihalang — miqyos va ishonchlilikka fokus.",
       "explanation": "Bu savol senior intervyularda aynan shu shaklda so'raladi. Kutiladigan signal — talabni aniqlash, kalit/partition tanlovi, kafolatlar konfiguratsiyasi (acks/min.insync/idempotent), sekin iste'molchi muammosi va cheklovlarni oshkora aytish."
@@ -180,7 +179,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Kafka'da `retention.ms` va `log.retention.bytes` tugaganda nima bo'ladi va bu qanday xatarni keltiradi?",
       "explanation": "Bu incident ko'rinishi: consumer bir kecha to'xtab qolgan, retention 24 soat — uyg'onganda `latest` bilan boshlab o'rtadagi eventlarni yo'qotadi. Himoya: retention'ni tiklanish vaqtidan katta qo'yish, lag'ga alert (nafaqat xato), `auto.offset.reset=earliest` bilan ehtiyot (dublikat yaxshi, yo'qotishdan), va muhim ma'lumotni ombor/S3 ga arxivlash."
@@ -191,7 +190,7 @@
       "level": "St",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Kafka Streams/consumer'da stateful agregatsiya kerak (5 daqiqali oyna). Holat qayerda saqlanadi?",
       "explanation": "Changelog compacted topic bo'ladi, shuning uchun tiklash oxirgi holatdan boshlanadi. Muhim detallar: standby replica bilan tiklash vaqtini qisqartirish, event-time vs processing-time farqi (kechikkan eventlar `grace` ichida hisobga olinadi), va rebalance paytida state ko'chishi qimmat — `static membership` bu narxni kamaytiradi."
@@ -202,7 +201,7 @@
       "level": "P",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Kafka'da ISR va high watermark nima?",
       "explanation": "`replica.lag.time.max.ms` dan orqada qolgan replica ISR'dan chiqariladi — shundan keyin `min.insync.replicas` shartini buzsa producer `acks=all` bilan xato oladi (bu himoya, nosozlik emas). Leader almashganda yangi leader ISR'dan tanlanadi; `unclean.leader.election` yoqilgan bo'lsa ISR'dan tashqaridagi replica ham leader bo'lib ma'lumot kesilishi mumkin."
@@ -213,7 +212,7 @@
       "level": "St",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Consumer rebalance protokollari: eager, cooperative, static membership — farqi?",
       "explanation": "Amaliy tavsiya: `CooperativeStickyAssignor` + static membership — deploy paytidagi lag sakrashini deyarli yo'qotadi. Static membership'da diqqat: instansiya haqiqatan o'lsa ham session timeout tugaguncha uning partitionlari qayta taqsimlanmaydi, shuning uchun timeout deploy vaqtiga moslanadi."
@@ -224,10 +223,76 @@
       "level": "St",
       "type": "card",
       "topic": "Kafka",
-      "domain": "msg",
+      "domain": "kafka",
       "section": "m1",
       "question": "Kafka transactional producer ichkarida qanday ishlaydi?",
       "explanation": "Muhim cheklov: atomiklik faqat Kafka ichida (bir necha partition/topic + consumer offset). Tashqi DB bilan atomiklik yo'q — shuning uchun outbox yoki idempotent consumer kerak. Narxi: latency oshadi (markerlar, coordinator round-trip) va `transactional.id` har instansiya uchun barqaror bo'lishi kerak, aks holda fencing ishlamaydi."
+    },
+    {
+      "id": 31186,
+      "code": "KF1",
+      "level": "M",
+      "type": "card",
+      "topic": "Kafka",
+      "domain": "kafka",
+      "section": "m1",
+      "question": "Message key nima uchun kerak va qanday tanlanadi?",
+      "explanation": "Key bo'yicha partition tanlanadi (hash) — bir key'ning barcha xabarlari bir partition'da va tartibda; key hot bo'lsa partition notekis."
+    },
+    {
+      "id": 31187,
+      "code": "KF2",
+      "level": "S",
+      "type": "card",
+      "topic": "Kafka",
+      "domain": "kafka",
+      "section": "m1",
+      "question": "Idempotent producer (`enable.idempotence=true`) nimani hal qiladi?",
+      "explanation": "Retry'da broker dublikat yozmaydi: producer ID + sequence number bo'yicha takror batch'ni tashlaydi; partition ichida tartib saqlanadi."
+    },
+    {
+      "id": 31188,
+      "code": "KF3",
+      "level": "S",
+      "type": "card",
+      "topic": "Kafka",
+      "domain": "kafka",
+      "section": "m1",
+      "question": "`max.poll.interval.ms` va `max.poll.records` nima uchun muhim?",
+      "explanation": "poll() lar orasidagi vaqt limitdan oshsa consumer guruhdan chiqariladi (rebalance); og'ir ishlov bo'lsa records ni kamaytirish yoki limitni oshirish."
+    },
+    {
+      "id": 31189,
+      "code": "KF4",
+      "level": "S",
+      "type": "card",
+      "topic": "Kafka",
+      "domain": "kafka",
+      "section": "m1",
+      "question": "Schema Registry nima uchun kerak?",
+      "explanation": "Avro/Protobuf/JSON Schema sxemalarini markazda saqlaydi, versiyalaydi va moslik (backward/forward) qoidasini tekshiradi; xabarda faqat schema ID."
+    },
+    {
+      "id": 31190,
+      "code": "KF5",
+      "level": "St",
+      "type": "card",
+      "topic": "Kafka",
+      "domain": "kafka",
+      "section": "m1",
+      "question": "KRaft nima va ZooKeeper'dan nimasi bilan farq qiladi?",
+      "explanation": "Kafka metadata'ni o'zining Raft kvorumi (controller'lar) da saqlaydi; ZooKeeper kerak emas, failover tezroq, partition limiti kattaroq. Kafka 4.0 da ZooKeeper olib tashlangan."
+    },
+    {
+      "id": 31191,
+      "code": "KF6",
+      "level": "St",
+      "type": "card",
+      "topic": "Kafka",
+      "domain": "kafka",
+      "section": "m1",
+      "question": "Tiered storage nima beradi?",
+      "explanation": "Eski log segmentlari obyekt omboriga (S3) ko'chiriladi; broker diski kichik, retention uzun va arzon, broker almashtirish tez."
     }
   ]
 }

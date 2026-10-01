@@ -1,165 +1,164 @@
 {
- "id": "v4",
- "name": "Linux filesystems",
- "domain": "linux",
- "domainLabel": "Linux",
- "topics": [
-  "Filesystems"
- ],
- "questions": [
-  {
-   "id": 31103,
-   "code": "LF01",
-   "level": "J",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "Linux katalog ierarxiyasi (FHS): /etc, /var, /usr, /opt, /tmp nima uchun?",
-   "explanation": "/etc — config, /var — o'zgaruvchan ma'lumot (log, db), /usr — o'rnatilgan dastur, /opt — 3rd party, /tmp — vaqtinchalik."
-  },
-  {
-   "id": 31104,
-   "code": "LF02",
-   "level": "J",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "mount va /etc/fstab nima? Nega UUID ishlatiladi?",
-   "explanation": "mount — qurilmani dir'ga ulaydi. fstab — boot'da avtomatik. /dev/sdX nomi o'zgarishi mumkin, UUID o'zgarmaydi."
-  },
-  {
-   "id": 31105,
-   "code": "LF03",
-   "level": "J",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "df va du farqi nima?",
-   "explanation": "df — FS darajasida bo'sh/band joy. du — fayl/dir hajmini yig'adi."
-  },
-  {
-   "id": 31106,
-   "code": "LF04",
-   "level": "M",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "ext4, XFS va Btrfs farqi; qachon qaysi?",
-   "explanation": "ext4 — universal, shrink mumkin. XFS — katta fayl, parallel IO, shrink yo'q (RHEL default). Btrfs — CoW, snapshot, checksum."
-  },
-  {
-   "id": 31107,
-   "code": "LF05",
-   "level": "M",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "Disk to'liq emas (df), lekin 'No space left on device'. Sabab?",
-   "explanation": "Inode tugagan (ko'p kichik fayl), reserved blocks, yoki o'chirilgan lekin ochiq fayl boshqa holat. df -i tekshir."
-  },
-  {
-   "id": 31108,
-   "code": "LF06",
-   "level": "M",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "O'chirilgan fayl joyni bo'shatmayapti. Nega va qanday hal qilinadi?",
-   "explanation": "Process faylni ochiq ushlab turibdi; inode link soni 0 lekin fd bor. lsof +L1, process restart yoki fd'ni truncate."
-  },
-  {
-   "id": 31109,
-   "code": "LF07",
-   "level": "M",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "Journaling nima va ext4 data=ordered rejimi nimani kafolatlaydi?",
-   "explanation": "Metadata o'zgarishi avval jurnalga yoziladi — crash'dan keyin FS izchil. ordered: data metadata'dan oldin diskka tushadi."
-  },
-  {
-   "id": 31110,
-   "code": "LF08",
-   "level": "M",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "tmpfs, procfs, sysfs nima?",
-   "explanation": "tmpfs — RAM'dagi FS. procfs (/proc) — process va kernel holati. sysfs (/sys) — qurilma va driver parametrlari."
-  },
-  {
-   "id": 31111,
-   "code": "LF09",
-   "level": "M",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "Foydali mount opsiyalari: noatime, noexec, nosuid, nodev, ro.",
-   "explanation": "noatime — o'qishda atime yozilmaydi (IO kamayadi). noexec/nosuid/nodev — /tmp kabi joylarda xavfsizlik."
-  },
-  {
-   "id": 31112,
-   "code": "LF10",
-   "level": "S",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "fsync, page cache va 'yozildi' degan nima? Ma'lumot qachon yo'qolishi mumkin?",
-   "explanation": "write() page cache'ga yozadi; diskka keyin. fsync gacha crash = yo'qotish. Yangi faylda dir'ni ham fsync qil."
-  },
-  {
-   "id": 31113,
-   "code": "LF11",
-   "level": "S",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "XFS'ni kichraytirish kerak bo'lsa nima qilasan?",
-   "explanation": "XFS shrink qo'llamaydi. Yangi kichik LV/disk, xfsdump/rsync bilan ko'chirish, mount almashtirish."
-  },
-  {
-   "id": 31114,
-   "code": "LF12",
-   "level": "S",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "Copy-on-write FS (Btrfs/ZFS) va DB: qanday muammo bor?",
-   "explanation": "CoW random write'da fragmentatsiya va write amplification beradi. DB uchun nodatacow/chattr +C yoki ZFS recordsize tuning."
-  },
-  {
-   "id": 31115,
-   "code": "LF13",
-   "level": "S",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "FS buzilganda (fsck) qanday tiklash va xavfsizlik qoidalari?",
-   "explanation": "Faqat unmount holatda fsck/xfs_repair. Avval disk image/snapshot. dmesg'da IO xatolarini tekshir."
-  },
-  {
-   "id": 31116,
-   "code": "LF14",
-   "level": "St",
-   "type": "card",
-   "topic": "Filesystems",
-   "domain": "linux",
-   "section": "v4",
-   "question": "Ko'p node bitta FS'ga yozishi kerak: NFS, CephFS, object storage — qanday tanlaysan?",
-   "explanation": "NFS — oddiy, bitta server, lock/cache muammolari. CephFS/GlusterFS — taqsimlangan POSIX. Object storage (S3) — eng scalable, POSIX emas."
-  }
- ]
+  "id": "v4",
+  "name": "Linux filesystems",
+  "domain": "linux",
+  "topics": [
+    "Filesystems"
+  ],
+  "questions": [
+    {
+      "id": 31103,
+      "code": "LF01",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Linux katalog ierarxiyasi (FHS): /etc, /var, /usr, /opt, /tmp nima uchun?",
+      "explanation": "/etc — config, /var — o'zgaruvchan ma'lumot (log, db), /usr — o'rnatilgan dastur, /opt — 3rd party, /tmp — vaqtinchalik."
+    },
+    {
+      "id": 31104,
+      "code": "LF02",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "mount va /etc/fstab nima? Nega UUID ishlatiladi?",
+      "explanation": "mount — qurilmani dir'ga ulaydi. fstab — boot'da avtomatik. /dev/sdX nomi o'zgarishi mumkin, UUID o'zgarmaydi."
+    },
+    {
+      "id": 31105,
+      "code": "LF03",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "df va du farqi nima?",
+      "explanation": "df — FS darajasida bo'sh/band joy. du — fayl/dir hajmini yig'adi."
+    },
+    {
+      "id": 31106,
+      "code": "LF04",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "ext4, XFS va Btrfs farqi; qachon qaysi?",
+      "explanation": "ext4 — universal, shrink mumkin. XFS — katta fayl, parallel IO, shrink yo'q (RHEL default). Btrfs — CoW, snapshot, checksum."
+    },
+    {
+      "id": 31107,
+      "code": "LF05",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Disk to'liq emas (df), lekin 'No space left on device'. Sabab?",
+      "explanation": "Inode tugagan (ko'p kichik fayl), reserved blocks, yoki o'chirilgan lekin ochiq fayl boshqa holat. df -i tekshir."
+    },
+    {
+      "id": 31108,
+      "code": "LF06",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "O'chirilgan fayl joyni bo'shatmayapti. Nega va qanday hal qilinadi?",
+      "explanation": "Process faylni ochiq ushlab turibdi; inode link soni 0 lekin fd bor. lsof +L1, process restart yoki fd'ni truncate."
+    },
+    {
+      "id": 31109,
+      "code": "LF07",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Journaling nima va ext4 data=ordered rejimi nimani kafolatlaydi?",
+      "explanation": "Metadata o'zgarishi avval jurnalga yoziladi — crash'dan keyin FS izchil. ordered: data metadata'dan oldin diskka tushadi."
+    },
+    {
+      "id": 31110,
+      "code": "LF08",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "tmpfs, procfs, sysfs nima?",
+      "explanation": "tmpfs — RAM'dagi FS. procfs (/proc) — process va kernel holati. sysfs (/sys) — qurilma va driver parametrlari."
+    },
+    {
+      "id": 31111,
+      "code": "LF09",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Foydali mount opsiyalari: noatime, noexec, nosuid, nodev, ro.",
+      "explanation": "noatime — o'qishda atime yozilmaydi (IO kamayadi). noexec/nosuid/nodev — /tmp kabi joylarda xavfsizlik."
+    },
+    {
+      "id": 31112,
+      "code": "LF10",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "fsync, page cache va 'yozildi' degan nima? Ma'lumot qachon yo'qolishi mumkin?",
+      "explanation": "write() page cache'ga yozadi; diskka keyin. fsync gacha crash = yo'qotish. Yangi faylda dir'ni ham fsync qil."
+    },
+    {
+      "id": 31113,
+      "code": "LF11",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "XFS'ni kichraytirish kerak bo'lsa nima qilasan?",
+      "explanation": "XFS shrink qo'llamaydi. Yangi kichik LV/disk, xfsdump/rsync bilan ko'chirish, mount almashtirish."
+    },
+    {
+      "id": 31114,
+      "code": "LF12",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Copy-on-write FS (Btrfs/ZFS) va DB: qanday muammo bor?",
+      "explanation": "CoW random write'da fragmentatsiya va write amplification beradi. DB uchun nodatacow/chattr +C yoki ZFS recordsize tuning."
+    },
+    {
+      "id": 31115,
+      "code": "LF13",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "FS buzilganda (fsck) qanday tiklash va xavfsizlik qoidalari?",
+      "explanation": "Faqat unmount holatda fsck/xfs_repair. Avval disk image/snapshot. dmesg'da IO xatolarini tekshir."
+    },
+    {
+      "id": 31116,
+      "code": "LF14",
+      "level": "St",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Ko'p node bitta FS'ga yozishi kerak: NFS, CephFS, object storage — qanday tanlaysan?",
+      "explanation": "NFS — oddiy, bitta server, lock/cache muammolari. CephFS/GlusterFS — taqsimlangan POSIX. Object storage (S3) — eng scalable, POSIX emas."
+    }
+  ]
 }

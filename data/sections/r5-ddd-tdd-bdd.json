@@ -2,7 +2,6 @@
   "id": "r5",
   "name": "DDD / TDD / BDD",
   "domain": "arch",
-  "domainLabel": "Architecture & OOP",
   "topics": [
     "DDD",
     "TDD",

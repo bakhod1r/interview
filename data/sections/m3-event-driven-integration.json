@@ -1,8 +1,7 @@
 {
   "id": "m3",
   "name": "Event-driven & integration",
-  "domain": "msg",
-  "domainLabel": "Kafka & messaging",
+  "domain": "evt",
   "topics": [
     "EDA",
     "Integration",
@@ -15,7 +14,7 @@
       "level": "St",
       "type": "card",
       "topic": "Integration",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Servis DBga order yozadi va Kafka'ga event yuboradi. Biri success'li, ikkinchisi yiqilishi mumkin. Qaysi pattern buni hal qiladi?",
       "explanation": "Dual-write muammosi. Outbox atomiklikni DB transaction'siga keltiradi. Kafolat — at-least-once, shuning uchun consumer'lar idempotent bo'lishi kerak (event_id bo'yicha dedup). 2PC Kafka bilan amalda qo'llanmaydi va availability'ni tushiradi."
@@ -26,7 +25,7 @@
       "level": "St",
       "type": "card",
       "topic": "CDC",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Debezium kabi CDC toollari Postgres'dan o'zgarishlarni qanday oladi?",
       "explanation": "Logical replication slot WAL'ni consumer o'qiguncha saqlaydi. Xavf: consumer to'xtasa slot WAL'ni ushlab turadi va disk to'lib, primary yiqiladi — slot lag monitoringi va max_slot_wal_keep_size majburiy. Afzallik: ilovaga o'zgarish kerak emas, commit tartibi saqlanadi."
@@ -37,7 +36,7 @@
       "level": "St",
       "type": "card",
       "topic": "EDA",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Event'lar sxemasi vaqt o'tib o'zgaradi. Buni qanday boshqarasiz?",
       "explanation": "Staff signal: event'ni public API kabi ko'rish va compatibility'ni avtomatik tekshirish. Ko'p jamoa aynan shu yerda og'riq oladi."
@@ -48,7 +47,7 @@
       "level": "S",
       "type": "card",
       "topic": "EDA",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Event dizaynida 'event notification' va 'event-carried state transfer' farqi va tanlovi?",
       "explanation": "Amaliy tanlov: ichki, tez o'zgaradigan va katta ma'lumotda notification + callback; consumer autonomiyasi muhim (tashqi jamoa, offline ishlash) bo'lsa state transfer. Ikkinchisida eventda versiya va `occurred_at` bo'lishi shart, chunki tartib buzilishi mumkin — consumer eski eventni yangi holat ustiga qo'llamasligi kerak."
@@ -59,7 +58,7 @@
       "level": "S",
       "type": "card",
       "topic": "EDA",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Saga'da compensation nima va nega 'rollback' emas?",
       "explanation": "Muhim detallar: compensation har doim to'liq qaytarmaydi (yuborilgan email qaytmaydi — shuning uchun 'semantik' compensation, masalan bekor qilish xabari). Kerak: har qadam holati saqlanadigan saga log (orchestrator yoki state machine), timeout bo'yicha compensation, va pivot qadam tushunchasi — undan keyin faqat oldinga borish mumkin."
@@ -70,7 +69,7 @@
       "level": "S",
       "type": "card",
       "topic": "EDA",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Orchestration va choreography orasida qanday tanlanadi?",
       "explanation": "Amaliy qoida: murakkab, pul yoki SLA'ga bog'liq, ko'p qadamli va compensation talab qiladigan jarayon — orchestration (Temporal/Camunda yoki o'z state machine). Oddiy reaktiv ta'sirlar (email yuborish, analitika, kesh invalidatsiyasi) — choreography. Ko'pincha ikkisi birga: yadro jarayon orkestrlangan, yon effektlar event orqali."
@@ -81,7 +80,7 @@
       "level": "St",
       "type": "card",
       "topic": "CDC",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Debezium bilan CDC joriy qilishda asosiy xatarlar?",
       "explanation": "Eng xavfli operatsion nuqta — to'xtagan slot: `pg_replication_slots.restart_lsn` orqada qolsa WAL o'chmaydi va primary disk to'ladi (alert shart). Coupling muammosining yechimi — CDC'ni to'g'ridan-to'g'ri iste'molchiga bermay, anti-corruption qatlamda public eventga aylantirish (yoki outbox jadvalini CDC qilish — sxema o'zingiz nazoratidagi kontrakt)."
@@ -92,7 +91,7 @@
       "level": "S",
       "type": "card",
       "topic": "Integration",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Tashqi provayder webhook yuboradi. Ishonchli qabul qilish uchun minimal talablar?",
       "explanation": "Provayder retry qiladi — dublikat kafolatlangan. Sinxron og'ir ishlov timeout keltiradi va provayder yana yuboradi (ish ikki marta bajariladi). Shuning uchun: raw saqlash → 200 → queue → idempotent handler. Imzoda vaqt oynasi (masalan 5 daqiqa) replay hujumini cheklaydi, tekshiruv `hmac.Equal` bilan constant-time bo'lishi kerak."
@@ -103,7 +102,7 @@
       "level": "S",
       "type": "card",
       "topic": "EDA",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Event sxemasini o'zgartirish kerak: `amount` (int) → `money {amount, currency}`. Qanday?",
       "explanation": "Event — kontrakt, deploy tartibi noma'lum: consumer'lar sizdan keyin ham eski kodda bo'lishi mumkin va retention tufayli eski eventlar qayta o'qiladi. Shuning uchun faqat qo'shimcha o'zgarish (backward compatible), migratsiya bosqichli, va schema registry'da compatibility rejimi (BACKWARD) majburiy. Eski maydonni o'chirish uchun retention oynasini ham kutish kerak."
@@ -114,7 +113,7 @@
       "level": "St",
       "type": "card",
       "topic": "EDA",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Event sourcing'da snapshot va projection nima uchun kerak?",
       "explanation": "Operatsion nozikliklar: projection eventual consistent — UI 'yozdim lekin ro'yxatda yo'q' holatini boshqarishi kerak (o'z yozuvini optimistik ko'rsatish yoki kutish); projection'ni noldan qayta qurish vaqti o'lchanadi va reja bo'lishi kerak; event sxemasi versiyalanadi, chunki eski eventlar abadiy o'qiladi (upcasting)."
@@ -125,7 +124,7 @@
       "level": "S",
       "type": "card",
       "topic": "Integration",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Tashqi tizimga integratsiyada anti-corruption layer (ACL) nima beradi?",
       "explanation": "Belgisi: agar domen kodida PSP yoki CRM maydonlari nomlari paydo bo'lsa (`stripe_customer_id` domen entity'sida) — ACL yo'q. To'g'ri: adapter tashqi javobni domen qiymat obyektlariga aylantiradi, xatolarni domen xatolariga xaritalaydi, va tashqi tizim o'zgarganda faqat adapter va uning testlari o'zgaradi."
@@ -136,7 +135,7 @@
       "level": "S",
       "type": "card",
       "topic": "EDA",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Eventda qancha ma'lumot bo'lishi kerak — minimal yoki to'liq?",
       "explanation": "Amaliy mezon: 'consumer bu eventni qayta ishlash uchun sizga qayta murojaat qilishi kerakmi?' — ha bo'lsa, ehtimol ma'lumot yetishmayapti. Lekin DB qatorini shundoq yuborish (CDC'ni public event sifatida) eng yomon variant: ichki sxema tashqi kontraktga aylanadi. O'rta yo'l — aniq loyihalangan domen eventi."
@@ -147,7 +146,7 @@
       "level": "St",
       "type": "card",
       "topic": "Integration",
-      "domain": "msg",
+      "domain": "evt",
       "section": "m3",
       "question": "Uchinchi tomon API'si kuniga 10k so'rov limiti bor, sizga 50k kerak. Qanday hal qilasiz?",
       "explanation": "Texnik yechim ketma-ketligi: (1) so'rovlar profilini o'lchash — ko'pincha 70% takroriy; (2) kesh va dedupe (single-flight); (3) webhook/push bilan pull'ni almashtirish; (4) qolganini rate limiter bilan tekislash va navbat kutish vaqtini SLA sifatida ko'rsatish. Ko'p akkaunt — shartnoma buzilishi, texnik yechim emas."

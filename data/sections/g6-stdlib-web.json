@@ -2,7 +2,6 @@
   "id": "g6",
   "name": "Stdlib & web",
   "domain": "go",
-  "domainLabel": "Go",
   "topics": [
     "Stdlib"
   ],

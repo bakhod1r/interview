@@ -2,7 +2,6 @@
   "id": "g7",
   "name": "Runtime internals",
   "domain": "go",
-  "domainLabel": "Go",
   "topics": [
     "Runtime"
   ],

@@ -2,7 +2,6 @@
   "id": "t3",
   "name": "System & infra gotchas",
   "domain": "sys",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "System gotcha"
   ],

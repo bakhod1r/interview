@@ -1,6 +1,6 @@
 {
   "id": "n2",
-  "name": "MongoDB",
+  "name": "MongoDB basics",
   "domain": "mongo",
   "topics": [
     "MongoDB"
@@ -185,6 +185,116 @@
       "section": "n2",
       "question": "MongoDB change streams nima va cheklovlari?",
       "explanation": "Amaliy qo'llanish: kesh invalidatsiyasi, qidiruv indeksiga sinxronlash, event chiqarish (Kafka'ga ko'prik). Ishonchlilik uchun resume token doimiy saqlanadi va oplog oynasi tiklanish vaqtidan katta bo'lishi kerak — aks holda to'liq qayta sinxronlash rejasi bo'lishi shart."
+    },
+    {
+      "id": 31130,
+      "code": "MG1",
+      "level": "J",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "MongoDB'da `_id` va `ObjectId` nima?",
+      "explanation": "Har hujjatda majburiy unique `_id`; berilmasa driver `ObjectId` yaratadi (12 bayt: vaqt + tasodifiy + counter)."
+    },
+    {
+      "id": 31131,
+      "code": "MG2",
+      "level": "J",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "MongoDB'da asosiy CRUD amallari qaysilar?",
+      "explanation": "insertOne/insertMany, find/findOne, updateOne/updateMany ($set, $inc), deleteOne/deleteMany, replaceOne."
+    },
+    {
+      "id": 31132,
+      "code": "MG3",
+      "level": "M",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "`explain()` chiqishida nimaga qaraysiz?",
+      "explanation": "winningPlan: IXSCAN yoki COLLSCAN; totalDocsExamined vs nReturned nisbati; SORT bosqichi xotirada bo'lyaptimi."
+    },
+    {
+      "id": 31133,
+      "code": "MG4",
+      "level": "M",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "TTL index nima va qanday ishlaydi?",
+      "explanation": "Date maydonga qo'yiladigan index; fon thread har ~60 sekundda muddati o'tgan hujjatlarni o'chiradi."
+    },
+    {
+      "id": 31134,
+      "code": "MG5",
+      "level": "M",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "Read preference (`primary`, `secondary`, `nearest`) nima?",
+      "explanation": "Client o'qishni qaysi replica set a'zosidan qilishini belgilaydi; secondary'dan o'qish eski ma'lumot berishi mumkin."
+    },
+    {
+      "id": 31135,
+      "code": "MG6",
+      "level": "S",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "Read concern (`local`, `majority`, `linearizable`) nima?",
+      "explanation": "O'qilgan ma'lumot qanchalik 'mustahkam' ekanini belgilaydi: majority — rollback bo'lmaydigan ma'lumot."
+    },
+    {
+      "id": 31136,
+      "code": "MG7",
+      "level": "S",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "MongoDB schema validation qanday yoqiladi va nega kerak?",
+      "explanation": "Collection'ga `$jsonSchema` validator qo'yiladi; noto'g'ri hujjat yozilishini DB darajasida to'xtatadi."
+    },
+    {
+      "id": 31137,
+      "code": "MG8",
+      "level": "S",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "WiredTiger storage engine haqida nimani bilish kerak?",
+      "explanation": "Document-level locking, compression, MVCC snapshot, o'z cache'i (RAM'ning ~50%) + OS page cache."
+    },
+    {
+      "id": 31138,
+      "code": "MG9",
+      "level": "St",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "Hashed va ranged sharding farqi? Qaysi qachon?",
+      "explanation": "Hashed — yozuvni teng taqsimlaydi, lekin range query barcha shardga boradi; ranged — range query tez, lekin monoton kalitda hot shard."
+    },
+    {
+      "id": 31139,
+      "code": "MG10",
+      "level": "St",
+      "type": "card",
+      "topic": "MongoDB",
+      "domain": "mongo",
+      "section": "n2",
+      "question": "Bucket pattern nima va time-series uchun nega foydali?",
+      "explanation": "Har o'lchov alohida hujjat emas — bir vaqt oynasidagi o'lchovlar bitta hujjat ichida massivda; hujjat va index soni keskin kamayadi."
     }
   ]
 }

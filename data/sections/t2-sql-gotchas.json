@@ -2,7 +2,6 @@
   "id": "t2",
   "name": "SQL gotchas",
   "domain": "db",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "SQL gotcha"
   ],

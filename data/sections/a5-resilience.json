@@ -2,7 +2,6 @@
   "id": "a5",
   "name": "Resilience",
   "domain": "api",
-  "domainLabel": "API, HTTP, security",
   "topics": [
     "Resilience"
   ],

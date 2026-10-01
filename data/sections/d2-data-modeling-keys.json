@@ -2,7 +2,6 @@
   "id": "d2",
   "name": "Data modeling & keys",
   "domain": "db",
-  "domainLabel": "PostgreSQL & SQL",
   "topics": [
     "Keys",
     "Design",

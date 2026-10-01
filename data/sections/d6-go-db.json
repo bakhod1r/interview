@@ -1,0 +1,156 @@
+{
+  "id": "d6",
+  "name": "Go + DB",
+  "domain": "db",
+  "topics": [
+    "Go+DB"
+  ],
+  "questions": [
+    {
+      "id": 5014,
+      "code": "V15",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Go'da <code>database/sql</code> yoki <code>pgx</code> pool'ini sozlashda eng muhim parametr?",
+      "explanation": "Default MaxOpenConns — cheksiz: 50 pod × cheksiz = DB yiqiladi. Hisob: hamma instance × pool ≤ max_connections minus zaxira. MaxIdleConns MaxOpenConns'dan kichik bo'lsa, connection'lar doim yopilib-ochiladi (TLS handshake narxi). ConnMaxLifetime — LB va failover'dan keyin eski connection'larni tozalaydi.",
+      "source": "https://pkg.go.dev/database/sql#DB.SetMaxOpenConns"
+    },
+    {
+      "id": 5015,
+      "code": "V16",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Go'da <code>rows, err := db.QueryContext(...)</code> dan keyin eng ko'p uchraydigan xato?",
+      "explanation": "rows.Close() bitta row qolib ketganda ham zarur (return yoki break bilan chiqilsa). QueryRow'da Close kerak emas — Scan o'zi yopadi. Context bekor bo'lsa query ham bekor qilinadi (Postgres'ga cancel yuboriladi) — HTTP handler context'ini DB chaqiruviga uzating."
+    },
+    {
+      "id": 5016,
+      "code": "V17",
+      "level": "S",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "PgBouncer transaction mode ortida Go ilovasi 'prepared statement does not exist' xatosi beryapti. Sabab?",
+      "explanation": "Transaction mode'da yo'qoladigan boshqa narsalar: SET, LISTEN/NOTIFY, temp table'lar, session-level advisory lock. Shuning uchun advisory lock kerak bo'lsa transaction-level (pg_advisory_xact_lock) variantini ishlating."
+    },
+    {
+      "id": 14028,
+      "code": "SR29",
+      "level": "S",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Go'da NULL bo'lishi mumkin bo'lgan ustunlarni qanday o'qiysiz?",
+      "explanation": "Amaliy maslahat: domain modelda Null* tiplarini tarqatmang — repository qatlamida pointer yoki default qiymatga aylantiring. Ko'pincha eng yaxshi yechim — sxemada NOT NULL DEFAULT qo'yib, NULL'ni umuman yo'q qilish."
+    },
+    {
+      "id": 30822,
+      "code": "PG23",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Go'da <code>database/sql</code> bilan tranzaksiyani to'g'ri yozish shabloni qanday?",
+      "snippet": "tx, err := db.BeginTx(ctx, nil)\nif err != nil { return err }\n// ... ?",
+      "explanation": "`BeginTx` dan keyin darhol `defer tx.Rollback()` — commit bo'lgandan keyin Rollback `sql.ErrTxDone` qaytaradi va zararsiz. Har query `tx.ExecContext/QueryContext` orqali (db. emas — aks holda boshqa connection, tx tashqarisida). Oxirida `return tx.Commit()` va uning xatosini tekshirish. Tx ichida tashqi HTTP yo'q, context uzatiladi."
+    },
+    {
+      "id": 30823,
+      "code": "PG24",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Bu Go kodining muammosi nima va qanday tuzatiladi?",
+      "snippet": "q := \"SELECT * FROM users WHERE email = '\" + email + \"'\"\nrows, err := db.QueryContext(ctx, q)",
+      "explanation": "SQL injection: `email = \"' OR '1'='1\"` yoki `'; DROP TABLE users; --` query mantiqini o'zgartiradi. Yechim — placeholder (`$1` Postgres, `?` MySQL): qiymat query matnidan alohida yuboriladi, hech qachon SQL sifatida parse qilinmaydi. Table/column nomlarini parametr qilib bo'lmaydi — ular uchun whitelist. ORDER BY yo'nalishi ham whitelist."
+    },
+    {
+      "id": 30824,
+      "code": "PG25",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "HTTP handler'da DB query'ga <code>r.Context()</code> uzatish va timeout qo'yish nima beradi?",
+      "explanation": "Client uzilsa yoki timeout tugasa context bekor bo'ladi — driver Postgres'ga cancel request yuboradi, query to'xtaydi, connection bo'shaydi. Uzatilmasa: client ketgan, lekin og'ir query DB'da ishlayveradi, pool band. `context.WithTimeout` — har so'rovga yuqori chegara. Server tomonda ham `statement_timeout` — ikki qavat himoya."
+    },
+    {
+      "id": 31197,
+      "code": "GDB1",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "`pgx` va `database/sql` (lib/pq) farqi? Qaysi birini tanlaysiz?",
+      "explanation": "pgx — Postgres'ga xos, tezroq, COPY, LISTEN/NOTIFY, batch, ko'p tur qo'llab-quvvatlaydi; database/sql — umumiy interfeys. Yangi loyihada pgx (pgxpool)."
+    },
+    {
+      "id": 31198,
+      "code": "GDB2",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "sqlc, ORM (GORM) va qo'lda SQL — qanday tanlanadi?",
+      "explanation": "sqlc — SQL yozasiz, type-safe Go kod generatsiya qilinadi; GORM — tez CRUD, lekin yashirin query va N+1; qo'lda SQL — to'liq nazorat, ko'p boilerplate."
+    },
+    {
+      "id": 31199,
+      "code": "GDB3",
+      "level": "S",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Go'dan Postgres'ga million qatorni tez yuklash usuli?",
+      "explanation": "COPY protokoli (`pgx.CopyFrom`) — INSERT'dan 10x+ tez; yoki multi-row INSERT / batch; indeks va triggerlarni hisobga olish."
+    },
+    {
+      "id": 31200,
+      "code": "GDB4",
+      "level": "S",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Integration testlarda haqiqiy Postgres qanday ishlatiladi?",
+      "explanation": "testcontainers-go bilan test vaqtida konteyner; migratsiyalar qo'llanadi; har test transaction ichida va oxirida rollback yoki alohida schema/DB."
+    },
+    {
+      "id": 31201,
+      "code": "GDB5",
+      "level": "S",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Go'da Postgres `LISTEN/NOTIFY` dan qanday foydalaniladi va cheklovlari?",
+      "explanation": "Alohida ulanishda LISTEN, `WaitForNotification`; payload ≤ 8KB, ulanish uzilsa xabarlar yo'qoladi — ishonchli navbat emas."
+    },
+    {
+      "id": 31202,
+      "code": "GDB6",
+      "level": "St",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d6",
+      "question": "Ko'p goroutine'li servisda pool to'lib, so'rovlar `context deadline exceeded` bilan tushyapti. Qanday tahlil qilasiz?",
+      "explanation": "pool.Stat() (AcquireCount, EmptyAcquireCount, AcquireDuration), sekin query'lar, yopilmagan rows/tx (leak), uzun transaction ichida tashqi chaqiruv."
+    }
+  ]
+}

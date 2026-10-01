@@ -2,7 +2,6 @@
   "id": "t12",
   "name": "Security gotchas",
   "domain": "sec",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Security gotcha"
   ],

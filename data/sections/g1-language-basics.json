@@ -2,7 +2,6 @@
   "id": "g1",
   "name": "Language basics",
   "domain": "go",
-  "domainLabel": "Go",
   "topics": [
     "Basics",
     "Interfaces",

@@ -2,7 +2,6 @@
   "id": "r4",
   "name": "Clean code & architecture",
   "domain": "arch",
-  "domainLabel": "Architecture & OOP",
   "topics": [
     "Architecture style",
     "Clean code",

@@ -2,7 +2,6 @@
   "id": "s2",
   "name": "Practice: failure & scale",
   "domain": "dist",
-  "domainLabel": "Distributed systems",
   "topics": [
     "Failure",
     "Fundamentals",

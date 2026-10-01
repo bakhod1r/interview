@@ -1,8 +1,7 @@
 {
   "id": "d5",
-  "name": "Operations, scaling, Go+DB",
+  "name": "Replication, scaling, ops",
   "domain": "db",
-  "domainLabel": "PostgreSQL & SQL",
   "topics": [
     "Migrations",
     "Migration",
@@ -12,8 +11,7 @@
     "Partitioning",
     "Sharding",
     "Incident",
-    "Cost",
-    "Go+DB"
+    "Cost"
   ],
   "questions": [
     {
@@ -217,40 +215,6 @@
       "explanation": "Diagnostika: EXPLAIN (ANALYZE) da 'rows' taxmini va 'actual rows' farqi — statistikaga ishora; ANALYZE yoki column uchun statistika maqsadini oshirish (ALTER TABLE ... SET STATISTICS), ko'p column'li bog'liqlik uchun CREATE STATISTICS. Vaqtinchalik chora sifatida query'ni qayta yozish (masalan LATERAL yoki CTE MATERIALIZED) ishlatiladi."
     },
     {
-      "id": 5014,
-      "code": "V15",
-      "level": "M",
-      "type": "card",
-      "topic": "Go+DB",
-      "domain": "db",
-      "section": "d5",
-      "question": "Go'da <code>database/sql</code> yoki <code>pgx</code> pool'ini sozlashda eng muhim parametr?",
-      "explanation": "Default MaxOpenConns — cheksiz: 50 pod × cheksiz = DB yiqiladi. Hisob: hamma instance × pool ≤ max_connections minus zaxira. MaxIdleConns MaxOpenConns'dan kichik bo'lsa, connection'lar doim yopilib-ochiladi (TLS handshake narxi). ConnMaxLifetime — LB va failover'dan keyin eski connection'larni tozalaydi.",
-      "source": "https://pkg.go.dev/database/sql#DB.SetMaxOpenConns"
-    },
-    {
-      "id": 5015,
-      "code": "V16",
-      "level": "M",
-      "type": "card",
-      "topic": "Go+DB",
-      "domain": "db",
-      "section": "d5",
-      "question": "Go'da <code>rows, err := db.QueryContext(...)</code> dan keyin eng ko'p uchraydigan xato?",
-      "explanation": "rows.Close() bitta row qolib ketganda ham zarur (return yoki break bilan chiqilsa). QueryRow'da Close kerak emas — Scan o'zi yopadi. Context bekor bo'lsa query ham bekor qilinadi (Postgres'ga cancel yuboriladi) — HTTP handler context'ini DB chaqiruviga uzating."
-    },
-    {
-      "id": 5016,
-      "code": "V17",
-      "level": "S",
-      "type": "card",
-      "topic": "Go+DB",
-      "domain": "db",
-      "section": "d5",
-      "question": "PgBouncer transaction mode ortida Go ilovasi 'prepared statement does not exist' xatosi beryapti. Sabab?",
-      "explanation": "Transaction mode'da yo'qoladigan boshqa narsalar: SET, LISTEN/NOTIFY, temp table'lar, session-level advisory lock. Shuning uchun advisory lock kerak bo'lsa transaction-level (pg_advisory_xact_lock) variantini ishlating."
-    },
-    {
       "id": 14010,
       "code": "SR11",
       "level": "S",
@@ -261,17 +225,6 @@
       "question": "Ilovada 200 ta ishchi thread/goroutine bor, DB pool hajmi 30. Yuk oshganda nima bo'ladi?",
       "explanation": "Kuzatiladigan metrika: pool wait time va band ulanishlar ulushi. Pool'ni ko'r-ko'rona oshirish DB'ni yiqitadi (Postgres'da har ulanish — alohida process). To'g'ri yo'l: sekin query'larni tuzatish, tranzaksiyani qisqartirish, kerakli joyda kesh, va ilova darajasida konkurentlikni cheklash (semaphore).",
       "source": "https://www.secondtalent.com/interview-guide/backend-performance-optimization/"
-    },
-    {
-      "id": 14028,
-      "code": "SR29",
-      "level": "S",
-      "type": "card",
-      "topic": "Go+DB",
-      "domain": "db",
-      "section": "d5",
-      "question": "Go'da NULL bo'lishi mumkin bo'lgan ustunlarni qanday o'qiysiz?",
-      "explanation": "Amaliy maslahat: domain modelda Null* tiplarini tarqatmang — repository qatlamida pointer yoki default qiymatga aylantiring. Ko'pincha eng yaxshi yechim — sxemada NOT NULL DEFAULT qo'yib, NULL'ni umuman yo'q qilish."
     },
     {
       "id": 30229,
@@ -525,41 +478,6 @@
       "section": "d5",
       "question": "Postgres'dan Kafka'ga o'zgarishlarni (CDC) qanday oqizasiz? Debezium ishlatganda nimalarga e'tibor berasiz?",
       "explanation": "Logical decoding: replication slot + `pgoutput` plugin, publication; Debezium WAL'dan row o'zgarishlarini o'qib Kafka'ga yozadi. E'tibor: slot iste'mol qilinmasa WAL to'planadi (disk to'ladi) — `max_slot_wal_keep_size`, monitoring; failover'da slot (PG17 failover slots); `REPLICA IDENTITY` (UPDATE/DELETE'da eski qiymatlar), DDL replikatsiya qilinmaydi — sxema evolyutsiyasi; initial snapshot; at-least-once — consumer idempotent. Outbox table + CDC — domain event'lar uchun toza naqsh."
-    },
-    {
-      "id": 30822,
-      "code": "PG23",
-      "level": "M",
-      "type": "card",
-      "topic": "Go+DB",
-      "domain": "db",
-      "section": "d5",
-      "question": "Go'da <code>database/sql</code> bilan tranzaksiyani to'g'ri yozish shabloni qanday?",
-      "snippet": "tx, err := db.BeginTx(ctx, nil)\nif err != nil { return err }\n// ... ?",
-      "explanation": "`BeginTx` dan keyin darhol `defer tx.Rollback()` — commit bo'lgandan keyin Rollback `sql.ErrTxDone` qaytaradi va zararsiz. Har query `tx.ExecContext/QueryContext` orqali (db. emas — aks holda boshqa connection, tx tashqarisida). Oxirida `return tx.Commit()` va uning xatosini tekshirish. Tx ichida tashqi HTTP yo'q, context uzatiladi."
-    },
-    {
-      "id": 30823,
-      "code": "PG24",
-      "level": "M",
-      "type": "card",
-      "topic": "Go+DB",
-      "domain": "db",
-      "section": "d5",
-      "question": "Bu Go kodining muammosi nima va qanday tuzatiladi?",
-      "snippet": "q := \"SELECT * FROM users WHERE email = '\" + email + \"'\"\nrows, err := db.QueryContext(ctx, q)",
-      "explanation": "SQL injection: `email = \"' OR '1'='1\"` yoki `'; DROP TABLE users; --` query mantiqini o'zgartiradi. Yechim — placeholder (`$1` Postgres, `?` MySQL): qiymat query matnidan alohida yuboriladi, hech qachon SQL sifatida parse qilinmaydi. Table/column nomlarini parametr qilib bo'lmaydi — ular uchun whitelist. ORDER BY yo'nalishi ham whitelist."
-    },
-    {
-      "id": 30824,
-      "code": "PG25",
-      "level": "M",
-      "type": "card",
-      "topic": "Go+DB",
-      "domain": "db",
-      "section": "d5",
-      "question": "HTTP handler'da DB query'ga <code>r.Context()</code> uzatish va timeout qo'yish nima beradi?",
-      "explanation": "Client uzilsa yoki timeout tugasa context bekor bo'ladi — driver Postgres'ga cancel request yuboradi, query to'xtaydi, connection bo'shaydi. Uzatilmasa: client ketgan, lekin og'ir query DB'da ishlayveradi, pool band. `context.WithTimeout` — har so'rovga yuqori chegara. Server tomonda ham `statement_timeout` — ikki qavat himoya."
     },
     {
       "id": 30825,

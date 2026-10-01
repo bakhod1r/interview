@@ -1,6 +1,6 @@
 {
   "id": "n1",
-  "name": "Caching",
+  "name": "Caching patterns",
   "domain": "redis",
   "topics": [
     "Cache"

@@ -1,0 +1,87 @@
+{
+  "id": "n5",
+  "name": "MongoDB gotchas",
+  "domain": "mongo",
+  "topics": [
+    "Mongo gotcha"
+  ],
+  "questions": [
+    {
+      "id": 31140,
+      "code": "MGG1",
+      "level": "S",
+      "type": "card",
+      "topic": "Mongo gotcha",
+      "domain": "mongo",
+      "section": "n5",
+      "question": "Hujjatga massiv (`comments`) cheksiz `$push` qilinyapti. Nima bo'ladi?",
+      "explanation": "Hujjat 16MB limitga yetib yozuv xato beradi; undan oldin ham katta hujjat har o'qish/yozishda sekin."
+    },
+    {
+      "id": 31141,
+      "code": "MGG2",
+      "level": "S",
+      "type": "card",
+      "topic": "Mongo gotcha",
+      "domain": "mongo",
+      "section": "n5",
+      "question": "Replica set'da yozuv `w:1` bilan muvaffaqiyatli qaytdi, keyin u yo'qoldi. Qanday?",
+      "explanation": "Primary yozib javob berdi, secondary'ga yetmay yiqildi; yangi primary saylandi, eski yozuv rollback'ga tushdi."
+    },
+    {
+      "id": 31142,
+      "code": "MGG3",
+      "level": "S",
+      "type": "card",
+      "topic": "Mongo gotcha",
+      "domain": "mongo",
+      "section": "n5",
+      "question": "`find().sort({createdAt:-1}).skip(100000).limit(20)` sekin. Nega?",
+      "explanation": "skip baribir 100000 hujjatni o'tib chiqadi; chuqur sahifalarda chiziqli sekinlashadi."
+    },
+    {
+      "id": 31143,
+      "code": "MGG4",
+      "level": "S",
+      "type": "card",
+      "topic": "Mongo gotcha",
+      "domain": "mongo",
+      "section": "n5",
+      "question": "Regex query `{name: /ali/i}` indeksni ishlatmayapti. Nega?",
+      "explanation": "Faqat case-sensitive prefix regex (`/^ali/`) indeksdan samarali foydalanadi; `i` flag va o'rtadagi pattern to'liq scan."
+    },
+    {
+      "id": 31144,
+      "code": "MGG5",
+      "level": "St",
+      "type": "card",
+      "topic": "Mongo gotcha",
+      "domain": "mongo",
+      "section": "n5",
+      "question": "Yangi index production'da yaratildi, keyin qo'shimcha query'lar sekinlashdi. Nima tekshirasiz?",
+      "explanation": "Har index yozuvni sekinlashtiradi va RAM egallaydi; working set cache'dan chiqib ketgan bo'lishi mumkin; planner boshqa indeksni tanlagan bo'lishi mumkin."
+    },
+    {
+      "id": 31145,
+      "code": "MGG6",
+      "level": "St",
+      "type": "card",
+      "topic": "Mongo gotcha",
+      "domain": "mongo",
+      "section": "n5",
+      "question": "Ko'p hujjatli transaction'lar sekin va tez-tez `WriteConflict` beryapti. Sabab?",
+      "explanation": "Bir hujjatni bir nechta transaction parallel o'zgartiryapti; Mongo optimistic — konfliktda abort; uzun transaction cache'ni bosadi."
+    },
+    {
+      "id": 31146,
+      "code": "MGG7",
+      "level": "M",
+      "type": "card",
+      "topic": "Mongo gotcha",
+      "domain": "mongo",
+      "section": "n5",
+      "question": "Ilova sanani string (`\"2026-10-01\"`) qilib saqlagan. Qanday muammolar chiqadi?",
+      "explanation": "Taqqoslash leksikografik, timezone yo'q, TTL index ishlamaydi, date operatorlari ($dateTrunc) ishlamaydi."
+    }
+  ]
+}

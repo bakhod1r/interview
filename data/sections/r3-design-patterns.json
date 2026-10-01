@@ -2,7 +2,6 @@
   "id": "r3",
   "name": "Design patterns",
   "domain": "arch",
-  "domainLabel": "Architecture & OOP",
   "topics": [
     "Pattern"
   ],

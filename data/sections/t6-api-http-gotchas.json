@@ -2,7 +2,6 @@
   "id": "t6",
   "name": "API & HTTP gotchas",
   "domain": "api",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "API gotcha"
   ],

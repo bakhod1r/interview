@@ -2,7 +2,6 @@
   "id": "a1",
   "name": "HTTP & REST",
   "domain": "api",
-  "domainLabel": "API, HTTP, security",
   "topics": [
     "HTTP",
     "REST",

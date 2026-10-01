@@ -2,7 +2,6 @@
   "id": "t5",
   "name": "Time, date, encoding gotchas",
   "domain": "go",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Time gotcha"
   ],

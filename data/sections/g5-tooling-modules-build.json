@@ -2,7 +2,6 @@
   "id": "g5",
   "name": "Tooling, modules, build",
   "domain": "go",
-  "domainLabel": "Go",
   "topics": [
     "Tooling"
   ],

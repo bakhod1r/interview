@@ -1,6 +1,6 @@
 {
   "id": "n3",
-  "name": "Elasticsearch",
+  "name": "Elasticsearch basics",
   "domain": "elastic",
   "topics": [
     "Elasticsearch"
@@ -148,6 +148,116 @@
       "section": "n3",
       "question": "PostgreSQL'dan Elasticsearch'ga ma'lumot sinxronlashning eng ishonchli yo'li?",
       "explanation": "Dual write ikki tizim orasida nomuvofiqlik keltiradi (biri yozildi, ikkinchisi yo'q). CDC/outbox bilan tartib va qayta o'ynatish imkoni bo'ladi. Muhim operatsion detal: mapping o'zgarganda joyida o'zgartirib bo'lmaydi — yangi indeks yaratib alias'ni atomik almashtirish (`_aliases` actions) standart naqsh."
+    },
+    {
+      "id": 31147,
+      "code": "ES1",
+      "level": "J",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Inverted index nima?",
+      "explanation": "Har so'z (term) uchun u uchragan hujjatlar ro'yxati; shu sabab full-text qidiruv tez."
+    },
+    {
+      "id": 31148,
+      "code": "ES2",
+      "level": "J",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Index, shard va replica nima?",
+      "explanation": "Index — hujjatlar to'plami; u primary shard'larga bo'linadi; har shardning replica nusxalari bor (fault tolerance va o'qish yuki)."
+    },
+    {
+      "id": 31149,
+      "code": "ES3",
+      "level": "M",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Analyzer nima? Qaysi qismlardan iborat?",
+      "explanation": "Matnni term'larga aylantiradi: char filter → tokenizer → token filter'lar (lowercase, stop, stemmer)."
+    },
+    {
+      "id": 31150,
+      "code": "ES4",
+      "level": "M",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Bool query'da `must` va `filter` farqi?",
+      "explanation": "must — score'ga ta'sir qiladi; filter — faqat ha/yo'q, score hisoblanmaydi va keshlanadi, tezroq."
+    },
+    {
+      "id": 31151,
+      "code": "ES5",
+      "level": "M",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Aggregation turlari: bucket va metric farqi?",
+      "explanation": "Bucket — hujjatlarni guruhlaydi (terms, date_histogram, range); metric — son hisoblaydi (avg, sum, cardinality); ichma-ich bo'lishi mumkin."
+    },
+    {
+      "id": 31152,
+      "code": "ES6",
+      "level": "S",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Index alias va zero-downtime reindex qanday qilinadi?",
+      "explanation": "Ilova alias'ga yozadi/o'qiydi; yangi index yaratilib `_reindex` qilinadi, keyin alias atomik ravishda yangi index'ga o'tkaziladi."
+    },
+    {
+      "id": 31153,
+      "code": "ES7",
+      "level": "S",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Bulk indeksatsiyani tezlashtirish uchun nimalar qilinadi?",
+      "explanation": "_bulk API (5–15MB batch), refresh_interval ni oshirish yoki -1, vaqtincha replicas=0, parallel worker'lar, ID'ni ES generatsiya qilishi."
+    },
+    {
+      "id": 31154,
+      "code": "ES8",
+      "level": "S",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "`nested` va oddiy `object` maydon farqi?",
+      "explanation": "Object massiv ichidagi maydonlar yassilanadi va obyektlar orasidagi bog'liqlik yo'qoladi; nested har elementni alohida yashirin hujjat qiladi."
+    },
+    {
+      "id": 31155,
+      "code": "ES9",
+      "level": "St",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Index Lifecycle Management (ILM) va hot-warm-cold arxitektura nima?",
+      "explanation": "Vaqt bo'yicha indekslar (log) rollover qilinadi va yoshiga qarab arzonroq node'larga ko'chiriladi, oxiri o'chiriladi."
+    },
+    {
+      "id": 31156,
+      "code": "ES10",
+      "level": "St",
+      "type": "card",
+      "topic": "Elasticsearch",
+      "domain": "elastic",
+      "section": "n3",
+      "question": "Shard hajmi va soni qanday rejalashtiriladi?",
+      "explanation": "Shard ~10–50GB atrofida; har shard heap va fayl deskriptor yeydi; juda ko'p kichik shard klasterni sekinlashtiradi."
     }
   ]
 }

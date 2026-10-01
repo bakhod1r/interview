@@ -2,7 +2,6 @@
   "id": "s1",
   "name": "Theory: consensus & consistency",
   "domain": "dist",
-  "domainLabel": "Distributed systems",
   "topics": [
     "Consensus",
     "Consistency",

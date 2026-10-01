@@ -2,7 +2,6 @@
   "id": "t4",
   "name": "Concurrency gotchas",
   "domain": "go",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Concurrency gotcha"
   ],

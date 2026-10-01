@@ -2,7 +2,6 @@
   "id": "t8",
   "name": "Memory & GC gotchas",
   "domain": "go",
-  "domainLabel": "Edge cases & gotchas",
   "topics": [
     "Memory gotcha"
   ],

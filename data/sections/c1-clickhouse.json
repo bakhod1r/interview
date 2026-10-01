@@ -1,0 +1,252 @@
+{
+  "id": "c1",
+  "name": "ClickHouse",
+  "domain": "ch",
+  "topics": [
+    "ClickHouse"
+  ],
+  "questions": [
+    {
+      "id": 31164,
+      "code": "CH1",
+      "level": "J",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "ClickHouse nima va qanday vazifalar uchun?",
+      "explanation": "Ustunli (columnar) OLAP DB: milliardlab qator ustida tezkor agregatsiya — analitika, log, metrika, event'lar."
+    },
+    {
+      "id": 31165,
+      "code": "CH2",
+      "level": "J",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "OLTP va OLAP farqi?",
+      "explanation": "OLTP — ko'p kichik tranzaksiya, qator bo'yicha (Postgres); OLAP — kam, lekin og'ir agregat so'rov, ko'p qator va kam ustun (ClickHouse)."
+    },
+    {
+      "id": 31166,
+      "code": "CH3",
+      "level": "M",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Columnar saqlash nega analitikada tez?",
+      "explanation": "So'rov faqat kerakli ustunlarni o'qiydi; bir turdagi qiymatlar yaxshi siqiladi; vektorli (SIMD) qayta ishlash."
+    },
+    {
+      "id": 31167,
+      "code": "CH4",
+      "level": "M",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "MergeTree engine qanday ishlaydi?",
+      "explanation": "Har insert yangi immutable 'part' yaratadi (ORDER BY bo'yicha saralangan); fonda partlar birlashtiriladi (merge)."
+    },
+    {
+      "id": 31168,
+      "code": "CH5",
+      "level": "M",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "`ORDER BY` (sorting key) va `PRIMARY KEY` ClickHouse'da nima?",
+      "explanation": "Primary key unique emas — sparse index; har 8192 qator (granule) uchun bitta belgi; filtrlar ORDER BY prefiksiga mos bo'lsa tez."
+    },
+    {
+      "id": 31169,
+      "code": "CH6",
+      "level": "M",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "`PARTITION BY` nima uchun va qanday tanlanadi?",
+      "explanation": "Ma'lumotni katta mantiqiy bo'laklarga (odatda oy/kun) ajratadi; eski partitionni tez DROP qilish, retention uchun. Juda mayda partition — zarar."
+    },
+    {
+      "id": 31170,
+      "code": "CH7",
+      "level": "M",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "ClickHouse'ga ma'lumot qanday yozilishi kerak?",
+      "explanation": "Katta batch'lar bilan (≥ 1000–100000 qator), sekundiga bir necha insert; mayda insert'lar uchun async_insert yoki Buffer/Kafka engine."
+    },
+    {
+      "id": 31171,
+      "code": "CH8",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Materialized view ClickHouse'da qanday ishlaydi?",
+      "explanation": "Insert trigger kabi: manba jadvalga kelgan har batch'ni transformatsiya qilib target jadvalga yozadi; eski ma'lumotni qayta hisoblamaydi."
+    },
+    {
+      "id": 31172,
+      "code": "CH9",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "ReplacingMergeTree, SummingMergeTree, AggregatingMergeTree farqi?",
+      "explanation": "Merge paytida: Replacing — bir xil kalitli qatorlardan oxirgisini qoldiradi; Summing — raqamlarni qo'shadi; Aggregating — agregat holatlarni birlashtiradi."
+    },
+    {
+      "id": 31173,
+      "code": "CH10",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "ClickHouse'da UPDATE va DELETE qanday ishlaydi?",
+      "explanation": "`ALTER TABLE ... UPDATE/DELETE` — mutation: fonda butun partlar qayta yoziladi, og'ir. Lightweight DELETE qatorni belgilaydi. Tez-tez update uchun ReplacingMergeTree."
+    },
+    {
+      "id": 31174,
+      "code": "CH11",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "ClickHouse'da JOIN'lar bilan nimaga e'tibor berish kerak?",
+      "explanation": "Default hash join — o'ng jadval xotiraga yuklanadi; katta jadval o'ngda bo'lsa OOM. Ko'pincha denormalizatsiya yoki dictionary afzal."
+    },
+    {
+      "id": 31175,
+      "code": "CH12",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Dictionary nima?",
+      "explanation": "Tashqi manbadan (Postgres, fayl, HTTP) RAM'ga yuklanadigan kalit-qiymat ma'lumotnoma; dictGet() bilan tez lookup, avtomatik yangilanadi."
+    },
+    {
+      "id": 31176,
+      "code": "CH13",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Ma'lumot Postgres'dan ClickHouse'ga qanday oqiziladi?",
+      "explanation": "CDC (Debezium → Kafka → ClickHouse Kafka engine + MV) yoki davriy batch ETL; MaterializedPostgreSQL ham bor (eksperimental)."
+    },
+    {
+      "id": 31177,
+      "code": "CH14",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "ClickHouse'da replication qanday ishlaydi?",
+      "explanation": "ReplicatedMergeTree: partlar ro'yxati va navbat ClickHouse Keeper/ZooKeeper'da; replikalar partlarni bir-biridan yuklab oladi; multi-master yozuv."
+    },
+    {
+      "id": 31178,
+      "code": "CH15",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Distributed jadval va sharding qanday ishlaydi?",
+      "explanation": "Distributed engine o'zi ma'lumot saqlamaydi — so'rovni barcha shardlardagi lokal jadvallarga yuboradi va natijalarni birlashtiradi; yozuvda sharding key bo'yicha taqsimlaydi."
+    },
+    {
+      "id": 31179,
+      "code": "CH16",
+      "level": "S",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Kodek va siqish (compression) qanday tanlanadi?",
+      "explanation": "Default LZ4; ZSTD — kuchliroq siqish; Delta/DoubleDelta — vaqt va monoton sonlar; Gorilla — float metrikalar; LowCardinality — takrorlanuvchi stringlar."
+    },
+    {
+      "id": 31180,
+      "code": "CH17",
+      "level": "St",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "`Too many parts` xatosi chiqdi. Sabab va yechim?",
+      "explanation": "Juda ko'p mayda insert yoki juda mayda partition — merge ulgurmayapti; batch'ni kattalashtirish, async_insert, partitionlashni qayta ko'rish."
+    },
+    {
+      "id": 31181,
+      "code": "CH18",
+      "level": "St",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Projection va skip index (data skipping index) nima?",
+      "explanation": "Projection — jadval ichida boshqa tartib/agregatdagi yashirin nusxa, optimizer avtomatik tanlaydi; skip index — granule'lar uchun min/max, set, bloom filter."
+    },
+    {
+      "id": 31182,
+      "code": "CH19",
+      "level": "St",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Product analytics uchun events jadvalini qanday loyihalaysiz?",
+      "explanation": "Keng jadval, ORDER BY (tenant, event, ts), PARTITION BY oy, LowCardinality, TTL, kunlik agregatlar uchun MV."
+    },
+    {
+      "id": 31183,
+      "code": "CH20",
+      "level": "St",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "`SELECT ... FINAL` nima va qachon qimmat?",
+      "explanation": "Replacing/Collapsing jadvallarda merge'ni so'rov vaqtida bajaradi — dublikatsiz natija, lekin ko'p partlarda sekin."
+    },
+    {
+      "id": 31184,
+      "code": "CH21",
+      "level": "P",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "Qachon ClickHouse emas, boshqa yechim (Postgres, BigQuery, Druid) tanlaysiz?",
+      "explanation": "Hajm kichik bo'lsa Postgres yetarli; ops jamoasi yo'q bo'lsa managed (BigQuery/ClickHouse Cloud); ko'p point update/transaction kerak bo'lsa OLAP noto'g'ri."
+    },
+    {
+      "id": 31185,
+      "code": "CH22",
+      "level": "M",
+      "type": "card",
+      "topic": "ClickHouse",
+      "domain": "ch",
+      "section": "c1",
+      "question": "`LowCardinality(String)` nima beradi?",
+      "explanation": "Stringlarni dictionary encoding bilan saqlaydi: kam xil qiymatli ustunlarda disk, xotira va GROUP BY tezligi sezilarli yaxshilanadi."
+    }
+  ]
+}

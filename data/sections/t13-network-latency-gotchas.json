@@ -1,110 +1,109 @@
 {
- "id": "t13",
- "name": "Network & latency gotchas",
- "domain": "net",
- "domainLabel": "Networking",
- "topics": [
-  "Network gotcha"
- ],
- "questions": [
-  {
-   "id": 17022,
-   "code": "E60",
-   "level": "P",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "TCP connection 'tirik' ko'rinadi, lekin qarshi tomon allaqachon o'lgan. Nega va nima qilinadi?",
-   "explanation": "Qarshi tomon crash bo'lsa yoki tarmoq uzilsa FIN/RST kelmaydi — soket ochiq ko'rinadi va o'qish abadiy kutadi. Shuning uchun har doim: SetReadDeadline/SetWriteDeadline, HTTP client'da Timeout, gRPC'da keepalive parametrlari, load balancer idle timeout'idan qisqa ilova idle timeout. Bulutda NAT/LB idle timeout (ko'pincha 60-350s) jimgina ulanishni uzadi — 'birinchi so'rov xato beradi' muammosining sababi shu."
-  },
-  {
-   "id": 17023,
-   "code": "E61",
-   "level": "P",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "Yuk ostida 'connection reset by peer' va TIME_WAIT ko'payyapti. Sabab?",
-   "explanation": "Go'da har so'rovda yangi http.Client yaratish — Transport va ulanish pool'i ham yangi bo'ladi. To'g'risi: bitta Client'ni ulashib ishlatish, MaxIdleConnsPerHost'ni RPS'ga moslash (default 2 — mikroservislar uchun kam), javob Body'sini io.Copy(io.Discard, body) bilan tugatib yopish. TIME_WAIT ulanishni AKTIV yopgan tomonda 2*MSL turadi."
-  },
-  {
-   "id": 17024,
-   "code": "E62",
-   "level": "M",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "Bir service DNS orqali boshqasini chaqiradi. Deploy paytida eski podlarga trafik ketyapti. Nega?",
-   "explanation": "Go'da DNS javobi ulanish o'rnatishda hal qilinadi; pool'dagi tayyor ulanish qayta hal qilinmaydi. Shuning uchun: Service (ClusterIP) orqali yurish — IP barqaror; yoki headless DNS ishlatilsa client-side load balancing (gRPC resolver) kerak; MaxConnLifetime/IdleConnTimeout bilan ulanishlarni davriy yangilash; graceful shutdown bilan eski pod o'zi GOAWAY/FIN yuborishi."
-  },
-  {
-   "id": 17025,
-   "code": "E63",
-   "level": "P",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "p99 latency 2 sekund, p50 esa 20 ms. Qayerdan boshlaysan?",
-   "explanation": "Tail latency alohida hodisa: o'rtacha yuk past bo'lsa ham navbat nazariyasi bo'yicha foydalanish darajasi 70-80% dan oshganda kutish vaqti eksponensial o'sadi. Amaliy vositalar: hedged requests (Google 'The Tail at Scale'), load shedding, konkurentlikni cheklash (adaptive concurrency), per-tenant kvota."
-  },
-  {
-   "id": 30107,
-   "code": "SN108",
-   "level": "S",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "Go'da HTTP client bilan ko'p so'rov qilinadi, `time.Sleep` yo'q, lekin latency vaqti-vaqti bilan portlaydi. Klassik sabab?",
-   "explanation": "Ikki eng ko'p uchraydigan xato: (1) `defer resp.Body.Close()` yo'q yoki body to'liq o'qilmagan — keep-alive buziladi va FD leak bo'ladi; (2) per-host idle limit past bo'lgani uchun yuqori parallelizmda har so'rov yangi TCP+TLS. To'g'ri: bitta umumiy `http.Client` (timeout bilan) va sozlangan `Transport`."
-  },
-  {
-   "id": 30108,
-   "code": "SN109",
-   "level": "S",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "`http.Client{}` timeout'siz ishlatilgan. Eng xavfli natija?",
-   "explanation": "Default `http.Client` timeout'i yo'q — TCP osilib qolsa goroutine abadiy turadi. Aniq sozlash kerak: umumiy `Timeout`, `DialContext` timeout, `TLSHandshakeTimeout`, `ResponseHeaderTimeout`, va per-request `context.WithTimeout` (deadline propagatsiyasi uchun). Serverda ham `ReadHeaderTimeout`/`WriteTimeout` — Slowloris himoyasi."
-  },
-  {
-   "id": 30489,
-   "code": "SN490",
-   "level": "S",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "Go'da DNS natijalari keshlanmaydi. Bu nimaga olib keladi?",
-   "explanation": "Ikkinchi tomoni ham bor: kesh bo'lmagani uchun DNS o'zgarishi (failover, yangi endpoint) tez ko'rinadi — bu afzallik. Muammo faqat ulanishlar qisqa umrli bo'lganda paydo bo'ladi. Uzoq yashovchi ulanishlarda esa teskari xavf: eski IP'ga yopishib qolish (shu sabab `MaxConnectionAge` yoki davriy qayta ulanish)."
-  },
-  {
-   "id": 30490,
-   "code": "SN491",
-   "level": "S",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "Load balancer orqasida barcha so'rovlar bitta IP'dan kelayotgandek ko'rinadi. Oqibati?",
-   "explanation": "To'g'ri implementatsiya: ishonchli proksi ro'yxati (`trusted proxies`) va `X-Forwarded-For` zanjirining o'ngdan chapga o'qilishi — client tomonidan qo'shilgan soxta qiymatlar tashlanadi. Aks holda hujumchi `X-Forwarded-For: 1.2.3.4` yuborib rate limit va bloklashni aylanib o'tadi."
-  },
-  {
-   "id": 30491,
-   "code": "SN492",
-   "level": "St",
-   "type": "card",
-   "topic": "Network gotcha",
-   "domain": "net",
-   "section": "t13",
-   "question": "Servis o'z-o'ziga (ichki Service DNS orqali) so'rov yuboradi va vaqti-vaqti bilan timeout oladi. Klassik sabab?",
-   "explanation": "Diagnostika: node'da `conntrack -S` (insert_failed, drop), `dmesg` xabarlari, va `nf_conntrack_max` sozlamasi. Yuqori RPS'li qisqa ulanishlar conntrack jadvalini to'ldiradi — keep-alive bilan ulanish sonini kamaytirish eng samarali chora. Ba'zi holatlarda UDP DNS bilan parallel so'rovlar race'i (`--random-fully` tuzatishi) ham shu simptomni beradi."
-  }
- ]
+  "id": "t13",
+  "name": "Network & latency gotchas",
+  "domain": "net",
+  "topics": [
+    "Network gotcha"
+  ],
+  "questions": [
+    {
+      "id": 17022,
+      "code": "E60",
+      "level": "P",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "TCP connection 'tirik' ko'rinadi, lekin qarshi tomon allaqachon o'lgan. Nega va nima qilinadi?",
+      "explanation": "Qarshi tomon crash bo'lsa yoki tarmoq uzilsa FIN/RST kelmaydi — soket ochiq ko'rinadi va o'qish abadiy kutadi. Shuning uchun har doim: SetReadDeadline/SetWriteDeadline, HTTP client'da Timeout, gRPC'da keepalive parametrlari, load balancer idle timeout'idan qisqa ilova idle timeout. Bulutda NAT/LB idle timeout (ko'pincha 60-350s) jimgina ulanishni uzadi — 'birinchi so'rov xato beradi' muammosining sababi shu."
+    },
+    {
+      "id": 17023,
+      "code": "E61",
+      "level": "P",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "Yuk ostida 'connection reset by peer' va TIME_WAIT ko'payyapti. Sabab?",
+      "explanation": "Go'da har so'rovda yangi http.Client yaratish — Transport va ulanish pool'i ham yangi bo'ladi. To'g'risi: bitta Client'ni ulashib ishlatish, MaxIdleConnsPerHost'ni RPS'ga moslash (default 2 — mikroservislar uchun kam), javob Body'sini io.Copy(io.Discard, body) bilan tugatib yopish. TIME_WAIT ulanishni AKTIV yopgan tomonda 2*MSL turadi."
+    },
+    {
+      "id": 17024,
+      "code": "E62",
+      "level": "M",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "Bir service DNS orqali boshqasini chaqiradi. Deploy paytida eski podlarga trafik ketyapti. Nega?",
+      "explanation": "Go'da DNS javobi ulanish o'rnatishda hal qilinadi; pool'dagi tayyor ulanish qayta hal qilinmaydi. Shuning uchun: Service (ClusterIP) orqali yurish — IP barqaror; yoki headless DNS ishlatilsa client-side load balancing (gRPC resolver) kerak; MaxConnLifetime/IdleConnTimeout bilan ulanishlarni davriy yangilash; graceful shutdown bilan eski pod o'zi GOAWAY/FIN yuborishi."
+    },
+    {
+      "id": 17025,
+      "code": "E63",
+      "level": "P",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "p99 latency 2 sekund, p50 esa 20 ms. Qayerdan boshlaysan?",
+      "explanation": "Tail latency alohida hodisa: o'rtacha yuk past bo'lsa ham navbat nazariyasi bo'yicha foydalanish darajasi 70-80% dan oshganda kutish vaqti eksponensial o'sadi. Amaliy vositalar: hedged requests (Google 'The Tail at Scale'), load shedding, konkurentlikni cheklash (adaptive concurrency), per-tenant kvota."
+    },
+    {
+      "id": 30107,
+      "code": "SN108",
+      "level": "S",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "Go'da HTTP client bilan ko'p so'rov qilinadi, `time.Sleep` yo'q, lekin latency vaqti-vaqti bilan portlaydi. Klassik sabab?",
+      "explanation": "Ikki eng ko'p uchraydigan xato: (1) `defer resp.Body.Close()` yo'q yoki body to'liq o'qilmagan — keep-alive buziladi va FD leak bo'ladi; (2) per-host idle limit past bo'lgani uchun yuqori parallelizmda har so'rov yangi TCP+TLS. To'g'ri: bitta umumiy `http.Client` (timeout bilan) va sozlangan `Transport`."
+    },
+    {
+      "id": 30108,
+      "code": "SN109",
+      "level": "S",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "`http.Client{}` timeout'siz ishlatilgan. Eng xavfli natija?",
+      "explanation": "Default `http.Client` timeout'i yo'q — TCP osilib qolsa goroutine abadiy turadi. Aniq sozlash kerak: umumiy `Timeout`, `DialContext` timeout, `TLSHandshakeTimeout`, `ResponseHeaderTimeout`, va per-request `context.WithTimeout` (deadline propagatsiyasi uchun). Serverda ham `ReadHeaderTimeout`/`WriteTimeout` — Slowloris himoyasi."
+    },
+    {
+      "id": 30489,
+      "code": "SN490",
+      "level": "S",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "Go'da DNS natijalari keshlanmaydi. Bu nimaga olib keladi?",
+      "explanation": "Ikkinchi tomoni ham bor: kesh bo'lmagani uchun DNS o'zgarishi (failover, yangi endpoint) tez ko'rinadi — bu afzallik. Muammo faqat ulanishlar qisqa umrli bo'lganda paydo bo'ladi. Uzoq yashovchi ulanishlarda esa teskari xavf: eski IP'ga yopishib qolish (shu sabab `MaxConnectionAge` yoki davriy qayta ulanish)."
+    },
+    {
+      "id": 30490,
+      "code": "SN491",
+      "level": "S",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "Load balancer orqasida barcha so'rovlar bitta IP'dan kelayotgandek ko'rinadi. Oqibati?",
+      "explanation": "To'g'ri implementatsiya: ishonchli proksi ro'yxati (`trusted proxies`) va `X-Forwarded-For` zanjirining o'ngdan chapga o'qilishi — client tomonidan qo'shilgan soxta qiymatlar tashlanadi. Aks holda hujumchi `X-Forwarded-For: 1.2.3.4` yuborib rate limit va bloklashni aylanib o'tadi."
+    },
+    {
+      "id": 30491,
+      "code": "SN492",
+      "level": "St",
+      "type": "card",
+      "topic": "Network gotcha",
+      "domain": "net",
+      "section": "t13",
+      "question": "Servis o'z-o'ziga (ichki Service DNS orqali) so'rov yuboradi va vaqti-vaqti bilan timeout oladi. Klassik sabab?",
+      "explanation": "Diagnostika: node'da `conntrack -S` (insert_failed, drop), `dmesg` xabarlari, va `nf_conntrack_max` sozlamasi. Yuqori RPS'li qisqa ulanishlar conntrack jadvalini to'ldiradi — keep-alive bilan ulanish sonini kamaytirish eng samarali chora. Ba'zi holatlarda UDP DNS bilan parallel so'rovlar race'i (`--random-fully` tuzatishi) ham shu simptomni beradi."
+    }
+  ]
 }

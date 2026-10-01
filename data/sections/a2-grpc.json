@@ -2,7 +2,6 @@
   "id": "a2",
   "name": "gRPC",
   "domain": "api",
-  "domainLabel": "API, HTTP, security",
   "topics": [
     "gRPC"
   ],
@@ -151,6 +150,61 @@
       "section": "a2",
       "question": "gRPC'da katta fayl yoki katta ro'yxat qanday uzatiladi?",
       "explanation": "Xabar hajmi limitini oshirish (`MaxRecvMsgSize`) vaqtinchalik yechim: bitta so'rov butun heapni yeydi va p99 ni buzadi. Streaming bilan doimiy xotira sarfi bo'ladi; lekin stream davomida xato bo'lsa qisman natija muammosi paydo bo'ladi — shuning uchun chunk'lar idempotent va davom ettiriladigan bo'lishi kerak."
+    },
+    {
+      "id": 31192,
+      "code": "GR35",
+      "level": "J",
+      "type": "card",
+      "topic": "gRPC",
+      "domain": "api",
+      "section": "a2",
+      "question": "gRPC'dagi 4 xil RPC turi qaysilar?",
+      "explanation": "Unary, server streaming, client streaming, bidirectional streaming."
+    },
+    {
+      "id": 31193,
+      "code": "GR36",
+      "level": "M",
+      "type": "card",
+      "topic": "gRPC",
+      "domain": "api",
+      "section": "a2",
+      "question": "Interceptor nima va qayerda ishlatiladi?",
+      "explanation": "Har RPC atrofida bajariladigan middleware: auth, logging, metrika, tracing, panic recovery; unary va stream uchun alohida."
+    },
+    {
+      "id": 31194,
+      "code": "GR37",
+      "level": "M",
+      "type": "card",
+      "topic": "gRPC",
+      "domain": "api",
+      "section": "a2",
+      "question": "Metadata nima va qanday uzatiladi?",
+      "explanation": "HTTP/2 header'lari ko'rinishidagi kalit-qiymat juftliklar: auth token, request-id, tracing; `-bin` suffiksli kalitlar binar."
+    },
+    {
+      "id": 31195,
+      "code": "GR38",
+      "level": "S",
+      "type": "card",
+      "topic": "gRPC",
+      "domain": "api",
+      "section": "a2",
+      "question": "gRPC health checking va Kubernetes probe'lari qanday bog'lanadi?",
+      "explanation": "Standart `grpc.health.v1.Health` servisi; K8s 1.24+ da native `grpc` probe; servis bo'yicha SERVING/NOT_SERVING holat."
+    },
+    {
+      "id": 31196,
+      "code": "GR39",
+      "level": "S",
+      "type": "card",
+      "topic": "gRPC",
+      "domain": "api",
+      "section": "a2",
+      "question": "Brauzer va REST client'lar uchun gRPC servisni qanday ochasiz?",
+      "explanation": "grpc-gateway (proto annotatsiyalardan REST/JSON proxy), gRPC-Web (Envoy orqali) yoki Connect protokoli."
     }
   ]
 }

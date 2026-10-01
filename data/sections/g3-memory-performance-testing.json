@@ -2,7 +2,6 @@
   "id": "g3",
   "name": "Memory, performance, testing",
   "domain": "go",
-  "domainLabel": "Go",
   "topics": [
     "Memory",
     "Performance",

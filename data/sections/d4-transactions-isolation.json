@@ -2,7 +2,6 @@
   "id": "d4",
   "name": "Transactions & isolation",
   "domain": "db",
-  "domainLabel": "PostgreSQL & SQL",
   "topics": [
     "Transactions",
     "Isolation",

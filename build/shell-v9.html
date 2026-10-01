@@ -246,7 +246,8 @@ pre{background:var(--code-bg);color:var(--code-ink);font:13px/1.65 var(--mono);p
 .dk.l1 .nm{padding-left:28px}.dk.l1 .nm b{font-size:14.5px}
 .dk.l2 .nm{padding-left:58px}.dk.l2 .nm b{font-size:14px;font-weight:600}
 .dk.l2{min-height:44px}
-@media (max-width:520px){.dk.l1 .nm{padding-left:10px}.dk.l2 .nm{padding-left:26px}.dk .nm small{display:none}.dk.l2 .nm b{white-space:normal;line-height:1.3}}
+.dk.l3 .nm{padding-left:86px}.dk.l3 .nm b{font-size:13.5px;font-weight:600}.dk.l3{min-height:42px}
+@media (max-width:520px){.dk.l1 .nm{padding-left:10px}.dk.l2 .nm{padding-left:26px}.dk.l3 .nm{padding-left:40px}.dk.l3 .nm b{white-space:normal;line-height:1.3}.dk .nm small{display:none}.dk.l2 .nm b{white-space:normal;line-height:1.3}}
 .foot-line{margin-top:14px;text-align:center;color:var(--muted);font-size:13px}
 
 /* overview */
@@ -399,7 +400,9 @@ body:before,body:after{opacity:.22}
 const LV={J:"Junior",M:"Middle",S:"Senior",St:"Staff",P:"Principal"};
 const QD=[];
 const secOf=q=>Object.keys(SEC).find(k=>SEC[k][2]===q.d&&SEC[k][1].includes(q.tp));
-const GRP={"backend":["Backend","⚙︎",["go","db","redis","mongo","elastic","msg","api","sec","arch","fin","soft"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]],"devops":["DevOps","⛭",["linux","cont","cicd","obs","net","cloud"]]};
+// domen ro'yxatida element: "domen" yoki ["guruh-id","Guruh nomi",[domenlar]]
+const GRP={"backend":["Backend","⚙︎",["go",["db","DB",["db","mongo","elastic","ch"]],["cache","Cache",["redis"]],["mq","MQ",["kafka","rabbit","evt"]],"api","sec","fin"]],"arch":["Architecture","▣",["arch"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]],"devops":["DevOps","⛭",["linux","cont","cicd","obs","net","cloud"]],"soft":["Soft skills","☺",["soft"]]};
+const domsOf=l=>l.flatMap(x=>Array.isArray(x)?domsOf(x[2]):[x]);
 const QBY={};Q.forEach(q=>QBY[q.id]=q);
 const SECQ={};Q.forEach(q=>{const s=secOf(q);(SECQ[s]=SECQ[s]||[]).push(q);});
 
@@ -497,18 +500,23 @@ let ACT=[];
 const act=fn=>`data-a="${ACT.push(fn)-1}"`;
 document.addEventListener("click",e=>{const el=e.target.closest("[data-a]");if(!el)return;const fn=ACT[+el.dataset.a];if(fn){e.preventDefault();e.stopPropagation();fn(el,e);}});
 
-// ---------- decks: yo'nalish > domen > bo'lim ----------
+// ---------- decks: yo'nalish > (guruh) > domen > bo'lim ----------
 const DECK={};
-Object.entries(GRP).forEach(([g,[gn,ic,doms]])=>{
-  const gq=Q.filter(q=>doms.includes(q.d));if(!gq.length)return;
-  DECK["g:"+g]={id:"g:"+g,name:gn,ic,lvl:0,qs:gq,kids:[]};
-  // bitta domenli yo'nalish (DevOps, SD, Algo): domen qatlamini tashlab, bo'limlar to'g'ridan-to'g'ri
-  const live=doms.filter(dk=>Q.some(q=>q.d===dk)),flat=live.length===1;
-  live.forEach(dk=>{const dq=Q.filter(q=>q.d===dk);let par="g:"+g,lv=1;
-    if(!flat){DECK["d:"+dk]={id:"d:"+dk,name:DOM[dk]||dk,lvl:1,qs:dq,kids:[],parent:par};DECK[par].kids.push("d:"+dk);par="d:"+dk;lv=2;}
-    Object.keys(SEC).filter(k=>SEC[k][2]===dk&&SECQ[k]).forEach(k=>{
-      DECK["s:"+k]={id:"s:"+k,name:SEC[k][0],lvl:lv,qs:SECQ[k],kids:[],parent:par};DECK[par].kids.push("s:"+k);});
+const addDeck=(id,name,lvl,qs,par)=>{DECK[id]={id,name,lvl,qs,kids:[],parent:par};DECK[par].kids.push(id);};
+const addSecs=(dk,par,lv)=>Object.keys(SEC).filter(k=>SEC[k][2]===dk&&SECQ[k]).forEach(k=>addDeck("s:"+k,SEC[k][0],lv,SECQ[k],par));
+// bitta jonli domenli ro'yxat (Algo, Architecture): domen qatlamini tashlab, bo'limlar to'g'ridan-to'g'ri
+function addList(list,par,lv){
+  const live=list.filter(x=>Q.some(q=>domsOf([x]).includes(q.d)));
+  if(lv===1&&live.length===1&&!Array.isArray(live[0])){addSecs(live[0],par,lv);return;}
+  live.forEach(x=>{
+    if(Array.isArray(x)){const [gid,gnm,sub]=x,ds=domsOf(sub);addDeck("c:"+gid,gnm,lv,Q.filter(q=>ds.includes(q.d)),par);addList(sub,"c:"+gid,lv+1);}
+    else{addDeck("d:"+x,DOM[x]||x,lv,Q.filter(q=>q.d===x),par);addSecs(x,"d:"+x,lv+1);}
   });
+}
+Object.entries(GRP).forEach(([g,[gn,ic,list]])=>{
+  const ds=domsOf(list),gq=Q.filter(q=>ds.includes(q.d));if(!gq.length)return;
+  DECK["g:"+g]={id:"g:"+g,name:gn,ic,lvl:0,qs:gq,kids:[]};
+  addList(list,"g:"+g,1);
 });
 const pathOf=id=>{const r=[];let d=DECK[id];while(d){r.unshift(d.name);d=DECK[d.parent];}return r;};
 function counts(qs){qs=qs.filter(lvlOk);let nw=0,ln=0,rv=0;const t=now();

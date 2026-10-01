@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1489,
+  "total": 1562,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -13,16 +13,18 @@
   },
   "domains": {
     "go": "Go",
-    "db": "PostgreSQL & SQL",
-    "redis": "Redis & caching",
+    "db": "PostgreSQL",
     "mongo": "MongoDB",
     "elastic": "Elasticsearch",
-    "msg": "Kafka & messaging",
+    "ch": "ClickHouse",
+    "redis": "Redis",
+    "kafka": "Kafka",
+    "rabbit": "RabbitMQ",
+    "evt": "Event-driven",
     "api": "API & HTTP",
     "sec": "Security",
-    "arch": "Architecture & OOP",
     "fin": "Fintech & payments",
-    "soft": "Behavioral",
+    "arch": "Architecture",
     "sys": "System design",
     "dist": "Distributed systems",
     "alg": "Algorithms",
@@ -31,7 +33,8 @@
     "cicd": "CI/CD",
     "obs": "Observability",
     "net": "Networking",
-    "cloud": "Cloud"
+    "cloud": "Cloud",
+    "soft": "Soft skills"
   },
   "sections": [
     {
@@ -78,7 +81,7 @@
     },
     {
       "id": "g4",
-      "name": "Production cases (Go)",
+      "name": "Go production cases",
       "domain": "go",
       "count": 20,
       "file": "sections/g4-production-cases-go.json"
@@ -141,10 +144,17 @@
     },
     {
       "id": "d5",
-      "name": "Operations, scaling, Go+DB",
+      "name": "Replication, scaling, ops",
       "domain": "db",
-      "count": 54,
+      "count": 47,
       "file": "sections/d5-operations-scaling-go-db.json"
+    },
+    {
+      "id": "d6",
+      "name": "Go + DB",
+      "domain": "db",
+      "count": 13,
+      "file": "sections/d6-go-db.json"
     },
     {
       "id": "t2",
@@ -152,6 +162,41 @@
       "domain": "db",
       "count": 25,
       "file": "sections/t2-sql-gotchas.json"
+    },
+    {
+      "id": "n2",
+      "name": "MongoDB basics",
+      "domain": "mongo",
+      "count": 26,
+      "file": "sections/n2-mongodb.json"
+    },
+    {
+      "id": "n5",
+      "name": "MongoDB gotchas",
+      "domain": "mongo",
+      "count": 7,
+      "file": "sections/n5-mongodb-gotchas.json"
+    },
+    {
+      "id": "n3",
+      "name": "Elasticsearch basics",
+      "domain": "elastic",
+      "count": 23,
+      "file": "sections/n3-elasticsearch.json"
+    },
+    {
+      "id": "n6",
+      "name": "Elasticsearch gotchas",
+      "domain": "elastic",
+      "count": 7,
+      "file": "sections/n6-elasticsearch-gotchas.json"
+    },
+    {
+      "id": "c1",
+      "name": "ClickHouse",
+      "domain": "ch",
+      "count": 22,
+      "file": "sections/c1-clickhouse.json"
     },
     {
       "id": "n4",
@@ -162,7 +207,7 @@
     },
     {
       "id": "n1",
-      "name": "Caching",
+      "name": "Caching patterns",
       "domain": "redis",
       "count": 7,
       "file": "sections/n1-redis-caching.json"
@@ -175,46 +220,32 @@
       "file": "sections/t10-redis-cache-gotchas.json"
     },
     {
-      "id": "n2",
-      "name": "MongoDB",
-      "domain": "mongo",
-      "count": 16,
-      "file": "sections/n2-mongodb.json"
-    },
-    {
-      "id": "n3",
-      "name": "Elasticsearch",
-      "domain": "elastic",
-      "count": 13,
-      "file": "sections/n3-elasticsearch.json"
-    },
-    {
       "id": "m1",
-      "name": "Kafka",
-      "domain": "msg",
-      "count": 20,
+      "name": "Kafka basics",
+      "domain": "kafka",
+      "count": 26,
       "file": "sections/m1-kafka.json"
+    },
+    {
+      "id": "t9",
+      "name": "Kafka gotchas",
+      "domain": "kafka",
+      "count": 7,
+      "file": "sections/t9-kafka-queue-gotchas.json"
     },
     {
       "id": "m2",
       "name": "RabbitMQ & queues",
-      "domain": "msg",
-      "count": 15,
+      "domain": "rabbit",
+      "count": 18,
       "file": "sections/m2-rabbitmq-queues.json"
     },
     {
       "id": "m3",
       "name": "Event-driven & integration",
-      "domain": "msg",
+      "domain": "evt",
       "count": 13,
       "file": "sections/m3-event-driven-integration.json"
-    },
-    {
-      "id": "t9",
-      "name": "Kafka & queue gotchas",
-      "domain": "msg",
-      "count": 10,
-      "file": "sections/t9-kafka-queue-gotchas.json"
     },
     {
       "id": "a1",
@@ -227,7 +258,7 @@
       "id": "a2",
       "name": "gRPC",
       "domain": "api",
-      "count": 13,
+      "count": 18,
       "file": "sections/a2-grpc.json"
     },
     {
@@ -245,13 +276,6 @@
       "file": "sections/a5-resilience.json"
     },
     {
-      "id": "a4",
-      "name": "Auth & security",
-      "domain": "api",
-      "count": 17,
-      "file": "sections/a4-auth-security.json"
-    },
-    {
       "id": "t6",
       "name": "API & HTTP gotchas",
       "domain": "api",
@@ -266,11 +290,46 @@
       "file": "sections/x1-application-security.json"
     },
     {
+      "id": "a4",
+      "name": "Auth & security",
+      "domain": "sec",
+      "count": 17,
+      "file": "sections/a4-auth-security.json"
+    },
+    {
       "id": "t12",
       "name": "Security gotchas",
       "domain": "sec",
       "count": 9,
       "file": "sections/t12-security-gotchas.json"
+    },
+    {
+      "id": "p1",
+      "name": "Payments & PSP",
+      "domain": "fin",
+      "count": 12,
+      "file": "sections/p1-payments-psp.json"
+    },
+    {
+      "id": "p2",
+      "name": "Ledger & accounting",
+      "domain": "fin",
+      "count": 14,
+      "file": "sections/p2-ledger-accounting.json"
+    },
+    {
+      "id": "p3",
+      "name": "Compliance, fraud, FX",
+      "domain": "fin",
+      "count": 12,
+      "file": "sections/p3-compliance-fraud-fx.json"
+    },
+    {
+      "id": "r6",
+      "name": "Domain: e-commerce & billing",
+      "domain": "fin",
+      "count": 10,
+      "file": "sections/r6-domain-e-commerce-billing.json"
     },
     {
       "id": "r2",
@@ -306,41 +365,6 @@
       "domain": "arch",
       "count": 18,
       "file": "sections/r1-microservices-boundaries.json"
-    },
-    {
-      "id": "r6",
-      "name": "Domain: e-commerce & billing",
-      "domain": "arch",
-      "count": 10,
-      "file": "sections/r6-domain-e-commerce-billing.json"
-    },
-    {
-      "id": "p1",
-      "name": "Payments & PSP",
-      "domain": "fin",
-      "count": 12,
-      "file": "sections/p1-payments-psp.json"
-    },
-    {
-      "id": "p2",
-      "name": "Ledger & accounting",
-      "domain": "fin",
-      "count": 14,
-      "file": "sections/p2-ledger-accounting.json"
-    },
-    {
-      "id": "p3",
-      "name": "Compliance, fraud, FX",
-      "domain": "fin",
-      "count": 12,
-      "file": "sections/p3-compliance-fraud-fx.json"
-    },
-    {
-      "id": "b1",
-      "name": "Behavioral & teamwork",
-      "domain": "soft",
-      "count": 14,
-      "file": "sections/b1-behavioral-teamwork.json"
     },
     {
       "id": "y1",
@@ -392,20 +416,6 @@
       "file": "sections/z1-algorithm-patterns.json"
     },
     {
-      "id": "v2",
-      "name": "Linux users, groups, permissions",
-      "domain": "linux",
-      "count": 15,
-      "file": "sections/v2-linux-users.json"
-    },
-    {
-      "id": "v4",
-      "name": "Linux filesystems",
-      "domain": "linux",
-      "count": 14,
-      "file": "sections/v4-linux-filesystems.json"
-    },
-    {
       "id": "v1",
       "name": "LVM: PV, VG, LV",
       "domain": "linux",
@@ -413,11 +423,25 @@
       "file": "sections/v1-lvm.json"
     },
     {
+      "id": "v2",
+      "name": "Linux users, groups, permissions",
+      "domain": "linux",
+      "count": 15,
+      "file": "sections/v2-linux-users.json"
+    },
+    {
       "id": "v3",
       "name": "Package management",
       "domain": "linux",
       "count": 12,
       "file": "sections/v3-package-management.json"
+    },
+    {
+      "id": "v4",
+      "name": "Linux filesystems",
+      "domain": "linux",
+      "count": 14,
+      "file": "sections/v4-linux-filesystems.json"
     },
     {
       "id": "i7",
@@ -474,6 +498,13 @@
       "domain": "cloud",
       "count": 26,
       "file": "sections/i5-cloud-os-operations.json"
+    },
+    {
+      "id": "b1",
+      "name": "Behavioral & teamwork",
+      "domain": "soft",
+      "count": 14,
+      "file": "sections/b1-behavioral-teamwork.json"
     }
   ]
 }
