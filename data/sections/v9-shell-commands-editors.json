@@ -1,0 +1,109 @@
+{
+  "id": "v9",
+  "name": "Shell commands & text editors",
+  "domain": "linux",
+  "topics": [
+    "Commands & editors"
+  ],
+  "questions": [
+    {
+      "id": 31266,
+      "code": "LC01",
+      "level": "J",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "Eng ko'p ishlatiladigan asosiy buyruqlar: navigatsiya va fayl amallari.",
+      "explanation": "`pwd`, `cd`, `ls -la`, `mkdir -p`, `touch`, `cp -a`, `mv`, `rm -r`, `ln -s`, `cat/less`, `head/tail -f`, `stat`, `file`."
+    },
+    {
+      "id": 31267,
+      "code": "LC02",
+      "level": "J",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "Matn bilan ishlash: `grep`, `cut`, `sort`, `uniq`, `wc`, `tr` — har biri nima uchun?",
+      "explanation": "grep — qator filtrlash; cut — ustun kesish; sort — saralash; uniq — ketma-ket takrorlarni olib tashlash/sanash (avval sort); wc — sanash; tr — belgi almashtirish."
+    },
+    {
+      "id": 31268,
+      "code": "LC03",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "`sed` va `awk` qachon ishlatiladi? Tipik misollar.",
+      "explanation": "sed — oqim tahrirlovchi: almashtirish, qator o'chirish, in-place. awk — ustunli matn: maydon bo'yicha filtr, hisob-kitob, agregatsiya."
+    },
+    {
+      "id": 31269,
+      "code": "LC04",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "`jq` nima va DevOps'da qanday ishlatiladi?",
+      "explanation": "JSON uchun sed/awk: filtr, maydon olish, transformatsiya. kubectl/aws/API javoblarini skriptda parse qilish uchun."
+    },
+    {
+      "id": 31270,
+      "code": "LC05",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "`tee`, `sort -u`, `diff`, `comm`, `watch`, `timeout` — qachon foydali?",
+      "explanation": "tee — chiqishni ham ekranga, ham faylga; diff/comm — fayllarni solishtirish; watch — buyruqni davriy; timeout — osilib qolmaslik uchun vaqt chegarasi."
+    },
+    {
+      "id": 31271,
+      "code": "LC06",
+      "level": "J",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "vim'da asosiy ishlar: ochish, tahrirlash, saqlash, chiqish, qidirish.",
+      "explanation": "Rejimlar: Normal (Esc), Insert (`i`), Command (`:`). `:w` saqlash, `:q!` saqlamay chiqish, `:wq`/`ZZ`, `/text` qidirish, `dd` qator o'chirish, `u` undo."
+    },
+    {
+      "id": 31272,
+      "code": "LC07",
+      "level": "J",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "nano va vim farqi; serverda qaysi biri?",
+      "explanation": "nano — oddiy, pastda yorliqlar (`Ctrl+O` saqlash, `Ctrl+X` chiqish), yangi boshlovchi uchun. vim — modal, tez, kuchli, deyarli har serverda `vi` bor."
+    },
+    {
+      "id": 31273,
+      "code": "LC08",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "Config faylni serverda xavfsiz tahrirlash qoidalari?",
+      "explanation": "Avval backup, maxsus vositalar (`visudo`, `crontab -e`, `systemctl edit`), sintaksis tekshiruv (`nginx -t`, `sshd -t`), reload; aslida — qo'lda emas, config management (Ansible/Git)."
+    },
+    {
+      "id": 31274,
+      "code": "LC09",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "vim'da bir nechta qator / blok bilan ishlash: visual mode, `:g`, makro.",
+      "explanation": "`V` — qator tanlash, `Ctrl+v` — ustun bloki (ko'p qatorga birdaniga yozish), `:g/pat/d` — mos qatorlarni o'chirish, `q` — makro yozish."
+    }
+  ]
+}

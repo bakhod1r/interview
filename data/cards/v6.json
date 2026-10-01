@@ -37,5 +37,35 @@
   },
   "31227": {
     "a": "Bash qidirish tartibi:\n1. **alias** (`alias ll='ls -l'`)\n2. **keyword** (`if`, `[[`)\n3. **function**\n4. **builtin** (`cd`, `echo`, `read` — `cd` external bo'lolmaydi, chunki jarayon dir'i)\n5. **`PATH`** — chapdan o'ngga; natija `hash` cache'da.\n\n```sh\ntype -a echo   # builtin + /bin/echo\ncommand ls     # alias/function'siz\nhash -r        # cache tozalash (binary ko'chganda)\n```\n**Security:** `PATH` boshida `.` yoki yoziladigan dir — PATH hijacking. sudo `secure_path` shuning uchun."
+  },
+  "31256": {
+    "a": "```sh\nx=5            # to'g'ri\nx = 5          # x: command not found\nname=\"Ali Vali\"\necho \"$name\"\nreadonly PI=3.14\nexport DB_URL=postgres://...   # bola jarayonga ham ko'rinadi\nunset x\n```\nKonventsiya: env/global — `UPPER_CASE`, lokal — `lower_case` (tizim o'zgaruvchilari bilan to'qnashmaslik uchun)."
+  },
+  "31257": {
+    "a": "```sh\nif [ -f \"$f\" ] && [ \"$n\" -gt 3 ]; then ...; fi   # POSIX\nif [[ -f $f && $s == *.log ]]; then ...; fi        # bash\nif [[ $ip =~ ^10\\. ]]; then ...; fi\nif (( n > 3 )); then ...; fi\n```\nOperatorlar: fayl — `-f -d -e -r -x -s`; satr — `= != -z -n`; son — `-eq -ne -lt -gt`.\n\n**Gotcha:** `[ $x = y ]` — `x` bo'sh bo'lsa `[ = y ]` sintaksis xato. `[ \"$a\" > \"$b\" ]` — `>` redirect, fayl yaratadi!"
+  },
+  "31258": {
+    "a": "```sh\nfor h in web1 web2 db1; do ssh \"$h\" uptime; done\nfor ((i=1; i<=5; i++)); do echo $i; done\nfor f in *.log; do gzip \"$f\"; done\n\nwhile IFS= read -r line; do\n  echo \"$line\"\ndone < hosts.txt\n```\n**Nega `$(cat f)` yomon:** qatorni bo'shliq bo'yicha bo'ladi, glob kengayadi, butun faylni xotiraga oladi.\n\n`IFS=` — boshdagi bo'shliqni saqlaydi, `-r` — `\\` ni escape deb olmaydi.\n\nGotcha: oxirgi qator `\\n` siz bo'lsa yo'qoladi — `|| [[ -n $line ]]`."
+  },
+  "31259": {
+    "a": "```sh\ngreet() {\n  local name=$1\n  [[ -z $name ]] && return 1\n  echo \"Salom, $name\"\n}\nmsg=$(greet Ali) || echo \"xato\"\n```\n- `return 0..255` — muvaffaqiyat/xato signali, qiymat emas.\n- Natija — `echo` + command substitution (subshell!).\n- `local`'siz har o'zgaruvchi global — rekursiya va katta skriptlarda bug.\n- Log'larni stderr'ga (`>&2`), aks holda `$(f)` natijasiga aralashadi."
+  },
+  "31260": {
+    "a": "```sh\nhosts=(web1 web2 \"db 1\")\nhosts+=(cache1)\nfor h in \"${hosts[@]}\"; do echo \"$h\"; done\necho \"${#hosts[@]}\"     # 4\necho \"${hosts[0]}\"\n\ndeclare -A port=([web]=80 [db]=5432)\nfor k in \"${!port[@]}\"; do echo \"$k=${port[$k]}\"; done\n\nmapfile -t lines < file.txt   # faylni array'ga\n```\n`\"${a[@]}\"` qo'shtirnoq bilan — har element alohida; `${a[*]}` — bitta satr. macOS bash 3.2'da `declare -A` yo'q."
+  },
+  "31261": {
+    "a": "```sh\n${PORT:-8080}        # bo'sh bo'lsa 8080\n${PORT:=8080}        # + o'zlashtiradi\n${DIR:?DIR kerak}    # bo'sh bo'lsa xato bilan chiqadi\nf=/var/log/app.tar.gz\n${f##*/}             # app.tar.gz   (basename)\n${f%/*}              # /var/log     (dirname)\n${f%%.*}             # /var/log/app\n${f#*.}              # tar.gz\n${f//log/LOG}        # hammasini almashtirish\n${#f}                # uzunlik\n${f^^} ${f,,}        # katta/kichik harf (bash 4)\n```\n`rm -rf \"${DIR:?}/\"` — DIR bo'sh bo'lsa `/` o'chmaydi."
+  },
+  "31262": {
+    "a": "```sh\ncase \"$1\" in\n  start|up)   start_app ;;\n  stop)       stop_app ;;\n  *.tar.gz)   tar xzf \"$1\" ;;\n  -h|--help)  usage; exit 0 ;;\n  *)          echo \"noma'lum: $1\" >&2; exit 2 ;;\nesac\n```\nFlag parse: `while getopts \"vf:\" opt; do case $opt in v) verbose=1;; f) file=$OPTARG;; esac; done` (`getopts` faqat qisqa flag)."
+  },
+  "31263": {
+    "a": "```sh\nn=$(( 7 / 2 ))          # 3 (butun)\n(( count++ ))\necho $(( 2**10 ))       # 1024\necho \"scale=2; 7/2\" | bc   # 3.50\nawk 'BEGIN{print 7/2}'     # 3.5\n```\nGotcha: `08`, `09` — oktal deb o'qiladi va xato: `$(( 10#08 ))`.\n\n`set -e` bilan: `(( count++ ))` count 0 bo'lsa exit status 1 — skript to'xtaydi! `count=$((count+1))` xavfsiz."
+  },
+  "31264": {
+    "a": "```sh\nbash -n deploy.sh                  # faqat sintaksis\nbash -x deploy.sh                  # har buyruq trace\nexport PS4='+${BASH_SOURCE}:${LINENO}:${FUNCNAME[0]}: '\nset -x; ...; set +x                # faqat bir qism\ntrap 'echo \"xato: $BASH_COMMAND ($LINENO)\" >&2' ERR\nshellcheck deploy.sh\n```\nTest — `bats`:\n```sh\n@test \"bo'sh arg xato beradi\" {\n  run ./deploy.sh\n  [ \"$status\" -eq 2 ]\n}\n```\n**Ehtiyot:** `set -x` sir (token, parol)larni log'ga chiqaradi — CI log'da."
+  },
+  "31265": {
+    "a": "```sh\nfor h in $(cat hosts); do ssh \"$h\" uptime & done\nwait                            # exit code'lar yo'qoladi!\n\n# xatolarni ushlash\npids=(); for h in ...; do work \"$h\" & pids+=($!); done\nrc=0; for p in \"${pids[@]}\"; do wait \"$p\" || rc=1; done\n\n# bounded\nxargs -P 8 -n 1 ./sync.sh < hosts\n\n# lock (cron overlap)\nexec 9>/var/lock/backup.lock\nflock -n 9 || { echo \"allaqachon ishlayapti\"; exit 0; }\n```\nCheklovsiz `&` — 1000 host = 1000 SSH, fd va CPU tugaydi."
   }
 }

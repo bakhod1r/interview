@@ -1,0 +1,120 @@
+{
+  "id": "v10",
+  "name": "Find, xargs & archives",
+  "domain": "linux",
+  "topics": [
+    "Find & archives"
+  ],
+  "questions": [
+    {
+      "id": 31275,
+      "code": "LZ01",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`find` bilan fayl qidirish: nom, tur, hajm, vaqt bo'yicha.",
+      "explanation": "`find <dir> -name/-iname`, `-type f/d/l`, `-size +100M`, `-mtime -7`, `-mmin -30`, `-user`, `-perm`; `-maxdepth`."
+    },
+    {
+      "id": 31276,
+      "code": "LZ02",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`find`, `locate`, `which`, `whereis`, `type` farqi?",
+      "explanation": "find — real vaqtda FS'ni aylanadi (sekin, aniq). locate — tayyor DB'dan (tez, `updatedb`gacha eskirgan). which/type — PATH'dagi buyruq. whereis — binary, man, source."
+    },
+    {
+      "id": 31277,
+      "code": "LZ03",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`find -exec ... \\;`, `-exec ... +` va `-delete` farqi?",
+      "explanation": "`\\;` — har fayl uchun alohida jarayon (sekin). `+` — ko'p faylni bitta buyruqqa (xargs kabi, tez). `-delete` — ichki, eng tez; lekin tartibga ehtiyot."
+    },
+    {
+      "id": 31278,
+      "code": "LZ04",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`xargs` nima va nega kerak?",
+      "explanation": "stdin'dagi ro'yxatni buyruq argumentlariga aylantiradi. `Argument list too long` muammosini hal qiladi (ARG_MAX bo'yicha bo'ladi), `-n`, `-I {}`, `-P` parallel."
+    },
+    {
+      "id": 31279,
+      "code": "LZ05",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`find | xargs` da bo'shliqli fayl nomi muammosi va `-print0 | xargs -0` yechimi?",
+      "explanation": "xargs default bo'shliq/yangi qator bo'yicha bo'ladi — `my file.txt` ikki argumentga aylanadi, noto'g'ri faylga amal qilinadi. Yechim: NUL ajratuvchi."
+    },
+    {
+      "id": 31280,
+      "code": "LZ06",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`tar` bilan arxiv yaratish, ko'rish, ochish. `c`, `x`, `t`, `z`, `J`, `f` nima?",
+      "explanation": "`c` create, `x` extract, `t` list, `f` fayl nomi, `v` verbose, `z` gzip, `j` bzip2, `J` xz, `--zstd`. `-C` — boshqa katalogga ochish."
+    },
+    {
+      "id": 31281,
+      "code": "LZ07",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "gzip, bzip2, xz, zstd, zip — farqi va qachon qaysi?",
+      "explanation": "gzip — tez, universal; bzip2 — eski; xz — eng kichik, sekin (release paketlar); zstd — tez + yaxshi siqish, parallel (`-T0`), zamonaviy default; zip — Windows bilan almashish, har fayl alohida siqilgan."
+    },
+    {
+      "id": 31282,
+      "code": "LZ08",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "Arxiv ochishda qanday xavf bor (path traversal, tarbomb)?",
+      "explanation": "Arxivda `../../etc/cron.d/x` yoki absolute yo'l, symlink orqali katalogdan tashqariga yozish (Zip Slip); tarbomb — hamma fayl joriy katalogga sochiladi; zip bomb — kichik arxiv, terabaytlar."
+    },
+    {
+      "id": 31283,
+      "code": "LZ09",
+      "level": "S",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "Katta (yuzlab GB) katalogni backup arxiv qilish: ruxsatlar, tezlik, ishonchlilik?",
+      "explanation": "`tar` + `--numeric-owner`, ACL/xattr (`--acls --xattrs`), parallel siqish (zstd -T0/pigz), stream'da ko'chirish, checksum, restore test. Jonli DB faylini tar qilma — snapshot yoki dump."
+    },
+    {
+      "id": 31284,
+      "code": "LZ10",
+      "level": "S",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "Millionlab fayl ichidan izlash sekin. Tezlatish usullari?",
+      "explanation": "Qidiruvni toraytirish (`-xdev`, `-maxdepth`, `-prune`), `-name` ni oldinga, `fd`/`ripgrep` (parallel, .gitignore), `plocate` indeks, `-exec +`/`xargs -P`, inode cache. Asosiy savol — nega millionlab kichik fayl?"
+    }
+  ]
+}

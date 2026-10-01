@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1615,
+  "total": 1644,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -15440,6 +15440,345 @@
           "section": "v6",
           "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
           "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
+        },
+        {
+          "id": 31256,
+          "code": "LS14",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Shell'da o'zgaruvchi qanday e'lon qilinadi? `x = 5` nega xato?",
+          "explanation": "`x=5` — `=` atrofida bo'sh joy yo'q. `x = 5` shell uchun `x` buyrug'ini `=` va `5` argumentlari bilan chaqirish. O'qish: `\"$x\"`, `export` — bola jarayonlarga uzatish."
+        },
+        {
+          "id": 31257,
+          "code": "LS15",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "`if` sharti: `[ ]`, `[[ ]]`, `test` va `(( ))` farqi?",
+          "explanation": "`[`/`test` — POSIX buyruq, quoting shart. `[[ ]]` — bash keyword: splitting yo'q, `&&`/`||`, `=~` regex, pattern. `(( ))` — arifmetik solishtirish."
+        },
+        {
+          "id": 31258,
+          "code": "LS16",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Bash'da `for`, `while`, `until` sikllari; faylni qatorma-qator qanday to'g'ri o'qiladi?",
+          "explanation": "`for x in list`, `for ((i=0;i<n;i++))`, `while cond`. Fayl o'qish: `while IFS= read -r line; do ...; done < file` — `for line in $(cat f)` emas."
+        },
+        {
+          "id": 31259,
+          "code": "LS17",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Bash funksiyalari: argument, return qiymat va `local`?",
+          "explanation": "Argument — `$1..$n`, `$@`. `return` faqat exit status (0–255); natija stdout orqali `$(f)` bilan olinadi. `local` — o'zgaruvchi funksiya ichida qoladi, yo'qsa global."
+        },
+        {
+          "id": 31260,
+          "code": "LS18",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Bash array va associative array qanday ishlatiladi?",
+          "explanation": "Indexed: `a=(x y z)`, `\"${a[@]}\"`, `${#a[@]}`. Associative: `declare -A m; m[k]=v`, kalitlar `\"${!m[@]}\"`. POSIX sh'da array yo'q."
+        },
+        {
+          "id": 31261,
+          "code": "LS19",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Parameter expansion: `${var:-default}`, `${var:?}`, `${var#}`, `${var%}`, `${var//}`?",
+          "explanation": "Default qiymat, majburiy tekshiruv va satr kesish — tashqi `sed`/`basename`'siz."
+        },
+        {
+          "id": 31262,
+          "code": "LS20",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "`case` operatori qachon `if/elif`'dan yaxshi?",
+          "explanation": "Bitta qiymatni ko'p pattern bilan solishtirishda — glob pattern'lar, o'qilishi oson. CLI argument parse va subcommand'lar uchun klassik."
+        },
+        {
+          "id": 31263,
+          "code": "LS21",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Arifmetika shell'da qanday? `$(( ))`, `let`, `expr`, `bc`.",
+          "explanation": "`$(( a + b ))` — butun son, tez, builtin. `expr` — eski, tashqi. Kasr son — `bc` yoki `awk`."
+        },
+        {
+          "id": 31264,
+          "code": "LS22",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Skriptni debug qanday qilasan va qanday test qilasan?",
+          "explanation": "`bash -n` sintaksis, `set -x`/`PS4` trace, `shellcheck` statik, `trap ERR` + `$LINENO`, `bats`/`shunit2` test, `--dry-run`."
+        },
+        {
+          "id": 31265,
+          "code": "LS23",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Parallel ish va concurrency shell'da: `&`, `wait`, `xargs -P`, `flock`?",
+          "explanation": "`cmd &` fon, `wait` — hammasini kutish (`wait -n` — birinchisini). Cheklangan parallellik — `xargs -P N` yoki GNU `parallel`. Bir vaqtda ikki nusxa ishlamasligi — `flock`."
+        }
+      ]
+    },
+    {
+      "id": "v9",
+      "name": "Shell commands & text editors",
+      "domain": "linux",
+      "topics": [
+        "Commands & editors"
+      ],
+      "questions": [
+        {
+          "id": 31266,
+          "code": "LC01",
+          "level": "J",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "Eng ko'p ishlatiladigan asosiy buyruqlar: navigatsiya va fayl amallari.",
+          "explanation": "`pwd`, `cd`, `ls -la`, `mkdir -p`, `touch`, `cp -a`, `mv`, `rm -r`, `ln -s`, `cat/less`, `head/tail -f`, `stat`, `file`."
+        },
+        {
+          "id": 31267,
+          "code": "LC02",
+          "level": "J",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "Matn bilan ishlash: `grep`, `cut`, `sort`, `uniq`, `wc`, `tr` — har biri nima uchun?",
+          "explanation": "grep — qator filtrlash; cut — ustun kesish; sort — saralash; uniq — ketma-ket takrorlarni olib tashlash/sanash (avval sort); wc — sanash; tr — belgi almashtirish."
+        },
+        {
+          "id": 31268,
+          "code": "LC03",
+          "level": "M",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "`sed` va `awk` qachon ishlatiladi? Tipik misollar.",
+          "explanation": "sed — oqim tahrirlovchi: almashtirish, qator o'chirish, in-place. awk — ustunli matn: maydon bo'yicha filtr, hisob-kitob, agregatsiya."
+        },
+        {
+          "id": 31269,
+          "code": "LC04",
+          "level": "M",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "`jq` nima va DevOps'da qanday ishlatiladi?",
+          "explanation": "JSON uchun sed/awk: filtr, maydon olish, transformatsiya. kubectl/aws/API javoblarini skriptda parse qilish uchun."
+        },
+        {
+          "id": 31270,
+          "code": "LC05",
+          "level": "M",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "`tee`, `sort -u`, `diff`, `comm`, `watch`, `timeout` — qachon foydali?",
+          "explanation": "tee — chiqishni ham ekranga, ham faylga; diff/comm — fayllarni solishtirish; watch — buyruqni davriy; timeout — osilib qolmaslik uchun vaqt chegarasi."
+        },
+        {
+          "id": 31271,
+          "code": "LC06",
+          "level": "J",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "vim'da asosiy ishlar: ochish, tahrirlash, saqlash, chiqish, qidirish.",
+          "explanation": "Rejimlar: Normal (Esc), Insert (`i`), Command (`:`). `:w` saqlash, `:q!` saqlamay chiqish, `:wq`/`ZZ`, `/text` qidirish, `dd` qator o'chirish, `u` undo."
+        },
+        {
+          "id": 31272,
+          "code": "LC07",
+          "level": "J",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "nano va vim farqi; serverda qaysi biri?",
+          "explanation": "nano — oddiy, pastda yorliqlar (`Ctrl+O` saqlash, `Ctrl+X` chiqish), yangi boshlovchi uchun. vim — modal, tez, kuchli, deyarli har serverda `vi` bor."
+        },
+        {
+          "id": 31273,
+          "code": "LC08",
+          "level": "M",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "Config faylni serverda xavfsiz tahrirlash qoidalari?",
+          "explanation": "Avval backup, maxsus vositalar (`visudo`, `crontab -e`, `systemctl edit`), sintaksis tekshiruv (`nginx -t`, `sshd -t`), reload; aslida — qo'lda emas, config management (Ansible/Git)."
+        },
+        {
+          "id": 31274,
+          "code": "LC09",
+          "level": "M",
+          "type": "card",
+          "topic": "Commands & editors",
+          "domain": "linux",
+          "section": "v9",
+          "question": "vim'da bir nechta qator / blok bilan ishlash: visual mode, `:g`, makro.",
+          "explanation": "`V` — qator tanlash, `Ctrl+v` — ustun bloki (ko'p qatorga birdaniga yozish), `:g/pat/d` — mos qatorlarni o'chirish, `q` — makro yozish."
+        }
+      ]
+    },
+    {
+      "id": "v10",
+      "name": "Find, xargs & archives",
+      "domain": "linux",
+      "topics": [
+        "Find & archives"
+      ],
+      "questions": [
+        {
+          "id": 31275,
+          "code": "LZ01",
+          "level": "J",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "`find` bilan fayl qidirish: nom, tur, hajm, vaqt bo'yicha.",
+          "explanation": "`find <dir> -name/-iname`, `-type f/d/l`, `-size +100M`, `-mtime -7`, `-mmin -30`, `-user`, `-perm`; `-maxdepth`."
+        },
+        {
+          "id": 31276,
+          "code": "LZ02",
+          "level": "J",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "`find`, `locate`, `which`, `whereis`, `type` farqi?",
+          "explanation": "find — real vaqtda FS'ni aylanadi (sekin, aniq). locate — tayyor DB'dan (tez, `updatedb`gacha eskirgan). which/type — PATH'dagi buyruq. whereis — binary, man, source."
+        },
+        {
+          "id": 31277,
+          "code": "LZ03",
+          "level": "M",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "`find -exec ... \\;`, `-exec ... +` va `-delete` farqi?",
+          "explanation": "`\\;` — har fayl uchun alohida jarayon (sekin). `+` — ko'p faylni bitta buyruqqa (xargs kabi, tez). `-delete` — ichki, eng tez; lekin tartibga ehtiyot."
+        },
+        {
+          "id": 31278,
+          "code": "LZ04",
+          "level": "M",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "`xargs` nima va nega kerak?",
+          "explanation": "stdin'dagi ro'yxatni buyruq argumentlariga aylantiradi. `Argument list too long` muammosini hal qiladi (ARG_MAX bo'yicha bo'ladi), `-n`, `-I {}`, `-P` parallel."
+        },
+        {
+          "id": 31279,
+          "code": "LZ05",
+          "level": "M",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "`find | xargs` da bo'shliqli fayl nomi muammosi va `-print0 | xargs -0` yechimi?",
+          "explanation": "xargs default bo'shliq/yangi qator bo'yicha bo'ladi — `my file.txt` ikki argumentga aylanadi, noto'g'ri faylga amal qilinadi. Yechim: NUL ajratuvchi."
+        },
+        {
+          "id": 31280,
+          "code": "LZ06",
+          "level": "J",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "`tar` bilan arxiv yaratish, ko'rish, ochish. `c`, `x`, `t`, `z`, `J`, `f` nima?",
+          "explanation": "`c` create, `x` extract, `t` list, `f` fayl nomi, `v` verbose, `z` gzip, `j` bzip2, `J` xz, `--zstd`. `-C` — boshqa katalogga ochish."
+        },
+        {
+          "id": 31281,
+          "code": "LZ07",
+          "level": "M",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "gzip, bzip2, xz, zstd, zip — farqi va qachon qaysi?",
+          "explanation": "gzip — tez, universal; bzip2 — eski; xz — eng kichik, sekin (release paketlar); zstd — tez + yaxshi siqish, parallel (`-T0`), zamonaviy default; zip — Windows bilan almashish, har fayl alohida siqilgan."
+        },
+        {
+          "id": 31282,
+          "code": "LZ08",
+          "level": "M",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "Arxiv ochishda qanday xavf bor (path traversal, tarbomb)?",
+          "explanation": "Arxivda `../../etc/cron.d/x` yoki absolute yo'l, symlink orqali katalogdan tashqariga yozish (Zip Slip); tarbomb — hamma fayl joriy katalogga sochiladi; zip bomb — kichik arxiv, terabaytlar."
+        },
+        {
+          "id": 31283,
+          "code": "LZ09",
+          "level": "S",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "Katta (yuzlab GB) katalogni backup arxiv qilish: ruxsatlar, tezlik, ishonchlilik?",
+          "explanation": "`tar` + `--numeric-owner`, ACL/xattr (`--acls --xattrs`), parallel siqish (zstd -T0/pigz), stream'da ko'chirish, checksum, restore test. Jonli DB faylini tar qilma — snapshot yoki dump."
+        },
+        {
+          "id": 31284,
+          "code": "LZ10",
+          "level": "S",
+          "type": "card",
+          "topic": "Find & archives",
+          "domain": "linux",
+          "section": "v10",
+          "question": "Millionlab fayl ichidan izlash sekin. Tezlatish usullari?",
+          "explanation": "Qidiruvni toraytirish (`-xdev`, `-maxdepth`, `-prune`), `-name` ni oldinga, `fd`/`ripgrep` (parallel, .gitignore), `plocate` indeks, `-exec +`/`xargs -P`, inode cache. Asosiy savol — nega millionlab kichik fayl?"
         }
       ]
     },

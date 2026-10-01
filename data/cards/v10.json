@@ -1,0 +1,32 @@
+{
+  "31275": {
+    "a": "```sh\nfind /etc -name \"*.conf\"\nfind / -xdev -type f -size +500M 2>/dev/null     # katta fayllar, boshqa FS'ga o'tmasdan\nfind /var/log -type f -mtime +30                   # 30 kundan eski\nfind . -mmin -10                                   # 10 daqiqada o'zgargan\nfind /home -user ali -type d\nfind / -perm -4000 -type f 2>/dev/null             # SUID fayllar (audit)\nfind . -maxdepth 1 -empty\n```\n`-mtime +30` — 30 kundan **ko'p**, `-30` — kam. `2>/dev/null` — Permission denied shovqini."
+  },
+  "31276": {
+    "a": "| Vosita | Manba | Tezlik | Aniqlik |\n|---|---|---|---|\n| `find` | FS'ni aylanadi | sekin | real |\n| `locate`/`plocate` | `updatedb` DB | juda tez | eskirgan bo'lishi mumkin |\n| `which` | `PATH` | tez | faqat binary |\n| `type` | shell (alias, builtin ham) | tez | eng to'g'ri |\n| `whereis` | standart dir'lar | tez | binary+man |\n\nYangi yaratilgan faylni `locate` topmaydi — `sudo updatedb`."
+  },
+  "31277": {
+    "a": "```sh\nfind . -name \"*.tmp\" -exec rm {} \\;     # 10 000 fayl = 10 000 rm\nfind . -name \"*.tmp\" -exec rm {} +      # bir necha rm\nfind . -name \"*.tmp\" -delete\nfind /var/log -name \"*.log\" -mtime +7 -exec gzip {} +\n```\n**Gotcha:** `-delete` **oxirida** bo'lishi shart: `find . -delete -name \"*.tmp\"` — hamma narsani o'chiradi! Avval `-print` bilan sinab ko'r, keyin `-delete`.\n\n`-exec` fayl nomini xavfsiz uzatadi (bo'shliq, qator ko'chishi muammo emas)."
+  },
+  "31278": {
+    "a": "```sh\nfind . -name \"*.log\" | xargs gzip\ncat hosts | xargs -I{} ssh {} uptime\necho a b c | xargs -n1 echo          # har biri alohida\nxargs -P 8 -n 1 curl -sO < urls.txt  # 8 parallel\n```\n- `rm *` — `Argument list too long` (ARG_MAX). `find ... | xargs rm` — bo'lib beradi.\n- `-I{}` — har elementga bitta buyruq va joyiga qo'yish.\n- `-r` (GNU) — bo'sh kirishda buyruqni ishga tushirmaslik (`xargs rm` bo'sh — xato yoki kutilmagan amal).\n- `-t` — bajarilayotganni ko'rsatish."
+  },
+  "31279": {
+    "a": "```sh\nfind . -name \"*.txt\" | xargs rm             # 'my' va 'file.txt' — XATO, xavfli\nfind . -name \"*.txt\" -print0 | xargs -0 rm  # to'g'ri\nfind . -type f -print0 | xargs -0 -P4 -n50 sha256sum\n```\nNUL (`\\0`) — fayl nomida bo'lishi mumkin bo'lmagan yagona belgi. `grep -lZ`, `git ls-files -z`, `sort -z` ham NUL bilan ishlaydi.\n\nSecurity: hujumchi `foo\\n/etc/passwd` nomli fayl yaratsa, `-0`'siz skript `/etc/passwd`ga amal qilishi mumkin."
+  },
+  "31280": {
+    "a": "```sh\ntar czf backup.tar.gz /etc /var/www       # yaratish + gzip\ntar tzf backup.tar.gz | head               # ichini ko'rish\ntar xzf backup.tar.gz -C /restore          # ochish\ntar xzf backup.tar.gz etc/nginx/nginx.conf # bitta fayl\ntar --zstd -cf b.tar.zst dir/\ntar czf - dir | ssh host 'tar xzf - -C /dst'   # stream orqali ko'chirish\n```\n`tar` — arxivlaydi (ko'p fayl -> bitta), siqish — gzip/xz/zstd. Zamonaviy GNU tar ochishda siqishni o'zi aniqlaydi (`tar xf`)."
+  },
+  "31281": {
+    "a": "| Format | Siqish | Tezlik | Qachon |\n|---|---|---|---|\n| gzip | o'rta | tez | log, HTTP, universal |\n| bzip2 | yaxshi | sekin | eski |\n| xz | eng yaxshi | juda sekin | release tarball, bir marta siqib ko'p yuklash |\n| zstd | yaxshi | juda tez, parallel | backup, log, konteyner layer |\n| zip | o'rta | tez | Windows, random access |\n\n```sh\nzstd -T0 -19 big.sql        # barcha yadro\npigz -p 8 big.log           # parallel gzip\n```\nAllaqachon siqilgan (jpg, mp4, .gz) — qayta siqish foydasiz."
+  },
+  "31282": {
+    "a": "**Himoya:**\n- Avval ko'r: `tar tf x.tar | head`, `unzip -l x.zip`.\n- Bo'sh katalogga och: `mkdir out && tar xf x.tar -C out`.\n- GNU tar default `/` ni olib tashlaydi va `..` dan ogohlantiradi; root sifatida ochma (`--no-same-owner` user'da default).\n- Kodda (Go/Java) arxiv ochishda har yo'lni `filepath.Clean` + prefiks tekshiruv — **Zip Slip** (CVE'lar ko'p).\n- Hajm/fayl soni limiti — zip bomb.\n\n```go\np := filepath.Join(dst, h.Name)\nif !strings.HasPrefix(p, filepath.Clean(dst)+string(os.PathSeparator)) { return errBadPath }\n```"
+  },
+  "31283": {
+    "a": "```sh\ntar --acls --xattrs --numeric-owner -cpf - /srv/data \\\n  | zstd -T0 -3 \\\n  | tee >(sha256sum > data.tar.zst.sha256) \\\n  > /backup/data.tar.zst\n```\n- `-p`, `--numeric-owner` — restore boshqa host'da UID to'g'ri.\n- Izchillik: ishlayotgan ilova fayllari o'zgaradi (`file changed as we read it`) — LVM/FS snapshot'dan arxivla.\n- DB — `pg_dump`/`pg_basebackup`, fayl nusxasi emas.\n- Inkremental: `tar --listed-incremental`, yoki restic/borg (dedup, shifrlash).\n- **Restore test qilinmagan backup — backup emas.**"
+  },
+  "31284": {
+    "a": "```sh\nfind / -xdev \\( -path /proc -o -path /sys -o -path /var/lib/docker \\) -prune -o -name \"*.pem\" -print\nrg -l \"password\" /etc            # ripgrep, parallel\nfd -e log -S +100M /var          # fd\nplocate nginx.conf               # indeks\n```\n- Arzon test'lar oldinda: `-name` (metadata), `-newer`, keyin `-exec grep`.\n- NFS ustida find — juda sekin; serverda bajarish.\n- Arxitektura darajasi: millionlab mayda fayl — inode tugashi, backup sekin; object storage yoki DB'ga ko'chirish kerakmi — o'shani so'ra."
+  }
+}

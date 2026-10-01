@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1615,
+  "total": 1644,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -426,8 +426,22 @@
       "id": "v6",
       "name": "Shell",
       "domain": "linux",
-      "count": 13,
+      "count": 23,
       "file": "sections/v6-shell.json"
+    },
+    {
+      "id": "v9",
+      "name": "Shell commands & text editors",
+      "domain": "linux",
+      "count": 9,
+      "file": "sections/v9-shell-commands-editors.json"
+    },
+    {
+      "id": "v10",
+      "name": "Find, xargs & archives",
+      "domain": "linux",
+      "count": 10,
+      "file": "sections/v10-find-xargs-archives.json"
     },
     {
       "id": "v1",

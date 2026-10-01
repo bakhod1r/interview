@@ -148,6 +148,116 @@
       "section": "v6",
       "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
       "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
+    },
+    {
+      "id": 31256,
+      "code": "LS14",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Shell'da o'zgaruvchi qanday e'lon qilinadi? `x = 5` nega xato?",
+      "explanation": "`x=5` — `=` atrofida bo'sh joy yo'q. `x = 5` shell uchun `x` buyrug'ini `=` va `5` argumentlari bilan chaqirish. O'qish: `\"$x\"`, `export` — bola jarayonlarga uzatish."
+    },
+    {
+      "id": 31257,
+      "code": "LS15",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "`if` sharti: `[ ]`, `[[ ]]`, `test` va `(( ))` farqi?",
+      "explanation": "`[`/`test` — POSIX buyruq, quoting shart. `[[ ]]` — bash keyword: splitting yo'q, `&&`/`||`, `=~` regex, pattern. `(( ))` — arifmetik solishtirish."
+    },
+    {
+      "id": 31258,
+      "code": "LS16",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Bash'da `for`, `while`, `until` sikllari; faylni qatorma-qator qanday to'g'ri o'qiladi?",
+      "explanation": "`for x in list`, `for ((i=0;i<n;i++))`, `while cond`. Fayl o'qish: `while IFS= read -r line; do ...; done < file` — `for line in $(cat f)` emas."
+    },
+    {
+      "id": 31259,
+      "code": "LS17",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Bash funksiyalari: argument, return qiymat va `local`?",
+      "explanation": "Argument — `$1..$n`, `$@`. `return` faqat exit status (0–255); natija stdout orqali `$(f)` bilan olinadi. `local` — o'zgaruvchi funksiya ichida qoladi, yo'qsa global."
+    },
+    {
+      "id": 31260,
+      "code": "LS18",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Bash array va associative array qanday ishlatiladi?",
+      "explanation": "Indexed: `a=(x y z)`, `\"${a[@]}\"`, `${#a[@]}`. Associative: `declare -A m; m[k]=v`, kalitlar `\"${!m[@]}\"`. POSIX sh'da array yo'q."
+    },
+    {
+      "id": 31261,
+      "code": "LS19",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Parameter expansion: `${var:-default}`, `${var:?}`, `${var#}`, `${var%}`, `${var//}`?",
+      "explanation": "Default qiymat, majburiy tekshiruv va satr kesish — tashqi `sed`/`basename`'siz."
+    },
+    {
+      "id": 31262,
+      "code": "LS20",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "`case` operatori qachon `if/elif`'dan yaxshi?",
+      "explanation": "Bitta qiymatni ko'p pattern bilan solishtirishda — glob pattern'lar, o'qilishi oson. CLI argument parse va subcommand'lar uchun klassik."
+    },
+    {
+      "id": 31263,
+      "code": "LS21",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Arifmetika shell'da qanday? `$(( ))`, `let`, `expr`, `bc`.",
+      "explanation": "`$(( a + b ))` — butun son, tez, builtin. `expr` — eski, tashqi. Kasr son — `bc` yoki `awk`."
+    },
+    {
+      "id": 31264,
+      "code": "LS22",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Skriptni debug qanday qilasan va qanday test qilasan?",
+      "explanation": "`bash -n` sintaksis, `set -x`/`PS4` trace, `shellcheck` statik, `trap ERR` + `$LINENO`, `bats`/`shunit2` test, `--dry-run`."
+    },
+    {
+      "id": 31265,
+      "code": "LS23",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Parallel ish va concurrency shell'da: `&`, `wait`, `xargs -P`, `flock`?",
+      "explanation": "`cmd &` fon, `wait` — hammasini kutish (`wait -n` — birinchisini). Cheklangan parallellik — `xargs -P N` yoki GNU `parallel`. Bir vaqtda ikki nusxa ishlamasligi — `flock`."
     }
   ]
 }
