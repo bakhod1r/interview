@@ -502,10 +502,12 @@ const DECK={};
 Object.entries(GRP).forEach(([g,[gn,ic,doms]])=>{
   const gq=Q.filter(q=>doms.includes(q.d));if(!gq.length)return;
   DECK["g:"+g]={id:"g:"+g,name:gn,ic,lvl:0,qs:gq,kids:[]};
-  doms.forEach(dk=>{const dq=Q.filter(q=>q.d===dk);if(!dq.length)return;
-    DECK["d:"+dk]={id:"d:"+dk,name:DOM[dk]||dk,lvl:1,qs:dq,kids:[],parent:"g:"+g};DECK["g:"+g].kids.push("d:"+dk);
+  // bitta domenli yo'nalish (DevOps, SD, Algo): domen qatlamini tashlab, bo'limlar to'g'ridan-to'g'ri
+  const live=doms.filter(dk=>Q.some(q=>q.d===dk)),flat=live.length===1;
+  live.forEach(dk=>{const dq=Q.filter(q=>q.d===dk);let par="g:"+g,lv=1;
+    if(!flat){DECK["d:"+dk]={id:"d:"+dk,name:DOM[dk]||dk,lvl:1,qs:dq,kids:[],parent:par};DECK[par].kids.push("d:"+dk);par="d:"+dk;lv=2;}
     Object.keys(SEC).filter(k=>SEC[k][2]===dk&&SECQ[k]).forEach(k=>{
-      DECK["s:"+k]={id:"s:"+k,name:SEC[k][0],lvl:2,qs:SECQ[k],kids:[],parent:"d:"+dk};DECK["d:"+dk].kids.push("s:"+k);});
+      DECK["s:"+k]={id:"s:"+k,name:SEC[k][0],lvl:lv,qs:SECQ[k],kids:[],parent:par};DECK[par].kids.push("s:"+k);});
   });
 });
 const pathOf=id=>{const r=[];let d=DECK[id];while(d){r.unshift(d.name);d=DECK[d.parent];}return r;};
