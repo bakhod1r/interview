@@ -39,8 +39,8 @@ Run after any change to data or shell.
 
 ## Docs (standalone notes)
 - `docs/*.md` — Uzbek qo'llanmalar, ASCII diagrammalar bilan. build.js ularni `const DOCS=[];` (shell'da `secOf` qatoridan keyin) o'rniga `[id, # sarlavha, markdown]` qilib joylaydi.
-- DOCS element `[id, sarlavha, md, guruh]`: `docs/*.md` = "Qo'llanmalar" guruhi; `docs/<papka>/*.md` avtomatik kiradi, guruh nomi = papka `README.md` `# ` sarlavhasi (README o'zi kirmaydi).
-- UI: alohida `#docs` sahifa (`docsLib`, guruhlar bo'yicha), topbar'da 📚 tugma, bosh sahifada banner (`docsHome`), doc ichida guruh bo'yicha Oldingi/Keyingi pager, `#doc/<id>` (va `#doc/<id>/<h2-slug>`) hash route bilan `docView` ochiladi: sticky mundarija + `docMd` renderer (h2–h4, jadval, blockquote, kod, ro'yxat). Yangi `.md` qo'shish = faylni `docs/` ga tashlab build.
+- DOCS element `[id, sarlavha, md, guruh]`: `docs/*.md` = "Qo'llanmalar" guruhi; `docs/**/` papkalar rekursiv kiradi (hozir `docs/devops/linux/`), guruh nomi = o'sha papka `README.md` `# ` sarlavhasi (README o'zi kirmaydi).
+- UI: topbar'da tab'lar (🗂 Kartalar | 📚 Qo'llanmalar); `#docs` sahifa (`docsLib`) guruhlar bo'yicha ichki tab'lar (`V.dg`), doc ichida guruh bo'yicha Oldingi/Keyingi pager, `#doc/<id>` (va `#doc/<id>/<h2-slug>`) hash route bilan `docView` ochiladi: sticky mundarija + `docMd` renderer (h2–h4, jadval, blockquote, kod, ro'yxat). Yangi `.md` qo'shish = faylni `docs/` ga tashlab build.
 - `docs/linux-user-group-permission.md` — Senior level: user/UID, group, rwx/octal, kernel tekshiruv tartibi, SUID/SGID/sticky, umask, real/effective UID, capabilities, sudo, ACL mask, chattr/mount, SELinux, userns/K8s, PAM/NSS/LDAP, audit, architect jadvali (2026-10-01).
 - Docs qoidalari: har bo'lim senior darajada ("Senior nuqtalar" bloki bilan). Diagrammalar faqat ASCII (`+ - | v >`), emoji va Unicode box-drawing yo'q; jadvallar Markdown table.
 

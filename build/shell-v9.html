@@ -419,16 +419,21 @@ body:before,body:after{opacity:.22}
 .dtbl th,.dtbl td{padding:9px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
 .dtbl th{background:var(--bg-2);font-weight:800;white-space:nowrap}
 .dtbl tr:last-child td{border-bottom:0}
-.doc-btn{width:auto;padding:0 12px;gap:6px;display:flex;align-items:center;text-decoration:none;color:var(--ink);font:700 13px var(--sans);transition:border-color .2s,color .2s}.doc-btn:hover{border-color:var(--accent);color:var(--accent)}
-.docs-banner{display:flex;align-items:center;gap:14px;padding:16px 20px;margin:0 0 18px;color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,box-shadow .2s}
-.docs-banner:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:var(--shadow-lg)}
-.docs-banner>div{flex:1;min-width:0}.docs-banner b{font-size:16px}.docs-banner p{margin:4px 0;color:var(--muted);font-size:13px}.docs-banner small{font:600 11px var(--mono);color:var(--faint)}
-.docs-banner .go{font-size:20px;color:var(--accent);transition:transform .2s}.docs-banner:hover .go{transform:translateX(4px)}
+.tabs{position:relative;display:flex;gap:2px;padding:3px;border:1px solid var(--line);background:var(--bg-2);border-radius:12px;margin-left:8px}
+.tabs>*{position:relative;z-index:1;display:flex;align-items:center;gap:6px;padding:7px 14px;border:0;background:none;border-radius:9px;cursor:pointer;font:700 13px var(--sans);color:var(--muted);text-decoration:none;transition:color .2s,background .25s,box-shadow .25s}
+.tabs>*:hover{color:var(--ink)}.tabs>.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.tab-ind{display:none}
+.gtabs{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);margin:14px 0 18px;scrollbar-width:none}
+.gtabs button{flex:none;display:flex;align-items:center;gap:8px;padding:10px 14px;border:0;background:none;cursor:pointer;font:700 14px var(--sans);color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .25s}
+.gtabs button:hover{color:var(--ink)}.gtabs button.on{color:var(--accent);border-bottom-color:var(--accent)}
+.gtabs small{font:700 11px var(--mono);padding:1px 7px;border-radius:99px;background:var(--bg-2);color:var(--faint)}.gtabs .on small{background:var(--accent-soft);color:var(--accent)}
+.gpane{animation:dfade .3s ease}
 .docs-head h1{margin:6px 0 4px;font-size:28px}.docs-head p{margin:0 0 8px}
 .doc-pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
 .doc-pager a{padding:14px 16px;color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:4px;transition:border-color .2s}.doc-pager a:hover{border-color:var(--accent)}
 .doc-pager small{font:700 11px var(--mono);color:var(--faint)}.doc-pager b{font-size:14px;line-height:1.35}.doc-pager .nx{text-align:right}
-@media (max-width:860px){.doc-btn span{display:none}.doc-pager{grid-template-columns:1fr}}
+@media (max-width:640px){.tabs>* span{display:none}.tabs{margin-left:0}}
+@media (max-width:860px){.doc-pager{grid-template-columns:1fr}}
 @media (max-width:860px){.doc-wrap{grid-template-columns:1fr}.doc-toc{position:static;max-height:none}.doc{padding:22px 18px}.docs-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -605,9 +610,10 @@ function settings(){
 
 // ---------- views ----------
 function topbar(){
-  return `<div class="top"><span class="logo">ID</span><div class="brand">Interview Drill<small>${Q.length} karta · Anki uslubi</small></div><span class="sp"></span>
-  <label class="search"><input id="sq" type="search" placeholder="Karta qidirish…" value="${esc(V.search)}" autocomplete="off"><kbd>/</kbd></label>
-  <a class="icon-btn doc-btn" href="#docs" title="Qo'llanmalar" aria-label="Qo'llanmalar">📚<span>Qo'llanmalar</span></a>
+  const dv=V.view==="docs"||V.view==="doc";
+  return `<div class="top"><span class="logo">ID</span><div class="brand">Interview Drill<small>${Q.length} karta · Anki uslubi</small></div>
+  <nav class="tabs" role="tablist"><span class="tab-ind"></span><button role="tab" class="${dv?"":"on"}" aria-selected="${!dv}" ${act(()=>{if(location.hash)history.pushState("","",location.pathname+location.search);go("decks");})}>🗂<span>Kartalar</span></button>${DOCS.length?`<a role="tab" class="${dv?"on":""}" aria-selected="${dv}" href="#docs">📚<span>Qo'llanmalar</span></a>`:""}</nav><span class="sp"></span>
+  ${dv?"":`<label class="search"><input id="sq" type="search" placeholder="Karta qidirish…" value="${esc(V.search)}" autocomplete="off"><kbd>/</kbd></label>`}
   <button class="icon-btn" ${act(settings)} title="Sozlamalar" aria-label="Sozlamalar">⚙︎</button></div>`;
 }
 function decksView(){
@@ -622,7 +628,7 @@ function decksView(){
     <div class="card"><span class="ic">⟳</span><div><div class="v"><span class="c-learn">${all.ln}</span> · <span class="c-rev">${all.rv}</span></div><div class="l">kutyapti</div></div></div>
     <div class="card"><span class="ic">★</span><div><div class="v">${mature}</div><div class="l">yetilgan (21+ kun)</div></div></div>
   </div>`;
-  h+=docsHome()+`<div class="h2">To'plamlar</div>`;
+  h+=`<div class="h2">To'plamlar</div>`;
   h+=`<div class="card decks"><div class="dk-head"><span>To'plamlar</span><span class="c-new">Yangi</span><span class="c-learn">O'rg.</span><span class="c-rev">Takr.</span><span></span></div>`;
   const row=(id,fresh)=>{const d=DECK[id],c=counts(d.qs),open=S.open.includes(id),kids=d.kids.length;
     let r=`<div class="dk l${d.lvl}${fresh?" fresh":""}" ${act(()=>go("overview",{deck:id}))} role="button" tabindex="0">
@@ -681,15 +687,11 @@ function docMd(src){
 }
 const docGroups=()=>{const g=[];DOCS.forEach(d=>{let x=g.find(y=>y[0]===d[3]);x||g.push(x=[d[3],[]]);x[1].push(d);});return g;};
 const readMin=src=>Math.max(1,Math.round(src.split(/\s+/).length/180));
-function docsHome(){
-  if(!DOCS.length)return"";
-  const gs=docGroups(),min=DOCS.reduce((a,d)=>a+readMin(d[2]),0);
-  return`<a class="card docs-banner" href="#docs"><span class="doc-ic">📚</span><div><b>Qo'llanmalar</b><p>${gs.map(g=>esc(g[0])+" · "+g[1].length).join(" &nbsp;|&nbsp; ")}</p><small>${DOCS.length} ta hujjat · ~${Math.round(min/60*10)/10} soat o'qish</small></div><span class="go">→</span></a>`;
-}
 function docsLib(){
-  let h=`<div class="crumbs"><a class="btn ghost sm" href="#">← Bosh sahifa</a></div><div class="docs-head"><h1>Qo'llanmalar</h1><p class="muted">Mavzu bo'yicha konspekt va kurs darslari. Karta yodlashdan oldin — tushunish uchun.</p></div>`;
-  docGroups().forEach(([g,L])=>{h+=`<div class="h2">${esc(g)} <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:600">${L.length} ta</span></div>`+docTiles(L);});
-  return h;
+  const gs=docGroups(),cur=gs.find(g=>g[0]===V.dg)||gs[0];
+  let h=topbar()+`<div class="docs-head"><h1>Qo'llanmalar</h1><p class="muted">Mavzu bo'yicha konspekt va kurs darslari. Karta yodlashdan oldin — tushunish uchun.</p></div>`;
+  h+=`<div class="gtabs" role="tablist">${gs.map(([g,L])=>`<button role="tab" class="${g===cur[0]?"on":""}" aria-selected="${g===cur[0]}" ${act(()=>{V.dg=g;render();})}>${esc(g)}<small>${L.length}</small></button>`).join("")}</div>`;
+  return h+`<div class="gpane" key="${esc(cur[0])}">${docTiles(cur[1])}</div>`;
 }
 function docTiles(L){
   return`<div class="docs-grid">${L.map(([id,t,src])=>{const secs=(src.match(/^## /gm)||[]).length,lead=(src.match(/^> (.+)$/m)||[,""])[1].replace(/\*\*/g,"");
@@ -701,7 +703,8 @@ function docView(){
   const {h,toc}=docMd(d[2]);
   const G=DOCS.filter(x=>x[3]===d[3]),k=G.indexOf(d),pv=G[k-1],nx=G[k+1];
   const pager=pv||nx?`<div class="doc-pager">${pv?`<a class="card" href="#doc/${esc(pv[0])}"><small>← Oldingi</small><b>${esc(pv[1])}</b></a>`:"<span></span>"}${nx?`<a class="card nx" href="#doc/${esc(nx[0])}"><small>Keyingi →</small><b>${esc(nx[1])}</b></a>`:""}</div>`:"";
-  return`<div class="crumbs"><a class="btn ghost sm" href="#docs">← Qo'llanmalar</a><span class="muted" style="font-size:13px;margin-left:8px">${esc(d[3])}${G.length>1?` · ${k+1}/${G.length}`:""}</span></div>
+  V.dg=d[3];
+  return topbar()+`<div class="crumbs"><a class="btn ghost sm" href="#docs">← Qo'llanmalar</a><span class="muted" style="font-size:13px;margin-left:8px">${esc(d[3])}${G.length>1?` · ${k+1}/${G.length}`:""}</span></div>
   <div class="doc-wrap"><nav class="doc-toc card"><div class="tt">Mundarija</div>${toc.map(([id,t])=>`<a href="#doc/${esc(d[0])}/${id}">${mdi(t)}</a>`).join("")}</nav>
   <article class="card doc"><h1>${mdi(d[1])}</h1>${h}${pager}</article></div>`;
 }
@@ -843,7 +846,7 @@ document.addEventListener("keydown",e=>{
   if(tag==="TEXTAREA"){if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();$("#show")&&$("#show").click();}if(e.key==="Escape")e.target.blur();return;}
   if(tag==="INPUT"){if(e.key==="Escape"){V.search="";render();}return;}
   if(e.metaKey||e.ctrlKey||e.altKey)return;
-  if(V.view!=="study"){if(e.key==="/"){e.preventDefault();$("#sq")&&$("#sq").focus();}if(e.key==="Escape"&&V.view==="overview")go("decks");if(e.key==="Escape"&&V.view==="doc")location.hash="";return;}
+  if(V.view!=="study"){if(e.key==="/"){e.preventDefault();$("#sq")&&$("#sq").focus();}if(e.key==="Escape"&&V.view==="overview")go("decks");if(e.key==="Escape"&&V.view==="doc")location.hash="docs";return;}
   if(e.key==="Escape"){const s=S.sess;s&&s.deck&&DECK[s.deck]?go("overview",{deck:s.deck}):go("decks");return;}
   if(e.key==="z"||e.key==="Z"){undo();return;}
   const show=$("#show");

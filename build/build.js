@@ -73,25 +73,21 @@ const block = [
   "const GLO=" + js(GLO.map(g => [g.t, g.d])) + ";"
 ].join("\n");
 
-// docs/*.md -> DOCS: [id, sarlavha, markdown] (home sahifadagi "Qo'llanmalar")
+// docs/*.md -> "Qo'llanmalar" guruhi; docs/**/<papka>/*.md (rekursiv) -> guruh nomi = shu papka README.md "# " sarlavhasi
+// (README yo'q bo'lsa papka yo'li). README o'zi kirmaydi. DOCS element: [id, sarlavha, markdown, guruh]
 const docsDir = path.join(root, "docs");
-// docs/*.md -> "Qo'llanmalar" guruhi; docs/<papka>/*.md -> papka README sarlavhasi bilan guruh (README o'zi kirmaydi)
-// DOCS element: [id, sarlavha, markdown, guruh]
-const mdFiles = d => fs.readdirSync(d).filter(f => f.endsWith(".md") && f !== "README.md").sort();
-const readDoc = (rel, group) => {
-  const src = fs.readFileSync(path.join(docsDir, rel), "utf8");
-  const m = src.match(/^# (.+)$/m);
-  return [rel.replace(/\.md$/, "").replace(/\//g, "-"), m ? m[1].trim() : rel, src, group];
-};
 const DOCS = [];
-if (fs.existsSync(docsDir)) {
-  mdFiles(docsDir).forEach(f => DOCS.push(readDoc(f, "Qo'llanmalar")));
-  fs.readdirSync(docsDir, { withFileTypes: true }).filter(e => e.isDirectory()).sort((a, b) => a.name.localeCompare(b.name)).forEach(e => {
-    const dir = path.join(docsDir, e.name), rd = path.join(dir, "README.md");
-    const g = fs.existsSync(rd) && (fs.readFileSync(rd, "utf8").match(/^# (.+)$/m) || [])[1] || e.name;
-    mdFiles(dir).forEach(f => DOCS.push(readDoc(e.name + "/" + f, g.trim())));
+const walkDocs = rel => {
+  const dir = path.join(docsDir, rel), ents = fs.readdirSync(dir, { withFileTypes: true });
+  const rd = path.join(dir, "README.md");
+  const group = !rel ? "Qo'llanmalar" : ((fs.existsSync(rd) && (fs.readFileSync(rd, "utf8").match(/^# (.+)$/m) || [])[1]) || rel).trim();
+  ents.filter(e => e.isFile() && e.name.endsWith(".md") && e.name !== "README.md").map(e => e.name).sort().forEach(f => {
+    const r = rel ? rel + "/" + f : f, src = fs.readFileSync(path.join(docsDir, r), "utf8"), m = src.match(/^# (.+)$/m);
+    DOCS.push([r.replace(/\.md$/, "").replace(/\//g, "-"), m ? m[1].trim() : f, src, group]);
   });
-}
+  ents.filter(e => e.isDirectory()).map(e => e.name).sort().forEach(d => walkDocs(rel ? rel + "/" + d : d));
+};
+if (fs.existsSync(docsDir)) walkDocs("");
 
 const start = shell.indexOf("const QD=[");
 const marker = "const secOf=q=>";
