@@ -23,6 +23,8 @@ Run after any change to data or shell.
 
 ## UI (shell-v9)
 - Decks: direction › (group) › domain › section. `GRP` list items are a domain key or `[groupId, name, [domains]]` (Backend DB/Cache/MQ groups). A domain belongs to exactly one place in `GRP`. Single-domain direction (Architecture, Algorithms, Soft skills) shows sections directly.
+- Interview rejimi (`mock`, `mockMenu`, `MOCK_N`=20): bosh sahifadagi 🎤 karta yoki to'plam menyusi — tanlangan direction/to'plamdan (yoki hammasidan) 20 ta tasodifiy savol, `cram` sessiya (requeue yo'q, baholar FSRS'ga yoziladi), daraja filtri hisobga olinadi.
+- O'qish sozlamalari (⚙︎ ichida, `S.rd`): `principal-swe-knowledge-graph` ReadingControls'dan — 17 palitra (`PAL`, Quartz ranglari token'larga map), 20 shrift (`FONTS`, Google Fonts on-demand, `--read`), o'lcham (`--rsize`), hoshiya (`--pagew`), qalin, bionic (`bionic()` render'dan keyin), fokus (saqlanmaydi, Esc chiqaradi), to'liq ekran. `applyRead()` DOM yo'q bo'lsa (verify) return qiladi.
 - Spaced repetition: FSRS-5 (default weights, `S.cfg.ret` target retention 0.9; old SM-2 `srs` entries converted lazily), 4 buttons (Qayta / Qiyin / Yaxshi / Oson), learning steps 1m/6m, daily new-card limit (`S.cfg.newDay`, default 20), day rolls over at 04:00.
 - State lives in `localStorage` key `dbdrill.v1` (`res`, `srs`, `days`, `sess`, `cfg`, `nt`). Keep it backward-compatible; old `res` entries are migrated into `srs` on load.
 - Older shells (`shell-v7.html`, `shell-v8.html`) are backups only.
@@ -40,7 +42,7 @@ Run after any change to data or shell.
 ## Docs (standalone notes)
 - `docs/*.md` — Uzbek qo'llanmalar, ASCII diagrammalar bilan. build.js ularni `const DOCS=[];` (shell'da `secOf` qatoridan keyin) o'rniga `[id, # sarlavha, markdown]` qilib joylaydi.
 - DOCS element `[id, sarlavha, md, guruh]`: `docs/*.md` = "Qo'llanmalar" guruhi; `docs/**/` papkalar rekursiv kiradi (hozir `docs/devops/linux/`), guruh nomi = o'sha papka `README.md` `# ` sarlavhasi (README o'zi kirmaydi).
-- UI: topbar'da tab'lar (🗂 Kartalar | 📚 Qo'llanmalar); `#docs` sahifa (`docsLib`) guruhlar bo'yicha ichki tab'lar (`V.dg`), doc ichida guruh bo'yicha Oldingi/Keyingi pager, `#doc/<id>` (va `#doc/<id>/<h2-slug>`) hash route bilan `docView` ochiladi: sticky mundarija + `docMd` renderer (h2–h4, jadval, blockquote, kod, ro'yxat). Yangi `.md` qo'shish = faylni `docs/` ga tashlab build.
+- UI: topbar'da tab'lar (🎯 Interview | 📚 Qo'llanmalar); `#docs` sahifa (`docsLib`) guruhlar bo'yicha ichki tab'lar (`V.dg`), doc ichida guruh bo'yicha Oldingi/Keyingi pager, `#doc/<id>` (va `#doc/<id>/<h2-slug>`) hash route bilan `docView` ochiladi: sticky mundarija + `docMd` renderer (h2–h4, jadval, blockquote, kod, ro'yxat). Yangi `.md` qo'shish = faylni `docs/` ga tashlab build.
 - `docs/linux-user-group-permission.md` — Senior level: user/UID, group, rwx/octal, kernel tekshiruv tartibi, SUID/SGID/sticky, umask, real/effective UID, capabilities, sudo, ACL mask, chattr/mount, SELinux, userns/K8s, PAM/NSS/LDAP, audit, architect jadvali (2026-10-01).
 - Docs qoidalari: har bo'lim senior darajada ("Senior nuqtalar" bloki bilan). Diagrammalar faqat ASCII (`+ - | v >`), emoji va Unicode box-drawing yo'q; jadvallar Markdown table.
 
