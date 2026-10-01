@@ -1,17 +1,17 @@
 # Dars 5 — Navigatsiya
 
-> **Natija:** filesystem'da erkin harakat qilish, absolute/relative path, glob, xavfsiz file operatsiyalari. Senior darajada: inode, hard link va symlink farqi, `mv` va `cp` ichkarida nima qiladi, atomic yozish, script'larda path bilan bog'liq xavflar.
+> **Natija:** filesystem'da erkin harakat qilish, absolute/relative path, glob, xavfsiz fayl operatsiyalari. Inode, hard link va symlink farqi, `mv` va `cp` ichkarida nima qiladi, atomic yozish, script'larda path bilan bog'liq xavflar.
 
-## 1. Problem — fayllar qayerda va qanday topiladi?
+## 1. Muammo — fayllar qayerda va qanday topiladi?
 
-Server'da GUI file manager yo'q. Siz bilishingiz kerak:
+Server'da GUI fayl manager yo'q. Siz bilishingiz kerak:
 - hozir qayerdaman;
-- kerakli file qayerda (config, log, app);
+- kerakli fayl qayerda (config, log, app);
 - uni qanday qilib **xavfsiz** ko'chirish, nusxalash, o'chirish mumkin.
 
 Server'da `rm` xatosi qaytarilmaydi — **Korzina yo'q**. Shuning uchun bu dars nafaqat "qanday", balki "qanday qilib buzmaslik" haqida.
 
-## 2. Mental model — bitta tree
+## 2. Linux'da barcha fayllar bitta daraxtda
 
 Linux'da hammasi bitta tree, uning root'i — `/`. Disk'lar shu tree'ga **mount** qilinadi (Windows'dagi `C:` / `D:` kabi harflar yo'q).
 
@@ -34,7 +34,7 @@ df -h .          # joriy papka qaysi filesystem'da
 
 > **Nega bu muhim:** `/var/log` to'lsa, bu `/` ham to'ladi degani bo'lishi mumkin (agar ular bitta filesystem'da bo'lsa). Production'da `/var` yoki data papkalari ko'pincha alohida disk'ka chiqariladi — log to'lsa ham OS ishlayveradi.
 
-## 3. Asosiy command'lar
+## 3. Asosiy buyruqlar
 
 ```bash
 pwd                   # current (working) directory
@@ -61,9 +61,9 @@ tree -L 2             # tree ko'rinishi (alohida o'rnatiladi)
 +-- tur (- file, d directory, l symlink) + ruxsatlar (10-dars)
 ```
 
-> **Gotcha:** `.` bilan boshlangan file'lar (`.bashrc`, `.env`, `.git`) yashirin. `ls` ularni ko'rsatmaydi — `ls -a` kerak. Ko'p "file yo'q" degan xatolar aslida yashirin file.
+> **Tuzoq:** `.` bilan boshlangan fayllar (`.bashrc`, `.env`, `.git`) yashirin. `ls` ularni ko'rsatmaydi — `ls -a` kerak. Ko'p "fayl yo'q" degan xatolar aslida yashirin fayl.
 
-## 4. Absolute vs relative path
+## 4. To'liq (absolute) va nisbiy (relative) yo'l
 
 | Tur | Boshlanishi | Misol | Qayerda ishlatiladi |
 |---|---|---|---|
@@ -72,12 +72,12 @@ tree -L 2             # tree ko'rinishi (alohida o'rnatiladi)
 
 Relative path **har doim joriy directory'ga nisbatan**. Joriy directory esa process'ning holati — u kimga bog'liq, qayerdan ishga tushirilganiga.
 
-> **Senior gotcha:** cron va systemd script'ni **boshqa working directory**'da ishga tushiradi (odatda `/` yoki home). Script ichida `./config.yml` bo'lsa, u topilmaydi. Yechimlar:
+> **Tuzoq:** cron va systemd script'ni **boshqa working directory**'da ishga tushiradi (odatda `/` yoki home). Script ichida `./config.yml` bo'lsa, u topilmaydi. Yechimlar:
 > - absolute path ishlatish;
 > - script o'z papkasiga o'tishi: `cd "$(dirname "$(readlink -f "$0")")"`;
 > - systemd'da `WorkingDirectory=/opt/app`.
 
-## 5. File operatsiyalari — naive vs xavfsiz
+## 5. Fayl yaratish, nusxalash, ko'chirish, o'chirish — xavfsiz usullar
 
 ```bash
 mkdir -p a/b/c                  # nested; mavjud bo'lsa xato bermaydi (idempotent)
@@ -90,11 +90,11 @@ rm -i file                      # so'rab o'chiradi
 rm -rf dir/                     # QAYTARIB BO'LMAYDI
 ```
 
-### Idempotency — automation'ning asosiy xususiyati
+### Idempotency — necha marta ishga tushirsang ham natija bir xil
 
 **Idempotent** — necha marta ishga tushirsangiz ham natija bir xil.
 
-| Command | Idempotent? | Ikkinchi marta |
+| Buyruq | Idempotent? | Ikkinchi marta |
 |---|---|---|
 | `mkdir dir` | Yo'q | `File exists` xatosi, script to'xtaydi |
 | `mkdir -p dir` | Ha | Hech narsa qilmaydi |
@@ -102,7 +102,7 @@ rm -rf dir/                     # QAYTARIB BO'LMAYDI
 | `rm -f file` | Ha | Jim |
 | `echo x >> file` | Yo'q | Qator ikki marta qo'shiladi |
 
-Deploy script'lar qayta ishga tushirilishi kerak (xato bo'lsa, retry). Shuning uchun idempotent command'larni tanlang. Ansible, Terraform kabi tool'lar shu g'oya ustiga qurilgan.
+Deploy script'lar qayta ishga tushirilishi kerak (xato bo'lsa, retry). Shuning uchun idempotent buyruqlarni tanlang. Ansible, Terraform kabi vositalar shu g'oya ustiga qurilgan.
 
 ### `rm -rf` va bo'sh o'zgaruvchi
 
@@ -123,7 +123,7 @@ rm -rf -- "$DIR"
 
 Production versiyada qo'shimcha himoya: o'chiriladigan path kutilgan joyda ekanini tekshirish (allowlist) va `--` (path `-` bilan boshlansa ham option deb o'qilmaydi).
 
-### `mv` ichkarida nima qiladi
+### `mv` aslida nima qiladi
 
 ```
  Bir filesystem ichida:     mv = rename() syscall
@@ -135,9 +135,9 @@ Production versiyada qo'shimcha himoya: o'chiriladigan path kutilgan joyda ekani
                             - atomic EMAS: o'rtada uzilsa, yarim file qoladi
 ```
 
-### Atomic yozish pattern'i (production)
+### Faylni xavfsiz almashtirish (atomic yozish)
 
-Config yoki muhim file'ni to'g'ridan-to'g'ri ustidan yozsangiz, o'qiyotgan process yarim yozilgan file'ni ko'rishi mumkin.
+Config yoki muhim faylni to'g'ridan-to'g'ri ustidan yozsangiz, o'qiyotgan process yarim yozilgan faylni ko'rishi mumkin.
 
 ```bash
 # Naive: o'qiyotgan app yarim file'ni ko'rishi mumkin
@@ -149,9 +149,9 @@ generate_config > "$tmp"
 mv "$tmp" /etc/app/config.yml      # bir filesystem -> rename(), atomic
 ```
 
-Muhim: vaqtinchalik file **o'sha papkada** (o'sha filesystem'da) bo'lishi kerak, `/tmp`'da emas — aks holda `mv` atomic bo'lmaydi.
+Muhim: vaqtinchalik fayl **o'sha papkada** (o'sha filesystem'da) bo'lishi kerak, `/tmp`'da emas — aks holda `mv` atomic bo'lmaydi.
 
-### Deploy'da symlink switch
+### Yangi versiyaga symlink orqali bir zumda o'tish
 
 ```bash
 /opt/app/releases/v41/
@@ -161,9 +161,9 @@ Muhim: vaqtinchalik file **o'sha papkada** (o'sha filesystem'da) bo'lishi kerak,
 ln -sfn releases/v43 /opt/app/current.tmp && mv -T /opt/app/current.tmp /opt/app/current
 ```
 
-Yangi versiyaga o'tish — bitta atomic rename. Rollback — symlink'ni eski versiyaga qaytarish. Capistrano va ko'p deploy tool'lari shunday ishlaydi.
+Yangi versiyaga o'tish — bitta atomic rename. Rollback — symlink'ni eski versiyaga qaytarish. Capistrano va ko'p deploy vositalari shunday ishlaydi.
 
-## 6. Glob (wildcard)
+## 6. Glob — `*` va `?` bilan bir nechta faylni tanlash
 
 ```bash
 ls *.log             # .log bilan tugaganlar
@@ -172,18 +172,18 @@ ls file[0-9].txt     # diapazon
 ls {a,b}.txt         # brace expansion (glob emas: file mavjudligini tekshirmaydi)
 ```
 
-**Glob'ni shell ochadi, command emas.** `ls *.log` -> bash uni `ls a.log b.log` ga aylantiradi, `ls` faqat tayyor ro'yxatni ko'radi.
+**Glob'ni shell ochadi, buyruq emas.** `ls *.log` -> bash uni `ls a.log b.log` ga aylantiradi, `ls` faqat tayyor ro'yxatni ko'radi.
 
 Natijalar:
-- Mos file topilmasa, bash pattern'ni o'zgarishsiz uzatadi: `ls *.xyz` -> `cannot access '*.xyz'`.
-- `*` yashirin (`.` bilan boshlangan) file'larni olmaydi.
-- File juda ko'p bo'lsa: `rm *.tmp` -> `Argument list too long`. Yechim: `find . -name '*.tmp' -delete`.
+- Mos fayl topilmasa, bash usul'ni o'zgarishsiz uzatadi: `ls *.xyz` -> `cannot access '*.xyz'`.
+- `*` yashirin (`.` bilan boshlangan) fayllarni olmaydi.
+- Fayl juda ko'p bo'lsa: `rm *.tmp` -> `Argument list too long`. Yechim: `find . -name '*.tmp' -delete`.
 
-> **Security gotcha:** `-rf` nomli file yaratilsa, `rm *` uni option deb o'qiydi. Har doim `rm -- *` yoki `rm ./*` yozing.
+> **Xavfsizlik tuzog'i:** `-rf` nomli fayl yaratilsa, `rm *` uni option deb o'qiydi. Har doim `rm -- *` yoki `rm ./*` yozing.
 
-## 7. inode — file aslida nima
+## 7. inode — fayl diskda aslida qanday saqlanadi
 
-File nomi — faqat **directory entry**. Haqiqiy file — **inode**: metadata (owner, permission, size, vaqtlar, data block'lar manzili). **Nom inode ichida yo'q.**
+Fayl nomi — faqat **directory entry**. Haqiqiy fayl — **inode**: metadata (owner, permission, size, vaqtlar, data block'lar manzili). **Nom inode ichida yo'q.**
 
 ```
  directory entry          inode #1234                 data blocks
@@ -197,13 +197,13 @@ stat notes.txt         # inode'ning barcha metadata'si
 df -i                  # inode'lar ishlatilishi
 ```
 
-### Bundan kelib chiqadigan production faktlar
+### Bundan kelib chiqadigan amaliy holatlar
 
-1. **Disk bo'sh, lekin `No space left on device`.** Inode'lar tugagan: millionlab mayda file (session, cache, mail queue). Tekshirish: `df -i`. Topish: `sudo du --inodes -x / | sort -n | tail`.
-2. **File o'chirildi, lekin disk bo'shamadi.** File inode'ni ochiq ushlab turgan process bor (masalan, log yozayotgan app). Data link count 0 bo'lib, **barcha fd'lar yopilgandagina** o'chadi. Topish: `sudo lsof +L1`. Yechim: process'ni restart yoki log'ni o'chirish o'rniga `truncate -s 0 file` (6-darsda chuqurroq).
+1. **Disk bo'sh, lekin `No space left on device`.** Inode'lar tugagan: millionlab mayda fayl (session, cache, mail queue). Tekshirish: `df -i`. Topish: `sudo du --inodes -x / | sort -n | tail`.
+2. **Fayl o'chirildi, lekin disk bo'shamadi.** Fayl inode'ni ochiq ushlab turgan process bor (masalan, log yozayotgan app). Data link count 0 bo'lib, **barcha fd'lar yopilgandagina** o'chadi. Topish: `sudo lsof +L1`. Yechim: process'ni restart yoki log'ni o'chirish o'rniga `truncate -s 0 file` (6-darsda chuqurroq).
 3. **`mv` bir filesystem ichida bir zumda** — faqat directory entry o'zgaradi, data ko'chmaydi.
 
-## 8. Hard link vs symlink
+## 8. Hard link va symlink farqi
 
 ```bash
 ln file.txt hard.txt        # hard link — o'sha inode'ga yangi nom
@@ -223,29 +223,29 @@ ln -s /etc/nginx cfg        # symlink — path'ni saqlovchi kichik file
 | Original o'chirilsa | Ishlayveradi (link count > 0) | **Broken link** |
 | Directory uchun | yo'q | ha |
 | Boshqa filesystem'ga | yo'q (inode raqami faqat FS ichida unikal) | ha |
-| Ko'rinishi | Oddiy file, ajratib bo'lmaydi | `ls -l` da `l` va `->` |
+| Ko'rinishi | Oddiy fayl, ajratib bo'lmaydi | `ls -l` da `l` va `->` |
 
 **Real misollar:**
 - `/etc/nginx/sites-enabled/site -> ../sites-available/site` — config'ni yoqish/o'chirish.
 - `/opt/app/current -> releases/v42` — deploy (yuqorida).
 - `/usr/bin/python3 -> python3.12` — versiyalar.
 
-> **Gotcha:** relative symlink **link joylashgan papkaga** nisbatan hisoblanadi, siz turgan joyga emas. `ln -s ../sites-available/site /etc/nginx/sites-enabled/` — to'g'ri; `ln -s sites-available/site ...` — broken bo'ladi.
+> **Tuzoq:** relative symlink **link joylashgan papkaga** nisbatan hisoblanadi, siz turgan joyga emas. `ln -s ../sites-available/site /etc/nginx/sites-enabled/` — to'g'ri; `ln -s sites-available/site ...` — broken bo'ladi.
 
-> **Security gotcha (Staff darajada):** root ishlaydigan script `/tmp/report.txt`'ga yozsa, hujumchi oldindan `/tmp/report.txt -> /etc/passwd` symlink yaratib qo'yishi mumkin (symlink attack). Yechim: `mktemp` ishlating, oldindan ma'lum nomlarni emas.
+> **Xavfsizlik tuzog'i (Staff darajada):** root ishlaydigan script `/tmp/report.txt`'ga yozsa, hujumchi oldindan `/tmp/report.txt -> /etc/passwd` symlink yaratib qo'yishi mumkin (symlink attack). Yechim: `mktemp` ishlating, oldindan ma'lum nomlarni emas.
 
-## 9. Path xatolari va debugging
+## 9. Yo'l (path) bilan bog'liq xatolar va ularni topish
 
-| Symptom | Sabab | Yechim |
+| Belgi | Sabab | Yechim |
 |---|---|---|
-| `No such file or directory`, lekin file bor | Typo, case (`Docs` != `docs`) | `Tab`, `ls` |
+| `No such file or directory`, lekin fayl bor | Typo, case (`Docs` != `docs`) | `Tab`, `ls` |
 | Nomda probel | Shell ikki so'zga bo'ladi | `"My Docs"` yoki `My\ Docs` |
 | Symlink ishlamaydi | Broken link | `ls -l`, `readlink -f` |
 | Script'da ishlaydi, cron'da yo'q | Working directory boshqa | Absolute path |
 | `No space left`, `df -h` bo'sh | Inode tugagan | `df -i` |
 | `rm` qildim, disk bo'shamadi | Ochiq fd | `lsof +L1` |
 
-> **Qoida:** script'larda har doim o'zgaruvchilarni qo'shtirnoq ichiga oling: `"$file"`. Qo'shtirnoqsiz `$file` probel bor nomda ikki argumentga bo'linadi va noto'g'ri file ustida ish qiladi.
+> **Qoida:** script'larda har doim o'zgaruvchilarni qo'shtirnoq ichiga oling: `"$file"`. Qo'shtirnoqsiz `$file` probel bor nomda ikki argumentga bo'linadi va noto'g'ri fayl ustida ish qiladi.
 
 ## Amaliy mashg'ulot
 
@@ -253,38 +253,38 @@ ln -s /etc/nginx cfg        # symlink — path'ni saqlovchi kichik file
 2. `cp` va `cp -a` farqini `ls -l` timestamp'larida ko'ring.
 3. Hard link va symlink yarating, `ls -li` bilan inode'larni solishtiring. Original'ni o'chiring — qaysi biri ishlayveradi?
 4. Atomic switch: `releases/v1`, `releases/v2` yarating, `current` symlink'ni `ln -sfn` + `mv -T` bilan almashtiring.
-5. Buzib-tuzat: `python3 -c "f=open('/tmp/big','w'); import time; time.sleep(600)" &` bilan file ochiq qoldiring, `rm /tmp/big`, keyin `lsof +L1` bilan topib, sababni tushuntiring.
+5. Buzib-tuzat: `python3 -c "f=open('/tmp/big','w'); import time; time.sleep(600)" &` bilan fayl ochiq qoldiring, `rm /tmp/big`, keyin `lsof +L1` bilan topib, sababni tushuntiring.
 6. `touch -- -rf` yarating va `rm *` nima qilishini o'ylab ko'ring (ishga tushirmasdan). Keyin xavfsiz o'chiring.
 
 ## Uy vazifa
 
 1. Script yozing: `TARGET` papkasini tozalaydi. `set -u`, `${TARGET:?}` va allowlist tekshiruvi bilan. `TARGET`siz va `TARGET=/` bilan ishga tushirib, himoya ishlaganini ko'rsating.
-2. Config file'ni atomic yangilaydigan script yozing va nega `mktemp` `/tmp`'da emas, o'sha papkada bo'lishi kerakligini tushuntiring.
-3. 10 000 ta bo'sh file yarating (`touch f{1..10000}`), `df -i` qanday o'zgarganini ko'ring, keyin `find . -name 'f*' -delete` bilan tozalang.
+2. Config faylni atomic yangilaydigan script yozing va nega `mktemp` `/tmp`'da emas, o'sha papkada bo'lishi kerakligini tushuntiring.
+3. 10 000 ta bo'sh fayl yarating (`touch f{1..10000}`), `df -i` qanday o'zgarganini ko'ring, keyin `find . -name 'f*' -delete` bilan tozalang.
 
 ## Test savollari
 
 1. Nega cron script'ida relative path xavfli? 3 ta yechim ayting.
-2. Idempotent command nima? `mkdir` va `mkdir -p` misolida tushuntiring.
+2. Idempotent buyruq nima? `mkdir` va `mkdir -p` misolida tushuntiring.
 3. `rm -rf "$DIR/"*` nega xavfli va qanday himoyalanadi?
 4. Nega bir filesystem ichida `mv` atomic, boshqasiga esa yo'q?
 5. Hard link va symlink farqi? Nega hard link boshqa filesystem'ga qilinmaydi?
 6. Disk bo'sh, lekin `No space left` — 2 ta mumkin bo'lgan sabab?
-7. File o'chirildi, lekin disk bo'shamadi — nega va qanday topasiz?
-8. Glob'ni kim ochadi — shell'mi yoki command? Bundan qanday xavf kelib chiqadi?
+7. Fayl o'chirildi, lekin disk bo'shamadi — nega va qanday topasiz?
+8. Glob'ni kim ochadi — shell'mi yoki buyruq? Bundan qanday xavf kelib chiqadi?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - Script'da relative path va qo'shtirnoqsiz o'zgaruvchilar.
 - `rm -rf` dan oldin o'zgaruvchini tekshirmaslik.
-- Muhim file'ni joyida qayta yozish (atomic emas).
+- Muhim faylni joyida qayta yozish (atomic emas).
 - `mkdir` / `echo >>` bilan idempotent bo'lmagan deploy script.
 - Disk muammosida faqat `df -h`'ga qarash, `df -i` va `lsof +L1`'ni unutish.
 
-## Senior xulosa
+## Xulosa
 
 - Linux'da bitta tree, disk'lar unga mount qilinadi. Qaysi papka qaysi disk'da — `findmnt`, `df`.
-- Nom — faqat ishora, file — inode. Bundan: hard link, inode tugashi, "o'chirilgan, lekin joy egallagan" file.
+- Nom — faqat ishora, fayl — inode. Bundan: hard link, inode tugashi, "o'chirilgan, lekin joy egallagan" fayl.
 - Bir filesystem ichida `rename()` atomic — atomic config yozish va symlink deploy shunga tayanadi.
-- Script'larda: absolute path, qo'shtirnoq, `set -u`, `${VAR:?}`, `--`, idempotent command'lar.
+- Script'larda: absolute path, qo'shtirnoq, `set -u`, `${VAR:?}`, `--`, idempotent buyruqlar.
 - Server'da Korzina yo'q: har xavfli operatsiyadan oldin "noto'g'ri bo'lsa nima bo'ladi?" deb so'rang.

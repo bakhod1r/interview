@@ -1,22 +1,22 @@
 # Dars 18 — SCP, Rsync, FileZilla
 
-> **Natija:** file'larni local <-> remote xavfsiz ko'chirish va vaziyatga qarab tool tanlash. Senior darajada: rsync delta algoritmi, trailing slash va `--delete` xavflari, atomic deploy, uzilishga chidamlilik, integrity tekshiruvi, va "file ko'chirish" qachon to'g'ri deploy usuli emas.
+> **Natija:** fayllarni local <-> remote xavfsiz ko'chirish va vaziyatga qarab vosita tanlash. Rsync delta algoritmi, trailing slash va `--delete` xavflari, atomic deploy, uzilishga chidamlilik, integrity tekshiruvi, va "fayl ko'chirish" qachon to'g'ri deploy usuli emas.
 
-## 1. Problem — file'ni server'ga qanday yetkazish?
+## 1. Muammo — faylni server'ga qanday yetkazish?
 
 Vazifalar:
 - Bitta config'ni server'ga yuborish.
 - 5 GB log'ni tahlil uchun yuklab olish.
-- Sayt papkasini har deploy'da yangilash — faqat o'zgargan file'lar bilan.
+- Sayt papkasini har deploy'da yangilash — faqat o'zgargan fayllar bilan.
 - Backup'ni boshqa server'ga muntazam sinxronlash.
 
 Talablar: **xavfsiz** (shifrlangan, autentifikatsiya), **samarali** (keraksiz baytlarni yubormaslik), **ishonchli** (uzilsa davom etish, buzilmaganini tekshirish).
 
 Hammasi SSH ustida ishlaydi — 17-darsdagi kalit, agent va `~/.ssh/config` (aliaslar, `ProxyJump`) shu yerda ham ishlaydi.
 
-| Tool | Qachon | Kuchli tomoni |
+| Vosita | Qachon | Kuchli tomoni |
 |---|---|---|
-| `scp` | 1–2 file, bir martalik | Oddiy |
+| `scp` | 1–2 fayl, bir martalik | Oddiy |
 | `rsync` | Papka, takroriy sinxron, katta hajm | Faqat farqni yuboradi, davom etadi, metadata saqlaydi |
 | `sftp` / FileZilla (SFTP) | Interaktiv ko'rib chiqish, GUI | Qulay |
 
@@ -39,11 +39,11 @@ scp -3 web1:/etc/app.conf web2:/tmp/
 
 > **Tarix va nuance:** eski `scp` protokoli remote shell orqali ishlardi va remote tomonda fayl nomlarini shell talqin qilardi (xavfsizlik muammolari). OpenSSH 9.0'dan boshlab `scp` ichkarida **SFTP protokolini** ishlatadi. Buyruq bir xil, lekin ba'zi eski xatti-harakatlar (masalan, remote path'da glob/quote) biroz farq qilishi mumkin. Eski server bilan muammo bo'lsa: `scp -O` (legacy rejim).
 
-**Cheklovlar:** uzilsa — boshidan; har safar butun file'ni yuboradi; o'chirilgan file'larni sinxronlamaydi. Shuning uchun takroriy ish uchun — `rsync`.
+**Cheklovlar:** uzilsa — boshidan; har safar butun faylni yuboradi; o'chirilgan fayllarni sinxronlamaydi. Shuning uchun takroriy ish uchun — `rsync`.
 
-## 3. rsync — qanday ishlaydi
+## 3. rsync qanday ishlaydi
 
-### Delta algoritmi
+### Faqat o'zgargan qismni yuborish (delta algoritmi)
 
 ```
  Client: yangi file (1 GB)            Server: eski file (1 GB, ozgina farq)
@@ -57,7 +57,7 @@ scp -3 web1:/etc/app.conf web2:/tmp/
                                           4. Server yangi file'ni yig'adi
 ```
 
-Qaysi file'larni tekshirish kerakligini rsync default bo'yicha **hajm va mtime** bo'yicha hal qiladi ("quick check"). Hajm va vaqt bir xil bo'lsa — file o'tkazib yuboriladi.
+Qaysi fayllarni tekshirish kerakligini rsync default bo'yicha **hajm va mtime** bo'yicha hal qiladi ("quick check"). Hajm va vaqt bir xil bo'lsa — fayl o'tkazib yuboriladi.
 
 ```
  1-marta:  scp 1GB  [###########]  rsync 1GB  [###########]
@@ -84,7 +84,7 @@ rsync -a --checksum src/ dst/                    # mtime'ga ishonmay, mazmun bo'
 rsync -a --bwlimit=10m src/ lab:/backup/         # prod tarmog'ini bo'g'masin
 ```
 
-### Oxiridagi `/` — eng mashhur gotcha
+### Yo'l oxiridagi `/` — eng ko'p uchraydigan tuzoq
 
 ```
  rsync -a site  /dst/   ->  /dst/site/index.html     "papkaning O'ZINI"
@@ -110,9 +110,9 @@ rsync -a --delete --max-delete=50 "$SRC/" lab:/var/www/site/                    
 
 `--max-delete` — kutilmagan ommaviy o'chirishdan oxirgi himoya. Va 5-darsdagi qoida: `${SRC:?}` / `set -u`.
 
-## 4. Integrity — file buzilmasdan yetdimi?
+## 4. Fayl buzilmasdan yetib keldimi — tekshirish
 
-SSH transport'ni himoyalaydi, lekin manba disk xatosi, yarim yozilgan file yoki noto'g'ri versiya — boshqa masala.
+SSH transport'ni himoyalaydi, lekin manba disk xatosi, yarim yozilgan fayl yoki noto'g'ri versiya — boshqa masala.
 
 ```bash
 sha256sum app.tar.gz > app.tar.gz.sha256          # yuborishdan oldin
@@ -122,9 +122,9 @@ ssh lab 'cd /tmp && sha256sum -c app.tar.gz.sha256'   # -> app.tar.gz: OK
 
 Artefakt'lar (release, backup) uchun checksum — standart amaliyot. Supply chain uchun — imzo (16-dars g'oyasi).
 
-## 5. Atomic deploy — "yarim yangilangan sayt" muammosi
+## 5. Saytni yarim yangilangan holatda qoldirmaslik (atomic deploy)
 
-**Problem:** `rsync` ishlayotgan papkaga to'g'ridan-to'g'ri yozsa, bir necha soniya davomida foydalanuvchilar **aralash** holatni ko'radi: yangi HTML, eski JS. Uzilsa — sayt buzilgan holda qoladi.
+**Muammo:** `rsync` ishlayotgan papkaga to'g'ridan-to'g'ri yozsa, bir necha soniya davomida foydalanuvchilar **aralash** holatni ko'radi: yangi HTML, eski JS. Uzilsa — sayt buzilgan holda qoladi.
 
 ```
  Naive:   rsync site/ lab:/var/www/site/        -> jonli papka o'zgarish paytida "yarim"
@@ -141,15 +141,15 @@ ssh lab "ln -sfn $REL /var/www/current.tmp && mv -T /var/www/current.tmp /var/ww
 ssh lab "sudo systemctl reload nginx"
 ```
 
-`--link-dest` — o'zgarmagan file'larni oldingi release'dan **hard link** qiladi (5-dars): har release to'liq ko'rinadi, lekin diskda faqat farq joy egallaydi. Xuddi shu texnika bilan **inkremental backup**'lar quriladi.
+`--link-dest` — o'zgarmagan fayllarni oldingi release'dan **hard link** qiladi (5-dars): har release to'liq ko'rinadi, lekin diskda faqat farq joy egallaydi. Xuddi shu texnika bilan **inkremental backup**'lar quriladi.
 
-## 6. scp vs rsync vs sftp — qaror
+## 6. scp, rsync yoki sftp — qaysi birini tanlash
 
 | Savol | Tanlov |
 |---|---|
-| Bitta kichik file, bir marta | `scp` |
+| Bitta kichik fayl, bir marta | `scp` |
 | Papka, takroriy, faqat farq | `rsync -a` |
-| Katta file, tarmoq beqaror | `rsync -aP` |
+| Katta fayl, tarmoq beqaror | `rsync -aP` |
 | Manzil manbaga aynan teng bo'lishi kerak | `rsync -a --delete` (dry-run bilan) |
 | Ruxsat, owner, ACL saqlanishi kerak | `rsync -aHAX` (owner uchun manzilda root) |
 | Interaktiv ko'rish / GUI | `sftp` / FileZilla |
@@ -159,34 +159,34 @@ ssh lab "sudo systemctl reload nginx"
 
 `/var/www`'ga oddiy user yoza olmaydi. Variantlar:
 
-| Variant | Trade-off |
+| Variant | Afzallik va kamchilik |
 |---|---|
 | Avval `/tmp`'ga, keyin `ssh lab sudo cp` | Ikki qadam, oddiy |
-| `rsync --rsync-path="sudo rsync"` | Bir qadam, lekin user'ga `rsync` uchun sudo kerak — **bu amalda root** (11-dars: rsync orqali istalgan file'ni yozish mumkin) |
-| **Papka egasini deploy user'ga berish** (`chown deploy:www-data`, 2775) | To'g'ri: sudo kerak emas, least privilege |
+| `rsync --rsync-path="sudo rsync"` | Bir qadam, lekin user'ga `rsync` uchun sudo kerak — **bu amalda root** (11-dars: rsync orqali istalgan faylni yozish mumkin) |
+| **Papka egasini deploy user'ga berish** (`chown deploy:www-data`, 2775) | To'g'ri: sudo kerak emas, eng kam huquq tamoyili |
 
 ## 7. FileZilla (SFTP)
 
-1. File -> Site Manager -> New site.
-2. Protocol: **SFTP** — SSH File Transfer Protocol, Port 22.
-3. Logon type: **Key file** (`id_ed25519`) yoki agent; parol emas.
+1. Fayl -> Site Manager -> New site.
+2. Protocol: **SFTP** — SSH Fayl Transfer Protocol, Port 22.
+3. Logon type: **Key fayl** (`id_ed25519`) yoki agent; parol emas.
 4. Chap — local, o'ng — remote. Drag & drop.
 
 > **FTP emas, SFTP.** Klassik FTP parol va data'ni ochiq matnda yuboradi (telnet kabi, 17-dars). FTPS (FTP + TLS) — boshqa protokol, firewall bilan murakkab. SSH bor bo'lsa — SFTP.
 
-> **Security gotcha:** FileZilla ba'zi versiyalarda saqlangan parollarni lokal file'da shifrlanmagan holda saqlagan — bu malware'ning sevimli nishoni. Master password yoqing yoki faqat kalit/agent ishlating.
+> **Xavfsizlik tuzog'i:** FileZilla ba'zi versiyalarda saqlangan parollarni lokal faylda shifrlanmagan holda saqlagan — bu malware'ning sevimli nishoni. Master password yoqing yoki faqat kalit/agent ishlating.
 
-**GUI'ning cheklovi:** takrorlanmaydi va audit qilinmaydi. Production deploy uchun GUI — anti-pattern; o'rganish, ko'rib chiqish va bir martalik ish uchun normal.
+**GUI'ning cheklovi:** takrorlanmaydi va audit qilinmaydi. Production deploy uchun GUI — anti-usul; o'rganish, ko'rib chiqish va bir martalik ish uchun normal.
 
-## 8. File ko'chirish — qachon deploy usuli emas
+## 8. Fayl ko'chirish qachon deploy uchun yetmay qoladi
 
 `rsync` bilan deploy — kursdagi birinchi "CI/CD". Lekin u masshtabda cheklangan:
 
 | Muammo | Yetuk yechim |
 |---|---|
 | Server'da nima versiya turgani noaniq | Versiyalangan artefakt (tag, checksum) |
-| 20 server'ga ketma-ket rsync — ba'zilari muvaffaqiyatsiz | Rolling deploy tool (Ansible, K8s) |
-| Server'da qo'lda o'zgartirilgan file'lar | Immutable artefakt: image / paket |
+| 20 server'ga ketma-ket rsync — ba'zilari muvaffaqiyatsiz | Rolling deploy vosita (Ansible, K8s) |
+| Server'da qo'lda o'zgartirilgan fayllar | Immutable artefakt: image / paket |
 | Rollback | Oldingi image/release'ga qaytish |
 
 ```
@@ -195,15 +195,15 @@ ssh lab "sudo systemctl reload nginx"
           -> container image + registry + orchestrator (pull, rolling, rollback)
 ```
 
-> **Principal insight:** har bosqich o'z vaqtida to'g'ri. 1 server va kichik sayt uchun `rsync` + atomic symlink — mukammal va sodda yechim. Kubernetes'ga faqat real constraint'lar talab qilganda o'ting (1-dars: complexity'ni qo'shish oson, olib tashlash qiyin).
+> **Chuqurroq qarash:** har bosqich o'z vaqtida to'g'ri. 1 server va kichik sayt uchun `rsync` + atomic symlink — mukammal va sodda yechim. Kubernetes'ga faqat real constraint'lar talab qilganda o'ting (1-dars: complexity'ni qo'shish oson, olib tashlash qiyin).
 
-## 9. Failure modes
+## 9. Nima buzilishi mumkin
 
-| Symptom | Root cause | Yechim |
+| Belgi | Asl sabab | Yechim |
 |---|---|---|
 | Papka ichida papka (`/dst/site/site/`) | Trailing slash | Manba oxiriga `/` |
 | Manzil bo'shab qoldi | `--delete` + bo'sh/noto'g'ri manba | Validatsiya, dry-run, `--max-delete` |
-| Har safar hamma file qayta yuboriladi | mtime saqlanmayapti (`-a`siz), yoki FS vaqt aniqligi farqi | `-a`; FAT/SMB'da `--modify-window=1` |
+| Har safar hamma fayl qayta yuboriladi | mtime saqlanmayapti (`-a`siz), yoki FS vaqt aniqligi farqi | `-a`; FAT/SMB'da `--modify-window=1` |
 | `Permission denied` manzilda | Deploy user yoza olmaydi | Papka egaligi (sudo emas) |
 | Owner'lar saqlanmadi | Manzilda root emas | Normal: oddiy user owner'ni o'zgartira olmaydi (11-dars) |
 | Katta transfer uzildi | Tarmoq | `rsync -aP` va qayta ishga tushirish |
@@ -216,10 +216,10 @@ ssh lab "sudo systemctl reload nginx"
 2. `rsync -avn` bilan `site` va `site/` farqini dry-run'da ko'ring.
 3. Deploy user uchun `/var/www/site` egaligini sozlang (sudo'siz yozish).
 4. `rsync` bilan sinxronlang; brauzerda nginx sahifangizni ko'ring.
-5. `index.html`'ni o'zgartirib, yana `rsync -av` — faqat 1 file ketganini ko'ring.
+5. `index.html`'ni o'zgartirib, yana `rsync -av` — faqat 1 fayl ketganini ko'ring.
 6. Xavfli eksperiment (VM'da): bo'sh `empty/` papkadan `--delete -n` bilan nima o'chishini ko'ring; `--max-delete=1` qanday to'xtatishini sinang.
 7. Atomic deploy: `releases/` + `current` symlink bilan 2 ta release qiling va rollback'ni bajaring.
-8. 500 MB file yarating (`head -c 500M /dev/urandom > big`), `rsync -aP` bilan yuboring, o'rtada `Ctrl+C`, qayta ishga tushiring — davom etishini ko'ring; `sha256sum` bilan tekshiring.
+8. 500 MB fayl yarating (`head -c 500M /dev/urandom > big`), `rsync -aP` bilan yuboring, o'rtada `Ctrl+C`, qayta ishga tushiring — davom etishini ko'ring; `sha256sum` bilan tekshiring.
 9. Server'dan `access.log`'ni yuklab, 7-darsdagi pipeline tahlilini qiling.
 10. Xuddi shuni FileZilla'da SFTP + kalit bilan bajaring.
 
@@ -237,7 +237,7 @@ Har qadam uchun "bu qadam muvaffaqiyatsiz bo'lsa nima bo'ladi?" savoliga javob y
 ## Test savollari
 
 1. `scp -P` va `ssh -p` farqi?
-2. rsync qanday qilib faqat farqni yuboradi? Qaysi file o'zgarganini qanday biladi?
+2. rsync qanday qilib faqat farqni yuboradi? Qaysi fayl o'zgarganini qanday biladi?
 3. `rsync src/ dst` va `rsync src dst` farqi?
 4. `--delete`'dan oldin nima qilish kerak? Qanday qo'shimcha himoyalar bor?
 5. `-z` qachon foydali, qachon zarar?
@@ -247,7 +247,7 @@ Har qadam uchun "bu qadam muvaffaqiyatsiz bo'lsa nima bo'ladi?" savoliga javob y
 9. Nega FTP emas, SFTP?
 10. Qachon rsync deploy'dan artefakt/image deploy'ga o'tish kerak?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - Trailing slash'ni tekshirmasdan sinxronlash.
 - `--delete`'ni dry-run va validatsiyasiz ishlatish.
@@ -257,10 +257,10 @@ Har qadam uchun "bu qadam muvaffaqiyatsiz bo'lsa nima bo'ladi?" savoliga javob y
 - Checksum'siz backup/artefakt.
 - FTP yoki GUI orqali production deploy.
 
-## Senior xulosa
+## Xulosa
 
-- Bitta file — `scp`, papka va takroriy — `rsync`, interaktiv — SFTP/FileZilla. Hammasi SSH ustida.
+- Bitta fayl — `scp`, papka va takroriy — `rsync`, interaktiv — SFTP/FileZilla. Hammasi SSH ustida.
 - rsync: delta algoritmi + quick check (hajm, mtime). `-a` metadata'ni saqlaydi, `-P` uzilishga chidamli.
 - Trailing slash va `--delete` — eng ko'p data yo'qotadigan xatolar: dry-run, validatsiya, `--max-delete`.
 - Atomic deploy: yangi release papkasi + symlink switch + smoke test + rollback. `--link-dest` joy tejaydi.
-- File ko'chirish — boshlanish nuqtasi; masshtabda versiyalangan artefakt va orchestrator. Eng sodda yetarli yechimni tanlang.
+- Fayl ko'chirish — boshlanish nuqtasi; masshtabda versiyalangan artefakt va orchestrator. Eng sodda yetarli yechimni tanlang.

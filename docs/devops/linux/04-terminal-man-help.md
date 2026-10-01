@@ -1,19 +1,19 @@
 # Dars 4 — Terminal, man, --help
 
-> **Natija:** terminal, shell va command qanday ishlashini tushunish; stdin/stdout/stderr va exit code bilan ishlash; notanish command'ni mustaqil o'rganish. Senior darajada: shell command'ni qanday bajaradi (fork + exec), redirect tartibi, pipeline'da xatolar va xavfsiz script yozish asoslari.
+> **Natija:** terminal, shell va buyruq qanday ishlashini tushunish; stdin/stdout/stderr va exit kod bilan ishlash; notanish buyruqni mustaqil o'rganish. Shell buyruqni qanday bajaradi (fork + exec), redirect tartibi, pipeline'da xatolar va xavfsiz script yozish asoslari.
 
-## 1. Problem — nega GUI emas, terminal?
+## 1. Muammo — server'da nega oyna va sichqoncha (GUI) emas, terminal ishlatiladi?
 
 | GUI | Terminal (CLI) |
 |---|---|
-| Klik — avtomatlashtirib bo'lmaydi | Command — script'ga yoziladi, takrorlanadi |
+| Klik — avtomatlashtirib bo'lmaydi | Buyruq — script'ga yoziladi, takrorlanadi |
 | Server'da GUI yo'q (resurs, xavfsizlik) | SSH orqali dunyoning istalgan joyidan |
 | Nima qilinganini yozib bo'lmaydi | History, log, git'dagi script — audit |
 | Bitta server | `for` loop bilan 100 ta server |
 
-**Asosiy g'oya:** terminal — bu **automation interfeysi**. Qo'lda yozgan har command'ingiz ertaga script, keyin CI/CD pipeline qadami bo'ladi.
+**Asosiy g'oya:** terminal — bu **avtomatlashtirish interfeysi**. Qo'lda yozgan har buyrug'ingiz ertaga script, keyin CI/CD pipeline qadami bo'ladi.
 
-## 2. Terminal, shell, TTY — kim nima qiladi
+## 2. Terminal, shell va TTY — har biri nima ish qiladi
 
 ```
  Siz klaviaturada yozasiz
@@ -34,7 +34,7 @@
 |---|---|
 | **Terminal emulator** | Oyna: matnni chizadi, klaviaturani qabul qiladi |
 | **TTY / PTY** | Kernel'dagi terminal device (`/dev/pts/0`). SSH ham PTY yaratadi |
-| **Shell** | Command interpreter: `bash`, `zsh`, `sh` (Ubuntu'da `dash`) |
+| **Shell** | Buyruq interpreter: `bash`, `zsh`, `sh` (Ubuntu'da `dash`) |
 | **Prompt** | `student@server:~$` (`$` — oddiy user, `#` — root) |
 
 ```bash
@@ -43,9 +43,9 @@ echo $SHELL         # login shell (/etc/passwd'dagi)
 echo $0             # hozir ishlayotgan shell
 ```
 
-> **Gotcha:** Ubuntu'da `/bin/sh` -> `dash`, `bash` emas. `#!/bin/sh` bilan yozilgan script'da bash'ga xos sintaksis (`[[ ]]`, array'lar, `function`) ishlamaydi yoki boshqacha ishlaydi. Bash feature ishlatsangiz — `#!/usr/bin/env bash` yozing.
+> **Tuzoq:** Ubuntu'da `/bin/sh` -> `dash`, `bash` emas. `#!/bin/sh` bilan yozilgan script'da bash'ga xos sintaksis (`[[ ]]`, array'lar, `function`) ishlamaydi yoki boshqacha ishlaydi. Bash'ga xos imkoniyatlarni ishlatsangiz — `#!/usr/bin/env bash` yozing.
 
-## 3. Shell command'ni qanday bajaradi — internals
+## 3. Enter bosilgandan keyin ichkarida nima bo'ladi
 
 `ls -l /etc` yozib Enter bosdingiz:
 
@@ -60,10 +60,10 @@ echo $0             # hozir ishlayotgan shell
 
 Bu nima uchun muhim:
 - **`cd` nega builtin?** Agar `cd` alohida process bo'lsa, u faqat child'ning directory'sini o'zgartirardi, shell'niki emas. Shuning uchun `cd`, `export`, `source` shell'ning ichida bo'lishi shart.
-- **Glob va `$VAR`'ni shell ochadi**, command emas. `ls` hech qachon `*` belgisini ko'rmaydi.
-- **Har command — yangi process.** Loop ichida 10 000 marta `grep` chaqirish = 10 000 fork/exec — sekin. Bitta `grep` + pipe — tez.
+- **Glob va `$VAR`'ni shell ochadi**, buyruq emas. `ls` hech qachon `*` belgisini ko'rmaydi.
+- **Har buyruq — yangi process.** Loop ichida 10 000 marta `grep` chaqirish = 10 000 fork/exec — sekin. Bitta `grep` + pipe — tez.
 
-## 4. Command anatomiyasi
+## 4. Buyruq qanday qismlardan iborat
 
 ```
 ls   -l   --human-readable   /etc
@@ -74,10 +74,10 @@ ls   -l   --human-readable   /etc
 ```
 
 - `ls -lah` = `ls -l -a -h` (short option'lar birlashadi).
-- `--` — "option'lar tugadi": `rm -- -file.txt` (`-` bilan boshlangan file).
-- Konvensiya, qonun emas: ba'zi tool'lar (`find`, `java`, `dd`) boshqacha sintaksis ishlatadi. Shuning uchun `--help` / `man`.
+- `--` — "option'lar tugadi": `rm -- -file.txt` (`-` bilan boshlangan fayl).
+- Konvensiya, qonun emas: ba'zi vositalar (`find`, `java`, `dd`) boshqacha sintaksis ishlatadi. Shuning uchun `--help` / `man`.
 
-## 5. Command turlari va qidiruv tartibi
+## 5. Buyruq turlari va qidiruv tartibi
 
 ```bash
 type cd        # cd is a shell builtin
@@ -91,11 +91,11 @@ Shell qidiruv tartibi: **alias -> function -> builtin -> `$PATH` ichidagi binary
 
 > **`which` vs `type`:** `which` — tashqi dastur, faqat `$PATH`'ni ko'radi; alias va builtin'larni bilmaydi. `type` va `command -v` — shell'ning o'zi, haqiqatda nima ishga tushishini aytadi. Script'larda `command -v` ishlating (POSIX standart).
 
-> **Security gotcha:** `$PATH`'ga `.` (joriy papka) yoki boshqalar yoza oladigan papka qo'shmang. Kimdir `/tmp`'ga `ls` nomli zararli file qo'ysa, u sizning nomingizdan ishga tushadi.
+> **Xavfsizlik tuzog'i:** `$PATH`'ga `.` (joriy papka) yoki boshqalar yoza oladigan papka qo'shmang. Kimdir `/tmp`'ga `ls` nomli zararli fayl qo'ysa, u sizning nomingizdan ishga tushadi.
 
-## 6. Yordam olish — mustaqil o'rganish ko'nikmasi
+## 6. Notanish buyruqni o'zingiz qanday o'rganasiz
 
-Senior bilan junior farqi — hamma command'ni yod bilish emas, **notanish command'ni 2 daqiqada tushunib olish**.
+Tajribali muhandis bilan yangi boshlovchining farqi — hamma buyruqni yod bilish emas, **notanish buyruqni 2 daqiqada tushunib olish**.
 
 ```bash
 ls --help           # tez eslatma (ko'p GNU tool'larda)
@@ -108,16 +108,16 @@ tldr tar            # amaliy misollar (alohida o'rnatiladi)
 
 | man section | Mazmun | Misol |
 |---|---|---|
-| 1 | User command'lar | `man 1 ls` |
+| 1 | User buyruqlar | `man 1 ls` |
 | 2 | System call'lar | `man 2 open` |
 | 3 | C library funksiyalar | `man 3 printf` |
-| 5 | Config file format'lari | `man 5 crontab` |
+| 5 | Config fayl format'lari | `man 5 crontab` |
 | 7 | Umumiy tushunchalar | `man 7 signal` |
-| 8 | Admin command'lar | `man 8 useradd` |
+| 8 | Admin buyruqlar | `man 8 useradd` |
 
 `man` ichida: `/word` — qidiruv, `n` — keyingisi, `G` — oxiri, `q` — chiqish.
 
-### Notanish command algoritmi
+### Notanish buyruqni o'rganish tartibi
 
 ```
  1. type <cmd>              -> bu nima: builtin, alias, binary?
@@ -127,11 +127,11 @@ tldr tar            # amaliy misollar (alohida o'rnatiladi)
  5. Rasmiy hujjat           -> man page versiyangizga mos; internet'dagi misol boshqa versiya uchun bo'lishi mumkin
 ```
 
-> **Production qoidasi:** internet'dan ko'chirilgan command'ni tushunmasdan prod'da ishga tushirmang — ayniqsa `sudo`, `rm`, `dd`, `curl ... | bash`.
+> **Production qoidasi:** internet'dan ko'chirilgan buyruqni tushunmasdan prod'da ishga tushirmang — ayniqsa `sudo`, `rm`, `dd`, `curl ... | bash`.
 
-## 7. stdin, stdout, stderr — senior uchun majburiy
+## 7. Kirish va chiqish oqimlari: stdin, stdout, stderr
 
-Har process 3 ta ochiq **file descriptor** bilan boshlanadi:
+Har process 3 ta ochiq **fayl descriptor** bilan boshlanadi:
 
 ```
             +---------+ --fd 1 stdout--> natija (keyingi command'ga yoki file'ga)
@@ -139,7 +139,7 @@ Har process 3 ta ochiq **file descriptor** bilan boshlanadi:
  stdin      +---------+ --fd 2 stderr--> xato va diagnostika (terminalga)
 ```
 
-**Nega ikkita chiqish?** Natijani pipe orqali keyingi tool'ga yuborganda, xato xabarlari data'ni buzmasligi uchun. `stdout` — data, `stderr` — inson uchun xabar.
+**Nega ikkita chiqish?** Natijani pipe orqali keyingi vositaga yuborganda, xato xabarlari data'ni buzmasligi uchun. `stdout` — data, `stderr` — inson uchun xabar.
 
 ```bash
 cmd > out.txt          # stdout -> file (ustiga yozadi)
@@ -163,19 +163,19 @@ Redirect'lar **chapdan o'ngga** bajariladi. `2>&1` — "fd 2'ni **hozir** fd 1 q
  natija: ikkalasi file'da             natija: stderr terminalda qoldi
 ```
 
-### `>` bilan file'ni yo'qotish
+### `>` bilan faylni yo'qotish
 
 ```bash
 sort data.txt > data.txt     # data.txt BO'SH bo'lib qoladi!
 ```
 
-Shell avval `>` uchun file'ni bo'shatadi (truncate), keyin `sort` ishga tushadi va bo'sh file'ni o'qiydi. To'g'ri yo'l: `sort -o data.txt data.txt` yoki vaqtinchalik file + `mv`.
+Shell avval `>` uchun faylni bo'shatadi (truncate), keyin `sort` ishga tushadi va bo'sh faylni o'qiydi. To'g'ri yo'l: `sort -o data.txt data.txt` yoki vaqtinchalik fayl + `mv`.
 
-> Himoya: `set -o noclobber` — mavjud file'ga `>` bilan yozishni taqiqlaydi (`>|` bilan majburlash mumkin).
+> Himoya: `set -o noclobber` — mavjud faylga `>` bilan yozishni taqiqlaydi (`>|` bilan majburlash mumkin).
 
-## 8. Exit code — automation'ning tili
+## 8. Exit code — buyruq muvaffaqiyatli tugadimi
 
-Har command tugaganda 0–255 oralig'ida raqam qaytaradi: `0` — success, `0` dan boshqa — xato.
+Har buyruq tugaganda 0–255 oralig'ida raqam qaytaradi: `0` — success, `0` dan boshqa — xato.
 
 ```bash
 ls /etc; echo $?        # 0
@@ -188,15 +188,15 @@ cmd || echo "failed"    # faqat fail bo'lsa
 |---|---|
 | 0 | Success |
 | 1 | Umumiy xato |
-| 2 | Noto'g'ri ishlatish (ko'p tool'larda) |
+| 2 | Noto'g'ri ishlatish (ko'p vositalarda) |
 | 126 | Topildi, lekin bajarib bo'lmaydi (permission, executable emas) |
-| 127 | Command not found |
+| 127 | Buyruq not found |
 | 128+N | N signal bilan o'ldirildi |
 | 130 | Ctrl+C (128 + SIGINT 2) |
 | 137 | SIGKILL (128 + 9) — ko'pincha **OOM killer** yoki `kill -9` |
 | 143 | SIGTERM (128 + 15) — graceful to'xtatish so'ralgan |
 
-> CI/CD pipeline va Kubernetes aynan exit code'ga qaraydi. Pod `137` bilan o'lsa — memory limit'ni tekshiring (`kubectl describe pod` -> `OOMKilled`). `143` — odatda normal shutdown.
+> CI/CD pipeline va Kubernetes aynan exit kodga qaraydi. Pod `137` bilan o'lsa — memory limit'ni tekshiring (`kubectl describe pod` -> `OOMKilled`). `143` — odatda normal shutdown.
 
 ### Pipeline'dagi yashirin xato
 
@@ -205,7 +205,7 @@ curl -s https://bad.url | grep "ok"
 echo $?     # grep'ning exit code'i! curl xatosi ko'rinmaydi
 ```
 
-Pipeline'ning exit code'i — **oxirgi** command'niki. Bash'da:
+Pipeline'ning exit kodi — **oxirgi** buyruqniki. Bash'da:
 
 ```bash
 set -o pipefail              # birinchi xato bergan command'ning code'i
@@ -222,9 +222,9 @@ set -euo pipefail
 # -o pipefail pipe ichidagi xatoni yashirma
 ```
 
-> **Trade-off:** `set -e` sehrli emas — `if`, `&&`, `||` ichida va ba'zi holatlarda ishlamaydi. U xavfsizlik to'ri, lekin muhim joylarda xatoni aniq tekshirish (`if ! cmd; then ...`) baribir kerak. Script murakkablashsa (100+ qator, JSON, retry logika) — Python yoki Go'ga o'ting.
+> **Afzallik va kamchilik:** `set -e` sehrli emas — `if`, `&&`, `||` ichida va ba'zi holatlarda ishlamaydi. U xavfsizlik to'ri, lekin muhim joylarda xatoni aniq tekshirish (`if ! cmd; then ...`) baribir kerak. Script murakkablashsa (100+ qator, JSON, retry logika) — Python yoki Go'ga o'ting.
 
-## 9. Shortcut'lar va history
+## 9. Klaviatura qisqartmalari va buyruqlar tarixi
 
 | Key | Vazifa |
 |---|---|
@@ -236,11 +236,11 @@ set -euo pipefail
 | `Ctrl+L` | Ekranni tozalash |
 | `Ctrl+C` | SIGINT — jarayonni to'xtatish |
 | `Ctrl+D` | EOF (shell'dan chiqish) |
-| `!!` | Oxirgi command (`sudo !!`) |
+| `!!` | Oxirgi buyruq (`sudo !!`) |
 
-> **Security gotcha:** command qatorida yozilgan parol (`mysql -pSecret123`) `~/.bash_history`'ga va `ps aux` ro'yxatiga tushadi (boshqa user'lar ko'radi). Secret'ni env var, file yoki interaktiv so'rov orqali bering. Bash'da probel bilan boshlangan command history'ga yozilmaydi (`HISTCONTROL=ignorespace` bo'lsa).
+> **Xavfsizlik tuzog'i:** buyruq qatorida yozilgan parol (`mysql -pSecret123`) `~/.bash_history`'ga va `ps aux` ro'yxatiga tushadi (boshqa user'lar ko'radi). Secret'ni env var, fayl yoki interaktiv so'rov orqali bering. Bash'da probel bilan boshlangan buyruq history'ga yozilmaydi (`HISTCONTROL=ignorespace` bo'lsa).
 
-## 10. Error'larni o'qish
+## 10. Xato xabarlarini o'qishni o'rganish
 
 ```text
 lss: command not found                        -> 127: typo yoki PATH'da yo'q
@@ -255,8 +255,8 @@ bash: ./run.sh: /bin/bash^M: bad interpreter  -> Windows CRLF line ending (dos2u
 
 ## Amaliy mashg'ulot
 
-1. `wc`, `sort`, `uniq`, `date`, `cut` command'larini faqat `man` bilan o'rganing (internet'siz).
-2. `ls /etc /yoq > out.txt 2> err.txt` — ikkala file'ni tekshiring.
+1. `wc`, `sort`, `uniq`, `date`, `cut` buyruqlarini faqat `man` bilan o'rganing (internet'siz).
+2. `ls /etc /yoq > out.txt 2> err.txt` — ikkala faylni tekshiring.
 3. `ls /etc /yoq 2>&1 > out.txt` va `ls /etc /yoq > out.txt 2>&1` farqini ko'ring va tushuntiring.
 4. `false; echo $?`, `true; echo $?`, `sleep 100` -> `Ctrl+C` -> `echo $?` (130).
 5. `false | true; echo $?`, keyin `set -o pipefail` bilan qaytaring.
@@ -264,7 +264,7 @@ bash: ./run.sh: /bin/bash^M: bad interpreter  -> Windows CRLF line ending (dos2u
 
 ## Uy vazifa
 
-1. `date +%F` formatini `man date`'dan topib, `backup-2026-10-01.tar.gz` ko'rinishidagi nom bilan `/etc`'ni arxivlaydigan bitta qatorli command yozing.
+1. `date +%F` formatini `man date`'dan topib, `backup-2026-10-01.tar.gz` ko'rinishidagi nom bilan `/etc`'ni arxivlaydigan bitta qatorli buyruq yozing.
 2. `set -euo pipefail` bilan script yozing: mavjud bo'lmagan o'zgaruvchi ishlatilganda va pipe ichida xato bo'lganda to'xtashini ko'rsating.
 3. `type`, `which`, `command -v` farqini 3 ta misol bilan tushuntiring.
 
@@ -273,24 +273,24 @@ bash: ./run.sh: /bin/bash^M: bad interpreter  -> Windows CRLF line ending (dos2u
 1. Terminal emulator, PTY va shell farqi nima?
 2. Nega `cd` alohida dastur bo'la olmaydi?
 3. `2>&1` nima qiladi va tartib nega muhim?
-4. `sort file > file` nega file'ni bo'shatadi?
-5. Exit code 127, 137, 143 nimani bildiradi?
+4. `sort file > file` nega faylni bo'shatadi?
+5. Exit kod 127, 137, 143 nimani bildiradi?
 6. `curl ... | grep ...` da curl xatosi nega ko'rinmaydi? Qanday tuzatiladi?
-7. Nega command qatorida parol yozish xavfli?
+7. Nega buyruq qatorida parol yozish xavfli?
 8. `#!/bin/sh` script'da `[[ ]]` nega ishlamasligi mumkin?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - Xato xabarini o'qimasdan internet'dan qidirish.
-- `stdout` va `stderr`'ni aralashtirib, keyingi tool'ga axlat yuborish.
+- `stdout` va `stderr`'ni aralashtirib, keyingi vositaga axlat yuborish.
 - Pipeline'da `pipefail`'siz ishlash va xatoni yo'qotish.
-- Internet'dagi command'ni tushunmasdan `sudo` bilan ishga tushirish.
+- Internet'dagi buyruqni tushunmasdan `sudo` bilan ishga tushirish.
 - Bash'ning murakkab script'ini 500 qatorga o'stirish — Python/Go vaqti allaqachon kelgan.
 
-## Senior xulosa
+## Xulosa
 
-- Terminal — automation interfeysi: bugungi qo'lda yozilgan command — ertangi pipeline qadami.
-- Shell command'ni **fork + exec** bilan bajaradi; glob va o'zgaruvchilarni shell ochadi. Shuning uchun `cd` builtin.
-- Har command'da uchta stream (stdin/stdout/stderr) va bitta exit code bor. Automation, CI/CD va Kubernetes aynan shularga tayanadi.
+- Terminal — avtomatlashtirish interfeysi: bugungi qo'lda yozilgan buyruq — ertangi pipeline qadami.
+- Shell buyruqni **fork + exec** bilan bajaradi; glob va o'zgaruvchilarni shell ochadi. Shuning uchun `cd` builtin.
+- Har buyruqda uchta stream (stdin/stdout/stderr) va bitta exit kod bor. Avtomatlashtirish, CI/CD va Kubernetes aynan shularga tayanadi.
 - Redirect tartibi va `pipefail` — xatolarni yashirmaslik uchun.
-- Notanish command'ni o'rganish algoritmi (`type`, `--help`, `man`, xavfsiz sinash) — yod bilishdan muhimroq.
+- Notanish buyruqni o'rganish algoritmi (`type`, `--help`, `man`, xavfsiz sinash) — yod bilishdan muhimroq.

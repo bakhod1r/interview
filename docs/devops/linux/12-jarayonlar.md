@@ -1,8 +1,8 @@
 # Dars 12 — Jarayonlar (process)
 
-> **Natija:** ishlayotgan process'larni ko'rish, resurs yeyayotganini topish, to'g'ri signal bilan to'xtatish. Senior darajada: process qanday tug'iladi (fork/exec), holatlar va load average'ning haqiqiy ma'nosi, RSS va VSZ, zombie va orphan, graceful shutdown, PID 1 muammosi container'da.
+> **Natija:** ishlayotgan process'larni ko'rish, resurs yeyayotganini topish, to'g'ri signal bilan to'xtatish. Process qanday tug'iladi (fork/exec), holatlar va load average'ning haqiqiy ma'nosi, RSS va VSZ, zombie va orphan, toza to'xtatish (graceful shutdown), PID 1 muammosi container'da.
 
-## 1. Problem — server'da "nimadir sekin"
+## 1. Muammo — server sekinlashdi, sababini qanday topish kerak?
 
 Incident: sayt sekin, CPU 100%. Savollar:
 - Qaysi process CPU'ni yeyapti?
@@ -11,9 +11,9 @@ Incident: sayt sekin, CPU 100%. Savollar:
 
 Bularga javob berish uchun process modelini tushunish kerak.
 
-## 2. Mental model — dastur vs process
+## 2. Dastur va process farqi
 
-**Dastur** — diskdagi file (`/usr/bin/nginx`). **Process** — kernel'dagi ishlayotgan nusxa: o'z virtual memory'si, ochiq file'lari, identity'si (UID), holati.
+**Dastur** — diskdagi fayl (`/usr/bin/nginx`). **Process** — kernel'dagi ishlayotgan nusxa: o'z virtual memory'si, ochiq fayllari, identity'si (UID), holati.
 
 ```
  Process = {
@@ -28,7 +28,7 @@ Bularga javob berish uchun process modelini tushunish kerak.
 
 Hammasini ko'rish mumkin: `ls /proc/<PID>/` (8-dars).
 
-## 3. Process qanday tug'iladi — fork + exec
+## 3. Yangi process qanday paydo bo'ladi (fork + exec)
 
 ```
  bash (PID 1452)
@@ -43,9 +43,9 @@ Hammasini ko'rish mumkin: `ls /proc/<PID>/` (8-dars).
 ```
 
 - Child ota'dan meros oladi: env var'lar, ochiq fd'lar, working directory, UID.
-- Shuning uchun `export` qilingan o'zgaruvchi child'ga o'tadi (15-dars), ochiq file child'da ham ochiq qoladi.
+- Shuning uchun `export` qilingan o'zgaruvchi child'ga o'tadi (15-dars), ochiq fayl child'da ham ochiq qoladi.
 
-### Daraxt va PID 1
+### Process'lar daraxti va PID 1
 
 ```
 systemd (1)
@@ -64,7 +64,7 @@ ps -o pid,ppid,user,cmd -p $$
 
 **PID 1** (`systemd`) maxsus: u o'lsa — kernel panic. U **orphan**'larni (otasi o'lgan process'lar) asrab oladi va ularning tugashini kutib "tozalaydi".
 
-## 4. Ko'rish
+## 4. Ishlayotgan process'larni ko'rish
 
 ```bash
 ps aux                          # hammasi (BSD uslub)
@@ -85,12 +85,12 @@ top / htop                      # jonli
 | `R` | Running / runnable | CPU'da yoki navbatda |
 | `S` | Interruptible sleep | Nimanidir kutyapti (network, timer) — normal |
 | `D` | **Uninterruptible sleep** | Odatda disk/NFS I/O kutyapti; **signal'ga javob bermaydi**, `kill -9` ham |
-| `Z` | Zombie | Tugagan, lekin ota exit code'ni olmagan |
+| `Z` | Zombie | Tugagan, lekin ota exit kodni olmagan |
 | `T` | Stopped | `Ctrl+Z` yoki debugger |
 
-> **Debugging signali:** ko'p process `D` holatida — muammo CPU'da emas, **storage**'da (sekin disk, osilib qolgan NFS). `kill -9` yordam bermaydi — I/O tugashi yoki storage tiklanishi kerak.
+> **Diagnostika belgisi:** ko'p process `D` holatida — muammo CPU'da emas, **storage**'da (sekin disk, osilib qolgan NFS). `kill -9` yordam bermaydi — I/O tugashi yoki storage tiklanishi kerak.
 
-### Memory: VSZ va RSS
+### Xotira ko'rsatkichlari: VSZ va RSS
 
 | Ustun | Ma'no | Tuzoq |
 |---|---|---|
@@ -99,7 +99,7 @@ top / htop                      # jonli
 
 Aniqroq: `PSS` (shared qism bo'lingan) — `smem` yoki `/proc/<PID>/smaps_rollup`. Container'da esa cgroup'ning `memory.current`.
 
-### Load average — ko'p noto'g'ri tushuniladi
+### Load average — ko'pchilik noto'g'ri tushunadigan ko'rsatkich
 
 ```bash
 uptime      # load average: 3.20, 2.10, 1.05   (1, 5, 15 daqiqa)
@@ -111,7 +111,7 @@ nproc       # 4
 - Load yuqori, lekin CPU bo'sh -> ko'p process `D`'da -> **I/O muammosi**.
 - 1 > 5 > 15 — yuklama o'syapti; 1 < 15 — pasaymoqda.
 
-### CPU vaqti qayerga ketyapti (`top` sarlavhasi)
+### CPU vaqti nimaga sarflanyapti (`top` sarlavhasi)
 
 | Ko'rsatkich | Ma'no | Yuqori bo'lsa |
 |---|---|---|
@@ -120,7 +120,7 @@ nproc       # 4
 | `wa` | I/O kutish | Disk sekin |
 | `st` | Steal | Cloud'da qo'shni VM CPU'ni olyapti |
 
-## 5. Signallar — process bilan gaplashish
+## 5. Signallar — process'ga buyruq yuborish
 
 | Signal | Raqam | Ma'no | Tutib olsa bo'ladimi |
 |---|---|---|---|
@@ -139,7 +139,7 @@ kill -9 1234         # SIGKILL — oxirgi chora
 pkill -f "python worker.py"   # to'liq command line bo'yicha
 ```
 
-### Graceful shutdown — nega SIGTERM birinchi
+### Toza to'xtatish (toza to'xtatish (graceful shutdown)) — nega avval SIGTERM
 
 ```
  SIGTERM qabul qilindi
@@ -149,11 +149,11 @@ pkill -f "python worker.py"   # to'liq command line bo'yicha
    4. Connection'larni yop, exit 0
 ```
 
-`SIGKILL` bilan bularning hech biri bo'lmaydi: yarim yozilgan file, uzilgan so'rovlar, DB'da yakunlanmagan ish (DB o'zi WAL bilan tiklanadi, lekin app darajasidagi ish yo'qoladi).
+`SIGKILL` bilan bularning hech biri bo'lmaydi: yarim yozilgan fayl, uzilgan so'rovlar, DB'da yakunlanmagan ish (DB o'zi WAL bilan tiklanadi, lekin app darajasidagi ish yo'qoladi).
 
 **Qoida:** `SIGTERM` -> kutish (10–30 s) -> keyin `SIGKILL`. systemd va Kubernetes aynan shunday qiladi (`TimeoutStopSec`, `terminationGracePeriodSeconds`).
 
-### Go'da graceful shutdown
+### Go'da toza to'xtatish misoli
 
 ```go
 ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
@@ -174,7 +174,7 @@ if err := srv.Shutdown(shutdownCtx); err != nil {    // yangi so'rov yo'q, eskil
 }
 ```
 
-## 6. Zombie va orphan
+## 6. Zombie va yetim (orphan) process'lar
 
 ```
  Zombie:  child tugadi -> exit code'ini saqlash uchun process jadvalida qoladi
@@ -193,12 +193,12 @@ ps -eo pid,ppid,stat,cmd | awk '$3 ~ /Z/'    # zombie'lar va ularning otasi (PPI
 ### Container'da PID 1 muammosi
 
 Container ichida sizning app'ingiz **PID 1** bo'ladi. Natijalar:
-1. Kernel PID 1'ga default signal handler'larni qo'llamaydi: app `SIGTERM`'ni o'zi tutmasa — **hech narsa bo'lmaydi**. `docker stop` 10 s kutadi, keyin `SIGKILL`. Graceful shutdown yo'q.
+1. Kernel PID 1'ga default signal handler'larni qo'llamaydi: app `SIGTERM`'ni o'zi tutmasa — **hech narsa bo'lmaydi**. `docker stop` 10 s kutadi, keyin `SIGKILL`. Toza to'xtatish (graceful shutdown) yo'q.
 2. App zombie'larni tozalamaydi (u init emas) — child process ishlatsa, zombie'lar to'planadi.
 
 Yechim: kichik init — `docker run --init` (tini), yoki app'da signal'larni to'g'ri ishlash. Va Dockerfile'da **exec form**: `CMD ["./app"]`, `CMD ./app` emas — aks holda PID 1 `sh` bo'ladi va signal'ni app'ga uzatmaydi.
 
-## 7. Foreground / background va terminaldan ajratish
+## 7. Process'ni fonda ishlatish va terminal yopilganda saqlab qolish
 
 ```bash
 sleep 300 &          # fonda
@@ -208,7 +208,7 @@ Ctrl+Z  ->  bg       # pauza -> fonda davom
 nohup ./long.sh > out.log 2>&1 &   # SIGHUP'ni e'tiborsiz qoldiradi
 ```
 
-**Problem:** SSH uzilsa, terminal'dagi process'lar `SIGHUP` oladi va o'ladi.
+**Muammo:** SSH uzilsa, terminal'dagi process'lar `SIGHUP` oladi va o'ladi.
 
 | Yechim | Qachon |
 |---|---|
@@ -216,7 +216,7 @@ nohup ./long.sh > out.log 2>&1 &   # SIGHUP'ni e'tiborsiz qoldiradi
 | `tmux` / `screen` | Interaktiv ish, qayta ulanish kerak (migration, uzun operatsiya) |
 | **systemd servis / `systemd-run`** | Doimiy yoki muhim ish — restart, log, limit bilan (13-dars) |
 
-> **Anti-pattern:** production servisni `nohup ./app &` bilan ishga tushirish. Server reboot bo'lsa — yo'q; crash bo'lsa — hech kim qayta ko'tarmaydi; log'lar tasodifiy file'da.
+> **Anti-usul:** production servisni `nohup ./app &` bilan ishga tushirish. Server reboot bo'lsa — yo'q; crash bo'lsa — hech kim qayta ko'tarmaydi; log'lar tasodifiy faylda.
 
 ## 8. Resurslarni cheklash va ustuvorlik
 
@@ -230,7 +230,7 @@ cat /proc/1234/limits
 
 Masshtabda: cgroups (systemd `CPUQuota=`, `MemoryMax=`; Kubernetes `requests/limits`).
 
-## 9. Debugging algoritmi: "server sekin"
+## 9. "Server sekin" holatida tekshirish tartibi
 
 ```
  1. uptime            -> load vs nproc; o'syaptimi?
@@ -242,7 +242,7 @@ Masshtabda: cgroups (systemd `CPUQuota=`, `MemoryMax=`; Kubernetes `requests/lim
  7. Hypothesis -> tekshirish -> minimal fix -> monitoring bilan tasdiqlash
 ```
 
-**Symptom vs root cause:** "CPU 100%" — symptom. Root cause: cheksiz loop, regex backtracking, GC bosimi, cache yo'qligi sababli qayta hisoblash. `kill` symptom'ni yo'qotadi, root cause qaytib keladi. Kill'dan oldin **dalil yig'ing**: `top` snapshot, `strace -c`, Go uchun `pprof`, Java uchun thread dump.
+**Belgi va asl sabab:** "CPU 100%" — belgi. Asl sabab: cheksiz loop, regex backtracking, GC bosimi, cache yo'qligi sababli qayta hisoblash. `kill` belgini yo'qotadi, asl sabab qaytib keladi. Kill'dan oldin **dalil yig'ing**: `top` snapshot, `strace -c`, Go uchun `pprof`, Java uchun thread dump.
 
 ## Amaliy mashg'ulot
 
@@ -257,7 +257,7 @@ Masshtabda: cgroups (systemd `CPUQuota=`, `MemoryMax=`; Kubernetes `requests/lim
 ## Uy vazifa
 
 1. Zombie nima, nega `kill -9` uni o'ldirmaydi va qanday tozalanadi — 5 gapda.
-2. Go (yoki tanlagan tilingiz) servisi uchun graceful shutdown yozing va `kill` bilan sinang: ishlanayotgan so'rov tugashini isbotlang.
+2. Go (yoki tanlagan tilingiz) servisi uchun toza to'xtatish (graceful shutdown) yozing va `kill` bilan sinang: ishlanayotgan so'rov tugashini isbotlang.
 3. Dockerfile'da `CMD ./app` va `CMD ["./app"]` farqini signal nuqtai nazaridan tushuntiring.
 
 ## Test savollari
@@ -271,19 +271,19 @@ Masshtabda: cgroups (systemd `CPUQuota=`, `MemoryMax=`; Kubernetes `requests/lim
 7. Container'da app `docker stop`'ga 10 soniya javob bermaydi — nega?
 8. Nega production servisni `nohup` bilan ishga tushirmaslik kerak?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - Darhol `kill -9`.
 - Load average'ni CPU foizi deb o'qish.
 - VSZ'ga qarab "memory leak" deb vahima.
 - Zombie'ni o'ldirishga urinish, otaga qaramaslik.
 - Container'da shell form CMD va signal ishlamasligi.
-- Kill'dan oldin dalil yig'masdan root cause'ni yo'qotish.
+- Kill'dan oldin dalil yig'masdan asl sababni yo'qotish.
 
-## Senior xulosa
+## Xulosa
 
 - Process = kernel'dagi ishlayotgan dastur: PID, UID, memory, fd'lar, holat. U fork + exec bilan tug'iladi va ko'p narsani ota'dan meros oladi.
 - Holatlar va `top` ko'rsatkichlari muammo **qayerda** ekanini aytadi: CPU (`us/sy`), disk (`wa`, `D`), qo'shni (`st`).
-- To'xtatish — avval `SIGTERM` va graceful shutdown, keyin `SIGKILL`. App signal'ni to'g'ri ishlashi kerak, ayniqsa container'da PID 1 sifatida.
+- To'xtatish — avval `SIGTERM` va toza to'xtatish (graceful shutdown), keyin `SIGKILL`. App signal'ni to'g'ri ishlashi kerak, ayniqsa container'da PID 1 sifatida.
 - Zombie — otaning bug'i. Orphan — PID 1 asraydi.
 - Muhim ish — `nohup` emas, systemd. Kill'dan oldin — dalil.

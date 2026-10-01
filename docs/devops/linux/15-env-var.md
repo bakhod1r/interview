@@ -1,20 +1,20 @@
 # Dars 15 — Muhit o'zgaruvchilari (Env var)
 
-> **Natija:** env o'zgaruvchilarni o'qish, yaratish, doimiy qilish va `PATH` sababli `command not found`'ni tuzatish. Senior darajada: env qanday meros bo'ladi, shell startup file'lari tartibi, systemd va container'da env, 12-factor config, secret'larni env'da saqlashning xavflari va alternativalari, config validatsiyasi.
+> **Natija:** env o'zgaruvchilarni o'qish, yaratish, doimiy qilish va `PATH` sababli `command not found`'ni tuzatish. Env qanday meros bo'ladi, shell startup fayllari tartibi, systemd va container'da env, 12-factor config, secret'larni env'da saqlashning xavflari va alternativalari, config validatsiyasi.
 
-## 1. Problem — bitta binary, ko'p muhit
+## 1. Muammo — bitta dasturni dev, test va prod muhitida qanday sozlash kerak?
 
 Bitta app `dev`, `staging`, `prod`'da ishlaydi. Farqi: DB manzili, log darajasi, API kalitlari. Variantlar:
 
 | Variant | Muammo |
 |---|---|
 | Kodga yozish (`dbHost = "10.0.0.5"`) | Har muhit uchun alohida build; secret git'da |
-| Har muhit uchun config file | Yaxshi, lekin file'ni qayerga, qanday yetkazish kerak |
+| Har muhit uchun config fayl | Yaxshi, lekin faylni qayerga, qanday yetkazish kerak |
 | **Env var** | Kod o'zgarmaydi; platforma (systemd, Docker, K8s) qiymatni beradi |
 
 **12-factor tamoyili:** config (muhitga qarab o'zgaradigan hamma narsa) koddan ajratiladi va env orqali beriladi. **Bitta artefakt** barcha muhitlarga deploy qilinadi — "staging'da test qilingan aynan o'sha binary prod'ga ketadi".
 
-## 2. Mental model — env process'ning bir qismi
+## 2. Env o'zgaruvchilar process bilan birga yashaydi
 
 ```
  shell (DB_HOST=localhost, export qilingan)
@@ -32,7 +32,7 @@ Bundan kelib chiqadigan faktlar:
 - Ishlayotgan process'ning env'ini tashqaridan o'zgartirib bo'lmaydi — faqat restart.
 - Process env'i start paytidagi holat: `/proc/<PID>/environ`.
 
-## 3. Ko'rish
+## 3. Env o'zgaruvchilarni ko'rish
 
 ```bash
 env                      # export qilingan hammasi
@@ -47,15 +47,15 @@ tr '\0' '\n' < /proc/<PID>/environ    # boshqa process env'i (root yoki egasi)
 |---|---|
 | `HOME` | Home papka |
 | `USER` | Joriy user |
-| `PATH` | Command qidiriladigan papkalar |
+| `PATH` | Buyruq qidiriladigan papkalar |
 | `SHELL` | Login shell |
 | `LANG`, `LC_ALL` | Til va kodlash (sort tartibi, raqam formati!) |
 | `TZ` | Vaqt zonasi |
 | `PWD` | Joriy papka |
 
-> **Gotcha:** `LANG`/`LC_ALL` tool'lar xatti-harakatini o'zgartiradi: `sort` tartibi, `grep` tezligi (7-dars), raqamlardagi vergul/nuqta. Script'lar turli server'da turlicha ishlasa — locale'ni tekshiring. Deterministik natija uchun script'da `LC_ALL=C`.
+> **Tuzoq:** `LANG`/`LC_ALL` vositalar xatti-harakatini o'zgartiradi: `sort` tartibi, `grep` tezligi (7-dars), raqamlardagi vergul/nuqta. Script'lar turli server'da turlicha ishlasa — locale'ni tekshiring. Deterministik natija uchun script'da `LC_ALL=C`.
 
-## 4. Yaratish
+## 4. Env o'zgaruvchi yaratish
 
 ```bash
 NAME=Ali              # faqat shu shell (oddiy o'zgaruvchi)
@@ -66,18 +66,18 @@ DEBUG=1 ./app.sh      # faqat shu bitta command uchun, shell'da qolmaydi
 env -i bash --norc    # toza env bilan (debugging uchun)
 ```
 
-> **Gotcha:** `=` atrofida bo'sh joy yo'q: `NAME = Ali` — shell `NAME` nomli command'ni ishga tushirmoqchi bo'ladi.
+> **Tuzoq:** `=` atrofida bo'sh joy yo'q: `NAME = Ali` — shell `NAME` nomli buyruqni ishga tushirmoqchi bo'ladi.
 
 > **Qo'shtirnoq:** `echo $VAR` — probel va `*` bo'lsa so'zlarga bo'linadi va glob ochiladi. Har doim `"$VAR"`.
 
-## 5. PATH — shell xaritasi
+## 5. PATH — shell buyruqni qayerdan qidiradi
 
 ```bash
 echo "$PATH"
 # /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/student/bin
 ```
 
-Shell command'ni papkalarda **chapdan o'ngga** qidiradi; birinchi topilgani ishlaydi (4-dars: alias -> function -> builtin -> PATH).
+Shell buyruqni papkalarda **chapdan o'ngga** qidiradi; birinchi topilgani ishlaydi (4-dars: alias -> function -> builtin -> PATH).
 
 ```text
 $ myscript
@@ -91,19 +91,19 @@ command -v myscript
 hash -r                             # bash command cache'ini tozalash
 ```
 
-> **Gotcha 1:** `export PATH=~/bin` (eski qiymatsiz) — barcha command'lar yo'qoladi (`ls: command not found`). Tuzatish shu session'da: `export PATH=/usr/bin:/bin`.
+> **Tuzoq 1:** `export PATH=~/bin` (eski qiymatsiz) — barcha buyruqlar yo'qoladi (`ls: command not found`). Tuzatish shu session'da: `export PATH=/usr/bin:/bin`.
 
-> **Gotcha 2 — bash hash:** binary'ni boshqa papkaga ko'chirsangiz, bash eski yo'lni eslab qoladi: `No such file or directory`. Yechim: `hash -r` yoki yangi shell.
+> **Tuzoq 2 — bash hash:** binary'ni boshqa papkaga ko'chirsangiz, bash eski yo'lni eslab qoladi: `No such file or directory`. Yechim: `hash -r` yoki yangi shell.
 
-> **Security:** PATH'ga `.` yoki boshqalar yoza oladigan papkani qo'shmang, ayniqsa **boshiga** (4-dars). `/usr/local/bin` `/usr/bin`'dan oldin turadi — u yerga kim yoza olishini nazorat qiling.
+> **Xavfsizlik:** PATH'ga `.` yoki boshqalar yoza oladigan papkani qo'shmang, ayniqsa **boshiga** (4-dars). `/usr/local/bin` `/usr/bin`'dan oldin turadi — u yerga kim yoza olishini nazorat qiling.
 
 **Tartib dilemmasi:**
 - `PATH="$HOME/bin:$PATH"` — sizning versiyangiz tizimnikidan ustun (masalan, yangi `kubectl`).
-- `PATH="$PATH:$HOME/bin"` — tizim command'lari ustun, xavfsizroq.
+- `PATH="$PATH:$HOME/bin"` — tizim buyruqlari ustun, xavfsizroq.
 
-## 6. Doimiy qilish — qaysi file, qachon o'qiladi
+## 6. O'zgaruvchini doimiy qilish — qaysi fayl qachon o'qiladi
 
-| File | Kimga | Qachon o'qiladi |
+| Fayl | Kimga | Qachon o'qiladi |
 |---|---|---|
 | `/etc/environment` | Hamma | Login'da (PAM), shell sintaksisi emas: faqat `KEY=value` |
 | `/etc/profile`, `/etc/profile.d/*.sh` | Hamma | Login shell |
@@ -123,11 +123,11 @@ echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc      # hozirgi shell'da qo'llash
 ```
 
-> **Klassik incident:** script terminal'da ishlaydi, cron'da `command not found`. **Root cause:** cron va systemd `.bashrc`/`.profile`'ni o'qimaydi, ularning PATH'i minimal. Yechim: script'da to'liq path yoki script boshida `PATH=` aniq belgilash; servis uchun `Environment=`.
+> **Klassik incident:** script terminal'da ishlaydi, cron'da `command not found`. **Asl sabab:** cron va systemd `.bashrc`/`.profile`'ni o'qimaydi, ularning PATH'i minimal. Yechim: script'da to'liq path yoki script boshida `PATH=` aniq belgilash; servis uchun `Environment=`.
 
-> **Gotcha:** `~/.bashrc` boshida odatda "interaktiv bo'lmasa — chiq" qatori bor. Shuning uchun u yerga yozilgan narsa script'larda ko'rinmaydi.
+> **Tuzoq:** `~/.bashrc` boshida odatda "interaktiv bo'lmasa — chiq" qatori bor. Shuning uchun u yerga yozilgan narsa script'larda ko'rinmaydi.
 
-## 7. Servis va container'da env
+## 7. Servis va container uchun env berish
 
 ### systemd
 
@@ -158,7 +158,7 @@ env:
       secretKeyRef: {name: db, key: password}
 ```
 
-## 8. Config'ni app'da o'qish — naive vs production
+## 8. Dastur ichida sozlamalarni o'qish — xato va to'g'ri usul
 
 ```go
 // Naive: yo'q bo'lsa jim bo'sh string, xato kech va noaniq chiqadi
@@ -197,18 +197,18 @@ func loadConfig() (Config, error) {
 
 **Qoidalar:** barcha config **bitta joyda** o'qiladi (kod bo'ylab sochilgan `Getenv` emas); default'lar aniq; start'da config log'ga yoziladi — **secret'larsiz**.
 
-## 9. Secret'lar — env'ning qorong'u tomoni
+## 9. Parol va kalitlar (secret) — env'da saqlash xavflari
 
 Env secret uchun keng tarqalgan, lekin xavfsiz emas:
 
 | Xavf | Qanday |
 |---|---|
-| Child'larga meros | App chaqirgan har subprocess (shell, 3rd-party tool) secret'ni oladi |
+| Child'larga meros | App chaqirgan har subprocess (shell, 3rd-party vosita) secret'ni oladi |
 | `/proc/<PID>/environ` | Root yoki o'sha user o'qiy oladi |
 | Crash dump, debug endpoint | Ko'p framework'lar xato sahifasida env'ni chiqaradi |
 | Log | `env` yoki config dump log'ga tushadi |
 | `docker inspect` | Container env'i ochiq ko'rinadi |
-| Command qatori | `API_KEY=... ./app` — shell history'da qoladi |
+| Buyruq qatori | `API_KEY=... ./app` — shell history'da qoladi |
 
 **Yaxshiroq variantlar (o'sish tartibida):**
 
@@ -229,9 +229,9 @@ echo ".env" >> .gitignore
 
 > **Agar secret git'ga tushsa:** commit'ni o'chirish yetarli emas — u allaqachon klon'larda va tarixda. **Birinchi qadam — secret'ni bekor qilish (rotate)**, keyin tarixni tozalash. Profilaktika: pre-commit hook va CI'da secret scanner (gitleaks).
 
-## 10. Failure modes
+## 10. Nima buzilishi mumkin
 
-| Symptom | Root cause | Yechim |
+| Belgi | Asl sabab | Yechim |
 |---|---|---|
 | Terminal'da ishlaydi, cron/systemd'da yo'q | Minimal env, `.bashrc` o'qilmaydi | To'liq path, `Environment=` |
 | Yangi env servisda ko'rinmaydi | Restart qilinmagan / `daemon-reload` | `daemon-reload` + `restart` |
@@ -254,7 +254,7 @@ echo ".env" >> .gitignore
 
 1. `hello.service`'ga (13-dars) `EnvironmentFile=/etc/hello/hello.env` qo'shing (`GREETING=Assalomu`, ruxsat `640`, group servisniki). Qiymatni o'zgartiring va faqat restart'dan keyin ta'sir qilishini ko'rsating.
 2. Go (yoki tanlagan tilingiz)da `loadConfig` yozing: majburiy field'lar, validatsiya, barcha xatolarni bir vaqtda chiqarish, secret'larsiz log.
-3. Env, file va secret manager'ni secret saqlash uchun solishtiring: xavf, murakkablik, rotation.
+3. Env, fayl va secret manager'ni secret saqlash uchun solishtiring: xavf, murakkablik, rotation.
 
 ## Test savollari
 
@@ -267,19 +267,19 @@ echo ".env" >> .gitignore
 7. Fail fast config validatsiyasi qaysi muammoni hal qiladi?
 8. Secret git'ga tushdi — birinchi qadam?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - `export PATH=...` eski qiymatsiz.
 - `.bashrc`'ga yozib, cron/systemd ham ko'radi deb o'ylash.
 - `os.Getenv` kod bo'ylab sochilgan, validatsiyasiz.
-- Secret'ni command qatorida yoki git'da.
+- Secret'ni buyruq qatorida yoki git'da.
 - Config dump'ni log'ga secret'lar bilan yozish.
 - Env o'zgargandan keyin restart qilmaslik.
 
-## Senior xulosa
+## Xulosa
 
 - Env — process'ning bir qismi: export qilinganlar child'ga nusxa bo'lib o'tadi, ota'ga hech qachon qaytmaydi.
-- PATH — shell xaritasi: `:$PATH`'ni unutmang, tartib va yozish huquqi — security.
-- Shell startup file'lari interaktiv shell uchun; cron, systemd va container o'z env'iga ega.
+- PATH — shell xaritasi: `:$PATH`'ni unutmang, tartib va yozish huquqi — xavfsizlik.
+- Shell startup fayllari interaktiv shell uchun; cron, systemd va container o'z env'iga ega.
 - Config — bitta joyda o'qiladi, validatsiya qilinadi, xato bo'lsa start'da to'xtaydi.
-- Env secret uchun "minimal yechim": imkon bo'lsa file/credentials yoki secret manager; git'ga tushgan secret — darhol rotate.
+- Env secret uchun "minimal yechim": imkon bo'lsa fayl/credentials yoki secret manager; git'ga tushgan secret — darhol rotate.

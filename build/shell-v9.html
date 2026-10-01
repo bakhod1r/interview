@@ -432,7 +432,10 @@ body:before,body:after{opacity:.22}
 .doc-pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
 .doc-pager a{padding:14px 16px;color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:4px;transition:border-color .2s}.doc-pager a:hover{border-color:var(--accent)}
 .doc-pager small{font:700 11px var(--mono);color:var(--faint)}.doc-pager b{font-size:14px;line-height:1.35}.doc-pager .nx{text-align:right}
-.page{max-width:var(--pagew,1120px)}
+.page{max-width:var(--pagew,1120px);transition:max-width .35s cubic-bezier(.2,1,.3,1)}
+.rd-anim body,.rd-anim .card,.rd-anim .btn,.rd-anim .top *,.rd-anim .sheet *,.rd-anim .doc *{transition:background-color .35s ease,color .35s ease,border-color .35s ease,font-size .25s ease!important}
+.tgl:active i{width:22px}.tgl[aria-checked="true"]:active i{transform:translateX(14px)}
+.stepper b{transition:opacity .15s}
 .doc,.ans,.exp,.deep-in,.doc-tile b{font-family:var(--read,var(--sans))}
 body{font-family:var(--read,var(--sans));font-size:calc(15px*var(--rsize,1))}
 .doc{font-size:calc(15.5px*var(--rsize,1))}.ans,.exp,.deep-in{font-size:calc(1em*var(--rsize,1))}
@@ -493,8 +496,10 @@ const FONTS=[["source-serif", "Source Serif", "Serif", "\"Source Serif 4\", Geor
 const MARGINS=[1120,980,840,720],SIZES=[85,90,95,100,105,110,120,130];
 S.rd={pal:"",font:"",size:100,bold:false,mar:0,bio:false,focus:false,...(S.rd&&typeof S.rd==="object"?S.rd:{})};
 S.rd.focus=false;
-function applyRead(){
+let rdT=0;
+function applyRead(anim){
   const R=document.documentElement;if(!R||!R.style||!R.classList)return;
+  if(anim&&!RM()){R.classList.add("rd-anim");clearTimeout(rdT);rdT=setTimeout(()=>R.classList.remove("rd-anim"),450);}
   const st=R.style,rd=S.rd,p=PAL.find(x=>x[0]===rd.pal);
   const T=["--bg","--bg-2","--card","--ink","--muted","--faint","--line","--accent","--accent-2","--accent-ink","--accent-soft"];
   T.forEach(k=>st.removeProperty(k));
@@ -523,18 +528,18 @@ function bionic(root){
   });
 }
 function readRows(){
-  const sw=(k,lab)=>`<div class="set-row"><span>${lab}</span><button class="tgl" role="switch" aria-checked="${!!S.rd[k]}" ${act(el=>{S.rd[k]=!S.rd[k];el.setAttribute("aria-checked",S.rd[k]);save();applyRead();render();})}><i></i></button></div>`;
-  const step=(k,arr,lab,fmt,minus,plus)=>`<div class="set-row"><span>${lab}</span><div class="stepper"><button ${act(el=>{const i=arr.indexOf(S.rd[k]);S.rd[k]=arr[Math.max(0,(i<0?arr.indexOf(100):i)-1)];el.nextElementSibling.textContent=fmt(S.rd[k]);save();applyRead();})}>${minus}</button><b>${fmt(S.rd[k])}</b><button ${act(el=>{const i=arr.indexOf(S.rd[k]);S.rd[k]=arr[Math.min(arr.length-1,(i<0?arr.indexOf(100):i)+1)];el.previousElementSibling.textContent=fmt(S.rd[k]);save();applyRead();})}>${plus}</button></div></div>`;
+  const sw=(k,lab,rr)=>`<div class="set-row"><span>${lab}</span><button class="tgl" role="switch" aria-checked="${!!S.rd[k]}" ${act(el=>{S.rd[k]=!S.rd[k];el.setAttribute("aria-checked",S.rd[k]);save();applyRead(1);if(rr)requestAnimationFrame(()=>setTimeout(render,180));})}><i></i></button></div>`;
+  const step=(k,arr,lab,fmt,minus,plus)=>`<div class="set-row"><span>${lab}</span><div class="stepper"><button ${act(el=>{const i=arr.indexOf(S.rd[k]);S.rd[k]=arr[Math.max(0,(i<0?arr.indexOf(100):i)-1)];el.nextElementSibling.textContent=fmt(S.rd[k]);save();applyRead(1);})}>${minus}</button><b>${fmt(S.rd[k])}</b><button ${act(el=>{const i=arr.indexOf(S.rd[k]);S.rd[k]=arr[Math.min(arr.length-1,(i<0?arr.indexOf(100):i)+1)];el.previousElementSibling.textContent=fmt(S.rd[k]);save();applyRead(1);})}>${plus}</button></div></div>`;
   const grp=(L,gi)=>[...new Set(L.map(x=>x[gi]))];
   return`<div class="set-h">O'qish</div>
     <div class="set-row"><span>Palitra</span><select id="rdpal"><option value="">Standart</option>${[false,true].map(dk=>`<optgroup label="${dk?"Qorong'i":"Yorug'"}">${PAL.filter(x=>x[2]===dk).map(x=>`<option value="${x[0]}" ${S.rd.pal===x[0]?"selected":""}>${x[1]}</option>`).join("")}</optgroup>`).join("")}</select></div>
     <div class="set-row"><span>Shrift</span><select id="rdfont"><option value="">Standart (Manrope)</option>${grp(FONTS,2).map(g=>`<optgroup label="${g}">${FONTS.filter(x=>x[2]===g).map(x=>`<option value="${x[0]}" ${S.rd.font===x[0]?"selected":""}>${x[1]}</option>`).join("")}</optgroup>`).join("")}</select></div>
     ${step("size",SIZES,"Matn o'lchami",v=>v+"%","A−","A+")}
     ${step("mar",[0,1,2,3],"Hoshiya (margin)",v=>["Tor","O'rta","Keng","Juda keng"][v],"−","+")}
-    ${sw("bold","Qalin matn")}${sw("bio","Bionic o'qish")}
+    ${sw("bold","Qalin matn")}${sw("bio","Bionic o'qish",1)}
     <div class="set-row"><span>Fokus rejimi <small class="muted">(topbar va mundarija yashiriladi)</small></span><button class="tgl" role="switch" aria-checked="${!!S.rd.focus}" ${act(el=>{S.rd.focus=!S.rd.focus;el.setAttribute("aria-checked",S.rd.focus);applyRead();closeSheet();render();})}><i></i></button></div>
     <div class="set-row"><span>To'liq ekran</span><button class="tgl" role="switch" aria-checked="${!!document.fullscreenElement}" ${act(el=>{const R=document.documentElement;if(document.fullscreenElement)document.exitFullscreen&&document.exitFullscreen();else R.requestFullscreen&&R.requestFullscreen().catch(()=>toast("To'liq ekran mavjud emas"));el.setAttribute("aria-checked",!document.fullscreenElement);})}><i></i></button></div>
-    <button class="it" ${act(()=>{S.rd={pal:"",font:"",size:100,bold:false,mar:0,bio:false,focus:false};save();applyRead();closeSheet();render();toast("O'qish sozlamalari tiklandi");})}>↺ O'qish sozlamalarini tiklash</button>`;
+    <button class="it" ${act(()=>{S.rd={pal:"",font:"",size:100,bold:false,mar:0,bio:false,focus:false};save();applyRead(1);closeSheet();render();toast("O'qish sozlamalari tiklandi");})}>↺ O'qish sozlamalarini tiklash</button>`;
 }
 
 // ---------- sozlamalar ----------
@@ -615,8 +620,9 @@ function toast(msg){let t=$("#toast");if(!t){t=document.createElement("div");t.i
   t.textContent=msg;t.style.opacity=1;clearTimeout(t._h);t._h=setTimeout(()=>t.style.opacity=0,2200);}
 
 // click registry
-let ACT=[];
-const act=fn=>`data-a="${ACT.push(fn)-1}"`;
+// handler registry: render() faqat app handler'larini tozalaydi, ochiq sheet'nikini saqlaydi
+let ACT={},ACTN=0;
+const act=fn=>{ACT[++ACTN]=fn;return`data-a="${ACTN}"`;};
 document.addEventListener("click",e=>{const el=e.target.closest("[data-a]");if(!el)return;const fn=ACT[+el.dataset.a];if(fn){e.preventDefault();e.stopPropagation();fn(el,e);}});
 
 // ---------- decks: yo'nalish > (guruh) > domen > bo'lim ----------
@@ -692,8 +698,8 @@ function settings(){
     <button class="it" ${act((el,e)=>{const dark=S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;S.theme=dark?"light":"dark";S.rd.pal="";applyRead();themeSwap(e);save();const ps=$("#rdpal");ps&&(ps.value="");})}>◐ Yorug' / qorong'i mavzu</button>
     ${readRows()}
     <button class="it" style="color:var(--bad)" ${act(()=>{if(confirm("Barcha natijalar va takrorlash jadvali o'chirilsinmi?")){S.res={};S.srs={};S.days=[];S.sess=null;S.nt={day:"",n:0,extra:0};save();go("decks");}})}>Natijani tozalash</button>`);
-  $("#rdpal").onchange=e=>{S.rd.pal=e.target.value;save();applyRead();};
-  $("#rdfont").onchange=e=>{S.rd.font=e.target.value;save();applyRead();};
+  $("#rdpal").onchange=e=>{S.rd.pal=e.target.value;save();applyRead(1);};
+  $("#rdfont").onchange=e=>{S.rd.font=e.target.value;save();applyRead(1);};
   $("#rt").onchange=e=>{S.cfg.ret=Math.max(70,Math.min(99,+e.target.value||90))/100;save();};
   $("#nd").onchange=e=>{S.cfg.newDay=Math.max(0,Math.min(500,+e.target.value||0));save();render();};
 }
@@ -915,7 +921,7 @@ document.addEventListener("pointermove",e=>{
 },{passive:true});
 
 function render(){
-  ACT=[];
+  {const keep={};document.querySelectorAll("#sheet [data-a]").forEach(el=>{const k=el.dataset.a;if(ACT[k])keep[k]=ACT[k];});ACT=keep;}
   const app=$("#app"),ss=S.sess;
   const nav=[V.view,V.deck,!!V.search.trim(),V.view==="study"&&ss?ss.i+"/"+ss.title:""].join("|");
   const rev=V.view==="study"&&ss&&ss.rev[ss.i]?nav:"";

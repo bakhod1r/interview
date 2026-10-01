@@ -1,16 +1,18 @@
 # Dars 17 — OpenSSH server
 
-> **Natija:** server'ga SSH bilan kalit orqali kirish va `sshd`'ni xavfsiz sozlash. Senior darajada: SSH protokoli qanday ishlaydi (host key, key exchange, autentifikatsiya), `known_hosts` va MITM, agent forwarding xavfi, jump host, tunnel'lar, o'zingizni qulflab qo'ymaslik va masshtabda SSH (sertifikatlar, bastion, "SSH'siz" boshqaruv).
+> **Natija:** server'ga SSH bilan kalit orqali kirish va `sshd`'ni xavfsiz sozlash. SSH protokoli qanday ishlaydi (host key, key exchange, autentifikatsiya), `known_hosts` va MITM, agent forwarding xavfi, jump host, tunnel'lar, o'zingizni qulflab qo'ymaslik va masshtabda SSH (sertifikatlar, bastion, "SSH'siz" boshqaruv).
 
-## 1. Problem — monitor'siz server'ni boshqarish
+## 1. Muammo — server uzoqda turibdi, unga qanday ulanamiz?
 
-Server data-markazda yoki cloud'da. Monitor va klaviatura yo'q. Tarmoq orqali boshqarish kerak. Tarixiy yechim — **telnet**: hamma narsa, **parol ham**, ochiq matn bo'lib tarmoqdan o'tadi. Wi-Fi'dagi istalgan kishi o'qiydi.
+Server odatda boshqa binoda — data-markazda yoki cloud'da turadi. Uning yonida monitor ham, klaviatura ham yo'q. Demak, uni faqat **tarmoq orqali**, o'z kompyuteringizdan boshqarasiz.
 
-**SSH (Secure Shell)** hal qiladi:
-- **Confidentiality** — trafik shifrlangan.
-- **Server authentication** — siz **haqiqiy** server'ga ulanyapsiz (MITM emas).
-- **User authentication** — server sizning kimligingizni biladi (parol yoki kalit).
-- **Integrity** — yo'lda hech kim trafikni o'zgartira olmaydi.
+Ilgari buning uchun **telnet** ishlatilgan. Uning katta kamchiligi bor edi: siz yozgan hamma narsa, **parol ham**, tarmoqdan ochiq matn holida o'tardi. Bir Wi-Fi tarmog'idagi istalgan odam uni o'qiy olardi.
+
+**SSH (Secure Shell)** shu muammoni hal qiladi. U to'rtta narsani kafolatlaydi:
+- **Maxfiylik (confidentiality)** — trafik shifrlangan, begona o'qiy olmaydi.
+- **Server'ning haqiqiyligi (server authentication)** — siz aynan o'zingiz kutgan server'ga ulanyapsiz, o'rtada turgan soxta server'ga (MITM hujumi) emas.
+- **Sizning kimligingiz (user authentication)** — server sizni parol yoki kalit orqali taniydi.
+- **Butunlik (integrity)** — yo'lda hech kim trafikni sezdirmasdan o'zgartira olmaydi.
 
 Port: **22/TCP**.
 
@@ -19,7 +21,7 @@ Port: **22/TCP**.
  ssh  ======= shifrlangan TCP:22 =======>  sshd (daemon, systemd servis)
 ```
 
-## 2. Protokol qanday ishlaydi
+## 2. SSH ulanishi qadamma-qadam
 
 ```
  Client                                         Server
@@ -43,7 +45,7 @@ Ikki xil kalit — chalkashtirmang:
 
 **Session kaliti** har ulanishda yangi (key exchange) — host/user kalitlari faqat **autentifikatsiya** uchun. Shuning uchun bir kun kalit o'g'irlansa ham, eski yozib olingan trafikni ochib bo'lmaydi (**forward secrecy**).
 
-### `known_hosts` — TOFU va MITM
+### `known_hosts` — haqiqiy server'ga ulanganingizni qanday bilasiz
 
 Birinchi ulanishda:
 
@@ -64,7 +66,7 @@ WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!
 | Server qayta o'rnatildi / yangi VM o'sha IP'da | Sababni **tasdiqlang**, keyin `ssh-keygen -R host` |
 | MITM hujumi | Ulanmang! |
 
-> **Anti-pattern:** `StrictHostKeyChecking no` va `UserKnownHostsFile /dev/null` — "ogohlantirish xalaqit beryapti" deb. Bu SSH'ning server autentifikatsiyasini butunlay o'chiradi. Production'da yechim — fingerprint'ni oldindan tarqatish (IaC, cloud-init chiqishi) yoki **host sertifikatlari** (9-bo'lim).
+> **Anti-usul:** `StrictHostKeyChecking no` va `UserKnownHostsFile /dev/null` — "ogohlantirish xalaqit beryapti" deb. Bu SSH'ning server autentifikatsiyasini butunlay o'chiradi. Production'da yechim — fingerprint'ni oldindan tarqatish (IaC, cloud-init chiqishi) yoki **host sertifikatlari** (9-bo'lim).
 
 ## 3. O'rnatish
 
@@ -87,7 +89,7 @@ ssh lab 'uptime; df -h /'    # bitta command bajarib chiqish
 exit
 ```
 
-## 4. Kalit bilan login
+## 4. Parol o'rniga kalit bilan kirish
 
 ```
  Client                                      Server
@@ -110,11 +112,11 @@ ssh student@192.168.1.50                      # endi parolsiz
 | Brute force | Internet'dagi har server kuniga minglab urinish oladi | Amalda imkonsiz |
 | Phishing / qayta ishlatish | Boshqa saytdan o'g'irlangan parol | Kalit faqat sizda |
 | Server buzilsa | Parol (yoki hash'i) o'g'irlanadi | Server faqat public kalitni biladi |
-| Automation | Parolni script'ga yozish kerak | Kalit + agent |
+| Avtomatlashtirish | Parolni script'ga yozish kerak | Kalit + agent |
 
-**Passphrase:** private kalitni diskda shifrlaydi — laptop o'g'irlansa, kalit darhol ishlamaydi. Har safar kiritmaslik uchun — `ssh-agent`. Eng kuchli variant — **hardware kalit** (YubiKey: `ssh-keygen -t ed25519-sk`), private kalit qurilmadan chiqmaydi.
+**Passphrase:** private kalitni diskda shifrlaydi — noutbuk o'g'irlansa, kalit darhol ishlamaydi. Har safar kiritmaslik uchun — `ssh-agent`. Eng kuchli variant — **hardware kalit** (YubiKey: `ssh-keygen -t ed25519-sk`), private kalit qurilmadan chiqmaydi.
 
-### `~/.ssh/config`
+### `~/.ssh/config` — ulanishlarni qisqartirish
 
 ```text
 Host lab
@@ -136,7 +138,7 @@ Endi: `ssh lab`, `ssh prod-db1` (bastion orqali avtomatik).
 
 > **`IdentitiesOnly yes` nega:** agent'da 6+ kalit bo'lsa, client hammasini sinaydi va server `Too many authentication failures` bilan uzadi (`MaxAuthTries`).
 
-## 5. Server hardening — `/etc/ssh/sshd_config`
+## 5. SSH server'ni himoyalash — `/etc/ssh/sshd_config`
 
 Drop-in ishlating (8-dars): `/etc/ssh/sshd_config.d/10-hardening.conf`
 
@@ -160,9 +162,9 @@ sudo sshd -T | grep -i passwordauth   # haqiqiy (yakuniy) qiymat
 sudo systemctl reload ssh
 ```
 
-> **Gotcha:** sshd'da **birinchi** topilgan qiymat ishlaydi. `sshd_config` boshida `Include /etc/ssh/sshd_config.d/*.conf` bor — drop-in'lar asosiy file'dan **ustun**. Cloud image'larda `50-cloud-init.conf` `PasswordAuthentication yes` qilib qo'ygan bo'lishi mumkin. Shuning uchun `sshd -T` bilan yakuniy qiymatni tekshiring.
+> **Tuzoq:** sshd'da **birinchi** topilgan qiymat ishlaydi. `sshd_config` boshida `Include /etc/ssh/sshd_config.d/*.conf` bor — drop-in'lar asosiy fayldan **ustun**. Cloud image'larda `50-cloud-init.conf` `PasswordAuthentication yes` qilib qo'ygan bo'lishi mumkin. Shuning uchun `sshd -T` bilan yakuniy qiymatni tekshiring.
 
-### O'zingizni qulflab qo'ymaslik protokoli
+### Server'dan o'zingizni qulflab qo'ymaslik tartibi
 
 > **Ogohlantirish:** SSH config xatosi — remote server'ga kirish yo'li yo'qoladi. Konsol yo'q bo'lsa, server'ni qayta yaratish kerak bo'lishi mumkin.
 
@@ -175,19 +177,19 @@ sudo systemctl reload ssh
  Zaxira: cloud konsol / serial console / KVM yo'li borligini oldindan bilib qo'ying
 ```
 
-### Qo'shimcha qatlamlar
+### Qo'shimcha himoya qatlamlari
 
-| Qatlam | Nima beradi | Trade-off |
+| Qatlam | Nima beradi | Afzallik va kamchilik |
 |---|---|---|
 | Firewall (`ufw allow from 10.0.0.0/8 to any port 22`) | Faqat ma'lum tarmoqdan | Dinamik IP'da qiyin |
 | VPN / private network | SSH internet'ga umuman ochilmaydi | Qo'shimcha infra |
 | `fail2ban` | Ko'p urinishdan keyin IP blok | Parol o'chiq bo'lsa foydasi kam; asosan log shovqinini kamaytiradi |
 | Port o'zgartirish (22 -> 2222) | Bot shovqini kamayadi | Xavfsizlik **emas** (port scanner bir zumda topadi) |
-| MFA (kalit + TOTP) | Ikkinchi omil | Murakkablik, automation qiyin |
+| MFA (kalit + TOTP) | Ikkinchi omil | Murakkablik, avtomatlashtirish qiyin |
 
-## 6. Agent forwarding va jump host
+## 6. Oraliq server (bastion) orqali ulanish
 
-**Problem:** laptop -> bastion -> prod server. Prod'ga kalit bilan kirish kerak, lekin private kalitni bastion'ga ko'chirish xavfli.
+**Muammo:** noutbuk -> bastion -> prod server. Prod'ga kalit bilan kirish kerak, lekin private kalitni bastion'ga ko'chirish xavfli.
 
 ```
  Naive:     private kalitni bastion'ga nusxalash          -> bastion buzilsa, kalit ketdi
@@ -198,23 +200,23 @@ sudo systemctl reload ssh
                                                              laptop <-> prod o'rtasida, end-to-end
 ```
 
-## 7. Tunnel'lar (port forwarding)
+## 7. SSH tunnel — yopiq port'ga xavfsiz yo'l
 
 ```bash
-# Local forward: prod'dagi DB'ga (faqat localhost'da tinglaydi) laptop'dan ulanish
+# Local forward: prod'dagi DB'ga (faqat localhost'da tinglaydi) noutbukdan ulanish
 ssh -L 5432:localhost:5432 prod-db1
-psql -h localhost -p 5432          # laptop'da
+psql -h localhost -p 5432          # noutbukda
 
-# Remote forward: laptop'dagi servisni server orqali ochish
+# Remote forward: noutbukdagi servisni server orqali ochish
 ssh -R 8080:localhost:3000 lab
 
 # SOCKS proxy
 ssh -D 1080 bastion
 ```
 
-> **Security:** tunnel'lar firewall'ni chetlab o'tish vositasi ham. Production server'larda kerak bo'lmasa: `AllowTcpForwarding no`. Kerakli user'lar uchun — `Match` bloki bilan alohida ruxsat.
+> **Xavfsizlik:** tunnel'lar firewall'ni chetlab o'tish vositasi ham. Production server'larda kerak bo'lmasa: `AllowTcpForwarding no`. Kerakli user'lar uchun — `Match` bloki bilan alohida ruxsat.
 
-## 8. Failure modes va debugging
+## 8. Ko'p uchraydigan muammolar va ularni topish
 
 | Muammo | Sabab | Tekshirish |
 |---|---|---|
@@ -222,7 +224,7 @@ ssh -D 1080 bastion
 | `Permission denied (publickey)` | Noto'g'ri kalit / user / `AllowGroups` | Client: `ssh -v`; server: journal |
 | `REMOTE HOST IDENTIFICATION HAS CHANGED` | Server qayta o'rnatilgan yoki MITM | Fingerprint'ni tasdiqlash |
 | `Connection refused` | sshd ishlamayapti / boshqa port | `systemctl status ssh`, `ss -tlnp` |
-| `Connection timed out` | Tarmoq / firewall / security group | `ping`, `nc -vz host 22`, cloud SG |
+| `Connection timed out` | Tarmoq / firewall / xavfsizlik group | `ping`, `nc -vz host 22`, cloud SG |
 | `Too many authentication failures` | Agent'da ko'p kalit | `IdentitiesOnly yes` |
 | Ulanish sekin (5–10 s) | Server client IP'ni DNS'da resolve qilyapti | `UseDNS no` (default ko'p versiyalarda) |
 | Idle session uziladi | NAT/firewall timeout | `ServerAliveInterval 60` (client) |
@@ -235,7 +237,7 @@ sudo /usr/sbin/sshd -d -p 2222              # debug rejimda alohida port'da ishg
 
 **Debug qoidasi:** client xabari ataylab noaniq (`Permission denied`) — hujumchiga ma'lumot bermaslik uchun. Haqiqiy sabab **server log'ida**.
 
-## 9. Masshtabda SSH
+## 9. Ko'p server'li tizimda SSH
 
 | Muammo | 100+ server'da |
 |---|---|
@@ -248,7 +250,7 @@ sudo /usr/sbin/sshd -d -p 2222              # debug rejimda alohida port'da ishg
 - **Bastion / access proxy** (Teleport, Boundary): SSO, MFA, session recording.
 - **SSH'siz boshqaruv** (AWS SSM Session Manager, va h.k.): 22-port umuman ochilmaydi, kirish IAM orqali, audit avtomatik.
 
-> **Principal insight:** maqsad — "SSH'ni yaxshi himoyalash" emas, **SSH'ga ehtiyojni kamaytirish**. Deploy — CI/CD, config — IaC, log'lar — markaziy tizim. Odam server'ga faqat incident'da, vaqtinchalik va yozib olinadigan kirish bilan kiradi.
+> **Chuqurroq qarash:** maqsad — "SSH'ni yaxshi himoyalash" emas, **SSH'ga ehtiyojni kamaytirish**. Deploy — CI/CD, config — IaC, log'lar — markaziy tizim. Odam server'ga faqat incident'da, vaqtinchalik va yozib olinadigan kirish bilan kiradi.
 
 ## Amaliy mashg'ulot
 
@@ -257,7 +259,7 @@ sudo /usr/sbin/sshd -d -p 2222              # debug rejimda alohida port'da ishg
 3. `~/.ssh/config`'da `lab` aliasi.
 4. Hardening drop-in yozing; **qulflanmaslik protokoli** bo'yicha qo'llang; `sshd -T` bilan tekshiring.
 5. Buzib-tuzat: `chmod 777 ~/.ssh` (server'da) -> kalit ishlamaydi -> `journalctl -u ssh`'dan sababni toping -> tuzating.
-6. VM'da `python3 -m http.server 8000 --bind 127.0.0.1` ishga tushiring va laptop'dan `ssh -L` bilan oching.
+6. VM'da `python3 -m http.server 8000 --bind 127.0.0.1` ishga tushiring va noutbukdan `ssh -L` bilan oching.
 7. Ikki VM bo'lsa: `ssh -J` bilan birinchisi orqali ikkinchisiga kiring.
 
 ## Uy vazifa
@@ -279,7 +281,7 @@ sudo /usr/sbin/sshd -d -p 2222              # debug rejimda alohida port'da ishg
 9. Port'ni 2222 ga o'zgartirish xavfsizlik choramimi?
 10. SSH sertifikatlar `authorized_keys`'ning qaysi muammosini hal qiladi?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - Joriy sessiyani yopib, keyin yangi config'ni sinash.
 - `StrictHostKeyChecking no`'ni doimiy ishlatish.
@@ -288,7 +290,7 @@ sudo /usr/sbin/sshd -d -p 2222              # debug rejimda alohida port'da ishg
 - `sshd_config`'ni tahrirlab, cloud-init drop-in'i uni bekor qilganini sezmaslik.
 - Faqat client xabariga qarab debug qilish.
 
-## Senior xulosa
+## Xulosa
 
 - SSH = shifrlash + server autentifikatsiyasi (host key) + user autentifikatsiyasi (user key) + integrity.
 - Kalit bilan kiring (passphrase, agent, imkon bo'lsa hardware), root va parolni yoping, AllowGroups bilan cheklang.

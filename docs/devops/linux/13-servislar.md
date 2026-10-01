@@ -1,24 +1,24 @@
 # Dars 13 — Xizmatlar (servislar, systemd)
 
-> **Natija:** servisni boshqarish, holatini o'qish va o'z systemd unit file'ini yozish. Senior darajada: systemd nima problem'ni hal qiladi, unit'lar va dependency'lar, restart siyosati va crash loop, readiness, resource limit va sandboxing, production-grade unit file.
+> **Natija:** servisni boshqarish, holatini o'qish va o'z systemd unit faylini yozish. Systemd nima muammoni hal qiladi, unit'lar va dependency'lar, restart siyosati va crash loop, readiness, resource limit va sandboxing, production-grade unit fayl.
 
-## 1. Problem — servisni "tirik" ushlab turish
+## 1. Muammo — dastur doim ishlab turishini qanday ta'minlash kerak?
 
-12-darsda `nohup ./app &` anti-pattern ekanini ko'rdik. Production servisga kerak:
+12-darsda `nohup ./app &` anti-usul ekanini ko'rdik. Production servisga kerak:
 
 | Talab | `nohup` bilan |
 |---|---|
 | Boot'da avtomatik ishga tushish | Yo'q |
 | Crash bo'lsa qayta ko'tarish | Yo'q |
 | To'g'ri tartib (avval network, DB, keyin app) | Yo'q |
-| Log'larni yig'ish | Tasodifiy file |
+| Log'larni yig'ish | Tasodifiy fayl |
 | Resurs limiti (RAM, CPU) | Yo'q |
-| Xavfsizlik (alohida user, cheklangan file'lar) | Qo'lda |
+| Xavfsizlik (alohida user, cheklangan fayllar) | Qo'lda |
 | Graceful stop (SIGTERM, timeout, SIGKILL) | Qo'lda |
 
 **systemd** — PID 1 sifatida bularning hammasini **deklarativ** tarzda beradi: siz "nima kerak"ni yozasiz, systemd "qanday"ni bajaradi.
 
-## 2. Mental model — process vs service
+## 2. Oddiy process va servis farqi
 
 | | Process | Service |
 |---|---|---|
@@ -62,9 +62,9 @@ systemctl cat nginx                 # unit file + drop-in'lar
 systemctl show nginx -p MainPID,Restart,MemoryMax
 ```
 
-> **Gotcha:** `start` != `enable`. `start` — hozir; `enable` — reboot'dan keyin. Ikkalasi kerak: `enable --now`. Ko'p incident: "reboot'dan keyin servis turmadi".
+> **Tuzoq:** `start` != `enable`. `start` — hozir; `enable` — reboot'dan keyin. Ikkalasi kerak: `enable --now`. Ko'p incident: "reboot'dan keyin servis turmadi".
 
-### `restart` vs `reload` — trade-off
+### `restart` va `reload` farqi
 
 | | restart | reload |
 |---|---|---|
@@ -75,7 +75,7 @@ systemctl show nginx -p MainPID,Restart,MemoryMax
 
 **Production qoidasi:** reload/restart'dan **oldin** config'ni tekshiring: `nginx -t`, `sshd -t`, `haproxy -c -f ...`. Xato config bilan restart — o'zingiz chaqirgan outage.
 
-## 4. Status o'qish
+## 4. `systemctl status` natijasini o'qish
 
 ```text
 * nginx.service - A high performance web server
@@ -92,14 +92,14 @@ systemctl show nginx -p MainPID,Restart,MemoryMax
 
 | Qator | Nimani aytadi |
 |---|---|
-| `Loaded` | Unit file qayerda, enable bo'lganmi |
+| `Loaded` | Unit fayl qayerda, enable bo'lganmi |
 | `Active` | Holat va qachondan beri (tez-tez restart bo'lsa — "since" yangi) |
 | `Main PID`, `CGroup` | Qaysi process'lar |
 | Pastdagi qatorlar | Oxirgi log'lar — ko'pincha xato shu yerda |
 
 Holatlar: `active (running)`, `inactive (dead)`, `failed`, `activating (auto-restart)` — oxirgisi crash loop belgisi.
 
-## 5. Unit file'lar — qayerda va qanday ustunlik
+## 5. Unit fayllar qayerda turadi va qaysi biri ustun
 
 ```
  /usr/lib/systemd/system/   <- paketdan (TAHRIRLAMANG — yangilanishda yo'qoladi)
@@ -113,9 +113,9 @@ sudo systemctl edit --full nginx   # to'liq nusxa (kamdan-kam kerak)
 sudo systemctl daemon-reload       # unit o'zgargandan keyin SHART
 ```
 
-## 6. O'z unit file'imiz: naive -> production
+## 6. O'z unit faylimizni yozish: oddiydan to'liq variantgacha
 
-### Naive
+### Oddiy variant
 
 ```ini
 [Unit]
@@ -130,7 +130,7 @@ WantedBy=multi-user.target
 
 Muammolar: root sifatida ishlaydi; crash bo'lsa turmaydi; DB'dan oldin ishga tushishi mumkin; limit yo'q.
 
-### Production
+### To'liq (production) variant
 
 ```ini
 [Unit]
@@ -193,7 +193,7 @@ WantedBy=multi-user.target
 | `Restart=on-failure` | `always` — hatto toza `exit 0`'da ham qayta tushadi; ko'pincha `on-failure` to'g'riroq |
 | `StartLimitBurst` | Crash loop'ni cheklash: 5 daqiqada 5 marta yiqilsa — to'xtaydi va `failed` bo'ladi (alert uchun signal) |
 | `ExecStartPre` config check | Xato config bilan ishga tushmaslik |
-| `TimeoutStopSec=30` | Graceful shutdown uchun vaqt (12-dars), keyin SIGKILL |
+| `TimeoutStopSec=30` | Toza to'xtatish (graceful shutdown) uchun vaqt (12-dars), keyin SIGKILL |
 | `ProtectSystem=strict` | Butun filesystem read-only, faqat `StateDirectory` va h.k. yoziladi — buzilgan servis tizimni o'zgartira olmaydi |
 | `NoNewPrivileges` | SUID orqali root'ga ko'tarilish yo'q |
 
@@ -202,9 +202,9 @@ systemd-analyze security myapp      # sandboxing bahosi (0 = yaxshi, 10 = himoya
 systemd-analyze verify myapp.service
 ```
 
-> **Trade-off:** sandboxing kuchli, lekin ortiqcha cheklov servisni "sirli" tarzda buzadi (`Read-only file system`, `Permission denied`). Bittalab qo'shing va har birini sinang.
+> **Afzallik va kamchilik:** sandboxing kuchli, lekin ortiqcha cheklov servisni "sirli" tarzda buzadi (`Read-only file system`, `Permission denied`). Bittalab qo'shing va har birini sinang.
 
-### Restart va crash loop
+### Qayta ishga tushish va to'xtovsiz yiqilish (crash loop)
 
 ```
  app crash -> 5s -> start -> crash -> 5s -> start ... (StartLimitBurst'gacha) -> failed
@@ -212,7 +212,7 @@ systemd-analyze verify myapp.service
 
 `Restart=` — **containment**, yechim emas. Agar servis har 5 soniyada qayta tug'ilayotgan bo'lsa, bu yashirin incident. Monitoring: `NRestarts` (`systemctl show -p NRestarts myapp`) yoki restart'lar soniga alert.
 
-## 7. Timer'lar — cron'ning zamonaviy alternativasi
+## 7. Timer'lar — cron'ning zamonaviy o'rinbosari
 
 ```ini
 # /etc/systemd/system/backup.timer
@@ -231,15 +231,15 @@ WantedBy=timers.target
 | Bir vaqtda ikki marta ishlash | Mumkin (overlap) | Yo'q — servis allaqachon ishlayotgan bo'lsa |
 | O'tkazib yuborilgan ish | Yo'qoladi | `Persistent=true` |
 | Limit, sandbox | Yo'q | Servisdagi barcha imkoniyatlar |
-| Soddalik | Bitta qator | Ikki file |
+| Soddalik | Bitta qator | Ikki fayl |
 
 ```bash
 systemctl list-timers
 ```
 
-## 8. Failure modes
+## 8. Nima buzilishi mumkin
 
-| Symptom | Root cause | Tekshirish |
+| Belgi | Asl sabab | Tekshirish |
 |---|---|---|
 | Reboot'dan keyin servis yo'q | `enable` qilinmagan | `systemctl is-enabled` |
 | Unit o'zgardi, ta'sir yo'q | `daemon-reload` unutilgan | `systemctl status` ogohlantiradi |
@@ -248,9 +248,9 @@ systemctl list-timers
 | `status=217/USER` | `User=` mavjud emas | `getent passwd` |
 | `code=killed, signal=KILL` + OOM | `MemoryMax` yoki tizim OOM | `journalctl -k`, `systemctl show -p MemoryMax` |
 | Servis DB'dan oldin turib, yiqiladi | Dependency yo'q | `After=`/`Wants=` va app'da retry |
-| Stop 90 soniya osiladi | SIGTERM'ni ishlamaydi | App'da graceful shutdown, `TimeoutStopSec` |
+| Stop 90 soniya osiladi | SIGTERM'ni ishlamaydi | App'da toza to'xtatish (graceful shutdown), `TimeoutStopSec` |
 
-> **Distributed insight:** `After=postgresql.service` faqat **shu server'dagi** DB uchun ishlaydi. DB boshqa server'da bo'lsa, systemd hech narsa kafolatlamaydi — app o'zi **retry with backoff** qilishi kerak. Dependency'lar har doim yo'q bo'lishi mumkin, deb dizayn qiling.
+> **Tarqoq tizimlar uchun:** `After=postgresql.service` faqat **shu server'dagi** DB uchun ishlaydi. DB boshqa server'da bo'lsa, systemd hech narsa kafolatlamaydi — app o'zi **retry with backoff** qilishi kerak. Dependency'lar har doim yo'q bo'lishi mumkin, deb dizayn qiling.
 
 ## Amaliy mashg'ulot
 
@@ -274,24 +274,24 @@ systemctl list-timers
 1. systemd `nohup`'ning qaysi muammolarini hal qiladi?
 2. `restart` va `reload` farqi? Qaysi biri xato config'da xavfliroq?
 3. `enable` nima qiladi? `mask`-chi?
-4. Unit file'ni o'zgartirgandan keyin qaysi command shart?
-5. Nega paket unit file'ini emas, drop-in'ni tahrirlash kerak?
+4. Unit faylni o'zgartirgandan keyin qaysi buyruq shart?
+5. Nega paket unit faylini emas, drop-in'ni tahrirlash kerak?
 6. `Restart=always` va `on-failure` farqi? Crash loop qanday cheklanadi?
 7. `After=` nima kafolatlaydi va nima kafolatlamaydi?
 8. `ProtectSystem=strict` nima beradi va qanday muammo chiqarishi mumkin?
 9. cron o'rniga systemd timer'ning 3 ta afzalligi?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - `start` qilib, `enable` qilmaslik.
 - `daemon-reload`'ni unutish.
-- `/usr/lib/systemd/system/` ichidagi file'ni tahrirlash.
+- `/usr/lib/systemd/system/` ichidagi faylni tahrirlash.
 - Servisni root sifatida, limit'siz ishga tushirish.
-- `Restart=always`'ni root cause o'rniga ishlatish va crash loop'ni sezmaslik.
+- `Restart=always`'ni asl sabab o'rniga ishlatish va crash loop'ni sezmaslik.
 - Config tekshirmasdan restart.
 - `After=` yozib, `Wants=`/`Requires=`'ni unutish.
 
-## Senior xulosa
+## Xulosa
 
 - systemd — server'ning dispetcheri: boot tartibi, restart, log, cgroup limit va sandbox — hammasi deklarativ.
 - Servis = o'z cgroup'idagi process'lar to'plami: stop hech narsani qoldirmaydi, limit hammaga qo'llanadi.

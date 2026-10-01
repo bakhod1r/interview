@@ -1,23 +1,23 @@
 # Dars 16 — Paket menejeri
 
-> **Natija:** dasturni repo'dan o'rnatish, o'chirish, yangilash; `apt` va `dnf` ekvivalentlarini bilish. Senior darajada: paket menejeri qaysi problem'ni hal qiladi, dependency resolution, GPG imzo va supply chain, versiya pinning, xavfsiz yangilash strategiyasi, container'da paketlar.
+> **Natija:** dasturni repo'dan o'rnatish, o'chirish, yangilash; `apt` va `dnf` ekvivalentlarini bilish. Paket menejeri qaysi muammoni hal qiladi, dependency resolution, GPG imzo va supply chain, versiya pinning, xavfsiz yangilash strategiyasi, container'da paketlar.
 
-## 1. Problem — dasturni qanday o'rnatish?
+## 1. Muammo — dasturni qanday o'rnatish?
 
 Nginx'ni qo'lda o'rnatish:
 1. Source yoki binary'ni yuklab olish — qayerdan? haqiqiymi?
 2. Unga kerak bo'lgan kutubxonalar (`libssl`, `libpcre`) — ularga ham kerak bo'lganlar...
-3. File'larni to'g'ri joyga qo'yish (8-dars FHS), user yaratish, systemd unit.
-4. 3 oydan keyin security patch — hammasini qaytadan, qaysi file qaysi dasturniki ekanini eslab.
-5. O'chirish — qaysi file'lar? Hech kim bilmaydi.
+3. Fayllarni to'g'ri joyga qo'yish (8-dars FHS), user yaratish, systemd unit.
+4. 3 oydan keyin xavfsizlik patch — hammasini qaytadan, qaysi fayl qaysi dasturniki ekanini eslab.
+5. O'chirish — qaysi fayllar? Hech kim bilmaydi.
 
 **Paket menejeri hal qiladi:** ishonchli manba, avtomatik dependency, ma'lum joylashuv, bir buyruqda yangilash va toza o'chirish.
 
-## 2. Mental model — paket va repository
+## 2. Paket va repository nima
 
-**Paket** = file'lar arxivi + metadata (nom, versiya, arxitektura, **dependency**'lar, conflict'lar) + o'rnatish script'lari (postinst: user yaratish, servisni yoqish).
+**Paket** = fayllar arxivi + metadata (nom, versiya, arxitektura, **dependency**'lar, conflict'lar) + o'rnatish script'lari (postinst: user yaratish, servisni yoqish).
 
-| Oila | Format | Past daraja (bitta file) | Yuqori daraja (repo + dependency) |
+| Oila | Format | Past daraja (bitta fayl) | Yuqori daraja (repo + dependency) |
 |---|---|---|---|
 | Debian/Ubuntu | `.deb` | `dpkg` | **`apt`** |
 | RHEL/Rocky/Fedora | `.rpm` | `rpm` | **`dnf`** (eski `yum`) |
@@ -55,11 +55,11 @@ dpkg -L nginx                # paket file'lari qayerda
 dpkg -S /usr/sbin/nginx      # bu file qaysi paketdan
 ```
 
-> **Gotcha:** `update` != `upgrade`. `update` — menyuni yangilash, `upgrade` — ovqatni almashtirish. Yangi VM'da `apt install` "Unable to locate package" bersa — avval `update`.
+> **Tuzoq:** `update` != `upgrade`. `update` — menyuni yangilash, `upgrade` — ovqatni almashtirish. Yangi VM'da `apt install` "Unable to locate package" bersa — avval `update`.
 
-> **Script gotcha:** script'larda `apt` emas, `apt-get` ishlating — `apt` interaktiv foydalanish uchun, uning chiqish formati barqaror emas (o'zi ogohlantiradi). Va `DEBIAN_FRONTEND=noninteractive` — aks holda paket savol berib, pipeline osilib qoladi.
+> **Script tuzog'i:** script'larda `apt` emas, `apt-get` ishlating — `apt` interaktiv foydalanish uchun, uning chiqish formati barqaror emas (o'zi ogohlantiradi). Va `DEBIAN_FRONTEND=noninteractive` — aks holda paket savol berib, pipeline osilib qoladi.
 
-### Dependency resolution — nima murakkab
+### Dependency'larni hal qilish nega qiyin
 
 ```
  app-A kerak: libfoo >= 2.0
@@ -67,11 +67,11 @@ dpkg -S /usr/sbin/nginx      # bu file qaysi paketdan
  -> ikkalasi bitta tizimda bo'la olmaydi ("dependency hell")
 ```
 
-Distro buni bitta, bir-biriga mos versiyalar to'plamini (release) saqlab hal qiladi. Shuning uchun Ubuntu 24.04'da nginx'ning versiyasi "eski" ko'rinadi — u **barqarorlik** uchun muzlatilgan, security patch'lar esa **backport** qilinadi (versiya raqami o'zgarmasa ham, CVE yopilgan bo'lishi mumkin).
+Distro buni bitta, bir-biriga mos versiyalar to'plamini (release) saqlab hal qiladi. Shuning uchun Ubuntu 24.04'da nginx'ning versiyasi "eski" ko'rinadi — u **barqarorlik** uchun muzlatilgan, xavfsizlik patch'lar esa **backport** qilinadi (versiya raqami o'zgarmasa ham, CVE yopilgan bo'lishi mumkin).
 
-> **Security audit gotcha:** scanner "nginx 1.24 — CVE bor" desa, darhol vahima qilmang: distro patch'ni backport qilgan bo'lishi mumkin. Tekshirish: `apt changelog nginx` yoki distro'ning CVE tracker'i.
+> **Xavfsizlik audit tuzoq:** scanner "nginx 1.24 — CVE bor" desa, darhol vahima qilmang: distro patch'ni backport qilgan bo'lishi mumkin. Tekshirish: `apt changelog nginx` yoki distro'ning CVE tracker'i.
 
-## 4. apt <-> dnf
+## 4. apt va dnf buyruqlari solishtirmasi
 
 | Amal | Ubuntu | Rocky/RHEL |
 |---|---|---|
@@ -81,11 +81,11 @@ Distro buni bitta, bir-biriga mos versiyalar to'plamini (release) saqlab hal qil
 | O'chirish | `apt remove X` | `dnf remove X` |
 | Qidirish | `apt search X` | `dnf search X` |
 | Ma'lumot | `apt show X` | `dnf info X` |
-| File egasi | `dpkg -S f` | `rpm -qf f` |
-| Paket file'lari | `dpkg -L X` | `rpm -ql X` |
+| Fayl egasi | `dpkg -S f` | `rpm -qf f` |
+| Paket fayllari | `dpkg -L X` | `rpm -ql X` |
 | Tarix / rollback | `/var/log/apt/history.log` | `dnf history`, `dnf history undo N` |
 
-## 5. Supply chain security — nimaga ishonyapsiz?
+## 5. O'rnatilayotgan dasturga qanday ishonamiz (supply chain xavfsizlik)
 
 Paket o'rnatganda siz **root huquqi bilan begona kod** ishga tushiryapsiz (postinst script'lar root sifatida ishlaydi). Ishonch zanjiri:
 
@@ -99,7 +99,7 @@ Paket o'rnatganda siz **root huquqi bilan begona kod** ishga tushiryapsiz (posti
 
 Shuning uchun HTTP repo ham nisbatan xavfsiz — imzo HTTPS'dan mustaqil himoya beradi (lekin HTTPS maxfiylik qo'shadi).
 
-### Uchinchi tomon repo — to'g'ri usul
+### Boshqa kompaniya repo'sini to'g'ri qo'shish
 
 ```bash
 # Naive (xavfli): kalitga BARCHA repo'lar uchun ishonish
@@ -127,7 +127,7 @@ Yaxshiroq: yuklab olish -> o'qish -> checksum/imzo tekshirish -> ishga tushirish
 
 ## 6. Versiya va yangilash strategiyasi
 
-### Pinning
+### Versiyani qotirib qo'yish (pinning)
 
 ```bash
 sudo apt-mark hold postgresql-16     # avtomatik yangilanmasin
@@ -135,9 +135,9 @@ apt-mark showhold
 sudo apt install nginx=1.24.0-2ubuntu7   # aniq versiya
 ```
 
-**Trade-off:** hold — kutilmagan major yangilanishdan himoya, lekin security patch'lar ham to'xtaydi. Hold qilingan paketlarni ro'yxatda saqlang va muntazam ko'rib chiqing.
+**Afzallik va kamchilik:** hold — kutilmagan major yangilanishdan himoya, lekin xavfsizlik patch'lar ham to'xtaydi. Hold qilingan paketlarni ro'yxatda saqlang va muntazam ko'rib chiqing.
 
-### Avtomatik security update'lar
+### Xavfsizlik yangilanishlarini avtomatik o'rnatish
 
 ```bash
 sudo apt install unattended-upgrades
@@ -149,19 +149,19 @@ ls /var/run/reboot-required      # kernel yangilangan — reboot kerak
 | Strategiya | Afzallik | Xavf |
 |---|---|---|
 | Hech narsa avtomatik emas | Nazorat | Patch'lar oylab qo'yilmaydi (eng ko'p uchraydigan holat) |
-| Faqat security avtomatik | Tez himoya | Kamdan-kam regression |
+| Faqat xavfsizlik avtomatik | Tez himoya | Kamdan-kam regression |
 | Hammasi avtomatik | Doim yangi | Kutilmagan o'zgarish prod'da |
 | **Immutable image** (patch -> yangi image -> rolling deploy) | Test qilingan, takrorlanadigan, rollback oson | Pipeline kerak |
 
-> **Principal insight:** ko'p server'li tizimda "server'da `apt upgrade`" — config drift manbai: har server biroz boshqa vaqtda, boshqa versiya bilan yangilanadi. Yetuk yondashuv — paketlar **image build** vaqtida o'rnatiladi (Packer, Dockerfile), server'lar yangi image bilan almashtiriladi (3-dars evolyutsiyasi). Lekin bunda ham security update'lar uchun muntazam **rebuild** jarayoni bo'lishi shart.
+> **Chuqurroq qarash:** ko'p server'li tizimda "server'da `apt upgrade`" — config drift manbai: har server biroz boshqa vaqtda, boshqa versiya bilan yangilanadi. Yetuk yondashuv — paketlar **image build** vaqtida o'rnatiladi (Packer, Dockerfile), server'lar yangi image bilan almashtiriladi (3-dars evolyutsiyasi). Lekin bunda ham xavfsizlik update'lar uchun muntazam **rebuild** jarayoni bo'lishi shart.
 
-### Rollback
+### Oldingi versiyaga qaytish (rollback)
 
 - apt: eski versiyani aniq o'rnatish (`apt install pkg=old-version`), agar u repo/cache'da bo'lsa. Kafolat yo'q.
 - dnf: `dnf history undo` — qulayroq.
 - Ishonchli rollback: VM snapshot (3-dars) yoki oldingi image.
 
-## 7. Container'da paketlar
+## 7. Docker image ichida paket o'rnatish
 
 ```dockerfile
 # Naive: katta image, keraksiz cache, har build'da boshqa versiyalar
@@ -179,27 +179,27 @@ RUN apt-get update \
 | `update` va `install` bitta `RUN`'da | Alohida bo'lsa, `update` layer'i cache'lanadi va keyingi build'larda eski indeks bilan o'rnatiladi |
 | `--no-install-recommends` | Image kichik, hujum yuzasi kichik |
 | `rm -rf /var/lib/apt/lists/*` | Indeks image'da qolmasin |
-| Multi-stage build | Compiler va build tool'lar yakuniy image'ga tushmasin |
+| Multi-stage build | Compiler va build vositalar yakuniy image'ga tushmasin |
 | Distroless / scratch (Go) | Paket menejeri umuman yo'q — hujumchi `apt install` qila olmaydi (2-dars) |
 
-## 8. Boshqa usullar
+## 8. Dastur o'rnatishning boshqa usullari
 
-| Usul | Qachon | Trade-off |
+| Usul | Qachon | Afzallik va kamchilik |
 |---|---|---|
-| `.deb` file: `sudo apt install ./app.deb` | Vendor faqat file beradi | Dependency hal qilinadi, lekin yangilanish qo'lda |
+| `.deb` fayl: `sudo apt install ./app.deb` | Vendor faqat fayl beradi | Dependency hal qilinadi, lekin yangilanish qo'lda |
 | Rasmiy 3rd-party repo | Yangi versiya kerak (Docker, PostgreSQL) | Ishonch doirasi kengayadi |
 | `snap` / Flatpak | Desktop, izolyatsiya | Server'da kamdan-kam, avtomatik yangilanadi |
-| Statik binary (`/usr/local/bin`) | Go tool'lar (terraform, kubectl) | Paket bazasida yo'q — inventarizatsiya va yangilash qo'lda; checksum tekshiring |
+| Statik binary (`/usr/local/bin`) | Go vositalar (terraform, kubectl) | Paket bazasida yo'q — inventarizatsiya va yangilash qo'lda; checksum tekshiring |
 | Til paket menejerlari (pip, npm, go) | App dependency'lari | Tizim paketlari bilan aralashtirmang: `pip install` tizim Python'iga emas, venv'ga |
 
-> **Gotcha:** Ubuntu 24.04'da tizim Python'iga `pip install` qilish `externally-managed-environment` xatosi bilan rad etiladi (PEP 668) — bu ataylab: `pip` apt o'rnatgan paketlarni buzmasligi uchun. Yechim: `python3 -m venv`, yoki `pipx` tool'lar uchun.
+> **Tuzoq:** Ubuntu 24.04'da tizim Python'iga `pip install` qilish `externally-managed-environment` xatosi bilan rad etiladi (PEP 668) — bu ataylab: `pip` apt o'rnatgan paketlarni buzmasligi uchun. Yechim: `python3 -m venv`, yoki `pipx` vositalar uchun.
 
-## 9. Failure modes
+## 9. Nima buzilishi mumkin
 
-| Symptom | Root cause | Yechim |
+| Belgi | Asl sabab | Yechim |
 |---|---|---|
 | `Unable to locate package` | `apt update` qilinmagan / repo yo'q | `update`, `apt policy` |
-| `Could not get lock /var/lib/dpkg/lock-frontend` | Boshqa apt ishlayapti (ko'pincha unattended-upgrades) | Kuting; lock file'ni **o'chirmang** |
+| `Could not get lock /var/lib/dpkg/lock-frontend` | Boshqa apt ishlayapti (ko'pincha unattended-upgrades) | Kuting; lock faylni **o'chirmang** |
 | `dpkg was interrupted` | O'rnatish uzilgan | `sudo dpkg --configure -a` |
 | `unmet dependencies` / held broken packages | Aralash repo'lar, hold | `apt -f install`, `apt policy`, repo'larni tekshirish |
 | `NO_PUBKEY` / `signature invalid` | Repo kaliti yo'q yoki eskirgan | Kalitni rasmiy manbadan `signed-by` bilan |
@@ -210,7 +210,7 @@ RUN apt-get update \
 
 1. Yangi VM'da `apt update`siz `apt install htop` -> xato bo'lishi mumkin -> `update` -> ishlaydi.
 2. `htop`, `tree`, `curl`, `jq` o'rnating. `apt show jq` va `apt policy jq`'ni o'qing.
-3. `dpkg -L htop` — file'lari qayerga tushdi (FHS bilan solishtiring)?
+3. `dpkg -L htop` — fayllari qayerga tushdi (FHS bilan solishtiring)?
 4. `nginx`'ni `remove` qiling -> `/etc/nginx` qoldimi? -> `purge` -> qoldimi?
 5. `command -v ls` -> `dpkg -S` bilan qaysi paketdan ekanini toping.
 6. `apt-mark hold htop`, `apt list --upgradable`, keyin `unhold`.
@@ -220,7 +220,7 @@ RUN apt-get update \
 ## Uy vazifa
 
 1. Rocky VM'da (yoki Docker `rockylinux:9`) xuddi shu qadamlarni `dnf` bilan bajaring; `dnf history undo` bilan rollback qiling.
-2. 20 ta server uchun yangilash strategiyasini yozing: security update'lar, kernel reboot'lari, test muhiti, rollback.
+2. 20 ta server uchun yangilash strategiyasini yozing: xavfsizlik update'lar, kernel reboot'lari, test muhiti, rollback.
 3. `apt-key add` va `signed-by` farqini xavfsizlik nuqtai nazaridan tushuntiring.
 
 ## Test savollari
@@ -233,10 +233,10 @@ RUN apt-get update \
 6. Nega `curl | bash` xavfli?
 7. `signed-by` nima uchun kerak?
 8. Dockerfile'da nega `apt-get update` va `install` bitta `RUN`'da?
-9. `apt-mark hold`'ning trade-off'i?
-10. Lock xatosida nega lock file'ni o'chirmaslik kerak?
+9. `apt-mark hold`'ning afzallik va kamchiligi?
+10. Lock xatosida nega lock faylni o'chirmaslik kerak?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - `update`'siz `install`.
 - Script'larda interaktiv `apt` va `noninteractive`'siz ishlatish.
@@ -244,12 +244,12 @@ RUN apt-get update \
 - 3rd-party kalitni global ishonchli qilish.
 - Tizim Python'iga `pip install`.
 - Hold qilingan paketlarni unutish — patch'lar yillab qo'yilmaydi.
-- dpkg lock file'ini o'chirish.
+- dpkg lock faylini o'chirish.
 
-## Senior xulosa
+## Xulosa
 
-- Paket menejeri = ishonchli manba + dependency resolution + "qaysi file kimniki" bazasi + toza yangilash/o'chirish.
+- Paket menejeri = ishonchli manba + dependency resolution + "qaysi fayl kimniki" bazasi + toza yangilash/o'chirish.
 - Ishonch zanjiri — GPG imzo; 3rd-party repo faqat `signed-by` bilan; `curl | bash` — o'qilmagan root kod.
 - Distro barqarorlik uchun versiyani muzlatadi va patch'larni backport qiladi.
-- Yangilash — strategiya: security tez, major — test bilan; masshtabda — image rebuild va rolling deploy.
+- Yangilash — strategiya: xavfsizlik tez, major — test bilan; masshtabda — image rebuild va rolling deploy.
 - Container'da: bitta `RUN`, `--no-install-recommends`, cache'ni tozalash, imkon bo'lsa distroless.

@@ -1,8 +1,8 @@
 # Dars 11 — Egalik va sudo
 
-> **Natija:** file egasini o'zgartirish, `sudo`'ni to'g'ri ishlatish va sozlash, least privilege tamoyilini amalda qo'llash. Senior darajada: nega faqat root `chown` qila oladi, `sudo` ichkarida qanday ishlaydi, sudoers'dagi "yashirin root" teshiklari, audit va zamonaviy alternativalar.
+> **Natija:** fayl egasini o'zgartirish, `sudo`'ni to'g'ri ishlatish va sozlash, eng kam huquq tamoyili tamoyilini amalda qo'llash. Nega faqat root `chown` qila oladi, `sudo` ichkarida qanday ishlaydi, sudoers'dagi "yashirin root" teshiklari, audit va zamonaviy alternativalar.
 
-## 1. Problem — kuchni qanday berish va cheklash?
+## 1. Muammo — root huquqini kimga, qanday va qay darajada berish kerak?
 
 Server'da ba'zi ishlar root huquqini talab qiladi: paket o'rnatish, servisni restart qilish, port 80'ni ochish. Variantlar:
 
@@ -10,11 +10,11 @@ Server'da ba'zi ishlar root huquqini talab qiladi: paket o'rnatish, servisni res
 |---|---|
 | Hamma root parolini biladi | Kim nima qilganini bilib bo'lmaydi; parolni almashtirish = hammaga xabar berish; bitta xato `rm` — butun server |
 | Hamma root bo'lib ishlaydi (`sudo -i` va shu yerda qoladi) | Har typo root huquqida bajariladi |
-| **sudo**: har command alohida, o'z parolingiz bilan, log bilan | Tavsiya etilgan — lekin to'g'ri sozlansa |
+| **sudo**: har buyruq alohida, o'z parolingiz bilan, log bilan | Tavsiya etilgan — lekin to'g'ri sozlansa |
 
-**Asosiy g'oya:** kuch **vaqtincha**, **aniq command uchun** va **iz qoldirib** beriladi.
+**Asosiy g'oya:** kuch **vaqtincha**, **aniq buyruq uchun** va **iz qoldirib** beriladi.
 
-## 2. File egasi
+## 2. Fayl egasi
 
 Har inode'da ikkita identity: **owner (UID)** va **group (GID)**. 10-darsdagi ruxsatlar shu ikkisiga nisbatan tekshiriladi.
 
@@ -24,9 +24,9 @@ Har inode'da ikkita identity: **owner (UID)** va **group (GID)**. 10-darsdagi ru
               +------ owner
 ```
 
-Yangi file **yaratgan process'ning** effective UID'iga va (odatda) primary group'iga tegishli bo'ladi. Istisno: SGID papka ichida — papka group'i (10-dars).
+Yangi fayl **yaratgan process'ning** effective UID'iga va (odatda) primary group'iga tegishli bo'ladi. Istisno: SGID papka ichida — papka group'i (10-dars).
 
-> **Production nuance:** file'ni kim yaratganini ko'pincha "siz" emas, **servis** hal qiladi. `sudo` bilan yaratilgan file root'niki bo'ladi va keyin servis uni o'qiy/yoza olmaydi — juda ko'p uchraydigan `Permission denied` sababi.
+> **Production'dagi nozik jihat:** faylni kim yaratganini ko'pincha "siz" emas, **servis** hal qiladi. `sudo` bilan yaratilgan fayl root'niki bo'ladi va keyin servis uni o'qiy/yoza olmaydi — juda ko'p uchraydigan `Permission denied` sababi.
 
 ## 3. chown / chgrp
 
@@ -39,20 +39,20 @@ sudo chown -R www-data:www-data /var/www/site
 sudo chown --reference=a.txt b.txt    # boshqa file'dagidek
 ```
 
-### Nega faqat root boshqa user'ga file "bera oladi"?
+### Nega faylni boshqa user'ga faqat root o'tkaza oladi?
 
-Agar oddiy user o'z file'ini boshqasiga bera olsa:
-1. **Disk quota'ni chetlab o'tish** — katta file'ni boshqa user'ga "sovg'a" qilish va uning kvotasini to'ldirish.
-2. **Ayblash** — zararli file'ni boshqa user nomiga o'tkazish.
-3. **SUID hujumi** — tarixda: SUID file'ni root'ga berish = root dastur.
+Agar oddiy user o'z faylini boshqasiga bera olsa:
+1. **Disk quota'ni chetlab o'tish** — katta faylni boshqa user'ga "sovg'a" qilish va uning kvotasini to'ldirish.
+2. **Ayblash** — zararli faylni boshqa user nomiga o'tkazish.
+3. **SUID hujumi** — tarixda: SUID faylni root'ga berish = root dastur.
 
-Shuning uchun Linux'da `chown` (owner o'zgarishi) — faqat root (aniqrog'i `CAP_CHOWN` capability). Oddiy user faqat **o'z file'ining group'ini** o'zi a'zo bo'lgan group'ga o'zgartira oladi.
+Shuning uchun Linux'da `chown` (owner o'zgarishi) — faqat root (aniqrog'i `CAP_CHOWN` capability). Oddiy user faqat **o'z faylining group'ini** o'zi a'zo bo'lgan group'ga o'zgartira oladi.
 
-> **Gotcha:** `chown` SUID/SGID bit'larini **o'chiradi** — xavfsizlik uchun. Binary'ni deploy qilib, keyin `chown` qilsangiz, maxsus bit'larni qayta qo'yishingiz kerak bo'lishi mumkin.
+> **Tuzoq:** `chown` SUID/SGID bit'larini **o'chiradi** — xavfsizlik uchun. Binary'ni deploy qilib, keyin `chown` qilsangiz, maxsus bit'larni qayta qo'yishingiz kerak bo'lishi mumkin.
 
 > **Ehtiyot:** `chown -R` symlink'lar bo'ylab yurmaydi (default `-P`), lekin noto'g'ri path'da (`chown -R app: / var/www` — probel!) butun tizim egaligini buzadi. Har doim path'ni qo'shtirnoq ichida va avval `ls -ld` bilan tekshiring.
 
-## 4. sudo — qanday ishlaydi
+## 4. sudo qanday ishlaydi
 
 ```
  student: sudo systemctl restart nginx
@@ -89,11 +89,11 @@ sudo visudo                               # asosiy file
 sudo visudo -f /etc/sudoers.d/deploy      # drop-in
 ```
 
-### Nega faqat `visudo`
+### Nega sudoers'ni faqat `visudo` bilan tahrirlash kerak
 
-`visudo` file'ni lock qiladi, vaqtinchalik nusxada tahrirlaydi va **saqlashdan oldin sintaksisni tekshiradi**. `/etc/sudoers`'ni `nano` bilan buzsangiz — `sudo` butunlay ishlamaydi va root paroli yo'q server'da (Ubuntu default) tuzatish uchun recovery mode yoki konsol kerak bo'ladi.
+`visudo` faylni lock qiladi, vaqtinchalik nusxada tahrirlaydi va **saqlashdan oldin sintaksisni tekshiradi**. `/etc/sudoers`'ni `nano` bilan buzsangiz — `sudo` butunlay ishlamaydi va root paroli yo'q server'da (Ubuntu default) tuzatish uchun recovery mode yoki konsol kerak bo'ladi.
 
-## 5. sudoers qoidalari — naive vs production
+## 5. sudoers qoidalarini yozish — xavfli va to'g'ri usul
 
 Sintaksis: `KIM  QAYERDA=(KIM_SIFATIDA)  COMMAND'LAR`
 
@@ -108,15 +108,15 @@ deploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart myapp, /usr/bin/systemctl
 %ops   ALL=(ALL) ALL
 ```
 
-### "Yashirin root" — sudoers'dagi klassik teshiklar
+### Bilmasdan to'liq root berib qo'yish holatlari
 
-Ko'p command'lar **shell ochish yoki file yozish** imkonini beradi. Ularga sudo berish = to'liq root berish:
+Ko'p buyruqlar **shell ochish yoki fayl yozish** imkonini beradi. Ularga sudo berish = to'liq root berish:
 
 | sudoers'da ruxsat | Root'ga yo'l |
 |---|---|
 | `vim`, `less`, `more`, `man` | Ichidan `:!bash` yoki `!sh` |
 | `find` | `find . -exec /bin/sh \;` |
-| `tar`, `zip`, `rsync` | Checkpoint / `-e` opsiyalari bilan command bajarish |
+| `tar`, `zip`, `rsync` | Checkpoint / `-e` opsiyalari bilan buyruq bajarish |
 | `cp`, `tee`, `dd` | `/etc/sudoers` yoki `/etc/shadow`'ni ustidan yozish |
 | `chmod`, `chown` | `/etc/shadow`'ni ochish |
 | `systemctl` (argumentsiz) | Zararli unit yaratib ishga tushirish; `systemctl edit` |
@@ -128,27 +128,27 @@ Ko'p command'lar **shell ochish yoki file yozish** imkonini beradi. Ularga sudo 
 (Bunday hujumlar katalogi: GTFOBins.)
 
 **Qoidalar:**
-- Command'ni **to'liq path va aniq argumentlar** bilan yozing.
+- Buyruqni **to'liq path va aniq argumentlar** bilan yozing.
 - Wildcard'lardan qoching.
 - Ruxsat berilgan script'ni **root egaligida** va user yozolmaydigan joyda saqlang.
-- File tahrirlash kerak bo'lsa — `sudoedit` (pastda), editor'ning o'ziga sudo emas.
+- Fayl tahrirlash kerak bo'lsa — `sudoedit` (pastda), editor'ning o'ziga sudo emas.
 
 ### `sudoedit` — nega xavfsizroq
 
-`sudo vim /etc/hosts` — vim root sifatida ishlaydi, ichidan shell ochish mumkin. `sudoedit /etc/hosts` — file nusxasini **sizning** huquqingiz bilan ochadi, saqlaganda root uni joyiga ko'chiradi. Editor hech qachon root bo'lmaydi.
+`sudo vim /etc/hosts` — vim root sifatida ishlaydi, ichidan shell ochish mumkin. `sudoedit /etc/hosts` — fayl nusxasini **sizning** huquqingiz bilan ochadi, saqlaganda root uni joyiga ko'chiradi. Editor hech qachon root bo'lmaydi.
 
 ```text
 %webadmins ALL=(root) sudoedit /etc/nginx/sites-available/*
 ```
 
-### `NOPASSWD` — qachon to'g'ri
+### Parolsiz sudo (`NOPASSWD`) qachon to'g'ri
 
 | Holat | NOPASSWD? |
 |---|---|
-| CI/CD runner, automation account (parolni kim kiritadi?) | Ha — lekin **aniq command'lar** bilan |
+| CI/CD runner, avtomatlashtirish account (parolni kim kiritadi?) | Ha — lekin **aniq buyruqlar** bilan |
 | Odam, interaktiv ish | Yo'q — parol "ikkinchi o'ylash" lahzasi va o'g'irlangan session'dan himoya |
 
-## 6. Klassik gotcha'lar
+## 6. Ko'p uchraydigan tuzoqlar
 
 ### `sudo echo ... > /etc/file` ishlamaydi
 
@@ -157,7 +157,7 @@ sudo echo "1" > /proc/sys/net/ipv4/ip_forward
 # bash: /proc/sys/...: Permission denied
 ```
 
-**Root cause:** redirect'ni (`>`) **sizning** shell'ingiz ochadi — sudo'dan oldin. `sudo` faqat `echo`'ga qo'llanadi.
+**Asl sabab:** redirect'ni (`>`) **sizning** shell'ingiz ochadi — sudo'dan oldin. `sudo` faqat `echo`'ga qo'llanadi.
 
 ```bash
 echo "1" | sudo tee /proc/sys/net/ipv4/ip_forward >/dev/null   # tee root sifatida yozadi
@@ -169,7 +169,7 @@ sudo sh -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'              # alternativa
 
 `sudo` muhitni tozalaydi (`env_reset`) va `secure_path` ishlatadi. Natija: `~/bin/mytool` oddiy shell'da ishlaydi, `sudo mytool` — `command not found`. Bu **xato emas, himoya**: aks holda hujumchi `PATH`'ga zararli `ls` qo'yib, sizning sudo'ingiz bilan ishga tushirardi. Yechim: to'liq path.
 
-### `sudo` bilan yaratilgan file'lar
+### `sudo` bilan yaratilgan fayllar
 
 ```bash
 sudo git clone ... /opt/app      # hamma file root'niki
@@ -188,11 +188,11 @@ last -n 20                                          # login'lar
 
 Log'da: `student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/systemctl restart nginx`.
 
-**Cheklov:** `sudo -i` yoki `sudo bash` dan keyingi command'lar **alohida** log'ga tushmaydi — faqat "bash ochildi" yoziladi. Shuning uchun root shell'larni cheklash va kerak bo'lsa session recording (`sudo` I/O log, `auditd`, Teleport) ishlatish.
+**Cheklov:** `sudo -i` yoki `sudo bash` dan keyingi buyruqlar **alohida** log'ga tushmaydi — faqat "bash ochildi" yoziladi. Shuning uchun root shell'larni cheklash va kerak bo'lsa session recording (`sudo` I/O log, `auditd`, Teleport) ishlatish.
 
-> **Staff insight:** server'dagi log'ni root o'chirib yuborishi mumkin. Haqiqiy audit uchun log'lar **darhol markaziy joyga** (SIEM, log server) yuboriladi — hujumchi u yerga yeta olmaydi.
+> **Chuqurroq qarash:** server'dagi log'ni root o'chirib yuborishi mumkin. Haqiqiy audit uchun log'lar **darhol markaziy joyga** (SIEM, log server) yuboriladi — hujumchi u yerga yeta olmaydi.
 
-## 8. Least privilege — qatlamlar
+## 8. Eng kam huquq tamoyili — huquq darajalari
 
 ```
  Eng ko'p kuch                                           Eng kam kuch
@@ -201,32 +201,32 @@ Log'da: `student : TTY=pts/0 ; PWD=/home/student ; USER=root ; COMMAND=/usr/bin/
 
 | Tamoyil | Amalda |
 |---|---|
-| Least privilege | Har kimga va har servisga — faqat kerakli minimum |
+| Eng kam huquq tamoyili | Har kimga va har servisga — faqat kerakli minimum |
 | root bilan ishlamaslik | Har amal uchun `sudo`, root shell — favqulodda |
 | Servis o'z user'ida | `www-data`, `postgres`, `myapp` (9-dars) |
 | Root o'rniga capability | Port 80 uchun root emas: `AmbientCapabilities=CAP_NET_BIND_SERVICE` (systemd) |
 | Vaqtinchalik kirish | Doimiy sudo o'rniga — so'rov bo'yicha, muddatli (Teleport, Vault, AWS SSM) |
 | Audit | Log'lar markazlashtirilgan |
 
-### Masshtabda: server'ga kirmaslik
+### Eng yaxshi yechim: server'ga umuman kirmaslik
 
 Eng yaxshi sudo — **ishlatilmaydigan** sudo. Agar o'zgarishlar CI/CD va IaC orqali bo'lsa, odamlarga prod'da sudo kerak emas. Kirish faqat incident uchun ("break-glass"), qisqa muddatli va to'liq yozib olinadi.
 
-## 9. Failure modes
+## 9. Nima buzilishi mumkin
 
-| Symptom | Root cause | Yechim |
+| Belgi | Asl sabab | Yechim |
 |---|---|---|
 | `user is not in the sudoers file` | Group'da emas yoki session eski | `usermod -aG sudo`, qayta login |
 | `sudo` umuman ishlamaydi, `parse error` | sudoers buzilgan | Recovery mode / `pkexec visudo` / konsol |
 | `sudo echo > file` denied | Redirect sudo'dan tashqarida | `tee` |
 | `sudo: mytool: command not found` | `secure_path` | To'liq path |
-| Servis file'ni o'qiy olmaydi | File `sudo` bilan yaratilgan, root'niki | `chown`, keyingi safar to'g'ri user bilan yaratish |
+| Servis faylni o'qiy olmaydi | Fayl `sudo` bilan yaratilgan, root'niki | `chown`, keyingi safar to'g'ri user bilan yaratish |
 | `sudo` sekin (bir necha soniya) | Hostname resolve bo'lmayapti | `/etc/hosts`'ga hostname qo'shish |
 
 ## Amaliy mashg'ulot
 
 1. `/srv/project` yarating. Egasi `root:deploy`, ruxsat `2775` (SGID bilan).
-2. `ali` (deploy'da) file yaratsin — ishlaydi va group `deploy`; `student` (deploy'da emas) — `Permission denied`.
+2. `ali` (deploy'da) fayl yaratsin — ishlaydi va group `deploy`; `student` (deploy'da emas) — `Permission denied`.
 3. `ali`'ga faqat `systemctl restart nginx` uchun sudo bering (`visudo -f /etc/sudoers.d/ali`). `sudo -l` bilan tekshiring; `sudo systemctl stop nginx` rad etilishini ko'ring.
 4. "Yashirin root": vaqtincha `ali ALL=(root) /usr/bin/less` bering va `sudo less /etc/hosts` ichidan `!id` qiling — natija? Keyin qoidani o'chiring.
 5. `sudo echo test > /root/x` xatosini ko'ring va `tee` bilan tuzating.
@@ -241,7 +241,7 @@ Eng yaxshi sudo — **ishlatilmaydigan** sudo. Agar o'zgarishlar CI/CD va IaC or
 ## Test savollari
 
 1. `chown :deploy file` nima qiladi?
-2. Nega oddiy user o'z file'ini boshqasiga bera olmaydi?
+2. Nega oddiy user o'z faylini boshqasiga bera olmaydi?
 3. `sudo` qaysi parolni so'raydi va nega?
 4. Nega `sudo -i` bilan doim ishlash yomon (2 ta sabab)?
 5. `/etc/sudoers` qanday tahrirlanadi va nega?
@@ -250,7 +250,7 @@ Eng yaxshi sudo — **ishlatilmaydigan** sudo. Agar o'zgarishlar CI/CD va IaC or
 8. `sudoedit` `sudo vim`'dan nimasi bilan xavfsizroq?
 9. Port 80 uchun root o'rniga nima ishlatish mumkin?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - `NOPASSWD: ALL` "qulaylik uchun".
 - Editor, interpreter yoki `find`'ga sudo berish.
@@ -259,10 +259,10 @@ Eng yaxshi sudo — **ishlatilmaydigan** sudo. Agar o'zgarishlar CI/CD va IaC or
 - Audit log'larini faqat server'ning o'zida saqlash.
 - Servisni root sifatida faqat "port 80 kerak" deb ishga tushirish.
 
-## Senior xulosa
+## Xulosa
 
 - Egalik — kimniki, ruxsat — nima qila oladi, sudo — vaqtincha, aniq va iz qoldiradigan kuch.
 - `chown` faqat root'da — quota, ayblash va SUID hujumlaridan himoya.
-- sudo qoidasi = aniq command + aniq argument + to'liq path. Shell ochadigan har tool — yashirin root.
+- sudo qoidasi = aniq buyruq + aniq argument + to'liq path. Shell ochadigan har vosita — yashirin root.
 - `sudo` muhitni tozalaydi va redirect'ga ta'sir qilmaydi: `tee`, to'liq path.
 - Root o'rniga capability, doimiy sudo o'rniga vaqtinchalik kirish, server'dagi log o'rniga markaziy audit.

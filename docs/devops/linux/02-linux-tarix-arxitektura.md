@@ -2,24 +2,24 @@
 
 > **Natija:** kernel va user space chegarasini, system call qanday ishlashini, kernel module'larni va container'lar Linux kernel ustida qanday qurilganini tushunish. Darsdan keyin javob bera olasiz: "Nega container VM emas?", "Process qotib qoldi — ichida nima bo'layotganini qanday bilaman?", "Nega Alpine image'da binary ishlamayapti?"
 
-## 1. Problem — OS nima uchun kerak?
+## 1. Muammo — operatsion tizim (OS) nima uchun kerak?
 
 Tasavvur qiling, OS yo'q. Har bir dastur:
 - disk'ka yozish uchun disk controller'ning registrlarini o'zi boshqaradi;
 - boshqa dasturning memory'sini bemalol o'qiydi va buzadi;
 - CPU'ni egallab olsa, boshqalar hech qachon ishlamaydi.
 
-**OS kernel'i hal qiladigan 3 ta problem:**
+**OS kernel'i hal qiladigan 3 ta muammo:**
 
-| Problem | Kernel yechimi |
+| Muammo | Kernel yechimi |
 |---|---|
 | Hardware har xil, murakkab | **Abstraction**: hamma disk uchun bitta `read()` / `write()` |
 | Dasturlar bir-birini buzadi | **Isolation**: har process o'z virtual memory'sida |
 | Resurs cheklangan (CPU, RAM) | **Scheduling / sharing**: kernel kim qachon ishlashini hal qiladi |
 
-Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, file, container, cgroups) shularning biriga xizmat qiladi.
+Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, fayl, container, cgroups) shularning biriga xizmat qiladi.
 
-## 2. Qisqa tarix — nega Linux aynan shunday
+## 2. Qisqa tarix — Linux nega aynan shunday tuzilgan
 
 ```
 1969  Unix (Bell Labs) — "everything is a file", kichik tool'lar + pipe
@@ -32,13 +32,13 @@ Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, file, con
 ```
 
 **Unix falsafasi** — bugun ham amalda:
-1. Bitta tool bitta ishni yaxshi qiladi (`grep`, `sort`, `wc`).
-2. Tool'lar **text stream** va **pipe** orqali birlashadi.
-3. Hamma narsa file: disk, terminal, process ma'lumoti (`/proc`), hatto socket.
+1. Bitta vosita bitta ishni yaxshi qiladi (`grep`, `sort`, `wc`).
+2. Vositalar **text stream** va **pipe** orqali birlashadi.
+3. Hamma narsa fayl: disk, terminal, process ma'lumoti (`/proc`), hatto socket.
 
-> **Nega bu muhim:** DevOps automation shu falsafaga tayanadi. Config — text file, log — text stream, tool'lar pipe bilan ulanadi. Shuning uchun Linux'ni avtomatlashtirish oson.
+> **Nega bu muhim:** DevOps avtomatlashtirish shu falsafaga tayanadi. Config — text fayl, log — text stream, vositalar pipe bilan ulanadi. Shuning uchun Linux'ni avtomatlashtirish oson.
 
-## 3. Linux — bu kernel, distribution — to'plam
+## 3. Linux faqat kernel; distribution esa kernel + dasturlar to'plami
 
 **Distribution** = Linux kernel + userland (GNU coreutils, shell) + **libc** + package manager + init system.
 
@@ -49,20 +49,20 @@ Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, file, con
 | Alpine | Alpine | `apk` | **musl** | OpenRC | Docker image (~5MB) |
 | Minimal | distroless, scratch | yo'q | glibc / yo'q | yo'q | Production container |
 
-### Senior gotcha: glibc vs musl
+### Tuzoq: glibc va musl
 
 **libc** — user space dasturi bilan kernel o'rtasidagi kutubxona (`printf`, `malloc`, DNS resolve, syscall wrapper'lar).
 
-- glibc uchun compile qilingan binary musl'da ishlamaydi: `not found` xatosi chiqadi, garchi file mavjud bo'lsa ham (dynamic loader topilmaydi).
+- glibc uchun compile qilingan binary musl'da ishlamaydi: `not found` xatosi chiqadi, garchi fayl mavjud bo'lsa ham (dynamic loader topilmaydi).
 - Python wheel'lar Alpine'da ko'pincha source'dan compile bo'ladi: build sekin, image katta.
 - musl'ning DNS resolver va `malloc` xatti-harakati glibc'dan farq qiladi — ba'zi app'lar sekinroq.
 
-**Decision criteria:**
+**Qanday tanlash kerak:**
 - Go binary (`CGO_ENABLED=0`) — static, libc kerak emas: `scratch` yoki distroless eng yaxshi.
 - Python/Java/Node — Debian-slim yoki distroless (glibc): kamroq sirpriz.
 - Alpine — kichik o'lcham muhim va musl bilan muammo yo'qligi tekshirilgan bo'lsa.
 
-## 4. Arxitektura — mental model
+## 4. Linux qanday qatlamlardan iborat
 
 ```
  +------------------- User space (CPU ring 3) --------------------+
@@ -85,7 +85,7 @@ Bu uchtasini yodda tuting — Linux'dagi deyarli hamma narsa (process, file, con
 - **User space** — har process izolyatsiya qilingan. Bitta app crash bo'lsa (segfault), boshqalar ishlayveradi.
 - **CPU ring** — hardware darajasidagi himoya: ring 3'dagi kod privileged instruction'ni bajara olmaydi. Isolation software va'dasi emas, CPU kafolati.
 
-## 5. System call — qanday ishlaydi
+## 5. System call — dastur kernel'dan qanday yordam so'raydi
 
 Siz `cat file.txt` yozasiz. Ichkarida:
 
@@ -102,7 +102,7 @@ Siz `cat file.txt` yozasiz. Ichkarida:
 
 Har syscall — **user mode -> kernel mode o'tishi**: CPU holatini saqlash, privilege o'zgarishi, qaytish. Bitta o'tish arzon (yuzlab nanosekund), lekin millionlab bo'lsa — sezilarli.
 
-### Naive vs better
+### Sodda va yaxshiroq usul
 
 ```
  Naive:   1 bayt -> read() x 1 000 000   = 1 000 000 syscall  -> sekin
@@ -117,7 +117,7 @@ strace -f -p <PID>         # ishlayotgan process nima qilyapti (qotganda)
 strace -e trace=openat nginx -t   # nginx qaysi file'larni ochmoqchi
 ```
 
-> **Production gotcha:** `strace` process'ni **juda sekinlashtiradi** (har syscall'da to'xtatadi). Yuklangan prod server'da qisqa muddat ishlating. Past overhead kerak bo'lsa — `perf trace` yoki eBPF tool'lari (`bpftrace`, `bcc`).
+> **Production tuzog'i:** `strace` process'ni **juda sekinlashtiradi** (har syscall'da to'xtatadi). Yuklangan prod server'da qisqa muddat ishlating. Past overhead kerak bo'lsa — `perf trace` yoki eBPF vositalari (`bpftrace`, `bcc`).
 
 ### Debugging misoli: "process qotib qoldi"
 
@@ -128,9 +128,9 @@ ls -l /proc/4321/fd/5
 # 5 -> socket:[98765]   <- network'dan javob kutyapti
 ```
 
-Symptom: "app qotdi". Root cause: tashqi servisga timeout'siz so'rov. Fix: timeout qo'yish. Bu **observe -> hypothesis -> root cause** zanjiri — taxmin bilan restart qilish emas.
+Belgi: "app qotdi". Asl sabab: tashqi servisga timeout'siz so'rov. Yechim: timeout qo'yish. Bu **kuzatish -> taxmin -> asl sabab** zanjiri — taxmin bilan restart qilish emas.
 
-## 6. Monolithic kernel va module'lar
+## 6. Kernel turlari: monolithic va microkernel, module'lar
 
 | Model | Driver qayerda | Afzallik | Kamchilik | Misol |
 |---|---|---|---|---|
@@ -146,18 +146,18 @@ modinfo overlay       # Docker overlayfs module'i haqida
 dmesg -T | tail       # kernel log: OOM killer, disk xatolari, driver xabarlari
 ```
 
-> **Senior nuqta:** kernel version muhim. eBPF, cgroups v2, io_uring kabi feature'lar ma'lum kernel versiyasidan boshlab bor. "Bizning prod'da ishlaydimi?" — avval `uname -r`.
+> **Muhim nuqta:** kernel version muhim. eBPF, cgroups v2, io_uring kabi imkoniyatlar ma'lum kernel versiyasidan boshlab bor. "Bizning prod'da ishlaydimi?" — avval `uname -r`.
 
-## 7. Container — bu Linux kernel feature
+## 7. Container — alohida OS emas, kernel imkoniyati
 
 Docker container — VM emas. U **oddiy Linux process**, faqat kernel uni izolyatsiya qiladi va cheklaydi:
 
-| Kernel feature | Nima beradi | Hal qiladigan problem |
+| Kernel imkoniyati | Nima beradi | Hal qiladigan muammo |
 |---|---|---|
 | **namespaces** (pid, net, mnt, uts, ipc, user, cgroup) | Process o'zini alohida tizimda deb o'ylaydi | Isolation |
 | **cgroups** | CPU / RAM / IO limit | Sharing (bitta container hammani yemasin) |
 | **overlayfs** | Layer'li filesystem | Image'lar tez va ixcham |
-| **seccomp, capabilities, LSM** | Ruxsat berilgan syscall va huquqlar | Security |
+| **seccomp, capabilities, LSM** | Ruxsat berilgan syscall va huquqlar | Xavfsizlik |
 
 ```
  VM                                  Container
@@ -170,7 +170,7 @@ Docker container — VM emas. U **oddiy Linux process**, faqat kernel uni izolya
  +-------------------+               +---------------------+
 ```
 
-### Trade-off'lar
+### Afzallik va kamchiliklar
 
 | | VM | Container |
 |---|---|---|
@@ -179,21 +179,21 @@ Docker container — VM emas. U **oddiy Linux process**, faqat kernel uni izolya
 | Isolation | Kuchli (alohida kernel) | Kuchsizroq (umumiy kernel) |
 | Boshqa OS | Ha (Linux'da Windows) | Yo'q — host kernel bilan bir xil |
 
-> **Security implication:** container **host kernel'ni ulashadi**. Kernel vulnerability (container escape) barcha container'larga ta'sir qiladi. Shuning uchun multi-tenant muhitda (begona kod ishlatilsa) qo'shimcha qatlam: gVisor, Kata Containers, Firecracker microVM. AWS Lambda aynan Firecracker ishlatadi.
+> **Xavfsizlik implication:** container **host kernel'ni ulashadi**. Kernel vulnerability (container escape) barcha container'larga ta'sir qiladi. Shuning uchun multi-tenant muhitda (begona kod ishlatilsa) qo'shimcha qatlam: gVisor, Kata Containers, Firecracker microVM. AWS Lambda aynan Firecracker ishlatadi.
 
 ## 8. Nega server'da Linux?
 
 1. **Stability** — oylar davomida reboot'siz ishlaydi (kernel live patching ham bor).
-2. **Automation** — hamma narsa text file va CLI. GUI'ni avtomatlashtirish qiyin.
+2. **Avtomatlashtirish** — hamma narsa text fayl va CLI. GUI'ni avtomatlashtirish qiyin.
 3. **Cost** — litsenziya yo'q, scale qilganda muhim.
-4. **Ecosystem** — Docker, Kubernetes, cloud — hammasi Linux kernel feature'lariga tayanadi.
+4. **Ecosystem** — Docker, Kubernetes, cloud — hammasi Linux kernel imkoniyatlariga tayanadi.
 5. **Observability** — `/proc`, `strace`, `perf`, eBPF — ichkarini ko'rish vositalari.
 
 **Qachon Linux emas:** .NET Framework (eski) yoki Active Directory'ga bog'liq legacy tizimlar — Windows Server; ba'zi real-time / embedded tizimlar — RTOS.
 
-## 9. Failure modes — kernel darajasida nima buziladi
+## 9. Kernel darajasida nima buzilishi mumkin
 
-| Symptom | Ehtimoliy sabab | Qayerdan ko'rasiz |
+| Belgi | Ehtimoliy sabab | Qayerdan ko'rasiz |
 |---|---|---|
 | Process to'satdan o'ldi, exit 137 | **OOM killer** (RAM tugadi) | `dmesg -T \| grep -i oom`, `journalctl -k` |
 | Server javob bermaydi, qayta yuklandi | Kernel panic | Konsol log, `journalctl -k -b -1` |
@@ -220,26 +220,26 @@ Muhokama:
 
 1. 5 ta distro'ni jadvalda solishtiring: family, package manager, libc, use case.
 2. `docker run --rm alpine ps aux` natijasida nega faqat 1 ta process ko'rinishini tushuntiring (pid namespace).
-3. Go'da kichik HTTP server uchun base image tanlang (`scratch`, distroless, Alpine, Debian-slim). Trade-off'larni yozing: o'lcham, debug qulayligi, security, libc.
+3. Go'da kichik HTTP server uchun base image tanlang (`scratch`, distroless, Alpine, Debian-slim). Afzallik va kamchiliklarni yozing: o'lcham, debug qulayligi, xavfsizlik, libc.
 
 ## Test savollari
 
-1. Kernel hal qiladigan 3 ta asosiy problem qaysi?
+1. Kernel hal qiladigan 3 ta asosiy muammo qaysi?
 2. System call nima va nega ko'p kichik syscall sekin?
-3. Container va VM'ning asosiy farqi? Security nuqtai nazaridan nima kelib chiqadi?
+3. Container va VM'ning asosiy farqi? Xavfsizlik nuqtai nazaridan nima kelib chiqadi?
 4. Alpine image'da glibc'ga bog'liq binary nega ishlamasligi mumkin?
 5. OOM killer xabarini qayerdan ko'rasiz?
 6. Nega prod'da `strace`'ni ehtiyot bilan ishlatish kerak?
-7. Monolithic va microkernel trade-off'i nima?
+7. Monolithic va microkernel afzallik va kamchiligi nima?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - "Container — yengil VM" deb o'ylash: kernel umumiy ekanini unutish.
-- Process qotganda darhol restart: root cause yo'qoladi, muammo qaytadi.
+- Process qotganda darhol restart: asl sabab yo'qoladi, muammo qaytadi.
 - Alpine'ni "kichik = yaxshi" deb ko'r-ko'rona tanlash.
 - Kernel log'ga (`dmesg`) qaramasdan app'ni ayblash.
 
-## Senior xulosa
+## Xulosa
 
 - Kernel = abstraction + isolation + resource sharing. Linux'dagi hamma narsa shularning biriga xizmat qiladi.
 - User space kernel'dan faqat **syscall** orqali so'raydi. Syscall arzon emas — buffer'lang, lekin avval o'lchang (`strace -c`).

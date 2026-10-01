@@ -1,20 +1,20 @@
 # Dars 3 — Linux o'rnatish (VM / WSL)
 
-> **Natija:** ishlaydigan Ubuntu Server 24.04 LTS (kursning qolgan qismi shu server'da o'tadi), snapshot va network mode'lar tushunchasi. Senior darajada: hypervisor turlari, cloud image, cloud-init va "server qo'lda emas, kod bilan yaratiladi" tamoyili.
+> **Natija:** ishlaydigan Ubuntu Server 24.04 LTS (kursning qolgan qismi shu server'da o'tadi), snapshot va network mode'lar tushunchasi. Hypervisor turlari, cloud image, cloud-init va "server qo'lda emas, kod bilan yaratiladi" tamoyili.
 
-## 1. Problem — o'rganish uchun server qayerdan olinadi?
+## 1. Muammo — o'rganish uchun server qayerdan olinadi?
 
 Linux o'rganish uchun Linux kerak. Variantlar:
 
 | Variant | Muammo |
 |---|---|
-| Asosiy laptop'ga Linux o'rnatish | Ish muhitini buzish xavfi, qaytarish qiyin |
-| Cloud VM (AWS, Hetzner) | Pul, internet kerak, ochiq port'lar — security xavfi |
+| Asosiy noutbukka Linux o'rnatish | Ish muhitini buzish xavfi, qaytarish qiyin |
+| Cloud VM (AWS, Hetzner) | Pul, internet kerak, ochiq port'lar — xavfsizlik xavfi |
 | **Lokal VM** | Bepul, xavfsiz, buzsangiz — snapshot'dan qaytarasiz |
 
 O'rganish uchun eng yaxshi — **lokal VM**: istalgancha buzish va qaytarish mumkin. Lekin production'da hamma narsa boshqacha (7-bo'lim) — buni boshidan bilish kerak.
 
-## 2. Virtualization — qanday ishlaydi
+## 2. Virtualizatsiya — bitta kompyuterda bir nechta OS
 
 **Hypervisor** — bitta fizik kompyuterda bir nechta OS'ni ishlatadigan dastur. Har OS o'zini alohida kompyuterda deb o'ylaydi.
 
@@ -32,23 +32,23 @@ O'rganish uchun eng yaxshi — **lokal VM**: istalgancha buzish va qaytarish mum
 |---|---|---|
 | Qayerda ishlaydi | To'g'ridan-to'g'ri hardware ustida | Oddiy OS ichida dastur sifatida |
 | Overhead | Kam | Ko'proq (host OS ham resurs yeydi) |
-| Qayerda ishlatiladi | Production: AWS (Nitro, KVM asosida), GCP, VMware ESXi | Laptop'da o'rganish |
+| Qayerda ishlatiladi | Production: AWS (Nitro, KVM asosida), GCP, VMware ESXi | Noutbukda o'rganish |
 
-> **Nuance:** KVM — Linux kernel module. U Linux'ning o'zini Type 1 hypervisor'ga aylantiradi. Shuning uchun chegara har doim aniq emas — muhimi, guest bilan hardware o'rtasida qancha qatlam borligi.
+> **Nozik jihat:** KVM — Linux kernel module. U Linux'ning o'zini Type 1 hypervisor'ga aylantiradi. Shuning uchun chegara har doim aniq emas — muhimi, guest bilan hardware o'rtasida qancha qatlam borligi.
 
 **Hardware virtualization** (Intel VT-x / AMD-V, Apple Silicon'da Hypervisor.framework): CPU guest kodini to'g'ridan-to'g'ri, deyarli native tezlikda bajaradi. BIOS/UEFI'da o'chiq bo'lsa, VM juda sekin ishlaydi yoki umuman ishga tushmaydi.
 
-## 3. Image tanlash
+## 3. Qaysi Linux versiyasini (image) tanlash kerak
 
 | Tanlov | Tavsiya | Sabab |
 |---|---|---|
-| Server vs Desktop | **Server** | GUI yo'q, production'ga o'xshash, kam resurs |
-| Version | **24.04 LTS** | LTS — 5 yil standart security update (Ubuntu Pro bilan 10+ yil) |
+| Server va Desktop | **Server** | GUI yo'q, production'ga o'xshash, kam resurs |
+| Version | **24.04 LTS** | LTS — 5 yil standart xavfsizlik update (Ubuntu Pro bilan 10+ yil) |
 | Architecture | `amd64` yoki `arm64` | Host CPU'ga mos bo'lishi shart |
 
-**Nega LTS:** production'da bir server'ni yillab ishlatasiz. Non-LTS release 9 oy qo'llab-quvvatlanadi — keyin security patch yo'q. Server uchun LTS'dan boshqasini tanlashga deyarli sabab yo'q.
+**Nega LTS:** production'da bir server'ni yillab ishlatasiz. Non-LTS release 9 oy qo'llab-quvvatlanadi — keyin xavfsizlik patch yo'q. Server uchun LTS'dan boshqasini tanlashga deyarli sabab yo'q.
 
-### Senior gotcha: CPU architecture
+### Tuzoq: CPU architecture
 
 Apple Silicon (M-seriya) — `arm64`. Ko'p production server'lar — `amd64` (lekin AWS Graviton kabi `arm64` server'lar ham ko'paymoqda — arzonroq).
 
@@ -57,11 +57,11 @@ uname -m                   # x86_64 (= amd64) yoki aarch64 (= arm64)
 docker buildx build --platform linux/amd64,linux/arm64 -t app .   # multi-arch image
 ```
 
-Mac'da build qilingan `arm64` image `amd64` server'da `exec format error` beradi. Bu klassik "laptop'da ishlaydi, prod'da yo'q" muammosi.
+Mac'da build qilingan `arm64` image `amd64` server'da `exec format error` beradi. Bu klassik "noutbukda ishlaydi, prod'da yo'q" muammosi.
 
-## 4. Tool tanlash
+## 4. VM'ni qaysi dastur bilan yaratish kerak
 
-| Host OS | Tool | Izoh |
+| Host OS | Vosita | Izoh |
 |---|---|---|
 | Windows | **WSL2** yoki VirtualBox / Hyper-V | WSL2 tez, lekin to'liq server emas |
 | macOS Apple Silicon | **UTM** yoki **Multipass** | VirtualBox Apple Silicon'da cheklangan |
@@ -73,11 +73,11 @@ Mac'da build qilingan `arm64` image `amd64` server'da `exec format error` beradi
 - WSL2 — Hyper-V ustidagi yengil VM, Microsoft'ning maxsus kernel'i bilan.
 - `systemd` eski versiyalarda default o'chiq: `/etc/wsl.conf` ichida `[boot]` bo'limiga `systemd=true` yozib, `wsl --shutdown` qiling.
 - Network NAT orqali: tashqaridan WSL'ga SSH qilish qo'shimcha sozlash talab qiladi.
-- Windows file'lari (`/mnt/c`) orqali ishlash juda sekin — loyihani Linux filesystem'ida (`~`) saqlang.
+- Windows fayllari (`/mnt/c`) orqali ishlash juda sekin — loyihani Linux filesystem'ida (`~`) saqlang.
 
-**Decision:** kurs uchun (SSH, systemd, network darslari) — to'liq VM yaxshiroq. WSL2 — Windows'da kundalik dev ishi uchun.
+**Qaror:** kurs uchun (SSH, systemd, network darslari) — to'liq VM yaxshiroq. WSL2 — Windows'da kundalik dev ishi uchun.
 
-## 5. VM network mode'lari
+## 5. VM tarmoqqa qanday ulanadi (network mode'lar)
 
 ```
  NAT                          Bridged                      Host-only
@@ -97,7 +97,7 @@ Mac'da build qilingan `arm64` image `amd64` server'da `exec format error` beradi
 | **Host-only** | yo'q | ha | Izolyatsiya qilingan lab |
 | **NAT + Host-only** (2 adapter) | ha | ha | Kurs uchun eng qulay kombinatsiya |
 
-> **Gotcha:** Bridged mode kafe/ofis Wi-Fi'da ishlamasligi mumkin (ba'zi tarmoqlar bir MAC'dan ko'p IP bermaydi). Shunda NAT + port forward (host:2222 -> VM:22) yoki NAT + Host-only ishlating.
+> **Tuzoq:** Bridged mode kafe/ofis Wi-Fi'da ishlamasligi mumkin (ba'zi tarmoqlar bir MAC'dan ko'p IP bermaydi). Shunda NAT + port forward (host:2222 -> VM:22) yoki NAT + Host-only ishlating.
 
 Bu aynan production'dagi tushunchalarning kichik modeli: NAT = private subnet + NAT gateway, Bridged = public IP, Host-only = izolyatsiya qilingan VPC.
 
@@ -119,7 +119,7 @@ df -h /                        # root filesystem hajmi
 sudo apt update && sudo apt full-upgrade -y
 ```
 
-> **Ubuntu gotcha:** LVM bilan o'rnatganda installer default holatda disk'ning faqat bir qismini (masalan, yarmini) root'ga beradi. `df -h /` kichik ko'rinsa:
+> **Ubuntu tuzog'i:** LVM bilan o'rnatganda installer default holatda disk'ning faqat bir qismini (masalan, yarmini) root'ga beradi. `df -h /` kichik ko'rinsa:
 > ```bash
 > sudo lvextend -r -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
 > ```
@@ -131,7 +131,7 @@ sudo apt update && sudo apt full-upgrade -y
 - `full-upgrade` — kerak bo'lsa dependency'larni o'zgartiradi (kernel yangilanishi uchun kerak bo'lishi mumkin).
 - Kernel yangilangandan keyin **reboot** kerak: `ls /var/run/reboot-required`.
 
-## 7. Snapshot — backup emas
+## 7. Snapshot nega backup o'rnini bosmaydi
 
 ```
  base disk  <--  snapshot 1  <--  snapshot 2  <--  hozirgi holat
@@ -150,13 +150,13 @@ sudo apt update && sudo apt full-upgrade -y
 | Nimadan himoya qiladi | Xato o'zgarish (rollback) | Disk/server/region yo'qolishi |
 | Qachon | O'zgarishdan oldin | Muntazam, jadval bo'yicha |
 
-> **Principal insight:** backup'ning qiymati — **restore** qila olishingizda. Hech qachon restore qilib ko'rilmagan backup — gipoteza. Production'da restore'ni muntazam sinab ko'rish (restore drill) majburiy.
+> **Chuqurroq qarash:** backup'ning qiymati — **restore** qila olishingizda. Hech qachon restore qilib ko'rilmagan backup — gipoteza. Production'da restore'ni muntazam sinab ko'rish (restore drill) majburiy.
 
-### Database gotcha
+### Database tuzog'i
 
 Ishlayotgan DB'li VM snapshot'i **crash-consistent** bo'ladi: elektr o'chgandek holat. PostgreSQL WAL tufayli odatda tiklanadi, lekin to'g'ri backup — `pg_dump` / `pg_basebackup` yoki managed service'ning o'z backup'i.
 
-## 8. Production'da qanday: cloud image + cloud-init
+## 8. Haqiqiy loyihalarda server qanday yaratiladi: cloud image + cloud-init
 
 Real hayotda server'ga ISO'dan qo'lda o'rnatilmaydi. Nega?
 
@@ -182,7 +182,7 @@ runcmd:
   - systemctl enable --now nginx
 ```
 
-### Evolyutsiya: Junior -> Principal
+### Server yaratish usullari: qo'ldan to'liq avtomatlashtirishgacha
 
 ```
  1. Qo'lda (ISO, klik)                 -> lab uchun normal
@@ -193,13 +193,13 @@ runcmd:
  6. Container + Kubernetes             -> server'lar "cattle", app image'da
 ```
 
-Har qadam — **trade-off**: ko'proq avtomatlashtirish = ko'proq tool, o'rganish va maintenance. 1 ta server uchun Terraform ortiqcha bo'lishi mumkin. 50 ta uchun — majburiy.
+Har qadam — **afzallik va kamchilik**: ko'proq avtomatlashtirish = ko'proq vosita, o'rganish va maintenance. 1 ta server uchun Terraform ortiqcha bo'lishi mumkin. 50 ta uchun — majburiy.
 
-> **Security gotcha:** cloud-init `user-data` ichiga parol yoki secret yozmang — ko'p cloud'larda u metadata service orqali VM ichidan o'qiladi va log'larda qoladi. Secret'lar uchun — secret manager (Vault, AWS Secrets Manager).
+> **Xavfsizlik tuzog'i:** cloud-init `user-data` ichiga parol yoki secret yozmang — ko'p cloud'larda u metadata service orqali VM ichidan o'qiladi va log'larda qoladi. Secret'lar uchun — secret manager (Vault, AWS Secrets Manager).
 
-## 9. Failure modes
+## 9. Nima buzilishi mumkin
 
-| Symptom | Sabab | Yechim |
+| Belgi | Sabab | Yechim |
 |---|---|---|
 | VM juda sekin | VT-x/AMD-V o'chiq | BIOS/UEFI'da yoqing |
 | `exec format error` | arm64/amd64 mos emas | `uname -m`, multi-arch build |
@@ -232,7 +232,7 @@ Har qadam — **trade-off**: ko'proq avtomatlashtirish = ko'proq tool, o'rganish
 6. cloud-init nima qiladi va qo'lda o'rnatishning qaysi muammosini hal qiladi?
 7. Nega cloud-init user-data'ga secret yozmaslik kerak?
 
-## Common mistakes
+## Ko'p uchraydigan xatolar
 
 - Desktop image o'rnatish: GUI resurs yeydi va production'ga o'xshamaydi.
 - Snapshot'ni backup deb hisoblash.
@@ -240,7 +240,7 @@ Har qadam — **trade-off**: ko'proq avtomatlashtirish = ko'proq tool, o'rganish
 - Kernel yangilangandan keyin reboot qilmaslik: eski kernel ishlayveradi, patch qo'llanmaydi.
 - Prod server'ni qo'lda sozlash va hech qayerda yozmaslik.
 
-## Senior xulosa
+## Xulosa
 
 - Lab'da — VM + snapshot: buzish va qaytarish arzon.
 - Production'da — cloud image + cloud-init + IaC: server qo'lda emas, kod bilan yaratiladi, shuning uchun takrorlanadi va review qilinadi.
