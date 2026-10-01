@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1297,
+  "total": 1489,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -410,6 +410,62 @@
       "domain": "devops",
       "count": 14,
       "file": "sections/v4-linux-filesystems.json"
+    },
+    {
+      "id": "i1",
+      "name": "Containers & Kubernetes",
+      "domain": "devops",
+      "count": 17,
+      "file": "sections/i1-containers-kubernetes.json"
+    },
+    {
+      "id": "i2",
+      "name": "CI/CD & deploy",
+      "domain": "devops",
+      "count": 26,
+      "file": "sections/i2-ci-cd-deploy.json"
+    },
+    {
+      "id": "i3",
+      "name": "Observability & SRE",
+      "domain": "devops",
+      "count": 18,
+      "file": "sections/i3-observability-sre.json"
+    },
+    {
+      "id": "i4",
+      "name": "Networking & protocols",
+      "domain": "devops",
+      "count": 18,
+      "file": "sections/i4-networking-protocols.json"
+    },
+    {
+      "id": "i5",
+      "name": "Cloud, OS, operations",
+      "domain": "devops",
+      "count": 26,
+      "file": "sections/i5-cloud-os-operations.json"
+    },
+    {
+      "id": "i7",
+      "name": "Linux",
+      "domain": "devops",
+      "count": 68,
+      "file": "sections/i7-linux.json"
+    },
+    {
+      "id": "t11",
+      "name": "Docker & Kubernetes gotchas",
+      "domain": "devops",
+      "count": 10,
+      "file": "sections/t11-docker-kubernetes-gotchas.json"
+    },
+    {
+      "id": "t13",
+      "name": "Network & latency gotchas",
+      "domain": "devops",
+      "count": 9,
+      "file": "sections/t13-network-latency-gotchas.json"
     }
   ]
 }

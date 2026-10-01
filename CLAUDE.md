@@ -32,7 +32,7 @@ Run after any change to data or shell.
 - Target: Senior-level coverage. When asked "to'liqmi?" — audit gaps per topic, then add questions to thin sections ("yupqalariga qo'sh").
 - New topic/subtopic (e.g. inode, hardlink/softlink, LVM, kernel, shell, filesystem types) → add enough questions (mix mcq/code/open, J→P levels), place in the right section, sync `index.json` counts.
 - "Edge cases & gotchas" live in `t*` sections, spread by domain (Go, SQL, Kafka, Redis, K8s, security…) — not one big bucket.
-- Catalog structure: directions Backend / System Design / Algorithms. Infra/DevOps (`infra` domain: i1–i5, i7, t11, t13) removed from the catalog 2026-10-01 at user request — do not re-add. Same day user asked for a slim **DevOps** direction (`devops` domain): `v1` LVM (PV/VG/LV). Add DevOps topics there only on explicit request. Fintech (`p*`) under Backend.
+- Catalog structure: directions Backend / System Design / Algorithms. **DevOps** direction (`devops` domain): `v1` LVM, `v2` Linux users, `v3` package management, `v4` filesystems, plus former infra sections re-added 2026-10-01 at user request (i1–i5, i7, t11, t13 — domain changed to `devops`; i7 LVM questions live in v1). `i6` file is an old duplicate — keep out of catalog. Fintech (`p*`) under Backend.
 - Study UX = AnkiDroid style: flashcards, closed (hidden-answer) questions, FSRS. UI must stay premium: smooth animations, easy navigation.
 - Deploy: GitHub Pages serves `interview.html`. Push only when the user explicitly allows it in that session.
 - Always finish with `node build/build.js && node build/verify.js` green.

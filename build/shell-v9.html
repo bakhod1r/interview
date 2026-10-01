@@ -522,7 +522,7 @@ function queue(qs){qs=qs.filter(lvlOk);const t=now();
   return out.map(q=>q.id);}
 
 // ---------- routing ----------
-let V={view:S.sess?"study":"decks",deck:"",search:""};
+let V={view:"decks",deck:"",search:""};
 function go(view,extra={}){V={...V,view,...extra};closeSheet();render();window.scrollTo({top:0});}
 function startSession(title,ids,deck,mode){
   if(!ids.length){toast("Bu tanlovda karta yo'q"+(S.lvl.length?" (daraja filtri yoqilgan)":""));return;}
