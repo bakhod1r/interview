@@ -284,6 +284,17 @@
       "section": "g5",
       "question": "Katta Go monorepo'da CI 25 daqiqa ketyapti. Qanday tezlashtirasiz?",
       "explanation": "Senior signal: avval o'lchash (qaysi bosqich sekin), keyin kesh va o'zgargan qismni tanlash. Faqat kuchliroq runner so'rash — zaif javob."
+    },
+    {
+      "id": 30780,
+      "code": "SN594",
+      "level": "S",
+      "type": "card",
+      "topic": "Tooling",
+      "domain": "go",
+      "section": "g5",
+      "question": "`go.work` va `vendor/` qachon ishlatiladi?",
+      "explanation": "`go work init ./api ./lib` — `api` `lib` ning lokal versiyasini ko'radi. Tuzoq: `go.work` CI'ga tushib qolsa, build go.mod'dagi versiya emas lokal kod bilan o'tadi — `GOWORK=off` bilan tekshiring. Go 1.22+ workspace vendoring (`go work vendor`) ham bor. Vendoring o'rniga ko'pincha `GOPROXY` (Athens, Artifactory) + `GOFLAGS=-mod=mod` va `go.sum` checksum DB yetarli."
     }
   ]
 }

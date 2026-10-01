@@ -163,7 +163,7 @@
       "domain": "go",
       "section": "t1",
       "question": "Nima chop etiladi?",
-      "snippet": "x := 0.1 + 0.2\nfmt.Println(x == 0.3, x)",
+      "snippet": "a, b := 0.1, 0.2\nx := a + b\nfmt.Println(x == 0.3, x)",
       "explanation": "float64 ikkilik kasr — 0.1 va 0.2 aniq ifodalanmaydi. Pul uchun float ishlatilmaydi: int64 minor unit (tiyin/cent) yoki shopspring/decimal. Taqqoslash kerak bo'lsa epsilon bilan: math.Abs(a-b) < 1e-9."
     },
     {

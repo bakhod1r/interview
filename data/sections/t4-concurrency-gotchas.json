@@ -124,6 +124,30 @@
       "section": "t4",
       "question": "`sync.Mutex`ni struct bilan nusxalash nima qiladi?",
       "explanation": "Klassik ko'rinish: metod `func (s Store) Add()` (value receiver) — har chaqiruvda mutex nusxasi qulflanadi va hech kimni to'xtatmaydi. `go vet` bu holatni topadi, CI'da majburiy bo'lishi kerak. Xuddi shu qoida `sync.WaitGroup`, `sync.Once`, `atomic.Value` uchun ham amal qiladi."
+    },
+    {
+      "id": 30859,
+      "code": "SN618",
+      "level": "M",
+      "type": "card",
+      "topic": "Concurrency gotcha",
+      "domain": "go",
+      "section": "t4",
+      "question": "Bu kod nima bilan tugaydi?",
+      "snippet": "ch := make(chan int)\ngo func() {\n    for i := 0; i < 3; i++ {\n        ch <- i\n    }\n}()\nfor v := range ch {\n    fmt.Println(v)\n}",
+      "explanation": "0, 1, 2 chiqadi, keyin `fatal error: all goroutines are asleep - deadlock!`. `range ch` kanal yopilguncha kutadi, producer esa `close(ch)` qilmagan. Yechim: producer oxirida `defer close(ch)`."
+    },
+    {
+      "id": 30860,
+      "code": "SN619",
+      "level": "M",
+      "type": "card",
+      "topic": "Concurrency gotcha",
+      "domain": "go",
+      "section": "t4",
+      "question": "Bu kod nega osilib qoladi?",
+      "snippet": "type Store struct {\n    mu sync.Mutex\n    m  map[string]int\n}\n\nfunc (s *Store) Get(k string) int {\n    s.mu.Lock()\n    defer s.mu.Unlock()\n    return s.m[k]\n}\n\nfunc (s *Store) Incr(k string) {\n    s.mu.Lock()\n    defer s.mu.Unlock()\n    s.m[k] = s.Get(k) + 1\n}",
+      "explanation": "`sync.Mutex` reentrant (qayta kiriladigan) emas: `Incr` lock'ni ushlab turib `Get` ni chaqiradi, `Get` esa yana o'sha mutex'ni olishga urinadi va abadiy kutadi — self-deadlock. Yechim: lock olmaydigan ichki `get` metodi (`getLocked`) yoki lock'ni faqat tashqi metodda olish."
     }
   ]
 }

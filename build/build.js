@@ -64,11 +64,13 @@ if (ids.size !== questions.length) { console.error("id takrorlangan"); process.e
 const badMcq = questions.filter(q => q.t === "mcq" && !(Array.isArray(q.o) && q.o.length > 1 && q.a < q.o.length));
 if (badMcq.length) { console.error("mcq javob indeksi xato:", badMcq.map(q => q.n)); process.exit(1); }
 
+// matndagi "</script>", "<script", "<!--" inline <script> ni buzmasin
+const js = v => JSON.stringify(v).replace(/<(\/|script|!--)/gi, "\\u003c$1");
 const block = [
-  "const Q=" + JSON.stringify(questions) + ";",
-  "const DOM=" + JSON.stringify(data.domains) + ";",
-  "const SEC=" + JSON.stringify(SEC) + ";",
-  "const GLO=" + JSON.stringify(GLO.map(g => [g.t, g.d])) + ";"
+  "const Q=" + js(questions) + ";",
+  "const DOM=" + js(data.domains) + ";",
+  "const SEC=" + js(SEC) + ";",
+  "const GLO=" + js(GLO.map(g => [g.t, g.d])) + ";"
 ].join("\n");
 
 const start = shell.indexOf("const QD=[");

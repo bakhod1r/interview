@@ -526,6 +526,28 @@
       "section": "d4",
       "question": "Tranzaksiya ichida tashqi HTTP chaqiruv qilish nega yomon?",
       "explanation": "Bu eng ko'p uchraydigan 'DB sekinlashdi' sababi. To'g'ri naqsh: (1) DB tranzaksiyasida intent + outbox yozuvi, commit; (2) tashqi chaqiruv; (3) natijani alohida qisqa tranzaksiyada yozish; noma'lum holat uchun reconcile. Xuddi shu qoida uzoq hisob-kitob va foydalanuvchi kutishiga ham tegishli."
+    },
+    {
+      "id": 30802,
+      "code": "PG9",
+      "level": "S",
+      "type": "card",
+      "topic": "Concurrency",
+      "domain": "db",
+      "section": "d4",
+      "question": "Postgres <code>LISTEN/NOTIFY</code> qanday ishlaydi va uni queue sifatida ishlatish mumkinmi?",
+      "explanation": "`NOTIFY channel, payload` — commit bo'lgandan keyin shu kanalni `LISTEN` qilgan barcha session'larga yetkaziladi. Persistent emas: tinglovchi yo'q yoki uzilgan bo'lsa xabar yo'qoladi; payload ≤ 8000 bayt; global queue 8GB. Shuning uchun queue emas — \"uyg'otish signali\": haqiqiy ish table'da (`SKIP LOCKED`), NOTIFY faqat worker'ni darhol uyg'otadi. PgBouncer transaction mode'da LISTEN ishlamaydi."
+    },
+    {
+      "id": 30809,
+      "code": "PG16",
+      "level": "St",
+      "type": "card",
+      "topic": "Concurrency",
+      "domain": "db",
+      "section": "d4",
+      "question": "READ COMMITTED'da ikki tx bir row'ni <code>UPDATE ... SET stock = stock - 1 WHERE id = 1 AND stock > 0</code> qiladi. Ikkinchisi birinchining commit'ini kutgandan keyin nima bo'ladi?",
+      "explanation": "Ikkinchi tx kutadi; birinchi commit qilgach, Postgres row'ning yangi versiyasini oladi va WHERE shartini qayta tekshiradi (EvalPlanQual). Shart hali to'g'ri bo'lsa — yangi qiymat ustidan UPDATE (lost update yo'q); stock 0 bo'lib qolgan bo'lsa — 0 row yangilanadi. Lekin faqat shu row qayta tekshiriladi: query'ning boshqa qismlari (subquery, join, boshqa row'lar) eski snapshot'da qoladi — murakkab query'larda anomaliya mumkin."
     }
   ]
 }

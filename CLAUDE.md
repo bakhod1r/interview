@@ -22,7 +22,7 @@ Run after any change to data or shell.
 - Question ids must be unique across all sections.
 
 ## UI (shell-v9)
-- Decks: direction (`GRP`: Backend / DevOps / System Design / Algorithms) › domain › section. A domain belongs to exactly one direction in `GRP`.
+- Decks: direction (`GRP`: Backend / System Design / Algorithms) › domain › section. A domain belongs to exactly one direction in `GRP`.
 - Spaced repetition: FSRS-5 (default weights, `S.cfg.ret` target retention 0.9; old SM-2 `srs` entries converted lazily), 4 buttons (Qayta / Qiyin / Yaxshi / Oson), learning steps 1m/6m, daily new-card limit (`S.cfg.newDay`, default 20), day rolls over at 04:00.
 - State lives in `localStorage` key `dbdrill.v1` (`res`, `srs`, `days`, `sess`, `cfg`, `nt`). Keep it backward-compatible; old `res` entries are migrated into `srs` on load.
 - Older shells (`shell-v7.html`, `shell-v8.html`) are backups only.
@@ -32,7 +32,7 @@ Run after any change to data or shell.
 - Target: Senior-level coverage. When asked "to'liqmi?" — audit gaps per topic, then add questions to thin sections ("yupqalariga qo'sh").
 - New topic/subtopic (e.g. inode, hardlink/softlink, LVM, kernel, shell, filesystem types) → add enough questions (mix mcq/code/open, J→P levels), place in the right section, sync `index.json` counts.
 - "Edge cases & gotchas" live in `t*` sections, spread by domain (Go, SQL, Kafka, Redis, K8s, security…) — not one big bucket.
-- Catalog structure: directions Backend / DevOps / System Design / Algorithms. DevOps content (infra, Linux, CI/CD, K8s) belongs under DevOps, not Backend. Fintech (`p*`) under Backend.
+- Catalog structure: directions Backend / System Design / Algorithms. Infra/DevOps (`infra` domain: i1–i5, i7, t11, t13) removed from the catalog 2026-10-01 at user request — do not re-add. Same day user asked for a slim **DevOps** direction (`devops` domain): `v1` LVM (PV/VG/LV). Add DevOps topics there only on explicit request. Fintech (`p*`) under Backend.
 - Study UX = AnkiDroid style: flashcards, closed (hidden-answer) questions, FSRS. UI must stay premium: smooth animations, easy navigation.
 - Deploy: GitHub Pages serves `interview.html`. Push only when the user explicitly allows it in that session.
 - Always finish with `node build/build.js && node build/verify.js` green.

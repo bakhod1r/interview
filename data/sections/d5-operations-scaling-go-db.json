@@ -459,6 +459,163 @@
       "section": "d5",
       "question": "Indeks bloat aniqlandi. Xavfsiz tozalash?",
       "explanation": "`CONCURRENTLY` sekinroq va ikki marta skan qiladi, yiqilsa `INVALID` indeks qoladi (topib o'chirish kerak — `pg_index.indisvalid`). Jadval bloati uchun esa `pg_repack`. Profilaktika muhimroq: autovacuum sozlamalari, uzoq tranzaksiyalarni yo'q qilish, va tez-tez yangilanadigan ustunlarni indekslamaslik."
+    },
+    {
+      "id": 30803,
+      "code": "PG10",
+      "level": "S",
+      "type": "card",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Transaction ID wraparound nima va undan qanday himoyalanasiz?",
+      "explanation": "XID 32-bit, taqqoslash modul 2^31: freeze qilinmagan eski row'lar \"kelajakda\" bo'lib ko'rinmay qolishi mumkin. Himoya — VACUUM FREEZE (eski tuple'larni frozen deb belgilaydi); `autovacuum_freeze_max_age` (200M) dan oshsa majburiy anti-wraparound autovacuum. ~2 mlrd'ga yaqinlashsa DB yozishni to'xtatadi. Monitoring: `age(datfrozenxid)`, `age(relfrozenxid)`; uzoq tx/slot'lar freeze'ni bloklaydi."
+    },
+    {
+      "id": 30804,
+      "code": "PG11",
+      "level": "St",
+      "type": "card",
+      "topic": "Replication",
+      "domain": "db",
+      "section": "d5",
+      "question": "Postgres uchun avtomatik failover (HA) qanday quriladi? Split-brain'dan qanday himoyalanasiz?",
+      "explanation": "Postgres o'zida avtomatik failover yo'q. Patroni (etcd/Consul DCS bilan leader lock), yoki managed (RDS Multi-AZ, Cloud SQL). Leader lock TTL tugasa — eng kam lag'li replica promote. Split-brain himoyasi: DCS consensus (faqat lock egasi primary), eski primary lock yo'qotsa o'zini demote qiladi, watchdog/fencing, ilova routing (HAProxy/Patroni REST health, DNS, PgBouncer). Sync replica bilan RPO=0."
+    },
+    {
+      "id": 30805,
+      "code": "PG12",
+      "level": "S",
+      "type": "card",
+      "topic": "Incident",
+      "domain": "db",
+      "section": "d5",
+      "question": "<code>pg_stat_statements</code> nima beradi va undan qanday foydalanasiz?",
+      "explanation": "Normalizatsiyalangan query'lar bo'yicha agregat statistika: calls, total/mean/max vaqt, rows, shared blocks hit/read, temp, WAL. `total_exec_time` bo'yicha saralash — eng ko'p resurs yeyayotgan query'lar (ko'pincha eng sekin emas, eng ko'p chaqiriladigan). `shared_preload_libraries` talab qiladi. Davriy snapshot va delta, `queryid` bilan log/APM bog'lash."
+    },
+    {
+      "id": 30806,
+      "code": "PG13",
+      "level": "S",
+      "type": "card",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "Postgres extension'lari: qaysilarini bilasiz va prod'da qanday boshqarasiz? FDW nima?",
+      "explanation": "Ko'p ishlatiladigan: pg_stat_statements, pgcrypto/uuid, pg_trgm, btree_gist, PostGIS, pg_partman, pg_cron, TimescaleDB, pgvector, postgres_fdw. Boshqaruv: versiyani migratsiyada pin qilish (`CREATE EXTENSION ... VERSION`), upgrade'da `ALTER EXTENSION UPDATE`, managed'da ruxsat etilgan ro'yxat. FDW — tashqi manbani (boshqa Postgres, MySQL, fayl) local table kabi so'rash; pushdown cheklangan, tx kafolati zaif — migratsiya/ad-hoc uchun, hot path uchun emas."
+    },
+    {
+      "id": 30807,
+      "code": "PG14",
+      "level": "M",
+      "type": "card",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "<code>max_connections = 5000</code> qo'yish nega yomon fikr?",
+      "explanation": "Har connection — alohida OS process (~5-10MB+, work_mem alohida). Ko'p connection: memory, context switch, snapshot olish narxi (ProcArray skan, PG14 da yaxshilangan bo'lsa ham), lock contention. Faol query'lar soni CPU yadrolaridan ko'p bo'lsa throughput o'smaydi. To'g'ri yo'l: max_connections bir necha yuz, oldida PgBouncer, ilova pool'lari hisoblangan."
+    },
+    {
+      "id": 30808,
+      "code": "PG15",
+      "level": "St",
+      "type": "card",
+      "topic": "Replication",
+      "domain": "db",
+      "section": "d5",
+      "question": "Postgres'dan Kafka'ga o'zgarishlarni (CDC) qanday oqizasiz? Debezium ishlatganda nimalarga e'tibor berasiz?",
+      "explanation": "Logical decoding: replication slot + `pgoutput` plugin, publication; Debezium WAL'dan row o'zgarishlarini o'qib Kafka'ga yozadi. E'tibor: slot iste'mol qilinmasa WAL to'planadi (disk to'ladi) — `max_slot_wal_keep_size`, monitoring; failover'da slot (PG17 failover slots); `REPLICA IDENTITY` (UPDATE/DELETE'da eski qiymatlar), DDL replikatsiya qilinmaydi — sxema evolyutsiyasi; initial snapshot; at-least-once — consumer idempotent. Outbox table + CDC — domain event'lar uchun toza naqsh."
+    },
+    {
+      "id": 30822,
+      "code": "PG23",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d5",
+      "question": "Go'da <code>database/sql</code> bilan tranzaksiyani to'g'ri yozish shabloni qanday?",
+      "snippet": "tx, err := db.BeginTx(ctx, nil)\nif err != nil { return err }\n// ... ?",
+      "explanation": "`BeginTx` dan keyin darhol `defer tx.Rollback()` — commit bo'lgandan keyin Rollback `sql.ErrTxDone` qaytaradi va zararsiz. Har query `tx.ExecContext/QueryContext` orqali (db. emas — aks holda boshqa connection, tx tashqarisida). Oxirida `return tx.Commit()` va uning xatosini tekshirish. Tx ichida tashqi HTTP yo'q, context uzatiladi."
+    },
+    {
+      "id": 30823,
+      "code": "PG24",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d5",
+      "question": "Bu Go kodining muammosi nima va qanday tuzatiladi?",
+      "snippet": "q := \"SELECT * FROM users WHERE email = '\" + email + \"'\"\nrows, err := db.QueryContext(ctx, q)",
+      "explanation": "SQL injection: `email = \"' OR '1'='1\"` yoki `'; DROP TABLE users; --` query mantiqini o'zgartiradi. Yechim — placeholder (`$1` Postgres, `?` MySQL): qiymat query matnidan alohida yuboriladi, hech qachon SQL sifatida parse qilinmaydi. Table/column nomlarini parametr qilib bo'lmaydi — ular uchun whitelist. ORDER BY yo'nalishi ham whitelist."
+    },
+    {
+      "id": 30824,
+      "code": "PG25",
+      "level": "M",
+      "type": "card",
+      "topic": "Go+DB",
+      "domain": "db",
+      "section": "d5",
+      "question": "HTTP handler'da DB query'ga <code>r.Context()</code> uzatish va timeout qo'yish nima beradi?",
+      "explanation": "Client uzilsa yoki timeout tugasa context bekor bo'ladi — driver Postgres'ga cancel request yuboradi, query to'xtaydi, connection bo'shaydi. Uzatilmasa: client ketgan, lekin og'ir query DB'da ishlayveradi, pool band. `context.WithTimeout` — har so'rovga yuqori chegara. Server tomonda ham `statement_timeout` — ikki qavat himoya."
+    },
+    {
+      "id": 30825,
+      "code": "PG26",
+      "level": "M",
+      "type": "card",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "<code>EXPLAIN ANALYZE</code> chiqishida birinchi navbatda nimalarga qaraysiz?",
+      "snippet": "Seq Scan on orders  (cost=0.00..18334.00 rows=5 width=64)\n                    (actual time=0.02..142.7 rows=48210 loops=1)\n  Filter: (status = 'pending')\n  Rows Removed by Filter: 951790\nPlanning Time: 0.1 ms\nExecution Time: 150.3 ms",
+      "explanation": "1) Node turi: Seq Scan katta table'da + ko'p \"Rows Removed by Filter\" — index kerakligi belgisi. 2) `rows` taxmin (5) va `actual rows` (48210) farqi — statistika eskirgan, ANALYZE. 3) Eng ko'p vaqt olgan node (actual time, loops ga ko'paytiring). 4) BUFFERS bilan: shared read (disk) vs hit. EXPLAIN (ANALYZE) query'ni haqiqatan bajaradi — UPDATE/DELETE'ni tx ichida + ROLLBACK."
+    },
+    {
+      "id": 30826,
+      "code": "PG27",
+      "level": "M",
+      "type": "card",
+      "topic": "Backup",
+      "domain": "db",
+      "section": "d5",
+      "question": "<code>pg_dump</code> / <code>pg_restore</code> bilan backup: qaysi format va qanday cheklovlar bor?",
+      "explanation": "Custom (`-Fc`) yoki directory (`-Fd`, parallel `-j`) format — tanlab tiklash va parallel restore imkoni; plain SQL — faqat psql bilan. pg_dump izchil snapshot (REPEATABLE READ) oladi, ishlayotgan DB'ni bloklamaydi (lekin DDL bilan konflikt). Global obyektlar (rollar) — `pg_dumpall --globals-only`. Cheklov: mantiqiy nusxa — katta DB'da sekin restore, PITR yo'q; prod uchun asosiy backup emas, qo'shimcha."
+    },
+    {
+      "id": 30827,
+      "code": "PG28",
+      "level": "M",
+      "type": "card",
+      "topic": "Migrations",
+      "domain": "db",
+      "section": "d5",
+      "question": "DB migratsiyalarini jamoada qanday boshqarasiz (golang-migrate, Flyway kabi tool'lar)?",
+      "explanation": "Versiyalangan, ketma-ket SQL fayllar (up/down), repoda kod bilan birga; DB'da `schema_migrations` jadvali qaysi versiya qo'llanganini saqlaydi. Qo'llangan migratsiya hech qachon tahrirlanmaydi — yangi migratsiya yoziladi. CI'da bo'sh DB'ga hammasini qo'llab test. Deploy'da migratsiya alohida qadam (bitta instance/job), ilova bilan bir vaqtda emas. Backward-compatible o'zgarishlar (expand/contract)."
+    },
+    {
+      "id": 30828,
+      "code": "PG29",
+      "level": "M",
+      "type": "card",
+      "topic": "Ops",
+      "domain": "db",
+      "section": "d5",
+      "question": "VACUUM va ANALYZE nima qiladi? Nega autovacuum'ni o'chirmaslik kerak?",
+      "explanation": "VACUUM — MVCC'dan qolgan dead tuple'lar joyini qayta ishlatishga beradi (fayl kichraymaydi), visibility map'ni yangilaydi (index-only scan uchun), XID freeze qiladi (wraparound himoyasi). ANALYZE — column statistikasini (taqsimot, distinct, NULL ulushi) yig'adi — planner shu bilan plan tanlaydi. Autovacuum o'chirilsa: bloat, yomon plan'lar, oxir-oqibat wraparound tufayli DB to'xtashi."
+    },
+    {
+      "id": 30829,
+      "code": "PG30",
+      "level": "M",
+      "type": "card",
+      "topic": "Replication",
+      "domain": "db",
+      "section": "d5",
+      "question": "Read replica nima uchun kerak va ilovada uni ishlatganda nimani hisobga olasiz?",
+      "explanation": "Replica — primary'ning streaming nusxasi, faqat o'qish uchun: o'qish yukini taqsimlash, hisobot/analitika, failover zaxirasi. Hisobga olish: replica lag (yozgandan keyin darhol o'qish eski qiymat berishi mumkin), replica'ga yozib bo'lmaydi, uzoq query'lar recovery bilan konflikt (cancel). Ilovada ikki pool (rw, ro) va qaysi query qayerga ketishi aniq."
     }
   ]
 }

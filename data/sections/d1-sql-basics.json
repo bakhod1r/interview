@@ -260,6 +260,94 @@
       "section": "d1",
       "question": "`LATERAL` join qanday holatda kerak?",
       "explanation": "Oddiy JOIN'da 'har guruhdan N ta' ni ifodalash qiyin: window funksiya bilan ham butun to'plam skanerlanadi, `LATERAL` esa har guruh uchun indeks bo'yicha faqat N qator o'qiydi — katta jadvalda bir necha tartib tez. Sintaksis: `FROM customers c, LATERAL (SELECT ... WHERE o.customer_id = c.id ORDER BY created_at DESC LIMIT 3) o`."
+    },
+    {
+      "id": 30794,
+      "code": "PG1",
+      "level": "M",
+      "type": "card",
+      "topic": "SQL",
+      "domain": "db",
+      "section": "d1",
+      "question": "<code>categories(id, parent_id, name)</code> — berilgan kategoriyaning barcha avlodlarini (har chuqurlikda) qanday olasiz?",
+      "explanation": "`WITH RECURSIVE`: anchor (boshlang'ich row) + recursive qism (`JOIN` oldingi natija bilan), `UNION ALL` bilan. Sikl bo'lishi mumkin bo'lsa — `UNION` yoki path/`CYCLE` bilan himoya, chuqurlik chegarasi. Juda katta daraxtlar uchun alternativ: `ltree` yoki materialized path / closure table."
+    },
+    {
+      "id": 30795,
+      "code": "PG2",
+      "level": "S",
+      "type": "card",
+      "topic": "SQL",
+      "domain": "db",
+      "section": "d1",
+      "question": "Postgres'da \"maqolalar ichidan so'z qidirish\" — <code>ILIKE '%so''z%'</code> o'rniga full-text search qanday quriladi?",
+      "explanation": "`tsvector` (normalizatsiyalangan lexeme'lar) + `tsquery`, `@@` operatori, GIN index. Stored generated column yoki expression index. `ts_rank` bilan saralash, `websearch_to_tsquery` foydalanuvchi kiritishi uchun. Uzbek uchun stemmer yo'q — `simple` config. Typo-tolerance uchun `pg_trgm`. Murakkab relevance/facet — Elasticsearch."
+    },
+    {
+      "id": 30796,
+      "code": "PG3",
+      "level": "M",
+      "type": "card",
+      "topic": "SQL",
+      "domain": "db",
+      "section": "d1",
+      "question": "10 mln row'ni CSV'dan Postgres'ga eng tez qanday yuklaysiz? Nega <code>INSERT</code> loop sekin?",
+      "explanation": "`COPY ... FROM` (yoki psql `\\copy`, Go'da `pgx.CopyFrom`) — bitta stream, parse va WAL overhead minimal. Har INSERT alohida round-trip + tx commit (fsync). Tezlashtirish: katta batch tx'da, index/FK'larni keyin yaratish, staging (UNLOGGED) table, `maintenance_work_mem` oshirish, keyin `ANALYZE`."
+    },
+    {
+      "id": 30830,
+      "code": "PG31",
+      "level": "M",
+      "type": "card",
+      "topic": "GROUP BY",
+      "domain": "db",
+      "section": "d1",
+      "question": "<code>orders(id, user_id, status, amount)</code>. Har user uchun bitta query'da: jami buyurtmalar, to'langanlar soni va to'langan summa.",
+      "explanation": "Shartli aggregat: `count(*) FILTER (WHERE status='paid')`, `sum(amount) FILTER (...)` (Postgres) yoki portativ `sum(CASE WHEN status='paid' THEN amount ELSE 0 END)`. Bitta skan — har metrika uchun alohida subquery/JOIN'dan tez. `COALESCE(..., 0)` — FILTER bo'sh bo'lsa sum NULL qaytaradi."
+    },
+    {
+      "id": 30831,
+      "code": "PG32",
+      "level": "M",
+      "type": "card",
+      "topic": "GROUP BY",
+      "domain": "db",
+      "section": "d1",
+      "question": "Har buyurtma uchun mahsulot nomlarini bitta vergul bilan ajratilgan qatorda (va massiv sifatida) qanday qaytarasiz?",
+      "explanation": "`string_agg(p.name, ', ' ORDER BY p.name)` — text; `array_agg(p.name ORDER BY p.name)` — massiv; `json_agg`/`jsonb_agg` — API uchun JSON. Aggregat ichidagi ORDER BY tartibni kafolatlaydi. NULL'lar: string_agg ularni tashlaydi, array_agg qo'shadi (`FILTER (WHERE x IS NOT NULL)`)."
+    },
+    {
+      "id": 30832,
+      "code": "PG33",
+      "level": "M",
+      "type": "card",
+      "topic": "GROUP BY",
+      "domain": "db",
+      "section": "d1",
+      "question": "Oxirgi 30 kun bo'yicha kunlik daromad hisobotini chiqaring — buyurtma bo'lmagan kunlar ham 0 bilan ko'rinsin.",
+      "explanation": "`date_trunc('day', created_at)` (yoki `created_at::date`) bo'yicha GROUP BY — lekin bo'sh kunlar chiqmaydi. `generate_series` bilan kunlar ro'yxatini yaratib LEFT JOIN + `coalesce(sum, 0)`. Kun chegarasi session TimeZone'ga bog'liq — `AT TIME ZONE` aniq bering. WHERE'da yarim ochiq oraliq."
+    },
+    {
+      "id": 30833,
+      "code": "PG34",
+      "level": "M",
+      "type": "card",
+      "topic": "Subquery",
+      "domain": "db",
+      "section": "d1",
+      "question": "\"Kamida bitta buyurtmasi bor userlar\" — <code>IN</code>, <code>EXISTS</code> yoki <code>JOIN</code>: farqi nima?",
+      "explanation": "`EXISTS` va `IN (subquery)` — semi-join: har user bir marta, Postgres ikkalasini odatda bir xil rejalaydi. Oddiy `JOIN` — har buyurtma uchun user takrorlanadi, DISTINCT kerak (qimmat). `NOT IN` va `NOT EXISTS` esa farqli: NULL bo'lsa NOT IN bo'sh natija beradi — doim NOT EXISTS."
+    },
+    {
+      "id": 30834,
+      "code": "PG35",
+      "level": "M",
+      "type": "card",
+      "topic": "JOIN",
+      "domain": "db",
+      "section": "d1",
+      "question": "<code>employees(id, name, manager_id)</code>. Har xodim yonida menejerining ismini chiqaring (menejeri yo'qlar ham).",
+      "explanation": "Self-join: bir table'ni ikki alias bilan. `LEFT JOIN employees m ON m.id = e.manager_id` — menejersiz (CEO) ham chiqadi, `m.name` NULL. INNER JOIN ularni tushirib qoldiradi. Ko'p darajali ierarxiya (menejerning menejeri...) uchun — recursive CTE."
     }
   ]
 }

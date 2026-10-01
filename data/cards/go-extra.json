@@ -1,0 +1,152 @@
+{
+ "30756": {
+  "a": "**ctx deadline `grpc-timeout` header sifatida serverga uzatiladi; server ctx'si shu deadline bilan bekor bo'ladi, keyingi downstream chaqiruvlarga ham o'tadi (deadline propagation)**\n\n- gRPC'da default deadline yo'q — `context.Background()` bilan chaqiruv osilib qolishi mumkin.\n- Client `ctx, cancel := context.WithTimeout(ctx, 300*time.Millisecond)` beradi, grpc-go qolgan vaqtni `grpc-timeout` metadata'siga yozadi.\n- Server handler'idagi `ctx` shu muddat bilan keladi — uni DB va boshqa RPC'larga uzatsangiz butun zanjir bitta byudjetda ishlaydi."
+ },
+ "30757": {
+  "a": "**`status.Error(codes.NotFound, \"user 42\")` yoki `status.New(...).WithDetails(...)`; client `status.FromError(err)` bilan `Code()` ni tekshiradi**\n\n- Oddiy `error` client'ga `codes.Unknown` bo'lib boradi — retry/handling mantiqi kodni ajrata olmaydi.\n- To'g'ri mapping: topilmadi → `NotFound`, validatsiya → `InvalidArgument`, ruxsat → `PermissionDenied`/`Unauthenticated`, vaqtinchalik → `Unavailable` (retry qilinadi), ctx → `DeadlineExceeded`/`Canceled`.\n- Ichki xato matnini (SQL, stack) client'ga chiqarmang — `Internal` + log."
+ },
+ "30758": {
+  "a": "**Har RPC atrofida ishlaydigan middleware: unary (`grpc.UnaryServerInterceptor`) va stream turlari; auth, logging, metrics, tracing, panic recovery, deadline tekshiruvi uchun**\n\n- Server: `grpc.NewServer(grpc.ChainUnaryInterceptor(recovery, auth, logging))` — tartib muhim (recovery tashqarida bo'lsin).\n- Interceptor `info.FullMethod` bo'yicha qaysi RPC ekanini biladi, `metadata.FromIncomingContext(ctx)` bilan header o'qiydi.\n- Streaming uchun alohida `StreamServerInterceptor` kerak — faqat unary yozib, stream RPC'larni auth'siz qoldirish klassik xato."
+ },
+ "30759": {
+  "a": "**Client ctx bekor qilinmasa stream va uning goroutine/HTTP2 stream resurslari ochiq qoladi (leak); client `cancel()` chaqirishi yoki `Recv()` ni `io.EOF`gacha o'qishi kerak, server esa `stream.Context().Done()` ni tekshirishi kerak**\n\n- grpc-go hujjati: stream tugashi uchun yo `Recv` EOF/xato qaytarguncha o'qing, yo ctx'ni bekor qiling.\n- Server tomonda `Send` flow control bilan bloklanadi — client o'qimasa server goroutine'i osiladi; `stream.Context()` bekor bo'lishini kuzatish shart.\n- Uzoq stream'larda keepalive (`keepalive.ServerParameters`) va `MaxConnectionAge` — load balancer orqali ulanishlarni qayta taqsimlash uchun."
+ },
+ "30760": {
+  "a": "**gRPC bitta uzoq HTTP/2 ulanishda multiplex qiladi; ClusterIP (L4) ulanish darajasida balanslaydi, shuning uchun client bitta pod'ga yopishib qoladi. Yechim: headless service + client-side `round_robin`, yoki L7 proxy (Envoy/mesh)**\n\n- L4 balanslash har TCP ulanishni bir marta tanlaydi; HTTP/1.1 da ko'p ulanish bor edi, gRPC'da bitta.\n- Variantlar: `dns:///svc-headless:50051` + `grpc.WithDefaultServiceConfig(`{\"loadBalancingConfig\":[{\"round_robin\":{}}]}`)` (DNS qayta resolve uchun server `MaxConnectionAge` qo'yadi), xDS, yoki Envoy/Linkerd/Istio.\n- Skalalashda yangi pod trafik olmasligi ham shu sababdan."
+ },
+ "30761": {
+  "a": "**Mavjud maydonning raqamini (tag) yoki tipini o'zgartirish yoki o'chirilgan maydon raqamini qayta ishlatish**\n\n- Wire formatda faqat field raqami va tipi bor, nom yo'q — shuning uchun nomni o'zgartirish binary uchun xavfsiz (lekin JSON/`protojson` uchun emas).\n- O'chirilgan maydonni `reserved 5; reserved \"old_name\";` qiling — kimdir raqamni qayta ishlatsa eski ma'lumot noto'g'ri dekodlanadi. proto3'da yo'q maydon zero value — \"o'rnatilmagan\"ni ajratish uchun `optional` yoki wrapper tiplar.\n- CI'da `buf breaking` bilan tekshiriladi."
+ },
+ "30762": {
+  "a": "**`crypto/rand` (`rand.Read` yoki Go 1.24 `rand.Text()`) — `math/rand` (v2 ham) kriptografik xavfsiz emas, holatini tiklash mumkin**\n\n- `math/rand` — tez PRNG, chiqishidan keyingi qiymatlarni bashorat qilish mumkin; `math/rand/v2` dagi ChaCha8 ham security uchun mo'ljallanmagan (hujjat aniq aytadi).\n- Token, session ID, nonce, kalit — faqat `crypto/rand`.\n- Go 1.24 `crypto/rand.Text()` 26 belgilik base32 token qaytaradi; `rand.Read` Go 1.24+ da xato qaytarmaydi (xato bo'lsa crash)."
+ },
+ "30763": {
+  "a": "**SQL injection: `ORDER BY` qismi satr birlashtirish bilan qurilgan; identifikator va kalit so'zlarni parametr qilib bo'lmaydi, shuning uchun allowlist kerak**\n\n- Placeholder (`$1`, `?`) faqat qiymatlar uchun ishlaydi — ustun nomi, `ASC/DESC`, jadval nomi uchun emas.\n- `sort=name; DROP TABLE users--` yoki blind injection (`CASE WHEN ...\n- THEN id ELSE name END`) mumkin."
+ },
+ "30764": {
+  "a": "**`alg`ni token'ning o'zidan qabul qilish: `none` yoki RS256 o'rniga HS256 (public key'ni HMAC siri sifatida) — kalit funksiyasida algoritmni qat'iy tekshirmaslik**\n\n- `golang-jwt/jwt/v5` da `jwt.Parse(tok, keyFunc, jwt.WithValidMethods([]string{\"RS256\"}))` — ruxsat etilgan algoritmlarni qat'iy bering.\n- Algorithm confusion: server RSA public key'ni qaytaradigan keyFunc yozgan bo'lsa, hujumchi HS256 bilan public key'ni sir sifatida ishlatib imzo qalbakilashtiradi.\n- Qo'shimcha: `exp`/`nbf`/`aud`/`iss` tekshiruvi, qisqa muddat, kalit rotatsiyasi (`kid` + JWKS), token'ni `localStorage` emas httpOnly cookie'da saqlash."
+ },
+ "30765": {
+  "a": "**`bcrypt.GenerateFromPassword` (cost ≥ 10–12) yoki `argon2id` — sekin, tuzli (salt) KDF; tekshiruv `bcrypt.CompareHashAndPassword`**\n\n- SHA-256 juda tez — GPU sekundiga milliardlab urinadi; salt'siz bo'lsa rainbow table. bcrypt/argon2id ataylab sekin va har parolga alohida salt qo'shadi.\n- Tuzoq: bcrypt faqat birinchi 72 baytni hisobga oladi (`golang.org/x/crypto/bcrypt` 72 baytdan uzunida xato qaytaradi).\n- Cost'ni server ~100–300 ms sarflaydigan qilib tanlang va login endpoint'ini rate-limit qiling — aks holda bcrypt o'zi DoS vektori."
+ },
+ "30766": {
+  "a": "**`html/template` kontekstga qarab (HTML, atribut, JS, URL) avtomatik escape qiladi va XSS'dan himoya qiladi; `text/template` hech narsa escape qilmaydi**\n\n- Foydalanuvchi ma'lumotini HTML'ga chiqarishda doim `html/template`.\n- Himoyani `template.HTML(userInput)` kabi tip konversiyasi o'chiradi — bu tiplar \"menga ishon\" degani, faqat ishonchli manbaga.\n- `text/template` email matni, config generatsiya kabi HTML bo'lmagan joylar uchun."
+ },
+ "30767": {
+  "a": "**Token bucket: `rate.NewLimiter(r, b)` — sekundiga `r` token to'ldiriladi, maksimal `b` (burst). `Allow()` darhol true/false qaytaradi (429 uchun), `Wait(ctx)` token bo'lguncha bloklanadi (outbound chaqiruvlarni sekinlatish uchun)**\n\n- Inbound API limitda `Allow` + `429 Too Many Requests` + `Retry-After`; outbound (uchinchi tomon API kvotasi) uchun `Wait(ctx)` — ctx deadline'ini hurmat qiladi.\n- Har foydalanuvchiga limiter: `map[key]*rate.Limiter` + mutex + eskirganlarini tozalash (aks holda leak).\n- Muhim cheklov: bu bitta jarayon ichida — 10 replika bo'lsa umumiy limit 10x; global limit uchun Redis (GCRA, sliding window) kerak."
+ },
+ "30768": {
+  "a": "**Doimiy 1s kutish (backoff/jitter yo'q — thundering herd), 5xx/429 javoblari retry qilinmaydi (`err == nil`), ctx hisobga olinmaydi, body bor so'rovni qayta yuborib bo'lmaydi, non-idempotent POST takrorlanishi mumkin**\n\n- To'g'ri retry: exponential backoff + full jitter (`rand.N(base<<i)`), `Retry-After` ni hurmat qilish, `select { case <-time.After(d): case <-ctx.Done(): return }`, faqat vaqtinchalik xatolar (timeout, 502/503/504, 429) va faqat idempotent so'rovlar (yoki Idempotency-Key bilan).\n- `req.Body` birinchi urinishda o'qilib bo'ladi — `req.GetBody` yoki har safar yangi `http.Request`.\n- Har urinishda `resp.Body.Close()`."
+ },
+ "30769": {
+  "a": "**Closed (oddiy) → xatolar chegaradan oshsa Open (darhol xato qaytaradi, downstream'ga bormaydi) → kutishdan keyin Half-open (bir nechta sinov so'rovi) → muvaffaqiyatli bo'lsa Closed**\n\n- Maqsad: o'layotgan downstream'ga so'rov yuborib goroutine, connection va vaqtni band qilmaslik — fail fast va unga tiklanishga imkon berish.\n- Go'da `sony/gobreaker` keng tarqalgan.\n- Breaker, timeout, retry va bulkhead (concurrency limit, masalan semaphore) birga ishlaydi: retry breaker ichida bo'lsin."
+ },
+ "30770": {
+  "a": "**`golang.org/x/sync/semaphore.Weighted` (`Acquire(ctx, n)`), buferli kanal (`make(chan struct{}, N)`), yoki `errgroup.SetLimit(N)`**\n\n- Kanal semaforasi oddiy, lekin og'irlik (bitta ish 3 birlik) va ctx bilan bekor qilish uchun `semaphore.Weighted` qulay: `if err := sem.Acquire(ctx, 1); err != nil { return err }; defer sem.Release(1)`.\n- `errgroup.SetLimit` — goroutine sonini cheklaydi, `Go` bloklanadi.\n- Rate limiter (vaqt birligida nechta) va bulkhead (bir vaqtda nechta) — turli narsalar; ko'pincha ikkalasi kerak."
+ },
+ "30771": {
+  "a": "**`01` — `break` `yield`ning `false` qaytarishiga aylanadi va iterator to'xtaydi**\n\n- Go 1.23 range-over-func: `iter.Seq[V]` — `func(yield func(V) bool)`.\n- Loop tanasi `yield` ichida chaqiriladi; `break`, `return`, `goto` tanadan chiqqanda `yield` `false` qaytaradi va iterator darhol qaytishi shart.\n- Stdlib: `slices.All/Values/Collect/Sorted`, `maps.Keys/Values`, `strings.SplitSeq` (1.24)."
+ },
+ "30772": {
+  "a": "**Runtime panic: `range function continued iteration after function for loop body returned false`**\n\n- `yield` `false` qaytargandan keyin uni qayta chaqirish taqiqlangan — runtime buni tekshiradi va panic beradi.\n- Aks holda `break` dan keyin tana yana bajarilib, `defer` va `return` semantikasi buziladi.\n- Iterator yozishning qoidasi: har `yield` natijasini tekshiring; resurs (fayl, rows) ochilgan bo'lsa `defer` bilan yoping — erta `break`da ham ishlaydi."
+ },
+ "30773": {
+  "a": "**`6` — `~int` underlying tipi `int` bo'lgan barcha tiplarni qamraydi, `T` argumentdan aniqlanadi (type inference)**\n\n- `~T` — \"underlying type T\" bo'lgan tiplar to'plami.\n- `~` siz `int | float64` bo'lsa `MyInt` (va `time.Duration` kabi) mos kelmaydi.\n- Operator (`+`, `<`) faqat type set'dagi hamma tip uni qo'llasa ruxsat."
+ },
+ "30774": {
+  "a": "**Metodlar o'zining type parametriga ega bo'la olmaydi: `func (c *Cache[K,V]) Map[R any](...)` — kompilyatsiya xatosi; type parameter'ni faqat tip e'lonida berish yoki erkin funksiya yozish kerak**\n\n- Sabab — interfeys metod to'plami va dinamik dispatch bilan generic metodlarni birlashtirish muammosi.\n- Shuning uchun `slices.Map` yo'q, faqat erkin funksiyalar.\n- Boshqa cheklovlar: type switch faqat `any(v)` orqali, type parameter'ni struct'ga embed qilib bo'lmaydi, generic type alias Go 1.24 da qo'shildi."
+ },
+ "30775": {
+  "a": "**Tag oddiy satr — faqat `reflect` orqali o'qiladi; xato yozilgan tag (`json:name` qo'shtirnoqsiz, `json: \"name\"` probel bilan) jim e'tiborsiz qoldiriladi, uni `go vet` (structtag) ushlaydi**\n\n- Format: `` `json:\"name,omitempty\" db:\"name\" validate:\"required\"` `` — kalit:\"qiymat\" juftlari probel bilan ajratiladi.\n- `json:\"-\"` — maydon o'tkazib yuboriladi, `json:\"-,\"` — kalit nomi `-`.\n- Go 1.24 `omitzero` — `time.Time{}` kabi struct zero value'larini tashlab yuborish (`omitempty` struct uchun ishlamaydi)."
+ },
+ "30776": {
+  "a": "**Iste'molchi tomonda kichik interfeys e'lon qilib, testda qo'lda yozilgan fake berish; HTTP uchun `httptest.NewServer`; mock generator (gomock/mockery) faqat interaksiya tekshiruvi kerak bo'lganda**\n\n- Go'da monkey-patching yo'q (`go:linkname` hiylalari ishonchsiz). \"Accept interfaces, return structs\" — servis `type Charger interface{ Charge(ctx, Amount) error }` qabul qiladi.\n- Fake — holatli, haqiqatga yaqin (in-memory repo) va refactoring'ga chidamli; gomock/mockery `EXPECT().Times(1)` testlari implementatsiyaga bog'lanib mo'rt bo'ladi.\n- HTTP client uchun `httptest.Server` haqiqiy serialization va status code'larni ham tekshiradi."
+ },
+ "30777": {
+  "a": "**Go 1.22+ da muammo yo'q; Go 1.21 va oldin `t.Parallel` bilan hamma subtest oxirgi `tc` ni ko'radi — `tc := tc` kerak edi**\n\n- `t.Parallel()` subtest'ni to'xtatib turadi va loop tugagandan keyin davom ettiradi.\n- Go 1.22 gacha loop o'zgaruvchisi bitta edi — barcha subtestlar oxirgi qiymatni tekshirib, yashil o'tardi (bug yashirinadi!). 1.22+ (go.mod `go 1.22`) har iteratsiya yangi o'zgaruvchi.\n- Qo'shimcha: `t.Fatalf` xabarida `want` ham bo'lsin, `got != want` uchun murakkab tiplarda `cmp.Diff`, test nomlari unikal bo'lsin (`-run TestAbs/neg`)."
+ },
+ "30778": {
+  "a": "**`assert` xato bo'lsa testni davom ettiradi, `require` darhol to'xtatadi (`t.FailNow`); nil pointer bilan davom etib panic olmaslik uchun oldingi shartlarda `require` ishlatiladi**\n\n- Go jamoasi uslubi — `if got != want { t.Errorf(...) }` + `go-cmp`; testify esa sanoatda keng tarqalgan.\n- Tuzoq: `require` faqat test goroutine'ida ishlaydi — ichki goroutine'dan `t.FailNow` chaqirish taqiqlangan (test osilishi mumkin).\n- `assert.Equal(t, expected, actual)` argument tartibi — xato xabari teskari bo'lib qolmasin."
+ },
+ "30779": {
+  "a": "**Build tag (`//go:build integration`) yoki `testing.Short()` / env tekshiruvi bilan `t.Skip`; CI'da alohida bosqich `go test -tags=integration ./...`; Postgres/Kafka uchun testcontainers**\n\n- `go test ./...` tez va tashqi bog'liqliksiz bo'lishi kerak.\n- Integration testlar: `TestMain` da konteyner ko'tarish va migratsiya, har test o'z sxemasi/tranzaksiyasi (rollback) bilan izolyatsiya, `t.Cleanup`.\n- `-count=1` keshni o'chiradi (tashqi holatga bog'liq testlar keshlanmasin)."
+ },
+ "30780": {
+  "a": "**`go.work` — lokal ishlab chiqishda bir nechta modulni birga tahrirlash (`replace` yozmasdan); odatda commit qilinmaydi. `go mod vendor` — bog'liqliklarni repo ichiga nusxalash (offline/air-gapped build, audit); `go 1.14+` `vendor/` bo'lsa avtomatik `-mod=vendor`**\n\n- `go work init ./api ./lib` — `api` `lib` ning lokal versiyasini ko'radi.\n- Tuzoq: `go.work` CI'ga tushib qolsa, build go.mod'dagi versiya emas lokal kod bilan o'tadi — `GOWORK=off` bilan tekshiring.\n- Go 1.22+ workspace vendoring (`go work vendor`) ham bor."
+ },
+ "30816": {
+  "a": "**Har ulanishga bitta o'quvchi va bitta yozuvchi goroutine; boshqalar yozuvchiga buferli kanal orqali yuboradi.**\n\n- Ikki goroutine parallel `WriteMessage` — `concurrent write to websocket connection` panic.\n- `SetReadDeadline` + ping/pong — o'lik ulanishlarni topish.\n- `SetReadLimit` — katta xabar bilan DoS'dan himoya."
+ },
+ "30817": {
+  "a": "**Har client'ga buferli `send` kanal va bloklanmaydigan yuborish: bufer to'lsa — sekin client'ni uzish yoki xabarni tashlash.**\n\n- Broadcast hech qachon tarmoqqa to'g'ridan-to'g'ri yozmasin.\n- `writePump` da `SetWriteDeadline`.\n- Siyosat: uzish (chat) yoki eng eskisini tashlash (narx oqimi)."
+ },
+ "30818": {
+  "a": "**Pod'lar orasida pub/sub (Redis/NATS/Kafka): har pod faqat o'z ulanishlariga yetkazadi.**\n\n- LB: Upgrade header, idle timeout > ping interval.\n- Deploy/scale: ulanishlar uziladi — client reconnect + jitter, `last_event_id` bilan qayta tiklash.\n- Ulanish soni metrika va pod limiti (FD, xotira ~ har ulanishga buferlar)."
+ },
+ "30819": {
+  "a": "**`map[K]*list.Element` + `container/list`: Get — `MoveToFront`, Put — `PushFront`, sig'imdan oshsa `Back()` ni o'chirish. Hammasi O(1).**\n\n- Ro'yxat elementida kalit ham saqlanadi — evict'da map'dan o'chirish uchun.\n- `Get` ham yozuv (tartib o'zgaradi) — RWMutex foyda bermaydi."
+ },
+ "30820": {
+  "a": "**Sharding: kalit hash'i bo'yicha 16–256 ta mustaqil LRU, har biri o'z mutex'i bilan; yoki ristretto/otter kabi contention'ga mo'ljallangan kesh.**\n\n- RWMutex foydasiz — Get ham yozadi.\n- Sharded LRU global emas, shard ichida aniq LRU — odatda yetarli.\n- O'lchang: mutex profil, hit ratio."
+ },
+ "30821": {
+  "a": "**Katta kesh = katta tirik heap: GC mark vaqti va xotira cho'qqisi oshadi.**\n\n- Cheklov baytlar bo'yicha (+ TTL), yozuvlar soni bo'yicha emas.\n- `GOMEMLIMIT` konteyner limitidan pastroq.\n- Juda katta: pointersiz kesh (bigcache/freecache) yoki Redis.\n- Har replika o'z keshi — invalidatsiya va hit ratio'ni hisobga oling."
+ },
+ "30842": {
+  "a": "**O'zgartirsa, katta bo'lsa yoki mutex bo'lsa — pointer (`*T`); kichik va o'zgarmas bo'lsa — value (`T`). Bitta tipda bir xil.**\n\n- Value receiver nusxa ustida ishlaydi — o'zgarish chaqiruvchiga yetmaydi.\n- `*T` method set'i `T` metodlarini ham o'z ichiga oladi."
+ },
+ "30843": {
+  "a": "**Ha, `range` paytida `delete` xavfsiz — `0` chiqadi.**\n\n- Qo'shish ham panic bermaydi, lekin yangi element chiqishi kafolatlanmaydi.\n- Parallel goroutine'dan yozish — fatal error.\n- Hammasini o'chirish uchun Go 1.21+ `clear(m)`."
+ },
+ "30844": {
+  "a": "**`1024`. Untyped konstanta ishlatilgan joyda tipga keltiriladi; `int32` ga sig'masa — kompilyatsiya xatosi.**\n\n- `time.Second * 2` ishlaydi — 2 untyped.\n- `d := 2; time.Second * d` — xato: `int` va `Duration` aralashmaydi."
+ },
+ "30845": {
+  "a": "**Ma'lumot kerak bo'lsa — struct tip + `errors.As`; faqat holat kerak bo'lsa — sentinel `errors.New` + `errors.Is`.**\n\n- Pointer receiver bilan `Error()` va `return &ValidationError{...}`.\n- Asl xato bo'lsa `Unwrap() error`."
+ },
+ "30846": {
+  "a": "**`Add` — `go` dan oldin, `Done` — `defer` bilan, `Wait` — oxirida. Go 1.25+: `wg.Go(func(){...})`.**\n\n- WaitGroup'ni qiymat bilan uzatmang.\n- Xato yig'ish va bekor qilish — `errgroup`."
+ },
+ "30847": {
+  "a": "**Har kutishda `select { case <-ctx.Done(): return ctx.Err() ... }` va `ctx` ni ichki chaqiruvlarga uzatish.**\n\n- `ctx` — birinchi parametr, struct maydoni emas.\n- `context.WithCancel/Timeout` dan qaytgan `cancel` ni doim `defer cancel()`."
+ },
+ "30848": {
+  "a": "**Yozuvchi yopadi; bir nechta yozuvchi bo'lsa — hammasi tugagach koordinator (`wg.Wait(); close(ch)`).**\n\n- Yopilgan kanalga yozish — panic.\n- Kanalni yopish shart emas, agar hech kim `range` qilmasa — GC uni yig'adi."
+ },
+ "30849": {
+  "a": "**`NewTicker` + `defer Stop()` + `select` ichida `ctx.Done()`.**\n\n- `time.Tick` ni uzoq yashovchi bo'lmagan kodda ishlatmang (to'xtatib bo'lmaydi).\n- Sekin ish tick'larni o'tkazib yuboradi — navbat to'planmaydi."
+ },
+ "30850": {
+  "a": "**`t.Helper()` — xato qatori chaqiruvchi testni ko'rsatadi; `t.Cleanup` — test tugaganda tozalash (subtestlardan keyin, LIFO).**\n\n- `defer` yordamchi qaytganda ishlardi — juda erta.\n- `t.TempDir()`, `t.Setenv()` o'zi Cleanup ishlatadi."
+ },
+ "30851": {
+  "a": "**Hajm ma'lum bo'lsa `make([]T, 0, n)` — bitta allocation, qayta ko'chirishlar yo'q.**\n\n- `make([]T, n)` + `append` — xato: boshida n ta zero element qoladi.\n- Map: `make(map[K]V, n)`."
+ },
+ "30852": {
+  "a": "**`func BenchmarkX(b *testing.B) { for b.Loop() { ... } }` → `go test -run=^$ -bench=X -benchmem`.**\n\n- `-run=^$` — oddiy testlarni o'tkazib yuborish.\n- ns/op, B/op, allocs/op.\n- Solishtirish: `-count=10` + `benchstat`."
+ },
+ "30853": {
+  "a": "**`import _ \"net/http/pprof\"` + ichki port; `go tool pprof -http=: host:6060/debug/pprof/profile?seconds=30`.**\n\n- Endpoint'ni tashqariga ochmang.\n- `top`, `list Func`, flame graph (`-http`).\n- heap, goroutine, block, mutex profillari ham bor."
+ },
+ "30854": {
+  "a": "**Tartib: `Header().Set(...)` → `WriteHeader(code)` → `Write`/`Encode`. Bu kodda `Content-Type` yuborilmaydi.**\n\n- `Write` birinchi bo'lsa status avtomatik 200.\n- Keyingi `WriteHeader` — \"superfluous\" ogohlantirish, ta'sirsiz."
+ },
+ "30855": {
+  "a": "**`MaxBytesReader` (hajm) + `Decoder.DisallowUnknownFields` + xatoda 400 + alohida validatsiya.**\n\n- Hajm oshsa — `*http.MaxBytesError`, 413 qaytaring.\n- `json.Unmarshal` turni tekshiradi, lekin majburiy maydonni emas."
+ },
+ "30856": {
+  "a": "**`QueryRowContext(...).Scan(...)`; `errors.Is(err, sql.ErrNoRows)` — topilmadi.**\n\n- NULL ustun — `sql.NullString` / `*string`, aks holda Scan xatosi.\n- Parametrlar `$1` bilan — SQL injection yo'q.\n- Ko'p qator — `QueryContext` + `defer rows.Close()` + `rows.Err()`."
+ },
+ "30857": {
+  "a": "**`slog.New(slog.NewJSONHandler(...))` + `slog.Info(\"msg\", \"key\", val, ...)`; umumiy maydonlar — `logger.With(...)`.**\n\n- Xabar o'zgarmas, ma'lumot — atributlarda.\n- Daraja: Debug/Info/Warn/Error.\n- Maxfiy ma'lumot (parol, token) log qilinmasin."
+ },
+ "30858": {
+  "a": "**Env'dan bir marta `main` da o'qish → typed `Config` struct → xato bo'lsa start'da to'xtash → struct'ni uzatish.**\n\n- Default + majburiy tekshiruv + parse.\n- Kod ichida `os.Getenv` ni tarqatib yubormang.\n- Sirlar (parol) logga chiqmasin."
+ },
+ "30859": {
+  "a": "**`0 1 2`, keyin `deadlock!` — producer kanalni yopmagan, `range` abadiy kutadi.**\n\n- Yechim: producer'da `defer close(ch)`.\n- Serverda boshqa goroutine'lar bo'lsa deadlock aniqlanmaydi — jim goroutine leak."
+ },
+ "30860": {
+  "a": "**`sync.Mutex` reentrant emas: `Incr` lock ostida `Get` ni chaqiradi, `Get` yana `Lock` qiladi — o'zini abadiy kutadi.**\n\n- Yechim: lock'siz ichki yordamchi (`getLocked`) va lock faqat public metodlarda.\n- RWMutex'da ham `RLock` ichida `Lock` — deadlock."
+ }
+}

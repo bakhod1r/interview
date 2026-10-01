@@ -431,6 +431,133 @@
       "section": "g3",
       "question": "Konteynerda (limit 2GiB) Go servis OOMKilled bo'lyapti, heap esa ~1.2GiB. Nima qilasiz?",
       "explanation": "GOGC=100 da heap keyingi GC'gacha tirik xotiradan 2 marta o'sishi mumkin — 1.2GiB tirik ⇒ 2.4GiB cho'qqi. GOMEMLIMIT (Go 1.19+) soft limit: yetishmasa GC ko'proq CPU sarflaydi (death spiral'dan himoya bor). Go 1.25+ da GOMAXPROCS cgroup CPU limitini hisobga oladi; eskiroqlarda automaxprocs kerak edi."
+    },
+    {
+      "id": 30776,
+      "code": "SN590",
+      "level": "S",
+      "type": "card",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go'da tashqi bog'liqlikni (masalan, to'lov API) testda almashtirishning idiomatik usuli?",
+      "explanation": "Go'da monkey-patching yo'q (`go:linkname` hiylalari ishonchsiz). \"Accept interfaces, return structs\" — servis `type Charger interface{ Charge(ctx, Amount) error }` qabul qiladi. Fake — holatli, haqiqatga yaqin (in-memory repo) va refactoring'ga chidamli; gomock/mockery `EXPECT().Times(1)` testlari implementatsiyaga bog'lanib mo'rt bo'ladi. HTTP client uchun `httptest.Server` haqiqiy serialization va status code'larni ham tekshiradi. DB uchun testcontainers bilan haqiqiy Postgres."
+    },
+    {
+      "id": 30777,
+      "code": "SN591",
+      "level": "M",
+      "type": "card",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Table-driven testdagi muammo?",
+      "snippet": "tests := []struct{ name string; in, want int }{\n    {\"zero\", 0, 0}, {\"neg\", -1, 1},\n}\nfor _, tc := range tests {\n    t.Run(tc.name, func(t *testing.T) {\n        t.Parallel()\n        if got := Abs(tc.in); got != tc.want {\n            t.Fatalf(\"Abs(%d) = %d\", tc.in, got)\n        }\n    })\n}",
+      "explanation": "`t.Parallel()` subtest'ni to'xtatib turadi va loop tugagandan keyin davom ettiradi. Go 1.22 gacha loop o'zgaruvchisi bitta edi — barcha subtestlar oxirgi qiymatni tekshirib, yashil o'tardi (bug yashirinadi!). 1.22+ (go.mod `go 1.22`) har iteratsiya yangi o'zgaruvchi. Qo'shimcha: `t.Fatalf` xabarida `want` ham bo'lsin, `got != want` uchun murakkab tiplarda `cmp.Diff`, test nomlari unikal bo'lsin (`-run TestAbs/neg`)."
+    },
+    {
+      "id": 30778,
+      "code": "SN592",
+      "level": "S",
+      "type": "card",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "`testify` (`assert`/`require`) haqida qaysi gap to'g'ri?",
+      "explanation": "Go jamoasi uslubi — `if got != want { t.Errorf(...) }` + `go-cmp`; testify esa sanoatda keng tarqalgan. Tuzoq: `require` faqat test goroutine'ida ishlaydi — ichki goroutine'dan `t.FailNow` chaqirish taqiqlangan (test osilishi mumkin). `assert.Equal(t, expected, actual)` argument tartibi — xato xabari teskari bo'lib qolmasin. `suite` paketi parallel testlar bilan mos emas."
+    },
+    {
+      "id": 30779,
+      "code": "SN593",
+      "level": "S",
+      "type": "card",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Integration testlarni unit testlardan qanday ajratasiz?",
+      "explanation": "`go test ./...` tez va tashqi bog'liqliksiz bo'lishi kerak. Integration testlar: `TestMain` da konteyner ko'tarish va migratsiya, har test o'z sxemasi/tranzaksiyasi (rollback) bilan izolyatsiya, `t.Cleanup`. `-count=1` keshni o'chiradi (tashqi holatga bog'liq testlar keshlanmasin). `-race` CI'da doim, `-shuffle=on` testlar orasidagi yashirin bog'liqlikni ochadi."
+    },
+    {
+      "id": 30819,
+      "code": "SN598",
+      "level": "S",
+      "type": "card",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go'da O(1) LRU keshni qanday yozasiz?",
+      "snippet": "type entry struct {\n    key string\n    val []byte\n}\n\ntype LRU struct {\n    mu    sync.Mutex\n    cap   int\n    ll    *list.List               // old: front = eng yangi\n    items map[string]*list.Element\n}\n\nfunc (c *LRU) Get(k string) ([]byte, bool) {\n    c.mu.Lock()\n    defer c.mu.Unlock()\n    if e, ok := c.items[k]; ok {\n        c.ll.MoveToFront(e)\n        return e.Value.(*entry).val, true\n    }\n    return nil, false\n}\n\nfunc (c *LRU) Put(k string, v []byte) {\n    c.mu.Lock()\n    defer c.mu.Unlock()\n    if e, ok := c.items[k]; ok {\n        e.Value.(*entry).val = v\n        c.ll.MoveToFront(e)\n        return\n    }\n    c.items[k] = c.ll.PushFront(&entry{k, v})\n    if c.ll.Len() > c.cap {\n        old := c.ll.Back()\n        c.ll.Remove(old)\n        delete(c.items, old.Value.(*entry).key)\n    }\n}",
+      "explanation": "LRU = hash map (kalit → element) + ikki tomonlama bog'langan ro'yxat (foydalanish tartibi). `Get` elementni ro'yxat boshiga ko'chiradi, `Put` boshiga qo'shadi va sig'imdan oshsa oxiridagini (eng uzoq ishlatilmaganini) o'chiradi. Hammasi O(1). `container/list` yoki o'z ro'yxatingiz; `Get` ham tartibni o'zgartirgani uchun oddiy Mutex kerak."
+    },
+    {
+      "id": 30820,
+      "code": "SN599",
+      "level": "St",
+      "type": "card",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Yuqori yuklamali servisda LRU kesh mutex'i profilda issiq nuqta. Nima qilasiz?",
+      "explanation": "LRU'da `Get` ham ro'yxatni o'zgartiradi, shuning uchun har murojaat eksklyuziv lock oladi — RWMutex yordam bermaydi. Yechimlar: kalit hash'i bo'yicha N ta mustaqil shard (har biri o'z mutex'i va LRU'si); tartibni har o'qishda emas, namunaviy yangilash; yoki lock'siz o'qishga mo'ljallangan kesh (ristretto: buferlangan Get hodisalari va TinyLFU admission, otter: S3-FIFO). Har yechimda aniq LRU semantikasidan biroz voz kechiladi."
+    },
+    {
+      "id": 30821,
+      "code": "SN600",
+      "level": "S",
+      "type": "card",
+      "topic": "Memory",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go servisida in-process kesh (LRU) xotira va GC'ga qanday ta'sir qiladi va qanday sozlanadi?",
+      "explanation": "Millionlab yozuvli `map[string]*entry` — har yozuv bir nechta heap obyekt va pointer; GC har siklda ularni skanerlaydi (mark vaqti tirik heap'ga proporsional), tirik heap katta bo'lgani uchun GOGC=100 da cho'qqi 2x. Sig'imni yozuvlar soni emas, baytlar bo'yicha cheklash, TTL qo'shish, `GOMEMLIMIT` qo'yish; juda katta keshlar uchun pointersiz saqlash (bigcache/freecache: katta `[]byte` bo'laklar + `map[uint64]uint32` indeks) — GC skanerlashi deyarli nolga tushadi."
+    },
+    {
+      "id": 30850,
+      "code": "SN609",
+      "level": "M",
+      "type": "card",
+      "topic": "Testing",
+      "domain": "go",
+      "section": "g3",
+      "question": "`t.Helper()` va `t.Cleanup()` nima beradi?",
+      "snippet": "func newTestDB(t *testing.T) *sql.DB {\n    t.Helper()\n    db, err := sql.Open(\"pgx\", testDSN)\n    if err != nil {\n        t.Fatalf(\"open: %v\", err)\n    }\n    t.Cleanup(func() { db.Close() })\n    return db\n}",
+      "explanation": "`t.Helper()` — yordamchi funksiyani belgilaydi: xato xabari yordamchi ichidagi qatorni emas, uni chaqirgan test qatorini ko'rsatadi. `t.Cleanup(f)` — test (va uning subtestlari) tugaganda `f` ni LIFO tartibda chaqiradi; yordamchi funksiya resursni o'zi ochib, tozalashni ham o'zi ro'yxatdan o'tkaza oladi."
+    },
+    {
+      "id": 30851,
+      "code": "SN610",
+      "level": "M",
+      "type": "card",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Slice'ga `append` qilishda nega oldindan sig'im (`make([]T, 0, n)`) berish tavsiya etiladi?",
+      "snippet": "out := make([]Item, 0, len(rows))\nfor _, r := range rows {\n    out = append(out, convert(r))\n}",
+      "explanation": "Sig'im yetmaganda `append` yangi, kattaroq massiv ajratadi va barcha elementlarni ko'chiradi; n element uchun bir necha qayta ajratish va nusxa bo'ladi. Hajm oldindan ma'lum bo'lsa `make([]T, 0, n)` bitta allocation bilan hal qiladi. Map uchun ham `make(map[K]V, n)`."
+    },
+    {
+      "id": 30852,
+      "code": "SN611",
+      "level": "M",
+      "type": "card",
+      "topic": "Performance",
+      "domain": "go",
+      "section": "g3",
+      "question": "Oddiy benchmark qanday yoziladi va ishga tushiriladi?",
+      "snippet": "func BenchmarkParse(b *testing.B) {\n    data := loadFixture()\n    b.ReportAllocs()\n    for b.Loop() {\n        Parse(data)\n    }\n}",
+      "explanation": "`_test.go` faylda `BenchmarkXxx(b *testing.B)`; Go 1.24+ `for b.Loop()` (oldin `for i := 0; i < b.N; i++` + `b.ResetTimer()`). Ishga tushirish: `go test -run=^$ -bench=Parse -benchmem -count=10`. Natija: ns/op, B/op, allocs/op; solishtirish `benchstat` bilan."
+    },
+    {
+      "id": 30853,
+      "code": "SN612",
+      "level": "M",
+      "type": "card",
+      "topic": "Tracing",
+      "domain": "go",
+      "section": "g3",
+      "question": "Go servisiga pprof'ni qanday ulaysiz va CPU profilni qanday olasiz?",
+      "snippet": "import _ \"net/http/pprof\"\n\ngo func() {\n    log.Println(http.ListenAndServe(\"127.0.0.1:6060\", nil))\n}()",
+      "explanation": "`net/http/pprof` import qilinsa `/debug/pprof/` handler'lari `DefaultServeMux` ga qo'shiladi; uni faqat ichki portda (localhost/admin) oching. CPU profil: `go tool pprof -http=: http://localhost:6060/debug/pprof/profile?seconds=30`. Heap — `/heap`, goroutine — `/goroutine`."
     }
   ]
 }

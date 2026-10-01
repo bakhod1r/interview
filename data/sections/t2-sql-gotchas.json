@@ -235,6 +235,76 @@
       "section": "t2",
       "question": "`SELECT count(*)` katta jadvalda sekin. PostgreSQL'da nega va nima qilinadi?",
       "explanation": "MySQL InnoDB'da ham shunday. Amaliy yechimlar: UI'da 'taxminan N natija' (reltuples yoki `EXPLAIN` bahosi), filtrlangan sanoq uchun alohida agregat jadval (trigger yoki eventdan yangilanadi), yoki `count(*) OVER ()` bilan faqat joriy sahifa kontekstida. `count(1)` va `count(*)` bir xil tezlikda."
+    },
+    {
+      "id": 30810,
+      "code": "PG17",
+      "level": "J",
+      "type": "card",
+      "topic": "SQL gotcha",
+      "domain": "db",
+      "section": "t2",
+      "question": "Bitta tranzaksiya ichida 5 soniya farq bilan ikki marta <code>SELECT now();</code> chaqirildi. Natija?",
+      "snippet": "BEGIN;\nSELECT now();\nSELECT pg_sleep(5);\nSELECT now();\nCOMMIT;",
+      "explanation": "Ikkalasi bir xil: `now()` = `transaction_timestamp()` — tx boshlangan vaqt. Haqiqiy joriy vaqt: `clock_timestamp()` (har chaqiruvda o'zgaradi), `statement_timestamp()` — statement boshlanishi. Uzoq batch tx'da `created_at DEFAULT now()` barcha row'larga bir xil vaqt beradi."
+    },
+    {
+      "id": 30811,
+      "code": "PG18",
+      "level": "M",
+      "type": "card",
+      "topic": "SQL gotcha",
+      "domain": "db",
+      "section": "t2",
+      "question": "<code>created_at timestamptz</code>. Bu query 1-oktabr kunining hamma buyurtmalarini qaytaradimi?",
+      "snippet": "SELECT * FROM orders\nWHERE created_at BETWEEN '2026-10-01' AND '2026-10-02';",
+      "explanation": "Yo'q, to'g'ri emas: BETWEEN ikkala chegarani o'z ichiga oladi — 2-oktabr 00:00:00 dagi buyurtmalar ham kiradi (ikki kunga tushadi). `'2026-10-01'` va `'2026-10-31'` yozilsa esa 31-oktabrning 00:00 dan keyingisi tushib qoladi. To'g'ri: yarim ochiq oraliq `>= '2026-10-01' AND < '2026-10-02'`. Qo'shimcha: chegara session TimeZone'da talqin qilinadi."
+    },
+    {
+      "id": 30812,
+      "code": "PG19",
+      "level": "M",
+      "type": "card",
+      "topic": "SQL gotcha",
+      "domain": "db",
+      "section": "t2",
+      "question": "<code>CREATE INDEX ON users(email);</code> bor. Nega bu query'lar index'ni ishlatmaydi?",
+      "snippet": "SELECT * FROM users WHERE lower(email) = 'ali@x.uz';\nSELECT * FROM users WHERE email LIKE 'ali%';      -- lc_collate = en_US.UTF-8\nSELECT * FROM users WHERE email ILIKE 'ali@x.uz';",
+      "explanation": "1) Funksiya column ustida — index `email` bo'yicha, `lower(email)` bo'yicha emas: expression index kerak. 2) Non-C collation'da oddiy B-tree prefix LIKE uchun ishlamaydi — `text_pattern_ops` operator class yoki C collation. 3) ILIKE B-tree'ni ishlatmaydi — `lower()` expression index yoki `citext`, yoki `pg_trgm` GIN."
+    },
+    {
+      "id": 30813,
+      "code": "PG20",
+      "level": "M",
+      "type": "card",
+      "topic": "SQL gotcha",
+      "domain": "db",
+      "section": "t2",
+      "question": "<code>SELECT count(*) FROM events;</code> (200M row) nega sekin va UI'dagi \"jami\" uchun nima qilasiz?",
+      "explanation": "MVCC: har row versiyasining ko'rinishi tx'ga bog'liq — count saqlanmaydi, skan kerak (parallel seq scan yoki index-only scan + visibility map). Yechimlar: taxminiy son `pg_class.reltuples` yoki `EXPLAIN` estimate; trigger/counter table (hot row ehtiyot); kesh; UI'da \"10 000+\" ko'rsatish. MySQL MyISAM'dagi tez count InnoDB'da ham yo'q."
+    },
+    {
+      "id": 30814,
+      "code": "PG21",
+      "level": "S",
+      "type": "card",
+      "topic": "SQL gotcha",
+      "domain": "db",
+      "section": "t2",
+      "question": "Tasodifiy 1 ta row olish uchun <code>ORDER BY random() LIMIT 1</code> katta table'da nega yomon? Alternativa?",
+      "explanation": "Har row uchun random() hisoblab butun table'ni sort (top-N heapsort) qiladi — O(n). Alternativlar: `TABLESAMPLE SYSTEM/BERNOULLI` (taxminiy, tez), tasodifiy id oralig'idan `WHERE id >= random_id ORDER BY id LIMIT 1` (teshiklar bo'lsa notekis taqsimot), oldindan aralashtirilgan kesh ro'yxati."
+    },
+    {
+      "id": 30815,
+      "code": "PG22",
+      "level": "J",
+      "type": "card",
+      "topic": "SQL gotcha",
+      "domain": "db",
+      "section": "t2",
+      "question": "Natija nima?",
+      "snippet": "SELECT 5 / 2, 5 / 2.0, 1 / 3 * 3, avg(x) FROM (VALUES (1),(2)) t(x);",
+      "explanation": "`5/2 = 2` (integer bo'lish — kasr kesiladi), `5/2.0 = 2.5000000000000000` (numeric), `1/3*3 = 0` (avval 1/3=0), `avg = 1.5000000000000000` (avg integer uchun numeric qaytaradi). Foiz hisoblashda `count(*)/total*100` doim 0 beradi — `100.0 * a / b` yoki cast."
     }
   ]
 }

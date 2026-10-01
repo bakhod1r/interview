@@ -162,6 +162,105 @@
       "section": "d2",
       "question": "Ko'p-ko'pga (many-to-many) bog'lanishda qo'shimcha atributlar paydo bo'ldi. Nima qilinadi?",
       "explanation": "Bu DDD'dagi muhim signal: bog'lanishning o'zi biznes tushunchasi bo'lib chiqadi ('ro'yxatdan o'tish', 'a'zolik', 'tayinlash') va u haqida hodisalar bo'ladi (bekor qilindi, uzaytirildi). Texnik tomondan ham qulay: unique constraint (`student_id, course_id`), tarix va status shu jadvalda tabiiy joylashadi."
+    },
+    {
+      "id": 30797,
+      "code": "PG4",
+      "level": "S",
+      "type": "card",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Xona bron qilish tizimi: bitta xonaga vaqt oralig'i kesishadigan ikki bron tushmasligi kerak. DB darajasida qanday kafolatlaysiz?",
+      "explanation": "EXCLUDE constraint: `EXCLUDE USING gist (room_id WITH =, during WITH &&)` — `tstzrange` va `btree_gist` extension. Ilovadagi \"avval tekshir, keyin yoz\" race beradi (write skew). Constraint parallel tx'larda ham ishlaydi: ikkinchisi kutadi yoki `23P01` xato oladi."
+    },
+    {
+      "id": 30798,
+      "code": "PG5",
+      "level": "M",
+      "type": "card",
+      "topic": "Keys",
+      "domain": "db",
+      "section": "d2",
+      "question": "<code>GENERATED AS IDENTITY</code> / <code>serial</code> ID'larida nega \"teshiklar\" (1, 2, 5, 6) paydo bo'ladi? Muammomi?",
+      "explanation": "Sequence tranzaksion emas: `nextval` rollback'da qaytmaydi, `ON CONFLICT` ham qiymat sarflaydi, crash/failover'da kesh (`CACHE`) va WAL oldindan log qilingan 32 qiymat yo'qoladi. Muammo emas — ID faqat unique bo'lishi kerak. Ketma-ket raqam (invoice raqami) kerak bo'lsa — alohida counter row lock bilan. `identity` > `serial` (standart, huquqlar oddiy)."
+    },
+    {
+      "id": 30799,
+      "code": "PG6",
+      "level": "M",
+      "type": "card",
+      "topic": "Types",
+      "domain": "db",
+      "section": "d2",
+      "question": "<code>timestamp</code> va <code>timestamptz</code> farqi? Qaysi birini ishlatasiz?",
+      "explanation": "`timestamptz` UTC'da saqlaydi, kirishda session `TimeZone` bo'yicha UTC'ga, chiqishda qayta aylantiradi — zona saqlanmaydi. `timestamp` — zonasiz \"devordagi soat\", kontekst yo'qoladi. Hodisa vaqti uchun deyarli doim `timestamptz`. `timestamp` — faqat \"har kuni 09:00 mahalliy\" kabi zona-mustaqil qiymatlar uchun (zonani alohida column'da saqlab)."
+    },
+    {
+      "id": 30800,
+      "code": "PG7",
+      "level": "S",
+      "type": "card",
+      "topic": "Types",
+      "domain": "db",
+      "section": "d2",
+      "question": "Qachon <code>jsonb</code> column to'g'ri tanlov, qachon anti-pattern?",
+      "explanation": "To'g'ri: haqiqatan o'zgaruvchan atributlar (product specs, integratsiya payload'lari, sozlamalar), kam filtrlanadigan maydonlar. Anti-pattern: tez-tez filtrlanadigan/join qilinadigan, constraint kerak bo'lgan, tez-tez yangilanadigan maydonlar. Statistika yo'q (planner taxmini yomon), qisman yangilash butun qiymatni qayta yozadi (TOAST), FK yo'q. GIN `jsonb_path_ops` bilan `@>` tez."
+    },
+    {
+      "id": 30801,
+      "code": "PG8",
+      "level": "S",
+      "type": "card",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "Postgres trigger'lari (va PL/pgSQL funksiyalari) qachon foydali, qachon xavfli?",
+      "explanation": "Foydali: audit log, `updated_at`, denormalizatsiyalangan counter, murakkab invariant (constraint bilan ifodalanmaydigan), outbox yozish. Xavfli: yashirin biznes mantiq (kodda ko'rinmaydi), har row'da overhead (bulk ishlar sekin), trigger zanjirlari, test/debug qiyin, hot row lock contention. Qoida: ma'lumot butunligi — DB'da; biznes oqimi — ilovada."
+    },
+    {
+      "id": 30835,
+      "code": "PG36",
+      "level": "M",
+      "type": "card",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "\"User'ning ko'p buyurtmasi bor\" va \"Talaba ko'p kursga yoziladi, kursda ko'p talaba\" — table'larda qanday modellashtirasiz?",
+      "explanation": "1:N — \"ko'p\" tomonda FK: `orders.user_id REFERENCES users(id)`. N:M — oraliq (junction) table: `enrollments(student_id, course_id)` PK yoki UNIQUE (ikkalasi), ikkala FK, ikkinchi yo'nalish uchun index. Massiv column (`course_ids int[]`) — FK yo'q, join qiyin — anti-pattern. 1:1 — FK + UNIQUE yoki bitta table."
+    },
+    {
+      "id": 30836,
+      "code": "PG37",
+      "level": "M",
+      "type": "card",
+      "topic": "Design",
+      "domain": "db",
+      "section": "d2",
+      "question": "<code>NOT NULL</code>, <code>DEFAULT</code>, <code>CHECK</code> constraint'lari nega ilovadagi validatsiyadan tashqari DB'da ham kerak?",
+      "explanation": "DB'ga yozadiganlar faqat bitta ilova emas: boshqa servislar, migratsiya skriptlari, qo'lda SQL, eski kod versiyalari. Constraint — oxirgi himoya chizig'i, har yo'lda ishlaydi va ma'lumot sifatini kafolatlaydi. Planner ham NOT NULL/CHECK'dan foydalanadi. Ilova validatsiyasi — yaxshi xato xabarlari uchun; DB constraint — to'g'rilik uchun."
+    },
+    {
+      "id": 30837,
+      "code": "PG38",
+      "level": "M",
+      "type": "card",
+      "topic": "Keys",
+      "domain": "db",
+      "section": "d2",
+      "question": "Foreign key'da <code>ON DELETE CASCADE</code>, <code>RESTRICT</code>, <code>SET NULL</code> — qachon qaysi biri?",
+      "explanation": "CASCADE — bola parent'siz ma'nosiz bo'lsa (order_items order bilan). RESTRICT/NO ACTION (default) — muhim tarixiy ma'lumot (user o'chirilsa buyurtmalari, to'lovlar) — tasodifiy ommaviy o'chirishdan himoya. SET NULL — bog'lanish ixtiyoriy (task.assignee_id). CASCADE xavfi: bitta DELETE millionlab row va uzoq lock; FK column'ga index bo'lmasa — seq scan."
+    },
+    {
+      "id": 30838,
+      "code": "PG39",
+      "level": "M",
+      "type": "card",
+      "topic": "Keys",
+      "domain": "db",
+      "section": "d2",
+      "question": "FK column'ga index qo'yish shartmi? Postgres uni avtomatik yaratadimi?",
+      "explanation": "Yo'q, Postgres FK uchun bola tomonda index yaratmaydi (faqat PK/UNIQUE uchun). Index bo'lmasa: parent DELETE/UPDATE har safar bola table'ni seq scan qiladi (lock uzoq), `JOIN ... ON child.parent_id` va `WHERE parent_id = ?` sekin. Deyarli har FK'ga index kerak; istisno — juda kichik table yoki hech qachon filtrlanmaydigan/parent o'chirilmaydigan holat."
     }
   ]
 }

@@ -612,6 +612,53 @@
       "section": "g2",
       "question": "`testing/synctest` (Go 1.25 da stabil) qanday muammoni hal qiladi?",
       "explanation": "`synctest.Test(t, func(t *testing.T){...})` izolyatsiyalangan \"bubble\" yaratadi, ichida `time.Now`, `time.Sleep`, timer'lar sohta soatda ishlaydi. `time.Sleep(time.Hour)` test'ni bir zumda o'tkazadi, `time.Sleep(10*time.Millisecond)` bilan \"kutib ko'rish\" kabi flaky testlar yo'qoladi. Cheklov: bubble'dan tashqaridagi I/O (haqiqiy tarmoq) \"durable blocking\" hisoblanmaydi — `net.Pipe` kabi in-memory fake ishlatiladi. Go 1.24 da `GOEXPERIMENT=synctest` bilan `synctest.Run` edi."
+    },
+    {
+      "id": 30846,
+      "code": "SN605",
+      "level": "M",
+      "type": "card",
+      "topic": "Sync",
+      "domain": "go",
+      "section": "g2",
+      "question": "`sync.WaitGroup` qanday to'g'ri ishlatiladi?",
+      "snippet": "var wg sync.WaitGroup\nfor _, id := range ids {\n    wg.Add(1)\n    go func() {\n        defer wg.Done()\n        process(id)\n    }()\n}\nwg.Wait()",
+      "explanation": "`Add` goroutine ishga tushishidan OLDIN chaqiruvchi goroutine'da, `Done` — `defer` bilan goroutine ichida, `Wait` — hammasi tugaguncha bloklaydi. WaitGroup nusxalanmaydi (pointer bilan uzatiladi). Go 1.25+ `wg.Go(f)` shu naqshni qisqartiradi. Xato qaytarish kerak bo'lsa — `errgroup`."
+    },
+    {
+      "id": 30847,
+      "code": "SN606",
+      "level": "M",
+      "type": "card",
+      "topic": "Context",
+      "domain": "go",
+      "section": "g2",
+      "question": "Uzoq ishlaydigan worker goroutine'ni `context` bilan qanday to'xtatasiz?",
+      "snippet": "func worker(ctx context.Context, jobs <-chan Job) error {\n    for {\n        select {\n        case <-ctx.Done():\n            return ctx.Err()\n        case j, ok := <-jobs:\n            if !ok {\n                return nil\n            }\n            if err := handle(ctx, j); err != nil {\n                return err\n            }\n        }\n    }\n}",
+      "explanation": "Har bloklanuvchi kutish `select` ichida `ctx.Done()` bilan birga yoziladi; `ctx` ichki chaqiruvlarga (DB, HTTP) ham uzatiladi. Bekor qilish `cancel()` yoki deadline orqali; funksiya `ctx.Err()` qaytaradi. `ctx` — birinchi argument, struct'da saqlanmaydi."
+    },
+    {
+      "id": 30848,
+      "code": "SN607",
+      "level": "M",
+      "type": "card",
+      "topic": "Channels",
+      "domain": "go",
+      "section": "g2",
+      "question": "Producer-consumer'da kanalni kim yopishi kerak va nega?",
+      "explanation": "Kanalni faqat yozuvchi (producer) tomon yopadi — yozish tugaganini bildirish uchun; o'quvchi `for v := range ch` bilan yopilguncha o'qiydi. Bir nechta yozuvchi bo'lsa, ularning hammasi tugagach (WaitGroup) alohida koordinator yopadi. O'quvchi yopsa, yozuvchi yopilgan kanalga yozib panic qiladi."
+    },
+    {
+      "id": 30849,
+      "code": "SN608",
+      "level": "M",
+      "type": "card",
+      "topic": "Concurrency",
+      "domain": "go",
+      "section": "g2",
+      "question": "`time.Ticker` bilan davriy ishni qanday to'g'ri yozasiz?",
+      "snippet": "t := time.NewTicker(30 * time.Second)\ndefer t.Stop()\nfor {\n    select {\n    case <-t.C:\n        refresh()\n    case <-ctx.Done():\n        return\n    }\n}",
+      "explanation": "`time.NewTicker` + `defer t.Stop()` + `select` bilan `ctx.Done()`. `time.Tick` qaytargan ticker'ni to'xtatib bo'lmaydi (Go 1.23 dan oldin u hech qachon GC qilinmasdi). Ish tick'dan uzoq davom etsa, ticker kechikkan tick'larni yig'maydi — kanal buferida eng ko'pi bitta tick qoladi."
     }
   ]
 }

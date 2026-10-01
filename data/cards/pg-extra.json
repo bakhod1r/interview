@@ -1,0 +1,128 @@
+{
+ "30794": {
+  "a": "**`WITH RECURSIVE` — anchor query boshlang'ich row'ni beradi, recursive qism har qadamda oldingi natijaning bolalarini qo'shadi, yangi row qolmaganda to'xtaydi.**\n\n- `WITH RECURSIVE`: anchor (boshlang'ich row) + recursive qism (`JOIN` oldingi natija bilan), `UNION ALL` bilan.\n- Sikl bo'lishi mumkin bo'lsa — `UNION` yoki path/`CYCLE` bilan himoya, chuqurlik chegarasi.\n- Juda katta daraxtlar uchun alternativ: `ltree` yoki materialized path / closure table."
+ },
+ "30795": {
+  "a": "**Matnni `to_tsvector` bilan lexeme'larga aylantirib, GIN index qo'yasiz va `@@ websearch_to_tsquery(...)` bilan qidirasiz. `ILIKE '%x%'` oddiy B-tree'ni ishlatolmaydi — har safar seq scan.**\n\n- `tsvector` (normalizatsiyalangan lexeme'lar) + `tsquery`, `@@` operatori, GIN index.\n- Stored generated column yoki expression index.\n- `ts_rank` bilan saralash, `websearch_to_tsquery` foydalanuvchi kiritishi uchun.\n- Uzbek uchun stemmer yo'q — `simple` config.\n- Typo-tolerance uchun `pg_trgm`.\n- Murakkab relevance/facet — Elasticsearch."
+ },
+ "30796": {
+  "a": "**`COPY` — eng tez yo'l: ma'lumot bitta stream bilan oqadi, har row uchun parse/plan/round-trip yo'q. INSERT loop'da har row — tarmoq round-trip, statement parse, autocommit'da esa har birida WAL fsync.**\n\n- `COPY ...\n- FROM` (yoki psql `\\copy`, Go'da `pgx.CopyFrom`) — bitta stream, parse va WAL overhead minimal.\n- Har INSERT alohida round-trip + tx commit (fsync).\n- Tezlashtirish: katta batch tx'da, index/FK'larni keyin yaratish, staging (UNLOGGED) table, `maintenance_work_mem` oshirish, keyin `ANALYZE`."
+ },
+ "30797": {
+  "a": "**Exclusion constraint + range tip: `EXCLUDE USING gist (room_id WITH =, during WITH &&)`. Bir xil xona va kesishuvchi (`&&`) oraliq bo'lgan ikki row mavjud bo'lolmaydi.**\n\n- EXCLUDE constraint: `EXCLUDE USING gist (room_id WITH =, during WITH &&)` — `tstzrange` va `btree_gist` extension.\n- Ilovadagi \"avval tekshir, keyin yoz\" race beradi (write skew).\n- Constraint parallel tx'larda ham ishlaydi: ikkinchisi kutadi yoki `23P01` xato oladi."
+ },
+ "30798": {
+  "a": "**Sequence tranzaksion emas: berilgan qiymat rollback'da ham qaytarilmaydi. Teshiklar normal; ID'dan faqat noyoblik kutiladi, ketma-ketlik emas.**\n\n- Sequence tranzaksion emas: `nextval` rollback'da qaytmaydi, `ON CONFLICT` ham qiymat sarflaydi, crash/failover'da kesh (`CACHE`) va WAL oldindan log qilingan 32 qiymat yo'qoladi.\n- Muammo emas — ID faqat unique bo'lishi kerak.\n- Ketma-ket raqam (invoice raqami) kerak bo'lsa — alohida counter row lock bilan.\n- `identity` > `serial` (standart, huquqlar oddiy)."
+ },
+ "30799": {
+  "a": "**Hodisa vaqti uchun `timestamptz`. U absolyut vaqt nuqtasini (UTC) saqlaydi; `timestamp` esa zonasiz son — qaysi zonadaligi noma'lum.**\n\n- `timestamptz` UTC'da saqlaydi, kirishda session `TimeZone` bo'yicha UTC'ga, chiqishda qayta aylantiradi — zona saqlanmaydi.\n- `timestamp` — zonasiz \"devordagi soat\", kontekst yo'qoladi.\n- Hodisa vaqti uchun deyarli doim `timestamptz`.\n- `timestamp` — faqat \"har kuni 09:00 mahalliy\" kabi zona-mustaqil qiymatlar uchun (zonani alohida column'da saqlab)."
+ },
+ "30800": {
+  "a": "**`jsonb` — haqiqatan sxemasi o'zgaruvchan, kam filtrlanadigan ma'lumot uchun yaxshi. Asosiy biznes maydonlari (status, user_id, amount) oddiy column bo'lsin.**\n\n- To'g'ri: haqiqatan o'zgaruvchan atributlar (product specs, integratsiya payload'lari, sozlamalar), kam filtrlanadigan maydonlar.\n- Anti-pattern: tez-tez filtrlanadigan/join qilinadigan, constraint kerak bo'lgan, tez-tez yangilanadigan maydonlar.\n- Statistika yo'q (planner taxmini yomon), qisman yangilash butun qiymatni qayta yozadi (TOAST), FK yo'q.\n- GIN `jsonb_path_ops` bilan `@>` tez."
+ },
+ "30801": {
+  "a": "**Trigger — ma'lumot butunligi va audit uchun yaxshi (har qanday kod yo'lida ishlaydi). Biznes oqimi uchun xavfli: yashirin, sekin, debug qiyin.**\n\n- Foydali: audit log, `updated_at`, denormalizatsiyalangan counter, murakkab invariant (constraint bilan ifodalanmaydigan), outbox yozish.\n- Xavfli: yashirin biznes mantiq (kodda ko'rinmaydi), har row'da overhead (bulk ishlar sekin), trigger zanjirlari, test/debug qiyin, hot row lock contention.\n- Qoida: ma'lumot butunligi — DB'da; biznes oqimi — ilovada."
+ },
+ "30802": {
+  "a": "**`NOTIFY` — commit'dan keyin kanalni tinglayotgan session'larga yuboriladigan yengil pub/sub signal. Persistent emas, shuning uchun o'zi queue emas; to'g'ri naqsh — jobs table + SKIP LOCKED, NOTIFY esa faqat worker'ni uyg'otish uchun.**\n\n- `NOTIFY channel, payload` — commit bo'lgandan keyin shu kanalni `LISTEN` qilgan barcha session'larga yetkaziladi.\n- Persistent emas: tinglovchi yo'q yoki uzilgan bo'lsa xabar yo'qoladi; payload ≤ 8000 bayt; global queue 8GB.\n- Shuning uchun queue emas — \"uyg'otish signali\": haqiqiy ish table'da (`SKIP LOCKED`), NOTIFY faqat worker'ni darhol uyg'otadi.\n- PgBouncer transaction mode'da LISTEN ishlamaydi."
+ },
+ "30803": {
+  "a": "**Postgres tx ID'lari 32-bit va aylanma taqqoslanadi: har XID uchun ~2 mlrd \"o'tmish\", ~2 mlrd \"kelajak\". Eski row'lar freeze qilinmasa, ular kelajakdagi deb ko'rinib yo'qolishi mumkin edi. Himoya — VACUUM freeze va monitoring.**\n\n- XID 32-bit, taqqoslash modul 2^31: freeze qilinmagan eski row'lar \"kelajakda\" bo'lib ko'rinmay qolishi mumkin.\n- Himoya — VACUUM FREEZE (eski tuple'larni frozen deb belgilaydi); `autovacuum_freeze_max_age` (200M) dan oshsa majburiy anti-wraparound autovacuum. ~2 mlrd'ga yaqinlashsa DB yozishni to'xtatadi.\n- Monitoring: `age(datfrozenxid)`, `age(relfrozenxid)`; uzoq tx/slot'lar freeze'ni bloklaydi."
+ },
+ "30804": {
+  "a": "**Patroni + DCS (etcd/Consul) — standart: har node agent, primary DCS'da TTL'li leader lock ushlaydi. Lock yo'qolsa replica'lardan biri promote. Split-brain'dan himoya — faqat consensus'dagi lock egasi primary bo'la oladi; lock'ni yo'qotgan node o'zini read-only/stop qiladi (fencing, watchdog).**\n\n- Postgres o'zida avtomatik failover yo'q.\n- Patroni (etcd/Consul DCS bilan leader lock), yoki managed (RDS Multi-AZ, Cloud SQL).\n- Leader lock TTL tugasa — eng kam lag'li replica promote.\n- Split-brain himoyasi: DCS consensus (faqat lock egasi primary), eski primary lock yo'qotsa o'zini demote qiladi, watchdog/fencing, ilova routing (HAProxy/Patroni REST health, DNS, PgBouncer).\n- Sync replica bilan RPO=0."
+ },
+ "30805": {
+  "a": "**`pg_stat_statements` — har normalizatsiyalangan query (konstantalar `$1` ga almashtirilgan) bo'yicha yig'ma statistika: necha marta chaqirilgan, jami/o'rtacha vaqt, qaytgan row'lar, buffer hit/read, temp file, WAL. Performance ishlarining birinchi asbobi.**\n\n- Normalizatsiyalangan query'lar bo'yicha agregat statistika: calls, total/mean/max vaqt, rows, shared blocks hit/read, temp, WAL.\n- `total_exec_time` bo'yicha saralash — eng ko'p resurs yeyayotgan query'lar (ko'pincha eng sekin emas, eng ko'p chaqiriladigan).\n- `shared_preload_libraries` talab qiladi.\n- Davriy snapshot va delta, `queryid` bilan log/APM bog'lash."
+ },
+ "30806": {
+  "a": "**Extension'lar Postgres'ni kengaytiradi: yangi tiplar, index'lar, funksiyalar, background worker'lar. FDW (Foreign Data Wrapper) — tashqi ma'lumot manbasini local table kabi `SELECT` qilish imkoni.**\n\n- Ko'p ishlatiladigan: pg_stat_statements, pgcrypto/uuid, pg_trgm, btree_gist, PostGIS, pg_partman, pg_cron, TimescaleDB, pgvector, postgres_fdw.\n- Boshqaruv: versiyani migratsiyada pin qilish (`CREATE EXTENSION ...\n- VERSION`), upgrade'da `ALTER EXTENSION UPDATE`, managed'da ruxsat etilgan ro'yxat.\n- FDW — tashqi manbani (boshqa Postgres, MySQL, fayl) local table kabi so'rash; pushdown cheklangan, tx kafolati zaif — migratsiya/ad-hoc uchun, hot path uchun emas."
+ },
+ "30807": {
+  "a": "**Postgres process-per-connection: 5000 connection = 5000 OS process. Memory, CPU scheduling va ichki contention tufayli DB ko'p connection bilan sekinlashadi, tezlashmaydi. Yechim — connection pooler.**\n\n- Har connection — alohida OS process (~5-10MB+, work_mem alohida).\n- Ko'p connection: memory, context switch, snapshot olish narxi (ProcArray skan, PG14 da yaxshilangan bo'lsa ham), lock contention.\n- Faol query'lar soni CPU yadrolaridan ko'p bo'lsa throughput o'smaydi.\n- To'g'ri yo'l: max_connections bir necha yuz, oldida PgBouncer, ilova pool'lari hisoblangan."
+ },
+ "30808": {
+  "a": "**Logical decoding orqali: Postgres WAL'dan row darajasidagi o'zgarishlarni replication slot bilan beradi, Debezium (Kafka Connect) ularni o'qib Kafka topic'lariga yozadi. Asosiy xavf — iste'mol qilinmagan slot WAL'ni ushlab diskni to'ldirishi.**\n\n- Logical decoding: replication slot + `pgoutput` plugin, publication; Debezium WAL'dan row o'zgarishlarini o'qib Kafka'ga yozadi.\n- E'tibor: slot iste'mol qilinmasa WAL to'planadi (disk to'ladi) — `max_slot_wal_keep_size`, monitoring; failover'da slot (PG17 failover slots); `REPLICA IDENTITY` (UPDATE/DELETE'da eski qiymatlar), DDL replikatsiya qilinmaydi — sxema evolyutsiyasi; initial snapshot; at-least-once — consumer idempotent.\n- Outbox table + CDC — domain event'lar uchun toza naqsh."
+ },
+ "30809": {
+  "a": "**Ikkinchi tx kutadi; birinchi commit qilgach Postgres row'ning eng yangi versiyasini olib, WHERE shartini qayta tekshiradi (EvalPlanQual). Shart to'g'ri bo'lsa yangi qiymat ustidan yangilaydi, aks holda row o'tkazib yuboriladi. Shuning uchun atomik `stock = stock - 1 WHERE stock > 0` RC'da xavfsiz.**\n\n- Ikkinchi tx kutadi; birinchi commit qilgach, Postgres row'ning yangi versiyasini oladi va WHERE shartini qayta tekshiradi (EvalPlanQual).\n- Shart hali to'g'ri bo'lsa — yangi qiymat ustidan UPDATE (lost update yo'q); stock 0 bo'lib qolgan bo'lsa — 0 row yangilanadi.\n- Lekin faqat shu row qayta tekshiriladi: query'ning boshqa qismlari (subquery, join, boshqa row'lar) eski snapshot'da qoladi — murakkab query'larda anomaliya mumkin."
+ },
+ "30810": {
+  "a": "**Ikkala natija bir xil. `now()` tx boshlangan paytni qaytaradi va tx davomida o'zgarmaydi.**\n\n- Ikkalasi bir xil: `now()` = `transaction_timestamp()` — tx boshlangan vaqt.\n- Haqiqiy joriy vaqt: `clock_timestamp()` (har chaqiruvda o'zgaradi), `statement_timestamp()` — statement boshlanishi.\n- Uzoq batch tx'da `created_at DEFAULT now()` barcha row'larga bir xil vaqt beradi."
+ },
+ "30811": {
+  "a": "**Noto'g'ri. `BETWEEN` ikkala chegarani o'z ichiga oladi (`>=` va `<=`): 2-oktabr `00:00:00` dagi row'lar ham kiradi. To'g'ri — yarim ochiq oraliq `>= start AND < end`.**\n\n- Yo'q, to'g'ri emas: BETWEEN ikkala chegarani o'z ichiga oladi — 2-oktabr 00:00:00 dagi buyurtmalar ham kiradi (ikki kunga tushadi).\n- `'2026-10-01'` va `'2026-10-31'` yozilsa esa 31-oktabrning 00:00 dan keyingisi tushib qoladi.\n- To'g'ri: yarim ochiq oraliq `>= '2026-10-01' AND < '2026-10-02'`.\n- Qo'shimcha: chegara session TimeZone'da talqin qilinadi."
+ },
+ "30812": {
+  "a": "**Index aynan `email` qiymatlari bo'yicha, joriy collation tartibida qurilgan. Funksiya (`lower`), collation'ga bog'liq `LIKE` va `ILIKE` bu tartibdan foydalana olmaydi.**\n\n- 1) Funksiya column ustida — index `email` bo'yicha, `lower(email)` bo'yicha emas: expression index kerak.\n- 2) Non-C collation'da oddiy B-tree prefix LIKE uchun ishlamaydi — `text_pattern_ops` operator class yoki C collation.\n- 3) ILIKE B-tree'ni ishlatmaydi — `lower()` expression index yoki `citext`, yoki `pg_trgm` GIN."
+ },
+ "30813": {
+  "a": "**Postgres jami row sonini saqlamaydi — MVCC'da har tx uchun \"ko'rinadigan row'lar soni\" boshqacha. `count(*)` butun table (yoki index) bo'ylab yurib, har row'ning ko'rinishini tekshiradi.**\n\n- MVCC: har row versiyasining ko'rinishi tx'ga bog'liq — count saqlanmaydi, skan kerak (parallel seq scan yoki index-only scan + visibility map).\n- Yechimlar: taxminiy son `pg_class.reltuples` yoki `EXPLAIN` estimate; trigger/counter table (hot row ehtiyot); kesh; UI'da \"10 000+\" ko'rsatish.\n- MySQL MyISAM'dagi tez count InnoDB'da ham yo'q."
+ },
+ "30814": {
+  "a": "**`ORDER BY random()` har row'ni o'qib, har biriga tasodifiy son berib, eng kichigini topadi — 50M row uchun to'liq skan. Katta table'da `TABLESAMPLE` yoki tasodifiy ID oralig'idan sakrash.**\n\n- Har row uchun random() hisoblab butun table'ni sort (top-N heapsort) qiladi — O(n).\n- Alternativlar: `TABLESAMPLE SYSTEM/BERNOULLI` (taxminiy, tez), tasodifiy id oralig'idan `WHERE id >= random_id ORDER BY id LIMIT 1` (teshiklar bo'lsa notekis taqsimot), oldindan aralashtirilgan kesh ro'yxati."
+ },
+ "30815": {
+  "a": "**`2`, `2.5000000000000000`, `0`, `1.5000000000000000`. Ikki integer bo'linsa natija integer — kasr qismi kesiladi (yaxlitlanmaydi).**\n\n- `5/2 = 2` (integer bo'lish — kasr kesiladi), `5/2.0 = 2.5000000000000000` (numeric), `1/3*3 = 0` (avval 1/3=0), `avg = 1.5000000000000000` (avg integer uchun numeric qaytaradi).\n- Foiz hisoblashda `count(*)/total*100` doim 0 beradi — `100.0 * a / b` yoki cast."
+ },
+ "30822": {
+  "a": "**`BeginTx` → darhol `defer tx.Rollback()` → hamma query `tx.` orqali → `return tx.Commit()`. Shunda har qanday erta `return` yoki panic'da tx avtomatik rollback bo'ladi.**\n\n- `BeginTx` dan keyin darhol `defer tx.Rollback()` — commit bo'lgandan keyin Rollback `sql.ErrTxDone` qaytaradi va zararsiz.\n- Har query `tx.ExecContext/QueryContext` orqali (db. emas — aks holda boshqa connection, tx tashqarisida).\n- Oxirida `return tx.Commit()` va uning xatosini tekshirish.\n- Tx ichida tashqi HTTP yo'q, context uzatiladi."
+ },
+ "30823": {
+  "a": "**SQL injection. Foydalanuvchi kiritgan qiymat query matniga yopishtirilgan — u SQL kodi bo'lib bajarilishi mumkin. Yechim: placeholder (`$1`) bilan parametrlangan query.**\n\n- SQL injection: `email = \"' OR '1'='1\"` yoki `'; DROP TABLE users; --` query mantiqini o'zgartiradi.\n- Yechim — placeholder (`$1` Postgres, `?` MySQL): qiymat query matnidan alohida yuboriladi, hech qachon SQL sifatida parse qilinmaydi.\n- Table/column nomlarini parametr qilib bo'lmaydi — ular uchun whitelist.\n- ORDER BY yo'nalishi ham whitelist."
+ },
+ "30824": {
+  "a": "**Context bekor bo'lganda (client uzildi, timeout tugadi) driver Postgres'ga cancel yuboradi — query to'xtaydi va connection pool'ga qaytadi. Context'siz og'ir query client ketgandan keyin ham DB resursini yeyaveradi.**\n\n- Client uzilsa yoki timeout tugasa context bekor bo'ladi — driver Postgres'ga cancel request yuboradi, query to'xtaydi, connection bo'shaydi.\n- Uzatilmasa: client ketgan, lekin og'ir query DB'da ishlayveradi, pool band.\n- `context.WithTimeout` — har so'rovga yuqori chegara.\n- Server tomonda ham `statement_timeout` — ikki qavat himoya."
+ },
+ "30825": {
+  "a": "**Qarash tartibi: qaysi node eng ko'p vaqt oladi, taxmin va haqiqiy row soni farqi, scan turi va filtrda tashlangan row'lar, BUFFERS bilan disk o'qishlari.**\n\n- 1) Node turi: Seq Scan katta table'da + ko'p \"Rows Removed by Filter\" — index kerakligi belgisi.\n- 2) `rows` taxmin (5) va `actual rows` (48210) farqi — statistika eskirgan, ANALYZE.\n- 3) Eng ko'p vaqt olgan node (actual time, loops ga ko'paytiring).\n- 4) BUFFERS bilan: shared read (disk) vs hit.\n- EXPLAIN (ANALYZE) query'ni haqiqatan bajaradi — UPDATE/DELETE'ni tx ichida + ROLLBACK."
+ },
+ "30826": {
+  "a": "**`pg_dump -Fc` (custom) yoki `-Fd -j N` (directory, parallel) — eng qulay formatlar: siqilgan, tanlab va parallel tiklanadi. `pg_dump` — mantiqiy nusxa: kichik/o'rta DB, migratsiya, bitta table'ni olish uchun yaxshi; katta prod DB'ning asosiy backup'i uchun emas.**\n\n- Custom (`-Fc`) yoki directory (`-Fd`, parallel `-j`) format — tanlab tiklash va parallel restore imkoni; plain SQL — faqat psql bilan. pg_dump izchil snapshot (REPEATABLE READ) oladi, ishlayotgan DB'ni bloklamaydi (lekin DDL bilan konflikt).\n- Global obyektlar (rollar) — `pg_dumpall --globals-only`.\n- Cheklov: mantiqiy nusxa — katta DB'da sekin restore, PITR yo'q; prod uchun asosiy backup emas, qo'shimcha."
+ },
+ "30827": {
+  "a": "**Migratsiyalar — versiyalangan, o'zgarmas SQL fayllar, repoda kod bilan birga. Tool DB'dagi `schema_migrations` jadvali orqali qaysilari qo'llanganini biladi va faqat yangilarini ketma-ket bajaradi.**\n\n- Versiyalangan, ketma-ket SQL fayllar (up/down), repoda kod bilan birga; DB'da `schema_migrations` jadvali qaysi versiya qo'llanganini saqlaydi.\n- Qo'llangan migratsiya hech qachon tahrirlanmaydi — yangi migratsiya yoziladi.\n- CI'da bo'sh DB'ga hammasini qo'llab test.\n- Deploy'da migratsiya alohida qadam (bitta instance/job), ilova bilan bir vaqtda emas.\n- Backward-compatible o'zgarishlar (expand/contract)."
+ },
+ "30828": {
+  "a": "**VACUUM — eski (dead) row versiyalarini tozalab joyni qayta ishlatishga beradi va XID'larni freeze qiladi. ANALYZE — planner uchun statistikani yangilaydi. Autovacuum ikkalasini avtomatik bajaradi; o'chirish — bloat, sekin query'lar va oxirida wraparound.**\n\n- VACUUM — MVCC'dan qolgan dead tuple'lar joyini qayta ishlatishga beradi (fayl kichraymaydi), visibility map'ni yangilaydi (index-only scan uchun), XID freeze qiladi (wraparound himoyasi).\n- ANALYZE — column statistikasini (taqsimot, distinct, NULL ulushi) yig'adi — planner shu bilan plan tanlaydi.\n- Autovacuum o'chirilsa: bloat, yomon plan'lar, oxir-oqibat wraparound tufayli DB to'xtashi."
+ },
+ "30829": {
+  "a": "**Read replica — primary'dan WAL oqimi bilan yangilanadigan faqat o'qish nusxasi. O'qish yukini va og'ir hisobotlarni primary'dan olib tashlaydi. Asosiy tuzoq — replica lag: yozgandan keyingi o'qish eski ma'lumot ko'rsatishi mumkin.**\n\n- Replica — primary'ning streaming nusxasi, faqat o'qish uchun: o'qish yukini taqsimlash, hisobot/analitika, failover zaxirasi.\n- Hisobga olish: replica lag (yozgandan keyin darhol o'qish eski qiymat berishi mumkin), replica'ga yozib bo'lmaydi, uzoq query'lar recovery bilan konflikt (cancel).\n- Ilovada ikki pool (rw, ro) va qaysi query qayerga ketishi aniq."
+ },
+ "30830": {
+  "a": "**Shartli aggregat — bitta `GROUP BY` ichida `FILTER (WHERE ...)` yoki `CASE`:**\n\n- Shartli aggregat: `count(*) FILTER (WHERE status='paid')`, `sum(amount) FILTER (...)` (Postgres) yoki portativ `sum(CASE WHEN status='paid' THEN amount ELSE 0 END)`.\n- Bitta skan — har metrika uchun alohida subquery/JOIN'dan tez.\n- `COALESCE(..., 0)` — FILTER bo'sh bo'lsa sum NULL qaytaradi."
+ },
+ "30831": {
+  "a": "****\n\n- `string_agg(p.name, ', ' ORDER BY p.name)` — text; `array_agg(p.name ORDER BY p.name)` — massiv; `json_agg`/`jsonb_agg` — API uchun JSON.\n- Aggregat ichidagi ORDER BY tartibni kafolatlaydi.\n- NULL'lar: string_agg ularni tashlaydi, array_agg qo'shadi (`FILTER (WHERE x IS NOT NULL)`)."
+ },
+ "30832": {
+  "a": "**Kunlar ro'yxatini `generate_series` bilan yarating va unga buyurtmalarni LEFT JOIN qiling — bo'sh kunlar `0` bo'ladi.**\n\n- `date_trunc('day', created_at)` (yoki `created_at::date`) bo'yicha GROUP BY — lekin bo'sh kunlar chiqmaydi.\n- `generate_series` bilan kunlar ro'yxatini yaratib LEFT JOIN + `coalesce(sum, 0)`.\n- Kun chegarasi session TimeZone'ga bog'liq — `AT TIME ZONE` aniq bering.\n- WHERE'da yarim ochiq oraliq."
+ },
+ "30833": {
+  "a": "**`EXISTS` yoki `IN (SELECT ...)` — semi-join: har user bir marta qaytadi, Postgres ularni odatda bir xil tez rejalaydi. Oddiy `JOIN` userni har buyurtma uchun takrorlaydi — `DISTINCT` kerak bo'ladi.**\n\n- `EXISTS` va `IN (subquery)` — semi-join: har user bir marta, Postgres ikkalasini odatda bir xil rejalaydi.\n- Oddiy `JOIN` — har buyurtma uchun user takrorlanadi, DISTINCT kerak (qimmat).\n- `NOT IN` va `NOT EXISTS` esa farqli: NULL bo'lsa NOT IN bo'sh natija beradi — doim NOT EXISTS."
+ },
+ "30834": {
+  "a": "**Self-join — bitta table'ni ikki alias bilan qo'shish:**\n\n- Self-join: bir table'ni ikki alias bilan.\n- `LEFT JOIN employees m ON m.id = e.manager_id` — menejersiz (CEO) ham chiqadi, `m.name` NULL.\n- INNER JOIN ularni tushirib qoldiradi.\n- Ko'p darajali ierarxiya (menejerning menejeri...) uchun — recursive CTE."
+ },
+ "30835": {
+  "a": "**- 1:N: FK \"ko'p\" tomonda — `orders.user_id → users.id`. - N:M: oraliq (junction) table — `enrollments(student_id, course_id)`, ikkala FK, kombinatsiya unique.**\n\n- 1:N — \"ko'p\" tomonda FK: `orders.user_id REFERENCES users(id)`.\n- N:M — oraliq (junction) table: `enrollments(student_id, course_id)` PK yoki UNIQUE (ikkalasi), ikkala FK, ikkinchi yo'nalish uchun index.\n- Massiv column (`course_ids int[]`) — FK yo'q, join qiyin — anti-pattern.\n- 1:1 — FK + UNIQUE yoki bitta table."
+ },
+ "30836": {
+  "a": "**Ilova validatsiyasi — foydalanuvchiga chiroyli xato uchun; DB constraint'lari — ma'lumot to'g'riligining kafolati uchun. DB'ga yozadigan har qanday yo'l (boshqa servis, skript, qo'lda SQL, bug'li kod) constraint'dan o'tadi.**\n\n- DB'ga yozadiganlar faqat bitta ilova emas: boshqa servislar, migratsiya skriptlari, qo'lda SQL, eski kod versiyalari.\n- Constraint — oxirgi himoya chizig'i, har yo'lda ishlaydi va ma'lumot sifatini kafolatlaydi.\n- Planner ham NOT NULL/CHECK'dan foydalanadi.\n- Ilova validatsiyasi — yaxshi xato xabarlari uchun; DB constraint — to'g'rilik uchun."
+ },
+ "30837": {
+  "a": "**- CASCADE — bola parent'siz ma'nosiz: `order_items` → `orders`. - RESTRICT / NO ACTION (default) — bola muhim ma'lumot: `payments` → `users`. O'chirish rad etiladi. - SET NULL — bog'lanish ixtiyoriy: `tasks.assignee_id` → `users`.**\n\n- CASCADE — bola parent'siz ma'nosiz bo'lsa (order_items order bilan).\n- RESTRICT/NO ACTION (default) — muhim tarixiy ma'lumot (user o'chirilsa buyurtmalari, to'lovlar) — tasodifiy ommaviy o'chirishdan himoya.\n- SET NULL — bog'lanish ixtiyoriy (task.assignee_id).\n- CASCADE xavfi: bitta DELETE millionlab row va uzoq lock; FK column'ga index bo'lmasa — seq scan."
+ },
+ "30838": {
+  "a": "**Postgres bola tomondagi FK column'ga index yaratmaydi (MySQL InnoDB yaratadi). Deyarli har doim qo'lda qo'shish kerak.**\n\n- Yo'q, Postgres FK uchun bola tomonda index yaratmaydi (faqat PK/UNIQUE uchun).\n- Index bo'lmasa: parent DELETE/UPDATE har safar bola table'ni seq scan qiladi (lock uzoq), `JOIN ...\n- ON child.parent_id` va `WHERE parent_id = ?` sekin.\n- Deyarli har FK'ga index kerak; istisno — juda kichik table yoki hech qachon filtrlanmaydigan/parent o'chirilmaydigan holat."
+ },
+ "30839": {
+  "a": "**Yo'q. Ledger append-only: xato yozuvga reversal (teskari) yozuv qo'shiladi, so'ng to'g'ri yozuv. Hech narsa o'zgartirilmaydi va o'chirilmaydi.**\n\n- Yo'q.\n- Ledger yozuvlari immutable (append-only): xato yozuv o'zgartirilmaydi va o'chirilmaydi — teskari (reversal) yozuv qo'shiladi, keyin to'g'ri yozuv.\n- Audit izi saqlanadi, istalgan vaqtdagi balansni qayta tiklash mumkin, hisob-kitoblar tashqi hisobotlar bilan mos qoladi.\n- DB darajasida: ilova roliga UPDATE/DELETE huquqi yo'q yoki trigger bilan taqiq."
+ },
+ "30840": {
+  "a": "**Idempotency key: client har to'lov urinishiga noyob kalit beradi, server uni UNIQUE column'ga yozadi. Takroriy so'rov konfliktga uchraydi va yangi to'lov o'rniga birinchisining natijasi qaytariladi.**\n\n- Idempotency key: client har to'lov urinishi uchun unique kalit (UUID) yuboradi; server `payments(idempotency_key UNIQUE)` ga yozadi.\n- Ikkinchi so'rov unique konfliktga uchraydi — yangi to'lov yaratilmaydi, birinchisining natijasi qaytariladi.\n- Kalit va natija bitta tx'da saqlanadi; kalit + so'rov hash'i (boshqa body bilan qayta ishlatishni rad etish); muddat (24 soat)."
+ },
+ "30841": {
+  "a": "**Har summa valyutasi bilan birga saqlanadi (`amount_minor` + `currency`), har valyuta uchun alohida hisob. Turli valyutalar hech qachon to'g'ridan-to'g'ri qo'shilmaydi — konvertatsiya — kurs saqlangan alohida tranzaksiya.**\n\n- Har summa valyutasi bilan: `amount_minor bigint` + `currency char(3)`; har valyuta uchun alohida hisob (account per currency).\n- Turli valyutalarni to'g'ridan-to'g'ri qo'shib bo'lmaydi — konvertatsiya alohida tx: bir valyuta hisobidan debet, boshqasiga kredit, qo'llangan kurs va vaqt saqlanadi.\n- Minor unit soni valyutaga bog'liq (ISO 4217).\n- Hisobotda umumiy summa — aniq kurs sanasi bilan."
+ }
+}

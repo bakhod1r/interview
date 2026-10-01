@@ -569,6 +569,110 @@
       "section": "g1",
       "question": "Panic/recover qachon o'rinli?",
       "explanation": "Nozik joy: `recover` faqat shu goroutine'da ishlaydi — `go func()` ichida panic bo'lsa butun jarayon yiqiladi (shu sabab har spawn qilingan goroutine'da recovery wrapper bo'lishi kerak). Ikkinchi nuqta: recover'dan keyin holat noaniq bo'lishi mumkin, shuning uchun so'rovni bekor qilish to'g'ri, ishni davom ettirish emas."
+    },
+    {
+      "id": 30771,
+      "code": "SN585",
+      "level": "S",
+      "type": "card",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Nima chiqadi?",
+      "snippet": "func Count(n int) iter.Seq[int] {\n    return func(yield func(int) bool) {\n        for i := 0; i < n; i++ {\n            if !yield(i) {\n                return\n            }\n        }\n    }\n}\n\nfor v := range Count(10) {\n    if v == 2 {\n        break\n    }\n    fmt.Print(v)\n}",
+      "explanation": "Go 1.23 range-over-func: `iter.Seq[V]` — `func(yield func(V) bool)`. Loop tanasi `yield` ichida chaqiriladi; `break`, `return`, `goto` tanadan chiqqanda `yield` `false` qaytaradi va iterator darhol qaytishi shart. Stdlib: `slices.All/Values/Collect/Sorted`, `maps.Keys/Values`, `strings.SplitSeq` (1.24). Pull uslubi kerak bo'lsa `iter.Pull` (next/stop — `stop()`ni defer qiling, aks holda goroutine leak)."
+    },
+    {
+      "id": 30772,
+      "code": "SN586",
+      "level": "St",
+      "type": "card",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "`break` bo'lganda nima bo'ladi?",
+      "snippet": "func Bad(n int) iter.Seq[int] {\n    return func(yield func(int) bool) {\n        for i := 0; i < n; i++ {\n            yield(i) // natija tekshirilmaydi\n        }\n    }\n}\n\nfor v := range Bad(5) {\n    if v == 1 {\n        break\n    }\n}",
+      "explanation": "`yield` `false` qaytargandan keyin uni qayta chaqirish taqiqlangan — runtime buni tekshiradi va panic beradi. Aks holda `break` dan keyin tana yana bajarilib, `defer` va `return` semantikasi buziladi. Iterator yozishning qoidasi: har `yield` natijasini tekshiring; resurs (fayl, rows) ochilgan bo'lsa `defer` bilan yoping — erta `break`da ham ishlaydi. `go vet` va testlarda erta to'xtatish holatini ham tekshiring."
+    },
+    {
+      "id": 30773,
+      "code": "SN587",
+      "level": "S",
+      "type": "card",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Kompilyatsiya bo'ladimi va natija?",
+      "snippet": "type Number interface{ ~int | ~float64 }\n\nfunc Sum[T Number](xs []T) T {\n    var s T\n    for _, x := range xs {\n        s += x\n    }\n    return s\n}\n\ntype MyInt int\nfmt.Println(Sum([]MyInt{1, 2, 3}))",
+      "explanation": "`~T` — \"underlying type T\" bo'lgan tiplar to'plami. `~` siz `int | float64` bo'lsa `MyInt` (va `time.Duration` kabi) mos kelmaydi. Operator (`+`, `<`) faqat type set'dagi hamma tip uni qo'llasa ruxsat. Stdlib constraint'lar: `cmp.Ordered`, `comparable`; `golang.org/x/exp/constraints` endi asosan kerak emas. Union'li interfeys faqat constraint sifatida ishlatiladi — oddiy o'zgaruvchi tipi bo'la olmaydi."
+    },
+    {
+      "id": 30774,
+      "code": "SN588",
+      "level": "S",
+      "type": "card",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Go generics'ning qaysi cheklovi to'g'ri?",
+      "explanation": "Sabab — interfeys metod to'plami va dinamik dispatch bilan generic metodlarni birlashtirish muammosi. Shuning uchun `slices.Map` yo'q, faqat erkin funksiyalar. Boshqa cheklovlar: type switch faqat `any(v)` orqali, type parameter'ni struct'ga embed qilib bo'lmaydi, generic type alias Go 1.24 da qo'shildi. Implementatsiya — GC shape stenciling + dictionary: bir xil shape (masalan barcha pointerlar) bitta kodni bo'lishadi, shuning uchun generic kod har doim ham monomorfik koddek tez emas."
+    },
+    {
+      "id": 30775,
+      "code": "SN589",
+      "level": "M",
+      "type": "card",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Struct tag'lar haqida qaysi gap to'g'ri?",
+      "explanation": "Format: `` `json:\"name,omitempty\" db:\"name\" validate:\"required\"` `` — kalit:\"qiymat\" juftlari probel bilan ajratiladi. `json:\"-\"` — maydon o'tkazib yuboriladi, `json:\"-,\"` — kalit nomi `-`. Go 1.24 `omitzero` — `time.Time{}` kabi struct zero value'larini tashlab yuborish (`omitempty` struct uchun ishlamaydi). Kichik harfli (unexported) maydon tag bilan ham JSON'ga chiqmaydi."
+    },
+    {
+      "id": 30842,
+      "code": "SN601",
+      "level": "M",
+      "type": "card",
+      "topic": "Methods",
+      "domain": "go",
+      "section": "g1",
+      "question": "Metodga value receiver yoki pointer receiver — qanday tanlanadi?",
+      "explanation": "Pointer receiver: metod qiymatni o'zgartirsa, struct katta bo'lsa yoki ichida nusxalanmaydigan maydon (`sync.Mutex`) bo'lsa. Value receiver: kichik, o'zgarmas tiplar (`time.Time`, kichik koordinatalar). Bitta tipda aralashtirmaslik tavsiya etiladi."
+    },
+    {
+      "id": 30843,
+      "code": "SN602",
+      "level": "M",
+      "type": "card",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Map'ni `range` qilayotganda undan element o'chirish xavfsizmi?",
+      "snippet": "m := map[string]int{\"a\": 1, \"b\": 2, \"c\": 3}\nfor k := range m {\n    delete(m, k)\n}\nfmt.Println(len(m))",
+      "explanation": "Xavfsiz va `0` chiqadi. Spetsifikatsiya: iteratsiya paytida hali ko'rilmagan element o'chirilsa u keyin chiqmaydi; qo'shilgan element chiqishi ham, chiqmasligi ham mumkin. Boshqa goroutine'dan parallel o'zgartirish esa taqiqlangan (`concurrent map iteration and map write`)."
+    },
+    {
+      "id": 30844,
+      "code": "SN603",
+      "level": "M",
+      "type": "card",
+      "topic": "Basics",
+      "domain": "go",
+      "section": "g1",
+      "question": "Untyped konstanta nima? Natija?",
+      "snippet": "const big = 1 << 40\nfmt.Println(big / (1 << 30))\n// var x int32 = big  // ?",
+      "explanation": "`1024`. Untyped konstantalar kompilyatsiyada aniq (kamida 256 bit) hisoblanadi va faqat ishlatilgan joyda tipga keltiriladi. `var x int32 = big` esa kompilyatsiya xatosi: `cannot use big (untyped int constant 1099511627776) as int32 value (overflows)`."
+    },
+    {
+      "id": 30845,
+      "code": "SN604",
+      "level": "M",
+      "type": "card",
+      "topic": "Errors",
+      "domain": "go",
+      "section": "g1",
+      "question": "O'z xato tipingizni qachon va qanday yaratasiz?",
+      "explanation": "Chaqiruvchi xatodan ma'lumot (maydon nomi, status, retry mumkinligi) olishi kerak bo'lsa — `Error() string` metodli struct tip yaratiladi va `errors.As` bilan tekshiriladi. Faqat \"shu holat yuz berdimi\" kerak bo'lsa — sentinel `var ErrX = errors.New(...)` va `errors.Is`. Ichida asl sabab bo'lsa `Unwrap()` qo'shiladi."
     }
   ]
 }

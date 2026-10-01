@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-09-24",
-  "total": 1254,
+  "total": 1167,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -17,27 +17,27 @@
     "nosql": "Redis, Mongo, Elastic",
     "msg": "Kafka & messaging",
     "api": "API, HTTP, security",
-    "infra": "Infrastructure & DevOps",
     "arch": "Architecture & OOP",
     "dist": "Distributed systems",
     "sys": "System design",
     "alg": "Algorithms",
     "soft": "Behavioral",
-    "sec": "Security"
+    "sec": "Security",
+    "devops": "DevOps"
   },
   "sections": [
     {
       "id": "g1",
       "name": "Language basics",
       "domain": "go",
-      "count": 48,
+      "count": 57,
       "file": "sections/g1-language-basics.json"
     },
     {
       "id": "g2",
       "name": "Concurrency",
       "domain": "go",
-      "count": 52,
+      "count": 56,
       "file": "sections/g2-concurrency.json"
     },
     {
@@ -51,21 +51,21 @@
       "id": "g5",
       "name": "Tooling, modules, build",
       "domain": "go",
-      "count": 25,
+      "count": 26,
       "file": "sections/g5-tooling-modules-build.json"
     },
     {
       "id": "g6",
       "name": "Stdlib & web",
       "domain": "go",
-      "count": 28,
+      "count": 51,
       "file": "sections/g6-stdlib-web.json"
     },
     {
       "id": "g3",
       "name": "Memory, performance, testing",
       "domain": "go",
-      "count": 37,
+      "count": 48,
       "file": "sections/g3-memory-performance-testing.json"
     },
     {
@@ -86,7 +86,7 @@
       "id": "t4",
       "name": "Concurrency gotchas",
       "domain": "go",
-      "count": 10,
+      "count": 12,
       "file": "sections/t4-concurrency-gotchas.json"
     },
     {
@@ -107,14 +107,14 @@
       "id": "d1",
       "name": "SQL basics",
       "domain": "db",
-      "count": 22,
+      "count": 30,
       "file": "sections/d1-sql-basics.json"
     },
     {
       "id": "d2",
       "name": "Data modeling & keys",
       "domain": "db",
-      "count": 14,
+      "count": 23,
       "file": "sections/d2-data-modeling-keys.json"
     },
     {
@@ -128,28 +128,28 @@
       "id": "d4",
       "name": "Transactions & isolation",
       "domain": "db",
-      "count": 46,
+      "count": 48,
       "file": "sections/d4-transactions-isolation.json"
     },
     {
       "id": "d5",
       "name": "Operations, scaling, Go+DB",
       "domain": "db",
-      "count": 40,
+      "count": 54,
       "file": "sections/d5-operations-scaling-go-db.json"
     },
     {
       "id": "t2",
       "name": "SQL gotchas",
       "domain": "db",
-      "count": 19,
+      "count": 25,
       "file": "sections/t2-sql-gotchas.json"
     },
     {
       "id": "p2",
       "name": "Ledger & accounting",
       "domain": "db",
-      "count": 11,
+      "count": 14,
       "file": "sections/p2-ledger-accounting.json"
     },
     {
@@ -249,62 +249,6 @@
       "domain": "api",
       "count": 10,
       "file": "sections/t6-api-http-gotchas.json"
-    },
-    {
-      "id": "i1",
-      "name": "Containers & Kubernetes",
-      "domain": "infra",
-      "count": 17,
-      "file": "sections/i1-containers-kubernetes.json"
-    },
-    {
-      "id": "i2",
-      "name": "CI/CD & deploy",
-      "domain": "infra",
-      "count": 26,
-      "file": "sections/i2-ci-cd-deploy.json"
-    },
-    {
-      "id": "i3",
-      "name": "Observability & SRE",
-      "domain": "infra",
-      "count": 18,
-      "file": "sections/i3-observability-sre.json"
-    },
-    {
-      "id": "i4",
-      "name": "Networking & protocols",
-      "domain": "infra",
-      "count": 18,
-      "file": "sections/i4-networking-protocols.json"
-    },
-    {
-      "id": "i5",
-      "name": "Cloud, OS, operations",
-      "domain": "infra",
-      "count": 26,
-      "file": "sections/i5-cloud-os-operations.json"
-    },
-    {
-      "id": "i7",
-      "name": "Linux",
-      "domain": "infra",
-      "count": 79,
-      "file": "sections/i7-linux.json"
-    },
-    {
-      "id": "t11",
-      "name": "Docker & Kubernetes gotchas",
-      "domain": "infra",
-      "count": 10,
-      "file": "sections/t11-docker-kubernetes-gotchas.json"
-    },
-    {
-      "id": "t13",
-      "name": "Network & latency gotchas",
-      "domain": "infra",
-      "count": 9,
-      "file": "sections/t13-network-latency-gotchas.json"
     },
     {
       "id": "r1",
@@ -431,6 +375,13 @@
       "domain": "sec",
       "count": 12,
       "file": "sections/p3-compliance-fraud-fx.json"
+    },
+    {
+      "id": "v1",
+      "name": "LVM: PV, VG, LV",
+      "domain": "devops",
+      "count": 24,
+      "file": "sections/v1-lvm.json"
     }
   ]
 }

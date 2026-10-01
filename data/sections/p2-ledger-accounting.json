@@ -129,6 +129,39 @@
       "section": "p2",
       "question": "Hisob balansi manfiyga tushmasligini qanday kafolatlaysiz (yuqori konkurentlikda)?",
       "explanation": "Read-then-write har doim race beradi. Hot hisob (masalan merchant) bo'lsa bitta qatorga contention paydo bo'ladi — chora: hisobni sub-balanslarga bo'lish (N ta shard qator, tasodifiy tanlab yechish, jamlab o'qish) yoki navbat bilan ketma-ketlashtirish. Ledger yozuvlari esa baribir append-only qoladi."
+    },
+    {
+      "id": 30839,
+      "code": "PG40",
+      "level": "M",
+      "type": "card",
+      "topic": "Ledger",
+      "domain": "db",
+      "section": "p2",
+      "question": "Ledger'da noto'g'ri yozilgan tranzaksiyani qanday tuzatasiz — <code>UPDATE</code> qilasizmi?",
+      "explanation": "Yo'q. Ledger yozuvlari immutable (append-only): xato yozuv o'zgartirilmaydi va o'chirilmaydi — teskari (reversal) yozuv qo'shiladi, keyin to'g'ri yozuv. Audit izi saqlanadi, istalgan vaqtdagi balansni qayta tiklash mumkin, hisob-kitoblar tashqi hisobotlar bilan mos qoladi. DB darajasida: ilova roliga UPDATE/DELETE huquqi yo'q yoki trigger bilan taqiq."
+    },
+    {
+      "id": 30840,
+      "code": "PG41",
+      "level": "M",
+      "type": "card",
+      "topic": "Ledger",
+      "domain": "db",
+      "section": "p2",
+      "question": "Mijoz \"To'lash\" tugmasini ikki marta bosdi (yoki tarmoq retry qildi). Ikki marta pul yechilmasligi uchun DB'da nima qilasiz?",
+      "explanation": "Idempotency key: client har to'lov urinishi uchun unique kalit (UUID) yuboradi; server `payments(idempotency_key UNIQUE)` ga yozadi. Ikkinchi so'rov unique konfliktga uchraydi — yangi to'lov yaratilmaydi, birinchisining natijasi qaytariladi. Kalit va natija bitta tx'da saqlanadi; kalit + so'rov hash'i (boshqa body bilan qayta ishlatishni rad etish); muddat (24 soat)."
+    },
+    {
+      "id": 30841,
+      "code": "PG42",
+      "level": "M",
+      "type": "card",
+      "topic": "Ledger",
+      "domain": "db",
+      "section": "p2",
+      "question": "Ko'p valyutali hamyonda (UZS, USD) summalarni qanday saqlaysiz va jamlaysiz?",
+      "explanation": "Har summa valyutasi bilan: `amount_minor bigint` + `currency char(3)`; har valyuta uchun alohida hisob (account per currency). Turli valyutalarni to'g'ridan-to'g'ri qo'shib bo'lmaydi — konvertatsiya alohida tx: bir valyuta hisobidan debet, boshqasiga kredit, qo'llangan kurs va vaqt saqlanadi. Minor unit soni valyutaga bog'liq (ISO 4217). Hisobotda umumiy summa — aniq kurs sanasi bilan."
     }
   ]
 }

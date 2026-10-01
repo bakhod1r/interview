@@ -1,0 +1,41 @@
+{
+ "30781": {
+  "a": "**pvcreate → vgcreate → lvcreate → mkfs → mount.**\n\n```sh\npvcreate /dev/sdb /dev/sdc\nvgcreate data /dev/sdb /dev/sdc\nlvcreate -n pg -L 100G data      # yoki -l 100%FREE\nmkfs.xfs /dev/data/pg\nmount /dev/data/pg /var/lib/postgresql\n```\n\n- `/etc/fstab` ga UUID yoki `/dev/mapper/data-pg` bilan yoz.\n- Tekshir: `pvs`, `vgs`, `lvs`, `lsblk`."
+ },
+ "30782": {
+  "a": "**`pvs/vgs/lvs` — bir qatorli qisqa jadval (skriptga qulay); `*display` — har obyekt bo'yicha batafsil blok.**\n\n- `vgs` da `VFree` — VG'da qancha bo'sh joy.\n- `lvs -o +devices` — LV qaysi PV'larda yotganini ko'rsatadi.\n- `pvs -o +pv_used` — PV qancha band."
+ },
+ "30783": {
+  "a": "**Farq yo'q: ikkalasi bitta `dm-N` qurilmaga ishora.**\n\n- `/dev/vg/lv` — LVM yaratgan symlink.\n- `/dev/mapper/vg-lv` — device-mapper nomi; LV nomida `-` bo'lsa `--` ga aylanadi (`vg0-my--lv`).\n- fstab'da UUID ishonchliroq."
+ },
+ "30784": {
+  "a": "**Tartib muhim: avval FS, keyin LV. Teskari qilsang — ma'lumot yo'qoladi.**\n\n```sh\numount /data\ne2fsck -f /dev/vg/data\nlvreduce -r -L 50G /dev/vg/data   # -r: resize2fs ni o'zi chaqiradi\n```\n\n- ext4: faqat offline kichrayadi.\n- XFS: kichraytirib bo'lmaydi — backup, qayta yaratish, restore.\n- Har doim oldin backup."
+ },
+ "30785": {
+  "a": "**`-L` — aniq hajm (10G), `-l` — extent soni yoki foiz (`100%FREE`, `50%VG`). `-r` (`--resizefs`) — LV'dan keyin fayl tizimini ham kengaytiradi.**\n\n- `-r` siz: ext4 uchun `resize2fs`, XFS uchun `xfs_growfs /mount` qo'lda.\n- Online: ext4 va XFS mount holatida kengayadi."
+ },
+ "30786": {
+  "a": "**`pvmove` → `vgreduce` → `pvremove`. LV'lar online qoladi.**\n\n```sh\nvgextend vg0 /dev/sdd      # yangi disk\npvmove /dev/sdb            # sdb dagi extent'lar sdd ga\nvgreduce vg0 /dev/sdb\npvremove /dev/sdb\n```\n\n- VG'da yetarli bo'sh extent bo'lishi shart.\n- `pvmove` uzilsa — `pvmove` qayta ishga tushirib davom ettiriladi.\n- Katta disklarda sekin, I/O yuklaydi."
+ },
+ "30787": {
+  "a": "**Thin pool — LV'larga e'lon qilingan hajmdan kam real joy beradi; blok faqat yozilganda ajratiladi.**\n\n```sh\nlvcreate -L 100G -T vg0/pool\nlvcreate -V 500G -T vg0/pool -n big\n```\n\n- Afzallik: overcommit, arzon snapshot'lar (CoW pool ichida).\n- Xavf: pool 100% to'lsa — yozuvlar to'xtaydi/FS buziladi.\n- Monitoring: `lvs` da `Data%`, `Meta%`; `thin_pool_autoextend_threshold` (lvm.conf)."
+ },
+ "30788": {
+  "a": "**Linear — PV'lar ketma-ket ulanadi; striped (`-i 2 -I 64k`) — bloklar disklarga navbat bilan, I/O tezroq; raid1 (`--type raid1 -m1`) — har blok 2 nusxa.**\n\n- Linear va striped: bitta disk o'lsa — LV yo'qoladi (striped'da deyarli hammasi).\n- raid1: bitta disk o'lsa ishlaydi.\n- DB uchun bulutda ko'pincha bitta katta disk + linear yetarli."
+ },
+ "30789": {
+  "a": "**Snapshot — bir lahzadagi blok nusxasi: crash-consistent. Postgres uchun WAL bilan birga tiklanadi.**\n\n```sh\npsql -c \"CHECKPOINT\"   # yoki pg_backup_start()\nlvcreate -s -L 20G -n pgsnap vg0/pg\nmount -o ro,nouuid /dev/vg0/pgsnap /mnt/snap   # nouuid — XFS uchun\nrsync -a /mnt/snap/ backup:/pg/\numount /mnt/snap && lvremove -y vg0/pgsnap\n```\n\n- WAL boshqa LV'da bo'lsa — ikkalasini bir vaqtda olib bo'lmaydi: `pg_backup_start/stop` ishlat.\n- Snapshot'ni uzoq ushlama: CoW yozuvni sekinlashtiradi, to'lsa invalid bo'ladi."
+ },
+ "30790": {
+  "a": "**`lvconvert --merge vg0/snap` — origin LV snapshot paytidagi holatga qaytadi, snapshot yo'qoladi.**\n\n- Origin mount bo'lsa — merge keyingi aktivatsiyada (reboot yoki `umount` + `lvchange -an/-ay`) bajariladi.\n- Root FS uchun: OS upgrade oldidan snapshot, xato bo'lsa merge + reboot.\n- Snapshot'dan keyingi barcha o'zgarishlar yo'qoladi."
+ },
+ "30791": {
+  "a": "**Bulut diski online kattalashadi va o'z snapshot'i bor — LVM'siz ham `growpart` + `resize2fs/xfs_growfs` yetadi.**\n\nLVM foydali:\n- Disk limitidan katta hajm yoki bir nechta disk IOPS'ini birlashtirish (striping).\n- Disk almashtirish `pvmove` bilan online.\n- Ko'p LV'larni bitta hovuzdan moslashuvchan bo'lish.\n\nMinus: bulut snapshot'i ko'p diskli VG'ni bir vaqtda izchil olmaydi — multi-volume snapshot kerak."
+ },
+ "30792": {
+  "a": "**Qadam-baqadam:**\n\n1. `lsblk`, `blkid` — disk umuman ko'rinadimi, `LVM2_member` turi bormi.\n2. `pvscan --cache`, `vgscan` — qayta skan.\n3. `/etc/lvm/lvm.conf` dagi `filter`/`global_filter` diskni bloklamayaptimi; multipath bo'lsa — dublikat PV.\n4. `vgchange -ay vg0` — aktivatsiya.\n5. Metadata buzilgan: `vgcfgrestore -f /etc/lvm/archive/... vg0`.\n6. initramfs eski bo'lsa (root LV): `dracut -f` / `update-initramfs -u`."
+ },
+ "30793": {
+  "a": "**Printsip: ajratish, kengayish oson, tiklash sinalgan.**\n\n- OS, data, WAL — alohida LV (yoki disk): bir-birini to'ldirmaydi, I/O ajraladi.\n- VG'da 10–20% bo'sh joy — snapshot va shoshilinch kengaytirish uchun.\n- Redundancy: bare-metal'da mdadm/raid10 ostida yoki LVM raid; bulutda provider replikatsiyasi.\n- FS: XFS (katta fayl, parallel I/O) yoki ext4 (shrink mumkin).\n- Backup: snapshot faqat qisqa vaqtli; asosiy — `pgBackRest`/WAL arxiv, offsite.\n- Monitoring: `df`, `vgs VFree`, thin `Data%`, alert 80%.\n- Runbook: kengaytirish va disk almashtirish buyruqlari sinab ko'rilgan."
+ }
+}
