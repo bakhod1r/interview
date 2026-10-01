@@ -1,8 +1,7 @@
 {
   "id": "p2",
   "name": "Ledger & accounting",
-  "domain": "db",
-  "domainLabel": "Fintech & payments",
+  "domain": "fin",
   "topics": [
     "Ledger"
   ],
@@ -13,7 +12,7 @@
       "level": "M",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Double-entry ledger nima va nega fintech'da shu model tanlanadi?",
       "explanation": "Amaliy foydalari: har balans tarix bilan izohlanadi (audit), yo'qolgan pul darhol ko'rinadi (yig'indi nolga teng bo'lmaydi), va balansni UPDATE qilishdagi lost update muammosi yo'qoladi — faqat INSERT. Balansni tez o'qish uchun snapshot/materialized qiymat saqlanadi, lekin haqiqat manbai — yozuvlar.",
@@ -25,7 +24,7 @@
       "level": "S",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Foydalanuvchi balansini qanday saqlaysiz?",
       "explanation": "Agar tezlik uchun balans ustuni ham saqlansa, u bitta transaction ichida yozuv bilan birga yangilanadi va CHECK bilan himoyalanadi (masalan balans manfiy bo'lmasin). Muhim: mablag' yetarliligini tekshirish va yechish bitta atomik operatsiyada bo'lishi kerak — aks holda double-spend."
@@ -36,7 +35,7 @@
       "level": "S",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Reconciliation (yarashtirish) nima uchun kerak?",
       "explanation": "Amaliy dizayn: kunlik fayl/API hisoboti → moslashtirish kaliti (provayder tranzaksiya id) → farqlar jadvali → operatsion panel va alert. Farqlar normal hodisa (vaqt farqi, valyuta konvertatsiyasi, komissiya) — muhimi ularni tushuntirib yopish jarayoni bo'lishi. Yarashtirilmagan farqlar yig'ilib qolsa, keyin tergov qilish deyarli imkonsiz."
@@ -47,7 +46,7 @@
       "level": "S",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Pul o'tkazishda qaysi yozuv to'g'ri?",
       "snippet": "-- A dan B ga 100.00 (10000 tiyin)\n-- Variant 1\nUPDATE accounts SET balance = balance - 10000 WHERE id='A';\nUPDATE accounts SET balance = balance + 10000 WHERE id='B';\n\n-- Variant 2\nINSERT INTO entries(tx_id, account, amount) VALUES\n  ('t1','A',-10000), ('t1','B',+10000);",
@@ -59,7 +58,7 @@
       "level": "S",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Double-entry ledger'da balansni qanday hisoblaysiz — yuqori yuklamada?",
       "explanation": "Mutable balans ustuni audit va tiklashni yo'qotadi (qanday qilib shu raqam chiqdi?). Immutable yozuvlar + snapshot ikki narsani beradi: to'liq izlanish va tez o'qish. Har tranzaksiya uchun invariant `sum(debit) = sum(credit)` DB constraint yoki test bilan tekshiriladi; yozuvlar hech qachon `UPDATE`/`DELETE` qilinmaydi — faqat qarama-qarshi yozuv (reversal)."
@@ -70,7 +69,7 @@
       "level": "S",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Ledger yozuvlarida konkurent yozuv va izchillik uchun to'g'ri yondashuv?",
       "explanation": "Pul harakatida ikki xatarni yopish kerak: qo'sh yozuv (idempotency key + unique constraint) va minusga tushish (atomik shart). Hot hisob bo'lsa (masalan merchant hisobi) per-account navbat yoki sharding (bir hisobni ko'p sub-balansga bo'lish) qo'llanadi. `SERIALIZABLE` to'g'ri, lekin retry siyosati va throughput narxi bor."
@@ -81,7 +80,7 @@
       "level": "St",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Kunlik reconciliation: PSP settlement fayli bilan ichki ledger mos kelmadi. Qanday ishlaysiz?",
       "explanation": "Fintechda reconciliation — ixtiyoriy emas: webhook yo'qoladi, PSP kechikadi. Intervyuda kutiladigan detal — farqni toifalash va tuzatishni append-only yozuv bilan qilish."
@@ -92,7 +91,7 @@
       "level": "St",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Ledger'da pul o'tkazish (A→B) yozuvi qanday bo'ladi va nega ikki yozuv?",
       "explanation": "Ikki alohida tranzaksiya ishlatilsa pul 'havoda' qolishi mumkin (birinchi commit, ikkinchi fail). Bir DB ichida bu oddiy tranzaksiya; servislar orasida bo'lsa — saga bilan ikki bosqich (`pending` yozuv → tasdiq) yoki umuman ledgerni bitta servisda ushlash. Amaliyotda ledgerni bo'lish eng oxirgi chora, chunki invariant butunligi shu yerda."
@@ -103,7 +102,7 @@
       "level": "S",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Ledger'da yaxlitlash (rounding) qanday boshqariladi?",
       "explanation": "Klassik xato: 100.00 ni uchga bo'lib 33.33 × 3 = 99.99 — 1 tiyin yo'qoladi va reconciliation buziladi. Yechim: qoldiqni oxirgi qismga qo'shish yoki rounding hisobiga yozish. Foiz/soliq hisoblari uchun qaysi tartibda yaxlitlash (avval jamlab keyin yaxlitlashmi) ham biznes qoidasi sifatida qat'iy belgilanadi."
@@ -114,7 +113,7 @@
       "level": "St",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Ledger jadvali juda katta bo'lib ketdi (mlrd qator). Qanday boshqariladi?",
       "explanation": "Snapshot qoidalari: snapshot ham immutable yozuv sifatida saqlanadi (qaysi entry ID gacha hisoblangani bilan), shunda tekshirish (audit) mumkin bo'ladi. Arxivga ko'chirishda so'rov yo'li saqlanishi kerak (masalan yillik hisobot uchun) — ko'pincha ombor (ClickHouse/BigQuery) nusxasi shu maqsadda ishlatiladi."
@@ -125,7 +124,7 @@
       "level": "S",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Hisob balansi manfiyga tushmasligini qanday kafolatlaysiz (yuqori konkurentlikda)?",
       "explanation": "Read-then-write har doim race beradi. Hot hisob (masalan merchant) bo'lsa bitta qatorga contention paydo bo'ladi — chora: hisobni sub-balanslarga bo'lish (N ta shard qator, tasodifiy tanlab yechish, jamlab o'qish) yoki navbat bilan ketma-ketlashtirish. Ledger yozuvlari esa baribir append-only qoladi."
@@ -136,7 +135,7 @@
       "level": "M",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Ledger'da noto'g'ri yozilgan tranzaksiyani qanday tuzatasiz — <code>UPDATE</code> qilasizmi?",
       "explanation": "Yo'q. Ledger yozuvlari immutable (append-only): xato yozuv o'zgartirilmaydi va o'chirilmaydi — teskari (reversal) yozuv qo'shiladi, keyin to'g'ri yozuv. Audit izi saqlanadi, istalgan vaqtdagi balansni qayta tiklash mumkin, hisob-kitoblar tashqi hisobotlar bilan mos qoladi. DB darajasida: ilova roliga UPDATE/DELETE huquqi yo'q yoki trigger bilan taqiq."
@@ -147,7 +146,7 @@
       "level": "M",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Mijoz \"To'lash\" tugmasini ikki marta bosdi (yoki tarmoq retry qildi). Ikki marta pul yechilmasligi uchun DB'da nima qilasiz?",
       "explanation": "Idempotency key: client har to'lov urinishi uchun unique kalit (UUID) yuboradi; server `payments(idempotency_key UNIQUE)` ga yozadi. Ikkinchi so'rov unique konfliktga uchraydi — yangi to'lov yaratilmaydi, birinchisining natijasi qaytariladi. Kalit va natija bitta tx'da saqlanadi; kalit + so'rov hash'i (boshqa body bilan qayta ishlatishni rad etish); muddat (24 soat)."
@@ -158,7 +157,7 @@
       "level": "M",
       "type": "card",
       "topic": "Ledger",
-      "domain": "db",
+      "domain": "fin",
       "section": "p2",
       "question": "Ko'p valyutali hamyonda (UZS, USD) summalarni qanday saqlaysiz va jamlaysiz?",
       "explanation": "Har summa valyutasi bilan: `amount_minor bigint` + `currency char(3)`; har valyuta uchun alohida hisob (account per currency). Turli valyutalarni to'g'ridan-to'g'ri qo'shib bo'lmaydi — konvertatsiya alohida tx: bir valyuta hisobidan debet, boshqasiga kredit, qo'llangan kurs va vaqt saqlanadi. Minor unit soni valyutaga bog'liq (ISO 4217). Hisobotda umumiy summa — aniq kurs sanasi bilan."

@@ -1,8 +1,7 @@
 {
   "id": "n3",
   "name": "Elasticsearch",
-  "domain": "nosql",
-  "domainLabel": "Redis, Mongo, Elastic",
+  "domain": "elastic",
   "topics": [
     "Elasticsearch"
   ],
@@ -13,7 +12,7 @@
       "level": "M",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Elasticsearch va Solr — ikkalasi ham Lucene ustida. Amalda qanday tanlanadi?",
       "explanation": "Intervyuda 'qaysi biri yaxshi' emas, 'nima uchun shu' javobi kutiladi: jamoa tajribasi, managed servis mavjudligi, litsenziya masalalari (Elastic litsenziya o'zgarishi va OpenSearch forki) va operatsion qo'llab-quvvatlash. Texnik farqlar ko'p hollarda hal qiluvchi emas."
@@ -24,7 +23,7 @@
       "level": "M",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Elasticsearch'da <code>text</code> va <code>keyword</code> tiplari farqi?",
       "explanation": "Tipik dizayn: bitta maydonni ikkala tipda saqlash (title va title.keyword — multi-field). Xato mapping keyin tuzatilmaydi — reindex kerak, shuning uchun index shablonini oldindan aniq yozish muhim. Agregatsiya va saralashni text maydonda qilish xato beradi (fielddata)."
@@ -35,7 +34,7 @@
       "level": "M",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Mahsulot katalogi PostgreSQL'da, qidiruv Elasticsearch'da. To'g'ri arxitektura?",
       "explanation": "ES — qidiruv indeksi, tranzaksion DB emas (yaqin real vaqt, transaction yo'q). Ikkalasiga mustaqil yozish — dual write muammosi: biri yiqilsa ma'lumot farq qiladi. Reindex pipeline'i har doim tayyor turishi kerak: mapping o'zgarsa yoki ES buzilsa, Postgres'dan to'liq qayta qurish."
@@ -46,7 +45,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Hujjat indekslangach darhol qidiruvda topilmadi. Sabab?",
       "explanation": "Kerak bo'lsa ?refresh=wait_for (query refresh'gacha kutadi) — lekin har yozishda refresh=true qilish juda qimmat. Bulk indekslash maslahatlari: bulk API, refresh_interval=-1, replica=0, tugagach qaytarish."
@@ -57,7 +56,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Chuqur pagination (<code>from=100000&size=10</code>) nega yomon va o'rniga nima ishlatiladi?",
       "explanation": "Bu Postgres'dagi OFFSET muammosining aynan o'zi — yechim ham o'xshash: keyset (search_after) pagination, barqaror tartib uchun tie-breaker (_shard_doc yoki unikal id). Cheksiz scroll UI uchun search_after tabiiy mos."
@@ -68,7 +67,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Qidiruv natijalari sifatini qanday yaxshilaysiz?",
       "explanation": "Senior signal: relevance'ni his-tuyg'u bilan emas, o'lchov bilan sozlash va filter/query farqini bilish (cache va tezlik uchun muhim)."
@@ -79,7 +78,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "DB va qidiruv indeksi (Elasticsearch) o'rtasida ma'lumot mos kelmay qoldi. Eng ishonchli tuzilma qaysi?",
       "explanation": "Dual write — mos kelmaslikning asosiy sababi. CDC bilan tartib va kafolat yaxshilanadi, lekin indeks sxemasi o'zgarganda reindex baribir kerak — shuning uchun u bir martalik skript emas, qo'llab-quvvatlanadigan vosita bo'lishi kerak."
@@ -90,7 +89,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Elasticsearch'da qidiruv natijasi yozuvdan keyin darhol ko'rinmaydi. Nega?",
       "explanation": "Yozuv avval in-memory buffer + translog'ga tushadi, refresh yangi segment yaratadi. Bulk indeksatsiya paytida `refresh_interval: -1` qilinadi va oxirida qaytariladi (tezlik bir necha barobar). `wait_for` faqat kam sonli 'read-your-write' holatlarda; aks holda app tomonda o'z keshidan ko'rsatiladi."
@@ -101,7 +100,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "`from: 10000, size: 10` pagination sekin va xato beradi. To'g'ri yechim?",
       "explanation": "Deep paging koordinator nodeda 10010 × shard hujjatni saralashni talab qiladi. `search_after` holatsiz kursor beradi (foydalanuvchi pagination uchun ideal), `scroll` esa eksport uchun (snapshot ushlaydi, resursni band qiladi). UI'da ko'pincha 'keyingi sahifa' modeliga o'tish kerak."
@@ -112,7 +111,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Mapping'da `text` va `keyword` farqi amalda nimaga ta'sir qiladi?",
       "explanation": "Klassik xato: `status` maydonini `text` qilib qo'yib, agregatsiya ishlamasligi yoki `term` query mos kelmasligi (analiz tufayli lowercase). Yechim: `\"status\": {\"type\":\"keyword\"}` yoki `text` + `.keyword` sub-field. Dinamik mapping productionda o'chiriladi (`strict`) — aks holda bitta noto'g'ri hujjat mapping'ni buzadi."
@@ -123,7 +122,7 @@
       "level": "St",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "ES klaster sekinlashdi: shardlar juda ko'p (30k). Nima muammo?",
       "explanation": "Har kunga alohida kichik indeks yaratish — eng ko'p uchraydigan sabab. Tavsiya: shard hajmi 10-50GB, 1GB heap'ga ~20 shard chegarasi, vaqt seriyali ma'lumot uchun ILM (rollover hajm bo'yicha, keyin shrink/forcemerge, so'ng cold/delete). Data stream'lar shu naqshni avtomatlashtiradi."
@@ -134,7 +133,7 @@
       "level": "S",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "Elasticsearch'da relevantlik (`_score`) qanday hisoblanadi va qanday boshqariladi?",
       "explanation": "Amaliy muhandislik nuqtalari: biznes signallari (sotuv, reyting, yangilik) `rank_feature` yoki `function_score` bilan qo'shiladi; `explain: true` bilan nega shu tartib chiqqani tekshiriladi; `filter` konteksti skorga ta'sir qilmaydi va keshlanadi (shuning uchun aniq shartlar `filter`ga, matn qidiruvi `must`ga qo'yiladi)."
@@ -145,7 +144,7 @@
       "level": "St",
       "type": "card",
       "topic": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "section": "n3",
       "question": "PostgreSQL'dan Elasticsearch'ga ma'lumot sinxronlashning eng ishonchli yo'li?",
       "explanation": "Dual write ikki tizim orasida nomuvofiqlik keltiradi (biri yozildi, ikkinchisi yo'q). CDC/outbox bilan tartib va qayta o'ynatish imkoni bo'ladi. Muhim operatsion detal: mapping o'zgarganda joyida o'zgartirib bo'lmaydi — yangi indeks yaratib alias'ni atomik almashtirish (`_aliases` actions) standart naqsh."

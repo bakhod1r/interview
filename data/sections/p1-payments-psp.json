@@ -1,8 +1,7 @@
 {
   "id": "p1",
   "name": "Payments & PSP",
-  "domain": "arch",
-  "domainLabel": "Fintech & payments",
+  "domain": "fin",
   "topics": [
     "Payments"
   ],
@@ -13,7 +12,7 @@
       "level": "M",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "Authorization, capture va settlement farqi?",
       "explanation": "Dizaynga ta'siri: buyurtma holati va pul holati alohida modellanadi; auth muddati tugashi (odatda 7 kun) hisobga olinadi; qisman capture va qisman refund qo'llab-quvvatlanadi. Foydalanuvchi ko'radigan 'pending' summa — bank tomonidagi hold, sizning ledger'ingizda esa alohida yozuv turi."
@@ -24,7 +23,7 @@
       "level": "M",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "Karta ma'lumotlarini saqlash bo'yicha to'g'ri yondashuv?",
       "explanation": "CVV ni avtorizatsiyadan keyin saqlash umuman taqiqlangan. Saqlash mumkin bo'lgan minimal ma'lumot: token, oxirgi 4 raqam, brend, muddat — ko'rsatish uchun. Tokenizatsiya bilan takroriy to'lov (recurring) ham ishlaydi. Qamrov kichrayganda audit va sertifikatsiya xarajati ham kamayadi (SAQ A darajasi)."
@@ -35,7 +34,7 @@
       "level": "S",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "PSP webhook'larini qanday ishonchli qabul qilasiz?",
       "explanation": "Webhook — at-least-once va tartibsiz. Ishonchli tizim ikki manbaga tayanadi: webhook (tez) va polling/reconciliation (kafolat). Faqat webhook'ga tayanish — pul yo'qolishining klassik sababi."
@@ -46,7 +45,7 @@
       "level": "S",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "To'lov so'rovi timeout bo'ldi — PSP javobi noma'lum. To'g'ri harakat?",
       "explanation": "Timeout — 'bo'lmadi' degani emas: pul olingan bo'lishi mumkin. Shuning uchun har to'lov mahalliy `payment_intent` ID bilan boshlanadi, PSP'ga shu ID idempotency key sifatida beriladi, va noma'lum holat uchun reconciliation jarayoni (davriy `GET /charges` yoki settlement fayli bilan solishtirish) bo'ladi. Ikki marta to'lash — eng qimmat bug turi."
@@ -57,7 +56,7 @@
       "level": "S",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "Kartadan pul yechishning `authorization` va `capture` bosqichlari nima beradi?",
       "explanation": "Ikki bosqich biznes uchun muhim: buyurtma bekor bo'lsa `void` (capture'gacha) arzon va mijozga tez, `refund` (capture'dan keyin) sekin va komissiyali. Partial capture va multiple capture qo'llanishi PSP'ga bog'liq. Hold muddati (odatda 7 kun) o'tsa capture rad etiladi — shuning uchun jo'natish muddati bilan moslashtiriladi."
@@ -68,7 +67,7 @@
       "level": "St",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "Chargeback (dispute) oqimini tizimda qanday qo'llab-quvvatlaysiz?",
       "explanation": "Texnik talablar: dalillar (IP, qurilma, yetkazib berish tasdig'i, shartlar qabul qilingani) audit bilan saqlanadi va muddatga bog'langan; ledger'da chargeback va uning komissiyasi alohida hisob (hech qachon asl yozuvni o'chirish emas); fraud metrikasi (dispute rate) kuzatiladi, chunki kart tizimlari chegaradan oshsa jarima qo'yadi."
@@ -79,7 +78,7 @@
       "level": "S",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "PCI DSS doirasini kamaytirish uchun eng samarali qarori?",
       "explanation": "PAN tizimga kirsa — butun infra PCI doirasiga tushadi (audit, segmentatsiya, kalit boshqaruvi). Hosted fields bilan SAQ A darajasiga tushish mumkin. Qo'shimcha: CVV hech qachon saqlanmaydi, log/APM'da karta maydonlari maskalanadi, va takroriy to'lov uchun PSP tokeni (network token) ishlatiladi."
@@ -90,7 +89,7 @@
       "level": "S",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "3-D Secure (SCA) to'lov oqimini qanday o'zgartiradi?",
       "explanation": "Muhandislik oqibatlari: buyurtma 'to'langan' deb belgilanmaydi to natija kelmaguncha; inventar rezervi challenge davomida ushlab turilishi kerak (TTL bilan); frictionless flow (challenge'siz) va exemption'lar konversiyaga ta'sir qiladi. Natija ikki kanaldan kelishi mumkin (redirect va webhook) — ikkisi ham idempotent qayta ishlanishi shart."
@@ -101,7 +100,7 @@
       "level": "St",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "To'lov retry'lari (dunning) qanday loyihalanadi?",
       "explanation": "Ko'r-ko'rona retry ikki zarar keltiradi: kart tarmog'i jarima/blok qo'yadi (yuqori decline nisbati) va mijoz bir necha marta hold ko'radi. To'g'ri yondashuv sabab kodini tasniflash (hard vs soft decline), retry oynasini kartaning to'lov kuniga moslash, va har urinishda idempotency key yangilash siyosatini aniq belgilash."
@@ -112,7 +111,7 @@
       "level": "S",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "To'lov holatini nima belgilaydi: webhook, API javobi yoki ichki holat?",
       "explanation": "Webhook'ga yolg'iz ishonish klassik xato: u kechikadi, yo'qoladi, yoki tartibsiz keladi (`succeeded` dan keyin `processing`). Shuning uchun holat o'tishlari faqat oldinga (monoton) va har signal versiyasi tekshiriladi. Yakuniy himoya — davriy pull/reconcile, chunki pul masalasida 'signal kelmadi' ham holat."
@@ -123,7 +122,7 @@
       "level": "St",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "To'lov servisida 'double charge' hodisasi bo'ldi. Qanday tekshirasiz va tuzatasiz?",
       "explanation": "Pul bilan bog'liq incidentda tartib: ta'sirni o'lchash → mijozni himoya qilish (refund) → sababni dalil bilan aniqlash → DB darajasida tizimli to'siq. 'Kodni tuzatdim' javobi yetarli emas — constraint va detektor talab qilinadi."
@@ -134,7 +133,7 @@
       "level": "S",
       "type": "card",
       "topic": "Payments",
-      "domain": "arch",
+      "domain": "fin",
       "section": "p1",
       "question": "PSP webhook imzosi qanday tekshiriladi?",
       "explanation": "Eng ko'p uchraydigan xato: framework body'ni parse qilib qayta serializatsiya qiladi (probel/tartib o'zgaradi) va imza mos kelmaydi — shuning uchun raw body middleware'da saqlanishi kerak. Ikkinchi xato: `==` bilan solishtirish (timing). Uchinchisi: timestamp tekshirilmasa eski so'rov qayta yuborilishi mumkin."

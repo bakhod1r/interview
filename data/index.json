@@ -14,15 +14,18 @@
   "domains": {
     "go": "Go",
     "db": "PostgreSQL & SQL",
-    "nosql": "Redis, Mongo, Elastic",
+    "redis": "Redis & caching",
+    "mongo": "MongoDB",
+    "elastic": "Elasticsearch",
     "msg": "Kafka & messaging",
-    "api": "API, HTTP, security",
-    "arch": "Architecture & OOP",
-    "dist": "Distributed systems",
-    "sys": "System design",
-    "alg": "Algorithms",
-    "soft": "Behavioral",
+    "api": "API & HTTP",
     "sec": "Security",
+    "arch": "Architecture & OOP",
+    "fin": "Fintech & payments",
+    "soft": "Behavioral",
+    "sys": "System design",
+    "dist": "Distributed systems",
+    "alg": "Algorithms",
     "linux": "Linux",
     "cont": "Containers & K8s",
     "cicd": "CI/CD",
@@ -53,11 +56,11 @@
       "file": "sections/g7-runtime-internals.json"
     },
     {
-      "id": "g5",
-      "name": "Tooling, modules, build",
+      "id": "g3",
+      "name": "Memory, performance, testing",
       "domain": "go",
-      "count": 26,
-      "file": "sections/g5-tooling-modules-build.json"
+      "count": 48,
+      "file": "sections/g3-memory-performance-testing.json"
     },
     {
       "id": "g6",
@@ -67,11 +70,11 @@
       "file": "sections/g6-stdlib-web.json"
     },
     {
-      "id": "g3",
-      "name": "Memory, performance, testing",
+      "id": "g5",
+      "name": "Tooling, modules, build",
       "domain": "go",
-      "count": 48,
-      "file": "sections/g3-memory-performance-testing.json"
+      "count": 26,
+      "file": "sections/g5-tooling-modules-build.json"
     },
     {
       "id": "g4",
@@ -95,18 +98,18 @@
       "file": "sections/t4-concurrency-gotchas.json"
     },
     {
-      "id": "t5",
-      "name": "Time, date, encoding gotchas",
-      "domain": "go",
-      "count": 10,
-      "file": "sections/t5-time-date-encoding-gotchas.json"
-    },
-    {
       "id": "t8",
       "name": "Memory & GC gotchas",
       "domain": "go",
       "count": 14,
       "file": "sections/t8-memory-gc-gotchas.json"
+    },
+    {
+      "id": "t5",
+      "name": "Time, date, encoding gotchas",
+      "domain": "go",
+      "count": 10,
+      "file": "sections/t5-time-date-encoding-gotchas.json"
     },
     {
       "id": "d1",
@@ -151,46 +154,39 @@
       "file": "sections/t2-sql-gotchas.json"
     },
     {
-      "id": "p2",
-      "name": "Ledger & accounting",
-      "domain": "db",
-      "count": 14,
-      "file": "sections/p2-ledger-accounting.json"
-    },
-    {
-      "id": "n1",
-      "name": "Caching",
-      "domain": "nosql",
-      "count": 7,
-      "file": "sections/n1-redis-caching.json"
-    },
-    {
       "id": "n4",
       "name": "Redis",
-      "domain": "nosql",
+      "domain": "redis",
       "count": 101,
       "file": "sections/n4-redis.json"
     },
     {
+      "id": "n1",
+      "name": "Caching",
+      "domain": "redis",
+      "count": 7,
+      "file": "sections/n1-redis-caching.json"
+    },
+    {
+      "id": "t10",
+      "name": "Redis & cache gotchas",
+      "domain": "redis",
+      "count": 19,
+      "file": "sections/t10-redis-cache-gotchas.json"
+    },
+    {
       "id": "n2",
       "name": "MongoDB",
-      "domain": "nosql",
+      "domain": "mongo",
       "count": 16,
       "file": "sections/n2-mongodb.json"
     },
     {
       "id": "n3",
       "name": "Elasticsearch",
-      "domain": "nosql",
+      "domain": "elastic",
       "count": 13,
       "file": "sections/n3-elasticsearch.json"
-    },
-    {
-      "id": "t10",
-      "name": "Redis & cache gotchas",
-      "domain": "nosql",
-      "count": 19,
-      "file": "sections/t10-redis-cache-gotchas.json"
     },
     {
       "id": "m1",
@@ -242,18 +238,18 @@
       "file": "sections/a3-realtime.json"
     },
     {
-      "id": "a4",
-      "name": "Auth & security",
-      "domain": "api",
-      "count": 17,
-      "file": "sections/a4-auth-security.json"
-    },
-    {
       "id": "a5",
       "name": "Resilience",
       "domain": "api",
       "count": 14,
       "file": "sections/a5-resilience.json"
+    },
+    {
+      "id": "a4",
+      "name": "Auth & security",
+      "domain": "api",
+      "count": 17,
+      "file": "sections/a4-auth-security.json"
     },
     {
       "id": "t6",
@@ -263,11 +259,18 @@
       "file": "sections/t6-api-http-gotchas.json"
     },
     {
-      "id": "r1",
-      "name": "Microservices & boundaries",
-      "domain": "arch",
-      "count": 18,
-      "file": "sections/r1-microservices-boundaries.json"
+      "id": "x1",
+      "name": "Application security",
+      "domain": "sec",
+      "count": 21,
+      "file": "sections/x1-application-security.json"
+    },
+    {
+      "id": "t12",
+      "name": "Security gotchas",
+      "domain": "sec",
+      "count": 9,
+      "file": "sections/t12-security-gotchas.json"
     },
     {
       "id": "r2",
@@ -298,6 +301,13 @@
       "file": "sections/r5-ddd-tdd-bdd.json"
     },
     {
+      "id": "r1",
+      "name": "Microservices & boundaries",
+      "domain": "arch",
+      "count": 18,
+      "file": "sections/r1-microservices-boundaries.json"
+    },
+    {
       "id": "r6",
       "name": "Domain: e-commerce & billing",
       "domain": "arch",
@@ -307,30 +317,30 @@
     {
       "id": "p1",
       "name": "Payments & PSP",
-      "domain": "arch",
+      "domain": "fin",
       "count": 12,
       "file": "sections/p1-payments-psp.json"
     },
     {
-      "id": "s1",
-      "name": "Theory: consensus & consistency",
-      "domain": "dist",
-      "count": 15,
-      "file": "sections/s1-theory-consensus-consistency.json"
+      "id": "p2",
+      "name": "Ledger & accounting",
+      "domain": "fin",
+      "count": 14,
+      "file": "sections/p2-ledger-accounting.json"
     },
     {
-      "id": "s2",
-      "name": "Practice: failure & scale",
-      "domain": "dist",
-      "count": 20,
-      "file": "sections/s2-practice-failure-scale.json"
+      "id": "p3",
+      "name": "Compliance, fraud, FX",
+      "domain": "fin",
+      "count": 12,
+      "file": "sections/p3-compliance-fraud-fx.json"
     },
     {
-      "id": "t7",
-      "name": "Distributed gotchas",
-      "domain": "dist",
-      "count": 10,
-      "file": "sections/t7-distributed-gotchas.json"
+      "id": "b1",
+      "name": "Behavioral & teamwork",
+      "domain": "soft",
+      "count": 14,
+      "file": "sections/b1-behavioral-teamwork.json"
     },
     {
       "id": "y1",
@@ -354,46 +364,32 @@
       "file": "sections/t3-system-infra-gotchas.json"
     },
     {
+      "id": "s1",
+      "name": "Theory: consensus & consistency",
+      "domain": "dist",
+      "count": 15,
+      "file": "sections/s1-theory-consensus-consistency.json"
+    },
+    {
+      "id": "s2",
+      "name": "Practice: failure & scale",
+      "domain": "dist",
+      "count": 20,
+      "file": "sections/s2-practice-failure-scale.json"
+    },
+    {
+      "id": "t7",
+      "name": "Distributed gotchas",
+      "domain": "dist",
+      "count": 10,
+      "file": "sections/t7-distributed-gotchas.json"
+    },
+    {
       "id": "z1",
       "name": "Algorithm patterns",
       "domain": "alg",
       "count": 44,
       "file": "sections/z1-algorithm-patterns.json"
-    },
-    {
-      "id": "b1",
-      "name": "Behavioral & teamwork",
-      "domain": "soft",
-      "count": 14,
-      "file": "sections/b1-behavioral-teamwork.json"
-    },
-    {
-      "id": "x1",
-      "name": "Application security",
-      "domain": "sec",
-      "count": 21,
-      "file": "sections/x1-application-security.json"
-    },
-    {
-      "id": "t12",
-      "name": "Security gotchas",
-      "domain": "sec",
-      "count": 9,
-      "file": "sections/t12-security-gotchas.json"
-    },
-    {
-      "id": "p3",
-      "name": "Compliance, fraud, FX",
-      "domain": "sec",
-      "count": 12,
-      "file": "sections/p3-compliance-fraud-fx.json"
-    },
-    {
-      "id": "v1",
-      "name": "LVM: PV, VG, LV",
-      "domain": "linux",
-      "count": 24,
-      "file": "sections/v1-lvm.json"
     },
     {
       "id": "v2",
@@ -403,13 +399,6 @@
       "file": "sections/v2-linux-users.json"
     },
     {
-      "id": "v3",
-      "name": "Package management",
-      "domain": "linux",
-      "count": 12,
-      "file": "sections/v3-package-management.json"
-    },
-    {
       "id": "v4",
       "name": "Linux filesystems",
       "domain": "linux",
@@ -417,11 +406,39 @@
       "file": "sections/v4-linux-filesystems.json"
     },
     {
+      "id": "v1",
+      "name": "LVM: PV, VG, LV",
+      "domain": "linux",
+      "count": 24,
+      "file": "sections/v1-lvm.json"
+    },
+    {
+      "id": "v3",
+      "name": "Package management",
+      "domain": "linux",
+      "count": 12,
+      "file": "sections/v3-package-management.json"
+    },
+    {
+      "id": "i7",
+      "name": "Linux",
+      "domain": "linux",
+      "count": 68,
+      "file": "sections/i7-linux.json"
+    },
+    {
       "id": "i1",
       "name": "Containers & Kubernetes",
       "domain": "cont",
       "count": 17,
       "file": "sections/i1-containers-kubernetes.json"
+    },
+    {
+      "id": "t11",
+      "name": "Docker & Kubernetes gotchas",
+      "domain": "cont",
+      "count": 10,
+      "file": "sections/t11-docker-kubernetes-gotchas.json"
     },
     {
       "id": "i2",
@@ -445,32 +462,18 @@
       "file": "sections/i4-networking-protocols.json"
     },
     {
-      "id": "i5",
-      "name": "Cloud, OS, operations",
-      "domain": "cloud",
-      "count": 26,
-      "file": "sections/i5-cloud-os-operations.json"
-    },
-    {
-      "id": "i7",
-      "name": "Linux",
-      "domain": "linux",
-      "count": 68,
-      "file": "sections/i7-linux.json"
-    },
-    {
-      "id": "t11",
-      "name": "Docker & Kubernetes gotchas",
-      "domain": "cont",
-      "count": 10,
-      "file": "sections/t11-docker-kubernetes-gotchas.json"
-    },
-    {
       "id": "t13",
       "name": "Network & latency gotchas",
       "domain": "net",
       "count": 9,
       "file": "sections/t13-network-latency-gotchas.json"
+    },
+    {
+      "id": "i5",
+      "name": "Cloud, OS, operations",
+      "domain": "cloud",
+      "count": 26,
+      "file": "sections/i5-cloud-os-operations.json"
     }
   ]
 }

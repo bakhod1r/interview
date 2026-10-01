@@ -1,8 +1,7 @@
 {
   "id": "n4",
   "name": "Redis",
-  "domain": "nosql",
-  "domainLabel": "Redis, Mongo, Elastic",
+  "domain": "redis",
   "topics": [
     "Data types",
     "Internals",
@@ -18,7 +17,7 @@
       "level": "J",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Reyting table'i (leaderboard: ball bo'yicha top 10 va foydalanuvchi o'rni) uchun qaysi struktura?",
       "explanation": "ZSET — skiplist + hash: tartib va tezkor kirish. Boshqa moslamalar: String — cache/hisoblagich; Hash — obyekt maydonlari; Set — unikal to'plam va SINTER; List — oddiy queue/stack; Stream — hodisalar loglari va consumer group; HyperLogLog — taxminiy unikal sanoq (kam memory); Bitmap — kunlik faollik."
@@ -29,7 +28,7 @@
       "level": "J",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis String turi nimalarni saqlay oladi va maksimal hajmi qancha?",
       "explanation": "String — binary-safe bayt massivi; son, JSON, rasm ham bo'lishi mumkin."
@@ -40,7 +39,7 @@
       "level": "J",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Hash qachon alohida String key'lardan yaxshiroq?",
       "explanation": "Obyekt maydonlari uchun Hash: kam memory, maydonni alohida o'qish/yozish."
@@ -51,7 +50,7 @@
       "level": "J",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis List qanday ishlatiladi va qaysi amallar O(1)?",
       "explanation": "List — ikki tomonlama ro'yxat; boshi/oxiri O(1), o'rtasi O(n)."
@@ -62,7 +61,7 @@
       "level": "J",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Set va Sorted Set (ZSET) farqi?",
       "explanation": "Set — tartibsiz unikal; ZSET — score bo'yicha tartiblangan unikal."
@@ -73,7 +72,7 @@
       "level": "M",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "ZSET ichki tuzilishi qanday va nega skiplist?",
       "explanation": "Katta ZSET: skiplist + hash table; kichik: listpack."
@@ -84,7 +83,7 @@
       "level": "M",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Bitmap va bitfield nima uchun kerak? Misol keltiring.",
       "explanation": "Bitmap — String ustidagi bitlar; millionlab boolean'ni juda kam memory'da saqlaydi."
@@ -95,7 +94,7 @@
       "level": "M",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Streams'da consumer group qanday ishlaydi?",
       "explanation": "Consumer group — Kafka'ga o'xshash: xabar guruhdagi bitta consumerga, ACK bilan."
@@ -106,7 +105,7 @@
       "level": "M",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "RedisJSON va Redis Query Engine (RediSearch) nima beradi?",
       "explanation": "JSON hujjatni ichki yo'l bilan o'zgartirish va maydonlar bo'yicha indeks/qidiruv."
@@ -117,7 +116,7 @@
       "level": "S",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Pub/Sub va Streams farqi?",
       "explanation": "Ishonchli yetkazish kerak bo'lsa Pub/Sub mos emas (deploy paytida uzilish = yo'qolgan xabarlar). Streams: XADD, XREADGROUP, XACK, pending entries list (XPENDING) bilan ishlanmagan xabarlarni ko'rish va XCLAIM bilan boshqa consumer'ga o'tkazish. Kichik hajmdagi ishonchli queue uchun Streams — Kafka o'rniga arzon variant."
@@ -128,7 +127,7 @@
       "level": "S",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "HyperLogLog (`PFADD`/`PFCOUNT`) qachon ishlatiladi?",
       "explanation": "Set bilan 10 mln unique IP saqlash yuzlab MB, HyperLogLog esa 12 KB. Almashinuv — aniqlik. `PFMERGE` assotsiativ va idempotent bo'lgani uchun kunlik HLL'larni haftalikka birlashtirish to'g'ri natija beradi (oddiy sanoqlarni qo'shish esa bermaydi, chunki bir xil foydalanuvchi ikki kunda bo'lishi mumkin)."
@@ -139,7 +138,7 @@
       "level": "S",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Geo buyruqlar (GEOADD/GEOSEARCH) ichida nima turadi?",
       "explanation": "Geo — ZSET ustida, score = 52-bit geohash."
@@ -150,7 +149,7 @@
       "level": "S",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Bloom filter (Redis) qachon kerak va qanday cheklovi bor?",
       "explanation": "Ehtimoliy 'bor-yo'q' tekshiruvi: false positive bor, false negative yo'q."
@@ -161,7 +160,7 @@
       "level": "S",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis TimeSeries qachon oddiy ZSET'dan yaxshi?",
       "explanation": "Siqish, retention, downsampling va aggregation tayyor."
@@ -172,7 +171,7 @@
       "level": "St",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Qaysi Redis turini tanlash: millionlab obyekt uchun memory'ni qanday optimallashtirasiz?",
       "explanation": "To'g'ri tur, listpack encoding, qisqa key, bucket'larga bo'lish."
@@ -183,7 +182,7 @@
       "level": "St",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Streams'ni uzoq muddat ishlatganda qanday muammolar paydo bo'ladi?",
       "explanation": "Cheklanmagan o'sish, PEL to'planishi, o'lik consumer'lar, trimming va memory."
@@ -194,7 +193,7 @@
       "level": "P",
       "type": "card",
       "topic": "Data types",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'ga yangi ma'lumot turi kerak bo'lsa (masalan, maxsus indeks): modul yozasizmi, mavjud turlar ustida qurasizmi?",
       "explanation": "Avval mavjud turlar + Lua/Functions; modul — faqat jiddiy performance/memory ehtiyojida."
@@ -205,7 +204,7 @@
       "level": "J",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis buyruqlari qanday bajariladi?",
       "explanation": "Amaliy natijalar: INCR, SETNX, LPUSH kabi buyruqlarga lock kerak emas — ular allaqachon atomik. Lekin bitta sekin buyruq (KEYS *, katta ZRANGE, O(n) buyruq) butun serverni bloklaydi — barcha clientlar kutadi. Shuning uchun Redis'da 'sekin buyruq' = 'incident'. SLOWLOG bilan kuzatiladi.",
@@ -217,7 +216,7 @@
       "level": "M",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "TTL tugagan key memory'dan qachon o'chadi?",
       "explanation": "Amaliy natija: 'TTL qo'ydim, demak memory darhol bo'shaydi' degan hisob noto'g'ri — ayniqsa ko'p key bir vaqtda tugasa. Bir vaqtda ommaviy tugash yukni ham oshiradi, shuning uchun TTL'ga tasodifiy jitter qo'shiladi. Replicada key'ni faqat primary o'chiradi (DEL replikatsiya qilinadi)."
@@ -228,7 +227,7 @@
       "level": "M",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis object encoding nima? `OBJECT ENCODING` nimani ko'rsatadi?",
       "explanation": "Bir tur — bir necha ichki ko'rinish; kichik bo'lsa ixcham, kattalashsa o'zgaradi."
@@ -239,7 +238,7 @@
       "level": "M",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "`DEL` va `UNLINK` farqi?",
       "explanation": "UNLINK katta key'ni fonda o'chiradi — main thread bloklanmaydi."
@@ -250,7 +249,7 @@
       "level": "M",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "RESP protokoli nima? RESP2 va RESP3 farqi?",
       "explanation": "Redis client-server matnli protokoli; RESP3 boy turlar va push qo'shadi."
@@ -261,7 +260,7 @@
       "level": "S",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis single-threaded bo'lsa, nega bunday tez va qachon bu muammo?",
       "explanation": "Redis 6+ da I/O threads bor (tarmoq o'qish/yozish uchun), lekin komanda bajarilishi baribir bitta oqimda. Shu sabab operatsiyalar O(1) yoki O(log N) bo'lishi kerak; O(N) komandalar (`SMEMBERS`, `LRANGE 0 -1`) katta kolleksiyada latency spike beradi. CPU yetmasa — Cluster bilan shardlash yoki bir necha instansiya."
@@ -272,7 +271,7 @@
       "level": "S",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'da TTL qanday amalga oshiriladi (expiry mexanizmi)?",
       "explanation": "Amaliy natijalar: `used_memory` muddati o'tgan kalitlarni darhol qaytarmaydi (xotira rejasida hisobga olinadi); replicada kalitlar mustaqil o'chirilmaydi — master `DEL` yuboradi (shuning uchun eski versiyalarda replicadan o'qishda stale qiymat muammosi bo'lgan); ko'p kalit bir vaqtda expire bo'lsa active cycle CPU spike beradi — TTL'ga jitter shuning uchun ham kerak."
@@ -283,7 +282,7 @@
       "level": "S",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis dict (hash table) qanday kengayadi? Incremental rehash nima?",
       "explanation": "Rehash bir martada emas, har amalda bir oz — latency sakrashining oldini oladi."
@@ -294,7 +293,7 @@
       "level": "S",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis 6+ da I/O threads nima? Redis endi multi-threaded'mi?",
       "explanation": "Buyruq bajarilishi baribir bitta thread; I/O threads faqat socket o'qish/yozish va parse."
@@ -305,7 +304,7 @@
       "level": "S",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis event loop (ae) qanday ishlaydi?",
       "explanation": "epoll/kqueue asosidagi reactor: file events + time events."
@@ -316,7 +315,7 @@
       "level": "St",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Nega Redis yozuv buyruqlari replikaga effect sifatida (natija) yuboriladi, skript sifatida emas?",
       "explanation": "Effect replication — deterministik bo'lmagan skriptlar replikada boshqa natija bermasligi uchun."
@@ -327,7 +326,7 @@
       "level": "St",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis memory overhead'i qayerdan keladi: 1 mln mayda key nega kutilganidan ko'p joy oladi?",
       "explanation": "Har key: dictEntry, robj, SDS header, expire dict yozuvi, allocator yaxlitlash."
@@ -338,7 +337,7 @@
       "level": "P",
       "type": "card",
       "topic": "Internals",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis va Memcached/Dragonfly/KeyDB arxitekturasini solishtiring.",
       "explanation": "Single-thread shard modeli vs multi-thread; tanlov — tur boyligi, HA, ops."
@@ -349,7 +348,7 @@
       "level": "J",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis ma'lumotlari memory'da bo'lsa, restart'da nima bo'ladi? RDB nima?",
       "explanation": "Persistence o'chiq bo'lsa hammasi yo'qoladi; RDB — davriy snapshot fayl."
@@ -360,7 +359,7 @@
       "level": "J",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis replika nima uchun kerak?",
       "explanation": "Replika — master nusxasi: o'qishni taqsimlash va failover uchun."
@@ -371,7 +370,7 @@
       "level": "M",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "RDB va AOF'ni birga yoqish mumkinmi? Startup'da qaysi biri yuklanadi?",
       "explanation": "Mumkin va tavsiya etiladi; ikkalasi bo'lsa AOF yuklanadi (to'liqroq)."
@@ -382,7 +381,7 @@
       "level": "M",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis backup va restore qanday qilinadi?",
       "explanation": "RDB faylini nusxalash; replikadan olish; restore — faylni data dir'ga qo'yib start."
@@ -393,7 +392,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "RDB va AOF persistence farqi?",
       "explanation": "Ko'pincha ikkalasi birga yoqiladi (Redis 7'da multi-part AOF + RDB preamble). Muhim tushuncha: Redis — birinchi queue'da xotiradagi tizim; appendfsync always bo'lsa ham disk kafolati klassik DB level'ida emas. Kritik ma'lumotni Redis'da yagona nusxada saqlamaslik kerak.",
@@ -405,7 +404,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis replikatsiyasi va failover haqida qaysi to'g'ri?",
       "explanation": "Shuning uchun Redis'ni yagona haqiqat manbai sifatida ishlatish (to'lov, buyurtma) tavsiya etilmaydi — cache, sessiya, rate limit, queue uchun juda yaxshi. Sentinel — HA bitta master uchun; Cluster — sharding + HA. Split-brain holatlari uchun min-replicas-to-write sozlamasi bor."
@@ -416,7 +415,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Cluster'da <code>MGET user:1:name user:2:name</code> xato berdi (CROSSSLOT). Sabab va yechim?",
       "explanation": "Hash tag {...} ichidagi qism bo'yicha slot hisoblanadi. Ehtiyot bo'ling: hammasini bitta tagga solsangiz, ma'lumot bitta shardga yig'iladi (hot shard). Transaction va Lua ham bitta slot talab qiladi. Ko'pincha oddiyroq yechim — pipeline bilan alohida GET'lar."
@@ -427,7 +426,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "RDB va AOF persistensiya farqi va productionda qaysi tanlanadi?",
       "explanation": "`appendfsync always` durability beradi lekin throughputni keskin tushiradi; `everysec` — amaliy kelishuv. RDB `fork` qiladi, shuning uchun yozuv intensiv bo'lsa copy-on-write xotirasi oshadi (OOM xavfi). Redis 7'da multi-part AOF va RDB preamble bilan tiklanish tezlashgan. Eslatma: kesh vazifasida persistensiyani umuman o'chirish ham to'g'ri qaror."
@@ -438,7 +437,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Sentinel va Redis Cluster farqi?",
       "explanation": "Tanlov: ma'lumot bitta node RAM'iga sig'sa — Sentinel (oddiyroq, tranzaksiya va Lua cheklovsiz); sig'masa yoki throughput yetmasa — Cluster. Cluster'da `MGET key1 key2` turli slotda bo'lsa xato beradi, shuning uchun kalit dizayni hash tag bilan oldindan rejalashtiriladi. Ikkisida ham replikatsiya asinxron — failover'da oxirgi yozuvlar yo'qolishi mumkin."
@@ -449,7 +448,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis replikatsiyasi qanday ishlaydi: full va partial resync?",
       "explanation": "Asinxron replikatsiya; backlog yetarli bo'lsa PSYNC partial, aks holda RDB bilan full."
@@ -460,7 +459,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "AOF rewrite nima va `appendfsync` variantlari qanday trade-off beradi?",
       "explanation": "Rewrite AOF'ni ixchamlaydi; fsync rejimi — durability vs tezlik."
@@ -471,7 +470,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "BGSAVE paytida fork va copy-on-write qanday muammo beradi?",
       "explanation": "Fork — sahifa jadvali nusxasi; ko'p yozuvda CoW memory'ni ikki barobar oshirishi mumkin."
@@ -482,7 +481,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Sentinel failover qanday bo'ladi?",
       "explanation": "Sentinel'lar master yiqilganini quorum bilan aniqlaydi, lider tanlab replikani ko'taradi."
@@ -493,7 +492,7 @@
       "level": "S",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Cluster'da hash slot va MOVED/ASK redirect qanday ishlaydi?",
       "explanation": "16384 slot; key slot = CRC16(key) mod 16384; client noto'g'ri node'ga borsa redirect."
@@ -504,7 +503,7 @@
       "level": "St",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Cluster'da split-brain va yozuv yo'qolishi qanday sodir bo'ladi?",
       "explanation": "Asinxron replikatsiya + partition: eski master qisqa vaqt yozuv qabul qiladi, keyin ular yo'qoladi."
@@ -515,7 +514,7 @@
       "level": "St",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Cluster'da resharding va node qo'shish qanday bajariladi?",
       "explanation": "Slot'lar MIGRATE bilan key-bayon ko'chadi; ASK redirect bilan online."
@@ -526,7 +525,7 @@
       "level": "P",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Global (multi-region) Redis arxitekturasini qanday qurasiz?",
       "explanation": "Variantlar: region-lokal kesh + invalidatsiya, active-passive replika, yoki CRDT active-active."
@@ -537,7 +536,7 @@
       "level": "P",
       "type": "card",
       "topic": "Persistence & HA",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'da RPO va RTO maqsadlarini qanday belgilaysiz va ta'minlaysiz?",
       "explanation": "RPO — persistence/replikatsiya; RTO — failover tezligi va qayta isitish vaqti."
@@ -548,7 +547,7 @@
       "level": "J",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'ni kesh sifatida ishlatishning eng oddiy usuli qanday?",
       "explanation": "GET; miss bo'lsa DB'dan o'qib SET ... EX bilan yozish."
@@ -559,7 +558,7 @@
       "level": "M",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Distributed lock uchun to'g'ri buyruq va bo'shatish usuli?",
       "explanation": "Ikki nozik nuqta: 1) SETNX + EXPIRE alohida bo'lsa, orasida crash bo'lganda lock abadiy qoladi — shuning uchun bitta SET ... NX PX; 2) Oddiy DEL boshqa egasining lockini o'chirishi mumkin (sizning ishingiz TTL dan uzoq davom etsa) — shuning uchun token tekshiruvi Lua'da atomik qilinadi. Ish TTL dan uzoq cho'zilsa lock uzaytiriladi (watchdog).",
@@ -571,7 +570,7 @@
       "level": "M",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Pipeline, MULTI/EXEC va Lua skript farqi?",
       "explanation": "MULTI/EXEC'da rollback yo'q: buyruq ishlash vaqtida xato bersa, qolganlari baribir bajariladi. Shartli mantiq kerak bo'lsa (lockni tokenga qarab o'chirish, rate limit hisoblash) — Lua. Lua skript ham bitta threadda ishlaydi, shuning uchun qisqa bo'lishi shart — uzun skript butun serverni bloklaydi. WATCH — optimistik variant."
@@ -582,7 +581,7 @@
       "level": "M",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis bilan rate limiter: fixed window, sliding window, token bucket qanday qilinadi?",
       "explanation": "Fixed — INCR+EXPIRE; sliding — ZSET; token bucket — Lua bilan atomik."
@@ -593,7 +592,7 @@
       "level": "M",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'da session storage qanday qilinadi va nimalarga e'tibor kerak?",
       "explanation": "Session — Hash + sliding TTL; persistence va HA hal qilinishi kerak."
@@ -604,7 +603,7 @@
       "level": "M",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Pub/Sub'da xabar yo'qolishi qachon bo'ladi va keyspace notifications nima?",
       "explanation": "Pub/Sub fire-and-forget; obuna yo'q yoki sekin bo'lsa xabar yo'qoladi."
@@ -615,7 +614,7 @@
       "level": "M",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "WATCH bilan optimistic locking qanday ishlaydi?",
       "explanation": "WATCH qilingan key EXEC'dan oldin o'zgarsa tranzaksiya bekor (nil)."
@@ -626,7 +625,7 @@
       "level": "M",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Delayed queue (kechiktirilgan vazifalar) ni Redis'da qanday qilasiz?",
       "explanation": "ZSET: score = bajarilish vaqti; worker vaqti kelganlarini atomik oladi."
@@ -637,7 +636,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redlock (bir necha Redis node'da lock) ishonchlimi? Qanday yondashasiz?",
       "explanation": "Bu savol senior level'ni ajratadi: 'Redlock ishlatamiz' emas, 'lock nima uchun kerak — tezlik uchunmi yoki to'g'rilik uchunmi' degan savoldan boshlash.",
@@ -649,7 +648,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redlock (ko'p node'li Redis lock) tanqidi nimada?",
       "explanation": "Martin Kleppmann tanqidining mohiyati: qulf 'mutual exclusion' uchun optimizatsiya sifatida (ishni ikki marta qilmaslik) yaxshi, lekin to'g'rilik kafolati sifatida yaroqsiz. Shuning uchun amaliy naqsh: Redis lock bilan takroriy ishni kamaytirish + DB'da unique constraint/versiya bilan yakuniy to'g'rilikni ta'minlash."
@@ -660,7 +659,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Pipelining va Lua scripting orasidagi farq?",
       "explanation": "Tipik xato: `GET` qilib, ilovada tekshirib, `SET` qilish — orada boshqa client o'zgartiradi. Lua bir oqimda bajariladi (Redis single-threaded), shuning uchun atomik. Lekin Lua uzoq ishlasa butun serverni bloklaydi — skript qisqa bo'lishi va `KEYS` orqali kalitlarni e'lon qilishi kerak (Cluster'da shart)."
@@ -671,7 +670,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Client-side caching (tracking) Redis 6'da qanday ishlaydi?",
       "explanation": "Server qaysi client nima o'qiganini eslaydi va o'zgarganda invalidatsiya push qiladi."
@@ -682,7 +681,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'da idempotency key'ni qanday saqlaysiz (to'lov API)?",
       "explanation": "SET NX bilan birinchi so'rovni band qilish, natijani TTL bilan saqlash."
@@ -693,7 +692,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis Functions (Redis 7) Lua EVAL'dan nimasi bilan farq qiladi?",
       "explanation": "Functions server'da saqlanadi, replikatsiya/persist qilinadi, nom bilan chaqiriladi."
@@ -704,7 +703,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Ijtimoiy tarmoq feed/timeline'ni Redis bilan qanday loyihalaysiz?",
       "explanation": "Fan-out on write: har follower'ning ZSET/List'iga post id; celebrity uchun fan-out on read."
@@ -715,7 +714,7 @@
       "level": "S",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Distributed counter (like soni, view soni) ni yuqori yuklamada qanday qilasiz?",
       "explanation": "INCR yetadi, lekin hot key bo'lsa shard'langan counter yoki lokal agregatsiya."
@@ -726,7 +725,7 @@
       "level": "St",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'ni navbat (queue) sifatida ishlatish qachon to'g'ri, qachon yo'q?",
       "explanation": "Redis Streams (`XADD`/`XREADGROUP`/`XACK`) haqiqiy consumer group va pending list beradi — bu `LPUSH`/`RPOP` dan ancha ishonchli (ishlov berilayotgan xabar yo'qolmaydi). Lekin asinxron replikatsiya tufayli failover'da oxirgi yozuvlar yo'qolishi mumkin: pul yoki buyurtmaga tegishli ishni Redis navbatiga yolg'iz ishonib topshirmaslik kerak."
@@ -737,7 +736,7 @@
       "level": "St",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'ni primary database sifatida ishlatish mumkinmi? Qachon?",
       "explanation": "Mumkin, agar durability, memory narxi va query cheklovlari qabul qilinsa."
@@ -748,7 +747,7 @@
       "level": "P",
       "type": "card",
       "topic": "Patterns",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Kesh va DB o'rtasida kuchli consistency kerak bo'lgan tizimni qanday loyihalaysiz?",
       "explanation": "To'liq kafolat yo'q; CDC asosida invalidatsiya, versiyalash, lease va qisqa TTL kombinatsiyasi."
@@ -759,7 +758,7 @@
       "level": "J",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "`redis-cli` bilan qanday asosiy diagnostika qilasiz?",
       "explanation": "PING, INFO, DBSIZE, TTL, TYPE, MEMORY USAGE, SLOWLOG, --stat."
@@ -770,7 +769,7 @@
       "level": "M",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "<code>maxmemory</code> ga yetganda nima bo'ladi?",
       "explanation": "Cache sifatida ishlatsangiz: allkeys-lru yoki allkeys-lfu (takroriy murojaat ko'p bo'lsa LFU yaxshiroq). Queue/lock/session saqlasangiz noeviction xavfsizroq — lekin unda memory monitoringi va alert majburiy. LRU/LFU Redis'da taxminiy (sampling bilan) — aniq emas, bu ataylab qilingan.",
@@ -782,7 +781,7 @@
       "level": "M",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Production'da bu buyruq nima uchun xavfli va o'rniga nima ishlatiladi?",
       "snippet": "KEYS session:*",
@@ -794,7 +793,7 @@
       "level": "M",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "`SCAN` qanday ishlaydi va qanday kafolat beradi?",
       "explanation": "Cursor asosida iteratsiya: bloklamaydi, lekin dublikat bo'lishi mumkin."
@@ -805,7 +804,7 @@
       "level": "M",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "LRU va LFU eviction farqi? Redis LRU'ni qanday taxminiy qiladi?",
       "explanation": "Redis aniq LRU emas — tasodifiy namunadan eng eskisini tanlaydi."
@@ -816,7 +815,7 @@
       "level": "M",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Go'da `go-redis` client'ni production uchun qanday sozlaysiz?",
       "explanation": "Pool hajmi, timeout'lar, context, retry, pipeline — asosiy sozlamalar."
@@ -827,7 +826,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'da eviction policy `noeviction` bo'lsa xotira tugaganda nima bo'ladi?",
       "explanation": "Qaror 'Redis nima vazifada' degan savoldan kelib chiqadi: kesh — yo'qotish mumkin, demak LRU/LFU; navbat yoki yagona holat ombori — yo'qotish mumkin emas, demak `noeviction`, `maxmemory` zapas bilan va alert. Ikkisini bir instansiyada aralashtirish klassik xato — kesh yozuvi muhim ma'lumotni evict qiladi."
@@ -838,7 +837,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Big key va hot key muammosi: qanday topiladi va hal qilinadi?",
       "explanation": "Big key — bloklash va notekis memory; hot key — bitta node/CPU yuklamasi."
@@ -849,7 +848,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Memory fragmentation nima va `mem_fragmentation_ratio` qanday talqin qilinadi?",
       "explanation": "RSS / used_memory; >1.5 — fragmentation, <1 — swap."
@@ -860,7 +859,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis xavfsizligi: production instance'ni qanday himoyalaysiz?",
       "explanation": "Ochiq Redis = RCE xavfi; ACL, TLS, tarmoq izolatsiyasi, xavfli buyruqlar cheklovi."
@@ -871,7 +870,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Latency sabablari: `LATENCY DOCTOR`, `SLOWLOG` va tashqi omillar?",
       "explanation": "Sekin buyruq, fork, swap, THP, tarmoq, AOF fsync — asosiy sabablar."
@@ -882,7 +881,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Go'da context cancel bo'lganda Redis ulanishi bilan nima bo'ladi va pool tugashi qanday ko'rinadi?",
       "explanation": "Bekor qilingan so'rov ulanishni yopadi; pool tugasa PoolTimeout xatolari."
@@ -893,7 +892,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis litsenziyasi o'zgarishi (2024) va Valkey nima?",
       "explanation": "Redis 7.4 RSAL/SSPL'ga o'tdi; Linux Foundation BSD fork Valkey'ni chiqardi; Redis 8 AGPL qo'shdi."
@@ -904,7 +903,7 @@
       "level": "S",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Kubernetes'da Redis'ni qanday ishlatasiz?",
       "explanation": "StatefulSet + PVC, operator yoki managed; anti-affinity, resurs limitlari, persistence."
@@ -915,7 +914,7 @@
       "level": "St",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "'Redis bizga sekin' deyishdi: p99 latency sakraydi. Qanday tekshirasiz?",
       "explanation": "Staff signal: Redis'da latency muammosi deyarli doim 'bitta og'ir operatsiya butun threadni bloklagan' yoki 'memory/fork' bilan bog'liq. Tartib: o'lchash (SLOWLOG, INFO) → sabab → chora."
@@ -926,7 +925,7 @@
       "level": "St",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis instance'ni capacity planning: necha shard va qancha memory kerak?",
       "explanation": "Ma'lumot hajmi, overhead, fork CoW zaxirasi, ops/s va o'sish asosida."
@@ -937,7 +936,7 @@
       "level": "St",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis versiyasini (masalan 6.2 → 7.2) downtime'siz qanday yangilaysiz?",
       "explanation": "Replika avval yangilanadi, keyin failover; mosliklarni oldindan tekshirish."
@@ -948,7 +947,7 @@
       "level": "P",
       "type": "card",
       "topic": "Operations",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Kompaniyada 200+ Redis instance bor. Platforma darajasida ularni qanday boshqarasiz?",
       "explanation": "Standart profil, self-service, observability, capacity, xavfsizlik va xarajat boshqaruvi."
@@ -959,7 +958,7 @@
       "level": "J",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis asosan nimalarga ishlatiladi? 5-6 ta use case ayting.",
       "explanation": "Kesh, session, hisoblagich/rate limit, leaderboard, queue, lock, pub/sub, geo."
@@ -970,7 +969,7 @@
       "level": "J",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'ni oddiy queue sifatida qanday ishlatasiz?",
       "explanation": "Producer LPUSH, consumer BRPOP — FIFO, blocking kutish."
@@ -981,7 +980,7 @@
       "level": "J",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "OTP (SMS kod) va email tasdiqlash tokenlarini Redis'da qanday saqlaysiz?",
       "explanation": "SET kod EX 300 + urinishlar hisoblagichi; ishlatilgach DEL."
@@ -992,7 +991,7 @@
       "level": "M",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Reliable queue: List bilan job yo'qolmasligini qanday ta'minlaysiz?",
       "explanation": "BLMOVE bilan processing list'ga ko'chirish, tugagach LREM; osilganlarni qaytarish."
@@ -1003,7 +1002,7 @@
       "level": "M",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Queue uchun List va Streams'dan qaysi birini tanlaysiz?",
       "explanation": "Oddiy job — List; ACK, replay, consumer group, ko'p o'quvchi — Streams."
@@ -1014,7 +1013,7 @@
       "level": "M",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Priority queue'ni Redis'da qanday qilasiz?",
       "explanation": "ZSET score = priority (BZPOPMIN) yoki har priority uchun alohida List."
@@ -1025,7 +1024,7 @@
       "level": "M",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Chat yoki real-time notification uchun Redis'ni qanday ishlatasiz?",
       "explanation": "Pub/Sub — onlayn yetkazish; Streams/List — tarix va oflayn user'lar."
@@ -1036,7 +1035,7 @@
       "level": "M",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Online user'lar (presence) va 'oxirgi 5 daqiqada aktiv' ni qanday hisoblaysiz?",
       "explanation": "ZSET score = last seen vaqti; ZCOUNT/ZREMRANGEBYSCORE."
@@ -1047,7 +1046,7 @@
       "level": "M",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Autocomplete (qidiruv takliflari) ni Redis'da qanday qilasiz?",
       "explanation": "ZSET lex range yoki prefiks bo'yicha ZSET; murakkab bo'lsa Query Engine."
@@ -1058,7 +1057,7 @@
       "level": "M",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "E-commerce savatcha (cart) uchun Redis qanday ishlatiladi?",
       "explanation": "Hash: field = productId, value = soni; TTL; checkout'da DB'ga."
@@ -1069,7 +1068,7 @@
       "level": "S",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis queue va Kafka/RabbitMQ: qachon Redis yetarli, qachon emas?",
       "explanation": "Kichik-o'rta job queue — Redis; katta hajm, uzoq retention, kuchli durability — Kafka/Rabbit."
@@ -1080,7 +1079,7 @@
       "level": "S",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Chipta/joy band qilish (seat reservation, flash sale stock) ni Redis bilan qanday qilasiz?",
       "explanation": "Atomik Lua bilan stock ayirish yoki SET NX EX bilan vaqtinchalik band qilish; yakun DB'da."
@@ -1091,7 +1090,7 @@
       "level": "S",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Dedup (takroriy hodisa/xabarni o'tkazib yuborish) ni Redis bilan qanday qilasiz?",
       "explanation": "SET NX EX bilan event id; juda ko'p bo'lsa Bloom filter."
@@ -1102,7 +1101,7 @@
       "level": "St",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'ni qaysi holatlarda ishlatmaslik kerak?",
       "explanation": "Asosiy haqiqat manbai sifatida pul/ledger, katta dataset, murakkab query, uzoq retention."
@@ -1113,7 +1112,7 @@
       "level": "St",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Redis'ni Kafka oldida buffer yoki 'tez yozish qatlami' sifatida ishlatish to'g'rimi?",
       "explanation": "Ko'pincha anti-pattern: qo'shimcha yo'qotish nuqtasi; faqat aniq sabab bilan."
@@ -1124,7 +1123,7 @@
       "level": "P",
       "type": "card",
       "topic": "Use cases",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n4",
       "question": "Qachon Redis o'rniga boshqa tizim tanlaysiz? Arxitektura qarorini qanday asoslaysiz?",
       "explanation": "Talablar: durability, hajm, query, consistency, ops narxi — har biri boshqa tizimga olib keladi."

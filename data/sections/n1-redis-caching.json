@@ -1,8 +1,7 @@
 {
   "id": "n1",
   "name": "Caching",
-  "domain": "nosql",
-  "domainLabel": "Redis, Mongo, Elastic",
+  "domain": "redis",
   "topics": [
     "Cache"
   ],
@@ -13,7 +12,7 @@
       "level": "M",
       "type": "card",
       "topic": "Cache",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n1",
       "question": "Cache-aside (lazy loading) pattern'da o'qish oqimi qanday?",
       "explanation": "Eng keng tarqalgan pattern. Yozishda cache'ni yangilash emas, o'chirish (invalidate) xavfsizroq — ikki parallel yozish cache'ga eski qiymatni qoldirishi mumkin. TTL qo'shimcha himoya. Boshqalari: write-through, write-behind."
@@ -24,7 +23,7 @@
       "level": "S",
       "type": "card",
       "topic": "Cache",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n1",
       "question": "Cache stampede (thundering herd) nima va qanday oldini olasiz?",
       "explanation": "Senior signal: bir nechta usulni va ularning trade-off'ini bilish. Cache 'yiqilganda' (cold start) ham xuddi shu muammo — cache'ni isitish (warmup)."
@@ -35,7 +34,7 @@
       "level": "M",
       "type": "card",
       "topic": "Cache",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n1",
       "question": "Write-through, write-back va write-around farqi?",
       "explanation": "Eng keng tarqalgani — cache-aside (lazy loading) + yozishda kalitni invalidate qilish. Write-back faqat ishonchli, replikatsiyalangan kesh bilan (masalan Redis AOF) va yo'qotishga chidamli ma'lumot uchun. Tanlovda savol: kesh yo'qolsa nima bo'ladi va eskirgan ma'lumot qancha vaqt maqbul."
@@ -46,7 +45,7 @@
       "level": "S",
       "type": "card",
       "topic": "Cache",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n1",
       "question": "Kesh invalidatsiyasi subsystem'ini loyihalang — ko'p servis bir xil ma'lumotni keshlaydi.",
       "explanation": "Kuchli javob 'kesh invalidatsiyasi — eng qiyin ikki masaladan biri' degan hazil bilan cheklanmaydi: aniq mexanizm, zaxira TTL va kuzatuvni aytadi."
@@ -57,7 +56,7 @@
       "level": "S",
       "type": "card",
       "topic": "Cache",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n1",
       "question": "Kesh kaliti dizaynida nimalarga e'tibor beriladi?",
       "explanation": "Eng xavfli bug: kontekstni kalitga qo'shmaslik — bir tenant/til uchun keshlangan javob boshqasiga beriladi (ma'lumot oqishi). Versiyalash esa deploy paytida strukturasi o'zgargan qiymatlar bilan crash bo'lishini oldini oladi; alternativa — kesh qiymatida sxema versiyasini saqlab, mos kelmasa miss deb hisoblash."
@@ -68,7 +67,7 @@
       "level": "S",
       "type": "card",
       "topic": "Cache",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n1",
       "question": "Cache-aside, read-through, write-through, write-around — qisqa farqi?",
       "explanation": "Amaliy tanlov naqshi: ko'p o'qiladigan issiq ma'lumot — cache-aside + TTL + invalidatsiya; yozib darhol o'qiladigan ma'lumot — write-through; bir marta yozilib kam o'qiladigan ma'lumot — write-around (aks holda kesh keraksiz ma'lumot bilan to'ladi). Write-behind esa tez lekin durability'ni qurbon qiladi."
@@ -79,7 +78,7 @@
       "level": "St",
       "type": "card",
       "topic": "Cache",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "n1",
       "question": "Kesh hit ratio 60% ga tushdi, DB yuklamasi oshdi. Qanday tekshirasiz va tuzatasiz?",
       "explanation": "Intervyuda kutiladigan ketma-ketlik: metrikadan boshlash (`INFO stats`), sabab toifasini ajratish (evict/expire/kalit kardinalligi/deploy), keyin chora. LFU vs LRU tanlovini asoslash — kuchli detal."

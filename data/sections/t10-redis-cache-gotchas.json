@@ -1,8 +1,7 @@
 {
   "id": "t10",
   "name": "Redis & cache gotchas",
-  "domain": "nosql",
-  "domainLabel": "Edge cases & gotchas",
+  "domain": "redis",
   "topics": [
     "Redis gotcha"
   ],
@@ -13,7 +12,7 @@
       "level": "M",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "`INCR` bilan rate limiter yozdingiz. Qaysi bug tipik?",
       "explanation": "Yana bir kamchilik: fixed window counter chegarada ikki barobar trafikka ruxsat beradi (oynaning oxiri va boshi). Aniqroq: sliding window log (ZSET, xotira qimmat) yoki sliding window counter, yoki token bucket (Lua script bilan atomik). Redis 7 da funksiyalar (FUNCTION) skriptlarni saqlashning zamonaviy yo'li."
@@ -24,7 +23,7 @@
       "level": "M",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "`SET key val` qilindi — key'dagi avvalgi TTL bilan nima bo'ladi?",
       "explanation": "SET TTL'ni o'chiradi; key abadiy bo'lib qoladi."
@@ -35,7 +34,7 @@
       "level": "M",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "MULTI/EXEC ichida bitta buyruq xato bersa, qolganlari bekor bo'ladimi?",
       "explanation": "Yo'q — Redis rollback qilmaydi; runtime xatodan keyin qolganlar bajariladi."
@@ -46,7 +45,7 @@
       "level": "M",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Pipeline yuborildi, client faqat oxirgi javobni tekshirdi. Qanday xato yashirinadi?",
       "explanation": "Pipeline atomik emas; har buyruq alohida javob, o'rtadagi xatolar sezilmay qoladi."
@@ -57,7 +56,7 @@
       "level": "M",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "`SETNX` + `EXPIRE` ikki alohida buyruq bilan lock qo'yish xavfi?",
       "explanation": "Ikki buyruq orasida crash bo'lsa lock abadiy qoladi."
@@ -68,7 +67,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Production Redis'da `KEYS user:*` chaqirilsa nima bo'ladi?",
       "explanation": "KEYS O(N) va bloklovchi — millionlab kalitda sekundlab pauza, timeout to'lqini. SCAN kursor bilan porsiyalab yuradi (kafolat: skanerlash davomida mavjud bo'lgan kalit albatta qaytariladi, dublikat bo'lishi mumkin). Xuddi shunday xavfli: FLUSHALL, katta kolleksiyada SMEMBERS/HGETALL, DEL bilan katta obyektni o'chirish (UNLINK — asinxron variant)."
@@ -79,7 +78,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "`SETEX lock ...` bilan qo'lda distributed lock yozildi. Qaysi xato eng xavfli?",
       "explanation": "To'g'ri naqsh: `SET key <random-token> NX PX <ttl>`, bo'shatish Lua skript bilan atomik (`if redis.call('get',KEYS[1])==ARGV[1] then del end`). Yana ikki nuqta: TTL ishdan uzun bo'lishi yoki fencing token bilan himoya (qulf tugaganidan keyingi yozuvni rad etish), va Redis failover'da qulf kafolatlanmasligi — pul operatsiyasida qulfga emas, DB constraint'ga tayaniladi."
@@ -90,7 +89,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Kesh uchun `KEYS user:*` ishlatilgan. Nima bo'ladi?",
       "explanation": "Millionlab kalitda `KEYS` yuzlab millisekund-sekundlarga barcha mijozni to'xtatadi — latency spike va timeout to'lqini. Xuddi shu xavf: katta `HGETALL`, `SMEMBERS`, `DEL` bitta katta kalitga (`UNLINK` afzal), va `FLUSHALL`. Monitoringda `slowlog` va `latency doctor` shu holatni ko'rsatadi."
@@ -101,7 +100,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Redis'da `INCR` bilan rate limit yozildi, lekin limit ba'zan oshib ketadi. Nega?",
       "explanation": "Ikkinchi sabab — fixed window chegarasi: oyna chetida ketma-ket ikki oynada limitgacha so'rov o'tib, amalda 2x burst bo'ladi. Aniqroq variant: sliding window interpolatsiyasi yoki token bucket, ikkalasi ham bitta Lua skriptda atomik bajariladi."
@@ -112,7 +111,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Lua skript ichida key nomini argumentdan qurib (`'user:'..ARGV[1]`) ishlatish nega xato?",
       "explanation": "Cluster'da slot tekshirilmaydi — CROSSSLOT/noto'g'ri node; key'lar KEYS[] da e'lon qilinishi shart."
@@ -123,7 +122,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "`HGETALL` yoki `SMEMBERS` vaqti-vaqti bilan latency spike beradi. Nega?",
       "explanation": "Katta kolleksiyada O(n) va katta javob — main thread bloklanadi, output buffer o'sadi."
@@ -134,7 +133,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Replikadan o'qilgan qiymat masterga yozilgandan keyin eski chiqdi. Bug'mi?",
       "explanation": "Yo'q — async replikatsiya; read-your-writes yo'q."
@@ -145,7 +144,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "`EXPIRE` bilan qo'yilgan TTL'lar node soati o'zgarganda qanday ishlaydi?",
       "explanation": "Expire absolute unix vaqtda saqlanadi; soat sakrasa key'lar erta/kech eskiradi."
@@ -156,7 +155,7 @@
       "level": "S",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Kesh'ga `nil`/bo'sh natija yozilmaydi — DB baribir yiqildi. Nima bo'ldi?",
       "explanation": "Cache penetration: mavjud bo'lmagan key'lar har safar DB'ga boradi."
@@ -167,7 +166,7 @@
       "level": "St",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Kesh TTL bir vaqtda tugab, DB yiqildi. Bu qanday nomlanadi va nima qilinadi?",
       "explanation": "Uch alohida naqsh farqlanadi: stampede (bir kalit muddati tugab, minglab parallel qayta hisoblash), avalanche (ko'p kalit bir vaqtda), penetration (mavjud bo'lmagan kalitga so'rovlar — negative caching yoki bloom filter). Go'da single-flight uchun `golang.org/x/sync/singleflight`."
@@ -178,7 +177,7 @@
       "level": "St",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Redis kesh 'thundering herd'dan himoyalandi, lekin deploy'dan keyin DB baribir yiqildi. Ehtimolli sabab?",
       "explanation": "Shu sabab kesh versiyasini o'zgartirish (`v2:`) — bu deploy emas, incident xavfi bo'lgan operatsiya: bosqichma-bosqich (dual-read: yangi kalit yo'q bo'lsa eskisidan o'qish) qilinadi. DB tomonida esa konkurentlik limiti oxirgi himoya bo'lib qoladi."
@@ -189,7 +188,7 @@
       "level": "St",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Redis'ni restart qilishdi, ilova to'liq ishlamay qoldi, garchi Redis 'faqat kesh' deyilgan edi. Ehtimoliy sabablar?",
       "explanation": "Yashirin bog'liqliklar: session, lock, rate limit, idempotency, cold cache DB'ni yiqitishi."
@@ -200,7 +199,7 @@
       "level": "P",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Redis'ni cache sifatida ishlatyapsiz. maxmemory-policy `noeviction` bo'lsa nima bo'ladi?",
       "explanation": "noeviction — default va durable store uchun to'g'ri; cache uchun xato. volatile-* siyosatlari faqat TTL qo'yilgan kalitlarni o'chiradi — TTL'siz kalitlar to'plansa baribir OOM bo'ladi. Amaliyot: cache instansiyasi va durable (queue, session) instansiyasini ajratish, chunki bitta siyosat ikkalasiga to'g'ri kelmaydi."
@@ -211,7 +210,7 @@
       "level": "P",
       "type": "card",
       "topic": "Redis gotcha",
-      "domain": "nosql",
+      "domain": "redis",
       "section": "t10",
       "question": "Cache-aside'da eng keng tarqalgan mos kelmaslik (inconsistency) manbai?",
       "explanation": "Klassik race: A o'qiydi (miss, DB'dan eski qiymat oladi), B yozadi va cache'ni o'chiradi, keyin A eski qiymatni cache'ga yozadi — eskilik TTL tugaguncha qoladi. Yumshatish: yozuvda invalidate + qisqa TTL; muhim joyda 'delete after commit' va ikkinchi kechiktirilgan delete (delayed double delete); yoki versiyalangan kalit (kalitga entity versiyasini qo'shish) bilan eski yozuv umuman ustidan yozmaydi."
