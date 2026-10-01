@@ -42,14 +42,16 @@ for (const s of data.sections) {
 const GLO = fs.existsSync(path.join(root, "data/glossary.json")) ? JSON.parse(fs.readFileSync(path.join(root, "data/glossary.json"), "utf8")) : [];
 const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const gre = GLO.map(g => g.k.map(k => {
-  const t = k.trim();
+  let t = k.trim();
+  if (t[0] === "=") { t = t.slice(1); return new RegExp("(^|[^A-Za-z0-9'])" + esc(t) + "(?![A-Za-z0-9])", "i"); }
   if (/^[A-Z0-9\-\/]+$/.test(t) && t.length <= 5) return new RegExp("(^|[^A-Za-z0-9])" + esc(t) + "(?![A-Za-z0-9])");
   return new RegExp("(^|[^A-Za-z0-9'])" + esc(t), "i");
 }));
 for (const o of questions) {
-  const txt = [o.f || o.q, o.b || ""].join(" ");
+  // avval savol+javobdagi atamalar, keyin batafsil matndagilar (jami 10 tagacha)
+  const main = [o.f || o.q, o.b || ""].join(" "), deep = (o.x || "").replace(/<svg[\s\S]*?<\/svg>/g, "");
   const g = [];
-  gre.forEach((rs, i) => { if (g.length < 8 && rs.some(r => r.test(txt))) g.push(i); });
+  for (const txt of [main, deep]) gre.forEach((rs, i) => { if (g.length < 10 && !g.includes(i) && rs.some(r => r.test(txt))) g.push(i); });
   if (g.length) o.g = g;
 }
 
