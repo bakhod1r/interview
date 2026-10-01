@@ -73,16 +73,38 @@ const block = [
   "const GLO=" + js(GLO.map(g => [g.t, g.d])) + ";"
 ].join("\n");
 
+// docs/*.md -> DOCS: [id, sarlavha, markdown] (home sahifadagi "Qo'llanmalar")
+const docsDir = path.join(root, "docs");
+// docs/*.md -> "Qo'llanmalar" guruhi; docs/<papka>/*.md -> papka README sarlavhasi bilan guruh (README o'zi kirmaydi)
+// DOCS element: [id, sarlavha, markdown, guruh]
+const mdFiles = d => fs.readdirSync(d).filter(f => f.endsWith(".md") && f !== "README.md").sort();
+const readDoc = (rel, group) => {
+  const src = fs.readFileSync(path.join(docsDir, rel), "utf8");
+  const m = src.match(/^# (.+)$/m);
+  return [rel.replace(/\.md$/, "").replace(/\//g, "-"), m ? m[1].trim() : rel, src, group];
+};
+const DOCS = [];
+if (fs.existsSync(docsDir)) {
+  mdFiles(docsDir).forEach(f => DOCS.push(readDoc(f, "Qo'llanmalar")));
+  fs.readdirSync(docsDir, { withFileTypes: true }).filter(e => e.isDirectory()).sort((a, b) => a.name.localeCompare(b.name)).forEach(e => {
+    const dir = path.join(docsDir, e.name), rd = path.join(dir, "README.md");
+    const g = fs.existsSync(rd) && (fs.readFileSync(rd, "utf8").match(/^# (.+)$/m) || [])[1] || e.name;
+    mdFiles(dir).forEach(f => DOCS.push(readDoc(e.name + "/" + f, g.trim())));
+  });
+}
+
 const start = shell.indexOf("const QD=[");
 const marker = "const secOf=q=>";
 const end = shell.indexOf(marker);
 if (start < 0 || end < 0 || end < start) { console.error("shell ichidan data bloki topilmadi"); process.exit(1); }
 
 let out = shell.slice(0, start) + block + "\n" + shell.slice(end);
+if (!out.includes("const DOCS=[];")) { console.error("shell ichida 'const DOCS=[];' topilmadi"); process.exit(1); }
+out = out.replace("const DOCS=[];", () => "const DOCS=" + js(DOCS) + ";");
 out = out.replace("<h1>Interview Drill <span>DB + Backend</span></h1>",
   `<h1>Interview Drill <span>${questions.length} savol</span></h1>`);
 
 // yaroqsiz filtrni tozalash shell ichida (render oldidan)
 
 fs.writeFileSync(path.join(root, "interview.html"), out);
-console.log("interview.html yozildi:", questions.length, "savol,", Object.keys(SEC).length, "bo'lim,", (out.length / 1024).toFixed(0) + " KB");
+console.log("interview.html yozildi:", questions.length, "savol,", Object.keys(SEC).length, "bo'lim,", DOCS.length, "qo'llanma,", (out.length / 1024).toFixed(0) + " KB");

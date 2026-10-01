@@ -391,6 +391,45 @@ body:before,body:after{opacity:.22}
 .deep-in ul,.deep-in ol{padding-left:20px;margin:6px 0}
 .deep-in .dsvg{margin:10px 0;overflow-x:auto}.deep-in .dsvg svg{max-width:100%;height:auto;display:block;margin:auto}
 @keyframes dfade{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+/* qo'llanmalar */
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.doc-tile{display:flex;gap:14px;padding:18px 20px;color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,box-shadow .2s}
+.doc-tile:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:var(--shadow-lg)}
+.doc-ic{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font:800 18px var(--mono);color:var(--accent);background:var(--accent-soft)}
+.doc-tile b{font-size:15px;line-height:1.35}.doc-tile p{margin:6px 0 8px;color:var(--muted);font-size:13px;line-height:1.5}.doc-tile small{font:600 11px var(--mono);color:var(--faint)}
+.doc-wrap{display:grid;grid-template-columns:240px minmax(0,1fr);gap:20px;align-items:start}
+.doc-toc{position:sticky;top:16px;padding:14px 10px;max-height:calc(100vh - 32px);overflow:auto}
+.doc-toc .tt{font:800 11px var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:0 10px 8px}
+.doc-toc a{display:block;padding:6px 10px;border-radius:8px;font-size:13px;color:var(--ink);text-decoration:none;line-height:1.35}
+.doc-toc a:hover{background:var(--accent-soft);color:var(--accent)}
+.doc{padding:34px 40px;line-height:1.7;font-size:15.5px;min-width:0}
+.doc h1{font-size:28px;line-height:1.25;margin:0 0 18px;letter-spacing:-.01em}
+.doc h2{font-size:21px;margin:38px 0 12px;padding-top:6px;scroll-margin-top:16px}
+.doc h3{font-size:16.5px;margin:24px 0 8px;scroll-margin-top:16px}
+.doc h4{font-size:15px;margin:18px 0 6px}
+.doc p{margin:10px 0}.doc ul,.doc ol{padding-left:22px;margin:8px 0}.doc li{margin:4px 0}
+.doc hr{border:0;border-top:1px solid var(--line);margin:30px 0}
+.doc code{font:500 .88em var(--mono);background:var(--bg-2);border:1px solid var(--line);padding:1px 6px;border-radius:6px}
+.doc blockquote{margin:14px 0;padding:12px 16px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 12px 12px 0}
+.dpre{position:relative;margin:14px 0}
+.dpre pre{margin:0;padding:16px 18px;overflow-x:auto;background:var(--bg-2);border:1px solid var(--line);border-radius:12px;font:500 13px/1.55 var(--mono);white-space:pre;tab-size:4}
+.dpre .lang{position:absolute;top:6px;right:10px;font:700 10px var(--mono);color:var(--faint);text-transform:uppercase}
+.dtbl{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:12px}
+.dtbl table{border-collapse:collapse;width:100%;font-size:14px}
+.dtbl th,.dtbl td{padding:9px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.dtbl th{background:var(--bg-2);font-weight:800;white-space:nowrap}
+.dtbl tr:last-child td{border-bottom:0}
+.doc-btn{width:auto;padding:0 12px;gap:6px;display:flex;align-items:center;text-decoration:none;color:var(--ink);font:700 13px var(--sans);transition:border-color .2s,color .2s}.doc-btn:hover{border-color:var(--accent);color:var(--accent)}
+.docs-banner{display:flex;align-items:center;gap:14px;padding:16px 20px;margin:0 0 18px;color:inherit;text-decoration:none;transition:transform .2s,border-color .2s,box-shadow .2s}
+.docs-banner:hover{transform:translateY(-2px);border-color:var(--accent);box-shadow:var(--shadow-lg)}
+.docs-banner>div{flex:1;min-width:0}.docs-banner b{font-size:16px}.docs-banner p{margin:4px 0;color:var(--muted);font-size:13px}.docs-banner small{font:600 11px var(--mono);color:var(--faint)}
+.docs-banner .go{font-size:20px;color:var(--accent);transition:transform .2s}.docs-banner:hover .go{transform:translateX(4px)}
+.docs-head h1{margin:6px 0 4px;font-size:28px}.docs-head p{margin:0 0 8px}
+.doc-pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
+.doc-pager a{padding:14px 16px;color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:4px;transition:border-color .2s}.doc-pager a:hover{border-color:var(--accent)}
+.doc-pager small{font:700 11px var(--mono);color:var(--faint)}.doc-pager b{font-size:14px;line-height:1.35}.doc-pager .nx{text-align:right}
+@media (max-width:860px){.doc-btn span{display:none}.doc-pager{grid-template-columns:1fr}}
+@media (max-width:860px){.doc-wrap{grid-template-columns:1fr}.doc-toc{position:static;max-height:none}.doc{padding:22px 18px}.docs-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -400,6 +439,7 @@ body:before,body:after{opacity:.22}
 const LV={J:"Junior",M:"Middle",S:"Senior",St:"Staff",P:"Principal"};
 const QD=[];
 const secOf=q=>Object.keys(SEC).find(k=>SEC[k][2]===q.d&&SEC[k][1].includes(q.tp));
+const DOCS=[]; // build.js docs/*.md bilan to'ldiradi: [id, sarlavha, markdown]
 // domen ro'yxatida element: "domen" yoki ["guruh-id","Guruh nomi",[domenlar]]
 const GRP={"backend":["Backend","⚙︎",["go",["db","DB",["db","mongo","elastic","ch"]],["cache","Cache",["redis"]],["mq","MQ",["kafka","rabbit","evt"]],"api","sec","fin"]],"arch":["Architecture","▣",["arch"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]],"devops":["DevOps","⛭",["linux","cont","cicd","obs","net","cloud"]],"soft":["Soft skills","☺",["soft"]]};
 const domsOf=l=>l.flatMap(x=>Array.isArray(x)?domsOf(x[2]):[x]);
@@ -567,6 +607,7 @@ function settings(){
 function topbar(){
   return `<div class="top"><span class="logo">ID</span><div class="brand">Interview Drill<small>${Q.length} karta · Anki uslubi</small></div><span class="sp"></span>
   <label class="search"><input id="sq" type="search" placeholder="Karta qidirish…" value="${esc(V.search)}" autocomplete="off"><kbd>/</kbd></label>
+  <a class="icon-btn doc-btn" href="#docs" title="Qo'llanmalar" aria-label="Qo'llanmalar">📚<span>Qo'llanmalar</span></a>
   <button class="icon-btn" ${act(settings)} title="Sozlamalar" aria-label="Sozlamalar">⚙︎</button></div>`;
 }
 function decksView(){
@@ -581,6 +622,7 @@ function decksView(){
     <div class="card"><span class="ic">⟳</span><div><div class="v"><span class="c-learn">${all.ln}</span> · <span class="c-rev">${all.rv}</span></div><div class="l">kutyapti</div></div></div>
     <div class="card"><span class="ic">★</span><div><div class="v">${mature}</div><div class="l">yetilgan (21+ kun)</div></div></div>
   </div>`;
+  h+=docsHome()+`<div class="h2">To'plamlar</div>`;
   h+=`<div class="card decks"><div class="dk-head"><span>To'plamlar</span><span class="c-new">Yangi</span><span class="c-learn">O'rg.</span><span class="c-rev">Takr.</span><span></span></div>`;
   const row=(id,fresh)=>{const d=DECK[id],c=counts(d.qs),open=S.open.includes(id),kids=d.kids.length;
     let r=`<div class="dk l${d.lvl}${fresh?" fresh":""}" ${act(()=>go("overview",{deck:id}))} role="button" tabindex="0">
@@ -612,6 +654,66 @@ function overview(){
     </div></div>`;
   return h;
 }
+// ---------- qo'llanmalar (docs/*.md) ----------
+const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+function docMd(src){
+  const L=src.split("\n"),toc=[];let h="",i=0;
+  const isBlock=l=>/^(```|#{1,4} |>|\||---\s*$|\s*([-*]|\d+\.) )/.test(l);
+  while(i<L.length){const l=L[i];
+    if(l.startsWith("```")){const lang=l.slice(3).trim();let c=[];i++;while(i<L.length&&!L[i].startsWith("```"))c.push(L[i++]);i++;
+      h+=`<div class="dpre">${lang?`<span class="lang">${esc(lang)}</span>`:""}<pre>${esc(c.join("\n"))}</pre></div>`;continue;}
+    const hm=l.match(/^(#{1,4}) (.+)/);
+    if(hm){const n=hm[1].length,t=hm[2];if(n===1){i++;continue;}const id=slug(t);if(n===2)toc.push([id,t.replace(/\*\*/g,"")]);
+      h+=`<h${n} id="${id}">${mdi(t)}</h${n}>`;i++;continue;}
+    if(/^---\s*$/.test(l)){h+="<hr>";i++;continue;}
+    if(l.startsWith(">")){let c=[];while(i<L.length&&L[i].startsWith(">"))c.push(L[i++].replace(/^>\s?/,""));h+=`<blockquote>${mdi(c.join(" "))}</blockquote>`;continue;}
+    if(l.startsWith("|")){let c=[];while(i<L.length&&L[i].startsWith("|"))c.push(L[i++]);
+      const cells=r=>r.trim().replace(/^\||\|$/g,"").split("|").map(x=>x.trim());
+      const body=c.filter((r,k)=>k!==1||!/^\|[\s:|-]+\|?$/.test(r.trim()));
+      h+=`<div class="dtbl"><table><thead><tr>${cells(body[0]).map(x=>`<th>${mdi(x)}</th>`).join("")}</tr></thead><tbody>${body.slice(1).map(r=>`<tr>${cells(r).map(x=>`<td>${mdi(x)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;continue;}
+    if(/^\s*([-*]|\d+\.) /.test(l)){const ol=/^\s*\d/.test(l);let c=[];
+      while(i<L.length){const x=L[i];if(/^\s*([-*]|\d+\.) /.test(x)){c.push(x.replace(/^\s*([-*]|\d+\.) /,""));i++;}else if(/^\s{2,}\S/.test(x)&&c.length){c[c.length-1]+="<br>"+x.trim();i++;}else break;}
+      h+=`<${ol?"ol":"ul"}>${c.map(x=>`<li>${x.split("<br>").map(mdi).join("<br>")}</li>`).join("")}</${ol?"ol":"ul"}>`;continue;}
+    if(!l.trim()){i++;continue;}
+    let c=[];while(i<L.length&&L[i].trim()&&!isBlock(L[i]))c.push(L[i++]);h+=`<p>${mdi(c.join(" "))}</p>`;
+  }
+  return{h,toc};
+}
+const docGroups=()=>{const g=[];DOCS.forEach(d=>{let x=g.find(y=>y[0]===d[3]);x||g.push(x=[d[3],[]]);x[1].push(d);});return g;};
+const readMin=src=>Math.max(1,Math.round(src.split(/\s+/).length/180));
+function docsHome(){
+  if(!DOCS.length)return"";
+  const gs=docGroups(),min=DOCS.reduce((a,d)=>a+readMin(d[2]),0);
+  return`<a class="card docs-banner" href="#docs"><span class="doc-ic">📚</span><div><b>Qo'llanmalar</b><p>${gs.map(g=>esc(g[0])+" · "+g[1].length).join(" &nbsp;|&nbsp; ")}</p><small>${DOCS.length} ta hujjat · ~${Math.round(min/60*10)/10} soat o'qish</small></div><span class="go">→</span></a>`;
+}
+function docsLib(){
+  let h=`<div class="crumbs"><a class="btn ghost sm" href="#">← Bosh sahifa</a></div><div class="docs-head"><h1>Qo'llanmalar</h1><p class="muted">Mavzu bo'yicha konspekt va kurs darslari. Karta yodlashdan oldin — tushunish uchun.</p></div>`;
+  docGroups().forEach(([g,L])=>{h+=`<div class="h2">${esc(g)} <span class="muted" style="text-transform:none;letter-spacing:0;font-weight:600">${L.length} ta</span></div>`+docTiles(L);});
+  return h;
+}
+function docTiles(L){
+  return`<div class="docs-grid">${L.map(([id,t,src])=>{const secs=(src.match(/^## /gm)||[]).length,lead=(src.match(/^> (.+)$/m)||[,""])[1].replace(/\*\*/g,"");
+    const n=(id.match(/-(\d{2})-/)||[])[1];
+    return`<a class="card doc-tile" href="#doc/${esc(id)}"><span class="doc-ic">${n||"§"}</span><div><b>${esc(t)}</b><p>${esc(lead.length>140?lead.slice(0,140)+"…":lead)}</p><small>${secs} bo'lim · o'qish ~${readMin(src)} daq</small></div></a>`;}).join("")}</div>`;
+}
+function docView(){
+  const d=DOCS.find(x=>x[0]===V.doc);if(!d)return decksView();
+  const {h,toc}=docMd(d[2]);
+  const G=DOCS.filter(x=>x[3]===d[3]),k=G.indexOf(d),pv=G[k-1],nx=G[k+1];
+  const pager=pv||nx?`<div class="doc-pager">${pv?`<a class="card" href="#doc/${esc(pv[0])}"><small>← Oldingi</small><b>${esc(pv[1])}</b></a>`:"<span></span>"}${nx?`<a class="card nx" href="#doc/${esc(nx[0])}"><small>Keyingi →</small><b>${esc(nx[1])}</b></a>`:""}</div>`:"";
+  return`<div class="crumbs"><a class="btn ghost sm" href="#docs">← Qo'llanmalar</a><span class="muted" style="font-size:13px;margin-left:8px">${esc(d[3])}${G.length>1?` · ${k+1}/${G.length}`:""}</span></div>
+  <div class="doc-wrap"><nav class="doc-toc card"><div class="tt">Mundarija</div>${toc.map(([id,t])=>`<a href="#doc/${esc(d[0])}/${id}">${mdi(t)}</a>`).join("")}</nav>
+  <article class="card doc"><h1>${mdi(d[1])}</h1>${h}${pager}</article></div>`;
+}
+function route(){
+  const hs=(window.location||{}).hash||"";
+  if(hs==="#docs"&&DOCS.length){if(V.view!=="docs")go("docs");return;}
+  const m=hs.match(/^#doc\/([^/]+)(?:\/(.+))?/);
+  if(m&&DOCS.some(x=>x[0]===m[1])){if(V.view!=="doc"||V.doc!==m[1])go("doc",{doc:m[1]});
+    if(m[2]){const el=document.getElementById(m[2]);el&&el.scrollIntoView({behavior:RM()?"auto":"smooth",block:"start"});}}
+  else if(V.view==="doc"||V.view==="docs")go("decks");
+}
+window.addEventListener("hashchange",route);
 function searchView(){
   const s=V.search.trim().toLowerCase();
   const L=Q.filter(q=>(q.q+" "+(q.f||"")+" "+(q.b||"")+" "+(q.c||"")+" "+q.n+" "+q.tp).toLowerCase().includes(s));
@@ -725,7 +827,7 @@ function render(){
   const rev=V.view==="study"&&ss&&ss.rev[ss.i]?nav:"";
   const navAnim=nav!==lastNav,revAnim=!navAnim&&rev&&rev!==lastRev;
   lastNav=nav;lastRev=rev;
-  app.innerHTML=V.view==="study"?studyView():V.view==="overview"?overview():decksView();
+  app.innerHTML=V.view==="study"?studyView():V.view==="overview"?overview():V.view==="doc"?docView():V.view==="docs"?docsLib():decksView();
   app.classList.remove("anim","anim-rev");
   if(navAnim||revAnim){void app.offsetWidth;app.classList.add(navAnim?"anim":"anim-rev");}
   V.fresh="";
@@ -741,7 +843,7 @@ document.addEventListener("keydown",e=>{
   if(tag==="TEXTAREA"){if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();$("#show")&&$("#show").click();}if(e.key==="Escape")e.target.blur();return;}
   if(tag==="INPUT"){if(e.key==="Escape"){V.search="";render();}return;}
   if(e.metaKey||e.ctrlKey||e.altKey)return;
-  if(V.view!=="study"){if(e.key==="/"){e.preventDefault();$("#sq")&&$("#sq").focus();}if(e.key==="Escape"&&V.view==="overview")go("decks");return;}
+  if(V.view!=="study"){if(e.key==="/"){e.preventDefault();$("#sq")&&$("#sq").focus();}if(e.key==="Escape"&&V.view==="overview")go("decks");if(e.key==="Escape"&&V.view==="doc")location.hash="";return;}
   if(e.key==="Escape"){const s=S.sess;s&&s.deck&&DECK[s.deck]?go("overview",{deck:s.deck}):go("decks");return;}
   if(e.key==="z"||e.key==="Z"){undo();return;}
   const show=$("#show");
@@ -752,6 +854,7 @@ document.addEventListener("keydown",e=>{
   else if(e.key===" "||e.key==="Enter"){e.preventDefault();const b=document.querySelector(".ease .sug")||document.querySelector('.ease [data-e="good"]');b&&b.click();}
 });
 render();
+route();
 </script>
 </body>
 </html>
