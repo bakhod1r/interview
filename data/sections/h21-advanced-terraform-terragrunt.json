@@ -1,0 +1,190 @@
+{
+ "id": "h21",
+ "name": "Advanced Terraform & Terragrunt",
+ "domain": "iac",
+ "topics": [
+  "Advanced Terraform & Terragrunt"
+ ],
+ "questions": [
+  {
+   "id": 41311,
+   "code": "H2101",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "`terraform plan` lifecycle'ini qadamma-qadam tushuntiring.",
+   "explanation": "Konfiguratsiyani yuklab dependency graph (DAG) quradi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41312,
+   "code": "H2102",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terraform graph cycle nima va qanday hal qilinadi?",
+   "explanation": "A resurs B ga, B esa A ga bog'liq bo'lgan aylana dependency xatosi. Aylanani buzish bilan hal qilinadi (masalan avval security group'larni yaratib, qoidalarni alohida aws_vpc_security_group_ingress_rule resurslari sif...",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41313,
+   "code": "H2103",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terraform bilan ASG'da zero-downtime AMI yangilashni qanday qilasiz?",
+   "explanation": "aws_launch_template va create_before_destroy = true.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41314,
+   "code": "H2104",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "HCL'da `lookup()`, `try()` va `can()` farqi.",
+   "explanation": "lookup(map, key, default): map'dan default bilan qiymat oladi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41315,
+   "code": "H2105",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "OpenTofu'da variable'larni erta baholash (early evaluation) nima?",
+   "explanation": "Variable va local'larni backend va modul source kabi bloklarda ishlatish imkoni — backend bucket nomini hardcode qilish shart emas.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41316,
+   "code": "H2106",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terragrunt `read_terragrunt_config()` nima?",
+   "explanation": "Yordamchi HCL fayllarni import qilib, muhit o'zgaruvchilari, akkaunt ID va umumiy tag'larni markaziy ulashish.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41317,
+   "code": "H2107",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terragrunt `dependency` bloki nima?",
+   "explanation": "Boshqa modulga bog'liqlikni e'lon qiladi — output'larini avtomatik oladi va bajarish tartibini belgilaydi (run-all apply).",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41318,
+   "code": "H2108",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terragrunt `mock_outputs` nima?",
+   "explanation": "Upstream modul hali apply qilinmaganda plan uchun soxta output qiymatlari — plan yiqilmaydi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41319,
+   "code": "H2109",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "CI/CD'da avtomatik Terraform drift detection'ni qanday qilasiz?",
+   "explanation": "Jadval bo'yicha pipeline:",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41320,
+   "code": "H2110",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terratest bilan Terraform modulini Go'da qanday test qilasiz?",
+   "explanation": "func TestVpcModule(t testing.T) {",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41321,
+   "code": "H2111",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Rego va Conftest bilan Policy as Code qanday ishlaydi?",
+   "explanation": "Plan'ni JSON'ga eksport qilib (terraform show -json tfplan.binary > tfplan.json), CI'da Rego qoidalari bilan baholash:",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41322,
+   "code": "H2112",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "OpenTofu provider imzosini tekshirish nima?",
+   "explanation": "OpenTofu yuklangan provider binary'larining PGP imzosi va SHA256 checksum'ini registry public key'lariga nisbatan tekshiradi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41323,
+   "code": "H2113",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terraform modulini semantic versioning bilan qotirish nima?",
+   "explanation": "Modul source'ini aniq versiyaga pin qilish (registry'da version = \"5.1.0\", Git'da ?ref=v5.1.0) — sinovdan o'tmagan breaking change avtomatik kirmaydi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41324,
+   "code": "H2114",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "HCL'da `merge()` va `concat()` farqi.",
+   "explanation": "merge(map1, map2): map'larni birlashtiradi (bir xil key — o'ngdagisi yutadi).",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41325,
+   "code": "H2115",
+   "level": "S",
+   "type": "card",
+   "topic": "Advanced Terraform & Terragrunt",
+   "domain": "iac",
+   "section": "h21",
+   "question": "Terraform custom provider yaratish nima?",
+   "explanation": "Plugin Framework bilan ichki API'lar uchun Create, Read, Update, Delete metodlarini implementatsiya qiladigan Go plugin yozish.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  }
+ ]
+}

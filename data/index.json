@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T14:10:44.516Z",
-  "total": 2363,
+  "generatedAt": "2026-10-02T17:01:32.917Z",
+  "total": 4563,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -39,7 +39,9 @@
     "cloud": "Cloud",
     "soft": "Soft skills",
     "git": "Git",
-    "iac": "IaC"
+    "iac": "IaC",
+    "auto": "Automation & scripting",
+    "sre": "DevOps & SRE"
   },
   "sections": [
     {
@@ -561,6 +563,27 @@
       "file": "sections/v20-server-ops.json"
     },
     {
+      "id": "h23",
+      "name": "Linux internals, processes & memory",
+      "domain": "linux",
+      "count": 60,
+      "file": "sections/h23-linux-internals-processes-memory.json"
+    },
+    {
+      "id": "h24",
+      "name": "Kernel tuning & performance",
+      "domain": "linux",
+      "count": 40,
+      "file": "sections/h24-kernel-tuning-performance.json"
+    },
+    {
+      "id": "h25",
+      "name": "Advanced Linux internals & storage",
+      "domain": "linux",
+      "count": 100,
+      "file": "sections/h25-advanced-linux-internals-storage.json"
+    },
+    {
       "id": "w1",
       "name": "Git",
       "domain": "git",
@@ -568,11 +591,39 @@
       "file": "sections/w1-git.json"
     },
     {
+      "id": "h32",
+      "name": "Git internals",
+      "domain": "git",
+      "count": 50,
+      "file": "sections/h32-git-internals.json"
+    },
+    {
+      "id": "h33",
+      "name": "Branching, rebase & conflicts",
+      "domain": "git",
+      "count": 50,
+      "file": "sections/h33-branching-rebase-conflicts.json"
+    },
+    {
+      "id": "h34",
+      "name": "GitOps & enterprise Git",
+      "domain": "git",
+      "count": 50,
+      "file": "sections/h34-gitops-enterprise-git.json"
+    },
+    {
       "id": "k1",
       "name": "Docker basics",
       "domain": "docker",
       "count": 37,
       "file": "sections/k1-docker.json"
+    },
+    {
+      "id": "h17",
+      "name": "Docker, OCI & runtimes",
+      "domain": "docker",
+      "count": 60,
+      "file": "sections/h17-docker-oci-runtimes.json"
     },
     {
       "id": "t14",
@@ -645,6 +696,20 @@
       "file": "sections/k4-helm-argocd.json"
     },
     {
+      "id": "h18",
+      "name": "K8s architecture & control plane",
+      "domain": "k8s",
+      "count": 80,
+      "file": "sections/h18-k8s-architecture-control-plane.json"
+    },
+    {
+      "id": "h19",
+      "name": "K8s advanced & troubleshooting",
+      "domain": "k8s",
+      "count": 110,
+      "file": "sections/h19-k8s-advanced-troubleshooting.json"
+    },
+    {
       "id": "t11",
       "name": "Kubernetes gotchas",
       "domain": "k8s",
@@ -680,6 +745,27 @@
       "file": "sections/i10-jenkins.json"
     },
     {
+      "id": "h11",
+      "name": "CI/CD fundamentals",
+      "domain": "cicd",
+      "count": 50,
+      "file": "sections/h11-ci-cd-fundamentals.json"
+    },
+    {
+      "id": "h12",
+      "name": "GHA, GitLab & Jenkins deep dive",
+      "domain": "cicd",
+      "count": 50,
+      "file": "sections/h12-gha-gitlab-jenkins-deep-dive.json"
+    },
+    {
+      "id": "h13",
+      "name": "GitOps & supply chain",
+      "domain": "cicd",
+      "count": 100,
+      "file": "sections/h13-gitops-supply-chain.json"
+    },
+    {
       "id": "w2",
       "name": "Terraform",
       "domain": "iac",
@@ -699,6 +785,27 @@
       "domain": "iac",
       "count": 5,
       "file": "sections/w13-chef-puppet-salt.json"
+    },
+    {
+      "id": "h20",
+      "name": "Terraform & OpenTofu core",
+      "domain": "iac",
+      "count": 60,
+      "file": "sections/h20-terraform-opentofu-core.json"
+    },
+    {
+      "id": "h21",
+      "name": "Advanced Terraform & Terragrunt",
+      "domain": "iac",
+      "count": 15,
+      "file": "sections/h21-advanced-terraform-terragrunt.json"
+    },
+    {
+      "id": "h22",
+      "name": "Crossplane, Pulumi, Ansible",
+      "domain": "iac",
+      "count": 125,
+      "file": "sections/h22-crossplane-pulumi-ansible.json"
     },
     {
       "id": "i3",
@@ -722,6 +829,27 @@
       "file": "sections/w9-logs-tracing-slo.json"
     },
     {
+      "id": "h26",
+      "name": "Observability & Prometheus",
+      "domain": "obs",
+      "count": 60,
+      "file": "sections/h26-observability-prometheus.json"
+    },
+    {
+      "id": "h27",
+      "name": "PromQL & tracing",
+      "domain": "obs",
+      "count": 10,
+      "file": "sections/h27-promql-tracing.json"
+    },
+    {
+      "id": "h28",
+      "name": "Production diagnostics & SRE",
+      "domain": "obs",
+      "count": 130,
+      "file": "sections/h28-production-diagnostics-sre.json"
+    },
+    {
       "id": "i4",
       "name": "Networking & protocols",
       "domain": "net",
@@ -734,6 +862,27 @@
       "domain": "net",
       "count": 15,
       "file": "sections/w10-networking-basics.json"
+    },
+    {
+      "id": "h29",
+      "name": "Networking & security fundamentals",
+      "domain": "net",
+      "count": 60,
+      "file": "sections/h29-networking-security-fundamentals.json"
+    },
+    {
+      "id": "h30",
+      "name": "K8s security & zero trust",
+      "domain": "net",
+      "count": 10,
+      "file": "sections/h30-k8s-security-zero-trust.json"
+    },
+    {
+      "id": "h31",
+      "name": "DevSecOps & cryptography",
+      "domain": "net",
+      "count": 130,
+      "file": "sections/h31-devsecops-cryptography.json"
     },
     {
       "id": "t13",
@@ -769,6 +918,97 @@
       "domain": "cloud",
       "count": 5,
       "file": "sections/w12-gcp-basics.json"
+    },
+    {
+      "id": "h14",
+      "name": "Cloud fundamentals",
+      "domain": "cloud",
+      "count": 60,
+      "file": "sections/h14-cloud-fundamentals.json"
+    },
+    {
+      "id": "h15",
+      "name": "Azure, GCP & multi-cloud",
+      "domain": "cloud",
+      "count": 40,
+      "file": "sections/h15-azure-gcp-multi-cloud.json"
+    },
+    {
+      "id": "h16",
+      "name": "Cloud architecture & DR scenarios",
+      "domain": "cloud",
+      "count": 150,
+      "file": "sections/h16-cloud-architecture-dr-scenarios.json"
+    },
+    {
+      "id": "h1",
+      "name": "Bash & Python scripting",
+      "domain": "auto",
+      "count": 60,
+      "file": "sections/h1-bash-python-scripting.json"
+    },
+    {
+      "id": "h2",
+      "name": "Python, Go & automation tooling",
+      "domain": "auto",
+      "count": 140,
+      "file": "sections/h2-python-go-automation-tooling.json"
+    },
+    {
+      "id": "h3",
+      "name": "DevOps fundamentals & culture",
+      "domain": "sre",
+      "count": 50,
+      "file": "sections/h3-devops-fundamentals-culture.json"
+    },
+    {
+      "id": "h4",
+      "name": "SRE & reliability",
+      "domain": "sre",
+      "count": 50,
+      "file": "sections/h4-sre-reliability.json"
+    },
+    {
+      "id": "h5",
+      "name": "Platform engineering & FinOps",
+      "domain": "sre",
+      "count": 100,
+      "file": "sections/h5-platform-engineering-finops.json"
+    },
+    {
+      "id": "h6",
+      "name": "12-Factor & cloud-native patterns",
+      "domain": "sre",
+      "count": 40,
+      "file": "sections/h6-12-factor-cloud-native-patterns.json"
+    },
+    {
+      "id": "h7",
+      "name": "Reliability, scaling & governance",
+      "domain": "sre",
+      "count": 60,
+      "file": "sections/h7-reliability-scaling-governance.json"
+    },
+    {
+      "id": "h8",
+      "name": "Mock: system design",
+      "domain": "sre",
+      "count": 20,
+      "file": "sections/h8-mock-system-design.json"
+    },
+    {
+      "id": "h9",
+      "name": "Mock: incident troubleshooting",
+      "domain": "sre",
+      "count": 20,
+      "file": "sections/h9-mock-incident-troubleshooting.json"
+    },
+    {
+      "id": "h10",
+      "name": "Mock: SRE leadership",
+      "domain": "sre",
+      "count": 10,
+      "file": "sections/h10-mock-sre-leadership.json"
     },
     {
       "id": "b1",
