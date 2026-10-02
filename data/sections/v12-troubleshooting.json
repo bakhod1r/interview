@@ -1,0 +1,122 @@
+{
+  "id": "v12",
+  "name": "Memory, disk & troubleshooting",
+  "domain": "linux",
+  "topics": [
+    "Troubleshooting"
+  ],
+  "questions": [
+    {
+      "id": 30541,
+      "code": "DO7",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Serverda disk to'lib qoldi. Birinchi qaysi buyruqlar?",
+      "explanation": "Klassik tuzoq: log fayl o'chirilgan, lekin jarayon uni hali ochiq ushlab turibdi — joy bo'shamaydi. `lsof +L1` bilan topiladi; jarayonni qayta ishga tushirish yoki `> file` bilan truncate qilish kerak. Oldini olish: logrotate, alert 80%da."
+    },
+    {
+      "id": 30542,
+      "code": "DO8",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Load average 16, CPU foydalanish esa 10%. Nima bo'lishi mumkin?",
+      "explanation": "Linux'da load = running + runnable + D-state. Yuqori iowait, to'yingan disk (%util ~100) yoki osilib qolgan tarmoq fayl tizimi odatiy sabablar. Load'ni yadrolar soni bilan solishtiring (`nproc`)."
+    },
+    {
+      "id": 30544,
+      "code": "DO10",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Production serverda ilova sekinlashdi. Linux darajasida qanday tekshirasan?",
+      "explanation": "Brendan Gregg'ning '60 soniyada Linux tahlili' ro'yxati — intervyuda tizimli yondashuvni ko'rsatish muhim, tasodifiy buyruqlarni emas.",
+      "source": "https://www.brendangregg.com/usemethod.html"
+    },
+    {
+      "id": 30564,
+      "code": "LX10",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Jarayon osilib qoldi, CPU 0%. Nima qilayotganini qanday ko'rasan?",
+      "explanation": "Odatiy topilmalar: futex (lock kutish — deadlock), read on socket (timeout'siz tarmoq chaqiruvi), connect (DNS/firewall), flock. strace production'da ehtiyotkorlik bilan — jarayonni sezilarli sekinlashtiradi; eBPF vositalar (bpftrace, offcputime) yengilroq."
+    },
+    {
+      "id": 30565,
+      "code": "LX11",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`free -m` da `available` kam, `buff/cache` esa katta. Xotira yetishmayaptimi?",
+      "explanation": "'Linux ate my RAM' — klassik noto'g'ri tushuncha. `echo 3 > /proc/sys/vm/drop_caches` production'da deyarli hech qachon kerak emas (faqat benchmark). Haqiqiy bosim belgilari: swap in/out (vmstat si/so), PSI (/proc/pressure/memory), OOM killer loglari."
+    },
+    {
+      "id": 30566,
+      "code": "LX12",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "OOM killer nima va qaysi jarayonni tanlaydi?",
+      "explanation": "Konteynerda cgroup limiti oshsa, o'sha cgroup ichida OOM bo'ladi (K8s: OOMKilled, exit code 137 = 128+9). Kritik jarayonlarni (sshd) oom_score_adj=-1000 bilan himoyalash mumkin. Go ilovada GOMEMLIMIT'ni konteyner limitidan biroz pastga qo'yish GC'ni ertaroq ishga tushiradi."
+    },
+    {
+      "id": 30568,
+      "code": "LX14",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Disk to'la, `du` esa kam joy ko'rsatyapti. Nega?",
+      "snippet": "$ df -h /\n/dev/sda1  50G  50G  0  100% /\n$ du -sh / 2>/dev/null\n12G  /",
+      "explanation": "Klassik holat: `rm app.log` qilingan, ilova esa unga yozishda davom etyapti. Boshqa sabablar: mount qilingan katalog ostiga 'yashiringan' fayllar (mount'dan oldin yozilgan), ext4 root uchun zaxira bloklar (5%). logrotate'da copytruncate yoki ilovaga signal (reopen) kerak."
+    },
+    {
+      "id": 30569,
+      "code": "LX15",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`No space left on device`, lekin `df -h` 40% bo'sh ko'rsatyapti. Sabab?",
+      "explanation": "Inode soni ext4'da format vaqtida belgilanadi. Topish: `find / -xdev -type f | cut -d/ -f2-3 | sort | uniq -c | sort -n | tail`. XFS inode'larni dinamik ajratadi."
+    },
+    {
+      "id": 30570,
+      "code": "LX16",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`fsync` nima uchun kerak va DB'lar uchun nega muhim?",
+      "explanation": "Postgres WAL commit'da fsync qiladi (synchronous_commit). 'fsyncgate' (2018): fsync xatosidan keyin qayta urinish xavfsiz emasligi aniqlandi — Postgres endi panic qiladi. Yangi fayl uchun katalogni ham fsync qilish kerak. Atomik yozish: vaqtinchalik faylga yozish, fsync, rename."
+    },
+    {
+      "id": 30582,
+      "code": "LX28",
+      "level": "St",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
+      "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "id": "v13",
+  "name": "Linux networking & security",
+  "domain": "linux",
+  "topics": [
+    "Networking & security"
+  ],
+  "questions": [
+    {
+      "id": 30560,
+      "code": "LX6",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Qaysi jarayon 8080 portni band qilganini qanday topasan?",
+      "explanation": "ss — netstat'ning zamonaviy va tezroq o'rnini bosuvchisi: -l listening, -t TCP, -n raqamli, -p jarayon (boshqa foydalanuvchi jarayoni uchun root kerak). 'address already in use' ko'pincha eski jarayon yoki TIME_WAIT (SO_REUSEADDR yechadi)."
+    },
+    {
+      "id": 30571,
+      "code": "LX17",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Serverda minglab `TIME_WAIT` ulanishlar. Muammomi?",
+      "explanation": "tcp_tw_recycle NAT ortidagi clientlarni buzardi va Linux 4.12 da olib tashlandi. Haqiqiy belgisi: 'cannot assign requested address' (ephemeral port tugashi, ip_local_port_range). Eng yaxshi yechim — ulanishlarni qayta ishlatish."
+    },
+    {
+      "id": 30572,
+      "code": "LX18",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "DNS muammosini qanday tekshirasan?",
+      "explanation": "dig resolv.conf'dan foydalanadi, lekin nsswitch/hosts'ni chetlab o'tadi — getent ilova bilan bir xil yo'ldan yuradi. K8s'da ndots:5 tashqi domenlar uchun ko'p ortiqcha so'rov beradi (FQDN oxiriga nuqta yoki ndots kamaytirish)."
+    },
+    {
+      "id": 30573,
+      "code": "LX19",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`curl` sekin — 5 soniya kutib keyin javob beradi. Qayerda yo'qolayotganini qanday aniqlaysan?",
+      "explanation": "`curl -o /dev/null -s -w '%{time_namelookup} %{time_connect} %{time_appconnect} %{time_starttransfer}\\n' URL`. Aynan 5s — ko'pincha DNS (AAAA so'rovi javobsiz, resolver timeout 5s) yoki IPv6 ga urinib keyin IPv4 ga o'tish. Chuqurroq: tcpdump."
+    },
+    {
+      "id": 30574,
+      "code": "LX20",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`iptables`/`nftables` da DROP va REJECT farqi?",
+      "explanation": "Ichki tarmoqda REJECT diagnostikani osonlashtiradi va tez fail beradi; tashqi hujumchilarga DROP kam ma'lumot beradi. Debugging: `iptables -L -n -v` hisoblagichlari, `conntrack -L`; to'lgan conntrack jadvali ('nf_conntrack: table full') paketlarni tashlaydi."
+    },
+    {
+      "id": 30575,
+      "code": "LX21",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "SSH serverni qanday xavfsizlashtirasan?",
+      "explanation": "Zamonaviy yondashuv: SSH kalitlar o'rniga qisqa muddatli sertifikatlar (Vault SSH CA, Teleport) yoki umuman SSH'siz boshqaruv (AWS SSM). Port o'zgartirish faqat log shovqinini kamaytiradi, xavfsizlik bermaydi."
+    },
+    {
+      "id": 30577,
+      "code": "LX23",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Konteyner Linux'da qanday izolyatsiya qilinadi?",
+      "explanation": "Konteynerlar bitta yadroni bo'lishadi — yadro zaifligi hamma konteynerga ta'sir qiladi (shuning uchun gVisor, Kata, Firecracker). Root konteyner ichida hostda ham root (user namespace ishlatilmasa) — rootless va runAsNonRoot shuning uchun muhim."
+    },
+    {
+      "id": 30578,
+      "code": "LX24",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Konteynerda Go/Java ilova CPU limiti bilan sekin ishlayapti, CPU esa limitgacha yetmayapti. Nima bo'lishi mumkin?",
+      "explanation": "Tekshirish: cgroup'dagi cpu.stat (nr_throttled, throttled_usec). Yechim: GOMAXPROCS'ni limitga moslash (Go 1.25+ avtomatik, oldin automaxprocs), limitni oshirish yoki CPU limitini olib tashlab faqat request qo'yish."
+    },
+    {
+      "id": 30680,
+      "code": "LX46",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Unix domain socket va TCP socket farqi?",
+      "explanation": "Misollar: /var/run/docker.sock (unga kirish = host'da root!), PostgreSQL /var/run/postgresql/.s.PGSQL.5432. Konteynerlar o'rtasida sidecar bilan ham ishlatiladi. `ss -xl` — ro'yxat."
+    }
+  ]
+}

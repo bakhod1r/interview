@@ -269,6 +269,39 @@
       "section": "v1",
       "question": "Prod DB serverlar uchun disk qatlamini qanday dizayn qilasan: LVM, RAID, FS, snapshot?",
       "explanation": "Data, WAL, OS — alohida LV; monitoring va tiklash rejasi bilan."
+    },
+    {
+      "id": 30715,
+      "code": "LX68",
+      "level": "M",
+      "type": "card",
+      "topic": "LVM",
+      "domain": "linux",
+      "section": "v1",
+      "question": "Diskni downtime'siz almashtirish (extent'larni ko'chirish) buyrug'i?",
+      "explanation": "Tartib: `vgextend` (yangi) -> `pvmove /dev/old` -> `vgreduce vg0 /dev/old` -> `pvremove`."
+    },
+    {
+      "id": 30717,
+      "code": "LX70",
+      "level": "M",
+      "type": "card",
+      "topic": "LVM",
+      "domain": "linux",
+      "section": "v1",
+      "question": "Thin pool 100% to'lsa nima bo'ladi?",
+      "explanation": "`lvs` da Data% va Meta% monitoring; `thin_pool_autoextend_threshold` sozlash."
+    },
+    {
+      "id": 30721,
+      "code": "LX74",
+      "level": "M",
+      "type": "card",
+      "topic": "LVM",
+      "domain": "linux",
+      "section": "v1",
+      "question": "Snapshot'dan asl LV'ni qaytarish buyrug'i?",
+      "explanation": "LV band bo'lsa merge keyingi aktivatsiyada (reboot) bajariladi."
     }
   ]
 }

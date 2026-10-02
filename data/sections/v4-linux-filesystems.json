@@ -159,6 +159,160 @@
       "section": "v4",
       "question": "Ko'p node bitta FS'ga yozishi kerak: NFS, CephFS, object storage — qanday tanlaysan?",
       "explanation": "NFS — oddiy, bitta server, lock/cache muammolari. CephFS/GlusterFS — taqsimlangan POSIX. Object storage (S3) — eng scalable, POSIX emas."
+    },
+    {
+      "id": 30556,
+      "code": "LX2",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Hard link va symbolic link farqi?",
+      "explanation": "Ma'lumot inode'da, nom esa katalog yozuvi. Inode link count 0 bo'lib, hech bir jarayon ochib turmaganda disk joyi bo'shaydi. `ls -li` inode raqamini ko'rsatadi."
+    },
+    {
+      "id": 30678,
+      "code": "LX44",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Linux'da fayl turlari qanday va `ls -l` ning birinchi belgisi nimani bildiradi?",
+      "explanation": "'Hamma narsa fayl' — /dev/sda (b), /dev/null va /dev/tty (c), /run/docker.sock (s). Linux kengaytmaga qaramaydi: turni `file` buyrug'i ichki magic bayt bo'yicha aniqlaydi. `stat` — batafsil ma'lumot."
+    },
+    {
+      "id": 30682,
+      "code": "LX48",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Linux'dagi asosiy fayl tizimi turlari?",
+      "explanation": "Aniqlash: `df -T`, `lsblk -f`, `findmnt`. Tanlov: DB serverlar uchun ko'pincha XFS yoki ext4; snapshot kerak bo'lsa Btrfs/ZFS yoki LVM snapshot. XFS'ni kichraytirib bo'lmaydi (faqat kengaytirish)."
+    },
+    {
+      "id": 30683,
+      "code": "LX49",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Journaling fayl tizimi nima beradi?",
+      "explanation": "Jurnal fayl tizimi izchilligini kafolatlaydi, ilova ma'lumotini emas — ilova baribir fsync qilishi kerak. Btrfs/ZFS jurnal o'rniga copy-on-write ishlatadi (eski blok ustidan yozilmaydi)."
+    },
+    {
+      "id": 30684,
+      "code": "LX50",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "tmpfs nima va qayerda ishlatiladi?",
+      "explanation": "tmpfs'ga yozilgan ma'lumot xotira hisoblanadi — konteynerda cgroup memory limitiga kiradi (kutilmagan OOM sababi). Hajm cheklovi: `mount -t tmpfs -o size=512M tmpfs /mnt/x`."
+    },
+    {
+      "id": 30686,
+      "code": "LX52",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "`mount` va `/etc/fstab` nima?",
+      "explanation": "fstab'da /dev/sdb o'rniga UUID ishlating — qurilma nomi boot'lar orasida o'zgarishi mumkin. Tarmoq disklari uchun `nofail`, `_netdev` — aks holda disk ulanmasa server boot bo'lmaydi. Tekshirish: `mount -a` (reboot'dan oldin!). Xavfsizlik opsiyalari: noexec, nosuid, nodev."
+    },
+    {
+      "id": 30687,
+      "code": "LX53",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Overlay fayl tizimi (overlayfs) Docker'da qanday ishlatiladi?",
+      "explanation": "Oqibatlar: katta faylni ozgina o'zgartirish ham butun faylni upper qatlamga nusxalaydi; konteyner qatlamiga ko'p yozish sekin — ma'lumot volume'da bo'lishi kerak. Keyingi qatlamda o'chirilgan fayl image hajmidan ketmaydi — build'da bitta RUN ichida tozalash."
+    },
+    {
+      "id": 30693,
+      "code": "LX59",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Inode nima, unda nima saqlanadi va nima saqlanmaydi?",
+      "explanation": "ctime — 'creation time' EMAS, metadata o'zgargan vaqt (change time). Yaratilish vaqti (birth) ext4'da statx orqali mavjud. `noatime` mount opsiyasi o'qishdagi ortiqcha yozishni kamaytiradi."
+    },
+    {
+      "id": 30679,
+      "code": "LX45",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "/dev/null, /dev/zero, /dev/urandom nima?",
+      "explanation": "Misollar: `cmd > /dev/null 2>&1` — chiqishni o'chirish; `dd if=/dev/zero of=file bs=1M count=100` — 100MB fayl; `head -c 32 /dev/urandom | base64` — token. Zamonaviy Linux'da /dev/random ham bloklanmaydi (5.6+)."
+    },
+    {
+      "id": 30707,
+      "code": "LX60",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Hard link va soft (symbolic) link'ni chuqur solishtiring: `ln` va `ln -s` qanday ishlaydi, qachon qaysi biri, va 'log faylni o'chirdim, lekin disk bo'shamadi' holati bunga qanday bog'liq?",
+      "explanation": "Tekshirish: `ls -li` (inode raqami va link count), `stat`, `find -samefile`, `find -xtype l` (osilgan symlink'lar). `cp` default symlink'ni kuzatadi, `cp -P`/`-a` saqlaydi. Docker COPY va tar ham symlink'ni turlicha qayta ishlaydi — build'dagi 'fayl topilmadi' xatolarining tez-tez sababi."
+    },
+    {
+      "id": 30716,
+      "code": "LX69",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "XFS'ni kichraytirish mumkinmi?",
+      "explanation": "ext4 — unmount qilib kichrayadi (`e2fsck` + `resize2fs`). XFS — faqat `xfs_growfs`; kichraytirish: backup + qayta yaratish."
+    },
+    {
+      "id": 30688,
+      "code": "LX54",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Linux katalog tuzilmasi (FHS): /etc, /var, /usr, /opt, /home nima uchun?",
+      "explanation": "FHS — Filesystem Hierarchy Standard. Amaliy natija: /var alohida bo'limda bo'lsa log to'lib ketishi root fayl tizimini to'ldirmaydi. Konteyner image'da /usr immutable, holat /var yoki volume'da."
+    },
+    {
+      "id": 30689,
+      "code": "LX55",
+      "level": "J",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "/bin, /sbin, /lib, /boot, /tmp, /mnt, /media nima saqlaydi?",
+      "explanation": "Zamonaviy distributivlarda 'usrmerge': /bin -> /usr/bin, /lib -> /usr/lib symlink. /boot to'lib qolsa (eski kernellar) yangilanish buziladi — `apt autoremove`."
+    },
+    {
+      "id": 30690,
+      "code": "LX56",
+      "level": "M",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "/var/log, /var/lib, /var/run (/run), /var/cache farqi?",
+      "explanation": "Docker ma'lumoti /var/lib/docker da — disk to'lishining mashhur sababi (`docker system df`, `docker system prune`). Backup rejasi: /etc va /var/lib (servisga xos), /var/cache emas."
     }
   ]
 }

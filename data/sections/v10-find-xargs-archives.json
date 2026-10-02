@@ -115,6 +115,17 @@
       "section": "v10",
       "question": "Millionlab fayl ichidan izlash sekin. Tezlatish usullari?",
       "explanation": "Qidiruvni toraytirish (`-xdev`, `-maxdepth`, `-prune`), `-name` ni oldinga, `fd`/`ripgrep` (parallel, .gitignore), `plocate` indeks, `-exec +`/`xargs -P`, inode cache. Asosiy savol — nega millionlab kichik fayl?"
+    },
+    {
+      "id": 30580,
+      "code": "LX26",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "Log fayldan eng ko'p uchragan 10 ta IP'ni qanday chiqarasan?",
+      "explanation": "uniq faqat ketma-ket takrorlarni sanaydi — oldin sort shart. Katta fayllarda `sort -S 50% --parallel` yoki awk'da assotsiativ massiv: `awk '{c[$1]++} END {for (i in c) print c[i], i}' | sort -rn | head`. Real vaqtda: `tail -F`."
     }
   ]
 }

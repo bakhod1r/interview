@@ -485,6 +485,7 @@ if(!S.srs||typeof S.srs!=="object")S.srs={};
 if(!Array.isArray(S.days))S.days=[];
 S.lvl=(Array.isArray(S.lvl)?S.lvl:[]).filter(l=>LV[l]);
 if(S.sess&&!(Array.isArray(S.sess.ids)&&S.sess.ids.every(id=>QBY[id])))S.sess=null;
+if(S.sess&&S.sess.mode==="exam"&&(!S.sess.eg||!S.sess.t0))S.sess=null;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 if(S.theme)document.documentElement.dataset.theme=S.theme;
 
@@ -658,6 +659,7 @@ function queue(qs){qs=qs.filter(lvlOk);const t=now();
 
 // ---------- routing ----------
 let V={view:"decks",deck:"",search:""};
+let draft={}; // exam rejimida yozilgan javob matni (vaqtinchalik)
 function go(view,extra={}){V={...V,view,...extra};closeSheet();render();window.scrollTo({top:0});}
 function startSession(title,ids,deck,mode){
   if(!ids.length){toast("Bu tanlovda karta yo'q"+(S.lvl.length?" (daraja filtri yoqilgan)":""));return;}
@@ -670,6 +672,90 @@ function mock(id){
   const qs=(id?DECK[id].qs:Q).filter(lvlOk).map(q=>q.id);
   for(let i=qs.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[qs[i],qs[j]]=[qs[j],qs[i]];}
   startSession("🎤 Interview · "+(id?DECK[id].name:"aralash"),qs.slice(0,MOCK_N),id||"","cram");
+}
+// ---------- exam rejimi: vaqtli, javob yashirin, oxirida hisobot ----------
+const EXAM_SIZES=[10,20,30],EXAM_LV=["S","St","P"];
+const eScore=g=>g==="ok"?1:g==="mid"?.5:0;
+const fmtDur=ms=>{const t=Math.round(ms/1000);return Math.floor(t/60)+" daq "+String(t%60).padStart(2,"0")+" s";};
+function examStart(n,id){
+  const pool=(id?DECK[id].qs:Q).filter(q=>EXAM_LV.includes(q.l));
+  const byD={};pool.forEach(q=>{(byD[q.d]=byD[q.d]||[]).push(q)});
+  Object.values(byD).forEach(a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}});
+  const doms=Object.keys(byD).sort(()=>Math.random()-.5),ids=[];
+  while(ids.length<n){let added=false;
+    for(const d of doms){const a=byD[d];if(a&&a.length&&ids.length<n){ids.push(a.pop().id);added=true;}}
+    if(!added)break;}
+  if(!ids.length){toast("Exam uchun Senior+ karta topilmadi");return;}
+  closeSheet();
+  S.sess={title:"⏱ Exam · "+ids.length+" savol"+(id?" · "+DECK[id].name:""),ids,i:0,done:{},rev:{},deck:id||"",mode:"exam",t0:now(),eg:{}};
+  S.undo=null;draft={};save();go("study",{deck:id||""});
+}
+function examMenu(){
+  sheet(`<h3>⏱ Exam rejimi</h3><p class="muted" style="margin:0 0 10px;font-size:13px">Faqat Senior / Staff / Principal kartalar, yo'nalishlar bo'ylab teng taqsimlanadi. Javob va izoh <b>oxirigacha yashirin</b> — har savolga ovoz chiqarib javob bering, keyin hisobotda o'zingizni baholaysiz.</p>
+    ${EXAM_SIZES.map(n=>`<button class="it" ${act(()=>examStart(n,""))}>⏱ ${n} savol <small>aralash</small></button>`).join("")}
+    ${Object.keys(DECK).filter(k=>DECK[k].lvl===0&&DECK[k].qs.some(q=>EXAM_LV.includes(q.l))).map(k=>`<button class="it" ${act(()=>examStart(EXAM_SIZES[1],k))}>${DECK[k].ic} ${esc(DECK[k].name)} <small>${EXAM_SIZES[1]} savol</small></button>`).join("")}`);
+}
+function examNext(q){
+  const s=S.sess;s.rev[s.i]={v:(draft[q.id]||"").trim(),sug:""};
+  delete draft[q.id];s.i++;save();render();window.scrollTo({top:0});
+}
+function examGrade(id,g){
+  const s=S.sess;if(!s)return;
+  const e=g==="ok"?"good":g==="mid"?"hard":"again";
+  if(!S.srs[id]){newLeft();S.nt.n++;}
+  S.srs[id]=sched(S.srs[id]||null,e);
+  const i=s.ids.indexOf(id);
+  S.res[id]={v:(s.rev[i]||{}).v||null,g,t:now()};
+  const tk=dayKey();if(!S.days.includes(tk)){S.days.push(tk);S.days=S.days.slice(-400);}
+  s.eg[id]=g;save();render();
+}
+function examView(s){
+  const q=QBY[s.ids[s.i]],el=Math.round((now()-s.t0)/1000);
+  const back=()=>{if(confirm("Exam to'xtatilsinmi? Natija saqlanmaydi.")){S.sess=null;save();go("decks");}};
+  let h=`<div class="dtop rv-top"><div class="dtop-in"><button class="btn ghost sm" ${act(back)} aria-label="Chiqish">✕</button><span class="title">${esc(s.title)}</span>
+    <span class="cts"><span class="c-rev">${s.i+1}/${s.ids.length}</span><span class="c-learn">${Math.floor(el/60)}:${String(el%60).padStart(2,"0")}</span></span></div>
+    <div class="pbar"><i class="a" style="width:${s.i/s.ids.length*100}%"></i></div></div><div class="stage">`;
+  h+=`<div class="card qcard"><div class="tags"><span class="tag lv">${LV[q.l]}</span><span class="tag">${esc(SEC[secOf(q)][0])}</span><span class="n">#${esc(q.n)}</span></div>
+    <p class="qtext">${q.f?inline(q.f):q.q}</p>${q.c?`<pre>${esc(q.c)}</pre>`:""}
+    <textarea id="ta" placeholder="Javobni ovoz chiqarib ayting; istasangiz shu yerga qisqa yozib qo'ying (ixtiyoriy)">${esc(draft[q.id]||"")}</textarea>
+    <button class="btn primary show-btn" id="enext" ${act(()=>examNext(q))}>${s.i===s.ids.length-1?"Yakunlash va hisobot":"Keyingi savol"} <span class="hint" style="color:inherit;opacity:.7">Enter</span></button></div>`;
+  return h+`</div>`;
+}
+function examReport(){
+  const s=S.sess,qs=s.ids.map(id=>QBY[id]);
+  let pts=0,graded=0;
+  qs.forEach(q=>{const g=s.eg[q.id];if(g){graded++;pts+=eScore(g);}});
+  const pend=qs.length-graded,pct=graded?Math.round(pts/graded*100):0,dur=(s.t1||now())-s.t0;
+  const grp=(f,names)=>{const m={};
+    qs.forEach(q=>{const k=f(q),g=s.eg[q.id];m[k]=m[k]||[0,0,0];if(g){m[k][0]+=eScore(g);m[k][1]++;}m[k][2]++;});
+    return Object.entries(m).sort((a,b)=>b[1][2]-a[1][2]).map(([k,[p,n,t]])=>
+      `<div class="r"><span class="muted">${esc(names[k]||k)}</span><b>${n?Math.round(p/n*100)+"%":"—"} <span class="muted" style="font-weight:600">· ${t}</span></b></div>`).join("");};
+  let h=`<div class="stage"><div class="card ov"><h1>⏱ Exam natijasi</h1>
+    <div class="path">${qs.length} savol · ${fmtDur(dur)} · ~${Math.round(dur/1000/Math.max(qs.length,1))}s/savol${pend?` · <b>${pend} ta hali baholanmagan</b>`:""}</div>
+    <div class="ov-counts"><div><b>${pct}%</b><span>natija</span></div><div><b class="c-rev">${qs.filter(q=>s.eg[q.id]==="ok").length}</b><span>bildim</span></div><div><b style="color:var(--bad)">${qs.filter(q=>s.eg[q.id]==="bad").length}</b><span>bilmadim</span></div></div>
+    <div class="stats-line">${grp(q=>q.d,DOM)}</div>
+    <div class="stats-line" style="margin-top:10px">${grp(q=>q.l,LV)}</div></div>`;
+  qs.forEach((q,i)=>{
+    const g=s.eg[q.id],v=(s.rev[i]||{}).v;
+    const lab=g==="ok"?"bildim":g==="mid"?"qisman":g==="bad"?"bilmadim":"baholanmagan";
+    h+=`<details class="card deep" style="margin-top:10px"${g?"":" open"}><summary><span class="tag lv">${LV[q.l]}</span> ${i+1}. ${inline((q.f||q.q).replace(/<[^>]+>/g,""))} — <b>${lab}</b></summary><div class="deep-in">`;
+    if(q.c)h+=`<pre>${esc(q.c)}</pre>`;
+    if(v)h+=`<h6>Sizning yozganingiz</h6><pre>${esc(v)}</pre>`;
+    h+=`<h6>Javob</h6><div class="ans">${q.b?md(q.b):`<p>${inline(q.e)}</p>`}</div>`;
+    if(q.g&&typeof GLO!=="undefined")h+=`<details class="glo"><summary>📖 Atamalar</summary><ul>${q.g.map(x=>`<li><b>${esc(GLO[x][0])}</b> — ${inline(GLO[x][1])}</li>`).join("")}</ul></details>`;
+    if(q.x)h+=`<details class="deep"><summary>Batafsil tushuntirish</summary><div class="deep-in">${md(q.x)}</div></details>`;
+    h+=`<div class="grade" style="margin-top:14px">
+      <button class="g-bad${g==="bad"?" on":""}" ${act(()=>examGrade(q.id,"bad"))}>Bilmadim</button>
+      <button class="g-mid${g==="mid"?" on":""}" ${act(()=>examGrade(q.id,"mid"))}>Qisman</button>
+      <button class="g-ok${g==="ok"?" on":""}" ${act(()=>examGrade(q.id,"ok"))}>Bildim</button></div>`;
+    h+=`</div></details>`;
+  });
+  const weak=qs.filter(q=>s.eg[q.id]&&s.eg[q.id]!=="ok").map(q=>q.id);
+  h+=`<div class="done acts" style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:20px;padding:0">
+    <button class="btn primary" ${act(()=>examStart(qs.length,s.deck))}>Yana ${qs.length} savol</button>
+    ${weak.length?`<button class="btn" ${act(()=>{const d=s.deck;S.sess=null;save();startSession("Exam · zaif joylar",weak,d,"cram");})}>Zaif joylarni mashq qilish (${weak.length})</button>`:""}
+    <button class="btn ghost" ${act(()=>{S.sess=null;save();go("decks");})}>Chiqish</button></div></div>`;
+  return h;
 }
 function mockMenu(){
   sheet(`<h3>🎤 Interview rejimi</h3><p class="muted" style="margin:0 0 10px;font-size:13px">${MOCK_N} ta tasodifiy savol. Javobni ovoz chiqarib ayting, keyin kartani oching.${S.lvl.length?" Daraja filtri hisobga olinadi.":""}</p>
@@ -687,6 +773,7 @@ function deckMenu(id){const d=DECK[id],c=counts(d.qs);
     <button class="it" ${act(()=>study(id))}>▶ O'rganish <small>${c.nw+c.ln+c.rv} karta</small></button>
     <button class="it" ${act(()=>go("overview",{deck:id}))}>ⓘ Umumiy ko'rinish</button>
     <button class="it" ${act(()=>mock(id))}>🎤 Interview: ${MOCK_N} ta tasodifiy savol</button>
+    <button class="it" ${act(()=>examStart(EXAM_SIZES[1],id))}>⏱ Exam: ${EXAM_SIZES[1]} ta Senior+ savol (vaqtli)</button>
     <button class="it" ${act(()=>startSession(d.name+" · xatolar",wr,id,"cram"))}>✕ Xatolarni takrorlash <small>${wr.length}</small></button>
     <button class="it" ${act(()=>startSession(d.name+" · hammasi",d.qs.filter(lvlOk).map(q=>q.id),id,"cram"))}>≡ Hammasini ko'rib chiqish <small>${d.qs.filter(lvlOk).length}</small></button>
     <button class="it" ${act(()=>{S.nt.extra+=20;save();closeSheet();render();toast("Bugungi yangi karta limiti +20");})}>＋ Bugun yana 20 ta yangi</button>`);}
@@ -725,6 +812,7 @@ function decksView(){
     <div class="card"><span class="ic">★</span><div><div class="v">${mature}</div><div class="l">yetilgan (21+ kun)</div></div></div>
   </div>`;
   h+=`<button class="card mock-cta" ${act(mockMenu)}><span class="doc-ic">🎤</span><div><b>Interview rejimi</b><p>${MOCK_N} ta tasodifiy savol — haqiqiy suhbatdagidek, bo'limlar aralash</p></div><span class="go">→</span></button>`;
+  h+=`<button class="card mock-cta" ${act(examMenu)}><span class="doc-ic">⏱</span><div><b>Exam rejimi</b><p>Senior+ savollar, vaqt bilan — javob oxirigacha yashirin, so'ng yo'nalishlar bo'yicha hisobot</p></div><span class="go">→</span></button>`;
   h+=`<div class="h2">To'plamlar</div>`;
   h+=`<div class="card decks"><div class="dk-head"><span>To'plamlar</span><span class="c-new">Yangi</span><span class="c-learn">O'rg.</span><span class="c-rev">Takr.</span><span></span></div>`;
   const row=(id,fresh)=>{const d=DECK[id],c=counts(d.qs),open=S.open.includes(id),kids=d.kids.length;
@@ -826,6 +914,7 @@ function searchView(){
 function studyView(){
   const s=S.sess;if(!s)return decksView();
   if(s.i>=s.ids.length)return finishView();
+  if(s.mode==="exam")return examView(s);
   const q=QBY[s.ids[s.i]],rv=s.rev[s.i];
   // qolgan kartalar (Anki: ko'k/qizil/yashil)
   const rest={new:0,learn:0,rev:0};new Set(s.ids.slice(s.i)).forEach(id=>rest[cat(QBY[id])]++);
@@ -878,6 +967,7 @@ function undo(){const u=S.undo,s=S.sess;if(!u||!s)return;
   if(u.res)S.res[u.id]=u.res;else delete S.res[u.id];
   S.nt=u.nt;s.ids=u.ids;s.i=u.i;delete s.done[u.i];s.rev[u.i]=u.rev;S.undo=null;save();render();toast("Bekor qilindi");}
 function finishView(){
+  if(S.sess&&S.sess.mode==="exam"){if(!S.sess.t1){S.sess.t1=now();save();}return examReport();}
   const s=S.sess,v=Object.values(s.done),c={again:0,hard:0,good:0,easy:0};v.forEach(e=>c[e]++);
   const back=s.deck&&DECK[s.deck]?()=>{S.sess=null;save();go("overview",{deck:s.deck});}:()=>{S.sess=null;save();go("decks");};
   return `<div class="stage" style="margin-top:6vh"><div class="card done qcard"><div class="em">🎉</div><h2>Tabriklaymiz!</h2><p class="muted">${esc(s.title)} — ${v.length} ta javob. Hozircha shu to'plam tugadi.</p>
@@ -937,6 +1027,7 @@ function render(){
   bionic(app);
   if(S.rd.focus&&!app.querySelector(".focus-exit"))app.insertAdjacentHTML("afterbegin",`<button class="focus-exit" ${act(()=>{S.rd.focus=false;applyRead();render();})}>✕ Fokusdan chiqish</button>`);
   if(navAnim&&!RM()){app.querySelectorAll(".today .v,.ov-counts b,.tri b").forEach(countUp);if(app.querySelector(".done"))confetti();}
+  const ta=$("#ta");if(ta)ta.oninput=()=>{if(S.sess)draft[S.sess.ids[S.sess.i]]=ta.value;};
   const sq=$("#sq");if(sq)sq.oninput=e=>{V.search=e.target.value;const pos=e.target.selectionStart;render();const n=$("#sq");n.focus();n.setSelectionRange(pos,pos);};
 }
 document.addEventListener("keydown",e=>{
@@ -949,6 +1040,8 @@ document.addEventListener("keydown",e=>{
   if(V.view!=="study"){if(e.key==="/"){e.preventDefault();$("#sq")&&$("#sq").focus();}if(e.key==="Escape"&&V.view==="overview")go("decks");if(e.key==="Escape"&&V.view==="doc")location.hash="docs";return;}
   if(e.key==="Escape"){const s=S.sess;s&&s.deck&&DECK[s.deck]?go("overview",{deck:s.deck}):go("decks");return;}
   if(e.key==="z"||e.key==="Z"){undo();return;}
+  const en=$("#enext");
+  if(en){if(e.key==="Enter"||e.key===" "){e.preventDefault();en.click();}return;}
   const show=$("#show");
   if(show){
     if(e.key===" "||e.key==="Enter"){e.preventDefault();show.click();return;}

@@ -170,6 +170,39 @@
       "section": "v2",
       "question": "Container ichida root ishlatish xavfi va user namespaces qanday yordam beradi?",
       "explanation": "Container root = host UID 0 (userns bo'lmasa); kernel bug yoki noto'g'ri mount host'ni buzadi. userns container 0 ni host'dagi yuqori UID'ga map qiladi."
+    },
+    {
+      "id": 30555,
+      "code": "LX1",
+      "level": "J",
+      "type": "card",
+      "topic": "Linux users",
+      "domain": "linux",
+      "section": "v2",
+      "question": "`chmod 754 app.sh` qanday ruxsat beradi?",
+      "explanation": "Har raqam — r=4, w=2, x=1 yig'indisi: 7=rwx, 5=r-x, 4=r--. Katalog uchun x — ichiga kirish (cd) huquqi, r — ro'yxatni ko'rish. Xavfsizlik: 777 deyarli hech qachon to'g'ri javob emas."
+    },
+    {
+      "id": 30576,
+      "code": "LX22",
+      "level": "M",
+      "type": "card",
+      "topic": "Linux users",
+      "domain": "linux",
+      "section": "v2",
+      "question": "`sudo` va `setuid` bit: xavfi nima?",
+      "explanation": "Topish: `find / -perm -4000 -type f 2>/dev/null`. GTFOBins — qaysi binary'lardan privilege escalation qilish mumkinligi ro'yxati. Minimal huquq: sudoers'da aniq buyruq va argumentlar; capability'lar (setcap cap_net_bind_service) setuid o'rniga."
+    },
+    {
+      "id": 30681,
+      "code": "LX47",
+      "level": "M",
+      "type": "card",
+      "topic": "Linux users",
+      "domain": "linux",
+      "section": "v2",
+      "question": "Fayl ruxsatlaridagi sticky bit, setuid, setgid nima?",
+      "explanation": "`ls -l` da: `-rwsr-xr-x` (setuid), `drwxrwsr-x` (setgid), `drwxrwxrwt` (sticky, /tmp). setgid katalog — jamoaviy papkalar uchun qulay. umask (odatda 022) yangi fayl ruxsatlarini belgilaydi."
     }
   ]
 }

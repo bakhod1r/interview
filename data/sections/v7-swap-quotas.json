@@ -159,6 +159,17 @@
       "section": "v7",
       "question": "Multi-tenant platformada diskni qanday cheklaysan: quota, LVM, cgroup, K8s?",
       "explanation": "Variantlar: user/project quota (bitta FS), alohida LV/volume (qattiq izolyatsiya), K8s `ephemeral-storage` limit + PVC o'lchami, loop/overlay `size=`. cgroup disk hajmini emas, IO'ni cheklaydi."
+    },
+    {
+      "id": 30567,
+      "code": "LX13",
+      "level": "S",
+      "type": "card",
+      "topic": "Swap & quotas",
+      "domain": "linux",
+      "section": "v7",
+      "question": "Swap production serverda: yoqish kerakmi?",
+      "explanation": "Swapping boshlangan servis ko'pincha 'o'lik emas, lekin foydasiz' holatga tushadi — tez o'lib qayta ishga tushish yaxshiroq bo'lishi mumkin. Yangi K8s versiyalarida swap qo'llab-quvvatlash (NodeSwap) bor, lekin ehtiyotkorlik bilan."
     }
   ]
 }

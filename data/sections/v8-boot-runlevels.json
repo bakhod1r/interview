@@ -159,6 +159,17 @@
       "section": "v8",
       "question": "Katta fleet'da kernel yangilash va boot xavfsizligini qanday tashkil qilasan?",
       "explanation": "Canary/rolling reboot, A/B yoki fallback kernel (`grub-reboot`, `GRUB_DEFAULT=saved`), livepatch (kpatch/Livepatch) kritik CVE uchun, console/serial access, avtomatik health check va rollback, PodDisruptionBudget/drain."
+    },
+    {
+      "id": 30581,
+      "code": "LX27",
+      "level": "S",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Server boot bo'lish jarayonini BIOS'dan login'gacha tushuntirib ber.",
+      "explanation": "Debugging: `systemd-analyze blame`/`critical-chain` — sekin boot; `journalctl -b -1` — oldingi boot loglari; kernel panic uchun serial console. Bulutda: instance console output/screenshot."
     }
   ]
 }
