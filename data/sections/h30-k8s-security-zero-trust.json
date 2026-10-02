@@ -1,0 +1,130 @@
+{
+ "id": "h30",
+ "name": "K8s security & zero trust",
+ "domain": "net",
+ "topics": [
+  "K8s security & zero trust"
+ ],
+ "questions": [
+  {
+   "id": 41911,
+   "code": "H3001",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Ssenariy: klasterda container escape hujumi. Defense in depth blast radius'ni qanday cheklaydi?",
+   "explanation": "Non-root (runAsNonRoot: true): hujumchi host'ga imtiyozsiz user sifatida tushadi (user namespace bilan yanada yaxshi).",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41912,
+   "code": "H3002",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Ssenariy: SLSA Level 3 ga mos avtomatik end-to-end supply chain xavfsizlik pipeline'ini loyihalang.",
+   "explanation": "[ Developer Commit ] ➔ [ GitHub PR (2-Person Review) ]",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41913,
+   "code": "H3003",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Ssenariy: hardcode DB parolli legacy ilovani Vault dynamic secrets'ga downtime'siz qanday ko'chirasiz?",
+   "explanation": "ESO yoki Vault Agent sidecar — credential'larni in-memory volume'ga (/vault/secrets/database.env).",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41914,
+   "code": "H3004",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "TCP SYN flood'ni kernel va load balancer darajasida qanday kamaytirasiz?",
+   "explanation": "SYN cookies: sysctl -w net.ipv4.tcp_syncookies=1.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41915,
+   "code": "H3005",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Kubernetes'da Cilium va WireGuard bilan zero-trust microsegmentation qanday qilinadi?",
+   "explanation": "Cilium eBPF: pod'larni o'zgartirmasdan L3–L7 NetworkPolicy.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41916,
+   "code": "H3006",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Ssenariy: auditda muhandislarning prod EC2'ga to'g'ridan-to'g'ri SSH kirishi aniqlandi. Teleport yoki SSM bilan zero-trust access gateway qanday joriy qilasiz?",
+   "explanation": "portga ruxsat beruvchi SG qoidalarini o'chirish; public IP'larni olib tashlash.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41917,
+   "code": "H3007",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Secrets sprawl nima va enterprise tuzatish pipeline'ini qanday loyihalaysiz?",
+   "explanation": "Secret'lar kod, config, chat, CI o'zgaruvchilari bo'ylab tarqalib ketishi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41918,
+   "code": "H3008",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "DNS tunneling / exfiltration nima va qanday bloklanadi?",
+   "explanation": "Hujum: zararli dastur o'g'irlangan ma'lumotni DNS subdomen'larga kodlab (data.evil-domain.com) hujumchining authoritative serveriga so'raydi — HTTP filtrlarini chetlab o'tadi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41919,
+   "code": "H3009",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Ssenariy: turli AWS VPC'lardagi ikki Kubernetes klasterini public internetsiz xavfsiz qanday ulaysiz?",
+   "explanation": "VPC'larni Transit Gateway yoki VPC peering bilan ulash (CIDR'lar kesishmasin, pod CIDR'lar ham).",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41920,
+   "code": "H3010",
+   "level": "S",
+   "type": "card",
+   "topic": "K8s security & zero trust",
+   "domain": "net",
+   "section": "h30",
+   "question": "Pod Security Standards (Privileged, Baseline, Restricted) farqi.",
+   "explanation": "Privileged: cheklovsiz — privileged container, host network, hostPath.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  }
+ ]
+}

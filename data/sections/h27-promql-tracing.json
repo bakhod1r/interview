@@ -1,0 +1,130 @@
+{
+ "id": "h27",
+ "name": "PromQL & tracing",
+ "domain": "obs",
+ "topics": [
+  "PromQL & tracing"
+ ],
+ "questions": [
+  {
+   "id": 41711,
+   "code": "H2701",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "PromQL'da error rate foizini qanday hisoblaysiz?",
+   "explanation": "sum(rate(http_requests_total{status=~\"5..\"}[5m]))",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41712,
+   "code": "H2702",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "Kubernetes'da container CPU foizini (limit'ga nisbatan) PromQL bilan qanday hisoblaysiz?",
+   "explanation": "sum(rate(container_cpu_usage_seconds_total{container!=\"\", container!=\"POD\"}[5m])) by (pod, namespace)",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41713,
+   "code": "H2703",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "PromQL'da `increase()` va `rate()` farqi.",
+   "explanation": "rate() — soniyadagi o'rtacha o'sish.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41714,
+   "code": "H2704",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "PromQL vector matching (`on()`, `ignoring()`, `group_left()`, `group_right()`) nima?",
+   "explanation": "Arifmetik operatsiyalarda ikki vektor label'larini moslash:",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41715,
+   "code": "H2705",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "OTel Collector'da xatolarni ushlash uchun tail-based sampling qanday sozlanadi?",
+   "explanation": "processors:",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41716,
+   "code": "H2706",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "OTel TraceIdRatioBased sampler nima?",
+   "explanation": "SDK darajasidagi head-based sampler: Trace ID hash'i bo'yicha deterministik foizni saqlaydi (ParentBased bilan birga — bir trace bo'ylab izchil qaror).",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41717,
+   "code": "H2707",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "Tempo'da trace-to-logs va logs-to-trace korrelyatsiyasi qanday?",
+   "explanation": "Grafana'da Tempo va Loki data source'larini traceId maydoni bo'yicha bog'lash (derived fields) — trace va log orasida bir bosishda ikki tomonlama o'tish.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41718,
+   "code": "H2708",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "Thanos Querier va Thanos Store Gateway farqi.",
+   "explanation": "Querier: stateless so'rov engine — jonli sidecar'lar va Store Gateway'lar bo'ylab PromQL, HA dublikatlarini dedup qiladi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41719,
+   "code": "H2709",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "Thanos Compactor nima?",
+   "explanation": "S3'dagi block'larga downsampling (5 daqiqa va 1 soat rezolyutsiya), compaction va retention qo'llaydigan singleton servis.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 41720,
+   "code": "H2710",
+   "level": "S",
+   "type": "card",
+   "topic": "PromQL & tracing",
+   "domain": "obs",
+   "section": "h27",
+   "question": "Mimir arxitekturasi (distributor, ingester, querier, compactor) qanday?",
+   "explanation": "Distributor: stateless — sample'larni validatsiya qilib hash bo'yicha ingester'larga taqsimlaydi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  }
+ ]
+}

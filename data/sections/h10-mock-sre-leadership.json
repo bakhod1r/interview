@@ -1,0 +1,130 @@
+{
+ "id": "h10",
+ "name": "Mock: SRE leadership",
+ "domain": "sre",
+ "topics": [
+  "Mock: SRE leadership"
+ ],
+ "questions": [
+  {
+   "id": 40541,
+   "code": "H1001",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): product tezligi va SRE error budget freeze'i o'rtasidagi konfliktni qanday hal qilasiz?",
+   "explanation": "Error budget policy — rahbariyat imzolagan kelishuv ekanini eslatish (siyosat, shaxsiy fikr emas).",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40542,
+   "code": "H1002",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): blameless post-mortem madaniyatini qanday o'rnatasiz?",
+   "explanation": "Inson xatosi tekshiruvning boshlanishi, xulosasi emas — buni rahbar o'z misolida ko'rsatadi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40543,
+   "code": "H1003",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): cross-functional chaos engineering GameDay'ni qanday boshqarasiz?",
+   "explanation": "Gipoteza: \"Payment pod'larga 50% paket yo'qotish kiritilsa, circuit breaker ishlaydi va checkout muvaffaqiyati > 99.9% qoladi\".",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40544,
+   "code": "H1004",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): SRE jamoasida on-call burnout va alert fatigue'ni qanday boshqarasiz?",
+   "explanation": "Alert auditi: shovqinli, harakat talab qilmaydigan threshold alert'larni o'chirish.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40545,
+   "code": "H1005",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): 20 ta jamoa bo'ylab cloud xarajatini kamaytirishni qanday olib borasiz?",
+   "explanation": "Majburiy tag'lar (Owner, Environment, CostCenter) — SCP/policy bilan majburlanadi; showback/chargeback.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40546,
+   "code": "H1006",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): on-call handoff va rotatsiya jarayonini qanday loyihalaysiz?",
+   "explanation": "Har hafta chiqib ketayotgan va kirayotgan on-call orasida 30 daqiqalik handoff.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40547,
+   "code": "H1007",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): SEV1 avariya paytida stakeholder kommunikatsiyasini qanday boshqarasiz?",
+   "explanation": "Incident bridge'ga alohida Communications Lead tayinlash — texnik javobgarlar diagnozga e'tibor beradi.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40548,
+   "code": "H1008",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): butun tashkilotni Internal Developer Platform'ga qanday o'tkazasiz?",
+   "explanation": "Platformani mahsulot sifatida ko'rish: jamoalardan kundalik og'riqlarni intervyu qilish.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40549,
+   "code": "H1009",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): junior DevOps'larni kuchli SRE'larga qanday tarbiyalaysiz?",
+   "explanation": "Shadow on-call: junior avval incident'larni kuzatadi, keyin reverse-shadow, keyin primary.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  },
+  {
+   "id": 40550,
+   "code": "H1010",
+   "level": "St",
+   "type": "card",
+   "topic": "Mock: SRE leadership",
+   "domain": "sre",
+   "section": "h10",
+   "question": "Mock (leadership): infra investitsiyasi va texnik qarzni rahbariyatga qanday asoslaysiz?",
+   "explanation": "Texnik qarzni biznes xavfi tiliga tarjima qilish: downtime soati uchun yo'qotilgan daromad, churn, dasturchi kutish vaqti narxi, compliance va xavfsizlik ta'siri — investitsiya va kutilgan qaytimni raqamlar bilan.",
+   "source": "NotHarshhaa/DevOps-Interview-Questions"
+  }
+ ]
+}

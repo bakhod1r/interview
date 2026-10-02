@@ -472,7 +472,7 @@ const QD=[];
 const secOf=q=>Object.keys(SEC).find(k=>SEC[k][2]===q.d&&SEC[k][1].includes(q.tp));
 const DOCS=[]; // build.js docs/*.md bilan to'ldiradi: [id, sarlavha, markdown]
 // domen ro'yxatida element: "domen" yoki ["guruh-id","Guruh nomi",[domenlar]]
-const GRP={"backend":["Backend","⚙︎",["go",["db","DB",["db","mongo","elastic","ch"]],["cache","Cache",["redis"]],["mq","MQ",["kafka","rabbit","evt"]],"api","sec","fin"]],"arch":["Architecture","▣",["arch"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]],"devops":["DevOps","⛭",["linux","git",["cont","Containers & K8s",["docker","compose","swarm","k8s"]],"cicd","iac","obs","net","cloud"]],"soft":["Soft skills","☺",["soft"]]};
+const GRP={"backend":["Backend","⚙︎",["go",["db","DB",["db","mongo","elastic","ch"]],["cache","Cache",["redis"]],["mq","MQ",["kafka","rabbit","evt"]],"api","sec","fin"]],"arch":["Architecture","▣",["arch"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]],"devops":["DevOps","⛭",["sre","linux","auto","git",["cont","Containers & K8s",["docker","compose","swarm","k8s"]],"cicd","iac","obs","net","cloud"]],"soft":["Soft skills","☺",["soft"]]};
 const domsOf=l=>l.flatMap(x=>Array.isArray(x)?domsOf(x[2]):[x]);
 const QBY={};Q.forEach(q=>QBY[q.id]=q);
 const SECQ={};Q.forEach(q=>{const s=secOf(q);(SECQ[s]=SECQ[s]||[]).push(q);});
