@@ -1,53 +1,18 @@
 {
   "id": "i1",
-  "name": "Containers & Kubernetes",
-  "domain": "cont",
+  "name": "Kubernetes",
+  "domain": "k8s",
   "topics": [
-    "Docker",
     "Kubernetes"
   ],
   "questions": [
-    {
-      "id": 2006,
-      "code": "I7",
-      "level": "J",
-      "type": "card",
-      "topic": "Docker",
-      "domain": "cont",
-      "section": "i1",
-      "question": "Konteyner va virtual mashina farqi?",
-      "explanation": "Konteyner — o'ralgan jarayon, 'kichik VM' emas. Oqibatlari: yadro umumiy (security chegarasi zaifroq — shuning uchun ko'p tenantli muhitda gVisor/Firecracker), host yadrosiga bog'liqlik (Linux image Windows yadrosida ishlamaydi). Image — qatlamli fayl tizimi, konteyner esa shu image'dan ishga tushgan jarayon."
-    },
-    {
-      "id": 2007,
-      "code": "I8",
-      "level": "J",
-      "type": "card",
-      "topic": "Docker",
-      "domain": "cont",
-      "section": "i1",
-      "question": "Nega har kod o'zgarishida build 5 daqiqa ketadi? Tuzatish?",
-      "snippet": "FROM node:20\nWORKDIR /app\nCOPY . .\nRUN npm ci\nRUN npm run build\nCMD [\"node\", \"dist/main.js\"]",
-      "explanation": "Docker qatlamlarni keshlaydi: qatlam inputi o'zgarmasa qayta bajarilmaydi. To'g'ri tartib: kam o'zgaradigan narsa yuqorida. Yana: .dockerignore (node_modules, .git), multi-stage build bilan yakuniy image'da faqat dist va production bog'liqliklar, root bo'lmagan user, aniq versiyali base image (node:20.11-alpine, latest emas)."
-    },
-    {
-      "id": 2008,
-      "code": "I9",
-      "level": "M",
-      "type": "card",
-      "topic": "Docker",
-      "domain": "cont",
-      "section": "i1",
-      "question": "Production image hajmini kamaytirishning eng samarali yo'li?",
-      "explanation": "Katta image — sekin deploy, sekin autoscaling, katta hujum yuzasi. Qo'shimcha: slim/alpine yoki distroless base, RUN'larni birlashtirib cache'ni o'chirish (apt-get clean), .dockerignore. Go uchun yakuniy image scratch/distroless'da bir necha MB bo'lishi mumkin."
-    },
     {
       "id": 2009,
       "code": "I10",
       "level": "M",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Liveness va readiness probe farqi?",
       "explanation": "Tipik xato: liveness probe'ni DB'ga bog'lash — DB bir daqiqa sekinlashса, Kubernetes hamma podlarni restart qilib incidentni kuchaytiradi. Qoida: liveness faqat 'jarayon tirikmi' (yengil, bog'liqliksiz), readiness bog'liqliklarni tekshirishi mumkin. Sekin startlar uchun startupProbe."
@@ -58,7 +23,7 @@
       "level": "M",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Pod tez-tez OOMKilled bo'lyapti va latency sakrayapti. Bu manifestda nima muammo?",
       "snippet": "resources:\n  requests:\n    cpu: \"2\"\n    memory: \"2Gi\"\n  limits:\n    cpu: \"2\"\n    memory: \"256Mi\"",
@@ -70,7 +35,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Rolling update paytida qisqa uzilishlar bo'lyapti. Qaysi to'plam buni yopadi?",
       "explanation": "Uzilishning ikki sababi: 1) yangi pod tayyor bo'lmasdan trafik oldi (readiness yo'q), 2) eski pod query o'rtasida o'ldirildi (graceful shutdown yo'q). PDB node drain/cluster upgrade paytida bir vaqtda qancha pod yo'qolishini cheklaydi. terminationGracePeriodSeconds shutdown vaqtidan katta bo'lsin."
@@ -81,7 +46,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Deployment va StatefulSet farqi? Postgres'ni Kubernetes'da ishlatasizmi?",
       "explanation": "Senior javob: 'mumkin, lekin kerakmi?' Konteyner DB'ni sekinlashtirmaydi — murakkablik operatsiyada. Test/dev muhit uchun — bemalol."
@@ -92,7 +57,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Go servis podda deploy paytida 5xx beradi, keyin tinchiydi. Eng ehtimolli sabab va yechim?",
       "explanation": "Ikki tomonli muammo: (1) start — readiness probe haqiqiy dependency tayyorligini (DB pool, migratsiya, kesh warm) tekshirishi kerak; (2) stop — `preStop` sleep (5-15s) + graceful shutdown: SIGTERM'da yangi ulanish qabul qilinmaydi, mavjudlari tugatiladi, `terminationGracePeriodSeconds` shundan katta. Endpoint propagatsiyasi asinxron — shuning uchun sleep kerak."
@@ -103,7 +68,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Go servisga `limits.memory: 512Mi` qo'yilgan, OOMKilled bo'lyapti. To'g'ri chora?",
       "explanation": "Go GC default soft limitni bilmaydi: heap 2x o'sib limitdan oshadi va cgroup OOM killer o'ldiradi (Go panic ham bermaydi). `GOMEMLIMIT=400MiB` soft limit — GC agressivlashadi. `GOGC` bilan birga ishlatiladi. Ustiga `GOMAXPROCS` CPU limitga moslanishi kerak (automaxprocs), aks holda throttling va latency."
@@ -114,7 +79,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "CPU `limits` qo'yilgan podda p99 latency portlaydi, CPU ishlatish esa 40%. Sabab?",
       "explanation": "O'rtacha ishlatish past bo'lishi mumkin, lekin burst paytda kvota tugaydi. Yechimlar: limitni oshirish yoki latency-sezgir servisda CPU limitni olib tashlash (faqat `requests` + to'g'ri sizing), GOMAXPROCS'ni kvotaga moslash, goroutine parallelizmini kamaytirish. `container_cpu_cfs_throttled_seconds_total` — asosiy dalil."
@@ -125,21 +90,10 @@
       "level": "St",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "HPA CPU bo'yicha skale qiladi, lekin Kafka consumer lag o'sib ketyapti. To'g'ri yondashuv?",
       "explanation": "Consumer I/O'ga bog'liq bo'lishi mumkin — CPU signal bermaydi. KEDA lag'ni to'g'ridan-to'g'ri o'qib skale qiladi. Muhim cheklov: consumer'lar soni partition sonidan oshsa foyda yo'q (ortiqchasi bo'sh turadi) — demak partition soni oldindan rejalashtiriladi va rebalance narxi (stop-the-world) hisobga olinadi."
-    },
-    {
-      "id": 30029,
-      "code": "SN30",
-      "level": "S",
-      "type": "card",
-      "topic": "Docker",
-      "domain": "cont",
-      "section": "i1",
-      "question": "Go servis uchun production image: qaysi qurilish to'g'ri?",
-      "explanation": "Toolchain'li image: 1GB+ hajm, ko'p CVE, ichida kompilyator va shell — hujum yuzasi. Distroless/scratch bilan bir necha o'n MB. Eslatmalar: `scratch`da TLS uchun `ca-certificates` va zone ma'lumotlari ko'chiriladi, `CGO_ENABLED=0` static bo'lishi uchun, layer keshi uchun `go mod download` alohida qatlamda."
     },
     {
       "id": 30261,
@@ -147,7 +101,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "`requests` va `limits` farqi va QoS klasslariga ta'siri?",
       "explanation": "Amaliy siyosat: xotirada `requests = limits` (Guaranteed) — chunki xotira siqilmaydigan resurs va OOM keladi; CPU'da `requests` aniq, `limits` ehtiyotkorlik bilan (latency-sezgir servisda throttling zarar qiladi). Klaster sig'imini rejalashtirishda `requests` yig'indisi muhim, `limits` esa overcommit darajasini belgilaydi."
@@ -158,7 +112,7 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "`livenessProbe` va `readinessProbe` ni noto'g'ri sozlash qanday incident keltiradi?",
       "explanation": "Qoida: liveness — 'jarayon o'zini tiklay olmaydigan holatda qotib qoldimi' (deadlock) uchun, faqat mahalliy tekshiruv; readiness — 'hozir trafik qabul qila olamanmi'; startupProbe — sekin ishga tushish uchun (liveness'ni erta o'ldirmasligi uchun). `failureThreshold` va `periodSeconds` real ish vaqtiga moslanadi."
@@ -169,7 +123,7 @@
       "level": "St",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Deploy paytida 100% mavjudlikni saqlash uchun qaysi obyektlar birga kerak?",
       "explanation": "PDB ayniqsa muhim: klaster avtoskaler yoki node yangilanishi bir vaqtda ko'p podni chiqarib tashlamasligi uchun. `maxUnavailable: 0` bilan yangi pod tayyor bo'lgach eskisi o'chadi. Bularsiz 'rolling update' amalda qisqa downtime yoki 5xx to'lqini beradi — eng ko'p uchraydigan 'sababsiz xatolar' manbasi."
@@ -180,7 +134,7 @@
       "level": "St",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Service trafikni podlarga qanday yetkazadi (kube-proxy)?",
       "explanation": "Amaliy oqibatlar: iptables rejimida minglab Service bo'lsa qoidalarni yangilash sekundlarga cho'ziladi (endpoint o'zgarishi kech yetadi — deploy paytida 5xx); IPVS/eBPF kattaroq klasterlarda barqarorroq. Balansirovka L4 darajasida — HTTP/2/gRPC uchun yetarli emas (ulanish darajasida taqsimlanadi), shuning uchun client-side LB yoki mesh kerak."
@@ -191,10 +145,175 @@
       "level": "S",
       "type": "card",
       "topic": "Kubernetes",
-      "domain": "cont",
+      "domain": "k8s",
       "section": "i1",
       "question": "Service mesh (sidecar) qanday narxga ega va qachon oqlanadi?",
       "explanation": "Kichik tizimda (3-5 servis, bitta til) kutubxona darajasidagi yechim (gRPC interceptor + OTel) arzonroq va shaffofroq. Mesh'ning haqiqiy qiymati — siyosatni koddan ajratish va ko'p jamoada bir xil xatti-harakat. Sidecarsiz variantlar (ambient mesh, eBPF) narxni kamaytiradi, lekin yetuklik darajasi tekshirilishi kerak."
+    },
+    {
+      "id": 33109,
+      "code": "DK76",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Kubernetes nima va qanday muammoni hal qiladi?",
+      "explanation": "Container orchestrator: ko'p node'da container'larni joylash, sog'lig'ini kuzatish, restart, scaling, rolling update, service discovery, config/secret. Desired state deklarativ — controller'lar haqiqiy holatni unga yaqinlashtiradi."
+    },
+    {
+      "id": 33110,
+      "code": "DK77",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Pod, ReplicaSet, Deployment farqi?",
+      "explanation": "Pod — bir yoki bir nechta container'ning eng kichik birligi (umumiy IP/volume). ReplicaSet — N ta pod'ni ushlab turadi. Deployment — ReplicaSet'larni boshqaradi: rolling update va rollback."
+    },
+    {
+      "id": 33111,
+      "code": "DK78",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Service turlari: ClusterIP, NodePort, LoadBalancer, Headless farqi?",
+      "explanation": "ClusterIP — klaster ichki barqaror IP (default); NodePort — har node'da 30000-32767 port; LoadBalancer — cloud LB yaratadi; Headless (clusterIP: None) — DNS to'g'ridan-to'g'ri pod IP'larini qaytaradi (StatefulSet)."
+    },
+    {
+      "id": 33112,
+      "code": "DK79",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Asosiy kubectl buyruqlari: get, describe, logs, exec, apply, delete, port-forward?",
+      "explanation": "get — ro'yxat; describe — batafsil + event'lar; logs — container log; exec — ichida buyruq; apply — deklarativ yaratish/yangilash; delete; port-forward — lokal portni pod'ga ulash."
+    },
+    {
+      "id": 33113,
+      "code": "DK80",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "ConfigMap va Secret nima? Secret haqiqatan maxfiymi?",
+      "explanation": "ConfigMap — konfiguratsiya, Secret — maxfiy ma'lumot; env yoki fayl sifatida pod'ga beriladi. Secret default faqat base64 (shifrlash emas): etcd encryption at rest va RBAC yoqilishi, yoki tashqi secret manager kerak."
+    },
+    {
+      "id": 33114,
+      "code": "DK81",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Namespace nima va nima uchun ishlatiladi?",
+      "explanation": "Klaster ichida mantiqiy bo'linish: nom ziddiyatsiz, RBAC, ResourceQuota, LimitRange, NetworkPolicy namespace bo'yicha. Xavfsizlik chegarasi emas (node va kernel umumiy)."
+    },
+    {
+      "id": 33115,
+      "code": "DK82",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Ingress nima, Ingress Controller'siz ishlaydimi? Gateway API?",
+      "explanation": "Ingress — HTTP(S) routing qoidalari (host/path -> Service, TLS). O'zi hech narsa qilmaydi — controller (ingress-nginx, Traefik) kerak. Gateway API — yangi, rollar bo'yicha ajratilgan, kuchliroq standart."
+    },
+    {
+      "id": 33116,
+      "code": "DK83",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "PV, PVC, StorageClass qanday bog'langan?",
+      "explanation": "PVC — pod'ning disk so'rovi; PV — haqiqiy disk; StorageClass — PV'ni dinamik yaratish (CSI driver). PVC StorageClass orqali PV bilan bind bo'ladi."
+    },
+    {
+      "id": 33117,
+      "code": "DK84",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Pod holatlari: Pending, CrashLoopBackOff, ImagePullBackOff, OOMKilled — har biri qanday debug qilinadi?",
+      "explanation": "Pending — scheduling (resurs/taint/PVC); ImagePullBackOff — image nomi/auth; CrashLoopBackOff — ilova yiqilyapti (logs --previous); OOMKilled — memory limit. describe va events birinchi qadam."
+    },
+    {
+      "id": 33118,
+      "code": "DK85",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "DaemonSet, Job, CronJob qachon ishlatiladi?",
+      "explanation": "DaemonSet — har node'da bitta pod (log/metrics agent, CNI). Job — tugaydigan vazifa (migratsiya). CronJob — jadval bo'yicha Job."
+    },
+    {
+      "id": 33119,
+      "code": "DK86",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Labels, selectors, taints/tolerations va affinity farqi?",
+      "explanation": "Labels/selectors — obyektlarni guruhlash va bog'lash. nodeSelector/affinity — pod'ni node'ga tortadi. Taint — node pod'larni itaradi, toleration ruxsat beradi. podAntiAffinity/topologySpread — replikalarni tarqatadi."
+    },
+    {
+      "id": 33120,
+      "code": "DK87",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "HPA qanday ishlaydi va requests nega shart?",
+      "explanation": "HPA metrics-server'dan CPU/memory (yoki custom metric) olib, target'ga nisbatan replikalarni hisoblaydi: desired = ceil(current * metric/target). CPU % requests'ga nisbatan — requests bo'lmasa HPA ishlamaydi."
+    },
+    {
+      "id": 33121,
+      "code": "DK88",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "RBAC: Role, ClusterRole, RoleBinding, ServiceAccount qanday bog'langan?",
+      "explanation": "Role — namespace'dagi ruxsatlar (verb+resource); ClusterRole — klaster bo'yicha; Binding — ruxsatni subject'ga (user/group/ServiceAccount) beradi. Pod API'ga o'z ServiceAccount token'i bilan murojaat qiladi."
+    },
+    {
+      "id": 33122,
+      "code": "DK89",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "NetworkPolicy nima? Default holatda pod'lar bir-biri bilan gaplasha oladimi?",
+      "explanation": "Default — hamma pod hamma pod bilan gaplashadi. NetworkPolicy ingress/egress'ni label bo'yicha cheklaydi; CNI qo'llashi kerak (Calico, Cilium; flannel yo'q)."
+    },
+    {
+      "id": 33123,
+      "code": "DK90",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Pod yaratilishidan ishga tushishigacha nima sodir bo'ladi (kubectl apply -> container)?",
+      "explanation": "kubectl -> apiserver (authn, authz, admission) -> etcd; Deployment controller ReplicaSet, u Pod yaratadi; scheduler node tanlaydi (filter+score) va bind; kubelet CRI orqali containerd: image pull, CNI network, volume mount, container start; probe'lar; endpoint'ga qo'shiladi."
     }
   ]
 }

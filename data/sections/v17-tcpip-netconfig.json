@@ -1,0 +1,197 @@
+{
+  "id": "v17",
+  "name": "TCP/IP & network config",
+  "domain": "linux",
+  "topics": [
+    "TCP/IP"
+  ],
+  "questions": [
+    {
+      "id": 31357,
+      "code": "DY11",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "OSI va TCP/IP modeli qatlamlari. Har qatlamga misol protokol va Linux vositasi.",
+      "explanation": "OSI 7 qatlam: Physical, Data link, Network, Transport, Session, Presentation, Application. Amalda TCP/IP 4 qatlam: Link, Internet (IP), Transport (TCP/UDP), Application. Debug pastdan yuqoriga."
+    },
+    {
+      "id": 31358,
+      "code": "DY12",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "TCP va UDP farqi? Qaysi protokollar qaysi birini ishlatadi?",
+      "explanation": "TCP — ulanishli, ishonchli, tartibli, flow/congestion control (HTTP/1-2, SSH, DB). UDP — ulanishsiz, kafolatsiz, kam overhead (DNS, NTP, VoIP, video, QUIC/HTTP3)."
+    },
+    {
+      "id": 31359,
+      "code": "DY13",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "TCP 3-way handshake va 4-way close. Holatlar: LISTEN, SYN_SENT, ESTABLISHED, FIN_WAIT, CLOSE_WAIT, TIME_WAIT.",
+      "explanation": "Ochish: SYN -> SYN-ACK -> ACK. Yopish: FIN -> ACK, FIN -> ACK. Birinchi yopgan tomon TIME_WAIT'ga tushadi (2*MSL). CLOSE_WAIT — qarshi tomon yopdi, bizning ilova hali close() qilmagan (ko'pincha leak)."
+    },
+    {
+      "id": 31360,
+      "code": "DY14",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "IP manzil, subnet, CIDR: `10.0.1.0/24` da nechta host? `/16`, `/28`? Private diapazonlar?",
+      "explanation": "/N — birinchi N bit network. Host soni = 2^(32-N) - 2 (network va broadcast). /24 = 254, /16 = 65534, /28 = 14. Private (RFC 1918): 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16."
+    },
+    {
+      "id": 31361,
+      "code": "DY15",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "NAT, SNAT/DNAT/masquerade va port forwarding nima? Linux'da qanday qilinadi?",
+      "explanation": "NAT — paket manzilini o'zgartirish. SNAT/masquerade — ichki hostlar tashqariga bitta IP bilan chiqadi. DNAT — tashqi portga kelganni ichki hostga yo'naltirish (port forwarding). Linux'da netfilter nat jadvali + ip_forward=1."
+    },
+    {
+      "id": 31362,
+      "code": "DY16",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Ubuntu'da static IP qanday beriladi (netplan)? RHEL'da (nmcli)?",
+      "explanation": "Ubuntu: `/etc/netplan/*.yaml` -> `netplan try` (avtomatik rollback) -> `netplan apply`. RHEL: `nmcli con mod ... ipv4.method manual ipv4.addresses ... ` -> `nmcli con up`. `ip addr add` — vaqtinchalik."
+    },
+    {
+      "id": 31363,
+      "code": "DY17",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Routing: default gateway, `ip route add`, bir nechta interfeys va policy routing.",
+      "explanation": "Kernel route jadvalidan eng aniq (longest prefix) mosini tanlaydi; topilmasa default. `ip route add 10.20.0.0/16 via 10.0.1.254`. Ikki interfeysdan javob boshqa yo'ldan ketsa (asymmetric) — policy routing (`ip rule`, alohida jadval)."
+    },
+    {
+      "id": 31364,
+      "code": "DY18",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "ARP nima? `ip neigh`, gratuitous ARP, IP konflikti.",
+      "explanation": "ARP — IPv4 manzilni bir xil L2 tarmoqdagi MAC'ga aylantiradi. Gateway'ga ham avval ARP. IP konfliktida ikki MAC bitta IP'ga javob beradi — uzilish-ulanish. Gratuitous ARP — failover'da (keepalived VIP) boshqalarning keshini yangilash."
+    },
+    {
+      "id": 31365,
+      "code": "DY19",
+      "level": "S",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Yuqori yuklamali server uchun TCP/network sysctl'lar: somaxconn, backlog, ephemeral port, keepalive.",
+      "explanation": "`net.core.somaxconn` va ilova listen backlog — accept navbati. `ip_local_port_range` — chiquvchi ulanish portlari. `tcp_tw_reuse`. `tcp_keepalive_*`. `netdev_max_backlog`, buffer'lar. O'zgartirishdan oldin o'lcha: `ss -lnt` Recv-Q, `nstat`, `netstat -s`."
+    },
+    {
+      "id": 31366,
+      "code": "DY20",
+      "level": "S",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Ikki server orasida tarmoq sekin. Bandwidth, latency, packet loss'ni qanday o'lchaysan?",
+      "explanation": "Latency: `ping`, `mtr`. Bandwidth: `iperf3` (server -s, client -c, -P parallel, -R teskari). Loss/retransmit: `mtr`, `ss -ti`, `nstat TcpRetransSegs`. Interfeys: `ethtool`, `ip -s link` (errors, drops)."
+    },
+    {
+      "id": 31381,
+      "code": "DY35",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "OSI 7 qatlami batafsil: har qatlam vazifasi, PDU nomi, qurilma va manzil turi.",
+      "explanation": "7 Application, 6 Presentation, 5 Session, 4 Transport (segment/datagram, port), 3 Network (packet, IP, router), 2 Data link (frame, MAC, switch), 1 Physical (bit, kabel/hub). Eslab qolish: \"All People Seem To Need Data Processing\" (7 dan 1 ga)."
+    },
+    {
+      "id": 31382,
+      "code": "DY36",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Encapsulation: HTTP so'rov qatlamlar bo'ylab qanday o'raladi va qabul tomonda ochiladi?",
+      "explanation": "Har qatlam yuqoridan kelgan ma'lumotga o'z header'ini qo'shadi: data -> TCP segment (portlar) -> IP packet (IP manzillar) -> Ethernet frame (MAC, FCS) -> bitlar. Qabul tomonda teskari (decapsulation). Router har hop'da faqat L2 frame'ni almashtiradi, IP manzillar (NAT bo'lmasa) o'zgarmaydi."
+    },
+    {
+      "id": 31383,
+      "code": "DY37",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Brauzerga `https://example.com` yozilganda nima sodir bo'ladi? OSI qatlamlari bo'yicha.",
+      "explanation": "DNS (L7, UDP 53) -> ARP gateway MAC (L2) -> TCP handshake (L4) -> TLS handshake (L6/L7) -> HTTP so'rov (L7) -> server/LB javobi -> render. Har bosqichda nima buzilishi va qaysi buyruq bilan tekshirilishini aytish — kuchli javob."
+    },
+    {
+      "id": 31384,
+      "code": "DY38",
+      "level": "M",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "L4 va L7 load balancer farqi? Qaysi qatlamda qanday qaror qabul qiladi?",
+      "explanation": "L4 — IP:port va TCP/UDP darajasida (paket ichini ko'rmaydi): tez, protokolga bog'liq emas, TLS passthrough. L7 — HTTP'ni tushunadi: path/host/header bo'yicha routing, TLS termination, retry, cookie sticky, WAF; qimmatroq."
+    },
+    {
+      "id": 31385,
+      "code": "DY39",
+      "level": "S",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Tarmoq muammosini OSI bo'yicha pastdan yuqoriga debug qilish: har qatlamda qaysi buyruq va qanday belgi?",
+      "explanation": "L1: link/kabel (`ethtool`, `ip link`), L2: ARP/VLAN/MAC (`ip neigh`, `arping`), L3: IP/route/ICMP (`ip a`, `ip route get`, `ping`, `mtr`), L4: port/firewall (`ss`, `nc -zv`, `tcpdump` SYN/RST), L5-6: TLS (`openssl s_client`), L7: HTTP/DNS (`curl -v`, `dig`). Har qatlamni tasdiqlab yuqoriga chiq."
+    },
+    {
+      "id": 33141,
+      "code": "DW18",
+      "level": "S",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "DNS'ni o'zgartirding, lekin ba'zi client'lar hali eski IP'ga borayapti. Nega va qanday boshqarasan?",
+      "explanation": "DNS keshlar: TTL (resolver, OS, brauzer, ilova/JVM `networkaddress.cache.ttl`, Go/Node), negativ kesh, ba'zi resolver'lar TTL'ni hurmat qilmaydi. Migratsiyadan oldin TTL'ni kamaytir, eski server ma'lum muddat ishlasin, `dig @authoritative` bilan tekshir."
+    },
+    {
+      "id": 33142,
+      "code": "DW19",
+      "level": "S",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Bonding/teaming va VLAN: server tarmoq redundancy'si qanday sozlanadi?",
+      "explanation": "Bonding — bir nechta NIC'ni bitta mantiqiy interfeysga: `active-backup` (mode 1, switch sozlamasisiz, failover), `802.3ad` LACP (mode 4, switch'da LAG kerak, yuk taqsimoti + failover). VLAN — bitta fizik linkda bir nechta L2 tarmoq (802.1Q tag), `eth0.100`."
+    }
+  ]
+}

@@ -104,6 +104,83 @@
       "section": "v9",
       "question": "vim'da bir nechta qator / blok bilan ishlash: visual mode, `:g`, makro.",
       "explanation": "`V` — qator tanlash, `Ctrl+v` — ustun bloki (ko'p qatorga birdaniga yozish), `:g/pat/d` — mos qatorlarni o'chirish, `q` — makro yozish."
+    },
+    {
+      "id": 31340,
+      "code": "DX56",
+      "level": "J",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "`chmod`, `chown`, `chgrp` flaglari va misollar (`-R`, symbolic va octal).",
+      "explanation": "chmod u/g/o/a +-= r/w/x yoki octal (755). chown user:group. -R rekursiv. Katalog uchun x = kirish huquqi."
+    },
+    {
+      "id": 31341,
+      "code": "DX57",
+      "level": "J",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "`grep` eng kerakli flaglari?",
+      "explanation": "-i katta-kichik farqsiz, -r rekursiv, -n qator raqami, -v teskari, -c soni, -l faqat fayl nomi, -w butun so'z, -E regex, -F fixed string, -o faqat moslik, -A/-B/-C kontekst."
+    },
+    {
+      "id": 31342,
+      "code": "DX58",
+      "level": "J",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "`tail -f`, `less`, `head`, `wc` — log ko'rishning amaliy usullari?",
+      "explanation": "`tail -f`/`-F` real vaqt (F — rotate'dan keyin ham), `tail -n 200`, `less +F` (kuzatish + qidiruv), `head -n`, `wc -l` qatorlar soni."
+    },
+    {
+      "id": 31343,
+      "code": "DX59",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "logrotate qanday ishlaydi? `copytruncate` va `create` farqi?",
+      "explanation": "cron/timer bilan kuniga bir marta `/etc/logrotate.d/*` bo'yicha loglarni aylantiradi, siqadi, eskisini o'chiradi. create — faylni rename qilib yangisini yaratadi (ilovaga signal kerak); copytruncate — nusxa olib asl faylni 0 ga qisqartiradi (signal kerak emas, lekin qator yo'qolishi mumkin)."
+    },
+    {
+      "id": 31344,
+      "code": "DX60",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "Disk joyini tez topish: `df`, `du`, `ncdu` flaglari.",
+      "explanation": "`df -hT` FS bo'yicha, `df -i` inode, `du -sh *`, `du -xh --max-depth=1 / | sort -h`, `ncdu -x /`. -x — boshqa FS'ga o'tmaslik."
+    },
+    {
+      "id": 31345,
+      "code": "DX61",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "`awk` / `sed` / `sort` / `uniq` bilan access log tahlili (top IP, top URL, 5xx).",
+      "explanation": "Pipeline: maydonni ajrat (awk '{print $1}') -> sort -> uniq -c -> sort -rn -> head. sed — almashtirish/qator tanlash."
+    },
+    {
+      "id": 31346,
+      "code": "DX62",
+      "level": "M",
+      "type": "card",
+      "topic": "Commands & editors",
+      "domain": "linux",
+      "section": "v9",
+      "question": "Fayl va katalog nusxalash/ko'chirish: `cp -a`, `mv`, `rm -rf` xavflari, `ln -s`, `mkdir -p`, `install`.",
+      "explanation": "cp -a — ruxsat, egasi, vaqt, symlink saqlanadi. rm -rf — qaytarib bo'lmaydi; o'zgaruvchi bo'sh bo'lsa `rm -rf $DIR/` = `rm -rf /`. mkdir -p — ota kataloglar bilan."
     }
   ]
 }

@@ -1,0 +1,230 @@
+{
+  "id": "v14",
+  "name": "systemd, services & cron",
+  "domain": "linux",
+  "topics": [
+    "systemd & services"
+  ],
+  "questions": [
+    {
+      "id": 31285,
+      "code": "DX01",
+      "level": "J",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "systemd, systemctl va journalctl farqi nima? (\"systemctl vs systemd\")",
+      "explanation": "systemd — init tizimi va servis menejeri (PID 1). systemctl — unga buyruq beradigan CLI. journalctl — systemd-journald loglarini o'qiydigan CLI."
+    },
+    {
+      "id": 31286,
+      "code": "DX02",
+      "level": "J",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "`systemctl start` va `systemctl enable` farqi? `--now` nima?",
+      "explanation": "start — hozir ishga tushiradi (reboot'dan keyin yo'q). enable — boot'da avtomatik (symlink yaratadi), hozir ishga tushirmaydi. `enable --now` — ikkalasi."
+    },
+    {
+      "id": 31287,
+      "code": "DX03",
+      "level": "J",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "`restart` va `reload` farqi? `reload-or-restart` qachon?",
+      "explanation": "restart — jarayon o'ldiriladi va qayta ko'tariladi (ulanishlar uziladi). reload — jarayon tirik, faqat config qayta o'qiladi (odatda SIGHUP), unit'da ExecReload bo'lsa."
+    },
+    {
+      "id": 31288,
+      "code": "DX04",
+      "level": "J",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "`systemctl daemon-reload` nima va qachon kerak?",
+      "explanation": "Unit fayllar (.service) diskda o'zgarganda systemd'ga ularni qayta o'qitadi. Servisni restart qilmaydi."
+    },
+    {
+      "id": 31289,
+      "code": "DX05",
+      "level": "J",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "Servis ishlamayapti. Birinchi qaysi buyruqlar?",
+      "explanation": "`systemctl status app` -> `journalctl -u app -e` / `-b` -> unit faylni ko'r (`systemctl cat app`) -> qo'lda ishga tushirib ko'r."
+    },
+    {
+      "id": 31290,
+      "code": "DX06",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "O'z ilovang uchun systemd unit fayl yoz (Go binary, alohida user, auto-restart).",
+      "explanation": "`/etc/systemd/system/app.service`: [Unit] After/Wants, [Service] User, ExecStart, Restart=on-failure, Environment, limits; [Install] WantedBy=multi-user.target."
+    },
+    {
+      "id": 31291,
+      "code": "DX07",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "Unit `Type=` qiymatlari: simple, exec, forking, oneshot, notify — farqi?",
+      "explanation": "systemd servis qachon \"tayyor\" deb hisoblashini belgilaydi. simple — darhol; exec — exec() muvaffaqiyatli bo'lgach; forking — ota jarayon chiqqach; oneshot — tugagach; notify — ilova sd_notify(READY=1) yuborganda."
+    },
+    {
+      "id": 31292,
+      "code": "DX08",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "`Restart=` qiymatlari va `StartLimitBurst`/`StartLimitIntervalSec` nima?",
+      "explanation": "Restart=no/on-failure/always/on-abnormal... servis o'lganda qayta ishga tushirish siyosati. StartLimit — ma'lum vaqtda N martadan ko'p restart bo'lsa systemd taslim bo'ladi (start-limit-hit)."
+    },
+    {
+      "id": 31293,
+      "code": "DX09",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "`Wants`, `Requires`, `After`, `Before`, `BindsTo` farqi?",
+      "explanation": "Wants/Requires — dependency (nimani birga ishga tushirish); After/Before — tartib (ordering). Ular mustaqil: Requires=X tartib bermaydi, After=X ham kerak."
+    },
+    {
+      "id": 31294,
+      "code": "DX10",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "Paket bergan unit faylni qanday to'g'ri o'zgartirasan? (drop-in, `systemctl edit`)",
+      "explanation": "`systemctl edit nginx` — `/etc/systemd/system/nginx.service.d/override.conf` yaratadi; paket yangilanganda yo'qolmaydi. To'liq almashtirish: `systemctl edit --full`."
+    },
+    {
+      "id": 31295,
+      "code": "DX11",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "journalctl'ning eng kerakli flaglari?",
+      "explanation": "-u unit, -f follow, -e end, -b boot, --since/--until, -p priority, -o format, -k kernel, --disk-usage, --vacuum-*."
+    },
+    {
+      "id": 31296,
+      "code": "DX12",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "journald disk to'ldiryapti. Qanday cheklaysan?",
+      "explanation": "`/etc/systemd/journald.conf`: SystemMaxUse=, SystemKeepFree=, MaxRetentionSec=; restart journald; bir martalik tozalash `journalctl --vacuum-size`."
+    },
+    {
+      "id": 31297,
+      "code": "DX13",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "systemd timer va cron farqi? Timer qanday yoziladi?",
+      "explanation": "cron — oddiy, klassik. timer — unit bilan birlashgan: log journald'da, dependency, Persistent= (o'tkazib yuborilganini bajaradi), RandomizedDelaySec, resource limit."
+    },
+    {
+      "id": 31298,
+      "code": "DX14",
+      "level": "J",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "crontab sintaksisi: `*/5 * * * *` nima? `crontab -e/-l` va `/etc/crontab` farqi?",
+      "explanation": "5 maydon: daqiqa soat kun oy hafta_kuni. */5 — har 5 daqiqada. crontab -e — user crontab'i; /etc/crontab va /etc/cron.d/* — tizim, 6-maydon user nomi."
+    },
+    {
+      "id": 31299,
+      "code": "DX15",
+      "level": "M",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "Cron job qo'lda ishlaydi, cron'da ishlamaydi. Sabablari?",
+      "explanation": "Environment farqi: PATH, HOME, shell (sh, bash emas), working directory, `%` belgisi, ruxsat, ssh-agent/credentials yo'q, crontab oxirida newline yo'q."
+    },
+    {
+      "id": 31300,
+      "code": "DX16",
+      "level": "S",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "systemd'da servisni resurs bilan cheklash (CPU, RAM, IO) va hardening qanday?",
+      "explanation": "cgroup v2 asosida: MemoryMax, MemoryHigh, CPUQuota, CPUWeight, IOWeight, TasksMax. Hardening: NoNewPrivileges, ProtectSystem, ProtectHome, PrivateTmp, CapabilityBoundingSet, SystemCallFilter. Baho: `systemd-analyze security`."
+    },
+    {
+      "id": 31301,
+      "code": "DX17",
+      "level": "S",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "Graceful shutdown: `systemctl stop` paytida nima sodir bo'ladi?",
+      "explanation": "systemd ExecStop (bo'lsa) bajaradi, so'ng KillSignal (SIGTERM) cgroup'dagi jarayonlarga, TimeoutStopSec kutadi, keyin SIGKILL. KillMode= kimga yuborilishini belgilaydi."
+    },
+    {
+      "id": 31302,
+      "code": "DX18",
+      "level": "S",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "Socket activation va `systemd-analyze` vositalari nima beradi?",
+      "explanation": "Socket activation: systemd portni o'zi ochadi, birinchi ulanishda servisni ko'taradi; restart paytida ulanishlar navbatda kutadi. systemd-analyze — boot vaqti, critical-chain, unit tekshiruvi, security."
+    },
+    {
+      "id": 33137,
+      "code": "DW14",
+      "level": "S",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "Servis restart-loop'da (crash -> restart -> crash). Qanday tahlil qilasan?",
+      "explanation": "`systemctl status` (restart counter, exit code/signal), `journalctl -u app -b --no-pager` birinchi xatoni top (oxirgisi emas), exit code ma'nosini aniqla (1 config, 203 EXEC, 137 OOM, 139 SIGSEGV), coredump (`coredumpctl`), qo'lda shu user/env bilan ishga tushir, so'nggi o'zgarish (deploy/config/secret)."
+    },
+    {
+      "id": 33138,
+      "code": "DW15",
+      "level": "S",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "journald yoki ilova loglarida vaqt mos kelmaydi / boot oralig'ida loglar yo'qolgan. Nima sabab?",
+      "explanation": "Journal volatile (`/run/log/journal`, reboot'da yo'qoladi) — `Storage=persistent` yoki `/var/log/journal` yarat. Rate limit (`Suppressed N messages`). Vaqt: soat sinxron emas yoki timezone farqi (UTC vs local). Crash oldidagi loglar diskka flush bo'lmagan."
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "t15",
+  "name": "Docker Compose gotchas",
+  "domain": "compose",
+  "topics": [
+    "Infra gotcha"
+  ],
+  "questions": [
+    {
+      "id": 33090,
+      "code": "DK57",
+      "level": "M",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "compose",
+      "section": "t15",
+      "question": "`.env` faylidagi o'zgaruvchi container ichida yo'q. Nega?",
+      "explanation": ".env faqat compose.yaml'dagi ${VAR} interpolatsiyasi uchun. Container'ga o'tishi uchun environment: yoki env_file: da ko'rsatish kerak."
+    },
+    {
+      "id": 33091,
+      "code": "DK58",
+      "level": "M",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "compose",
+      "section": "t15",
+      "question": "compose.yaml o'zgartirildi, `docker compose restart api` qilindi — o'zgarish ishlamadi. Nega?",
+      "explanation": "restart mavjud container'ni qayta ishga tushiradi, konfiguratsiyani qayta o'qimaydi. up -d config farqini ko'rib container'ni recreate qiladi."
+    },
+    {
+      "id": 33092,
+      "code": "DK59",
+      "level": "M",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "compose",
+      "section": "t15",
+      "question": "Postgres image'da `POSTGRES_PASSWORD` o'zgartirildi, lekin eski parol ishlayapti. Nega?",
+      "explanation": "Init skriptlar (POSTGRES_*, /docker-entrypoint-initdb.d) faqat data papka bo'sh bo'lganda ishlaydi. Volume'da eski cluster bor — env e'tiborsiz."
+    },
+    {
+      "id": 33093,
+      "code": "DK60",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "compose",
+      "section": "t15",
+      "question": "Compose'da `ports: - 22:22` yoki `- 5432:5432` qo'shtirnoqsiz yozildi, kutilmagan port ochildi. Nega?",
+      "explanation": "YAML 1.1 xx:yy (60 dan kichik sonlar) ni sexagesimal (60-lik) son deb o'qishi mumkin: 22:22 = 1342. Port mapping'ni har doim qo'shtirnoq ichida yoz."
+    },
+    {
+      "id": 33094,
+      "code": "DK61",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "compose",
+      "section": "t15",
+      "question": "Bind mount qilingan `node_modules`/vendor papka host'dagisi bilan almashib, ilova ishlamay qoldi. Nega?",
+      "explanation": "Bind mount ./:/app image'dagi /app/node_modules ni yashiradi; host'da u yo'q yoki boshqa OS uchun (macOS native modul). Yechim: anonim volume bilan qayta yashirish."
+    }
+  ]
+}

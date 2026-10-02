@@ -1,0 +1,98 @@
+{
+  "id": "v18",
+  "name": "TLS, certificates & Nginx",
+  "domain": "linux",
+  "topics": [
+    "TLS & Nginx"
+  ],
+  "questions": [
+    {
+      "id": 31367,
+      "code": "DY21",
+      "level": "J",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "TLS handshake qanday ishlaydi va sertifikat nima uchun kerak?",
+      "explanation": "TLS — shifrlash + server autentifikatsiyasi. Sertifikat = public key + domen nomi + muddat, CA imzolagan. Client zanjirni ishonchli root CA'gacha tekshiradi, keyin key exchange (ECDHE) bilan session kalit kelishiladi."
+    },
+    {
+      "id": 31368,
+      "code": "DY22",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "`openssl` bilan sertifikatni tekshirish: muddat, domen, zanjir, masofaviy server.",
+      "explanation": "Masofaviy: `openssl s_client -connect host:443 -servername host -showcerts`. Fayl: `openssl x509 -in cert.pem -noout -text/-dates/-subject/-issuer/-ext subjectAltName`. Muddat tekshiruvi: `-checkend`."
+    },
+    {
+      "id": 31369,
+      "code": "DY23",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "CSR yaratish, self-signed sertifikat, formatlar: PEM, DER, PFX/P12, CRT/KEY.",
+      "explanation": "`openssl req -new -newkey ... -keyout key.pem -out req.csr` — CA'ga beriladigan so'rov. Self-signed: `openssl req -x509`. PEM — base64 (-----BEGIN), DER — binary, PFX/P12 — kalit+sertifikat+zanjir bitta parol bilan (Windows/Java)."
+    },
+    {
+      "id": 31370,
+      "code": "DY24",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Let's Encrypt / certbot: sertifikat olish va avtomatik yangilash qanday?",
+      "explanation": "certbot ACME protokoli orqali domenni tasdiqlaydi (HTTP-01: :80'da token fayl; DNS-01: TXT yozuv, wildcard uchun). Sertifikat 90 kun; certbot timer kuniga 2 marta tekshiradi, 30 kun qolganda yangilaydi; deploy hook bilan nginx reload."
+    },
+    {
+      "id": 31371,
+      "code": "DY25",
+      "level": "J",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx asosiy buyruqlari va config tuzilishi: `nginx -t`, reload, server block, location.",
+      "explanation": "`nginx -t` sintaksis tekshiruvi, `systemctl reload nginx` (yoki `nginx -s reload`) downtime'siz. Tuzilma: `/etc/nginx/nginx.conf` -> `http {}` -> `server {}` (sites-enabled / conf.d) -> `location {}`. `nginx -T` — to'liq yig'ilgan config."
+    },
+    {
+      "id": 31372,
+      "code": "DY26",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx'ni reverse proxy + TLS sifatida sozlash (Go/Node backend oldida).",
+      "explanation": "`proxy_pass http://upstream;` + kerakli header'lar (Host, X-Real-IP, X-Forwarded-For, X-Forwarded-Proto), timeout'lar, keepalive upstream, 80 -> 443 redirect, ssl_certificate fullchain, HSTS."
+    },
+    {
+      "id": 31373,
+      "code": "DY27",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx 502 Bad Gateway, 504 Gateway Timeout, 413, 499 — sabablari va tekshirish.",
+      "explanation": "502 — upstream'ga ulanib bo'lmadi yoki noto'g'ri javob (backend o'lgan, noto'g'ri port, socket ruxsati, SELinux). 504 — upstream vaqtida javob bermadi (proxy_read_timeout). 413 — client_max_body_size. 499 — client nginx javobini kutmay ulanishni yopdi."
+    },
+    {
+      "id": 31374,
+      "code": "DY28",
+      "level": "S",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx performance va himoya: worker'lar, keepalive, gzip, caching, rate limiting.",
+      "explanation": "`worker_processes auto`, `worker_connections`, `worker_rlimit_nofile`; keepalive client/upstream; gzip/brotli; `proxy_cache`; `limit_req_zone` + `limit_conn`; `server_tokens off`; timeout'lar (slowloris)."
+    }
+  ]
+}

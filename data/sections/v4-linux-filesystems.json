@@ -313,6 +313,39 @@
       "section": "v4",
       "question": "/var/log, /var/lib, /var/run (/run), /var/cache farqi?",
       "explanation": "Docker ma'lumoti /var/lib/docker da — disk to'lishining mashhur sababi (`docker system df`, `docker system prune`). Backup rejasi: /etc va /var/lib (servisga xos), /var/cache emas."
+    },
+    {
+      "id": 33126,
+      "code": "DW03",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Fayl tizimi birdan read-only bo'lib qoldi (`Read-only file system`). Nima bo'ldi va nima qilasan?",
+      "explanation": "ext4 xato (I/O error, journal buzilishi) aniqlaganda `errors=remount-ro` bo'yicha o'zini ro qiladi — ma'lumotni himoya qilish uchun. Sabab ko'pincha disk/volume muammosi. `dmesg` -> disk sog'ligi -> backup -> umount qilib fsck. Faqat `remount,rw` bilan \"tuzatish\" xavfli."
+    },
+    {
+      "id": 33127,
+      "code": "DW04",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "NFS mount osilib qoldi: `df`, `ls` qotadi, jarayonlar D-state. Nima qilasan?",
+      "explanation": "NFS `hard` mount'da server javob bermasa client cheksiz kutadi (ma'lumot yo'qolmasligi uchun). Server/tarmoqni tikla — eng yaxshi yechim. Majburiy: `umount -f -l`. Oldini olish: `timeo/retrans`, `nofail`, `_netdev`, monitoring, automount."
+    },
+    {
+      "id": 33128,
+      "code": "DW05",
+      "level": "S",
+      "type": "card",
+      "topic": "Filesystems",
+      "domain": "linux",
+      "section": "v4",
+      "question": "Inode to'ldi (`df -i` 100%), joy esa bor. Qanday topasan va hal qilasan?",
+      "explanation": "Millionlab mayda fayl (session, cache, mail queue, PHP sessions, k8s/docker overlay, tmp). Qaysi katalogda fayl ko'pligini sanab top, xavfsiz tozala, sababni tuzat (cleanup job, TTL). ext4'da inode soni mkfs paytida qotadi — ko'paytirib bo'lmaydi."
     }
   ]
 }

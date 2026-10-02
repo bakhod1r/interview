@@ -1,0 +1,340 @@
+{
+  "id": "i10",
+  "name": "Jenkins",
+  "domain": "cicd",
+  "topics": [
+    "Jenkins"
+  ],
+  "questions": [
+    {
+      "id": 32030,
+      "code": "JNK1",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins nima? Controller va agent arxitekturasi?",
+      "explanation": "Self-hosted CI/CD server (Java). Controller — UI, scheduling, konfiguratsiya; agent (node) — build'ni bajaradi. Build controller'da ishlamasligi kerak."
+    },
+    {
+      "id": 32031,
+      "code": "JNK2",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Freestyle job va Pipeline farqi?",
+      "explanation": "Freestyle — UI'da sozlanadigan oddiy job, versiyalanmaydi. Pipeline — `Jenkinsfile` (Groovy DSL), kod sifatida git'da, stage'lar, resume, review."
+    },
+    {
+      "id": 32032,
+      "code": "JNK3",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Declarative Jenkinsfile tuzilmasi qanday?",
+      "explanation": "`pipeline { agent; environment; stages { stage { steps } }; post }`. Declarative — qat'iy sintaksis, validatsiya; Scripted — erkin Groovy."
+    },
+    {
+      "id": 32033,
+      "code": "JNK4",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins'da credential qanday ishlatiladi?",
+      "explanation": "Credentials store'da saqlanadi (ID bilan), `withCredentials` yoki `environment { X = credentials('id') }` bilan step'ga beriladi, log'da maskalanadi."
+    },
+    {
+      "id": 32034,
+      "code": "JNK5",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Build trigger turlari?",
+      "explanation": "Webhook (push/PR), Poll SCM (cron bilan git tekshirish), cron (`triggers { cron(...) }`), upstream job, qo'lda, `parameters` bilan."
+    },
+    {
+      "id": 33053,
+      "code": "JNK16",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Declarative pipeline'da `agent any`, `agent none`, `label`, `docker` farqi?",
+      "explanation": "`any` — har qanday bo'sh agent. `none` — global agent yo'q, har stage o'zi tanlaydi. `label` — tegli agent. `docker` — agent ustida container ichida."
+    },
+    {
+      "id": 33054,
+      "code": "JNK17",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Workspace nima va uni qanday tozalaysiz?",
+      "explanation": "Workspace — agent'dagi build katalogi (`$WORKSPACE`), job'lar orasida saqlanib qoladi. Eski fayllar keyingi build'ni buzishi mumkin — `cleanWs()` yoki `deleteDir()`."
+    },
+    {
+      "id": 33055,
+      "code": "JNK18",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "`options` blokida nimalar sozlanadi?",
+      "explanation": "`timeout`, `retry`, `buildDiscarder`, `disableConcurrentBuilds`, `timestamps`, `skipDefaultCheckout`, `durabilityHint` — pipeline yoki stage darajasida."
+    },
+    {
+      "id": 33056,
+      "code": "JNK19",
+      "level": "J",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "`archiveArtifacts` va `junit` nima uchun ishlatiladi?",
+      "explanation": "`archiveArtifacts` — build natijasini (binary, report) Jenkins'da saqlaydi. `junit` — test report'ni parse qilib trend va fail'larni UI'da ko'rsatadi; fail test build'ni `UNSTABLE` qiladi."
+    },
+    {
+      "id": 32035,
+      "code": "JNK6",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Multibranch Pipeline va Organization Folder qanday ishlaydi?",
+      "explanation": "Multibranch — repo'ni skanerlaydi, `Jenkinsfile` bor har branch/PR uchun job yaratadi. Organization Folder — butun GitHub org/GitLab group'ni skanerlaydi."
+    },
+    {
+      "id": 32036,
+      "code": "JNK7",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Shared Library nima va qanday versiyalanadi?",
+      "explanation": "Ko'p pipeline'lar uchun umumiy Groovy kod (`vars/`, `src/`, `resources/`) alohida repo'da. `@Library('lib@v1.2') _` bilan versiyaga pin qilinadi."
+    },
+    {
+      "id": 32037,
+      "code": "JNK8",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "`parallel` va `stash/unstash` qachon ishlatiladi?",
+      "explanation": "`parallel` — stage'larni bir vaqtda turli agent'larda. `stash` — fayllarni bir agent'dan boshqasiga shu build ichida uzatish (kichik fayllar uchun)."
+    },
+    {
+      "id": 32038,
+      "code": "JNK9",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Kubernetes plugin bilan dinamik agent'lar qanday ishlaydi?",
+      "explanation": "Har build uchun pod yaratiladi (pod template, bir nechta container), tugagach o'chadi. Statik agent'lar o'rniga ephemeral, autoscale."
+    },
+    {
+      "id": 32039,
+      "code": "JNK10",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "`input` step va manual approval'ning gotcha'si?",
+      "explanation": "`input` pipeline'ni insonning tasdig'igacha to'xtatadi. Gotcha: agent ichida kutsa executor band qoladi — `agent none` bilan stage darajasida va `timeout` bilan ishlatish kerak."
+    },
+    {
+      "id": 33057,
+      "code": "JNK20",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "`when` direktivasi bilan qanday shartlar yoziladi?",
+      "explanation": "`branch`, `tag`, `environment`, `expression`, `changeset`, `changeRequest`, `allOf`/`anyOf`/`not`; `beforeAgent true` — agent ajratishdan oldin tekshirish."
+    },
+    {
+      "id": 33058,
+      "code": "JNK21",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "`lock` (Lockable Resources) va `milestone` nima uchun?",
+      "explanation": "`lock` — bir resursga (test DB, environment) bir vaqtda faqat bitta build. `milestone` — yangi build milestone'dan o'tsa eski build'lar bekor qilinadi (eski versiya yangisidan keyin deploy bo'lmasin)."
+    },
+    {
+      "id": 33059,
+      "code": "JNK22",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins'ni GitHub/GitLab bilan webhook orqali qanday ulaysiz?",
+      "explanation": "Repo'da webhook (`/github-webhook/` yoki GitLab plugin endpoint), Jenkins'da Multibranch + Branch Source plugin, commit status/PR check'ni qaytarish. Credential — GitHub App (token rotation, yuqori rate limit)."
+    },
+    {
+      "id": 33060,
+      "code": "JNK23",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "`matrix` direktivasi Declarative pipeline'da qanday ishlaydi?",
+      "explanation": "`matrix { axes { axis {...} } stages {...} }` — o'qlar kombinatsiyasi parallel ishlaydi; `excludes` bilan ba'zilarini olib tashlash."
+    },
+    {
+      "id": 33061,
+      "code": "JNK24",
+      "level": "M",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Scripted va Declarative pipeline qachon qaysi biri?",
+      "explanation": "Declarative — default: qat'iy struktura, validatsiya, `post`, `when`, o'qish oson. Scripted (`node {}`) — to'liq Groovy, dinamik logika; lekin murakkab va xatoga moyil. Declarative ichida `script {}` — kichik dinamik qism."
+    },
+    {
+      "id": 32040,
+      "code": "JNK11",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Groovy CPS va sandbox: nega Jenkinsfile'da oddiy Groovy kutilganday ishlamaydi?",
+      "explanation": "Pipeline CPS (Continuation Passing Style) bilan qayta yoziladi — controller restart'dan keyin resume uchun holat serializatsiya qilinadi. Serializable bo'lmagan obyekt, closure'lar, ba'zi metodlar ishlamaydi; `@NonCPS` kerak. Sandbox xavfli metodlarni bloklaydi (script approval)."
+    },
+    {
+      "id": 32041,
+      "code": "JNK12",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins controller'ni production'da qanday xavfsiz va barqaror qilasiz?",
+      "explanation": "Controller'da executor 0, RBAC (Matrix/Role-based), SSO, plugin minimal va yangilangan, CSRF yoqilgan, agent > controller security, JCasC bilan konfiguratsiya kodda, `JENKINS_HOME` backup."
+    },
+    {
+      "id": 32042,
+      "code": "JNK13",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins sekin va beqaror bo'lsa — qanday debug qilasiz?",
+      "explanation": "O'lcha: queue va build vaqtlari, controller heap/GC, thread dump, disk (`JENKINS_HOME`, build history). Odatiy sabablar: ko'p build tarixi, og'ir Groovy controller'da, plugin leak, stash katta fayl."
+    },
+    {
+      "id": 32043,
+      "code": "JNK14",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins, GitHub Actions, GitLab CI — qachon qaysi birini tanlaysiz?",
+      "explanation": "Kod qayerda bo'lsa o'sha platformaning CI'si default (Actions/GitLab). Jenkins — on-prem, murakkab legacy integratsiyalar, maxsus agent talablari bo'lsa; narxi — operatsion yuk."
+    },
+    {
+      "id": 32044,
+      "code": "JNK15",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins'da build reproducibility va supply chain xavfsizligini qanday ta'minlaysiz?",
+      "explanation": "Agent image'lari immutable va pin qilingan, dependency mirror (Nexus/Artifactory), artifact imzolash (cosign) va SBOM, build'ni tag/SHA'dan, credential'lar qisqa muddatli (Vault), Jenkinsfile o'zgarishi review'dan."
+    },
+    {
+      "id": 33062,
+      "code": "JNK25",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "JCasC (Configuration as Code) va Job DSL bilan Jenkins'ni qanday kod sifatida boshqarasiz?",
+      "explanation": "JCasC — global konfiguratsiya (security realm, credentials, agent cloud, plugin sozlamalari) YAML'da. Job DSL / Organization Folder — job'lar kodda. Plugin'lar `plugins.txt` bilan pin, controller immutable image."
+    },
+    {
+      "id": 33063,
+      "code": "JNK26",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins'dan GitHub Actions/GitLab CI'ga migratsiyani qanday rejalashtirasiz?",
+      "explanation": "Inventarizatsiya (job'lar, plugin'lar, credential'lar, trigger'lar) > logikani Jenkins'dan mustaqil skriptlarga chiqarish > pilot repo > parallel ishlatish (shadow) > bosqichma-bosqich ko'chirish > Jenkins'ni read-only, keyin o'chirish."
+    },
+    {
+      "id": 33064,
+      "code": "JNK27",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins'da agent'lar orasida build cache'ni qanday hal qilasiz?",
+      "explanation": "Ephemeral agent'da cache yo'q. Variantlar: PVC (K8s, ReadWriteMany yoki har node uchun), remote cache (Gradle/Bazel remote cache, Go `GOCACHE` S3 sync), dependency proxy (Nexus), pre-baked agent image."
+    },
+    {
+      "id": 33065,
+      "code": "JNK28",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Ko'p jamoali Jenkins'da RBAC va multi-tenancy qanday tashkil qilinadi?",
+      "explanation": "Folder'lar har jamoa uchun, Role-based Authorization Strategy (folder/item role), folder-scope credential, alohida agent label'lar, SSO group mapping. Kuchli izolyatsiya kerak bo'lsa — alohida controller'lar."
+    },
+    {
+      "id": 33066,
+      "code": "JNK29",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins pipeline'da deployment strategiyasi (blue-green, canary, rollback) qanday quriladi?",
+      "explanation": "Jenkins orkestrator: build bir marta, artifact'ni staging'ga, smoke test, approval, prod'ga canary (masalan Argo Rollouts/Helm), metrika tekshiruvi, avtomatik rollback. Jenkins o'zi traffic boshqarmaydi."
+    },
+    {
+      "id": 33067,
+      "code": "JNK30",
+      "level": "S",
+      "type": "card",
+      "topic": "Jenkins",
+      "domain": "cicd",
+      "section": "i10",
+      "question": "Jenkins plugin'larini qanday boshqarasiz va yangilaysiz?",
+      "explanation": "Minimal plugin to'plami, `plugins.txt` da versiya pin, Plugin Installation Manager CLI bilan image'ga o'rnatish, staging controller'da test, keyin prod. Security advisory'larni kuzatish."
+    }
+  ]
+}

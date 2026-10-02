@@ -1,0 +1,272 @@
+{
+  "32000": {
+    "a": "- **Workflow** — `.github/workflows/*.yml` fayl, `on:` event'lar bilan trigger bo'ladi.\n- **Job** — bitta **runner** (VM/container) da ishlaydi. Job'lar default **parallel**; tartib `needs:` bilan.\n- **Step** — job ichida ketma-ket; `run:` (shell) yoki `uses:` (action).\n- **Action** — qayta ishlatiladigan blok (`actions/checkout@v4`): JS, Docker yoki composite.\n\n```yaml\non: [push]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: go test ./...\n```\n\nStep'lar bitta workspace'ni bo'lishadi; job'lar **yo'q** (alohida mashina)."
+  },
+  "32001": {
+    "a": "```yaml\non:\n  push:\n    branches: [main]\n    paths: ['src/**']\n  pull_request:\n  schedule:\n    - cron: '0 3 * * *'   # UTC\n  workflow_dispatch:\n    inputs:\n      env: { type: choice, options: [stg, prod] }\n```\n\n- `schedule` — faqat **default branch**da, UTC, kechikishi mumkin.\n- `paths` filter — monorepo'da keraksiz build'ni kesadi.\n- `workflow_call` — reusable workflow."
+  },
+  "32002": {
+    "a": "| | GitHub-hosted | Self-hosted |\n|---|---|---|\n| Muhit | har job toza VM | o'zing boshqarasan, state qoladi |\n| Narx | daqiqa bo'yicha | o'z infra |\n| Tarmoq | public | private resurslarga kirish |\n| Xavf | izolyatsiya bor | public repo + fork PR = RCE xavfi |\n\nSelf-hosted'ni **public repo**da ishlatmaslik kerak — fork PR sening mashinangda kod ishlatadi. Production'da: ephemeral runner (ARC, K8s'da har job yangi pod)."
+  },
+  "32003": {
+    "a": "```yaml\n- run: ./deploy.sh\n  env:\n    TOKEN: ${{ secrets.DEPLOY_TOKEN }}\n```\n\n- Darajalar: **repository**, **environment** (approval bilan), **organization**.\n- Mask faqat aniq qiymatni yashiradi — base64 qilingan yoki bo'lingan qiymat log'ga chiqib ketadi.\n- Secret'ni `run:` ichida to'g'ridan-to'g'ri `${{ }}` bilan emas, `env:` orqali bering (injection'dan himoya)."
+  },
+  "32004": {
+    "a": "```yaml\njobs:\n  build: { ... }\n  deploy:\n    needs: build\n    if: github.ref == 'refs/heads/main'\n```\n\n- `needs` bo'lmasa job'lar parallel.\n- Oldingi job fail bo'lsa keyingisi **skip**; `if: always()` yoki `failure()` bilan o'zgartiriladi.\n- DAG hosil bo'ladi: `needs: [lint, test]`."
+  },
+  "32005": {
+    "a": "```yaml\nstrategy:\n  fail-fast: false\n  max-parallel: 4\n  matrix:\n    go: ['1.22', '1.23']\n    os: [ubuntu-latest, macos-latest]\n    exclude:\n      - { go: '1.22', os: macos-latest }\nruns-on: ${{ matrix.os }}\n```\n\n- `fail-fast: true` (default) — bitta fail qolganini bekor qiladi; flaky testni yashiradi, shuning uchun ko'pincha `false`.\n- Limit: 256 job/matrix."
+  },
+  "32006": {
+    "a": "```yaml\n- uses: actions/cache@v4\n  with:\n    path: ~/go/pkg/mod\n    key: go-${{ hashFiles('**/go.sum') }}\n    restore-keys: go-\n- uses: actions/upload-artifact@v4\n  with: { name: bin, path: dist/ }\n```\n\n| | Cache | Artifact |\n|---|---|---|\n| Maqsad | tezlik | natija |\n| Kafolat | yo'qolishi mumkin | retention davomida bor |\n| Scope | branch + default branch | run |\n\nCache'ga ishonib correctness qurmang — cache miss ham ishlashi shart."
+  },
+  "32007": {
+    "a": "```yaml\n# chaqirish\njobs:\n  ci:\n    uses: org/shared/.github/workflows/go-ci.yml@v1\n    with: { go: '1.23' }\n    secrets: inherit\n```\n\n- **Reusable workflow**: job darajasida, o'z `runs-on`, environment, nesting 4 daraja.\n- **Composite action**: step darajasida, `action.yml` + `runs.using: composite`, workspace umumiy.\n\nQoida: platforma standarti (lint+test+scan) — reusable workflow; kichik takrorlanuvchi qadam — composite."
+  },
+  "32008": {
+    "a": "```yaml\ndeploy:\n  environment:\n    name: production\n    url: https://app.example.com\n```\n\n- Production secret faqat shu environment job'iga beriladi.\n- **Required reviewers** — manual gate.\n- **Deployment branches** — faqat `main`/tag.\n- Deployment tarixi UI'da ko'rinadi (audit)."
+  },
+  "32009": {
+    "a": "```yaml\nconcurrency:\n  group: deploy-${{ github.ref }}\n  cancel-in-progress: false\n```\n\n- PR CI: `cancel-in-progress: true` — daqiqa tejaydi.\n- Production deploy: `false` — yarim deploy bekor qilinmasin, navbatga tursin.\n- Guruh kaliti noto'g'ri bo'lsa (masalan hamma uchun bitta) — barcha branch bir-birini bloklaydi."
+  },
+  "32010": {
+    "a": "- `pull_request` — fork PR'da secret yo'q, token read-only. Xavfsiz.\n- `pull_request_target` — base branch workflow'i, **secret bor**.\n\nXavfli pattern:\n```yaml\non: pull_request_target\nsteps:\n  - uses: actions/checkout@v4\n    with: { ref: ${{ github.event.pull_request.head.sha }} }\n  - run: make test   # hujumchi Makefile'i secret bilan ishlaydi\n```\n\nYechim: untrusted kodni `pull_request`da ishlat, natijani artifact qilib, `workflow_run` bilan secret'li job'da faqat **ma'lumot** sifatida o'qi. Label-gate (`safe-to-test`) ham yordam beradi."
+  },
+  "32011": {
+    "a": "```yaml\n# XATO\n- run: echo \"${{ github.event.pull_request.title }}\"\n# TO'G'RI\n- run: echo \"$TITLE\"\n  env:\n    TITLE: ${{ github.event.pull_request.title }}\n```\n\nExpression shell ishga tushishdan **oldin** almashtiriladi — quoting yordam bermaydi. Untrusted: title, body, branch nomi, commit message, issue comment. Tekshirish: `zizmor`, `actionlint`."
+  },
+  "32012": {
+    "a": "```yaml\npermissions:\n  id-token: write\n  contents: read\nsteps:\n  - uses: aws-actions/configure-aws-credentials@v4\n    with:\n      role-to-assume: arn:aws:iam::123:role/deploy\n      aws-region: eu-central-1\n```\n\nFoyda: uzoq yashovchi access key yo'q, rotation kerak emas, leak bo'lsa ~1 soatda o'ladi.\n\nXato: trust policy'da `sub` ni `repo:org/*` qilib keng ochish — har qanday repo/branch deploy qila oladi. To'g'ri: `repo:org/app:environment:production`."
+  },
+  "32013": {
+    "a": "```yaml\npermissions: {}            # workflow default: hech narsa\njobs:\n  release:\n    permissions:\n      contents: write\n      packages: write\n```\n\n- Token faqat shu run davomida yashaydi, lekin compromised step (masalan zararli action) u bilan repo'ga push qilishi mumkin.\n- `GITHUB_TOKEN` bilan qilingan push yangi workflow trigger qilmaydi (rekursiyadan himoya) — kerak bo'lsa GitHub App token."
+  },
+  "32014": {
+    "a": "```yaml\n- uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2\n```\n\n- Dependabot `github-actions` ecosystem SHA'ni yangilab turadi.\n- Org policy: faqat allowlist action'lar.\n- Action ham supply chain — u job'ning barcha secret va token'iga kira oladi.\n- Qo'shimcha: `step-security/harden-runner` bilan egress monitoring."
+  },
+  "32015": {
+    "a": "```yaml\nstages: [build, test, deploy]\n\nbuild:\n  stage: build\n  script: go build ./...\n\nunit:\n  stage: test\n  script: go test ./...\n```\n\n- Stage'dagi barcha job tugamaguncha keyingi stage boshlanmaydi (`needs` bo'lmasa).\n- Default stage'lar: `.pre, build, test, deploy, .post`."
+  },
+  "32016": {
+    "a": "- Runner GitLab'ga **poll** qiladi (pull model) — inbound port kerak emas.\n- Turlari: **shared** (instance), **group**, **project**.\n- `tags:` bilan job kerakli runner'ga yo'naltiriladi.\n\n| Executor | Izolyatsiya |\n|---|---|\n| shell | yo'q, host'da |\n| docker | har job yangi container |\n| kubernetes | har job pod |\n\nProduction: docker/kubernetes, shell executor faqat ishonchli muhitda."
+  },
+  "32017": {
+    "a": "```yaml\nvariables:\n  GO_VERSION: '1.23'\n\ndeploy:\n  script: ./deploy.sh \"$CI_COMMIT_SHA\"\n```\n\n- Predefined: `CI_COMMIT_SHA`, `CI_COMMIT_REF_NAME`, `CI_PIPELINE_SOURCE`, `CI_REGISTRY_IMAGE`.\n- Secret'ni `.gitlab-ci.yml`ga yozmang — UI variable + Protected + Masked.\n- Precedence: trigger/manual > project > group > instance > YAML."
+  },
+  "32018": {
+    "a": "```yaml\ntest:\n  image: golang:1.23\n  services:\n    - name: postgres:16\n      alias: db\n  variables:\n    POSTGRES_PASSWORD: test\n    DATABASE_URL: postgres://postgres:test@db:5432/postgres\n  script: go test ./...\n```\n\nService'ga hostname = `alias` (yoki image nomidan). Faqat docker/kubernetes executor'da."
+  },
+  "32019": {
+    "a": "```yaml\nbuild:\n  script: go build -o app\n  artifacts:\n    paths: [app]\n    expire_in: 1 week\n  cache:\n    key:\n      files: [go.sum]\n    paths: [.go/pkg/mod]\n```\n\n- Artifact ishonchli, keyingi job'lar default oladi (`dependencies`/`needs` bilan cheklash).\n- Cache yo'q bo'lishi mumkin — pipeline baribir to'g'ri ishlashi shart."
+  },
+  "32020": {
+    "a": "```yaml\ndeploy:\n  rules:\n    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH\n      when: manual\n    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'\n      changes: [k8s/**]\n    - when: never\n```\n\nGotcha: hech bir rule mos kelmasa job **qo'shilmaydi**. `workflow:rules` — butun pipeline yaratilishini boshqaradi (MR + branch duplicate pipeline'ni oldini olish)."
+  },
+  "32021": {
+    "a": "```yaml\nlint:     { stage: test, script: make lint }\nbuild-a:  { stage: build, script: make a }\ntest-a:\n  stage: test\n  needs: [build-a]\n  script: make test-a\n```\n\n- `needs: []` — darhol boshlanadi.\n- `needs` artifact'ni ham faqat ko'rsatilgan job'lardan oladi (`artifacts: false` bilan o'chirish).\n- Monorepo'da `changes` + `needs` = faqat o'zgargan servis build bo'ladi."
+  },
+  "32022": {
+    "a": "```yaml\ninclude:\n  - project: platform/ci-templates\n    ref: v2.1.0\n    file: /go.yml\n\n.go-base:\n  image: golang:1.23\n  before_script: [go mod download]\n\ntest:\n  extends: .go-base\n  script: go test ./...\n```\n\n- `.` bilan boshlangan job — hidden (shablon).\n- `include` `ref` ni tag'ga pin qiling — `main` o'zgarsa hamma pipeline buziladi.\n- Yangi yo'l: **CI/CD Components** (`include: component:`) — versiyalangan, input'li."
+  },
+  "32023": {
+    "a": "```yaml\nreview:\n  script: helm upgrade --install app-$CI_MERGE_REQUEST_IID ./chart\n  environment:\n    name: review/$CI_COMMIT_REF_SLUG\n    url: https://$CI_COMMIT_REF_SLUG.dev.example.com\n    on_stop: stop-review\n    auto_stop_in: 2 days\n```\n\nProtected environment — faqat ruxsat etilgan user deploy qiladi. `resource_group` — bir environment'ga parallel deploy'ni taqiqlaydi."
+  },
+  "32024": {
+    "a": "```yaml\ngenerate:\n  script: ./gen-ci.sh > child.yml\n  artifacts: { paths: [child.yml] }\n\nrun-child:\n  trigger:\n    include:\n      - artifact: child.yml\n        job: generate\n    strategy: depend\n```\n\n- `strategy: depend` — parent child natijasini kutadi.\n- Monorepo: har servis o'z child pipeline'i.\n- Dinamik pipeline — matrix'dan murakkab holatlar uchun."
+  },
+  "32025": {
+    "a": "- Developer `.gitlab-ci.yml` ni o'zgartira oladi = pipeline'da istalgan kod. Shuning uchun production secret **faqat** protected variable bo'lsin.\n- Protected branch'ga push/merge faqat Maintainer.\n- Fork MR pipeline'lari default parent project secret'larini olmaydi.\n- Qo'shimcha: protected environment + required approval, **pipeline execution policy** (security scan majburiy), `CODEOWNERS` `.gitlab-ci.yml` uchun.\n\nMasked ham kafolat emas: `echo $X | rev` maskani chetlab o'tadi."
+  },
+  "32026": {
+    "a": "```yaml\ndeploy:\n  id_tokens:\n    AWS_TOKEN:\n      aud: sts.amazonaws.com\n  script:\n    - aws sts assume-role-with-web-identity --role-arn $ROLE --web-identity-token $AWS_TOKEN ...\n```\n\n- Trust policy'da `sub` = `project_path:grp/app:ref_type:branch:ref:main` — tor qiling.\n- `CI_JOB_TOKEN` scope: Settings > CI/CD > Job token permissions — inbound allowlist (default yopiq)."
+  },
+  "32027": {
+    "a": "1. **Measure**: qaysi job critical path'da.\n2. `rules: changes: [services/a/**]` + `compare_to: refs/heads/main`.\n3. `needs` bilan stage barrier'ni olib tashlash.\n4. `parallel: 5` + test sharding (`CI_NODE_INDEX`).\n5. Cache: `key: files: [go.sum]`, `policy: pull` ko'p job uchun, faqat bitta job `push`.\n6. Docker layer cache / prebuilt CI image.\n7. `interruptible: true` + auto-cancel redundant pipelines.\n\nTrade-off: `changes` shared kutubxona o'zgarishini o'tkazib yuborishi mumkin — dependency grafini hisobga oling."
+  },
+  "32028": {
+    "a": "Muammo: A va B alohida yashil, birga merge qilinganda `main` buziladi (semantic conflict).\n\n- **Merged results pipeline**: `source + target` merge commit'ida ishlaydi.\n- **Merge train**: A, A+B, A+B+C parallel test; B fail bo'lsa train qayta quriladi.\n\nTrade-off: runner sarfi oshadi, flaky test butun navbatni sekinlashtiradi — flaky'ni avval tuzating. GitHub analogi: merge queue."
+  },
+  "32029": {
+    "a": "- `privileged = true` + DinD = root on host. Alternativa: **kaniko**, **buildah**, BuildKit rootless.\n- Ephemeral: kubernetes executor, har job yangi pod, tugagach o'chadi.\n- Production deploy runner — alohida, `tags` bilan, faqat protected ref.\n- Image'larni digest bilan pin qiling (`golang@sha256:...`).\n- Dependency proxy / mirror — tashqi registry'ga bog'liqlik va typosquatting xavfini kamaytiradi.\n- SLSA provenance: build'ni imzolash (cosign)."
+  },
+  "32030": {
+    "a": "```\n+------------+   JNLP/SSH   +---------+\n| Controller | -----------> | Agent 1 |\n|  UI, queue |              +---------+\n|  plugins   | -----------> | Agent 2 (K8s pod)\n+------------+\n```\n\n- Controller'da executor soni = 0 qiling (xavfsizlik + barqarorlik).\n- Agent ulanishi: SSH (controller ulanadi) yoki inbound/JNLP (agent ulanadi).\n- Hammasi plugin orqali — kuchli, lekin plugin'lar asosiy muammo manbai."
+  },
+  "32031": {
+    "a": "- **Freestyle**: click-ops, tarix/review yo'q, murakkab oqim qiyin.\n- **Pipeline**: Pipeline-as-Code, `Jenkinsfile` repo'da, PR'da review qilinadi, stage view.\n- **Multibranch Pipeline**: har branch/PR uchun avtomatik job.\n\nYangi ish faqat Pipeline bilan."
+  },
+  "32032": {
+    "a": "```groovy\npipeline {\n  agent { label 'linux' }\n  environment { GO111MODULE = 'on' }\n  stages {\n    stage('Build') { steps { sh 'go build ./...' } }\n    stage('Test')  { steps { sh 'go test ./...' } }\n  }\n  post {\n    always  { junit 'report.xml' }\n    failure { echo 'fail' }\n  }\n}\n```\n\n`post` bloklari: `always`, `success`, `failure`, `unstable`, `cleanup`."
+  },
+  "32033": {
+    "a": "```groovy\nenvironment {\n  REG = credentials('registry-creds')  // REG_USR, REG_PSW\n}\nsteps {\n  withCredentials([string(credentialsId: 'api-token', variable: 'TOKEN')]) {\n    sh 'curl -H \"Authorization: Bearer $TOKEN\" ...'   // bitta qo'shtirnoq emas!\n  }\n}\n```\n\nGotcha: Groovy `\"...$TOKEN\"` (double quote) — Groovy interpolation, secret command-line'ga tushadi. Shell'ga `'...'` (single quote) bilan bering."
+  },
+  "32034": {
+    "a": "```groovy\ntriggers {\n  cron('H 3 * * *')\n  pollSCM('H/5 * * * *')\n}\nparameters {\n  choice(name: 'ENV', choices: ['stg', 'prod'])\n}\n```\n\n- `H` — hash: job'larni vaqt bo'yicha tarqatadi (hamma 00:00 da yugurmasin).\n- Webhook > pollSCM: poll — keraksiz yuklama va kechikish."
+  },
+  "32035": {
+    "a": "- Branch o'chirilsa job ham o'chadi (orphan strategy).\n- PR uchun: `CHANGE_ID`, `CHANGE_TARGET` env.\n- `when { branch 'main' }` — faqat main'da deploy:\n\n```groovy\nstage('Deploy') {\n  when { branch 'main' }\n  steps { sh './deploy.sh' }\n}\n```\n\nXavf: fork PR'dagi `Jenkinsfile` o'zgarishi — \"Trusted\" sozlamasi bilan faqat ishonchli contributor Jenkinsfile'i ishlatiladi."
+  },
+  "32036": {
+    "a": "```\nshared-lib/\n  vars/goPipeline.groovy   // goPipeline() step\n  src/org/acme/Utils.groovy\n  resources/templates/\n```\n\n```groovy\n@Library('platform-lib@v1.4.0') _\ngoPipeline(service: 'billing')\n```\n\n- Global (trusted) library sandbox'siz ishlaydi — faqat admin o'zgartirsin.\n- `@main` ga bog'lanish — bitta commit hamma pipeline'ni sindiradi; tag'ga pin qiling."
+  },
+  "32037": {
+    "a": "```groovy\nstage('Build') { steps { sh 'make'; stash name: 'bin', includes: 'dist/**' } }\nstage('Tests') {\n  parallel {\n    stage('unit') { agent any; steps { unstash 'bin'; sh 'make unit' } }\n    stage('e2e')  { agent any; steps { unstash 'bin'; sh 'make e2e' } }\n  }\n}\n```\n\n- Stash controller orqali o'tadi — katta fayl uchun sekin va controller'ni yuklaydi; katta narsalar uchun artifact repo (Nexus/S3).\n- `failFast true` — bitta fail qolganini to'xtatadi."
+  },
+  "32038": {
+    "a": "```groovy\npipeline {\n  agent {\n    kubernetes {\n      yaml '''\nspec:\n  containers:\n  - name: go\n    image: golang:1.23\n    command: [sleep, infinity]\n'''\n    }\n  }\n  stages {\n    stage('Test') { steps { container('go') { sh 'go test ./...' } } }\n  }\n}\n```\n\n- `jnlp` container avtomatik qo'shiladi (controller bilan aloqa).\n- Foyda: toza muhit, snowflake agent yo'q.\n- Minus: pod start vaqti, cache yo'q — PVC yoki remote cache kerak."
+  },
+  "32039": {
+    "a": "```groovy\nstage('Approve') {\n  agent none\n  options { timeout(time: 1, unit: 'HOURS') }\n  input {\n    message 'Deploy to prod?'\n    submitter 'release-managers'\n  }\n}\n```\n\n- `submitter` — kim tasdiqlay oladi.\n- Timeout bo'lmasa build kunlab osilib turadi."
+  },
+  "32040": {
+    "a": "- Pipeline kodi **controller**da ishlaydi, `sh` esa agent'da. Og'ir Groovy hisob = controller CPU/heap.\n- `NotSerializableException` — masalan `Matcher` ni o'zgaruvchida saqlash.\n- `@NonCPS` metod — resume qilinmaydi, ichida step (`sh`) chaqirib bo'lmaydi.\n- Script approval'da `staticMethod` ni ko'r-ko'rona approve qilish = controller'da RCE.\n\nQoida: logika `sh` skript/CLI'da, Jenkinsfile faqat orkestratsiya."
+  },
+  "32041": {
+    "a": "- **Attack surface**: plugin'lar — eng ko'p CVE manbai. Minimal set, muntazam update, `Script Security` approval nazorati.\n- **Script console** = root RCE — faqat admin.\n- **JCasC** (Configuration as Code) — YAML, review qilinadi, disaster'dan tez tiklash.\n- Credential'lar folder scope'da, global emas.\n- Agent-to-controller security yoqiq.\n- Monitoring: queue length, executor utilisation, heap, GC pause.\n- HA yo'q (OSS) — tez tiklanish uchun immutable controller image + JCasC + backup."
+  },
+  "32042": {
+    "a": "1. `/manage/systemInfo`, Prometheus plugin metrikalari.\n2. Thread dump — qaysi plugin/job osilgan.\n3. GC log — heap yetmayapti yoki leak.\n4. `buildDiscarder(logRotator(numToKeepStr: '30'))` — tarixni cheklash.\n5. Durability: `options { durabilityHint('PERFORMANCE_OPTIMIZED') }` — disk I/O kamayadi, lekin crash'da resume yo'q.\n6. Og'ir Groovy (JSON parse, loop) ni `sh` + `jq` ga ko'chirish.\n7. Katta artifact'larni stash/archive o'rniga Nexus/S3.\n\nRoot cause'ni topmasdan heap'ni oshirish — symptom'ni yashiradi."
+  },
+  "32043": {
+    "a": "| | GitHub Actions | GitLab CI | Jenkins |\n|---|---|---|---|\n| Hosting | SaaS + self-hosted runner | SaaS/self-managed | faqat self-hosted |\n| Konfig | YAML | YAML | Groovy |\n| Ekotizim | Marketplace action | Components, templates | 1800+ plugin |\n| Ops yuk | past | o'rta | yuqori |\n| Kuchli tomon | GitHub bilan integratsiya, OIDC | yagona platforma (SCM+CI+registry+security) | moslashuvchanlik, on-prem |\n\nQaror mezoni: kod hosting, compliance (air-gapped), ops jamoasi bor-yo'qligi, migratsiya narxi. Jenkins'dan ko'chishda — avval logikani skriptlarga (make/Taskfile) chiqaring, shunda CI faqat orkestrator bo'ladi."
+  },
+  "32044": {
+    "a": "- Snowflake agent (qo'lda o'rnatilgan tool) — \"mening agent'imda ishlaydi\" muammosi. Docker/K8s agent + digest pin.\n- `checkout scm` aniq SHA'ni oladi — release build'ni tag'dan.\n- Dependency: proxy repo, lockfile, checksum (`go.sum`).\n- Imzo: `cosign sign`, SLSA provenance, SBOM (`syft`).\n- Secret: Vault plugin + qisqa TTL, statik credential emas.\n- Plugin'lar ham supply chain — update center'dan, versiya pin (plugins.txt)."
+  },
+  "33023": {
+    "a": "```yaml\n- run: make test\n- if: failure()\n  run: ./notify-slack.sh\n- if: always()\n  uses: actions/upload-artifact@v4\n  with: { name: logs, path: logs/ }\n- if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')\n  run: ./release.sh\n```\n\nGotcha: `always()` bekor qilingan run'da ham ishlaydi — cleanup uchun `!cancelled()` ko'pincha to'g'riroq."
+  },
+  "33024": {
+    "a": "```yaml\nenv:\n  APP: billing\njobs:\n  deploy:\n    environment: production\n    steps:\n      - run: ./deploy.sh --region \"$REGION\"\n        env:\n          REGION: ${{ vars.REGION }}\n          TOKEN: ${{ secrets.TOKEN }}\n```\n\n- `vars` log'da ochiq — parol qo'ymang.\n- Precedence: step `env` > job `env` > workflow `env`.\n- Environment darajasidagi `vars`/`secrets` repo darajasidagini override qiladi."
+  },
+  "33025": {
+    "a": "```yaml\n- id: ver\n  run: echo \"tag=$(git describe --tags)\" >> \"$GITHUB_OUTPUT\"\n- run: echo \"BUILD_ID=$RANDOM\" >> \"$GITHUB_ENV\"\n- run: echo ${{ steps.ver.outputs.tag }} $BUILD_ID\n```\n\n- `GITHUB_PATH` — PATH'ga qo'shish.\n- `GITHUB_STEP_SUMMARY` — run sahifasiga Markdown hisobot.\n- Ko'p qatorli qiymat: `EOF` delimiter sintaksisi."
+  },
+  "33026": {
+    "a": "```yaml\npermissions: { contents: read, packages: write }\nsteps:\n  - uses: actions/checkout@v4\n  - uses: docker/setup-buildx-action@v3\n  - uses: docker/login-action@v3\n    with:\n      registry: ghcr.io\n      username: ${{ github.actor }}\n      password: ${{ secrets.GITHUB_TOKEN }}\n  - uses: docker/build-push-action@v6\n    with:\n      push: ${{ github.ref == 'refs/heads/main' }}\n      tags: ghcr.io/${{ github.repository }}:${{ github.sha }}\n      cache-from: type=gha\n      cache-to: type=gha,mode=max\n```\n\nTag sifatida `latest` emas, commit SHA — deploy aniq versiyani biladi."
+  },
+  "33027": {
+    "a": "```yaml\njobs:\n  build:\n    outputs:\n      image: ${{ steps.meta.outputs.image }}\n    steps:\n      - id: meta\n        run: echo \"image=ghcr.io/app:${GITHUB_SHA}\" >> $GITHUB_OUTPUT\n  deploy:\n    needs: build\n    steps:\n      - run: helm upgrade app --set image=${{ needs.build.outputs.image }}\n```\n\nKatta ma'lumot (fayl) — artifact orqali; output limit ~1MB/job. Dinamik matrix: output'dan JSON + `fromJSON()`."
+  },
+  "33028": {
+    "a": "```yaml\njobs:\n  changes:\n    outputs: { svcs: ${{ steps.f.outputs.changes }} }\n    steps:\n      - uses: dorny/paths-filter@v3\n        id: f\n        with:\n          filters: |\n            billing: services/billing/**\n            auth: services/auth/**\n  build:\n    needs: changes\n    if: needs.changes.outputs.svcs != '[]'\n    strategy:\n      matrix: { svc: ${{ fromJSON(needs.changes.outputs.svcs) }} }\n```\n\nTrade-off: shared `pkg/` o'zgarsa hammasi build bo'lishi kerak — filter'ga qo'shing. Bo'sh matrix xato beradi — `if:` bilan himoya."
+  },
+  "33029": {
+    "a": "```yaml\non:\n  workflow_run:\n    workflows: [CI]\n    types: [completed]\njobs:\n  deploy:\n    if: github.event.workflow_run.conclusion == 'success'\n```\n\n- `workflow_run` default branch kontekstida, secret bilan ishlaydi — fork PR artifact'ini **data** sifatida o'qing, ishga tushirmang.\n- `gh workflow run deploy.yml -f env=prod` — CLI'dan dispatch."
+  },
+  "33030": {
+    "a": "```yaml\non:\n  push:\n    tags: ['v*.*.*']\njobs:\n  release:\n    permissions: { contents: write, packages: write }\n    steps:\n      - uses: actions/checkout@v4\n        with: { fetch-depth: 0 }\n      - uses: goreleaser/goreleaser-action@v6\n        with: { args: release --clean }\n        env: { GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} }\n```\n\n- `fetch-depth: 0` — tarix kerak (changelog, `git describe`).\n- Tag protection (ruleset) — kim tag qo'ya oladi.\n- Build bir marta, xuddi shu artifact staging va prod'ga (rebuild yo'q)."
+  },
+  "33031": {
+    "a": "```yaml\njobs:\n  test:\n    timeout-minutes: 15\n    strategy:\n      matrix:\n        go: ['1.23']\n        include:\n          - go: tip\n            experimental: true\n    continue-on-error: ${{ matrix.experimental == true }}\n    steps:\n      - uses: nick-fields/retry@v3\n        with: { max_attempts: 3, timeout_minutes: 5, command: make e2e }\n```\n\nRetry flaky testni yashiradi — faqat tarmoq/infra operatsiyalari uchun, testlar uchun emas."
+  },
+  "33032": {
+    "a": "```yaml\njobs:\n  build:\n    runs-on: arc-runner-set   # scale set nomi\n```\n\n- **Ephemeral** — job tugagach pod o'chadi, keyingi job'ga state/secret qolmaydi.\n- `minRunners: 0` — xarajat; lekin cold start (image pull) — node'da image pre-pull/cache.\n- Runner group + repo allowlist — qaysi repo qaysi runner'dan foydalanadi.\n- Cloud credential: node IAM emas, OIDC — aks holda har job node rolini oladi.\n- Monitoring: queue time, pod start time."
+  },
+  "33033": {
+    "a": "```yaml\non:\n  pull_request:\n  merge_group:\n```\n\n- `merge_group` yo'q bo'lsa required check hech qachon kelmaydi — queue osilib qoladi.\n- Tez check'lar PR'da, og'ir e2e — faqat `merge_group`da (xarajat).\n- Flaky test butun navbatni to'xtatadi — quarantine kerak.\n- Ruleset: required status checks + merge queue."
+  },
+  "33034": {
+    "a": "```yaml\npermissions:\n  id-token: write\n  attestations: write\n  packages: write\nsteps:\n  - uses: docker/build-push-action@v6\n    id: push\n  - uses: actions/attest-build-provenance@v2\n    with:\n      subject-name: ghcr.io/org/app\n      subject-digest: ${{ steps.push.outputs.digest }}\n      push-to-registry: true\n```\n\nNega: registry'ga kimdir qo'lda image push qilsa, provenance yo'q — cluster qabul qilmaydi. Reusable workflow'da build = SLSA Level 3 (build logikasini chaqiruvchi o'zgartira olmaydi)."
+  },
+  "33035": {
+    "a": "1. **Detect**: JUnit report + test analytics, bir commit'da pass/fail bo'lgan testlar.\n2. **Contain**: quarantine ro'yxati, owner + muddat.\n3. **Root cause** odatda: `time.Now()`/sleep, test tartibiga bog'liqlik, global state, port to'qnashuvi, tashqi servis.\n4. Go: `go test -count=50 -race -shuffle=on ./...` bilan reproduce.\n5. **Prevent**: hermetic test (testcontainers), fake clock.\n\nRetry flaky'ni yashiradi va haqiqiy race bug'ni production'ga o'tkazadi."
+  },
+  "33036": {
+    "a": "- `paths`/`paths-ignore` — docs o'zgarishi CI'ni ishga tushirmasin.\n- `concurrency: cancel-in-progress` PR uchun.\n- macOS daqiqasi ~10x qimmat — faqat kerak bo'lsa.\n- Cache: Go mod + build cache (`actions/setup-go` cache: true), Docker `type=gha`.\n- Test sharding matrix bilan; critical path'ni qisqartirish.\n- Artifact retention'ni kamaytirish (storage).\n- `timeout-minutes` — osilgan job 6 soat yemasin.\n\nTrade-off: self-hosted arzon ko'rinadi, lekin ops va xavfsizlik narxi bor."
+  },
+  "33037": {
+    "a": "- `org/.github` yoki `platform-workflows` repo — `go-ci.yml@v3`.\n- **Rulesets**: required status checks, required workflows (security scan majburiy), signed commits.\n- Breaking o'zgarish — major versiya, eski versiyaga deprecation muddati.\n- Inventory: qaysi repo qaysi versiyada — `gh api` / code search.\n- Exception jarayoni: repo o'z workflow'ini qo'sha oladi, lekin required'ni o'chira olmaydi.\n\nPrinsip: golden path — default oson, chetga chiqish mumkin, lekin ko'rinadigan."
+  },
+  "33038": {
+    "a": "```yaml\ndefault:\n  before_script: [go mod download]\ntest:\n  script:\n    - go test ./...\n  after_script:\n    - docker compose down || true\n```\n\n- `after_script` — `before_script`dagi `export` o'zgaruvchilarni ko'rmaydi (yangi shell).\n- Timeout default 5 min.\n- `default:` — barcha job'larga umumiy kalitlar."
+  },
+  "33039": {
+    "a": "```yaml\nlint:\n  allow_failure: true\ne2e:\n  timeout: 30m\n  retry:\n    max: 2\n    when: [runner_system_failure, stuck_or_timeout_failure]\nscan:\n  allow_failure:\n    exit_codes: [137]\n```\n\n`retry.when` bilan faqat infra xatoda qayta urinish — test fail'ini retry qilish flaky'ni yashiradi."
+  },
+  "33040": {
+    "a": "```yaml\nworkflow:\n  rules:\n    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'\n    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS\n      when: never        # MR bor bo'lsa branch pipeline'ni o'chir\n    - if: $CI_COMMIT_BRANCH\n    - if: $CI_COMMIT_TAG\n```\n\nShu pattern'siz MR ochilganda ikki pipeline (branch + MR) ishlaydi — runner isrofi."
+  },
+  "33041": {
+    "a": "```yaml\nbuild-image:\n  image: docker:27\n  services: [docker:27-dind]\n  script:\n    - echo \"$CI_REGISTRY_PASSWORD\" | docker login -u \"$CI_REGISTRY_USER\" --password-stdin \"$CI_REGISTRY\"\n    - docker build -t \"$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA\" .\n    - docker push \"$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA\"\n```\n\n- `--password-stdin` — parol process ro'yxatida ko'rinmasin.\n- DinD privileged runner talab qiladi; alternativa kaniko/buildah."
+  },
+  "33042": {
+    "a": "```yaml\ntest:\n  parallel: 4\n  script: ./run-tests.sh --shard $CI_NODE_INDEX/$CI_NODE_TOTAL\n\ndeploy:\n  parallel:\n    matrix:\n      - REGION: [eu, us]\n        ENV: [stg, prod]\n  script: ./deploy.sh $ENV $REGION\n```\n\n`needs` matrix job'ning aniq nusxasiga: `needs: [{job: build, parallel: {matrix: [{ARCH: amd64}]}}]`."
+  },
+  "33043": {
+    "a": "```yaml\ntest:\n  interruptible: true\ndeploy-prod:\n  resource_group: production\n  interruptible: false\n```\n\n- Ikki parallel deploy = race, eski versiya yangisini bosib ketishi mumkin — `resource_group` bilan.\n- `process_mode`: `unordered`, `oldest_first`, `newest_first`.\n- Auto-cancel redundant pipelines faqat `interruptible` job'larni to'xtatadi."
+  },
+  "33044": {
+    "a": "```yaml\nlint:\n  dependencies: []\ndeploy:\n  needs:\n    - job: build\n      artifacts: true\n    - job: test\n      artifacts: false\n```\n\nKatta artifact'lar har job'ga yuklansa pipeline sekinlashadi va storage oshadi. `expire_in` — saqlash muddati."
+  },
+  "33045": {
+    "a": "```yaml\n.setup:\n  script:\n    - go mod download\n\ntest:\n  script:\n    - !reference [.setup, script]\n    - go test ./...\n```\n\n`extends` — butun kalitni birlashtiradi (hash merge, massivlarni almashtiradi). `!reference` — aniq bo'lakni joylashtiradi."
+  },
+  "33046": {
+    "a": "```yaml\nnightly-e2e:\n  rules:\n    - if: $CI_PIPELINE_SOURCE == 'schedule' && $SUITE == 'e2e'\n```\n\n```sh\ncurl -X POST -F token=$TRIGGER_TOKEN -F ref=main \\\n  -F 'variables[ENV]=stg' https://gitlab.example.com/api/v4/projects/42/trigger/pipeline\n```\n\nSchedule egasi kim bo'lsa pipeline o'sha user nomidan ishlaydi — u ketsa schedule to'xtaydi; service account'ga o'tkazing."
+  },
+  "33047": {
+    "a": "```toml\n[[runners]]\n  executor = \"kubernetes\"\n  [runners.cache]\n    Type = \"s3\"\n    Shared = true\n    [runners.cache.s3]\n      BucketName = \"ci-cache\"\n      BucketLocation = \"eu-central-1\"\n  [runners.kubernetes]\n    cpu_request = \"1\"\n    memory_limit = \"4Gi\"\n```\n\n- `concurrent` (global) va `limit` (runner) — parallel job chegarasi.\n- Request/limit bo'lmasa bitta og'ir job node'ni yeydi.\n- Monitoring: runner Prometheus metrikalari, job queue duration.\n- Spot instance — arzon, lekin job o'ldirilishi mumkin — `retry: when: runner_system_failure`."
+  },
+  "33048": {
+    "a": "```yaml\ninclude:\n  - template: Jobs/SAST.gitlab-ci.yml\n  - template: Jobs/Secret-Detection.gitlab-ci.yml\n  - template: Jobs/Dependency-Scanning.gitlab-ci.yml\n  - template: Jobs/Container-Scanning.gitlab-ci.yml\n```\n\n- Developer `.gitlab-ci.yml` dan scan'ni olib tashlay oladi — shuning uchun **policy** darajasida majburlash.\n- Shovqin: false positive'larni triage, aks holda jamoa e'tibor bermaydi.\n- Secret topildi = rotate qil, faqat commit'dan o'chirish yetmaydi (tarixda qoladi)."
+  },
+  "33049": {
+    "a": "- Faqat qisqa vaqt, maxfiy bo'lmagan branch'da, keyin log'ni o'chirish.\n- Xavfsizroq: `CI_DEBUG_SERVICES`, aniq joyda `set -x` (secret ishlatilmaydigan qismda).\n- Lokal reproduce: `gitlab-ci-local`, yoki runner image'ni `docker run -it` bilan.\n- Pipeline editor > Validate / `ci/lint` API — sintaksis xatolar uchun.\n- Job log retention va kim ko'ra olishi (public pipelines sozlamasi) tekshiriladi."
+  },
+  "33050": {
+    "a": "- Cluster API'ni internetga ochish va kubeconfig'ni CI variable'da saqlash shart emas.\n- **Push (CI access)**: oddiy, lekin CI'da cluster huquqi bor.\n- **Pull (Flux)**: cluster o'zi git'dan tortadi, drift tuzatiladi, audit = git log.\n- Agent huquqini `ci_access` da aniq project/group va impersonation bilan cheklang.\n- Rollback: git revert (GitOps) yoki environment > rollback (CI)."
+  },
+  "33051": {
+    "a": "- Pipeline execution policy: `inject` (project pipeline'ga qo'shish) yoki `override` (o'rnini bosish).\n- Separation of duties: deploy'ni tasdiqlovchi kod muallifi bo'lmasin (MR approval rules, protected environment approvals).\n- Audit events: kim, qachon, nima deploy qildi.\n- Trade-off: markaziy nazorat vs jamoa avtonomiyasi; policy o'zgarishi hamma project'ga ta'sir qiladi — versiyalash va bosqichma-bosqich rollout."
+  },
+  "33052": {
+    "a": "- Runner: autoscaling, bir nechta zona, `tags` bilan workload ajratish (build, deploy, GPU).\n- Rate limit: ko'p runner GitLab API'ni poll qilib yuklaydi — `check_interval`.\n- Object storage — local disk to'lib qolishining oldini oladi.\n- Backup: `gitlab-backup` + secrets fayli (`gitlab-secrets.json`) — usiz CI variable'larni decrypt qilib bo'lmaydi.\n- Upgrade yo'li: required stop versiyalar, avval staging.\n- Observability: Prometheus, queue duration, Sidekiq backlog."
+  },
+  "33053": {
+    "a": "```groovy\npipeline {\n  agent none\n  stages {\n    stage('Build') {\n      agent { docker { image 'golang:1.23' } }\n      steps { sh 'go build ./...' }\n    }\n    stage('Deploy') {\n      agent { label 'deploy' }\n      steps { sh './deploy.sh' }\n    }\n  }\n}\n```\n\n`agent none` + `input` — tasdiq kutilganda executor band bo'lmaydi."
+  },
+  "33054": {
+    "a": "```groovy\npost {\n  cleanup { cleanWs() }\n}\n```\n\n- Bir job parallel ishlasa `@2` suffiksli workspace yaratiladi.\n- Disk to'lishi — eski workspace'lar eng ko'p uchraydigan sabab.\n- Ephemeral (K8s) agent'da muammo o'z-o'zidan yo'qoladi."
+  },
+  "33055": {
+    "a": "```groovy\noptions {\n  timeout(time: 30, unit: 'MINUTES')\n  buildDiscarder(logRotator(numToKeepStr: '20'))\n  disableConcurrentBuilds(abortPrevious: true)\n  timestamps()\n}\n```\n\n`buildDiscarder` yo'q bo'lsa `JENKINS_HOME` cheksiz o'sadi."
+  },
+  "33056": {
+    "a": "```groovy\npost {\n  always {\n    junit 'reports/*.xml'\n    archiveArtifacts artifacts: 'dist/**', fingerprint: true\n  }\n}\n```\n\n- Go: `go-junit-report` yoki `gotestsum --junitfile`.\n- `fingerprint` — artifact qaysi build'dan ekanini kuzatish.\n- Katta artifact'lar controller diskini to'ldiradi — Nexus/S3'ga."
+  },
+  "33057": {
+    "a": "```groovy\nstage('Deploy') {\n  when {\n    beforeAgent true\n    allOf {\n      branch 'main'\n      not { changeRequest() }\n      changeset 'services/billing/**'\n    }\n  }\n  steps { sh './deploy.sh' }\n}\n```\n\n`beforeAgent` bo'lmasa shart false bo'lsa ham agent/pod ajratiladi — vaqt va resurs isrofi."
+  },
+  "33058": {
+    "a": "```groovy\nstage('Deploy staging') {\n  steps {\n    milestone(1)\n    lock(resource: 'staging-env') {\n      sh './deploy.sh staging'\n    }\n    milestone(2)\n  }\n}\n```\n\nMuammo: build #11 #12 dan sekinroq bo'lsa, eski kod yangisini bosib ketadi — milestone buni oldini oladi."
+  },
+  "33059": {
+    "a": "- GitHub App > PAT: org darajasida, qisqa muddatli token, rate limit kattaroq.\n- Webhook secret — soxta so'rovlardan himoya.\n- Jenkins internetda bo'lmasa: smee/relay yoki faqat polling.\n- Build natijasi PR'da required check sifatida — branch protection bilan."
+  },
+  "33060": {
+    "a": "```groovy\nstage('Test') {\n  matrix {\n    axes {\n      axis { name 'GO';  values '1.22', '1.23' }\n      axis { name 'OS';  values 'linux', 'windows' }\n    }\n    excludes {\n      exclude {\n        axis { name 'GO'; values '1.22' }\n        axis { name 'OS'; values 'windows' }\n      }\n    }\n    agent { label \"${OS}\" }\n    stages { stage('t') { steps { sh 'go test ./...' } } }\n  }\n}\n```"
+  },
+  "33061": {
+    "a": "```groovy\n// Scripted\nnode('linux') {\n  stage('Build') {\n    checkout scm\n    def svcs = sh(script: 'ls services', returnStdout: true).trim().split()\n    parallel svcs.collectEntries { s -> [(s): { sh \"make -C services/${s}\" }] }\n  }\n}\n```\n\nKatta `script {}` bloklari — signal: logikani Shared Library yoki shell skriptga chiqaring."
+  },
+  "33062": {
+    "a": "```yaml\njenkins:\n  numExecutors: 0\n  securityRealm:\n    oic: { ... }\n  clouds:\n    - kubernetes:\n        name: k8s\n        namespace: ci\ncredentials:\n  system:\n    domainCredentials:\n      - credentials:\n          - string: { id: slack, secret: \"${SLACK_TOKEN}\" }\n```\n\n- Secret'lar YAML'da emas — env/K8s Secret/Vault'dan interpolatsiya.\n- UI'da qo'lda o'zgarish = drift; keyingi reload uni o'chiradi.\n- DR: yangi controller = image + JCasC + job seed — daqiqalarda."
+  },
+  "33063": {
+    "a": "- **Assessment**: ishlatilmaydigan job'lar ko'p — avval o'chiring.\n- Plugin xaritasi: har plugin funksiyasining ekvivalenti (yoki yo'qligi).\n- Credential'lar: statikdan OIDC'ga o'tish imkoniyati.\n- GitHub Actions Importer (`gh actions-importer`) — avtomatik konvertatsiya boshlang'ich nuqta sifatida.\n- Xavf: o'ziga xos on-prem agent'lar (HSM, Windows, hardware) — self-hosted runner kerak.\n- Muvaffaqiyat metrikasi: lead time, pipeline vaqti, fail rate, ops xarajati.\n- Rollback: migratsiya davrida ikkala tizim ham ishlay oladi."
+  },
+  "33064": {
+    "a": "- **Pre-baked image**: tez-tez o'zgarmaydigan dependency'lar image'da.\n- **PVC**: oddiy, lekin RWX parallel yozishda corruption xavfi — read-only mount + bitta yozuvchi job.\n- **Proxy repo**: tarmoq tezligi + upstream uzilishiga chidamlilik.\n- **Remote build cache**: eng yaxshi natija, lekin infra.\n\nTrade-off: cache tezlik beradi, lekin hermetiklik va xavfsizlikni pasaytiradi (cache poisoning) — PR build'lar cache'ga yozmasin."
+  },
+  "33065": {
+    "a": "- Credential folder scope'da: A jamoasi B'ning prod secret'ini ishlata olmaydi.\n- Lekin Jenkinsfile istalgan agent label'ini so'rashi mumkin — deploy agent'larini cheklash (Job Restrictions / K8s pod template ruxsatlari).\n- Global Shared Library trusted — faqat platforma jamoasi.\n- Bitta controller = bitta failure domain va plugin konflikti. Katta tashkilotda: controller per business unit (CloudBees modeli yoki oddiy bir nechta OSS controller + JCasC)."
+  },
+  "33066": {
+    "a": "```groovy\nstage('Canary') {\n  steps {\n    sh 'helm upgrade app ./chart --set image.tag=$GIT_COMMIT --set canary.weight=10'\n    script {\n      def ok = sh(script: './check-slo.sh --window 10m', returnStatus: true) == 0\n      if (!ok) { sh 'helm rollback app'; error 'canary SLO buzildi' }\n    }\n  }\n}\n```\n\n- Rollback = oldingi artifact versiyasi (rebuild emas).\n- DB migratsiya: expand-contract, aks holda rollback ishlamaydi.\n- Yaxshiroq: deploy'ni GitOps (Argo CD) ga topshirish, Jenkins faqat manifest'dagi tag'ni yangilaydi."
+  },
+  "33067": {
+    "a": "- Har plugin = attack surface + dependency daraxti + upgrade xavfi.\n- UI'dan \"Update all\" prod'da — tasodifiy breaking change.\n- `jenkins-plugin-cli --plugin-file plugins.txt` — reproducible image.\n- LTS liniyasi, yiliga bir necha marta rejalashtirilgan upgrade.\n- Tashlab ketilgan (unmaintained) plugin'larni almashtirish/olib tashlash.\n- Jenkins Security Advisories — kritik CVE'da darhol patch."
+  }
+}

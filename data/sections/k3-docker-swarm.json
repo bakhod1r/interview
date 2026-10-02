@@ -1,0 +1,219 @@
+{
+  "id": "k3",
+  "name": "Docker Swarm",
+  "domain": "swarm",
+  "topics": [
+    "Swarm"
+  ],
+  "questions": [
+    {
+      "id": 31410,
+      "code": "DK25",
+      "level": "J",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Docker Swarm nima? Manager va worker node farqi?",
+      "explanation": "Docker'ga o'rnatilgan orchestrator: bir necha host'ni klasterga birlashtiradi. Manager — klaster holati (Raft) va scheduling; worker — task'larni (container) ishga tushiradi."
+    },
+    {
+      "id": 31411,
+      "code": "DK26",
+      "level": "J",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm'da service, task va stack nima?",
+      "explanation": "Service — kerakli holat (image, replicas, port); task — bitta container'ning scheduling birligi; stack — compose fayldan bir nechta service'lar to'plami."
+    },
+    {
+      "id": 31412,
+      "code": "DK27",
+      "level": "J",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Replicated va global service farqi?",
+      "explanation": "Replicated — N ta nusxa, scheduler node'larga taqsimlaydi; global — har node'da bittadan (monitoring agent, log collector)."
+    },
+    {
+      "id": 31413,
+      "code": "DK28",
+      "level": "M",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm routing mesh va ingress network qanday ishlaydi?",
+      "explanation": "Publish qilingan port klasterdagi har node'da ochiladi; istalgan node'ga kelgan so'rov IPVS orqali service'ning istalgan task'iga yo'naltiriladi (ingress overlay). mode=host — faqat task turgan node'da, mesh'siz."
+    },
+    {
+      "id": 31414,
+      "code": "DK29",
+      "level": "M",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm'da rolling update va rollback qanday sozlanadi?",
+      "explanation": "update_config: parallelism, delay, order (start-first/stop-first), failure_action (rollback/pause), monitor; rollback_config. docker service update --image ... / docker service rollback."
+    },
+    {
+      "id": 31415,
+      "code": "DK30",
+      "level": "M",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm secrets va configs qanday ishlaydi?",
+      "explanation": "Secret Raft log'da shifrlangan saqlanadi, faqat unga ruxsat berilgan service task'lariga /run/secrets/<name> (tmpfs) sifatida beriladi. Config — shifrlanmagan konfiguratsiya fayllari. Ikkalasi immutable — o'zgartirish uchun yangi nom."
+    },
+    {
+      "id": 31416,
+      "code": "DK31",
+      "level": "M",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Placement constraints va node label'lar nima uchun?",
+      "explanation": "Task'larni aniq node'larga bog'lash: node.role, node.hostname, node.labels.*. Masalan DB faqat SSD diskli node'da. Preferences — zonalarga tekis tarqatish."
+    },
+    {
+      "id": 31417,
+      "code": "DK32",
+      "level": "S",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm manager'lar soni nega toq bo'lishi kerak? Quorum yo'qolsa nima bo'ladi?",
+      "explanation": "Raft ko'pchilik (N/2+1) talab qiladi. 3 manager 1 ta yo'qotishga, 5 — 2 taga chidaydi; juft son qo'shimcha chidamlilik bermaydi. Quorum yo'qolsa mavjud task'lar ishlayveradi, lekin boshqaruv (deploy, scale, qayta scheduling) to'xtaydi."
+    },
+    {
+      "id": 31418,
+      "code": "DK33",
+      "level": "S",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm va Kubernetes: qachon qaysi birini tanlaysan?",
+      "explanation": "Swarm — sodda, Docker CLI/compose bilan, kichik jamoa va kichik klaster uchun tez. K8s — katta ekotizim (operator, HPA, RBAC, CRD, service mesh), murakkabroq, standart. Swarm ekotizimi kichik, kelajagi cheklangan."
+    },
+    {
+      "id": 31419,
+      "code": "DK34",
+      "level": "S",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm'da stateful service (DB) ishlatish muammolari?",
+      "explanation": "Volume local — task boshqa node'ga ko'chsa ma'lumot u yerda yo'q. Yechim: constraint bilan node'ga bog'lash, shared/CSI storage, yoki DB'ni klasterdan tashqarida (managed) saqlash."
+    },
+    {
+      "id": 33095,
+      "code": "DK62",
+      "level": "J",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm service'ni yaratish, ko'rish, scale, log, o'chirish buyruqlari?",
+      "explanation": "docker service create/ls/ps/scale/logs/update/rm. docker stack deploy/ls/ps/rm — stack darajasida."
+    },
+    {
+      "id": 33096,
+      "code": "DK63",
+      "level": "J",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Overlay network nima va Swarm'da service'lar qanday gaplashadi?",
+      "explanation": "Overlay — bir nechta host ustidagi virtual L2 tarmoq (VXLAN). Bir overlay'dagi service'lar nomi bo'yicha (DNS -> VIP) bir-birini topadi, qaysi node'da ekanidan qat'i nazar."
+    },
+    {
+      "id": 33097,
+      "code": "DK64",
+      "level": "J",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Node maintenance: drain, pause, active farqi?",
+      "explanation": "active — task qabul qiladi; pause — yangi task olmaydi, borlari qoladi; drain — yangi olmaydi va mavjud task'lar boshqa node'larga ko'chiriladi."
+    },
+    {
+      "id": 33098,
+      "code": "DK65",
+      "level": "M",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm'da healthcheck va restart_policy qanday birga ishlaydi?",
+      "explanation": "Swarm healthcheck unhealthy bo'lgan task'ni o'ldirib yangisini yaratadi. restart_policy: condition (none/on-failure/any), delay, max_attempts, window."
+    },
+    {
+      "id": 33099,
+      "code": "DK66",
+      "level": "M",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm service'da task `Pending` yoki `Rejected` holatda turibdi. Qanday debug qilasan?",
+      "explanation": "docker service ps --no-trunc xato matnini ko'rsatadi: constraint qondirilmagan, resurs (reservation) yetmaydi, image pull xatosi, port band, secret/network yo'q."
+    },
+    {
+      "id": 33100,
+      "code": "DK67",
+      "level": "M",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "`docker stack deploy` bilan private registry'dan image pull bo'lmayapti. Nega?",
+      "explanation": "Worker node'larda registry login yo'q. --with-registry-auth manager'dagi credential'ni task'larga uzatadi."
+    },
+    {
+      "id": 33101,
+      "code": "DK68",
+      "level": "S",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm klasterini monitoring va log yig'ish qanday tashkil qilinadi?",
+      "explanation": "Global service'lar: node-exporter, cAdvisor (metrika), fluent-bit/Promtail (log). Prometheus Swarm service discovery (dockerswarm_sd_configs) bilan task'larni topadi. Daemon metrikalari metrics-addr bilan."
+    },
+    {
+      "id": 33102,
+      "code": "DK69",
+      "level": "S",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm overlay trafigini shifrlash va Swarm xavfsizlik modeli?",
+      "explanation": "Control plane (manager-node) mTLS bilan avtomatik, sertifikatlar rotatsiya qilinadi. Data plane overlay default shifrlanmaydi — --opt encrypted (IPsec) bilan yoqiladi, CPU narxi bor. Autolock Raft kalitini himoya qiladi."
+    },
+    {
+      "id": 33103,
+      "code": "DK70",
+      "level": "S",
+      "type": "card",
+      "topic": "Swarm",
+      "domain": "swarm",
+      "section": "k3",
+      "question": "Swarm klasterini backup va disaster recovery qanday qilinadi?",
+      "explanation": "Manager'dagi /var/lib/docker/swarm (Raft, secret, config) ni Docker to'xtatib backup qilinadi. Tiklash: yangi node'ga ko'chirib --force-new-cluster. Ilova ma'lumotlari (volume) alohida backup."
+    }
+  ]
+}

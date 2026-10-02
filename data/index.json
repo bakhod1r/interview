@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-09-24",
-  "total": 1644,
+  "generatedAt": "2026-10-02T13:31:22.535Z",
+  "total": 2008,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -29,7 +29,10 @@
     "dist": "Distributed systems",
     "alg": "Algorithms",
     "linux": "Linux",
-    "cont": "Containers & K8s",
+    "docker": "Docker",
+    "compose": "Docker Compose",
+    "swarm": "Docker Swarm",
+    "k8s": "Kubernetes",
     "cicd": "CI/CD",
     "obs": "Observability",
     "net": "Networking",
@@ -433,14 +436,14 @@
       "id": "v9",
       "name": "Shell commands & text editors",
       "domain": "linux",
-      "count": 9,
+      "count": 16,
       "file": "sections/v9-shell-commands-editors.json"
     },
     {
       "id": "v10",
       "name": "Find, xargs & archives",
       "domain": "linux",
-      "count": 11,
+      "count": 15,
       "file": "sections/v10-find-xargs-archives.json"
     },
     {
@@ -461,7 +464,7 @@
       "id": "v2",
       "name": "Linux users, groups, permissions",
       "domain": "linux",
-      "count": 18,
+      "count": 19,
       "file": "sections/v2-linux-users.json"
     },
     {
@@ -475,49 +478,140 @@
       "id": "v4",
       "name": "Linux filesystems",
       "domain": "linux",
-      "count": 28,
+      "count": 31,
       "file": "sections/v4-linux-filesystems.json"
+    },
+    {
+      "id": "v16",
+      "name": "Disks, partitions & RAID",
+      "domain": "linux",
+      "count": 10,
+      "file": "sections/v16-disks-raid.json"
     },
     {
       "id": "v8",
       "name": "Boot loaders & runlevels",
       "domain": "linux",
-      "count": 15,
+      "count": 17,
       "file": "sections/v8-boot-runlevels.json"
+    },
+    {
+      "id": "v14",
+      "name": "systemd, services & cron",
+      "domain": "linux",
+      "count": 20,
+      "file": "sections/v14-systemd-services.json"
     },
     {
       "id": "v11",
       "name": "Kernel & processes",
       "domain": "linux",
-      "count": 16,
+      "count": 20,
       "file": "sections/v11-kernel-processes.json"
     },
     {
       "id": "v12",
       "name": "Memory, disk & troubleshooting",
       "domain": "linux",
-      "count": 10,
+      "count": 32,
       "file": "sections/v12-troubleshooting.json"
     },
     {
       "id": "v13",
       "name": "Linux networking & security",
       "domain": "linux",
-      "count": 9,
+      "count": 23,
       "file": "sections/v13-linux-net-security.json"
     },
     {
-      "id": "i1",
-      "name": "Containers & Kubernetes",
-      "domain": "cont",
+      "id": "v17",
+      "name": "TCP/IP & network config",
+      "domain": "linux",
       "count": 17,
+      "file": "sections/v17-tcpip-netconfig.json"
+    },
+    {
+      "id": "v15",
+      "name": "SSH & remote access",
+      "domain": "linux",
+      "count": 14,
+      "file": "sections/v15-ssh.json"
+    },
+    {
+      "id": "v18",
+      "name": "TLS, certificates & Nginx",
+      "domain": "linux",
+      "count": 8,
+      "file": "sections/v18-tls-nginx.json"
+    },
+    {
+      "id": "v19",
+      "name": "Ops: time, backup, automation",
+      "domain": "linux",
+      "count": 14,
+      "file": "sections/v19-ops-practices.json"
+    },
+    {
+      "id": "v20",
+      "name": "Server bilan ishlash",
+      "domain": "linux",
+      "count": 44,
+      "file": "sections/v20-server-ops.json"
+    },
+    {
+      "id": "k1",
+      "name": "Docker basics",
+      "domain": "docker",
+      "count": 26,
+      "file": "sections/k1-docker.json"
+    },
+    {
+      "id": "t14",
+      "name": "Docker gotchas",
+      "domain": "docker",
+      "count": 9,
+      "file": "sections/t14-docker-gotchas.json"
+    },
+    {
+      "id": "k2",
+      "name": "Docker Compose",
+      "domain": "compose",
+      "count": 19,
+      "file": "sections/k2-docker-compose.json"
+    },
+    {
+      "id": "t15",
+      "name": "Docker Compose gotchas",
+      "domain": "compose",
+      "count": 5,
+      "file": "sections/t15-compose-gotchas.json"
+    },
+    {
+      "id": "k3",
+      "name": "Docker Swarm",
+      "domain": "swarm",
+      "count": 19,
+      "file": "sections/k3-docker-swarm.json"
+    },
+    {
+      "id": "t16",
+      "name": "Docker Swarm gotchas",
+      "domain": "swarm",
+      "count": 5,
+      "file": "sections/t16-swarm-gotchas.json"
+    },
+    {
+      "id": "i1",
+      "name": "Kubernetes",
+      "domain": "k8s",
+      "count": 28,
       "file": "sections/i1-containers-kubernetes.json"
     },
     {
       "id": "t11",
-      "name": "Docker & Kubernetes gotchas",
-      "domain": "cont",
-      "count": 10,
+      "name": "Kubernetes gotchas",
+      "domain": "k8s",
+      "count": 6,
       "file": "sections/t11-docker-kubernetes-gotchas.json"
     },
     {
@@ -526,6 +620,27 @@
       "domain": "cicd",
       "count": 26,
       "file": "sections/i2-ci-cd-deploy.json"
+    },
+    {
+      "id": "i8",
+      "name": "GitHub Actions",
+      "domain": "cicd",
+      "count": 30,
+      "file": "sections/i8-github-actions.json"
+    },
+    {
+      "id": "i9",
+      "name": "GitLab CI",
+      "domain": "cicd",
+      "count": 30,
+      "file": "sections/i9-gitlab-ci.json"
+    },
+    {
+      "id": "i10",
+      "name": "Jenkins",
+      "domain": "cicd",
+      "count": 30,
+      "file": "sections/i10-jenkins.json"
     },
     {
       "id": "i3",

@@ -170,6 +170,28 @@
       "section": "v8",
       "question": "Server boot bo'lish jarayonini BIOS'dan login'gacha tushuntirib ber.",
       "explanation": "Debugging: `systemd-analyze blame`/`critical-chain` — sekin boot; `journalctl -b -1` — oldingi boot loglari; kernel panic uchun serial console. Bulutda: instance console output/screenshot."
+    },
+    {
+      "id": 33124,
+      "code": "DW01",
+      "level": "S",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Kernel yangilangandan keyin server boot bo'lmayapti. Qanday tiklaysan?",
+      "explanation": "Konsol (cloud serial console / IPMI) orqali GRUB menyusida eski kernelni tanla -> boot -> sababni top (initramfs, driver/modul, fstab, DKMS) -> eski kernelni default qil yoki tuzat -> keyin fleet'da canary."
+    },
+    {
+      "id": 33125,
+      "code": "DW02",
+      "level": "S",
+      "type": "card",
+      "topic": "Boot & runlevels",
+      "domain": "linux",
+      "section": "v8",
+      "question": "Server boot paytida emergency mode'ga tushdi: \"Give root password for maintenance\". Sababi va tuzatish?",
+      "explanation": "Ko'pincha /etc/fstab'dagi qurilma topilmadi (disk olib tashlangan, UUID o'zgargan, `nofail` yo'q) yoki FS xatosi (fsck). Root parol bilan kir -> `journalctl -xb` -> fstab'ni tuzat (`mount -o remount,rw /`) -> `mount -a` -> reboot."
     }
   ]
 }

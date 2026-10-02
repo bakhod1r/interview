@@ -458,6 +458,7 @@ b.bio{font-weight:750}
 .mock-cta>div{flex:1;min-width:0}.mock-cta b{font-size:16px}.mock-cta p{margin:4px 0 0;color:var(--muted);font-size:13px}
 .mock-cta .go{font-size:20px;color:var(--accent);transition:transform .2s}.mock-cta:hover .go{transform:translateX(4px)}
 @media (max-width:640px){.tabs>* span{display:none}.tabs{margin-left:0}}
+@media (max-width:420px){.top{gap:8px;flex-wrap:wrap}.top .sp{display:none}.brand{flex:1 1 0;min-width:0}.brand small{overflow:hidden;text-overflow:ellipsis}.brand{font-size:16px}.brand small{font-size:10px}.tabs>*{padding-left:9px!important;padding-right:9px!important}.dk-head,.dk{grid-template-columns:1fr 30px 30px 30px 26px;gap:2px}.dk-head{font-size:9.5px;letter-spacing:.02em}.dk .nm b{white-space:normal;line-height:1.25}}
 @media (max-width:860px){.doc-pager{grid-template-columns:1fr}}
 @media (max-width:860px){.doc-wrap{grid-template-columns:1fr}.doc-toc{position:static;max-height:none}.doc{padding:22px 18px}.docs-grid{grid-template-columns:1fr}}
 </style>
@@ -471,7 +472,7 @@ const QD=[];
 const secOf=q=>Object.keys(SEC).find(k=>SEC[k][2]===q.d&&SEC[k][1].includes(q.tp));
 const DOCS=[]; // build.js docs/*.md bilan to'ldiradi: [id, sarlavha, markdown]
 // domen ro'yxatida element: "domen" yoki ["guruh-id","Guruh nomi",[domenlar]]
-const GRP={"backend":["Backend","⚙︎",["go",["db","DB",["db","mongo","elastic","ch"]],["cache","Cache",["redis"]],["mq","MQ",["kafka","rabbit","evt"]],"api","sec","fin"]],"arch":["Architecture","▣",["arch"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]],"devops":["DevOps","⛭",["linux","cont","cicd","obs","net","cloud"]],"soft":["Soft skills","☺",["soft"]]};
+const GRP={"backend":["Backend","⚙︎",["go",["db","DB",["db","mongo","elastic","ch"]],["cache","Cache",["redis"]],["mq","MQ",["kafka","rabbit","evt"]],"api","sec","fin"]],"arch":["Architecture","▣",["arch"]],"sd":["System Design","◈",["sys","dist"]],"alg":["Algorithms","∑",["alg"]],"devops":["DevOps","⛭",["linux",["cont","Containers & K8s",["docker","compose","swarm","k8s"]],"cicd","obs","net","cloud"]],"soft":["Soft skills","☺",["soft"]]};
 const domsOf=l=>l.flatMap(x=>Array.isArray(x)?domsOf(x[2]):[x]);
 const QBY={};Q.forEach(q=>QBY[q.id]=q);
 const SECQ={};Q.forEach(q=>{const s=secOf(q);(SECQ[s]=SECQ[s]||[]).push(q);});

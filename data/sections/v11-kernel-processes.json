@@ -181,6 +181,50 @@
       "section": "v11",
       "question": "`ls -l /etc/passwd` buyrug'ini bajarganda nima sodir bo'ladi (shell'dan kernelgacha)?",
       "explanation": "Bu savol kernel, shell, fayl tizimi va jarayon tushunchalarini bitta zanjirda tekshiradi. `strace ls -l /etc/passwd` bilan o'zingiz ko'rib chiqing."
+    },
+    {
+      "id": 31336,
+      "code": "DX52",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Signal'lar: SIGTERM, SIGKILL, SIGHUP, SIGINT, SIGSTOP farqi? `kill`, `pkill`, `killall`.",
+      "explanation": "SIGTERM(15) — iltimos to'xta (ushlanadi). SIGKILL(9) — majburiy, ushlanmaydi. SIGHUP(1) — terminal uzildi / daemonlarda config reload. SIGINT(2) — Ctrl+C. SIGSTOP(19)/SIGCONT — pauza/davom (Ctrl+Z = SIGTSTP)."
+    },
+    {
+      "id": 31337,
+      "code": "DX53",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Foreground/background: `&`, Ctrl+Z, `bg`, `fg`, `jobs`, `nohup`, `disown`, tmux/screen.",
+      "explanation": "`cmd &` — background; Ctrl+Z to'xtatadi; bg/fg davom ettiradi; jobs ro'yxat. Terminal yopilganda SIGHUP keladi — nohup/disown/setsid yoki tmux bilan himoya. Uzoq ish uchun eng yaxshisi tmux yoki systemd-run."
+    },
+    {
+      "id": 31338,
+      "code": "DX54",
+      "level": "M",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Jarayon prioritet: `nice`, `renice`, `ionice`, `taskset`/CPU affinity.",
+      "explanation": "nice -20 (eng yuqori) .. 19 (eng past), oddiy user faqat pasaytira oladi. renice ishlab turganini o'zgartiradi. ionice — disk prioriteti (-c3 idle). taskset — jarayonni ma'lum core'larga bog'lash."
+    },
+    {
+      "id": 31339,
+      "code": "DX55",
+      "level": "M",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "`/proc/PID/` ichida nimalar bor va debugda qanday foydalanasan?",
+      "explanation": "cmdline, environ, status (VmRSS, Threads, State), limits, fd/ (ochiq fayllar), cwd, exe, maps, stack, io, cgroup, oom_score. Hech qanday vositasiz jarayonni o'rganish mumkin."
     }
   ]
 }

@@ -117,6 +117,248 @@
       "section": "v12",
       "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
       "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
+    },
+    {
+      "id": 31315,
+      "code": "DX31",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Server qotib qoldi (javob bermayapti / juda sekin). Qadamma-qadam nima qilasan?",
+      "explanation": "Avval kirish yo'li (SSH/konsol), keyin USE metodi: CPU, RAM, disk IO, tarmoq, keyin jarayon darajasi va loglar. Tez stabillashtir (mitigation), keyin root cause. 60 soniyalik checklist: uptime, dmesg, vmstat, mpstat, pidstat, iostat, free, sar, top."
+    },
+    {
+      "id": 31316,
+      "code": "DX32",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`top` natijasini o'qi: load average, %Cpu qatoridagi us/sy/ni/id/wa/hi/si/st, RES/VIRT/SHR.",
+      "explanation": "load — run queue + D-state o'rtachasi (core soni bilan solishtir). us user, sy kernel, wa IO kutish, st hypervisor o'g'irlagan. RES — haqiqiy RAM, VIRT — virtual manzil fazosi, SHR — shared."
+    },
+    {
+      "id": 31317,
+      "code": "DX33",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`vmstat 1` va `iostat -xz 1` ustunlarini tushuntir.",
+      "explanation": "vmstat: r, b, swpd, free, buff, cache, si, so, bi, bo, in, cs, us, sy, id, wa, st. iostat -x: r/s, w/s, rkB/s, wkB/s, r_await, w_await, aqu-sz, %util."
+    },
+    {
+      "id": 31318,
+      "code": "DX34",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Qaysi jarayon ko'p RAM / CPU yeyapti? Buyruqlar va flaglar.",
+      "explanation": "`ps aux --sort=-%mem | head`, `ps -eo pid,ppid,user,%cpu,%mem,rss,etime,cmd --sort=-%cpu | head`, `top`/`htop`, `pidstat -r 1`, `smem`, `/proc/PID/status`."
+    },
+    {
+      "id": 31319,
+      "code": "DX35",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`lsof` va `strace` — eng kerakli ishlatilishlar?",
+      "explanation": "lsof: kim faylni/portni ochgan, o'chirilgan lekin ochiq fayllar, FD soni. strace: jarayon qaysi syscall'da osilgan, qaysi faylni topolmayapti, vaqt qayerga ketyapti."
+    },
+    {
+      "id": 31320,
+      "code": "DX36",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`Too many open files` xatosi. Diagnostika va yechim?",
+      "explanation": "Jarayon FD limitiga (RLIMIT_NOFILE, soft default 1024) yetdi. Tekshir: `/proc/PID/limits`, `ls /proc/PID/fd | wc -l`. Avval leak'mi aniqla (yopilmagan connection/file), keyin limitni systemd `LimitNOFILE` yoki limits.conf orqali oshir."
+    },
+    {
+      "id": 31321,
+      "code": "DX37",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Ilova xotirasi sekin o'sib OOM bilan o'lyapti. Qanday tasdiqlaysan va tekshirasan?",
+      "explanation": "Belgi: `dmesg`/`journalctl -k` da \"Out of memory: Killed process\", konteynerda exit 137 / OOMKilled. RSS vaqt bo'yicha grafigi. Leak'mi yoki limit kichikmi — profiling (Go pprof heap), cgroup memory.events."
+    },
+    {
+      "id": 31322,
+      "code": "DX38",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "CPU 100%. Qaysi kod qatori aybdor ekanini qanday topasan?",
+      "explanation": "top -> PID; `top -H -p PID` -> thread; `perf top -p PID` / `perf record -g` -> flame graph; til darajasida: Go pprof, Java jstack/async-profiler, Python py-spy. Aniqla: user CPU (ilova) yoki sys (kernel, syscall, lock)."
+    },
+    {
+      "id": 31323,
+      "code": "DX39",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Disk IO bottleneck'ni qanday aniqlaysan va qaysi jarayon aybdor?",
+      "explanation": "`iostat -xz 1` (await, %util, aqu-sz), `vmstat` wa/b, `iotop -oPa`, `pidstat -d 1`, D-state jarayonlar. Keyin sabab: swap, log, DB checkpoint, backup, noatime yo'q."
+    },
+    {
+      "id": 31324,
+      "code": "DX40",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`dmesg` da `task blocked for more than 120 seconds` / `hung_task`. Nima va nima qilasan?",
+      "explanation": "Jarayon 120s+ D-state'da (uninterruptible IO). Sabab: disk/NFS/iSCSI javob bermayapti, FS freeze, kernel lock. kill -9 ham ishlamaydi. Asosiy qurilmani tekshir."
+    },
+    {
+      "id": 31325,
+      "code": "DX41",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`free -h`, `/proc/meminfo` va \"Linux RAM'ni yeyapti\" (page cache) — qanday o'qiysan?",
+      "explanation": "Bo'sh RAM — isrof; kernel uni page cache uchun ishlatadi va kerak bo'lganda qaytaradi. Haqiqiy ko'rsatkich — `available`, `free` emas. Muammo belgisi: available past + swap faol + OOM."
+    },
+    {
+      "id": 31326,
+      "code": "DX42",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Incident paytida va keyin: qanday ishlash tartibi (mitigate vs root cause, postmortem)?",
+      "explanation": "Avval ta'sirni kamaytir (rollback, trafik yo'naltirish, scale, restart) — lekin dalilni saqla. Kommunikatsiya: incident commander, status update. Keyin blameless postmortem: timeline, root cause, contributing factors, action items."
+    },
+    {
+      "id": 32050,
+      "code": "DZ06",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`sar` (sysstat) nima va o'tgan voqeani qanday tahlil qilasan? (\"Kecha soat 3 da server sekinlashgan\")",
+      "explanation": "sar har 10 daqiqada (sozlanadi) CPU, RAM, IO, tarmoq statistikasini `/var/log/sysstat` (`/var/log/sa`)ga yozadi. Real vaqt vositalari (top) o'tmishni ko'rsatmaydi — sar ko'rsatadi. `sar -u/-r/-b/-d/-n DEV/-q -f fayl -s -e`."
+    },
+    {
+      "id": 32051,
+      "code": "DZ07",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "PSI (Pressure Stall Information) nima va nega load average'dan yaxshiroq?",
+      "explanation": "`/proc/pressure/{cpu,memory,io}` — vazifalar resurs kutib qancha vaqt to'xtab qolganini % da ko'rsatadi (some — kamida bittasi, full — hammasi). Load average aralash (CPU + D-state) va core soniga bog'liq; PSI to'g'ridan-to'g'ri \"qanchalik azob chekyapmiz\"ni beradi. cgroup bo'yicha ham bor."
+    },
+    {
+      "id": 32052,
+      "code": "DZ08",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`perf` va flame graph: qachon kerak va qanday olinadi?",
+      "explanation": "perf — kernel'ning sampling profiler'i: CPU qayerga ketayotganini (user + kernel stack) ko'rsatadi, ilovani qayta kompilyatsiya qilmasdan. Flame graph — stack namunalarini vizual: kenglik = CPU vaqti. CPU yuqori, lekin sabab noma'lum bo'lganda."
+    },
+    {
+      "id": 32055,
+      "code": "DZ11",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Interview scenario: \"Disk to'ldi, server ishlamay qoldi\" — 5 daqiqalik javob tuzilmasi (detect, mitigate, root cause, prevent).",
+      "explanation": "1) Tasdiqla: df -h / df -i. 2) Tez joy bo'shat xavfsiz yo'l bilan (eski loglar, journal vacuum, docker prune, o'chirilgan-lekin-ochiq fayllar truncate). 3) Servisni tikla va tekshir. 4) Root cause: nima o'sdi va nega. 5) Oldini olish: logrotate, retention, alert predict_linear, alohida /var partition, kvota."
+    },
+    {
+      "id": 33129,
+      "code": "DW06",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Ilova har safar aniq ~5 soniya kechikadi (ba'zan). Qayerdan qidirasan?",
+      "explanation": "\"Aniq 5s\" — timeout belgisi: DNS (resolv.conf `timeout:5`, IPv6 AAAA/A parallel so'rov va conntrack race, birinchi nameserver o'lik), TCP SYN retransmit (1s,3s...), ARP. `curl -w` bilan bosqichni aniqla, `tcpdump port 53`."
+    },
+    {
+      "id": 33130,
+      "code": "DW07",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Konteyner/servis vaqti-vaqti bilan sekin, CPU limitga yetmagan bo'lsa ham (CPU throttling). Qanday isbotlaysan?",
+      "explanation": "CFS quota 100ms davr ichida hisoblanadi: ko'p thread'li ilova limitni davrning boshida yeb qo'yadi va qolgan vaqt to'xtatiladi -> p99 latency sakraydi, o'rtacha CPU esa past ko'rinadi. Isbot: cgroup `cpu.stat` nr_throttled/throttled_usec, `container_cpu_cfs_throttled_periods_total`."
+    },
+    {
+      "id": 33131,
+      "code": "DW08",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`nf_conntrack: table full, dropping packet` — nima va qanday tuzatasan?",
+      "explanation": "Netfilter conntrack har bir ulanish (NAT, stateful firewall, Docker/K8s) uchun yozuv saqlaydi; jadval to'lsa yangi ulanishlar jim tashlanadi — tasodifiy timeout'lar. Tez yechim: nf_conntrack_max oshirish; asosiy: timeout'larni kamaytirish, keraksiz trafikni NOTRACK, ulanishlarni qayta ishlatish."
+    },
+    {
+      "id": 33132,
+      "code": "DW09",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Server RAM'i sekin-asta tugaydi, lekin hech bir jarayon RSS'i katta emas. Xotira qayerda?",
+      "explanation": "Jarayonlardan tashqari: kernel slab (dentry/inode cache, ayniqsa unreclaimable), tmpfs/shm (`/dev/shm`, `/run`), hugepages, page tables, kernel modul/driver leak, o'chirilgan-lekin-ochiq tmpfs fayllar, ZFS ARC. `/proc/meminfo` va `slabtop` bilan bo'lib chiq."
+    },
+    {
+      "id": 33133,
+      "code": "DW10",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Ko'p zombie / `fork: Resource temporarily unavailable` — sababi va yechimi?",
+      "explanation": "`fork: retry: Resource temporarily unavailable` — jarayon/thread limiti: user'ning `nproc` (ulimit -u), systemd `TasksMax`, cgroup `pids.max`, yoki `kernel.pid_max`/`threads-max`. Zombie'lar o'zi resurs yemaydi, lekin PID band qiladi; ota jarayon wait() qilmayapti."
+    },
+    {
+      "id": 33134,
+      "code": "DW11",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Server time-wait/ephemeral port tugadi: `connect: cannot assign requested address`. Nima bu?",
+      "explanation": "Chiquvchi ulanishlar uchun lokal port (ephemeral, `ip_local_port_range`) bitta (src IP, dst IP, dst port) to'plamiga ~28k. Ko'p qisqa ulanish + TIME_WAIT 60s = port tugaydi. Yechim: connection pooling/keep-alive, `tcp_tw_reuse=1`, port diapazonini kengaytirish, ko'p dst IP/src IP."
     }
   ]
 }

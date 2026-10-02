@@ -1,0 +1,120 @@
+{
+  "id": "v16",
+  "name": "Disks, partitions & RAID",
+  "domain": "linux",
+  "topics": [
+    "Disks & RAID"
+  ],
+  "questions": [
+    {
+      "id": 31347,
+      "code": "DY01",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "Diskdagi qurilmalarni qanday ko'rasan? `lsblk`, `blkid`, `fdisk -l`, `df` farqi.",
+      "explanation": "lsblk — blok qurilmalar daraxti (disk -> partition -> LVM -> mount). blkid — UUID va FS turi. fdisk -l — partition jadvali. df — faqat mount qilingan FS'lar band/bo'sh joyi."
+    },
+    {
+      "id": 31348,
+      "code": "DY02",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "Serverga yangi disk qo'shildi. Uni ishlatishgacha bo'lgan to'liq qadamlar?",
+      "explanation": "lsblk bilan top -> partition (parted/fdisk, GPT) -> mkfs -> mkdir mount point -> mount -> UUID bilan /etc/fstab -> `mount -a` bilan tekshir."
+    },
+    {
+      "id": 31349,
+      "code": "DY03",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "MBR va GPT farqi? `fdisk`, `gdisk`, `parted` qachon?",
+      "explanation": "MBR: 2 TiB limit, 4 primary (yoki extended+logical), BIOS. GPT: katta disklar, 128 partition, zaxira header, CRC, UEFI. fdisk — interaktiv (hozir GPT ham), gdisk — GPT uchun, parted — skriptlash va resize uchun qulay."
+    },
+    {
+      "id": 31350,
+      "code": "DY04",
+      "level": "M",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "Cloud'da disk (EBS/PD) kattalashtirildi. Partition va FS'ni downtime'siz kengaytir.",
+      "explanation": "Kernel yangi o'lchamni ko'rsin (rescan) -> `growpart` partition'ni kengaytiradi -> FS: ext4 `resize2fs`, XFS `xfs_growfs` (mount point bilan). LVM bo'lsa: pvresize -> lvextend -r."
+    },
+    {
+      "id": 31351,
+      "code": "DY05",
+      "level": "M",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "`mkfs` va FS sozlamalari: ext4 vs XFS yaratishda kerakli flaglar, inode soni, reserved blocks.",
+      "explanation": "`mkfs.ext4 -L label -m 1 -i <bytes-per-inode>`; XFS: `mkfs.xfs -L label`. ext4 default 5% root uchun rezerv — katta ma'lumot diskida `-m 0/1` yoki `tune2fs -m 1`. Mayda fayllar ko'p bo'lsa inode'ni ko'proq ber (XFS dinamik)."
+    },
+    {
+      "id": 31352,
+      "code": "DY06",
+      "level": "M",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "`mount` opsiyalari va buyruqlari: `-o remount`, `umount` \"target is busy\", bind mount, `findmnt`.",
+      "explanation": "`mount -o remount,ro /` — qayta mount; busy bo'lsa `lsof +D` / `fuser -vm` bilan kim ushlayotganini top; `umount -l` lazy. Bind mount — katalogni boshqa joyda ko'rsatish. findmnt — mount daraxti."
+    },
+    {
+      "id": 31353,
+      "code": "DY07",
+      "level": "M",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "RAID darajalari: 0, 1, 5, 6, 10 — farqi, sig'imi, nechta disk o'lishiga chidaydi?",
+      "explanation": "0 — striping, tez, himoya yo'q. 1 — mirror. 5 — parity, 1 disk. 6 — 2 parity, 2 disk. 10 — mirror'lar ustida stripe, yozish tez, har juftdan 1 disk. RAID backup emas."
+    },
+    {
+      "id": 31354,
+      "code": "DY08",
+      "level": "M",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "`mdadm` bilan software RAID yaratish, holatini tekshirish va o'lgan diskni almashtirish.",
+      "explanation": "`mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc`, holat `cat /proc/mdstat` va `mdadm --detail`. Almashtirish: --fail -> --remove -> yangi disk --add -> rebuild kuzat. Config `mdadm --detail --scan >> mdadm.conf` + initramfs."
+    },
+    {
+      "id": 31355,
+      "code": "DY09",
+      "level": "M",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "Disk sog'lig'ini qanday tekshirasan? `smartctl`, `dmesg` I/O error, `badblocks`.",
+      "explanation": "`smartctl -a /dev/sda` (Reallocated_Sector_Ct, Pending, Offline_Uncorrectable, NVMe: Percentage Used, Media errors), `dmesg -T | grep -i error`, `smartctl -t short`. Belgilar paydo bo'lsa — backup va almashtirish."
+    },
+    {
+      "id": 31356,
+      "code": "DY10",
+      "level": "S",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "Disk/storage performance'ni qanday o'lchaysan? `fio`, `dd` va ularning tuzoqlari.",
+      "explanation": "`fio` — real yuklamaga o'xshash test (random/sequential, blok o'lchami, iodepth, direct=1). `dd` faqat taxminiy sequential va page cache tufayli aldaydi. IOPS, throughput, latency (p99) uchala metrika."
+    }
+  ]
+}

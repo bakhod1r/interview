@@ -1,0 +1,297 @@
+{
+  "id": "k1",
+  "name": "Docker basics",
+  "domain": "docker",
+  "topics": [
+    "Docker"
+  ],
+  "questions": [
+    {
+      "id": 2006,
+      "code": "I7",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Konteyner va virtual mashina farqi?",
+      "explanation": "Konteyner — o'ralgan jarayon, 'kichik VM' emas. Oqibatlari: yadro umumiy (security chegarasi zaifroq — shuning uchun ko'p tenantli muhitda gVisor/Firecracker), host yadrosiga bog'liqlik (Linux image Windows yadrosida ishlamaydi). Image — qatlamli fayl tizimi, konteyner esa shu image'dan ishga tushgan jarayon."
+    },
+    {
+      "id": 2007,
+      "code": "I8",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Nega har kod o'zgarishida build 5 daqiqa ketadi? Tuzatish?",
+      "snippet": "FROM node:20\nWORKDIR /app\nCOPY . .\nRUN npm ci\nRUN npm run build\nCMD [\"node\", \"dist/main.js\"]",
+      "explanation": "Docker qatlamlarni keshlaydi: qatlam inputi o'zgarmasa qayta bajarilmaydi. To'g'ri tartib: kam o'zgaradigan narsa yuqorida. Yana: .dockerignore (node_modules, .git), multi-stage build bilan yakuniy image'da faqat dist va production bog'liqliklar, root bo'lmagan user, aniq versiyali base image (node:20.11-alpine, latest emas)."
+    },
+    {
+      "id": 2008,
+      "code": "I9",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Production image hajmini kamaytirishning eng samarali yo'li?",
+      "explanation": "Katta image — sekin deploy, sekin autoscaling, katta hujum yuzasi. Qo'shimcha: slim/alpine yoki distroless base, RUN'larni birlashtirib cache'ni o'chirish (apt-get clean), .dockerignore. Go uchun yakuniy image scratch/distroless'da bir necha MB bo'lishi mumkin."
+    },
+    {
+      "id": 30029,
+      "code": "SN30",
+      "level": "S",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Go servis uchun production image: qaysi qurilish to'g'ri?",
+      "explanation": "Toolchain'li image: 1GB+ hajm, ko'p CVE, ichida kompilyator va shell — hujum yuzasi. Distroless/scratch bilan bir necha o'n MB. Eslatmalar: `scratch`da TLS uchun `ca-certificates` va zone ma'lumotlari ko'chiriladi, `CGO_ENABLED=0` static bo'lishi uchun, layer keshi uchun `go mod download` alohida qatlamda."
+    },
+    {
+      "id": 31386,
+      "code": "DK1",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Image va container farqi nima?",
+      "explanation": "Image — o'zgarmas, qatlamli shablon (read-only layer'lar). Container — image'ning ishga tushgan nusxasi: ustiga yoziladigan qatlam + izolyatsiya qilingan jarayon."
+    },
+    {
+      "id": 31387,
+      "code": "DK2",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Dockerfile'dagi asosiy instruksiyalar: FROM, RUN, COPY, CMD, ENTRYPOINT, EXPOSE, ENV — har biri nima qiladi?",
+      "explanation": "FROM — asos image; RUN — build paytida buyruq (yangi layer); COPY — fayl ko'chirish; CMD — default argument; ENTRYPOINT — doimiy bajariladigan dastur; EXPOSE — hujjat (portni ochmaydi); ENV — muhit o'zgaruvchisi."
+    },
+    {
+      "id": 31388,
+      "code": "DK3",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "`docker run -p 8080:80`, `-v`, `-e`, `--rm`, `-d` flaglari nima qiladi?",
+      "explanation": "-p host:container port mapping; -v volume/bind mount; -e env; --rm to'xtaganda o'chirish; -d fonda ishlatish."
+    },
+    {
+      "id": 31389,
+      "code": "DK4",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Volume, bind mount va tmpfs farqi?",
+      "explanation": "Volume — Docker boshqaradigan papka (/var/lib/docker/volumes), portativ; bind mount — hostdagi aniq yo'l; tmpfs — RAM'da, vaqtinchalik."
+    },
+    {
+      "id": 31390,
+      "code": "DK5",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Docker layer cache qanday ishlaydi va Dockerfile tartibi nega muhim?",
+      "explanation": "Har instruksiya layer; instruksiya va kirish fayllari o'zgarmasa cache ishlatiladi. Bitta layer o'zgarsa undan keyingilar hammasi qayta quriladi — kam o'zgaradiganlarni yuqoriga qo'y."
+    },
+    {
+      "id": 31391,
+      "code": "DK6",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "CMD va ENTRYPOINT farqi; shell form va exec form?",
+      "explanation": "ENTRYPOINT — doimiy dastur, CMD — unga default argument. Exec form (JSON array) jarayonni PID 1 qiladi va signal oladi; shell form /bin/sh -c orqali ishlaydi, SIGTERM ilovaga yetmaydi."
+    },
+    {
+      "id": 31392,
+      "code": "DK7",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Docker network turlari: bridge, host, none, overlay. Container'lar bir-birini qanday topadi?",
+      "explanation": "bridge — default, NAT; host — host network stack; none — tarmoqsiz; overlay — ko'p host (Swarm). User-defined bridge'da Docker embedded DNS (127.0.0.11) container nomini resolve qiladi."
+    },
+    {
+      "id": 31393,
+      "code": "DK8",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "`docker stop` va `docker kill` farqi? Restart policy'lar?",
+      "explanation": "stop — SIGTERM, timeout (10s) keyin SIGKILL; kill — darhol SIGKILL (yoki --signal). Restart: no, on-failure[:N], always, unless-stopped."
+    },
+    {
+      "id": 31394,
+      "code": "DK9",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Container ichida nima bo'layotganini qanday debug qilasan?",
+      "explanation": "docker logs -f, docker exec -it sh, docker inspect, docker stats, docker events, docker top; distroless bo'lsa docker debug yoki --pid/--network bilan sidecar."
+    },
+    {
+      "id": 31395,
+      "code": "DK10",
+      "level": "S",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Docker container izolyatsiyasi qanday qurilgan va u VM'dek xavfsizmi?",
+      "explanation": "Namespace (pid, net, mnt, uts, ipc, user), cgroups (resurs), capabilities, seccomp, AppArmor/SELinux. Kernel umumiy — kernel exploit host'ni oladi, VM'dek kuchli chegara emas."
+    },
+    {
+      "id": 31396,
+      "code": "DK11",
+      "level": "S",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Docker arxitekturasi: docker CLI, dockerd, containerd, runc qanday bog'langan?",
+      "explanation": "CLI REST API orqali dockerd'ga; dockerd containerd'ga (gRPC); containerd shim orqali runc'ni chaqiradi; runc OCI spec bo'yicha namespace/cgroup yaratib jarayonni ishga tushiradi va chiqadi."
+    },
+    {
+      "id": 31397,
+      "code": "DK12",
+      "level": "S",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Image'ni tag bilan emas digest bilan pin qilish va image supply chain xavfsizligi?",
+      "explanation": "Tag o'zgaruvchan (latest qayta yoziladi), digest (sha256) o'zgarmas. Production: digest pin, imzolash (cosign), SBOM, vulnerability scan, minimal base image."
+    },
+    {
+      "id": 33068,
+      "code": "DK35",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Docker registry bilan ishlash: login, tag, push, pull. Private registry?",
+      "explanation": "Image registry'da saqlanadi (Docker Hub, GHCR, ECR, Harbor). Nom: registry/namespace/repo:tag. docker tag bilan nom beriladi, docker push yuboradi."
+    },
+    {
+      "id": 33069,
+      "code": "DK36",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "`docker ps`, `images`, `logs`, `exec`, `rm`, `rmi`, `system prune` — asosiy buyruqlar nima qiladi?",
+      "explanation": "ps — container'lar; images — image'lar; logs — stdout/stderr; exec — ishlab turgan container ichida buyruq; rm/rmi — o'chirish; system prune — keraksiz narsalarni tozalash."
+    },
+    {
+      "id": 33070,
+      "code": "DK37",
+      "level": "J",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Multi-stage build nima va nega kerak?",
+      "explanation": "Bitta Dockerfile'da bir nechta FROM: birinchi bosqichda kompilyator bilan build, oxirgisiga faqat binary ko'chiriladi. Image kichik, xavfsiz, build tool'lar production'ga tushmaydi."
+    },
+    {
+      "id": 33071,
+      "code": "DK38",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Docker HEALTHCHECK qanday ishlaydi va nima uchun kerak?",
+      "explanation": "Container ichida davriy buyruq ishlatadi; holat starting/healthy/unhealthy. Compose depends_on va Swarm rolling update shundan foydalanadi. Oddiy Docker unhealthy container'ni o'zi restart qilmaydi."
+    },
+    {
+      "id": 33072,
+      "code": "DK39",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Container resurs limitlari: `--memory`, `--cpus`, `--pids-limit`. Limit oshsa nima bo'ladi?",
+      "explanation": "Cgroups orqali. Memory oshsa — kernel OOM killer jarayonni o'ldiradi (exit 137, OOMKilled=true). CPU limit — throttling (sekinlashadi, o'lmaydi). pids-limit — fork bomb'dan himoya."
+    },
+    {
+      "id": 33073,
+      "code": "DK40",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Docker logging: log qayerga yoziladi, disk to'lib qolishining oldini qanday olasan?",
+      "explanation": "Default json-file driver /var/lib/docker/containers/<id>/<id>-json.log ga, rotatsiyasiz yozadi. max-size/max-file qo'y yoki local/journald/fluentd driver ishlat. Ilova stdout'ga yozishi kerak."
+    },
+    {
+      "id": 33074,
+      "code": "DK41",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "`docker system df` 80 GB ko'rsatyapti. Disk nima bilan to'ladi va qanday tozalaysan?",
+      "explanation": "Dangling image'lar, to'xtagan container'lar, ishlatilmagan volume'lar, build cache, katta log fayllar. prune buyruqlari bilan tanlab tozalanadi."
+    },
+    {
+      "id": 33075,
+      "code": "DK42",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "`docker build` context nima, `.dockerignore` nega kerak?",
+      "explanation": "Context — build'ga yuboriladigan papka (odatda .). Hammasi daemon'ga uzatiladi. .dockerignore keraksiz/maxfiy fayllarni chiqarib tashlaydi: build tez, cache barqaror, secret image'ga tushmaydi."
+    },
+    {
+      "id": 33076,
+      "code": "DK43",
+      "level": "S",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Multi-arch image (amd64 + arm64) qanday quriladi?",
+      "explanation": "docker buildx + BuildKit: --platform linux/amd64,linux/arm64, natija bitta tag ostida manifest list. QEMU emulyatsiya sekin — Go'da GOARCH bilan cross-compile yoki native builder'lar tez."
+    },
+    {
+      "id": 33077,
+      "code": "DK44",
+      "level": "S",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Rootless Docker va userns-remap nima? Qachon kerak?",
+      "explanation": "Container ichidagi root host'da oddiy UID'ga map qilinadi. Container escape bo'lsa ham host root olinmaydi. Kamchilik: <1024 port, ba'zi storage/network cheklovlari."
+    }
+  ]
+}

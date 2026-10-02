@@ -203,6 +203,17 @@
       "section": "v2",
       "question": "Fayl ruxsatlaridagi sticky bit, setuid, setgid nima?",
       "explanation": "`ls -l` da: `-rwsr-xr-x` (setuid), `drwxrwsr-x` (setgid), `drwxrwxrwt` (sticky, /tmp). setgid katalog — jamoaviy papkalar uchun qulay. umask (odatda 022) yangi fayl ruxsatlarini belgilaydi."
+    },
+    {
+      "id": 33147,
+      "code": "DW24",
+      "level": "S",
+      "type": "card",
+      "topic": "Linux users",
+      "domain": "linux",
+      "section": "v2",
+      "question": "Fayl ruxsatlari to'g'ri ko'rinadi, lekin servis `Permission denied` beradi. Qaysi qatlamlarni tekshirasan?",
+      "explanation": "Yo'lning har bir katalogida `x` (traverse) ruxsati, egasi/guruh (servis qaysi user bilan ishlaydi, supplementary group yangilanmagan), ACL/mask, mount opsiyalari (noexec, ro), SELinux/AppArmor, systemd sandbox (ProtectSystem/ProtectHome/ReadWritePaths), capabilities (port < 1024), chattr +i."
     }
   ]
 }

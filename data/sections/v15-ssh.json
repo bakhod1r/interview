@@ -1,0 +1,164 @@
+{
+  "id": "v15",
+  "name": "SSH & remote access",
+  "domain": "linux",
+  "topics": [
+    "SSH"
+  ],
+  "questions": [
+    {
+      "id": 31303,
+      "code": "DX19",
+      "level": "J",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "SSH nima va qanday ishlaydi (qisqacha)?",
+      "explanation": "Secure Shell — shifrlangan masofaviy kirish protokoli (TCP 22). Bosqichlar: TCP ulanish -> versiya almashinuvi -> key exchange (DH/ECDH) -> server host key'ni tekshirish -> user autentifikatsiya (parol/kalit) -> shifrlangan sessiya/kanallar."
+    },
+    {
+      "id": 31304,
+      "code": "DX20",
+      "level": "J",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "SSH kalit bilan kirishni noldan qanday sozlaysan?",
+      "explanation": "`ssh-keygen -t ed25519` -> `ssh-copy-id user@host` (yoki public key'ni `~/.ssh/authorized_keys` ga qo'sh) -> ruxsatlar 700/600 -> `ssh user@host` -> keyin parolni o'chir."
+    },
+    {
+      "id": 31305,
+      "code": "DX21",
+      "level": "M",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "sshd_config'ni production uchun qanday sozlaysan (hardening)?",
+      "explanation": "Parol login o'chiq, root login o'chiq, faqat kalit, AllowUsers/AllowGroups, MaxAuthTries, LoginGraceTime, X11/agent forwarding o'chiq, zamonaviy algoritmlar; `sshd -t` bilan tekshirib reload; fail2ban/firewall."
+    },
+    {
+      "id": 31306,
+      "code": "DX22",
+      "level": "J",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "`~/.ssh/config` nima uchun? Misol.",
+      "explanation": "Client sozlamalari: alias, HostName, User, Port, IdentityFile, ProxyJump. Uzun `ssh -i ... -p ... user@ip` o'rniga `ssh prod`."
+    },
+    {
+      "id": 31307,
+      "code": "DX23",
+      "level": "M",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "SSH tunnel: `-L`, `-R`, `-D` farqi?",
+      "explanation": "-L local forward: lokal port -> server orqali uzoq manzil. -R remote forward: server porti -> sizning lokal manzil. -D dynamic: SOCKS proxy."
+    },
+    {
+      "id": 31308,
+      "code": "DX24",
+      "level": "M",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "Bastion (jump host) orqali kirish: `ProxyJump` va agent forwarding farqi, xavfi?",
+      "explanation": "`ssh -J bastion target` — kalit lokal qoladi, bastion faqat TCP'ni uzatadi (xavfsiz). Agent forwarding (`-A`) — bastion'dagi root sizning agent'ingizdan foydalana oladi (xavfli)."
+    },
+    {
+      "id": 31309,
+      "code": "DX25",
+      "level": "M",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "`Permission denied (publickey)` — qanday debug qilasan?",
+      "explanation": "`ssh -vvv` client tomonida qaysi kalit taklif qilinganini ko'r; server tomonda `journalctl -u ssh` / `/var/log/auth.log`; ruxsatlar (home, .ssh 700, authorized_keys 600, egasi), to'g'ri user, AllowUsers, SELinux konteksti."
+    },
+    {
+      "id": 31310,
+      "code": "DX26",
+      "level": "M",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "`WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` — nima qilasan?",
+      "explanation": "Server host key known_hosts'dagidan farq qiladi: server qayta o'rnatilgan/IP qayta ishlatilgan YOKI MITM hujum. Avval sababni tasdiqla, keyin `ssh-keygen -R host`."
+    },
+    {
+      "id": 31311,
+      "code": "DX27",
+      "level": "J",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "scp, rsync va sftp farqi? Kerakli flaglar.",
+      "explanation": "scp — oddiy nusxa. rsync — faqat farqni yuboradi, davom ettiradi, ruxsatlarni saqlaydi (katta/takroriy ko'chirish uchun). sftp — interaktiv fayl sessiyasi."
+    },
+    {
+      "id": 31312,
+      "code": "DX28",
+      "level": "S",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "Yuzlab server va ko'p muhandis uchun SSH access'ni qanday boshqarasan?",
+      "explanation": "authorized_keys'ni qo'lda tarqatish shkalalanmaydi. Variantlar: SSH CA (qisqa muddatli user sertifikatlari), SSO bilan Teleport/Boundary, AWS SSM/GCP IAP (portsiz), config management. Audit, offboarding, MFA, break-glass."
+    },
+    {
+      "id": 31313,
+      "code": "DX29",
+      "level": "S",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "SSH ulanish sekin (login 10-30s). Sabablari?",
+      "explanation": "Ko'pincha DNS reverse lookup (`UseDNS yes`), GSSAPI auth urinishi, ko'p kalit sinash, sekin PAM/LDAP, MOTD skriptlar, entropiya. `ssh -vvv` da qaysi qadamda to'xtashini ko'r."
+    },
+    {
+      "id": 31314,
+      "code": "DX30",
+      "level": "M",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "fail2ban nima va SSH brute-force'dan qanday himoyalanasan?",
+      "explanation": "fail2ban loglarni kuzatadi va N ta muvaffaqiyatsiz urinishdan keyin IP'ni firewall bilan vaqtincha bloklaydi. Asosiy himoya baribir: parolni o'chirish, faqat kalit, 22 portni cheklash."
+    },
+    {
+      "id": 33139,
+      "code": "DW16",
+      "level": "S",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "SSH orqali ishlayotgan Ansible/CI deploy vaqti-vaqti bilan `Connection reset` / `Broken pipe` bilan yiqiladi. Sabablar?",
+      "explanation": "Idle timeout (NAT gateway, LB, firewall ~350s), sshd `MaxStartups` (bir vaqtda ko'p auth'siz ulanish — 10:30:100 default), `MaxSessions` (ControlMaster bilan), server yuklamasi, ClientAlive sozlamalari. Yechim: keepalive, MaxStartups oshirish, ControlPersist, forks'ni moslash."
+    },
+    {
+      "id": 33140,
+      "code": "DW17",
+      "level": "S",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "SSH host key, user key va sertifikat rotatsiyasini qanday rejalashtirasan? Xodim ketganda nima qilinadi?",
+      "explanation": "Offboarding: IdP'da hisobni o'chirish -> SSH sertifikatlar avtomatik tugaydi (qisqa TTL) yoki authorized_keys'dan kalitni hamma serverdan olib tashlash (config management), umumiy secret'lar rotatsiyasi, audit. Host key rotatsiyasi: `UpdateHostKeys`, host sertifikat."
+    }
+  ]
+}

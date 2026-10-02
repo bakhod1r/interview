@@ -1,0 +1,272 @@
+{
+  "31386": {
+    "a": "- **Image** — read-only layer'lar to'plami + metadata (CMD, ENV, EXPOSE). O'zgarmas, tag/digest bilan aniqlanadi.\n- **Container** — image ustiga qo'shilgan yupqa **writable layer** + namespace/cgroup bilan izolyatsiya qilingan jarayon.\n- Bitta image'dan ko'p container ishga tushadi; ular image layer'larini **ulashadi** (copy-on-write).\n- Container o'chirilsa (`docker rm`) writable layer ham yo'qoladi — ma'lumot kerak bo'lsa **volume**.\n\n```sh\ndocker pull nginx:1.27      # image\ndocker run -d --name web nginx:1.27   # container\ndocker ps -a; docker images\n```"
+  },
+  "31387": {
+    "a": "| Instruksiya | Qachon ishlaydi | Izoh |\n|---|---|---|\n| `FROM` | build | asos image, multi-stage'da bir necha marta |\n| `RUN` | build | buyruq bajaradi, **yangi layer** yaratadi |\n| `COPY` / `ADD` | build | fayl ko'chiradi; `ADD` URL/tar ochadi — odatda `COPY` afzal |\n| `ENV` / `ARG` | build (+run) | `ARG` faqat build paytida, `ENV` container'da ham |\n| `WORKDIR` | build | ishchi papka |\n| `EXPOSE` | — | faqat **hujjat**; portni `-p` ochadi |\n| `USER` | run | root bo'lmagan user |\n| `ENTRYPOINT` | run | doimiy dastur |\n| `CMD` | run | default argument/buyruq, `docker run img X` bilan almashadi |"
+  },
+  "31388": {
+    "a": "```sh\ndocker run -d --rm --name api \\\n  -p 8080:80 \\            # host 8080 -> container 80\n  -v data:/var/lib/app \\  # named volume\n  -v $PWD/conf:/etc/app:ro \\  # bind mount, read-only\n  -e LOG_LEVEL=debug \\\n  myapp:1.2\n```\n- `-p 127.0.0.1:8080:80` — faqat localhost'da ochish (default `0.0.0.0` — hamma interfeys!).\n- `-it` — interaktiv terminal; `--restart unless-stopped` — avtomatik qayta ishga tushirish."
+  },
+  "31389": {
+    "a": "- **Named volume** (`-v data:/path`) — Docker boshqaradi, backup/migratsiya oson, host yo'lga bog'liq emas. **Production DB uchun shu.**\n- **Bind mount** (`-v /host/path:/path`) — hostdagi aniq papka; dev'da kodni jonli o'zgartirish uchun. Kamchilik: host strukturasi va UID/permission muammolari.\n- **tmpfs** (`--tmpfs /tmp`) — RAM'da, container to'xtasa yo'qoladi; secret/vaqtinchalik fayllar uchun.\n- Gotcha: bo'sh named volume image'dagi fayllar bilan **to'ldiriladi**, bind mount esa image papkasini **yashiradi**."
+  },
+  "31390": {
+    "a": "- Cache kaliti: instruksiya matni + (COPY/ADD uchun) fayl checksum'i + oldingi layer.\n- Bir layer invalid bo'lsa — **keyingi barcha layer'lar** qayta quriladi.\n\n```dockerfile\nFROM golang:1.23 AS build\nWORKDIR /src\nCOPY go.mod go.sum ./\nRUN go mod download          # dependency o'zgarmasa cache\nCOPY . .\nRUN CGO_ENABLED=0 go build -o /app ./cmd/api\n```\n- BuildKit: `RUN --mount=type=cache,target=/root/.cache/go-build` — build cache layer'dan tashqarida.\n- `.dockerignore` — `.git`, `node_modules` context'ga kirmasin (cache buzilmasin, build tez)."
+  },
+  "31391": {
+    "a": "```dockerfile\nENTRYPOINT [\"/app\"]\nCMD [\"--port=8080\"]\n# docker run img --port=9000  -> /app --port=9000\n```\n- **Exec form** `[\"/app\"]` — /app PID 1, `SIGTERM` to'g'ridan-to'g'ri keladi → graceful shutdown.\n- **Shell form** `CMD /app` — `/bin/sh -c /app`; sh PID 1, signalni uzatmaydi → 10s keyin `SIGKILL`.\n- Wrapper script ishlatsang oxirida `exec \"$@\"`.\n- PID 1 zombie'larni yig'maydi — kerak bo'lsa `--init` (tini)."
+  },
+  "31392": {
+    "a": "- **bridge** (default `docker0`) — har container o'z IP, chiqishda NAT, kirishga `-p`.\n- **User-defined bridge** (`docker network create app`) — **container nomi bo'yicha DNS** ishlaydi; default bridge'da yo'q.\n- **host** — izolyatsiya yo'q, port mapping kerak emas, tez (faqat Linux).\n- **none** — faqat loopback.\n- **overlay** — VXLAN orqali bir necha host (Swarm), **macvlan** — container'ga fizik tarmoqda MAC.\n```sh\ndocker network create app\ndocker run -d --network app --name db postgres\ndocker run --network app alpine ping db\n```"
+  },
+  "31393": {
+    "a": "- `docker stop -t 30 api` — `SIGTERM`, 30s kutadi, keyin `SIGKILL`. `STOPSIGNAL` Dockerfile'da o'zgartiriladi.\n- `docker kill` — darhol `SIGKILL`; exit code 137.\n- Restart policy:\n  - `no` — default\n  - `on-failure:5` — non-zero exit'da, 5 martagacha\n  - `always` — har doim, daemon restartda ham (qo'lda stop qilinsa ham daemon restartdan keyin ko'tariladi)\n  - `unless-stopped` — always, lekin qo'lda to'xtatilgan bo'lsa qolmaydi"
+  },
+  "31394": {
+    "a": "```sh\ndocker logs -f --tail 100 api\ndocker exec -it api sh\ndocker inspect api --format '{{.State.ExitCode}} {{.State.OOMKilled}}'\ndocker stats            # CPU/RAM\ndocker events           # restart/oom hodisalari\ndocker cp api:/etc/app.yaml .\n# shell yo'q (distroless):\ndocker run -it --pid=container:api --network=container:api nicolaka/netshoot\n```\n- Exit 137 = SIGKILL (ko'pincha OOM), 143 = SIGTERM, 139 = segfault."
+  },
+  "31395": {
+    "a": "- **Namespace** — nimani ko'radi; **cgroups** — qancha ishlatadi; **capabilities** — root huquqi bo'lingan; **seccomp** — syscall filtr; **LSM** — MAC.\n- Kernel **umumiy** → kernel CVE = container escape. Kuchliroq izolyatsiya: gVisor, Kata, Firecracker.\n- Xavfli: `--privileged`, `-v /var/run/docker.sock` (= host root), `--pid=host`, `--cap-add SYS_ADMIN`.\n- Hardening: `USER 10001`, `--read-only`, `--cap-drop ALL`, `--security-opt no-new-privileges`, rootless Docker / userns-remap, image scan (Trivy), digest bilan pin."
+  },
+  "31396": {
+    "a": "```\ndocker CLI --REST(unix socket)--> dockerd --gRPC--> containerd --> containerd-shim --> runc --> process\n```\n- **runc** — OCI runtime: container yaratadi va chiqib ketadi; jarayonga **shim** ota bo'lib qoladi → dockerd/containerd restart bo'lsa container o'lmaydi (`live-restore`).\n- **OCI** standart: image spec + runtime spec → Docker image Podman/K8s'da ham ishlaydi.\n- Kubernetes 1.24'dan dockershim olib tashlandi — kubelet to'g'ridan-to'g'ri containerd/CRI-O (CRI) bilan ishlaydi; image'lar o'zgarmadi."
+  },
+  "31397": {
+    "a": "- `nginx:1.27` keyin boshqa image'ga ko'chishi mumkin; `nginx@sha256:...` — aynan bir xil bayt.\n- Pipeline: build → **SBOM** (syft) → **scan** (Trivy/Grype, CRITICAL'da fail) → **sign** (cosign) → registry → admission'da imzoni tekshirish.\n- Minimal base: distroless/scratch — kam paket = kam CVE, shell yo'q.\n- Secret'ni `ENV`/`ARG` bilan image'ga qo'yma — `docker history` ko'rsatadi. BuildKit: `RUN --mount=type=secret,id=npmrc`.\n- `latest` production'da — rollback va reproducibility yo'q."
+  },
+  "31398": {
+    "a": "```dockerfile\n# yomon\nRUN apt-get update\nRUN apt-get install -y curl\n# yaxshi\nRUN apt-get update && apt-get install -y --no-install-recommends curl \\\n && rm -rf /var/lib/apt/lists/*\n```\n- Keyingi RUN'da `rm` qilish hajmni kamaytirmaydi — fayl oldingi layer'da qoladi."
+  },
+  "31399": {
+    "a": "- Docker published port `nat` jadvalida DNAT qiladi → paket `FORWARD` orqali o'tadi, ufw `INPUT` qoidalari ishlamaydi.\n- Yechim: `-p 127.0.0.1:5432:5432`, yoki port publish qilmaslik (ichki network), yoki `DOCKER-USER` chain'ga qoida.\n- DB'ni hech qachon `0.0.0.0` ga publish qilma."
+  },
+  "31400": {
+    "a": "```yaml\nservices:\n  api:\n    build: .\n    ports: [\"8080:8080\"]\n    environment:\n      DB_URL: postgres://app:secret@db:5432/app\n    depends_on: [db]\n  db:\n    image: postgres:16\n    volumes: [pgdata:/var/lib/postgresql/data]\nvolumes:\n  pgdata:\n```\n- `docker compose up -d`, `down`, `logs -f api`, `ps`, `exec db psql`.\n- Compose v2 — `docker compose` (plugin), eski `docker-compose` (Python) deprecated; `version:` maydoni endi kerak emas.\n- Bitta host; ko'p host/HA kerak bo'lsa — Swarm yoki Kubernetes."
+  },
+  "31401": {
+    "a": "- Default: `<project>_default` bridge network, hamma service unga ulangan.\n- `api` ichidan `db:5432` — to'g'ri; `localhost:5432` — **noto'g'ri** (api o'zi).\n- `ports` faqat host'dan kirish uchun kerak; service'lar o'zaro **container port** bilan gaplashadi (host port emas).\n- Izolyatsiya: bir nechta `networks:` (frontend/backend) — db faqat backend'da."
+  },
+  "31402": {
+    "a": "- `stop` — to'xtatadi, container qoladi.\n- `down` — container + network o'chadi; **volume qoladi**.\n- `down -v` — volume'lar ham → ma'lumot yo'qoladi.\n- `down --rmi all` — image'lar ham.\n- Volume'siz DB (`volumes:` yo'q) — container o'chsa ma'lumot ketadi."
+  },
+  "31403": {
+    "a": "```yaml\nservices:\n  db:\n    image: postgres:16\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U app\"]\n      interval: 5s\n      retries: 10\n  api:\n    depends_on:\n      db:\n        condition: service_healthy\n  migrate:\n    ...\n  api2:\n    depends_on:\n      migrate:\n        condition: service_completed_successfully\n```\n- Production'da DB keyin restart bo'lishi mumkin — ilovada **retry/backoff** baribir shart."
+  },
+  "31404": {
+    "a": "- `.env` — **Compose fayliga** `${TAG:-latest}` qiymat beradi (container'ga avtomatik o'tmaydi).\n- `env_file: [api.env]` — container env'iga.\n- `environment:` — inline, env_file'dan ustun.\n- Ustunlik: shell env > `.env` (interpolatsiyada).\n- `${VAR:?xato}` — bo'lmasa fail. `docker compose config` — yakuniy YAML'ni ko'rish.\n- Secret'lar uchun `secrets:` (fayl sifatida `/run/secrets/`), env'da emas."
+  },
+  "31405": {
+    "a": "```sh\ndocker compose up                        # compose.yaml + compose.override.yaml\ndocker compose -f compose.yaml -f compose.prod.yaml up -d\ndocker compose --profile debug up        # profiles: [debug] service'lar\n```\n- Override'da dev: bind mount kod, debug port, hot reload.\n- Prod faylda: `restart: unless-stopped`, resurs limit, log rotation.\n- `include:` — boshqa compose fayllarni qo'shish (monorepo)."
+  },
+  "31406": {
+    "a": "- `docker compose up -d --build api` — faqat api'ni qayta build va recreate.\n- `docker compose up -d --force-recreate` — config o'zgarmasa ham qayta yaratish.\n- `develop.watch`:\n```yaml\nservices:\n  web:\n    build: .\n    develop:\n      watch:\n        - action: sync\n          path: ./src\n          target: /app/src\n        - action: rebuild\n          path: go.mod\n```\n- `docker compose watch`."
+  },
+  "31407": {
+    "a": "- `ports: [\"8080:8080\"]` + scale=3 → \"port is already allocated\". Yechim: port publish qilmaslik yoki diapazon `\"8080-8082:8080\"`.\n- `container_name` belgilangan bo'lsa scale ishlamaydi.\n- Ichki DNS `api` → bir nechta IP (round-robin), oldiga nginx/Traefik.\n- Haqiqiy scaling/HA kerak bo'lsa Compose emas — Swarm/K8s."
+  },
+  "31408": {
+    "a": "- Kerakli: `restart: unless-stopped`, healthcheck, `deploy.resources.limits`, `logging: {driver: json-file, options: {max-size: 10m, max-file: \"3\"}}`.\n- Image digest/aniq tag, `docker compose pull && up -d` — recreate paytida qisqa downtime.\n- Zero-downtime: reverse proxy + blue/green (ikki service, proxy almashtirish).\n- Backup: volume'larni muntazam (pg_dump), host o'lishi = hamma o'ladi.\n- Trade-off: soddalik ↔ HA. 1 server, kichik trafik — Compose yetarli; bir necha node, SLA — K8s/Swarm/managed."
+  },
+  "31409": {
+    "a": "- Compose Specification bitta: `docker compose` (single host) va `docker stack deploy -c compose.yaml app` (Swarm).\n- Stack'da: `build:` ishlamaydi (image registry'da bo'lishi kerak), `depends_on` e'tiborsiz, `container_name` yo'q.\n- `deploy.update_config`, `placement.constraints`, `restart_policy` — Swarm'da to'liq ishlaydi.\n- Kompose — compose → K8s manifest konvertori (boshlang'ich nuqta, production uchun qo'lda tozalash kerak)."
+  },
+  "31410": {
+    "a": "```sh\ndocker swarm init --advertise-addr 10.0.0.1\ndocker swarm join-token worker\ndocker swarm join --token SWMTKN-... 10.0.0.1:2377\ndocker node ls\n```\n- **Manager** — Raft orqali holatni saqlaydi, scheduling, API. Default'da u ham task ishlatadi.\n- **Worker** — faqat task bajaradi.\n- Portlar: 2377/tcp (management), 7946/tcp+udp (gossip), 4789/udp (VXLAN overlay)."
+  },
+  "31411": {
+    "a": "```sh\ndocker service create --name web --replicas 3 -p 80:80 nginx:1.27\ndocker service ls; docker service ps web\ndocker service scale web=5\ndocker stack deploy -c compose.yaml shop\ndocker stack services shop\n```\n- Desired state: task o'lsa, Swarm yangisini boshqa node'da ko'taradi (reconciliation).\n- K8s analogi: service ≈ Deployment, task ≈ Pod, stack ≈ Helm release."
+  },
+  "31412": {
+    "a": "- `--mode replicated --replicas 3` (default).\n- `--mode global` — har (mos keladigan) node'da 1 task; yangi node qo'shilsa avtomatik. K8s DaemonSet analogi.\n- Misol: node-exporter, fluent-bit — global; API — replicated."
+  },
+  "31413": {
+    "a": "- `-p 80:80` → har node'ning :80 i ochiq, task bo'lmagan node ham qabul qilib forward qiladi.\n- Ichkarida: service VIP + IPVS load balancing.\n- Kamchilik: client IP yo'qoladi (SNAT), qo'shimcha hop.\n- `--publish mode=host,target=80,published=80` — client IP saqlanadi, lekin faqat task bor node'da; global service + tashqi LB bilan.\n- Tashqarida odatda LB (HAProxy/cloud LB) hamma node'lar oldida."
+  },
+  "31414": {
+    "a": "```yaml\ndeploy:\n  replicas: 4\n  update_config:\n    parallelism: 1\n    delay: 10s\n    order: start-first      # yangisi ko'tarilib keyin eskisi o'chadi\n    failure_action: rollback\n    monitor: 30s\n  rollback_config:\n    parallelism: 2\n```\n```sh\ndocker service update --image api:1.3 shop_api\ndocker service rollback shop_api\n```\n- Healthcheck bo'lmasa Swarm \"running\" = muvaffaqiyat deb hisoblaydi — **healthcheck shart**."
+  },
+  "31415": {
+    "a": "```sh\nprintf 's3cret' | docker secret create db_pass -\ndocker service create --secret db_pass -e DB_PASS_FILE=/run/secrets/db_pass api\n```\n- Secret env'da emas, **faylda** — `docker inspect` da ko'rinmaydi.\n- Immutable: rotation = `db_pass_v2` yaratish → `service update --secret-rm db_pass --secret-add source=db_pass_v2,target=db_pass`.\n- `docker config` — nginx.conf kabi fayllar."
+  },
+  "31416": {
+    "a": "```sh\ndocker node update --label-add disk=ssd node-3\ndocker service create --constraint 'node.labels.disk==ssd' --constraint 'node.role==worker' postgres\ndocker service create --placement-pref 'spread=node.labels.zone' ...\n```\n- Constraint qondirilmasa task `Pending` turadi.\n- `docker node update --availability drain node-2` — maintenance: task'lar boshqa node'larga ko'chadi."
+  },
+  "31417": {
+    "a": "| Manager | Quorum | Chidaydi |\n|---|---|---|\n| 1 | 1 | 0 |\n| 3 | 2 | 1 |\n| 4 | 3 | 1 |\n| 5 | 3 | 2 |\n- 7 dan ko'p tavsiya etilmaydi — Raft yozuv latency oshadi.\n- Manager'larni turli AZ'ga tarqat; production'da manager'larni `drain` qilib faqat boshqaruvga qoldir.\n- Quorum yo'qolsa tiklash: tirik manager'da `docker swarm init --force-new-cluster`, keyin yangi manager'lar qo'shish. Raft holatini (`/var/lib/docker/swarm`) backup qil."
+  },
+  "31418": {
+    "a": "| | Swarm | Kubernetes |\n|---|---|---|\n| O'rganish | soat | hafta/oy |\n| Konfiguratsiya | compose.yaml | ko'p manifest/Helm |\n| Autoscaling | yo'q (built-in) | HPA/VPA/KEDA, cluster autoscaler |\n| Stateful | cheklangan | StatefulSet, CSI, operatorlar |\n| RBAC/multi-tenant | zaif | kuchli |\n| Managed | deyarli yo'q | EKS/GKE/AKS |\n- Tanlov: 3-10 node, bitta jamoa, oddiy stateless — Swarm yoki hatto Compose + LB. Ko'p jamoa, autoscaling, ekotizim kerak — K8s (iloji bo'lsa managed)."
+  },
+  "31419": {
+    "a": "- Default `local` volume driver — har node'da alohida.\n- Variantlar:\n  1. `placement.constraints: [node.hostname==db-1]` — oddiy, lekin node o'lsa failover yo'q.\n  2. Network storage (NFS, Portworx, CSI — Swarm 23+ da CSI qo'llovi cheklangan).\n  3. DB'ni **tashqarida** (managed RDS yoki alohida VM) — ko'pincha eng to'g'ri.\n- Replicated DB (Postgres primary/replica) ni Swarm'da qo'lda boshqarish — operator yo'q, xavfli."
+  },
+  "33068": {
+    "a": "```sh\ndocker login ghcr.io -u me --password-stdin < token.txt\ndocker build -t ghcr.io/acme/api:1.4.0 .\ndocker push ghcr.io/acme/api:1.4.0\ndocker pull ghcr.io/acme/api:1.4.0\ndocker run -d -p 5000:5000 registry:2   # o'z registry\n```\n- Nomda registry bo'lmasa — `docker.io/library/...`.\n- Docker Hub pull rate limit bor — CI'da mirror/cache yoki o'z registry.\n- Credential `~/.docker/config.json` da — credential helper ishlat (plain base64 emas)."
+  },
+  "33069": {
+    "a": "```sh\ndocker ps -a                 # hammasi, to'xtaganlar bilan\ndocker images\ndocker logs -f --since 10m api\ndocker exec -it api sh\ndocker rm -f api             # majburan o'chirish\ndocker rmi myapp:old\ndocker system df             # disk qancha band\ndocker system prune -a --volumes   # EHTIYOT: volume'lar ham\n```\n- `prune -a` ishlatilmayotgan **hamma** image'larni o'chiradi; `--volumes` — ma'lumot yo'qoladi."
+  },
+  "33070": {
+    "a": "```dockerfile\nFROM golang:1.23 AS build\nWORKDIR /src\nCOPY go.mod go.sum ./\nRUN go mod download\nCOPY . .\nRUN CGO_ENABLED=0 go build -ldflags=\"-s -w\" -o /app ./cmd/api\n\nFROM gcr.io/distroless/static:nonroot\nCOPY --from=build /app /app\nUSER nonroot\nENTRYPOINT [\"/app\"]\n```\n- 900 MB → ~15 MB. `--target build` — faqat bitta bosqichni build qilish (test uchun)."
+  },
+  "33071": {
+    "a": "```dockerfile\nHEALTHCHECK --interval=10s --timeout=3s --start-period=20s --retries=3 \\\n  CMD wget -qO- http://localhost:8080/healthz || exit 1\n```\n- `docker inspect --format '{{.State.Health.Status}}' api`.\n- Standalone Docker: unhealthy → faqat status, restart **yo'q** (Swarm restart qiladi).\n- Kubernetes HEALTHCHECK'ni **e'tiborsiz** qoldiradi — u yerda probe'lar.\n- Distroless'da `curl`/`wget` yo'q — ilovaning o'zida `-healthcheck` flag."
+  },
+  "33072": {
+    "a": "```sh\ndocker run --memory=512m --memory-swap=512m --cpus=1.5 --pids-limit=200 api\ndocker stats\ndocker inspect api --format '{{.State.OOMKilled}}'\n```\n- Limitsiz container host'ning butun RAM'ini yeyishi mumkin.\n- Go: `GOMEMLIMIT` ni limitdan ~10% past qo'y; JVM: `-XX:MaxRAMPercentage`.\n- CPU throttling latency p99'ni buzadi — `nr_throttled` ni kuzat."
+  },
+  "33073": {
+    "a": "```json\n// /etc/docker/daemon.json\n{ \"log-driver\": \"local\", \"log-opts\": { \"max-size\": \"10m\", \"max-file\": \"3\" } }\n```\n- O'zgarish faqat **yangi** container'larga ta'sir qiladi.\n- Ilova faylga emas **stdout/stderr** ga yozsin (12-factor).\n- Markaziy log: fluent-bit/Vector → Loki/Elastic."
+  },
+  "33074": {
+    "a": "```sh\ndocker system df -v\ndocker image prune            # dangling (<none>)\ndocker image prune -a --filter \"until=168h\"\ndocker container prune\ndocker builder prune --keep-storage 10GB\ndocker volume ls -f dangling=true    # avval ko'r, keyin o'chir\ndu -sh /var/lib/docker/containers/*/*-json.log | sort -h | tail\n```\n- Volume prune — ma'lumot yo'qolishi mumkin, avval tekshir.\n- CI runner'larda cron bilan `builder prune`."
+  },
+  "33075": {
+    "a": "```\n# .dockerignore\n.git\nnode_modules\n*.log\n.env\ndist\nDockerfile\n```\n- `.git` context'da bo'lsa — har commit `COPY . .` cache'ni buzadi.\n- `.env` ignore qilinmasa — secret image layer'ida qoladi.\n- `docker build -f docker/Dockerfile .` — context va Dockerfile alohida."
+  },
+  "33076": {
+    "a": "```sh\ndocker buildx create --use\ndocker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/acme/api:1.4 --push .\ndocker buildx imagetools inspect ghcr.io/acme/api:1.4\n```\n```dockerfile\nFROM --platform=$BUILDPLATFORM golang:1.23 AS build\nARG TARGETOS TARGETARCH\nRUN GOOS=$TARGETOS GOARCH=$TARGETARCH go build -o /app .\n```\n- Apple Silicon'da build qilingan image amd64 server'da `exec format error` beradi — platform aniq ko'rsat."
+  },
+  "33077": {
+    "a": "- **userns-remap** — daemon root, lekin container UID'lari `/etc/subuid` diapazoniga map.\n- **Rootless** — daemon ham oddiy user'da; network slirp4netns/pasta (sekinroq).\n- Podman default rootless, daemon'siz.\n- Cheklovlar: privileged port (`net.ipv4.ip_unprivileged_port_start`), overlay filesystem, cgroup v2 delegation.\n- Qachon: multi-tenant host, CI runner'lar, xavfsizlik talabi yuqori."
+  },
+  "33078": {
+    "a": "```sh\ndocker run --user \"$(id -u):$(id -g)\" -v $PWD:/work img\n```\n- Teskari muammo: image'dagi user (UID 10001) host papkaga yoza olmaydi → `Permission denied`.\n- UID raqam muhim, nom emas."
+  },
+  "33079": {
+    "a": "```dockerfile\nENTRYPOINT [\"sh\",\"-c\",\"exec /app --port=$PORT\"]\n```\n- Exec form'da `$PORT` kengaymaydi (shell yo'q) — `sh -c` kerak bo'lsa **exec** bilan.\n- Tekshir: `docker exec api ps -o pid,cmd` — PID 1 ilova bo'lishi kerak."
+  },
+  "33080": {
+    "a": "- `docker run img:latest` — lokal nusxa bor bo'lsa ishlatadi.\n- `docker compose pull && docker compose up -d` yoki `--pull always`.\n- To'g'ri yo'l: `api:1.4.2` yoki `api@sha256:...` — qaysi versiya ishlayotgani aniq, rollback oson."
+  },
+  "33081": {
+    "a": "```sh\ndocker compose up -d\ndocker compose ps\ndocker compose logs -f --tail=50 api\ndocker compose exec db psql -U app\ndocker compose run --rm api go test ./...   # bir martalik\ndocker compose restart api                  # compose.yaml o'zgarishini OLMAYDI\ndocker compose up -d api                    # o'zgarishni oladi (recreate)\ndocker compose config                       # yakuniy YAML\n```"
+  },
+  "33082": {
+    "a": "```yaml\nservices:\n  web:\n    ports: [\"127.0.0.1:8080:80\"]   # host -> container\n  api:\n    expose: [\"9000\"]               # faqat ichki\n```\n- Ichki service'lar (db, redis) uchun `ports` kerak emas — xavfsizroq.\n- `\"8080:80\"` qo'shtirnoqda yoz — YAML `22:22` ni 60-lik son deb o'qishi mumkin."
+  },
+  "33083": {
+    "a": "```yaml\nservices:\n  api:\n    build:\n      context: .\n      dockerfile: docker/Dockerfile\n      args: { GO_VERSION: \"1.23\" }\n      target: prod\n    image: ghcr.io/acme/api:${TAG:-dev}\n```\n- `docker compose build && docker compose push` — CI'da shu nom bilan push."
+  },
+  "33084": {
+    "a": "```yaml\nservices:\n  api:\n    deploy:\n      resources:\n        limits: { cpus: \"1.0\", memory: 512M }\n        reservations: { memory: 256M }\n    logging:\n      driver: json-file\n      options: { max-size: \"10m\", max-file: \"3\" }\n    restart: unless-stopped\n```\n- Tekshir: `docker stats`, `docker inspect` → `HostConfig.Memory`."
+  },
+  "33085": {
+    "a": "```yaml\nservices:\n  proxy: { networks: [front] }\n  api:   { networks: [front, back] }\n  db:    { networks: [back] }\nnetworks:\n  front: {}\n  back: { internal: true }\n```\n- `external: true` — boshqa compose loyiha bilan umumiy network.\n- `aliases` — service'ga qo'shimcha DNS nom."
+  },
+  "33086": {
+    "a": "```yaml\nservices:\n  api:\n    secrets: [db_pass]\n    environment:\n      DB_PASS_FILE: /run/secrets/db_pass\nsecrets:\n  db_pass:\n    file: ./secrets/db_pass.txt\n```\n- Postgres/MySQL image'lari `*_FILE` env'ni qo'llaydi.\n- `secrets/` ni `.gitignore` ga qo'sh. Compose (Swarm emas) — fayl shunchaki bind mount, shifrlanmaydi."
+  },
+  "33087": {
+    "a": "```sh\nexport COMPOSE_PROJECT_NAME=ci_$CI_JOB_ID\ndocker compose -f compose.test.yaml up -d --wait     # healthcheck kutadi\ndocker compose -f compose.test.yaml run --rm tests\nrc=$?\ndocker compose -f compose.test.yaml down -v\nexit $rc\n```\n- `--wait` — hamma service healthy bo'lguncha.\n- Unikal project nomi — parallel job'lar to'qnashmasin.\n- Alternativa: Testcontainers (testning o'zida)."
+  },
+  "33088": {
+    "a": "- `-p name`, `COMPOSE_PROJECT_NAME`, yoki compose.yaml'da `name: shop`.\n- Bir host'da ikki nusxa (staging/prod) — turli project nomi.\n- Volume nomini qat'iy qilish: `volumes: {pgdata: {name: shop_pgdata}}`.\n- Repo boshqa papkaga clone qilinsa DB bo'sh chiqadi — shu sabab."
+  },
+  "33089": {
+    "a": "1. Proxy (Traefik) service label/DNS bo'yicha routing.\n2. `docker compose up -d --no-deps --scale api=2 --no-recreate api` — yangi nusxa.\n3. Yangi healthy bo'lgach eskisini o'chirish.\n- Yoki `api_blue` / `api_green`, proxy config almashtirish + reload.\n- Tayyor vosita: docker-rollout plugin.\n- Murakkablik oshsa — Swarm (`order: start-first`) yoki K8s."
+  },
+  "33090": {
+    "a": "```yaml\nservices:\n  api:\n    env_file: [.env]          # yoki\n    environment:\n      DB_URL: ${DB_URL}\n```\n- Tekshir: `docker compose config` va `docker compose exec api env`."
+  },
+  "33091": {
+    "a": "- Config o'zgarishi: `docker compose up -d api`.\n- Image o'zgarishi: `up -d --build` yoki `pull` + `up -d`.\n- Bind mount'dagi config faylni ilova qayta o'qishi uchun — restart/reload yetarli."
+  },
+  "33092": {
+    "a": "- Parolni o'zgartirish: `ALTER USER app PASSWORD '...'`.\n- Dev'da noldan boshlash: `docker compose down -v` (ma'lumot yo'qoladi!).\n- Init SQL o'zgarishi ham shu sababli qo'llanmaydi — migratsiya vositasi ishlat."
+  },
+  "33093": {
+    "a": "```yaml\nports:\n  - \"22:22\"\n  - \"127.0.0.1:5432:5432\"\n```\n- Yoki long syntax: `{target: 22, published: 2222, host_ip: 127.0.0.1}`."
+  },
+  "33094": {
+    "a": "```yaml\nvolumes:\n  - ./:/app\n  - /app/node_modules     # image'dagisini saqlab qoladi\n```\n- macOS/Windows'da bind mount sekin — `develop.watch` yoki `:cached`."
+  },
+  "33095": {
+    "a": "```sh\ndocker service create --name api --replicas 3 -p 8080:8080 ghcr.io/acme/api:1.4\ndocker service ls\ndocker service ps api --no-trunc       # task'lar va xato sabablari\ndocker service logs -f api\ndocker service scale api=5\ndocker service inspect --pretty api\ndocker service rm api\ndocker stack rm shop\n```"
+  },
+  "33096": {
+    "a": "```sh\ndocker network create -d overlay --attachable backend\ndocker service create --network backend --name db postgres:16\ndocker service create --network backend --name api -e DB_HOST=db api:1.4\n```\n- `db` → service VIP → IPVS → task'lardan biri.\n- `tasks.db` — har task IP'si (DNS RR).\n- `--attachable` — oddiy `docker run` container ham ulana oladi."
+  },
+  "33097": {
+    "a": "```sh\ndocker node update --availability drain node-2   # yamoq/reboot oldidan\ndocker node update --availability active node-2\ndocker node promote node-4   # worker -> manager\ndocker node demote node-4\ndocker node rm node-5\n```\n- Drain'dan keyin active qilinsa task'lar avtomatik qaytib balanslanmaydi — `docker service update --force api`."
+  },
+  "33098": {
+    "a": "```yaml\ndeploy:\n  restart_policy:\n    condition: on-failure\n    delay: 5s\n    max_attempts: 5\n    window: 60s\nhealthcheck:\n  test: [\"CMD\",\"/app\",\"-healthcheck\"]\n  interval: 10s\n  start_period: 30s\n```\n- Rolling update yangi task **healthy** bo'lishini kutadi — healthcheck bo'lmasa \"running\" yetarli bo'ladi."
+  },
+  "33099": {
+    "a": "```sh\ndocker service ps api --no-trunc --format '{{.Node}} {{.CurrentState}} {{.Error}}'\ndocker node ls\ndocker node inspect node-3 --pretty     # label, resurs\n```\n- \"no suitable node\" → constraint/label/reservation.\n- \"No such image\" → registry auth: `docker stack deploy --with-registry-auth`.\n- \"port already in use\" → `mode=host` publish to'qnashuvi."
+  },
+  "33100": {
+    "a": "```sh\ndocker login ghcr.io\ndocker stack deploy -c compose.yaml --with-registry-auth shop\n```\n- Har deploy'da qo'shish kerak (token muddati tugashi mumkin)."
+  },
+  "33101": {
+    "a": "```yaml\nservices:\n  node-exporter:\n    image: prom/node-exporter\n    deploy: { mode: global }\n  cadvisor:\n    image: gcr.io/cadvisor/cadvisor\n    deploy: { mode: global }\n```\n- Kuzat: task restart soni, Pending task'lar, manager Raft holati (`docker node ls` Reachable/Unreachable), node disk.\n- Log: `docker service logs` qisqa muddatli — markaziy Loki/Elastic."
+  },
+  "33102": {
+    "a": "```sh\ndocker network create -d overlay --opt encrypted backend\ndocker swarm update --autolock=true    # manager restartda unlock key kerak\ndocker swarm ca --rotate\ndocker swarm join-token --rotate worker\n```\n- Manager = klaster ustidan to'liq nazorat; Docker API (2375) ni hech qachon ochiq qoldirma.\n- Join token sizsa — rotate."
+  },
+  "33103": {
+    "a": "```sh\nsystemctl stop docker                       # bitta manager (quorum saqlansin)\ntar czf swarm-$(date +%F).tgz /var/lib/docker/swarm\nsystemctl start docker\n# tiklash:\ntar xzf swarm.tgz -C /\nsystemctl start docker\ndocker swarm init --force-new-cluster\n```\n- Autolock yoqilgan bo'lsa unlock key ham kerak.\n- Stack fayllar Git'da — klasterni noldan qayta deploy qilish ko'pincha tezroq (GitOps)."
+  },
+  "33104": {
+    "a": "```yaml\nports:\n  - target: 80\n    published: 80\n    mode: host\ndeploy: { mode: global }\n```"
+  },
+  "33105": {
+    "a": "```yaml\nconfigs:\n  nginx_conf:\n    name: nginx_conf_${CONF_HASH}\n    file: ./nginx.conf\n```\n- `CONF_HASH=$(sha1sum nginx.conf | cut -c1-8) docker stack deploy ...`."
+  },
+  "33106": {
+    "a": "- Swarm'da service'lar mustaqil, tartib kafolatlanmaydi.\n- Yechim: ilovada DB ulanish retry, healthcheck, `restart_policy: on-failure`."
+  },
+  "33107": {
+    "a": "- Mavjud task'lar ishlayveradi, deploy/scale/failover yo'q.\n- Tiklash: tirik manager'da `docker swarm init --force-new-cluster`."
+  },
+  "33108": {
+    "a": "```sh\ndocker service update --force api\n```\n- Rolling tarzda qayta yaratiladi — update_config'ga rioya qiladi."
+  },
+  "33109": {
+    "a": "- Deklarativ YAML: \"3 ta replika, shu image\" → K8s o'zi ta'minlaydi (reconciliation loop).\n- Control plane: `kube-apiserver`, `etcd`, `scheduler`, `controller-manager`.\n- Node: `kubelet`, container runtime (containerd), `kube-proxy`.\n- Kerak emas: 1-2 servis, kichik jamoa — Compose/PaaS yetarli."
+  },
+  "33110": {
+    "a": "```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata: { name: api }\nspec:\n  replicas: 3\n  selector: { matchLabels: { app: api } }\n  template:\n    metadata: { labels: { app: api } }\n    spec:\n      containers:\n        - name: api\n          image: ghcr.io/acme/api:1.4\n          ports: [{ containerPort: 8080 }]\n```\n- Pod'ni qo'lda yaratma — o'lsa qayta tug'ilmaydi.\n- Rollback: `kubectl rollout undo deploy/api`."
+  },
+  "33111": {
+    "a": "- Service pod'larni **label selector** bilan topadi → EndpointSlice.\n- DNS: `api.prod.svc.cluster.local`.\n- `ExternalName` — tashqi DNS'ga CNAME.\n- HTTP uchun ko'p LoadBalancer o'rniga bitta Ingress/Gateway."
+  },
+  "33112": {
+    "a": "```sh\nkubectl get pods -n prod -o wide\nkubectl describe pod api-7d9f -n prod      # Events — xato sababi shu yerda\nkubectl logs api-7d9f -c api --previous    # crash bo'lgan oldingi container\nkubectl exec -it api-7d9f -- sh\nkubectl apply -f k8s/\nkubectl port-forward svc/api 8080:80\nkubectl rollout status deploy/api\nkubectl get events --sort-by=.lastTimestamp\n```"
+  },
+  "33113": {
+    "a": "```yaml\nenvFrom:\n  - configMapRef: { name: api-config }\n  - secretRef: { name: api-secret }\nvolumeMounts:\n  - { name: cfg, mountPath: /etc/api }\n```\n- `kubectl get secret x -o yaml` — base64 decode qilinadi.\n- Himoya: `EncryptionConfiguration` (KMS), RBAC `get secrets` cheklash, External Secrets / Vault / Sealed Secrets (Git uchun)."
+  },
+  "33114": {
+    "a": "```sh\nkubectl create ns staging\nkubectl get pods -A\nkubectl config set-context --current --namespace=staging\n```\n- Default: `default`, `kube-system`, `kube-public`, `kube-node-lease`.\n- Node, PV, ClusterRole — namespace'siz (cluster-scoped)."
+  },
+  "33115": {
+    "a": "```yaml\napiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata: { name: api }\nspec:\n  ingressClassName: nginx\n  tls: [{ hosts: [api.acme.uz], secretName: api-tls }]\n  rules:\n    - host: api.acme.uz\n      http:\n        paths:\n          - path: /\n            pathType: Prefix\n            backend: { service: { name: api, port: { number: 80 } } }\n```\n- TLS sertifikat: cert-manager + Let's Encrypt.\n- Gateway API: `GatewayClass` → `Gateway` (infra) → `HTTPRoute` (dev jamoa)."
+  },
+  "33116": {
+    "a": "```yaml\nkind: PersistentVolumeClaim\nspec:\n  storageClassName: gp3\n  accessModes: [ReadWriteOnce]\n  resources: { requests: { storage: 20Gi } }\n```\n- Access mode: RWO (bitta node), ROX, RWX (NFS/EFS), RWOP.\n- `reclaimPolicy: Delete` — PVC o'chsa disk ham o'chadi! Prod DB uchun `Retain`.\n- `volumeBindingMode: WaitForFirstConsumer` — disk pod tushgan AZ'da yaratilsin."
+  },
+  "33117": {
+    "a": "| Holat | Qarash | Odatiy sabab |\n|---|---|---|\n| Pending | `describe pod` Events | resurs yetmaydi, taint, nodeSelector, PVC bind yo'q |\n| ImagePullBackOff | Events | tag xato, `imagePullSecrets` yo'q, rate limit |\n| CrashLoopBackOff | `logs --previous` | config/env xato, DB'ga ulanmadi, liveness juda qattiq |\n| OOMKilled (137) | `describe` Last State | limit kichik, leak |\n| CreateContainerConfigError | Events | ConfigMap/Secret yo'q |"
+  },
+  "33118": {
+    "a": "```yaml\nkind: CronJob\nspec:\n  schedule: \"0 3 * * *\"\n  concurrencyPolicy: Forbid\n  jobTemplate:\n    spec:\n      backoffLimit: 3\n      activeDeadlineSeconds: 600\n      template:\n        spec:\n          restartPolicy: OnFailure\n```\n- CronJob ikki marta yoki o'tkazib yuborilishi mumkin — job **idempotent** bo'lsin.\n- `ttlSecondsAfterFinished` — tugagan pod'larni tozalash."
+  },
+  "33119": {
+    "a": "```yaml\ntolerations:\n  - { key: gpu, operator: Exists, effect: NoSchedule }\naffinity:\n  nodeAffinity:\n    requiredDuringSchedulingIgnoredDuringExecution:\n      nodeSelectorTerms:\n        - matchExpressions: [{ key: gpu, operator: In, values: [\"a100\"] }]\ntopologySpreadConstraints:\n  - { maxSkew: 1, topologyKey: topology.kubernetes.io/zone, whenUnsatisfiable: DoNotSchedule, labelSelector: { matchLabels: { app: api } } }\n```\n- Toleration o'zi pod'ni o'sha node'ga **olib bormaydi** — affinity ham kerak."
+  },
+  "33120": {
+    "a": "```yaml\napiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nspec:\n  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: api }\n  minReplicas: 3\n  maxReplicas: 20\n  metrics:\n    - type: Resource\n      resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }\n```\n- Navbat/lag bo'yicha — KEDA. Node yetmasa — Cluster Autoscaler/Karpenter.\n- `behavior.scaleDown.stabilizationWindowSeconds` — flapping'ga qarshi."
+  },
+  "33121": {
+    "a": "```yaml\nkind: Role\nrules:\n  - apiGroups: [\"\"]\n    resources: [configmaps]\n    verbs: [get, list, watch]\n---\nkind: RoleBinding\nsubjects: [{ kind: ServiceAccount, name: api, namespace: prod }]\nroleRef: { kind: Role, name: cm-reader, apiGroup: rbac.authorization.k8s.io }\n```\n- `kubectl auth can-i list secrets --as=system:serviceaccount:prod:api`.\n- API kerak bo'lmasa `automountServiceAccountToken: false`."
+  },
+  "33122": {
+    "a": "```yaml\nkind: NetworkPolicy\nmetadata: { name: db-allow-api }\nspec:\n  podSelector: { matchLabels: { app: db } }\n  policyTypes: [Ingress]\n  ingress:\n    - from: [{ podSelector: { matchLabels: { app: api } } }]\n      ports: [{ port: 5432 }]\n```\n- Avval namespace'ga default-deny, keyin ruxsatlar.\n- Egress default-deny qilsang DNS (53) ga ruxsat berishni unutma."
+  },
+  "33123": {
+    "a": "1. `kubectl apply` → apiserver: authentication → RBAC → mutating/validating admission → etcd.\n2. Deployment controller → ReplicaSet → Pod (`nodeName` bo'sh).\n3. Scheduler: filter (resurs, taint, affinity) → score → bind.\n4. kubelet (watch): CNI IP beradi, CSI volume, `containerd` image pull + start.\n5. startup/readiness probe → Ready → EndpointSlice → kube-proxy qoidalari → trafik.\n- Har bosqichda xato `kubectl describe` Events'da ko'rinadi."
+  }
+}

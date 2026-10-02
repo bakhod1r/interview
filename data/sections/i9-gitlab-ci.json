@@ -1,0 +1,340 @@
+{
+  "id": "i9",
+  "name": "GitLab CI",
+  "domain": "cicd",
+  "topics": [
+    "GitLab CI"
+  ],
+  "questions": [
+    {
+      "id": 32015,
+      "code": "GLC1",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`.gitlab-ci.yml` da stage va job nima?",
+      "explanation": "Stage — bosqich (build, test, deploy), ketma-ket ishlaydi. Job — stage ichidagi vazifa; bir stage'dagi job'lar parallel."
+    },
+    {
+      "id": 32016,
+      "code": "GLC2",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "GitLab Runner va executor nima?",
+      "explanation": "Runner — job'larni oladigan agent (`gitlab-runner`). Executor — job qayerda ishlashi: `shell`, `docker`, `kubernetes`, `docker-machine`/autoscaler."
+    },
+    {
+      "id": 32017,
+      "code": "GLC3",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`variables` va CI/CD variable'lar qanday ishlaydi?",
+      "explanation": "YAML'dagi `variables:` yoki Settings > CI/CD > Variables. Belgilar: **Protected** (faqat protected branch/tag), **Masked** (log'da yashirin), File turi."
+    },
+    {
+      "id": 32018,
+      "code": "GLC4",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`image` va `services` kalitlari nima?",
+      "explanation": "`image` — job qaysi Docker image ichida ishlashi. `services` — yonidan ko'tariladigan qo'shimcha container (postgres, redis) testlar uchun."
+    },
+    {
+      "id": 32019,
+      "code": "GLC5",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Artifact va cache GitLab'da qanday farqlanadi?",
+      "explanation": "Artifact — job natijasi, keyingi stage'larga avtomatik uzatiladi, yuklab olish mumkin. Cache — dependency tezlashtirish, best-effort, runner'da/S3'da."
+    },
+    {
+      "id": 33038,
+      "code": "GLC16",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`before_script`, `script`, `after_script` farqi?",
+      "explanation": "`before_script` va `script` bitta shell'da ketma-ket, biri yiqilsa job fail. `after_script` alohida shell'da har doim ishlaydi (cleanup), uning xatosi job natijasiga ta'sir qilmaydi."
+    },
+    {
+      "id": 33039,
+      "code": "GLC17",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`allow_failure`, `retry` va `timeout` kalitlari?",
+      "explanation": "`allow_failure: true` — job yiqilsa pipeline davom etadi (sariq). `retry: 2` — infra xatolarida qayta. `timeout` — job uchun maksimal vaqt."
+    },
+    {
+      "id": 33040,
+      "code": "GLC18",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Pipeline turlari: branch, tag, MR, scheduled — `CI_PIPELINE_SOURCE` qanday yordam beradi?",
+      "explanation": "`CI_PIPELINE_SOURCE` qiymatlari: `push`, `merge_request_event`, `schedule`, `web`, `api`, `trigger`, `pipeline`. `rules` bilan qaysi job qaysi pipeline'da ishlashini aniqlaydi."
+    },
+    {
+      "id": 33041,
+      "code": "GLC19",
+      "level": "J",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "GitLab Container Registry'ga image push qilish?",
+      "explanation": "Predefined `CI_REGISTRY`, `CI_REGISTRY_USER`, `CI_REGISTRY_PASSWORD` (`CI_JOB_TOKEN`), `CI_REGISTRY_IMAGE` bilan login va push."
+    },
+    {
+      "id": 32020,
+      "code": "GLC6",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`rules` va eski `only/except` farqi?",
+      "explanation": "`rules` — tartibli shartlar ro'yxati, birinchi mos kelgani qo'llanadi (`if`, `changes`, `exists`, `when`). `only/except` deprecated, birlashtirish qiyin."
+    },
+    {
+      "id": 32021,
+      "code": "GLC7",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`needs` (DAG) stage'lardan nimasi bilan yaxshi?",
+      "explanation": "`needs` job'ga stage tugashini kutmasdan faqat kerakli job'lar tugashi bilan boshlash imkonini beradi — pipeline vaqti qisqaradi."
+    },
+    {
+      "id": 32022,
+      "code": "GLC8",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`include` va `extends` bilan konfiguratsiyani qanday qayta ishlatasiz?",
+      "explanation": "`include` — boshqa fayl/project/template'ni ulaydi (`local`, `project`, `remote`, `template`, `component`). `extends` — job'ni shablon (`.base`) dan meros qiladi."
+    },
+    {
+      "id": 32023,
+      "code": "GLC9",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Environment, `when: manual` va review app'lar?",
+      "explanation": "`environment:` deploy'ni kuzatadi (tarix, rollback, URL). `when: manual` — tugma bilan. Review app — har MR uchun vaqtinchalik environment, `on_stop` bilan o'chiriladi."
+    },
+    {
+      "id": 32024,
+      "code": "GLC10",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Parent-child va multi-project pipeline nima?",
+      "explanation": "Parent-child — bir repo ichida `trigger: include:` bilan dinamik/alohida child pipeline. Multi-project — boshqa project pipeline'ini trigger qilish (`trigger: project:`)."
+    },
+    {
+      "id": 33042,
+      "code": "GLC20",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`parallel` va `parallel:matrix` qanday ishlaydi?",
+      "explanation": "`parallel: N` — bir job'ning N nusxasi (`CI_NODE_INDEX`, `CI_NODE_TOTAL`) — test sharding. `parallel:matrix` — o'zgaruvchi kombinatsiyalari bo'yicha job'lar."
+    },
+    {
+      "id": 33043,
+      "code": "GLC21",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`resource_group` va `interruptible` nima uchun?",
+      "explanation": "`resource_group` — bir resurs (environment) ga bir vaqtda faqat bitta job (deploy navbatda). `interruptible: true` — yangi pipeline kelganda eskisini bekor qilish mumkin."
+    },
+    {
+      "id": 33044,
+      "code": "GLC22",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`dependencies` va `needs:artifacts` — artifact oqimini qanday boshqarasiz?",
+      "explanation": "Default — job oldingi barcha stage artifact'larini yuklaydi. `dependencies: [build]` yoki `needs: [{job: build, artifacts: true}]` — faqat keraklisi; `dependencies: []` — hech biri."
+    },
+    {
+      "id": 33045,
+      "code": "GLC23",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`!reference` tag va YAML anchor farqi?",
+      "explanation": "YAML anchor (`&`, `<<: *`) faqat bitta fayl ichida. `!reference [.job, script]` — `include` qilingan fayllar orasida ham ishlaydi va kalitning bir qismini (masalan script qatorlari) qayta ishlatadi."
+    },
+    {
+      "id": 33046,
+      "code": "GLC24",
+      "level": "M",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Scheduled pipeline va pipeline trigger token qanday ishlatiladi?",
+      "explanation": "Schedule — UI'da cron, o'z variable'lari bilan (nightly e2e, dependency scan). Trigger token — tashqi tizim API orqali pipeline ishga tushiradi."
+    },
+    {
+      "id": 32025,
+      "code": "GLC11",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Protected branch/variable modeli qanday xavfsizlik beradi va qayerda teshik bor?",
+      "explanation": "Protected variable faqat protected ref pipeline'iga beriladi. Teshik: Developer protected branch nomiga mos branch yarata olsa yoki MR pipeline'da `.gitlab-ci.yml` ni o'zgartirib secret'ni chiqarsa."
+    },
+    {
+      "id": 32026,
+      "code": "GLC12",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "`CI_JOB_TOKEN` va OIDC `id_tokens` qanday ishlatiladi?",
+      "explanation": "`CI_JOB_TOKEN` — job davomida yashaydigan token, registry/API/boshqa project'ga kirish (allowlist bilan). `id_tokens` — cloud/Vault uchun audience'li JWT, statik key'siz."
+    },
+    {
+      "id": 32027,
+      "code": "GLC13",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Katta monorepo'da GitLab pipeline'ni qanday tezlashtirasiz?",
+      "explanation": "O'lchash (pipeline analytics) > `rules:changes` bilan keraksiz job'ni kesish > `needs` DAG > cache kalitini lockfile'ga bog'lash > parallel/sharding > child pipeline > runner autoscaling."
+    },
+    {
+      "id": 32028,
+      "code": "GLC14",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Merge train va merged results pipeline nima muammoni yechadi?",
+      "explanation": "Merged results — MR'ni target bilan birlashtirilgan holatda test qiladi. Merge train — navbatdagi MR'larni ketma-ket birlashtirib test qiladi, shunda `main` hech qachon qizil bo'lmaydi."
+    },
+    {
+      "id": 32029,
+      "code": "GLC15",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Shared runner'larda job izolyatsiyasi va supply chain xavflari?",
+      "explanation": "Docker executor `privileged: true` (DinD) — container host'ni boshqarishi mumkin. Shared runner'da bir project boshqasining cache/secret'iga yetishi xavfi. Yechim: ephemeral runner, rootless build (kaniko/buildah), sensitive project uchun alohida runner."
+    },
+    {
+      "id": 33047,
+      "code": "GLC25",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Runner autoscaling va distributed cache qanday quriladi?",
+      "explanation": "Kubernetes executor yoki docker-autoscaler (fleeting plugin, AWS ASG) — job yuklamasiga qarab mashina ko'payadi. Ephemeral runner'larda local cache yo'q — S3/GCS distributed cache."
+    },
+    {
+      "id": 33048,
+      "code": "GLC26",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "GitLab security scanning (SAST, DAST, dependency, secret detection) pipeline'ga qanday qo'shiladi?",
+      "explanation": "Template'lar `include: template: Jobs/SAST.gitlab-ci.yml` va h.k. Natija MR widget'da. Ultimate'da security policy (scan execution / merge request approval policy) — majburiy qilish."
+    },
+    {
+      "id": 33049,
+      "code": "GLC27",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Pipeline'ni debug qilishda `CI_DEBUG_TRACE` nega xavfli?",
+      "explanation": "`CI_DEBUG_TRACE: true` har buyruqni va **barcha** variable'larni (masked secret'lar ham) log'ga chiqaradi. Log'ni ko'radigan har kim secret'ni oladi."
+    },
+    {
+      "id": 33050,
+      "code": "GLC28",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "GitLab bilan GitOps/K8s deploy (agent) qanday tashkil qilinadi?",
+      "explanation": "GitLab agent for Kubernetes (`agentk`) cluster ichida o'rnatiladi va GitLab'ga outbound ulanadi. Variant: CI access (pipeline `kubectl` bilan cluster'ga agent orqali) yoki GitOps (Flux, manifest repo'dan pull)."
+    },
+    {
+      "id": 33051,
+      "code": "GLC29",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Compliance pipeline / pipeline execution policy nima va qachon kerak?",
+      "explanation": "Tashkilot darajasida majburiy job'larni (scan, audit, imzo) har project pipeline'iga kiritish — developer ularni o'chira olmaydi. Regulyatsiyali muhitda (PCI DSS, SOC 2) kerak."
+    },
+    {
+      "id": 33052,
+      "code": "GLC30",
+      "level": "S",
+      "type": "card",
+      "topic": "GitLab CI",
+      "domain": "cicd",
+      "section": "i9",
+      "question": "Self-managed GitLab va runner'larni qanday masshtablash va ishonchli qilish kerak?",
+      "explanation": "Runner'lar gorizontal (stateless), GitLab o'zi — reference architecture (Gitaly cluster, PostgreSQL HA, Redis, object storage). Artifact/cache/registry — object storage'ga."
+    }
+  ]
+}

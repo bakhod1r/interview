@@ -104,6 +104,160 @@
       "section": "v13",
       "question": "Unix domain socket va TCP socket farqi?",
       "explanation": "Misollar: /var/run/docker.sock (unga kirish = host'da root!), PostgreSQL /var/run/postgresql/.s.PGSQL.5432. Konteynerlar o'rtasida sidecar bilan ham ishlatiladi. `ss -xl` — ro'yxat."
+    },
+    {
+      "id": 31327,
+      "code": "DX43",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`ip` buyrug'i: IP manzil, route, interfeyslarni ko'rish. `ifconfig`/`netstat` bilan farqi?",
+      "explanation": "`ip a` manzillar, `ip r` route, `ip link` interfeys, `ip neigh` ARP. ifconfig/netstat/route — net-tools, eskirgan; o'rniga iproute2 (`ip`, `ss`)."
+    },
+    {
+      "id": 31328,
+      "code": "DX44",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`ss -tulpn` flaglari nima? Port ochiqligini qanday tekshirasan?",
+      "explanation": "-t TCP, -u UDP, -l listening, -p process, -n raqamli (DNS/servis nomi yo'q). Lokal: `ss -tlnp | grep :80`; masofadan: `nc -zv host 80`, `curl -v`, `telnet`."
+    },
+    {
+      "id": 31329,
+      "code": "DX45",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`curl` kerakli flaglari: debug, header, method, timeout, TLS?",
+      "explanation": "-v verbose, -I faqat header, -X method, -H header, -d data, -o/-O, -L redirect, -k TLS tekshirmaslik, --resolve, -w timing, --connect-timeout/-m, -s/-S, -f."
+    },
+    {
+      "id": 31330,
+      "code": "DX46",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`dig` va `nslookup`: DNS'ni qanday tekshirasan? `/etc/hosts`, `/etc/resolv.conf`?",
+      "explanation": "`dig +short x.com`, `dig x.com A/AAAA/MX/CNAME`, `dig @8.8.8.8 x.com`, `dig +trace`. Resolution tartibi `/etc/nsswitch.conf` (`hosts: files dns`): avval /etc/hosts, keyin resolv.conf'dagi nameserver."
+    },
+    {
+      "id": 31331,
+      "code": "DX47",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`tcpdump` bilan trafikni qanday ushlaysan? Kerakli filtrlar.",
+      "explanation": "`tcpdump -i any -nn port 443`, host/net/port filtrlari, -w faylga (Wireshark'da ochish), -A/-X payload, -c count, SYN/RST flaglari bo'yicha filtr."
+    },
+    {
+      "id": 31332,
+      "code": "DX48",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Firewall: ufw, firewalld, iptables, nftables — farqi? Portni qanday ochasan?",
+      "explanation": "Hammasining ostida kernel netfilter. iptables — eski CLI, nftables — yangi. ufw (Ubuntu) va firewalld (RHEL) — ular ustidagi qulay frontend."
+    },
+    {
+      "id": 31333,
+      "code": "DX49",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "\"Servis ishlayapti, lekin tashqaridan ochilmayapti\". Qatlamma-qatlam tekshir.",
+      "explanation": "Ichkaridan tashqariga: jarayon ishlayaptimi -> qaysi IP/portda listen (`ss -tlnp`) -> lokal `curl` -> host firewall -> cloud security group/NACL -> LB/target health -> DNS -> client tomoni."
+    },
+    {
+      "id": 31334,
+      "code": "DX50",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`ping` ishlaydi, lekin ulanish bo'lmaydi / sekin. `traceroute`, `mtr` va MTU muammosi.",
+      "explanation": "ping (ICMP) != TCP portiga yo'l. mtr — har hop'da loss/latency. Kichik so'rov ishlaydi, katta javob osiladi — PMTU/MTU muammosi (VPN, overlay tarmoq), ICMP bloklangan."
+    },
+    {
+      "id": 31335,
+      "code": "DX51",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "SELinux / AppArmor ilovani bloklayapti. Qanday aniqlaysan va to'g'ri hal qilasan?",
+      "explanation": "Belgi: ruxsatlar to'g'ri, lekin \"Permission denied\". `getenforce`, `ausearch -m avc -ts recent`, `/var/log/audit/audit.log`. To'g'ri yechim — context/boolean/port (semanage, restorecon), `setenforce 0` emas."
+    },
+    {
+      "id": 32047,
+      "code": "DZ03",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Yangi Linux serverni production'ga chiqarishdan oldin xavfsizlik checklist'i (hardening).",
+      "explanation": "Update + avtomatik security patch; faqat kalit bilan SSH, root login yo'q; firewall default deny; keraksiz servis/portlarni o'chirish; least privilege sudo; vaqt sinxroni; loglar markaziy; auditd; fail2ban; disk shifrlash/secret'lar; CIS benchmark bilan tekshirish (Lynis)."
+    },
+    {
+      "id": 32048,
+      "code": "DZ04",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "auditd nima? Kim `/etc/passwd`ni o'zgartirdi yoki kim `sudo` bilan nima qildi — qanday topasan?",
+      "explanation": "auditd — kernel audit tizimi: syscall va fayl kirishlarini qoida bo'yicha qayd qiladi (kim, qachon, qaysi jarayon, auid — dastlabki login user). `auditctl -w fayl -p wa -k kalit`, qidirish `ausearch -k`, hisobot `aureport`."
+    },
+    {
+      "id": 32049,
+      "code": "DZ05",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Ochiq portlar va servislarni tashqaridan audit qilish: `nmap` asosiy flaglari.",
+      "explanation": "`nmap -sT/-sS` port skan, `-p-` hamma portlar, `-sV` servis versiyasi, `-sU` UDP, `-Pn` ping'siz, `-O` OS, `--script ssl-enum-ciphers`. Faqat o'zingga tegishli yoki ruxsat berilgan tizimlarni skanerla."
+    },
+    {
+      "id": 33135,
+      "code": "DW12",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "DDoS / SYN flood paytida Linux server darajasida nima qila olasan?",
+      "explanation": "Haqiqiy himoya — tarmoq chetida (CDN/cloud DDoS protection, upstream). Host darajasida: `tcp_syncookies`, backlog, rate limit (nftables/iptables hashlimit, nginx limit_req), conntrack sozlash, keraksiz portlarni yopish, monitoring. Aniqla: qaysi turdagi hujum (L3/L4 volumetric yoki L7)."
+    },
+    {
+      "id": 33136,
+      "code": "DW13",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "iptables qoidasi qo'shding va o'zingni serverdan chiqarib yubording. Bunga qanday yo'l qo'ymaslik kerak?",
+      "explanation": "Masofadan firewall o'zgartirishda: avval ESTABLISHED va SSH'ga ruxsat, keyin DROP; avtomatik rollback (`at`/`sleep && iptables-restore`, `netplan try`, `firewall-cmd --timeout`); konsol kirish tayyor; o'zgarishni IaC orqali va canary hostda sinash."
     }
   ]
 }

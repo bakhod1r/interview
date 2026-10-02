@@ -1,0 +1,219 @@
+{
+  "id": "k2",
+  "name": "Docker Compose",
+  "domain": "compose",
+  "topics": [
+    "Compose"
+  ],
+  "questions": [
+    {
+      "id": 31400,
+      "code": "DK15",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Docker Compose nima va qachon ishlatiladi?",
+      "explanation": "Ko'p container'li ilovani bitta YAML (compose.yaml) da e'lon qilib, bitta buyruq bilan ko'tarish vositasi. Lokal dev, test, kichik single-host deploy uchun."
+    },
+    {
+      "id": 31401,
+      "code": "DK16",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da service'lar bir-biriga qanday ulanadi?",
+      "explanation": "Compose loyiha uchun default network yaratadi; har service nomi DNS hostname bo'ladi (db:5432). Container ichida localhost — o'sha container'ning o'zi."
+    },
+    {
+      "id": 31402,
+      "code": "DK17",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "`docker compose down` va `down -v` farqi? Ma'lumot qachon yo'qoladi?",
+      "explanation": "down — container va network'ni o'chiradi, named volume qoladi. down -v named volume'larni ham o'chiradi — DB ma'lumoti yo'qoladi."
+    },
+    {
+      "id": 31403,
+      "code": "DK18",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "`depends_on` service tayyor bo'lishini kafolatlaydimi?",
+      "explanation": "Default faqat ishga tushish tartibini (container start). Tayyorlikni kutish uchun healthcheck + condition: service_healthy kerak; ilova baribir retry qilishi lozim."
+    },
+    {
+      "id": 31404,
+      "code": "DK19",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da environment: `.env`, `env_file`, `environment` va o'zgaruvchi interpolatsiyasi farqi?",
+      "explanation": "`.env` (loyiha papkasida) — compose.yaml ichidagi ${VAR} interpolatsiyasi uchun; env_file — container'ga o'zgaruvchilar yuklaydi; environment — inline, ustunroq."
+    },
+    {
+      "id": 31405,
+      "code": "DK20",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Dev va prod uchun turli Compose konfiguratsiya: override, profiles, bir nechta -f?",
+      "explanation": "compose.override.yaml avtomatik birlashadi; -f a.yaml -f b.yaml qo'lda merge; profiles ixtiyoriy service'larni yoqadi; extends/include qayta ishlatish."
+    },
+    {
+      "id": 31406,
+      "code": "DK21",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da kod o'zgarganda qayta build: `up --build`, `watch`, bind mount?",
+      "explanation": "up --build image'ni qayta quradi; bind mount kodni jonli ulaydi; compose watch fayl o'zgarishini sync/rebuild qiladi."
+    },
+    {
+      "id": 31407,
+      "code": "DK22",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Bir service'ni scale qilish: `docker compose up --scale api=3` — qanday muammolar chiqadi?",
+      "explanation": "Host port to'qnashadi (8080:8080 faqat bittaga), container_name ishlatib bo'lmaydi; load balancing uchun oldiga reverse proxy kerak, DNS round-robin service nomida."
+    },
+    {
+      "id": 31408,
+      "code": "DK23",
+      "level": "S",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'ni production'da (single host) ishlatish mumkinmi? Nimalarni hal qilish kerak?",
+      "explanation": "Mumkin, kichik tizim uchun. Lekin HA yo'q (bitta host), rolling update yo'q, scheduling yo'q. Restart policy, healthcheck, log rotation, resurs limit, backup, secret, zero-downtime strategiyasi qo'lda."
+    },
+    {
+      "id": 31409,
+      "code": "DK24",
+      "level": "S",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose `deploy:` bloki va `docker stack deploy` qanday bog'langan?",
+      "explanation": "deploy (replicas, resources, update_config, placement) asosan Swarm uchun; docker stack deploy compose faylini Swarm'da ishlatadi. Oddiy compose faqat resources va replicas'ning bir qismini hisobga oladi; build: stack'da e'tiborsiz."
+    },
+    {
+      "id": 33081,
+      "code": "DK48",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose asosiy buyruqlari: up, down, ps, logs, exec, run, build, pull, restart.",
+      "explanation": "up — yaratib ishga tushiradi; down — o'chiradi; exec — ishlab turgan service ichida; run — bir martalik yangi container; build/pull — image; restart — qayta ishga tushirish (config qayta o'qilmaydi)."
+    },
+    {
+      "id": 33082,
+      "code": "DK49",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da `ports` va `expose` farqi?",
+      "explanation": "ports — host portini container portiga ochadi (tashqaridan kirish). expose — faqat hujjat/ichki; service'lar o'zaro baribir gaplasha oladi."
+    },
+    {
+      "id": 33083,
+      "code": "DK50",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da `build:` va `image:` birga ishlatilsa nima bo'ladi?",
+      "explanation": "build image'ni quradi va image: nomini tag sifatida beradi. Faqat image: bo'lsa — registry'dan pull."
+    },
+    {
+      "id": 33084,
+      "code": "DK51",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da resurs limitlari va log rotation qanday beriladi?",
+      "explanation": "deploy.resources.limits (cpus, memory) — compose v2 standalone'da ham qo'llanadi. logging: driver + options max-size/max-file."
+    },
+    {
+      "id": 33085,
+      "code": "DK52",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da bir nechta network bilan izolyatsiya: frontend/backend.",
+      "explanation": "Har service faqat kerakli network'ga ulanadi; db faqat backend'da bo'lsa web undan ko'rinmaydi. internal: true — tashqi internetga chiqishsiz."
+    },
+    {
+      "id": 33086,
+      "code": "DK53",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose secrets qanday ishlatiladi va env'dan nimasi yaxshi?",
+      "explanation": "secrets: faylni container'ga /run/secrets/<name> sifatida mount qiladi. Env docker inspect, /proc/<pid>/environ, crash log va child process'larda ko'rinadi."
+    },
+    {
+      "id": 33087,
+      "code": "DK54",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose bilan CI'da integration test qanday yuritiladi?",
+      "explanation": "compose bilan DB/Redis/Kafka ko'tariladi, healthy bo'lishini kutib, test service run qilinadi, oxirida down -v. --exit-code-from va unikal project nomi."
+    },
+    {
+      "id": 33088,
+      "code": "DK55",
+      "level": "S",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose loyihasi nomi (project name) nima va u nimaga ta'sir qiladi?",
+      "explanation": "Default — papka nomi. Container, network, volume nomlari prefix oladi (<project>_db_1, <project>_pgdata). Papka nomi o'zgarsa yangi volume yaratiladi — eski ma'lumot \"yo'qolgandek\" ko'rinadi."
+    },
+    {
+      "id": 33089,
+      "code": "DK56",
+      "level": "S",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose bilan zero-downtime deploy qanday qilasan?",
+      "explanation": "Compose up -d container'ni recreate qiladi — qisqa uzilish. Yechim: reverse proxy (Traefik/nginx) + scale 2 va navbat bilan almashtirish, yoki blue/green ikki service."
+    }
+  ]
+}

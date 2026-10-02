@@ -126,6 +126,50 @@
       "section": "v10",
       "question": "Log fayldan eng ko'p uchragan 10 ta IP'ni qanday chiqarasan?",
       "explanation": "uniq faqat ketma-ket takrorlarni sanaydi — oldin sort shart. Katta fayllarda `sort -S 50% --parallel` yoki awk'da assotsiativ massiv: `awk '{c[$1]++} END {for (i in c) print c[i], i}' | sort -rn | head`. Real vaqtda: `tail -F`."
+    },
+    {
+      "id": 33148,
+      "code": "DV01",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`tar` flaglari to'liq: c, x, t, f, v, z, j, J, C, p, --exclude, -r, -u, --strip-components.",
+      "explanation": "Rejim: c yaratish, x ochish, t ro'yxat, r qo'shish, u yangilash. Siqish: z gzip, j bzip2, J xz, --zstd. f fayl nomi (har doim oxirgi qisqa flag), v verbose, C katalogga o'tish, p ruxsatlarni saqlash, --exclude, --strip-components."
+    },
+    {
+      "id": 33149,
+      "code": "DV02",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`gzip`, `gunzip`, `zcat` va boshqa `z*` vositalar flaglari.",
+      "explanation": "gzip faylni joyida siqadi (asl fayl o'chadi, .gz qoladi). -d ochish (= gunzip), -k aslini saqlash, -c stdout'ga, -1..-9 daraja, -r rekursiv, -l ma'lumot, -t tekshirish. zcat/zless/zgrep — ochmasdan o'qish."
+    },
+    {
+      "id": 33150,
+      "code": "DV03",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`zip` va `unzip` flaglari. tar.gz dan farqi nima?",
+      "explanation": "zip — arxiv + siqish bitta formatda, har fayl alohida siqiladi (random access, Windows bilan mos). -r rekursiv, -q jim, -e parol, -x chiqarish, -u yangilash, -9 daraja. unzip: -l ro'yxat, -d katalog, -o ustidan yozish, -n yozmaslik, -t test, -p stdout."
+    },
+    {
+      "id": 33151,
+      "code": "DV04",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`xz`, `bzip2`, `zstd`, `7z` flaglari va katta fayllarni siqish/bo'lish amaliyoti.",
+      "explanation": "Hammasi gzip'ga o'xshash interfeys: -d ochish, -k saqlash, -c stdout, -1..-9 (zstd -19, --ultra -22), -T threads (xz -T0, zstd -T0). xz eng yaxshi nisbat, sekin; zstd tez va yaxshi — zamonaviy default. `split` bilan bo'laklash, `sha256sum` bilan tekshirish."
     }
   ]
 }

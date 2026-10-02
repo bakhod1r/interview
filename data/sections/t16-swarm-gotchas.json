@@ -1,0 +1,65 @@
+{
+  "id": "t16",
+  "name": "Docker Swarm gotchas",
+  "domain": "swarm",
+  "topics": [
+    "Infra gotcha"
+  ],
+  "questions": [
+    {
+      "id": 33104,
+      "code": "DK71",
+      "level": "M",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Routing mesh orqali kelgan so'rovlarda ilova client IP o'rniga 10.0.0.x ko'radi. Nega?",
+      "explanation": "Ingress routing mesh SNAT qiladi. Real IP kerak bo'lsa publish mode=host + global/constraint service, yoki oldidagi LB'dan X-Forwarded-For / PROXY protocol."
+    },
+    {
+      "id": 33105,
+      "code": "DK72",
+      "level": "M",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Stack yangilangandan keyin eski konfiguratsiya qoldi: `docker config`/`secret` o'zgarmadi. Nega?",
+      "explanation": "Config va secret immutable; bir xil nom bilan o'zgartirib bo'lmaydi. Nomga versiya/hash qo'shiladi, stack fayl yangi nomga ishora qiladi."
+    },
+    {
+      "id": 33106,
+      "code": "DK73",
+      "level": "M",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Stack'dagi `depends_on` ishlamayapti: api db'dan oldin ko'tarilib yiqiladi. Nega?",
+      "explanation": "docker stack deploy depends_on'ni e'tiborsiz qoldiradi. Ilova retry/backoff qilishi va restart_policy bilan qayta urinishi kerak."
+    },
+    {
+      "id": 33107,
+      "code": "DK74",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "2 manager'li Swarm'da bitta manager o'chdi — klaster boshqarib bo'lmay qoldi. Nega?",
+      "explanation": "2 dan quorum = 2. Bittasi o'chsa ko'pchilik yo'q, Raft yozuv to'xtaydi. 2 manager 1 tadan ham yomonroq (ikki nuqta xavf). 3 yoki 5 kerak."
+    },
+    {
+      "id": 33108,
+      "code": "DK75",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Node qayta ulangandan keyin task'lar notekis: bitta node'da hammasi, yangisida hech narsa. Nega?",
+      "explanation": "Swarm ishlab turgan task'larni avtomatik qayta balanslamaydi; faqat yangi task'larni joylaydi. docker service update --force bilan qayta taqsimlanadi."
+    }
+  ]
+}
