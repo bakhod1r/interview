@@ -1,0 +1,218 @@
+{
+  "33152": {
+    "a": "Uch joy:\n\n| Joy | Nima | Buyruq |\n|---|---|---|\n| Working tree | Disk'dagi hozirgi fayllar | tahrirlash |\n| Index (staging) | Keyingi commit snapshot'i | `git add`, `git restore --staged` |\n| Repository | `.git/objects` — commit, tree, blob | `git commit` |\n\n```sh\ngit status          # uchala joy farqi\ngit diff            # working tree vs index\ngit diff --staged   # index vs HEAD\n```\n\n**Nega index kerak:** bitta fayldagi o'zgarishlarning bir qismini commit qilish (`git add -p`) — commit'lar mantiqiy, kichik bo'ladi."
+  },
+  "33153": {
+    "a": "- `git clone URL` — butun repo + `origin` remote.\n- `git fetch` — `origin/main` kabi remote-tracking branch'larni yangilaydi, **sizning branch'ingizni o'zgartirmaydi**. Xavfsiz.\n- `git pull` = `fetch` + `merge` (`pull.rebase=true` bo'lsa rebase).\n- `git push` — local commit'lar remote'ga. Remote oldinda bo'lsa rad etiladi (non-fast-forward).\n\nYaxshi odat:\n```sh\ngit config --global pull.rebase true   # keraksiz merge commit yo'q\ngit fetch && git log HEAD..origin/main # avval nima kelishini ko'r\n```"
+  },
+  "33154": {
+    "a": "Branch = `.git/refs/heads/<nom>` faylidagi bitta commit hash. Yangi commit qilinganda pointer oldinga siljiydi.\n\n```sh\ngit branch                 # ro'yxat\ngit switch -c feature/login  # yaratish + o'tish (eski: checkout -b)\ngit switch main\ngit branch -d feature/login  # merge qilingan bo'lsa o'chirish (-D majburiy)\ngit push -u origin feature/login  # remote'ga + upstream\n```\n\n`HEAD` — hozir qaysi branch'dasiz. **Detached HEAD** — branch emas, to'g'ridan commit'da turibsiz; u yerda qilingan commit branch'siz qoladi (`git switch -c new` bilan saqlang)."
+  },
+  "33155": {
+    "a": "```\n<<<<<<< HEAD\nport: 8080\n=======\nport: 9090\n>>>>>>> feature\n```\n\nQadamlar:\n1. `git status` — qaysi fayllarda konflikt.\n2. Faylni tahrirlang, markerlarni olib tashlang, to'g'ri variantni qoldiring.\n3. `git add file` keyin `git commit` (merge) yoki `git rebase --continue`.\n4. Bekor qilish: `git merge --abort` / `git rebase --abort`.\n\nKamaytirish: kichik PR, tez-tez `main`dan yangilash, formatter (bir xil format)."
+  },
+  "33156": {
+    "a": "```gitignore\n.env\n*.log\n/bin/\nnode_modules/\n!keep.log      # istisno\n```\n\n**Gotcha:** `.gitignore` faqat *untracked* fayllarga ta'sir qiladi.\n```sh\ngit rm --cached .env   # index'dan olib tashlash, diskda qoladi\ngit commit -m \"stop tracking .env\"\n```\nLekin `.env` tarixda qoladi — secret bo'lsa **rotate qiling** (tarixni tozalash yetarli emas).\n\nTekshirish: `git check-ignore -v path` — qaysi qoida ishladi."
+  },
+  "33157": {
+    "a": "```sh\ngit log --oneline --graph --all     # tarix daraxti\ngit log -p -- path/file             # fayl tarixi diff bilan\ngit log -S \"funcName\"               # shu matn qo'shilgan/o'chirilgan commit'lar (pickaxe)\ngit diff main...feature             # feature main'dan ajralgandan beri\ngit show <sha>                      # commit + diff\ngit blame -L 10,30 file.go          # qator muallifi\n```\n\nDebug'da: `blame` bilan commit topiladi, `show` bilan nega o'zgargani (commit message, PR) o'qiladi."
+  },
+  "33158": {
+    "a": "```\nfix(auth): refresh token muddati tekshiruvini tuzatish\n\nToken expiry'ni '<' bilan solishtirgan, chegaradagi token\nqabul qilinardi. '<=' ga o'zgartirildi, test qo'shildi.\n\nRefs: #142\n```\n\n- Sarlavha: nima qilindi; tana: **nega**.\n- `feat:` / `fix:` / `chore:` / `refactor:` — changelog va semver avtomatik (semantic-release).\n- \"fix\", \"wip\", \"update\" — yomon: 6 oydan keyin `git log` hech narsa aytmaydi."
+  },
+  "33159": {
+    "a": "```\nmerge:   A-B-C-----M (main)        rebase:  A-B-C-D'-E' (feature)\n              \\   /\n               D-E\n```\n\n| | merge | rebase |\n|---|---|---|\n| Tarix | haqiqiy, tarmoqli | chiziqli, toza |\n| Hash | o'zgarmaydi | yangi commit'lar |\n| Konflikt | bir marta | har commit uchun |\n| Xavf | yo'q | boshqalar ishlatgan branch'ni buzadi |\n\n**Qoida:** o'zingizning local feature branch'ni `main` ustiga rebase — ok. Umumiy branch (`main`, boshqalar pull qilgan) — faqat merge. Rebase'dan keyin push: `git push --force-with-lease` (oddiy `--force` emas — boshqaning commit'ini o'chirmaydi)."
+  },
+  "33160": {
+    "a": "| Buyruq | HEAD | Index | Working tree |\n|---|---|---|---|\n| `reset --soft X` | X | o'zgarmaydi | o'zgarmaydi |\n| `reset --mixed X` (default) | X | X | o'zgarmaydi |\n| `reset --hard X` | X | X | X — **o'zgarishlar yo'qoladi** |\n| `revert X` | yangi commit | | |\n\n```sh\ngit reset --soft HEAD~1   # oxirgi commit'ni \"ochish\", qayta commit qilish\ngit revert <sha>          # production'ga chiqqan bug commit'ni bekor qilish\n```\n\nPush qilingan tarixda **reset emas, revert**. `reset --hard` dan oldin `git stash` yoki `reflog`ni eslang."
+  },
+  "33161": {
+    "a": "```sh\ngit stash push -m \"wip login\"   # saqlash\ngit stash -u                    # untracked fayllar bilan\ngit stash list\ngit stash pop                   # qaytarish + o'chirish\ngit stash apply stash@{1}       # qaytarish, ro'yxatda qoladi\ngit stash drop stash@{0}\n```\n\nHolat: feature ustida ishlayapsiz, prod'da shoshilinch bug — `stash`, `switch main`, fix, qaytib `stash pop`.\n\n**Gotcha:** stash uzoq yashasa unutiladi va konflikt beradi. Uzoq ish uchun WIP commit yoki `git worktree` yaxshiroq."
+  },
+  "33162": {
+    "a": "```sh\ngit switch release/1.4\ngit cherry-pick a1b2c3d        # bitta commit\ngit cherry-pick A^..B          # diapazon\ngit cherry-pick -x a1b2c3d     # message'ga \"(cherry picked from ...)\" — kuzatish oson\n```\n\nEhtiyot:\n- Commit boshqa commit'larga bog'liq bo'lsa konflikt yoki buzilgan kod.\n- Ko'p cherry-pick = branch'lar ajralib ketgan belgisi (release strategiyani qayta ko'ring)."
+  },
+  "33163": {
+    "a": "```sh\ngit reflog\n# a1b2c3d HEAD@{0}: reset: moving to HEAD~3\n# 9f8e7d6 HEAD@{1}: commit: add payment retry   <- kerakli\ngit branch rescue 9f8e7d6     # yoki: git reset --hard 9f8e7d6\n```\n\n- Commit qilingan narsa deyarli hech qachon yo'qolmaydi (gc'gacha).\n- Commit **qilinmagan** o'zgarish `reset --hard` dan keyin reflog'da yo'q — qaytmaydi.\n- Reflog local: boshqa clone'da yo'q."
+  },
+  "33164": {
+    "a": "| | GitFlow | Trunk-based |\n|---|---|---|\n| Branch'lar | main, develop, feature, release, hotfix | main + qisqa feature |\n| Branch umri | kunlar–haftalar | soatlar–1-2 kun |\n| Release | rejali | doimiy (CD) |\n| Tugallanmagan kod | branch'da | main'da, feature flag ortida |\n\nTrunk-based talabi: kuchli CI (har PR test), feature flag, kichik PR.\nGitFlow hali ham o'rinli: bir nechta versiya qo'llab-quvvatlanadigan (on-prem, mobil) mahsulotlarda."
+  },
+  "33165": {
+    "a": "Tartib muhim:\n1. **Rotate/revoke** — kalitni bekor qiling. Bot'lar GitHub'ni soniyalarda skan qiladi; tarixni tozalash yetarli emas (fork, clone, cache).\n2. Audit: kalit bilan nima qilingan (cloud loglar).\n3. Tarixdan olib tashlash:\n```sh\ngit filter-repo --path .env --invert-paths\ngit push --force --all\n```\n4. Jamoa re-clone qiladi; GitHub support'dan cache tozalash.\n5. Oldini olish: `gitleaks`/`trufflehog` pre-commit hook + CI, GitHub push protection, secret'lar Vault/secret manager'da."
+  },
+  "33166": {
+    "a": "```sh\ngit bisect start\ngit bisect bad              # hozirgi — buzuq\ngit bisect good v1.3.0      # bu versiya ishlagan\n# Git o'rtadagi commit'ni checkout qiladi, test qiling:\ngit bisect good   # yoki bad\n...\ngit bisect reset\n\n# avtomatik: skript 0 = good, 1-127 = bad, 125 = skip\ngit bisect run go test ./pkg/payment -run TestRefund\n```\n\nShart: har commit build bo'lishi kerak — kichik, atomik commit'lar bisect'ni ishlatadi."
+  },
+  "33167": {
+    "a": "```sh\ngit remote -v\ngit remote add upstream https://github.com/org/project.git\ngit fetch upstream\ngit switch main && git rebase upstream/main\ngit push origin main\n```\n\nBranch upstream'ini sozlash: `git push -u origin feat` — keyin oddiy `git push/pull`.\nKo'rish: `git branch -vv` — har branch qaysi remote'ni kuzatadi va qancha oldinda/orqada."
+  },
+  "33168": {
+    "a": "```sh\ngit tag -a v1.4.0 -m \"Release 1.4.0\"   # annotated\ngit tag v1.4.0-tmp                      # lightweight (faqat pointer)\ngit push origin v1.4.0                  # yoki --tags\ngit describe --tags                     # v1.4.0-3-g1a2b3c (tag'dan keyin 3 commit)\n```\n\nCI: `on: push: tags: ['v*']` — tag push'da release build, image `app:1.4.0` bilan teglanadi.\nSemver: MAJOR.MINOR.PATCH. Tag'ni ko'chirish (force) yomon — boshqalarda eski qoladi."
+  },
+  "33169": {
+    "a": "```sh\n# .git/hooks/pre-commit (yoki pre-commit framework)\n#!/bin/sh\ngofmt -l . | grep . && exit 1\ngitleaks protect --staged || exit 1\n```\n\n- `.git/hooks` repo bilan **push qilinmaydi** — jamoa uchun `pre-commit` framework, husky yoki `core.hooksPath`.\n- Hook — qulaylik (tez feedback), CI — **majburiy darvoza** (branch protection + required checks).\n- Server-side hook'lar (pre-receive) — GitLab/GitHub Enterprise'da siyosat uchun."
+  },
+  "33170": {
+    "a": "| | Monorepo | Polyrepo |\n|---|---|---|\n| Cross-cutting o'zgarish | bitta PR | ko'p PR, versiya |\n| CI | affected-only kerak | oddiy |\n| Ownership | CODEOWNERS | repo darajasida |\n| Git hajmi | katta | kichik |\n\nTezlashtirish:\n```sh\ngit clone --filter=blob:none URL     # partial clone: blob kerakda yuklanadi\ngit clone --depth 1 URL              # CI uchun shallow\ngit sparse-checkout set services/api # faqat kerakli papka\ngit maintenance start                # fon optimizatsiya\n```\nCI: `paths:` filtri yoki Bazel/Nx/Turborepo bilan faqat o'zgargan qism."
+  },
+  "33171": {
+    "a": "```\ncommit 9f8e  -> tree a1b2 -> blob c3d4 (main.go)\n   |                    -> tree e5f6 (pkg/) -> blob ...\n   v parent\ncommit 7a6b\n```\n\n```sh\ngit cat-file -t HEAD          # commit\ngit cat-file -p HEAD          # tree, parent, author\ngit cat-file -p HEAD^{tree}\n```\n\nOqibatlar:\n- Bir xil fayl bir marta saqlanadi (dedup).\n- Rebase/amend = **yangi** commit'lar (parent o'zgardi, hash o'zgardi).\n- Branch/tag — shunchaki hash'ga ko'rsatkich; shuning uchun arzon.\n- Git SHA-1'dan SHA-256'ga o'tish jarayonida (`--object-format=sha256`)."
+  },
+  "33172": {
+    "a": "Minimal to'plam:\n- Require PR + 1-2 approval, stale approval reset yangi push'da.\n- **CODEOWNERS** — `/infra/` o'zgarsa platform jamoasi review majburiy.\n- Required status checks: build, test, lint, security scan.\n- Require branch up to date (yoki merge queue — katta jamoada).\n- Force push / delete taqiqlangan, admin'larga ham.\n- Squash yoki rebase merge — toza tarix.\n\nSenior nuqta: qoidalar **kodda** (Terraform GitHub provider) — qo'lda bosilgan sozlama drift qiladi va audit qilinmaydi."
+  },
+  "33173": {
+    "a": "```sh\ngit lfs install\ngit lfs track \"*.psd\"\ngit add .gitattributes\n```\nLFS: repo'da kichik pointer fayl, mazmun LFS server'da; checkout'da kerakli versiya yuklanadi.\n\nQoida: build artefakt (binary, docker image, `.jar`) Git'ga emas — artifact registry (Nexus, Artifactory, GHCR, S3).\nAllaqachon commit qilingan bo'lsa: `git lfs migrate import` yoki `filter-repo` (tarix qayta yoziladi — jamoa bilan kelishib)."
+  },
+  "33174": {
+    "a": "ClickOps muammolari: kim nima o'zgartirgani noma'lum, staging ≠ prod, falokatdan keyin qayta qurish qo'lda va sekin.\n\nIaC beradi:\n- **Takrorlanish** — bir xil kod, bir xil muhit (dev/stage/prod).\n- **Review** — PR orqali, `plan` diff bilan.\n- **Tarix va rollback** — Git.\n- **DR** — muhitni noldan ko'tarish.\n\nTurlari: provisioning (Terraform/OpenTofu, Pulumi, CloudFormation) va configuration management (Ansible, Chef, Puppet).\nDeclarative (holatni yozasiz) vs imperative (qadamlarni yozasiz)."
+  },
+  "33175": {
+    "a": "```hcl\nterraform {\n  required_providers { aws = { source = \"hashicorp/aws\", version = \"~> 5.0\" } }\n}\nprovider \"aws\" { region = var.region }\n\nvariable \"region\" { type = string  default = \"eu-central-1\" }\n\ndata \"aws_ami\" \"ubuntu\" {\n  most_recent = true\n  owners      = [\"099720109477\"]\n  filter { name = \"name\" values = [\"ubuntu/images/*24.04-amd64-server-*\"] }\n}\n\nresource \"aws_instance\" \"web\" {\n  ami           = data.aws_ami.ubuntu.id\n  instance_type = \"t3.micro\"\n  tags = { Name = \"web\" }\n}\n\noutput \"public_ip\" { value = aws_instance.web.public_ip }\n```\nReference `aws_instance.web.id` — Terraform shundan dependency graph quradi."
+  },
+  "33176": {
+    "a": "```sh\nterraform init            # .terraform/, lock fayl, backend\nterraform fmt && terraform validate\nterraform plan -out tf.plan\nterraform apply tf.plan   # aynan ko'rilgan plan bajariladi\nterraform destroy         # ehtiyot!\n```\n\nPlan belgilar: `+` yaratish, `~` joyida o'zgartirish, `-/+` **o'chirib qayta yaratish** (replace — downtime/ma'lumot yo'qolishi mumkin), `-` o'chirish.\n\nQoida: prod'da `plan` saqlanadi va review qilinadi, keyin aynan o'sha fayl `apply` qilinadi."
+  },
+  "33177": {
+    "a": "State'siz Terraform `aws_instance.web` qaysi EC2 ekanini bilmaydi.\n\nState'da: resource ID'lari, atributlar, dependency'lar, **ko'pincha parollar ochiq matnda** (masalan RDS password).\n\nQoidalar:\n- Git'ga emas — remote backend (S3 + lock, GCS, Terraform Cloud).\n- Shifrlangan, kirish cheklangan.\n- Qo'lda tahrirlamang — `terraform state mv/rm`, `import` buyruqlari bor.\n\n```sh\nterraform state list\nterraform state show aws_instance.web\n```"
+  },
+  "33178": {
+    "a": "```hcl\nterraform {\n  backend \"s3\" {\n    bucket       = \"acme-tfstate\"\n    key          = \"prod/network/terraform.tfstate\"\n    region       = \"eu-central-1\"\n    encrypt      = true\n    use_lockfile = true      # S3 native lock (1.10+); eski: dynamodb_table\n  }\n}\n```\n\n- Lock ushlangan bo'lsa ikkinchi `apply` kutadi/xato beradi.\n- Osilib qolgan lock: `terraform force-unlock ID` — faqat hech kim ishlamayotganiga ishonch bo'lsa.\n- Bucket: versioning yoqilgan (state'ni tiklash), public access block, KMS.\n- Eng yaxshisi: apply faqat CI'dan (bitta yo'l), odamlar faqat plan ko'radi."
+  },
+  "33179": {
+    "a": "```sh\nterraform plan -refresh-only    # faqat real holatni state'ga solishtirish\nterraform plan -detailed-exitcode  # 0 = o'zgarish yo'q, 2 = drift/o'zgarish\n```\n\nJarayon:\n1. Scheduled CI job har kuni `plan -detailed-exitcode` — exit 2 bo'lsa alert.\n2. Qaror: o'zgarish to'g'rimi? Ha — kodga qo'shing. Yo'q — `apply` bilan qaytaring.\n3. Oldini olish: prod konsolda write huquqi yo'q (read-only IAM), o'zgarish faqat pipeline orqali.\n\n`lifecycle { ignore_changes = [tags[\"LastScanned\"]] }` — tashqi tizim ataylab o'zgartiradigan maydonlar uchun."
+  },
+  "33180": {
+    "a": "```hcl\nmodule \"vpc\" {\n  source  = \"terraform-aws-modules/vpc/aws\"\n  version = \"5.8.1\"\n  name = \"prod\"\n  cidr = \"10.0.0.0/16\"\n  azs             = [\"eu-central-1a\", \"eu-central-1b\"]\n  private_subnets = [\"10.0.1.0/24\", \"10.0.2.0/24\"]\n}\n\nresource \"aws_eks_cluster\" \"this\" {\n  vpc_config { subnet_ids = module.vpc.private_subnets }\n}\n```\n\nQoidalar:\n- Versiyani **pin** qiling (git tag yoki registry version) — `main`ga bog'lanish kutilmagan o'zgarish beradi.\n- Variable'larga `type`, `description`, `validation`.\n- Juda umumiy \"hamma narsa\" modul — anti-pattern; kichik, kompozitsiyalanadigan modullar."
+  },
+  "33181": {
+    "a": "```hcl\n# xavfli: \"b\" o'chirilsa \"c\" index 2 -> 1, replace bo'ladi\nresource \"aws_iam_user\" \"u\" {\n  count = length(var.users)\n  name  = var.users[count.index]\n}\n\n# barqaror: manzil aws_iam_user.u[\"c\"]\nresource \"aws_iam_user\" \"u\" {\n  for_each = toset(var.users)\n  name     = each.key\n}\n```\n`count` hali ham ok: `count = var.enabled ? 1 : 0` (shartli resurs).\nMigratsiya: `moved` blok yoki `terraform state mv 'x[1]' 'x[\"c\"]'`."
+  },
+  "33182": {
+    "a": "```hcl\n# Terraform 1.5+: deklarativ import\nimport {\n  to = aws_s3_bucket.logs\n  id = \"acme-logs\"\n}\n# terraform plan -generate-config-out=gen.tf  # kod skeletini yaratadi\n\n# refactor: nom o'zgardi, resurs qayta yaratilmasin\nmoved {\n  from = aws_instance.web\n  to   = module.web.aws_instance.this\n}\n```\n`moved`siz rename = plan'da `-` va `+` = prod'da DB o'chishi mumkin. Har refactor'dan keyin plan \"0 to destroy\" ekanini tekshiring."
+  },
+  "33183": {
+    "a": "```hcl\ndata \"aws_secretsmanager_secret_version\" \"db\" { secret_id = \"prod/db\" }\n\nresource \"aws_db_instance\" \"main\" {\n  username = \"app\"\n  manage_master_user_password = true   # parolni AWS o'zi yaratadi va Secrets Manager'da saqlaydi\n}\n\nvariable \"api_key\" { type = string  sensitive = true }  # TF_VAR_api_key env'dan\n```\n\n- `sensitive` = plan/output'da yashirin, **state'da emas**.\n- State: shifrlangan backend, minimal kirish.\n- Iloji bo'lsa secret'ni Terraform orqali umuman o'tkazmang (managed password, IAM role, OIDC)."
+  },
+  "33184": {
+    "a": "```\nmodules/\n  vpc/  eks/  rds/\nenvs/\n  dev/   main.tf  backend.tf (key=dev/...)   terraform.tfvars\n  prod/  main.tf  backend.tf (key=prod/...)  terraform.tfvars\n```\n\nAfzalligi: har muhit alohida state (blast radius kichik), alohida IAM/account, prod'ga modulning yangi versiyasini kechroq chiqarish mumkin.\n\nWorkspace (`terraform workspace select prod`) — vaqtinchalik/preview muhitlar uchun yaxshi. Prod uchun xavfli: noto'g'ri workspace'da `apply`.\nTakrorlanishni kamaytirish: Terragrunt yoki Terraform Stacks."
+  },
+  "33185": {
+    "a": "Muammo: bitta ulkan state — plan 10 daqiqa, hamma bir-birini bloklaydi, bitta xato hammasini buzadi.\n\nTuzilma:\n```\nplatform/network   (egasi: platform)   -> outputs: vpc_id, subnets\nplatform/eks\ndata/rds           (egasi: data team)\napps/payments      (egasi: payments)   -> remote_state yoki SSM'dan o'qiydi\n```\n- Layer'lar orasida bog'lanish: `terraform_remote_state` yoki SSM Parameter Store (kamroq coupling).\n- CI: PR -> `plan` izoh -> review (CODEOWNERS) -> merge -> `apply`. Cloud'ga kirish OIDC (static key yo'q).\n- Gate'lar: `tflint`, `checkov`/`trivy config`, OPA (masalan \"S3 public bo'lmasin\"), cost (`infracost`).\n- Provider va modul versiyalari pin, `.terraform.lock.hcl` commit qilinadi."
+  },
+  "33186": {
+    "a": "```hcl\nresource \"aws_db_instance\" \"main\" {\n  lifecycle { prevent_destroy = true }\n  deletion_protection = true          # cloud darajasida ham\n}\n\nresource \"aws_launch_template\" \"lt\" {\n  lifecycle { create_before_destroy = true }\n}\n\nresource \"aws_ecs_service\" \"api\" {\n  lifecycle { ignore_changes = [desired_count] }  # autoscaler boshqaradi\n}\n```\nGotcha: `create_before_destroy` unique nomli resurslarda (bir xil nom) to'qnashadi — `name_prefix` ishlating.\n`prevent_destroy` faqat Terraform ichida; kodni o'chirsangiz himoya ham ketadi — cloud-side deletion protection ham yoqing."
+  },
+  "33187": {
+    "a": "| | Terraform/OpenTofu | Pulumi | CloudFormation/CDK |\n|---|---|---|---|\n| Til | HCL | Go/TS/Python | YAML/JSON, CDK = TS/Python |\n| Cloud | multi | multi | AWS |\n| State | o'zingiz (backend) | Pulumi Cloud/self | AWS boshqaradi |\n| Kuchli | ekotizim, modul'lar | abstraksiya, test | AWS bilan chuqur integratsiya |\n| Zaif | HCL cheklovlari | \"aqlli\" kod murakkablashadi | sekin, faqat AWS |\n\nOdatiy tanlov: Terraform/OpenTofu. Litsenziya: Terraform 1.6+ BSL — o'zingiz ishlatishga to'sqinlik yo'q, raqobatchi mahsulot qurishga bor."
+  },
+  "33188": {
+    "a": "| | Terraform | Ansible |\n|---|---|---|\n| Vazifa | resurs yaratish (VM, VPC, DB) | server ichini sozlash |\n| Model | declarative + state | task'lar ketma-ketligi (idempotent modullar) |\n| State | bor | yo'q (har safar real holatni tekshiradi) |\n| Ulanish | cloud API | SSH / WinRM |\n\nKonteyner davrida Ansible roli kichraydi (image ichida sozlanadi), lekin VM, bare-metal, tarmoq qurilmalari, OS hardening uchun hali keng."
+  },
+  "33189": {
+    "a": "```ini\n# inventory.ini\n[web]\nweb1 ansible_host=10.0.1.10\nweb2 ansible_host=10.0.1.11\n[db]\ndb1 ansible_host=10.0.2.10\n```\n\n```yaml\n# site.yml\n- hosts: web\n  become: true\n  tasks:\n    - name: nginx o'rnatish\n      ansible.builtin.apt: { name: nginx, state: present, update_cache: true }\n    - name: nginx ishlasin\n      ansible.builtin.service: { name: nginx, state: started, enabled: true }\n```\n```sh\nansible-playbook -i inventory.ini site.yml\nansible web -i inventory.ini -m ping     # ad-hoc\n```"
+  },
+  "33190": {
+    "a": "```yaml\n# idempotent: paket bor bo'lsa \"ok\"\n- ansible.builtin.apt: { name: nginx, state: present }\n\n# idempotent emas: har safar ishlaydi\n- ansible.builtin.shell: echo \"x\" >> /etc/app.conf\n\n# to'g'rilangan\n- ansible.builtin.lineinfile: { path: /etc/app.conf, line: \"x\" }\n\n# command'ni idempotent qilish\n- ansible.builtin.command: /opt/app/init.sh\n  args: { creates: /opt/app/.initialized }\n```\nTekshiruv: ikkinchi ishga tushirishda `changed=0` bo'lishi kerak. `--check --diff` — dry run."
+  },
+  "33191": {
+    "a": "```yaml\ntasks:\n  - name: nginx config\n    ansible.builtin.template: { src: nginx.conf.j2, dest: /etc/nginx/nginx.conf }\n    notify: reload nginx\n\nhandlers:\n  - name: reload nginx\n    ansible.builtin.service: { name: nginx, state: reloaded }\n```\n- Bir nechta task notify qilsa ham handler **bir marta**.\n- Play o'rtasida kerak bo'lsa: `meta: flush_handlers`.\n- Config'ni reload'dan oldin tekshirish: template'da `validate: nginx -t -c %s`."
+  },
+  "33192": {
+    "a": "```\ninventory/\n  hosts.ini\n  group_vars/\n    all.yml        # hamma\n    web.yml        # web guruhi\n  host_vars/\n    web1.yml\nroles/nginx/defaults/main.yml   # o'zgartirilishi mumkin bo'lgan default\n```\nPrecedence (soddalashtirilgan, pastdan yuqoriga): role defaults < inventory vars < group_vars/all < group_vars/<grp> < host_vars < play vars < role vars < `-e`.\n\nAmaliyot: role `defaults/`da hamma sozlanuvchi qiymat, muhit farqi `group_vars`da, `-e` faqat bir martalik override uchun.\nDebug: `ansible-inventory --host web1`, `debug: var=hostvars[inventory_hostname]`."
+  },
+  "33193": {
+    "a": "```jinja\n# templates/upstream.conf.j2\nupstream app {\n{% for h in groups['app'] %}\n  server {{ hostvars[h].ansible_host }}:{{ app_port | default(8080) }};\n{% endfor %}\n}\n```\n```yaml\n- ansible.builtin.template:\n    src: upstream.conf.j2\n    dest: /etc/nginx/conf.d/upstream.conf\n    owner: root\n    mode: \"0644\"\n    validate: nginx -t -c %s\n  notify: reload nginx\n```\n`copy` — statik fayl, `template` — o'zgaruvchili. Facts: `ansible_facts['distribution']`, `ansible_memtotal_mb`."
+  },
+  "33194": {
+    "a": "```sh\nansible-vault create group_vars/prod/vault.yml\nansible-vault edit   group_vars/prod/vault.yml\nansible-vault encrypt_string 's3cret' --name db_password\nansible-playbook site.yml --ask-vault-pass\nansible-playbook site.yml --vault-password-file ~/.vault_pass   # CI'da secret'dan\n```\nKonvensiya: `vault.yml`da `vault_db_password`, `vars.yml`da `db_password: \"{{ vault_db_password }}\"` — grep bilan topish oson.\nTask'da secret chiqmasin: `no_log: true`."
+  },
+  "33195": {
+    "a": "```ini\n# ansible.cfg\n[defaults]\nforks = 50\ngathering = smart\nfact_caching = jsonfile\nfact_caching_connection = /tmp/facts\n[ssh_connection]\npipelining = True\nssh_args = -o ControlMaster=auto -o ControlPersist=60s\n```\n```yaml\n- hosts: web\n  serial: [\"1\", \"10%\", \"25%\"]     # canary, keyin bosqichma-bosqich\n  max_fail_percentage: 5\n  pre_tasks:\n    - name: LB'dan chiqarish\n      ...\n  post_tasks:\n    - ansible.builtin.uri: { url: \"http://{{ inventory_hostname }}/healthz\", status_code: 200 }\n```\nDinamik inventory (aws_ec2 plugin) — serverlar ro'yxati qo'lda emas, tag bo'yicha."
+  },
+  "33196": {
+    "a": "```\n[app /metrics] <---scrape--- [Prometheus TSDB] ---> [Grafana]\n[node_exporter :9100] <--/            |\n                                      v\n                               [Alertmanager] -> Slack/PagerDuty\n```\n```yaml\nscrape_configs:\n  - job_name: node\n    scrape_interval: 15s\n    static_configs:\n      - targets: [\"10.0.1.10:9100\", \"10.0.1.11:9100\"]\n```\nPull afzalligi: target o'lganini `up == 0` bilan bilasiz, Prometheus o'zi tezlikni boshqaradi. Qisqa umrli job'lar uchun Pushgateway (cheklangan holatlarda).\nK8s'da target'lar service discovery bilan (`kubernetes_sd_configs`, ServiceMonitor)."
+  },
+  "33197": {
+    "a": "| Tur | Misol | Qanday so'raladi |\n|---|---|---|\n| Counter | `http_requests_total` | `rate(x[5m])` — xom qiymat ma'nosiz |\n| Gauge | `node_memory_MemAvailable_bytes` | to'g'ridan, `avg_over_time` |\n| Histogram | `http_request_duration_seconds_bucket` | `histogram_quantile(0.99, ...)` |\n| Summary | `go_gc_duration_seconds` | tayyor quantile, instance'lar bo'yicha yig'ib bo'lmaydi |\n\nLatency uchun **histogram** tanlang — bir nechta pod p99'ini to'g'ri hisoblash mumkin.\nCounter restart'da 0 ga tushadi — `rate()` buni avtomatik to'g'rilaydi."
+  },
+  "33198": {
+    "a": "```promql\n# RPS servis bo'yicha\nsum by (service) (rate(http_requests_total[5m]))\n\n# xatolar ulushi\nsum(rate(http_requests_total{code=~\"5..\"}[5m]))\n  / sum(rate(http_requests_total[5m]))\n\n# p99 latency\nhistogram_quantile(0.99,\n  sum by (le) (rate(http_request_duration_seconds_bucket[5m])))\n\n# disk 4 soatda to'ladimi\npredict_linear(node_filesystem_avail_bytes[6h], 4*3600) < 0\n\n# ishlamayotgan target'lar\nup == 0\n```\n`rate` vs `irate`: irate oxirgi 2 nuqta — keskin, dashboard uchun; alert uchun `rate`."
+  },
+  "33199": {
+    "a": "Series soni = label qiymatlari ko'paytmasi: 5 method × 20 route × 6 status × 50 pod = 30 000. `user_id` (1M) qo'shilsa = 30 mlrd.\n\nQoidalar:\n- Label = **chegaralangan** qiymat: method, route shabloni (`/users/:id`, `/users/42` emas), status class.\n- Yuqori kardinallikli ma'lumot — log/trace'ga (exemplar orqali bog'lash).\n- Tekshirish:\n```promql\ntopk(10, count by (__name__) ({__name__=~\".+\"}))\n```\n`promtool tsdb analyze`, Grafana Cardinality dashboard.\n- Himoya: `sample_limit`, `metric_relabel_configs` bilan label'ni drop qilish."
+  },
+  "33200": {
+    "a": "```yaml\ngroups:\n- name: api\n  rules:\n  - alert: HighErrorRate\n    expr: |\n      sum(rate(http_requests_total{code=~\"5..\"}[5m]))\n        / sum(rate(http_requests_total[5m])) > 0.05\n    for: 10m\n    labels: { severity: page, team: payments }\n    annotations:\n      summary: \"5xx > 5% (10 daqiqa)\"\n      runbook_url: https://wiki/runbooks/high-error-rate\n```\nAlertmanager: `group_by: [alertname, cluster]` — 100 pod bitta xabar; `inhibit_rules` — cluster down bo'lsa pod alertlari bostiriladi.\nYaxshi alert: **simptom** (foydalanuvchi his qiladi) ustida, runbook bilan, actionable. CPU 80% — odatda page emas."
+  },
+  "33201": {
+    "a": "Tuzilma:\n1. **Overview qatori:** RPS, error %, p99 latency, SLO burn rate.\n2. **Dependency'lar:** DB, cache, tashqi API latency/xato.\n3. **Resurslar (USE):** CPU, memory, saturation (throttling, navbat), restart'lar.\n\nAmaliyot:\n- Template variable: `$env`, `$service` — bitta dashboard hamma servisga.\n- Birliklar (s, bytes, %), threshold ranglari.\n- Annotation: deploy vaqtlari — \"latency deploy'dan keyin oshdi\" darhol ko'rinadi.\n- Provisioning (Git'da JSON, Grafana as code) — qo'lda tahrir yo'qolmaydi.\n- 40 panel — hech kim o'qimaydi. Har dashboard bitta savolga javob bersin."
+  },
+  "33202": {
+    "a": "```promql\n# CPU band %\n100 - avg by (instance)(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100\n\n# mavjud xotira %\nnode_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100\n\n# disk bo'sh %\nnode_filesystem_avail_bytes{fstype!~\"tmpfs|overlay\"}\n  / node_filesystem_size_bytes * 100\n\n# disk band (saturation)\nrate(node_disk_io_time_seconds_total[5m])\n```\nGotcha: `MemFree` emas `MemAvailable` — Linux page cache'ni \"band\" ko'rsatadi, lekin u bo'shatiladi.\nInode tugashi ham \"No space left on device\" beradi: `node_filesystem_files_free`."
+  },
+  "33203": {
+    "a": "```\ncluster A: Prometheus x2 (HA) --remote_write-->\ncluster B: Prometheus x2      --remote_write--> Mimir/Thanos (S3) <- Grafana (global query)\n```\n- **HA:** ikkita bir xil Prometheus, Alertmanager cluster dedupe qiladi.\n- **Recording rules** — og'ir so'rovlarni oldindan hisoblash (`job:http_requests:rate5m`), dashboard tez.\n- **Downsampling** — eski ma'lumot 5m/1h rezolyutsiyada (Thanos compactor).\n- Federation — eski usul, faqat agregatlar uchun.\n\nAvval kardinallikni nazorat qiling: ko'pincha \"scale muammosi\" = keraksiz label'lar."
+  },
+  "33204": {
+    "a": "- **Region:** ma'lumot qayerda yotishi (qonun, latency), narx regionga qarab farq qiladi. Ko'p xizmatlar region darajasida.\n- **AZ:** alohida elektr, sovutish, tarmoq. Bitta AZ yiqilishi odatiy hodisa deb loyihalanadi.\n- **Edge:** CDN cache, DNS.\n\nQoida: production = multi-AZ (ALB + 2+ AZ'da instance/pod, RDS Multi-AZ). Multi-region — qimmat va murakkab, faqat haqiqiy RTO/RPO talab qilsa.\nGotcha: AZ'lar orasidagi trafik pullik."
+  },
+  "33205": {
+    "a": "| Oila | Qachon |\n|---|---|\n| t3/t4g | kichik, notekis yuk (CPU credit) |\n| m7i/m7g | umumiy servislar |\n| c7i/c7g | CPU-bound (API, encoding) |\n| r7i/r7g | xotira (cache, DB) |\n\nNarx modellari: On-Demand, Savings Plans/Reserved (1-3 yil, ~40-70% arzon), Spot (90% gacha arzon, 2 daqiqa ogohlantirish bilan olib qo'yiladi — stateless/batch uchun).\nGotcha: `t` instance CPU credit tugasa sekinlashadi — doimiy yuk uchun `m`.\nAMI — image, user data — birinchi boot skripti, EBS — disk."
+  },
+  "33206": {
+    "a": "```sh\naws s3 cp backup.tar.gz s3://acme-backups/2026/10/\naws s3 sync ./site s3://acme-site --delete\naws s3 presign s3://acme-files/video.mp4 --expires-in 3600\n```\n- **Block Public Access** default yoqiq — shunday qolsin. Public kontent — CloudFront orqali.\n- Versioning + lifecycle (eski versiyalarni Glacier'ga, keyin o'chirish).\n- Shifrlash: SSE-S3 default, KMS — audit/kalit nazorati uchun.\n- Katta fayl upload: client to'g'ridan S3'ga **presigned URL** bilan (server orqali emas).\n- Strong read-after-write consistency (2020'dan)."
+  },
+  "33207": {
+    "a": "```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [{\n    \"Effect\": \"Allow\",\n    \"Action\": [\"s3:GetObject\"],\n    \"Resource\": \"arn:aws:s3:::acme-reports/*\"\n  }]\n}\n```\nQoidalar:\n- Ilovaga **role** (EC2 instance profile, EKS IRSA/Pod Identity, Lambda role) — access key emas.\n- Odamlar: SSO (IAM Identity Center), MFA; root account faqat favqulodda, MFA bilan.\n- Least privilege: `*` dan qoching, IAM Access Analyzer.\n- Explicit `Deny` har doim `Allow`dan ustun."
+  },
+  "33208": {
+    "a": "```\n              Internet\n                 |\n         [Internet Gateway]\n                 |\n  VPC 10.0.0.0/16\n  +-- public 10.0.1.0/24  : ALB, NAT GW, bastion\n  |        route 0.0.0.0/0 -> IGW\n  +-- private 10.0.11.0/24: app (EC2/EKS)\n  |        route 0.0.0.0/0 -> NAT GW\n  +-- private 10.0.21.0/24: RDS (internetga yo'l yo'q)\n```\n- Har AZ'da public + private subnet.\n- NAT GW pullik (soat + GB) — S3/DynamoDB uchun **VPC endpoint** (gateway, bepul) xarajatni kamaytiradi.\n- CIDR'ni boshidan katta va boshqa VPC/ofis bilan kesishmaydigan tanlang (peering uchun)."
+  },
+  "33209": {
+    "a": "| | Security Group | NACL |\n|---|---|---|\n| Daraja | ENI (instance) | subnet |\n| State | stateful | stateless (ephemeral port'larni ham ochish kerak) |\n| Qoidalar | faqat allow | allow + deny, raqam tartibida |\n| Manba | IP yoki **boshqa SG** | faqat CIDR |\n\nAmaliyot: asosiy himoya SG — \"DB SG faqat app SG'dan 5432 ga\". IP emas, SG reference — autoscaling'da ham ishlaydi.\nNACL — qo'pol blok (masalan, ma'lum CIDR'ni deny). 0.0.0.0/0 dan 22-port — xato; SSM Session Manager ishlating."
+  },
+  "33210": {
+    "a": "| | ALB | NLB |\n|---|---|---|\n| Qatlam | L7 | L4 |\n| Routing | path, host, header | port |\n| TLS | termination, SNI | passthrough yoki termination |\n| IP | o'zgaruvchan (DNS) | statik / Elastic IP |\n| WAF | bor | yo'q |\n\nHealth check: ALB `/healthz` HTTP 200 — yiqilgan target trafik olmaydi.\nDeregistration delay (connection draining) — deploy paytida mavjud so'rovlar tugaydi.\nK8s'da: AWS Load Balancer Controller — Ingress -> ALB, Service type LoadBalancer -> NLB."
+  },
+  "33211": {
+    "a": "- **Multi-AZ** = HA (failover), o'qish uchun ishlatilmaydi (Multi-AZ cluster bundan mustasno).\n- **Read replica** = scale, replication lag bor, failover avtomatik emas.\n- PITR: istalgan soniyaga **yangi** instance sifatida tiklanadi — endpoint o'zgaradi.\n- Private subnet, SG faqat app'dan, `storage_encrypted`, `deletion_protection`.\n- Ulanishlar ko'p (Lambda, ko'p pod) bo'lsa — RDS Proxy yoki PgBouncer.\n- Aurora: storage 3 AZ'da 6 nusxa, tezroq failover, qimmatroq.\n\nBackup'ni tiklashni **sinab ko'ring** — tiklanmagan backup = backup emas."
+  },
+  "33212": {
+    "a": "```sh\naws logs tail /ecs/api --follow --since 10m\naws cloudwatch describe-alarms --state-value ALARM\n```\n- Default EC2 metrikalarida **memory va disk yo'q** — agent o'rnating.\n- Logs Insights — so'rov tili:\n```\nfields @timestamp, @message\n| filter level = \"error\"\n| stats count() by bin(5m)\n```\n- Log retention default \"Never expire\" — xarajat o'sadi, retention qo'ying.\n- Muhim alarm'lar: ALB 5xx, target unhealthy, RDS CPU/storage/connections, billing."
+  },
+  "33213": {
+    "a": "Tez yutuqlar:\n- **AWS Budgets** alert (oylik limit 80%/100%).\n- Har resursda tag: `team`, `env`, `service` — Cost Explorer'da kim qancha sarflagani.\n- Dev muhitni kechasi o'chirish (scheduler).\n- Yashirin xarajatlar: NAT Gateway GB'lari, AZ'lar aro trafik, internetga egress, CloudWatch Logs, gp2 -> gp3 (arzonroq).\n- Yetim resurslar: unattached EBS, eski AMI/snapshot, Elastic IP.\n- Graviton (ARM) instance — ~20% arzon.\n- Barqaror yuk — Savings Plans; batch — Spot."
+  },
+  "33214": {
+    "a": "```nginx\nserver {\n    listen 80;\n    server_name api.example.com;\n\n    location / {\n        proxy_pass http://127.0.0.1:8080;\n        proxy_set_header Host              $host;\n        proxy_set_header X-Real-IP         $remote_addr;\n        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n    }\n}\n```\nHeader'larsiz backend hamma so'rovni `127.0.0.1`dan kelgan deb ko'radi va redirect'larda noto'g'ri host/sxema beradi.\nIlova `X-Forwarded-For`ga faqat ishonchli proxy'dan kelganda ishonishi kerak (spoofing)."
+  },
+  "33215": {
+    "a": "```sh\nsudo nginx -t && sudo systemctl reload nginx\nsudo nginx -T | less        # to'liq yig'ilgan config (include'lar bilan)\n```\n- Reload'da config xato bo'lsa master eski config'da qoladi — lekin har doim avval `-t`.\n- Fayllar: `/etc/nginx/nginx.conf`, `conf.d/*.conf` yoki `sites-available` + symlink `sites-enabled` (Debian).\n- Loglar: `/var/log/nginx/access.log`, `error.log` — 502/504 sababi error.log'da."
+  },
+  "33216": {
+    "a": "```nginx\nlocation = /healthz      { return 200 \"ok\"; }      # 1. aniq moslik\nlocation ^~ /static/     { root /var/www; }         # 2. prefix, regex tekshirilmaydi\nlocation ~* \\.(png|jpg)$ { expires 30d; }           # 3. regex, birinchi mos kelgan\nlocation /api/           { proxy_pass http://api; } # 4. eng uzun prefix\nlocation /               { proxy_pass http://web; }\n```\nGotcha: `default_server` bo'lmasa, noma'lum Host bilan kelgan so'rov **birinchi** server blokiga tushadi — boshqa saytingiz ochilib qolishi mumkin. Catch-all: `server { listen 80 default_server; return 444; }`."
+  },
+  "33217": {
+    "a": "```sh\nsudo apt install certbot python3-certbot-nginx\nsudo certbot --nginx -d example.com -d www.example.com\nsudo certbot renew --dry-run\nsystemctl list-timers | grep certbot\n```\n- HTTP-01: 80-port ochiq bo'lishi kerak. Wildcard (`*.example.com`) — faqat DNS-01.\n- 90 kun — avtomatlashtirishga majburlaydi. Muddat tugashini monitoring qiling (blackbox_exporter `probe_ssl_earliest_cert_expiry`).\n- Rate limit bor — test uchun `--staging`."
+  },
+  "33218": {
+    "a": "```nginx\nserver {\n    listen 80;\n    server_name example.com;\n    return 301 https://$host$request_uri;\n}\nserver {\n    listen 443 ssl;\n    http2 on;\n    server_name example.com;\n    ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;\n    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;\n    ssl_protocols TLSv1.2 TLSv1.3;\n    ssl_session_cache shared:SSL:10m;\n    add_header Strict-Transport-Security \"max-age=31536000; includeSubDomains\" always;\n}\n```\n- `fullchain.pem` (intermediate bilan) — faqat `cert.pem` bo'lsa ba'zi client'lar \"unable to verify\" beradi.\n- HSTS'ni yoqishdan oldin hamma subdomain HTTPS'da ekaniga ishonch hosil qiling (qaytarib olish qiyin).\n- Tekshirish: `testssl.sh`, SSL Labs."
+  },
+  "33219": {
+    "a": "```nginx\nupstream api {\n    least_conn;\n    server 10.0.1.10:8080 max_fails=3 fail_timeout=10s;\n    server 10.0.1.11:8080 max_fails=3 fail_timeout=10s;\n    server 10.0.1.12:8080 backup;\n    keepalive 32;                 # backend'ga ulanishlarni qayta ishlatish\n}\nserver {\n    location / {\n        proxy_pass http://api;\n        proxy_http_version 1.1;\n        proxy_set_header Connection \"\";   # keepalive uchun shart\n        proxy_next_upstream error timeout http_502;\n    }\n}\n```\n`proxy_next_upstream` POST'ni boshqa server'ga qayta yuborishi mumkin — non-idempotent so'rovlarda ehtiyot (default'da non-idempotent qayta yuborilmaydi)."
+  },
+  "33220": {
+    "a": "Debug tartibi:\n```sh\ntail -f /var/log/nginx/error.log\n# connect() failed (111: Connection refused)  -> 502: backend ishlamayapti / port\n# upstream timed out (110) while reading      -> 504: backend sekin\n# no live upstreams                           -> hamma server max_fails bilan chiqarilgan\nsystemctl status app; ss -tlnp | grep 8080\ncurl -v http://127.0.0.1:8080/healthz      # Nginx'siz to'g'ridan\n```\n- SELinux: `connect() ... (13: Permission denied)` -> `setsebool -P httpd_can_network_connect 1`.\n- 504'ni timeout'ni oshirib \"tuzatish\" — odatda simptomni yashirish; sekin endpoint'ni toping.\n- Access log'ga `$upstream_response_time` qo'shing."
+  },
+  "33221": {
+    "a": "```nginx\nhttp {\n    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;\n    limit_conn_zone $binary_remote_addr zone=conn:10m;\n    server_tokens off;\n    client_max_body_size 10m;\n\n    server {\n        location /api/login {\n            limit_req zone=api burst=20 nodelay;\n            limit_req_status 429;\n            limit_conn conn 10;\n            proxy_pass http://api;\n        }\n    }\n}\n```\nGotcha: Nginx LB/CDN ortida bo'lsa `$remote_addr` = LB IP, hamma bitta limitga tushadi — `real_ip_header X-Forwarded-For` + `set_real_ip_from <LB CIDR>`."
+  },
+  "33222": {
+    "a": "```nginx\nworker_processes auto;\nworker_rlimit_nofile 65535;\nevents { worker_connections 8192; }\nhttp {\n    sendfile on; tcp_nopush on;\n    keepalive_timeout 30s;\n    gzip on; gzip_types application/json text/css application/javascript;\n    proxy_cache_path /var/cache/nginx keys_zone=c:50m max_size=1g inactive=10m;\n    server {\n        location /api/catalog {\n            proxy_cache c;\n            proxy_cache_valid 200 1m;\n            proxy_cache_use_stale error timeout updating;   # backend yiqilsa eski javob\n            proxy_cache_lock on;                            # stampede'dan himoya\n            add_header X-Cache $upstream_cache_status;\n            proxy_pass http://api;\n        }\n    }\n}\n```\nO'lchang: `stub_status`/nginx-exporter, `$request_time` vs `$upstream_response_time` — kechikish Nginx'dami yoki backend'da."
+  },
+  "33223": {
+    "a": "```nginx\nmap $http_upgrade $connection_upgrade { default upgrade; '' close; }\n\nlocation /ws/ {\n    proxy_pass http://ws_backend;\n    proxy_http_version 1.1;\n    proxy_set_header Upgrade $http_upgrade;\n    proxy_set_header Connection $connection_upgrade;\n    proxy_read_timeout 1h;        # default 60s — jim ulanish uziladi\n}\n\nserver {\n    listen 443 ssl;\n    http2 on;\n    location /payments.v1.PaymentService/ { grpc_pass grpc://10.0.1.20:9090; }\n}\n```\nReload'da eski worker WebSocket ulanishlari tugaguncha yashaydi — `worker_shutdown_timeout` qo'ying, client reconnect logikasi bo'lsin."
+  }
+}

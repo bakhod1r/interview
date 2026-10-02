@@ -1,0 +1,95 @@
+{
+  "33387": {
+    "a": "```sh\nminikube start --cpus 4 --memory 8g\nminikube addons enable ingress\nkind create cluster --name dev --config kind-3nodes.yaml\nkind load docker-image api:dev --name dev        # lokal image'ni cluster'ga\ncurl -sfL https://get.k3s.io | sh -              # k3s server\n```\n| | minikube | kind | k3s |\n|---|---|---|---|\n| Maqsad | o'rganish, lokal dev | CI, test | yengil prod, edge |\n| Node | odatda 1 | container'lar, ko'p node | haqiqiy server/VM |\n| Tezlik | o'rtacha | tez | tez |\n\nLokal cluster'da LoadBalancer va storage farq qiladi — `minikube tunnel`, kind'da extraPortMappings."
+  },
+  "33388": {
+    "a": "```yaml\ncontainers:\n- name: api\n  image: ghcr.io/acme/api:1.5.0            # aniq versiya\n  # image: ghcr.io/acme/api@sha256:3f1c... # eng ishonchli: digest\n  imagePullPolicy: IfNotPresent\n```\n`latest` muammolari:\n- Turli node'larda turli versiya ishlashi mumkin (biri eski cache'dan).\n- `rollout undo` — oldingi ReplicaSet ham `latest` — hech narsa qaytmaydi.\n- Qaysi commit prod'da ekanini bilib bo'lmaydi.\nTag'ni ustidan yozish (mutable tag) ham xuddi shunday xavfli — registry'da tag immutability yoqing."
+  },
+  "33389": {
+    "a": "```sh\nkubectl cordon node-3\nkubectl drain node-3 --ignore-daemonsets --delete-emptydir-data --timeout=10m\n# ... kernel update, reboot ...\nkubectl uncordon node-3\nkubectl get nodes      # STATUS: Ready,SchedulingDisabled -> Ready\n```\n- DaemonSet pod'lari evict qilinmaydi — `--ignore-daemonsets` kerak.\n- emptyDir ma'lumoti yo'qoladi — shuning uchun alohida flag bilan tasdiqlash.\n- Drain osilsa: PDB ruxsat bermayapti (`replicas: 1` + `minAvailable: 1`) yoki controller'siz \"yalang'och\" pod."
+  },
+  "33390": {
+    "a": "```sh\nk9s -n prod             # :pods, :deploy, l = logs, s = shell, d = describe, ctrl-d = delete\nkubectl krew install ctx ns neat tree\nkubectl ctx prod-eu; kubectl ns payments\nkubectl tree deploy api              # Deployment -> ReplicaSet -> Pod\nkubectl get pod x -o yaml | kubectl neat   # status/managedFields'siz toza YAML\nstern -n prod api                    # ko'p pod loglari rangli, bir oqimda\n```\nAlias: `alias k=kubectl` + `source <(kubectl completion bash)` + `complete -F __start_kubectl k`.\nEhtiyot: UI'da prod context'da \"delete\" bir tugma — read-only kubeconfig ishlating."
+  },
+  "33391": {
+    "a": "```yaml\nenv:\n- name: POD_NAME\n  valueFrom: { fieldRef: { fieldPath: metadata.name } }\n- name: POD_NAMESPACE\n  valueFrom: { fieldRef: { fieldPath: metadata.namespace } }\n- name: NODE_NAME\n  valueFrom: { fieldRef: { fieldPath: spec.nodeName } }\n- name: MEM_LIMIT\n  valueFrom: { resourceFieldRef: { containerName: api, resource: limits.memory } }\nvolumes:\n- name: podinfo\n  downwardAPI:\n    items: [{ path: labels, fieldRef: { fieldPath: metadata.labels } }]\n```\nFoydalanish: log'larga pod nomi, Go `GOMEMLIMIT`ni limitdan hisoblash, consumer ID sifatida pod nomi.\nLabel'lar fayl orqali berilsa yangilanadi, env orqali — yo'q."
+  },
+  "33392": {
+    "a": "```sh\nsudo crictl ps -a                       # container'lar (o'lganlari bilan)\nsudo crictl pods\nsudo crictl logs <container-id>\nsudo crictl inspect <container-id> | jq '.info.runtimeSpec.linux.resources'\nsudo crictl images\nsudo crictl rmi --prune                 # ishlatilmagan image'lar (disk to'lsa)\n```\n`docker` CLI containerd'dagi K8s container'larini ko'rmaydi (boshqa namespace: `k8s.io`). Past darajada: `ctr -n k8s.io containers list`."
+  },
+  "33393": {
+    "a": "```sh\nls /etc/kubernetes/manifests/\n# etcd.yaml  kube-apiserver.yaml  kube-controller-manager.yaml  kube-scheduler.yaml\nkubectl get pods -n kube-system     # kube-apiserver-<node-name>\n```\n- O'zgartirish: manifest faylni tahrirlang — kubelet pod'ni qayta yaratadi.\n- Apiserver yiqilgan bo'lsa: `crictl ps`, `journalctl -u kubelet`, manifestdagi xato.\n- kubeadm: `kubeadm init`, `kubeadm join`, `kubeadm upgrade plan/apply`, `kubeadm certs check-expiration` (sertifikatlar 1 yilda tugaydi!)."
+  },
+  "33394": {
+    "a": "```\nkubectl apply -> authn -> authz (RBAC) -> mutating admission -> schema validation\n             -> validating admission -> etcd\n```\nBuilt-in misollar: `LimitRanger`, `ResourceQuota`, `PodSecurity`, `NamespaceLifecycle`.\nWebhook xavfi: webhook servisi yiqilsa va `failurePolicy: Fail` bo'lsa — cluster'da pod yaratib bo'lmaydi (hatto webhook'ning o'zini tuzatish ham). Shuning uchun:\n- `namespaceSelector` bilan `kube-system`ni chiqarib tashlash,\n- `timeoutSeconds` qisqa, webhook HA (2+ replika, PDB),\n- muhim bo'lmagan qoidalar uchun `failurePolicy: Ignore`.\nK8s 1.30+: ValidatingAdmissionPolicy (CEL) — webhook'siz, cluster ichida."
+  },
+  "33395": {
+    "a": "```sh\nkubectl get ns old-team -o jsonpath='{.spec.finalizers}{.metadata.finalizers}'\nkubectl api-resources --verbs=list --namespaced -o name | \\\n  xargs -n1 kubectl get -n old-team --ignore-not-found --show-kind\n# qolgan CR'lar, ularning controller'i (operator) allaqachon o'chirilgan\n```\nSabablar: operator o'chirilgan, lekin uning CR'larida finalizer qolgan; APIService ishlamayapti (`kubectl get apiservice` — False).\nTo'g'ri yo'l: controller'ni qaytarib tozalashga imkon berish. Finalizer'ni qo'lda olib tashlash (`kubectl patch ... -p '{\"metadata\":{\"finalizers\":null}}' --type=merge`) — tashqi resurslar (LB, disk) yetim qolishi mumkin.\n`--cascade=orphan` — egasini o'chirib, bolalarini qoldirish."
+  },
+  "33396": {
+    "a": "```yaml\nspec:\n  hostNetwork: true\n  dnsPolicy: ClusterFirstWithHostNet\n  dnsConfig:\n    options: [{ name: ndots, value: \"2\" }]\n```\nGotcha'lar:\n- `hostNetwork` + `dnsPolicy` default -> pod cluster Service nomlarini topa olmaydi.\n- hostNetwork pod'lar node portini band qiladi — bir node'da bitta replika.\n- Xavfsizlik: node tarmog'iga to'liq kirish — Pod Security `baseline` uni taqiqlaydi.\n- `ndots`ni pasaytirish tashqi domenlar uchun DNS so'rovlar sonini kamaytiradi."
+  },
+  "33397": {
+    "a": "```yaml\napiVersion: scheduling.k8s.io/v1\nkind: PriorityClass\nmetadata: { name: business-critical }\nvalue: 100000\nglobalDefault: false\npreemptionPolicy: PreemptLowerPriority\ndescription: \"To'lov va checkout servislari\"\n---\nspec:\n  priorityClassName: business-critical\n```\nIshlatish: muhim servislar > batch job'lar; overprovisioning (manfiy prioritetli \"pause\" pod'lar).\nXavf: hamma o'zini \"critical\" deb belgilasa ma'nosi yo'qoladi — ResourceQuota bilan PriorityClass bo'yicha cheklang. Preemption PDB'ni iloji boricha hurmat qiladi, lekin kafolat bermaydi."
+  },
+  "33398": {
+    "a": "```sh\nterraform console\n> cidrsubnet(\"10.0.0.0/16\", 8, 3)       # \"10.0.3.0/24\"\n> [for s in var.subnets : upper(s)]\n> aws_instance.web.private_ip\n\nterraform output -json | jq .\nterraform show tf.plan                     # saqlangan plan\nterraform show -json tf.plan | jq '.resource_changes[] | select(.change.actions | index(\"delete\"))'\nterraform graph | dot -Tsvg > graph.svg\n```\n`show -json` — CI'da plan'ni avtomatik tekshirish (masalan, delete bo'lsa approval talab qilish) uchun asos."
+  },
+  "33399": {
+    "a": "```hcl\nvariable \"ingress_ports\" { default = [80, 443] }\n\nresource \"aws_security_group\" \"web\" {\n  name   = \"web\"\n  vpc_id = var.vpc_id\n\n  dynamic \"ingress\" {\n    for_each = var.ingress_ports\n    content {\n      from_port   = ingress.value\n      to_port     = ingress.value\n      protocol    = \"tcp\"\n      cidr_blocks = [\"0.0.0.0/0\"]\n    }\n  }\n}\n```\nIterator nomi default blok nomi (`ingress.value`, `ingress.key`).\nKo'p hollarda alohida resurs (`aws_vpc_security_group_ingress_rule` + `for_each`) aniqroq: har qoida alohida manzilga ega, o'zgarish boshqalariga tegmaydi."
+  },
+  "33400": {
+    "a": "```hcl\nresource \"terraform_data\" \"migrate\" {\n  triggers_replace = [var.app_version]        # versiya o'zgarsa qayta ishlaydi\n  provisioner \"local-exec\" {\n    command = \"./scripts/migrate.sh ${var.app_version}\"\n  }\n}\n```\n- `terraform_data` (1.4+) — `null_resource`ning o'rnini bosadi, provider kerak emas.\n- `remote-exec` SSH ulanish, kalit va tarmoq kirishini talab qiladi — CI'da mo'rt.\n- Imkon qadar: `user_data` (birinchi boot), Packer bilan tayyor AMI, konfiguratsiya uchun Ansible."
+  },
+  "33401": {
+    "a": "| | SQS | SNS | EventBridge |\n|---|---|---|---|\n| Model | queue (pull) | pub/sub (push) | event bus + rules |\n| Iste'molchi | bitta guruh | ko'p | ko'p, filtr bilan |\n| Saqlash | 14 kungacha | yo'q (darhol yetkazadi) | archive/replay |\n| Misol | background job | bir hodisani ko'p servisga | \"S3'ga fayl tushsa\", cron |\n\nKlassik pattern: SNS -> bir nechta SQS (fan-out) — har servis o'z navbatida, mustaqil retry.\nSQS Standard — at-least-once, tartib kafolatsiz: handler idempotent bo'lsin; DLQ va visibility timeout sozlang."
+  },
+  "33402": {
+    "a": "| | ECS | EKS |\n|---|---|---|\n| API | AWS'ga xos | Kubernetes |\n| O'rganish | oson | qiyin |\n| Ekotizim | AWS integratsiya | Helm, operator'lar, multi-cloud |\n| Control plane narxi | bepul | ~$73/oy cluster |\n\nCompute: EC2 (arzonroq katta yukda, GPU) yoki Fargate (node yo'q, task bo'yicha to'lov, cold start, ba'zi cheklovlar — DaemonSet yo'q).\nKichik jamoa, faqat AWS — ECS + Fargate ko'pincha eng sodda tanlov."
+  },
+  "33403": {
+    "a": "```\nRoot (management)\n +-- OU Security    : log-archive, audit\n +-- OU Infra       : network, shared-services\n +-- OU Workloads\n      +-- prod      : payments-prod, api-prod\n      +-- nonprod   : dev, staging\n```\n```json\n{ \"Effect\": \"Deny\", \"Action\": \"*\", \"Resource\": \"*\",\n  \"Condition\": { \"StringNotEquals\": { \"aws:RequestedRegion\": [\"eu-central-1\"] } } }\n```\nTipik SCP'lar: ruxsat etilmagan region'larni taqiqlash, CloudTrail/GuardDuty'ni o'chirishni taqiqlash, root user amallarini cheklash.\nControl Tower/Landing Zone — bu tuzilmani avtomatik quradi. Odamlar SSO bilan kerakli account'ga role orqali kiradi."
+  },
+  "33404": {
+    "a": "| Servis | Savol | Misol |\n|---|---|---|\n| CloudTrail | Kim nima qildi? | \"SG'ni kim 0.0.0.0/0 ga ochdi?\" |\n| GuardDuty | Hujum bormi? | EC2 mining pool'ga ulanmoqda |\n| Config | Holat qoidaga mosmi, qanday o'zgargan? | shifrlanmagan EBS ro'yxati |\n| Security Hub | Hammasini bir joyda | CIS benchmark ball |\n\nMinimum: CloudTrail barcha region'larda, alohida log-archive account'dagi S3'ga (o'chirib bo'lmaydigan), GuardDuty yoqiq, muhim hodisalarga (root login, IAM o'zgarishi) EventBridge orqali alert."
+  },
+  "33405": {
+    "a": "| | VPC peering | Transit Gateway | PrivateLink |\n|---|---|---|---|\n| Topologiya | 1:1 | hub-and-spoke | servis -> iste'molchi |\n| Tranzitiv | yo'q | ha | — |\n| CIDR kesishishi | mumkin emas | mumkin emas | mumkin |\n| Narx | faqat trafik | soat + GB | soat + GB |\n| Misol | 2-3 VPC | 10+ VPC, VPN/Direct Connect | SaaS, boshqa jamoa API'si |\n\nAWS servislariga (S3, ECR, STS) xususiy kirish — VPC endpoint (gateway yoki interface/PrivateLink) — NAT trafigi va xarajatini kamaytiradi."
+  },
+  "33406": {
+    "a": "```sh\ngit restore main.go               # o'zgarishni tashlash (eski: git checkout -- main.go)\ngit restore --staged main.go      # unstage (eski: git reset HEAD main.go)\ngit clean -n                      # nima o'chishini ko'rish (dry run)\ngit clean -fd                     # untracked fayl va kataloglar\ngit clean -fdx                    # + .gitignore'dagilar (build, node_modules, .env!)\n```\n`-x` ehtiyot: lokal `.env`, IDE sozlamalari ham o'chadi. Har doim avval `-n`.\nCommit qilinmagan o'zgarishni `restore` qilsangiz — qaytarib bo'lmaydi (reflog'da yo'q)."
+  },
+  "33407": {
+    "a": "```\n1.4.2 -> 1.4.3   bug fix\n1.4.3 -> 1.5.0   yangi endpoint, eski ishlaydi\n1.5.0 -> 2.0.0   API'dan maydon olib tashlandi\n```\n| Constraint | Ma'nosi |\n|---|---|\n| `^1.4.0` (npm) | >=1.4.0 <2.0.0 |\n| `~1.4.0` (npm) | >=1.4.0 <1.5.0 |\n| `~> 5.60` (Terraform) | >=5.60, <6.0 |\n\nAvtomatlashtirish: Conventional Commits (`feat:` -> minor, `fix:` -> patch, `feat!:`/`BREAKING CHANGE` -> major) + semantic-release/release-please -> tag va changelog.\nGo modullari: v2+ import yo'lida `/v2` bo'lishi shart."
+  },
+  "33408": {
+    "a": "```sh\ngit submodule add https://github.com/acme/proto.git third_party/proto\ngit clone --recurse-submodules URL\ngit submodule update --init --recursive     # clone'dan keyin unutilgan bo'lsa\ngit submodule update --remote               # upstream'ning oxirgi commit'iga\n```\n- Ota repo faqat commit hash'ni saqlaydi (`.gitmodules` + gitlink).\n- Klassik xato: submodule ichida commit qilib push qilmaslik — boshqalar mavjud bo'lmagan commit'ga ishora oladi.\n- CI: `actions/checkout` da `submodules: recursive` va private bo'lsa token."
+  },
+  "33409": {
+    "a": "```yaml\n- hosts: web\n  serial: 1\n  tasks:\n    - name: LB'dan chiqarish\n      community.general.haproxy: { state: disabled, host: \"{{ inventory_hostname }}\", backend: app }\n      delegate_to: lb1\n\n    - name: DB migration (bir marta)\n      ansible.builtin.command: /opt/app/bin/migrate\n      run_once: true\n\n    - name: Slack'ga xabar\n      ansible.builtin.uri: { url: \"{{ slack_hook }}\", method: POST, body_format: json, body: { text: \"deploy {{ inventory_hostname }}\" } }\n      delegate_to: localhost\n```\nGotcha: `run_once` + `serial` — har batch'da bir marta ishlaydi, butun play'da emas."
+  },
+  "33410": {
+    "a": "```sh\nsplit -l 25 data.txt part_             # 25 qatordan: part_aa, part_ab\nsplit -b 100M -d backup.tar.gz bk_     # 100MB, raqamli suffix\ncat bk_* > backup.tar.gz && sha256sum backup.tar.gz\n\nopenssl rand -hex 16                   # 32 hex belgi\nopenssl rand -base64 24\ntr -dc 'A-Za-z0-9' </dev/urandom | head -c 7; echo\n\necho -n 'admin:s3cret' | base64        # YWRtaW46czNjcmV0\necho 'YWRtaW46czNjcmV0' | base64 -d\n```\nK8s Secret qiymatlari base64 — har kim decode qila oladi; himoya RBAC va encryption at rest'da.\n`echo`siz `-n` yangi qator ham kodlanadi — klassik xato."
+  },
+  "33411": {
+    "a": "```\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @\nOffending ECDSA key in /home/me/.ssh/known_hosts:42\n```\n```sh\nssh-keygen -R web1.example.com         # eski yozuvni o'chirish\nssh-keyscan -t ed25519 web1.example.com # yangi kalit\n# fingerprint'ni ishonchli kanal orqali solishtiring (cloud konsol, admin)\nssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub   # server tomonda\n```\n`StrictHostKeyChecking=no` — MITM'ga eshik ochadi; faqat vaqtinchalik lab'da. Avtomatlashtirishda: known_hosts'ni IaC orqali to'ldirish yoki SSH sertifikatlari (CA bilan imzolangan host key)."
+  },
+  "33412": {
+    "a": "```sh\nlsmod | grep br_netfilter\nsudo modprobe br_netfilter\nsudo modprobe -r pcspkr\nmodinfo overlay\necho br_netfilter | sudo tee /etc/modules-load.d/k8s.conf\necho \"blacklist nouveau\" | sudo tee /etc/modprobe.d/blacklist-nouveau.conf\nuname -r                               # joriy kernel versiyasi\n```\nK8s node tayyorlashda klassik: `overlay` va `br_netfilter` modullari + `net.bridge.bridge-nf-call-iptables=1`, `net.ipv4.ip_forward=1`.\nSecure Boot yoqilgan bo'lsa imzosiz modul (masalan, NVIDIA DKMS) yuklanmaydi."
+  },
+  "33413": {
+    "a": "```sh\nlscpu | grep -E 'Model name|^CPU\\(s\\)|Thread|NUMA|Hypervisor'\nnproc\nfree -h\nlsblk -o NAME,SIZE,TYPE,MOUNTPOINT,MODEL\nsudo dmidecode -t system -t memory | less\nlspci | grep -i -E 'ethernet|nvidia'\ncat /proc/cpuinfo | grep -c processor\nhostnamectl                 # OS, kernel, virtualizatsiya turi\nsystemd-detect-virt         # kvm, xen, none\n```\nKonteyner ichida `nproc`/`free` ko'pincha **host**ning qiymatini ko'rsatadi, cgroup limitini emas — `cat /sys/fs/cgroup/cpu.max`, `memory.max`."
+  },
+  "33414": {
+    "a": "```sh\nsudo ip netns add red\nsudo ip link add veth-host type veth peer name veth-red\nsudo ip link set veth-red netns red\nsudo ip addr add 10.10.0.1/24 dev veth-host && sudo ip link set veth-host up\nsudo ip netns exec red ip addr add 10.10.0.2/24 dev veth-red\nsudo ip netns exec red ip link set veth-red up\nsudo ip netns exec red ip link set lo up\nsudo ip netns exec red ping -c1 10.10.0.1\n```\n```\n[netns red: veth-red 10.10.0.2] ==veth== [host: veth-host 10.10.0.1] -> (bridge docker0/cni0) -> NAT -> internet\n```\nKonteyner namespace'iga kirish: `nsenter -t <PID> -n ip a` — image'da tool bo'lmasa ham host vositalari bilan debug."
+  },
+  "33415": {
+    "a": "```sh\nsudo useradd --system --no-create-home --shell /usr/sbin/nologin app\nid app                       # uid=998(app) ... (system UID diapazoni)\nsudo -u app /opt/app/bin/server    # shu user nomidan ishga tushirish\ngetent passwd app\n\nls -a /etc/skel              # .bashrc .profile .bash_logout\nsudo useradd -m -s /bin/bash alice   # -m: /home/alice + skel nusxasi\n```\n- `nologin` — interaktiv kirishni rad etadi, lekin `sudo -u` va systemd `User=` ishlaydi.\n- systemd'da `DynamicUser=yes` — user'ni umuman yaratmasdan vaqtinchalik UID.\n- Parolsiz, lekin SSH kalit bilan kirish mumkin bo'lgan user'larni ham tekshiring: `/home/*/.ssh/authorized_keys`."
+  },
+  "33416": {
+    "a": "```yaml\n# GitHub Actions\njobs:\n  test:\n    strategy:\n      fail-fast: false\n      matrix:\n        go: [\"1.24\", \"1.25\"]\n        os: [ubuntu-latest, macos-latest]\n    runs-on: ${{ matrix.os }}\n    steps:\n    - uses: actions/checkout@v4\n    - uses: actions/setup-go@v5\n      with: { go-version: \"${{ matrix.go }}\", cache: true }   # go mod + build cache\n    - run: go test -race ./...\n```\nCache kaliti lock faylning hash'idan (`go.sum`, `package-lock.json`) — dependency o'zgarsa cache yangilanadi.\nDocker: `cache-from/cache-to: type=gha` yoki registry cache.\nGotcha: cache'ga natija artefaktlarini (test natijasi) qo'ymang — \"yashil\" eskirgan build."
+  },
+  "33417": {
+    "a": "```\nPR:      lint -> unit test -> SAST -> SCA -> secret scan -> build image -> image scan\n          -> quality gate (yangi kodda: coverage >= 80%, 0 critical)\nstaging: deploy -> DAST (ZAP baseline) -> e2e\nprod:    imzolangan image, admission policy\n```\n```sh\ngovulncheck ./...          # faqat haqiqatan chaqirilgan zaif funksiyalar\nsemgrep ci\ntrivy fs --scanners vuln,secret,misconfig .\n```\nAmaliyot: \"yangi kod\" bo'yicha gate (eski qarzni birdaniga emas), false positive'larni boshqarish jarayoni, critical bo'lmaganlar — ticket, bloklamaydi. Aks holda jamoa skanerlarni o'chirib qo'yadi."
+  }
+}

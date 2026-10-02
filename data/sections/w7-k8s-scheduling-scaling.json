@@ -1,0 +1,175 @@
+{
+  "id": "w7",
+  "name": "K8s scheduling, scaling & storage",
+  "domain": "k8s",
+  "topics": [
+    "Scheduling & scaling"
+  ],
+  "questions": [
+    {
+      "id": 33277,
+      "code": "WS01",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Scheduler pod'ni qaysi node'ga joylashini qanday hal qiladi?",
+      "explanation": "Ikki bosqich: filtering (requests sig'adimi, nodeSelector/affinity, taint/toleration, port, volume zone) va scoring (resurs balansi, affinity afzalligi, spread). Eng yuqori ball olgan node tanlanadi. Hech biri mos kelmasa pod Pending."
+    },
+    {
+      "id": 33278,
+      "code": "WS02",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "nodeSelector, node affinity va taint/toleration farqi?",
+      "explanation": "nodeSelector/node affinity — pod qaysi node'larga **borishni xohlaydi** (pod tomondan tortish). Taint — node qaysi pod'larni **qabul qilmaydi** (node tomondan itarish); toleration bilan pod ruxsat oladi, lekin u yerga majburan bormaydi."
+    },
+    {
+      "id": 33279,
+      "code": "WS03",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Volume turlari: emptyDir, hostPath, configMap/secret, PVC?",
+      "explanation": "emptyDir — pod umri davomida vaqtinchalik (cache, tmp); hostPath — node fayl tizimi (xavfli, faqat tizim agentlari); configMap/secret — config fayl sifatida mount; PVC — doimiy storage (pod o'lsa ham qoladi)."
+    },
+    {
+      "id": 33280,
+      "code": "WS04",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "PV access mode'lari: ReadWriteOnce, ReadOnlyMany, ReadWriteMany, ReadWriteOncePod?",
+      "explanation": "RWO — bitta node o'qib-yozadi (EBS kabi blok disk); ROX — ko'p node o'qiydi; RWX — ko'p node o'qib-yozadi (NFS, EFS, CephFS); RWOP — faqat bitta pod."
+    },
+    {
+      "id": 33281,
+      "code": "WS05",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Liveness, readiness va startup probe'lar qachon qaysi biri ishlatiladi?",
+      "explanation": "readiness — trafik olishga tayyormi (fail = endpoint'dan chiqariladi); liveness — osilib qolganmi (fail = container restart); startup — sekin start bo'ladigan ilova uchun, o'tguncha liveness/readiness ishlamaydi."
+    },
+    {
+      "id": 33282,
+      "code": "WS06",
+      "level": "M",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Pod'larni AZ va node bo'yicha tarqatish: topologySpreadConstraints va podAntiAffinity?",
+      "explanation": "Barcha replikalar bitta node/AZ'da bo'lsa bitta nosozlik hammasini o'ldiradi. `topologySpreadConstraints` maxSkew bilan teng taqsimlaydi; podAntiAffinity bir xil pod'larni bir joyga qo'ymaydi."
+    },
+    {
+      "id": 33283,
+      "code": "WS07",
+      "level": "M",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "HPA, VPA va Cluster Autoscaler/Karpenter qanday birga ishlaydi?",
+      "explanation": "HPA — pod sonini metrikaga qarab o'zgartiradi; VPA — pod requests/limits'ni moslaydi; Cluster Autoscaler/Karpenter — Pending pod'lar uchun node qo'shadi va bo'sh node'larni olib tashlaydi. HPA va VPA bir xil CPU/memory metrikada birga ishlatilmaydi."
+    },
+    {
+      "id": 33284,
+      "code": "WS08",
+      "level": "M",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "KEDA nima va qachon HPA'dan yaxshiroq?",
+      "explanation": "KEDA — event-driven autoscaler: navbat uzunligi (Kafka lag, SQS, RabbitMQ), cron, Prometheus so'rovi bo'yicha scale qiladi va 0 replikaga tushira oladi. Ichida HPA'ni boshqaradi."
+    },
+    {
+      "id": 33285,
+      "code": "WS09",
+      "level": "M",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "StorageClass, dynamic provisioning va reclaimPolicy nima?",
+      "explanation": "StorageClass — disk turi va provisioner'ni (CSI drayver) tasvirlaydi; PVC yaratilganda mos PV avtomatik yaratiladi. reclaimPolicy: `Delete` — PVC o'chsa disk ham o'chadi; `Retain` — disk qoladi (qo'lda tozalash)."
+    },
+    {
+      "id": 33286,
+      "code": "WS10",
+      "level": "M",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "ResourceQuota va LimitRange nima uchun kerak?",
+      "explanation": "ResourceQuota — namespace bo'yicha umumiy limit (jami CPU/memory requests, pod soni, PVC, LoadBalancer). LimitRange — har container uchun default va min/max requests/limits. Ko'p jamoali cluster'da bir jamoa hammani bo'g'ib qo'ymasligi uchun."
+    },
+    {
+      "id": 33287,
+      "code": "WS11",
+      "level": "S",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "CPU limit va throttling: nega ko'p jamoalar CPU limit qo'ymaydi?",
+      "explanation": "CFS quota har 100ms davrda limitni qo'llaydi: ko'p thread'li ilova (Go GC, GOMAXPROCS = node yadrolari) quota'ni davr boshida yeb, qolgan vaqtda throttle bo'ladi — o'rtacha CPU past, lekin p99 latency yomon. Ko'pincha: to'g'ri CPU requests, limit yo'q (yoki keng), memory limit = requests."
+    },
+    {
+      "id": 33288,
+      "code": "WS12",
+      "level": "S",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Node bosimi va eviction: kubelet pod'larni qachon va qaysi tartibda chiqaradi?",
+      "explanation": "Node'da memory/disk/PID kam qolsa (eviction threshold, masalan `memory.available<100Mi`), kubelet pod'larni evict qiladi: avval requests'dan oshib ishlatayotganlar, QoS bo'yicha BestEffort -> Burstable -> Guaranteed, priority hisobga olinadi."
+    },
+    {
+      "id": 33289,
+      "code": "WS13",
+      "level": "S",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Katta cluster'da Pending pod'lar va bin-packing samaradorligini qanday optimallashtirasiz?",
+      "explanation": "Requests'ni haqiqiy foydalanishga moslash (VPA tavsiya, p95 foydalanish), har xil instance turlari bilan Karpenter konsolidatsiya, PriorityClass + overprovisioning (pause pod) tez scale uchun, Spot + On-Demand aralashma, daemonset xarajatini hisobga olish."
+    },
+    {
+      "id": 33290,
+      "code": "WS14",
+      "level": "S",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "etcd nima uchun kritik va uni qanday himoya qilish/zaxiralash kerak?",
+      "explanation": "etcd — butun cluster holati (hamma obyekt, Secret'lar). Raft konsensus: 3 yoki 5 a'zo, kvorum yo'qolsa API yozishni to'xtatadi. Tez disk (fsync latency), muntazam snapshot, encryption at rest, faqat apiserver kirishi."
+    },
+    {
+      "id": 33397,
+      "code": "WS15",
+      "level": "M",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "PriorityClass va preemption qanday ishlaydi?",
+      "explanation": "PriorityClass pod'ga raqamli ustuvorlik beradi. Joy bo'lmasa scheduler past prioritetli pod'larni evict qilib (preempt) yuqori prioritetlisiga joy ochadi. Tizim pod'lari `system-cluster-critical`/`system-node-critical`."
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "33371": {
+    "a": "```sh\ncmd < input.txt          # stdin fayldan\ncmd > out.txt            # stdout faylga (ustidan yozish)\ncmd >> out.txt           # stdout qo'shish\ncmd 2> err.txt           # faqat stderr\ncmd > all.txt 2>&1       # ikkalasi bitta faylga\ncmd &> all.txt           # bash qisqa yozuvi (bir xil)\ncmd 2>/dev/null          # xatolarni yashirish\ncmd > /dev/null 2>&1     # hammasini jim qilish (cron'da ko'p)\nls -l /proc/$$/fd        # joriy shell'ning fd'lari\n```\nstderr alohida bo'lishining sababi: pipe faqat stdout'ni keyingi buyruqqa uzatadi, xatolar ekranda ko'rinib qoladi va ma'lumotni buzmaydi."
+  },
+  "33372": {
+    "a": "```sh\nls /yoq /tmp > out.txt 2>&1    # out.txt: ikkalasi\nls /yoq /tmp 2>&1 > out.txt    # xato ekranda, faqat ro'yxat faylda\n```\n`2>&1` = \"fd 2'ni fd 1 **hozir** ko'rsatayotgan joyga nusxala\" (dup2), ko'rsatkich emas.\nPipe bilan: `cmd 2>&1 | grep x` — stderr ham pipe'ga kiradi; bash'da `cmd |& grep x`."
+  },
+  "33373": {
+    "a": "```sh\n# bitta arxivga\nfind /var/log/app -name '*.log' -mtime -1 -print0 | \\\n  tar --null -czf logs-$(date +%F).tar.gz --files-from=-\n\n# har birini alohida siqish\nfind /var/log/app -name '*.log' -mtime -1 -exec gzip -k {} +\n\n# 7 kundan eski .gz'larni o'chirish (avval -print bilan tekshiring!)\nfind /var/log/app -name '*.gz' -mtime +7 -print\nfind /var/log/app -name '*.gz' -mtime +7 -delete\n```\n`-mtime -1` = 24 soatdan yangi, `+7` = 7 kundan eski (to'liq kunlar bo'yicha yaxlitlanadi). Aniqroq: `-newermt \"2026-10-01 00:00\"`."
+  },
+  "33374": {
+    "a": "```sh\n# ko'rib chiqish (o'zgartirmaydi)\nsed 's/db-old.internal/db.internal/g' config.yaml | diff config.yaml -\n\n# zaxira bilan joyida\nsed -i.bak 's/db-old.internal/db.internal/g' config.yaml\n\n# ko'p faylda\ngrep -rl 'db-old.internal' /etc/app | xargs sed -i 's/db-old\\.internal/db.internal/g'\n\n# / ko'p bo'lsa boshqa ajratuvchi\nsed -i 's|/opt/old|/opt/new|g' *.conf\n```\nGotcha: macOS (BSD) `sed -i` argument talab qiladi: `sed -i '' 's/a/b/' f`. Regex'da `.` har qanday belgini bildiradi — `\\.` bilan ekranlang."
+  },
+  "33375": {
+    "a": "```sh\nawk '{print $1}' access.log                     # birinchi ustun (IP)\nawk -F: '{print $1, $7}' /etc/passwd            # user va shell\nawk '$9 >= 500 {print $7}' access.log           # 5xx bo'lgan URL'lar\nawk '{s += $10} END {print s/1024/1024 \" MB\"}' access.log   # jami trafik\nawk 'NR==10, NR==20' file                       # 10-20 qatorlar\nawk '{print $NF}' file                          # oxirgi ustun\ndf -h | awk 'NR>1 && $5+0 > 80 {print $6, $5}'  # 80% dan to'la disklar\n```\nOddiy holatda `cut -d: -f1` ham bo'ladi, lekin `cut` ketma-ket bo'shliqlarni bitta deb hisoblamaydi — `awk` hisoblaydi."
+  },
+  "33376": {
+    "a": "```sh\nprintf 'a\\nb\\na\\n' | uniq          # a b a  (noto'g'ri)\nprintf 'a\\nb\\na\\n' | sort | uniq   # a b\n\n# eng ko'p uchragan 10 ta IP\nawk '{print $1}' access.log | sort | uniq -c | sort -rn | head\n\ndu -sh * | sort -h                     # hajm bo'yicha\nsort -t, -k3,3n data.csv              # 3-ustun son bo'yicha\nsort -u emails.txt                    # = sort | uniq\n```\nGotcha: `sort -n` \"10K\"ni tushunmaydi — `-h`. Locale tartibni o'zgartiradi: barqaror natija uchun `LC_ALL=C sort`."
+  },
+  "33377": {
+    "a": "```sh\nhead -n 5 file\ntail -n 100 /var/log/syslog\ntail -n +2 data.csv                 # sarlavhasiz\nsed -n '100,120p' big.log           # 100-120 qatorlar\ntail -F /var/log/nginx/access.log   # logrotate'dan keyin ham ishlaydi\ntail -f app.log | grep --line-buffered ERROR\nhead -c 1M /dev/urandom > test.bin  # bayt bo'yicha\n```\n`-f` fayl deskriptorini kuzatadi: logrotate faylni ko'chirsa, eski (endi bo'sh) faylga qarab qolasiz — shuning uchun `-F`."
+  },
+  "33378": {
+    "a": "```sh\ncut -d, -f1,3 users.csv              # 1 va 3-ustun\ncut -c1-8 hashes.txt                 # birinchi 8 belgi\necho \"Hello\" | tr 'a-z' 'A-Z'        # HELLO\ntr -d '\\r' < win.txt > unix.txt      # Windows CRLF ni tozalash\ntr -s ' ' < file                     # ketma-ket bo'shliqlarni bittaga\nwc -l access.log                     # qatorlar soni\nls | wc -l\npaste -sd+ nums.txt | bc             # ustundagi sonlar yig'indisi\nmount | column -t                    # tekislangan jadval\n```\n`$'\\r'` (CRLF) — \"bad interpreter: /bin/bash^M\" xatosining sababi; `dos2unix` yoki `tr -d '\\r'`."
+  },
+  "33379": {
+    "a": "```sh\nps aux | grep nginx         # ... grep --color=auto nginx ham chiqadi\nps aux | grep '[n]ginx'     # grep o'zi chiqmaydi\npgrep -a nginx              # PID + buyruq\npgrep -u www-data -c nginx  # soni\npidof nginx\nps -o pid,ppid,%cpu,%mem,etime,cmd -C nginx\nsystemctl status nginx      # systemd servis bo'lsa eng aniq\n```\nSkriptda `ps | grep | wc -l` bilan \"ishlayaptimi\" tekshirish xato beradi (grep hisobga kiradi) — `pgrep -x` yoki `systemctl is-active`."
+  },
+  "33380": {
+    "a": "```sh\napt install htop\nsudo !!                        # = sudo apt install htop\nmkdir -p /opt/app/releases && cd !$\nhistory | grep docker\n!123                           # 123-buyruqni qayta\nCtrl+R  -> \"kubectl\"           # orqaga qidiruv, yana Ctrl+R keyingisi\n```\nXavfsizlik: buyruqda parol yozilsa tarixda qoladi. Bo'shliq bilan boshlang (`HISTCONTROL=ignorespace`) yoki parolni env/fayldan o'qing; `history -d N` bilan o'chirish."
+  },
+  "33381": {
+    "a": "```sh\ndiff -u nginx.conf.orig nginx.conf > nginx.patch\npatch --dry-run -p0 < nginx.patch\npatch -p0 < nginx.patch\n\ndiff -rq dir1/ dir2/                         # qaysi fayllar farq qiladi\ndiff <(ssh web1 cat /etc/nginx/nginx.conf) <(ssh web2 cat /etc/nginx/nginx.conf)\ndiff <(sort a.txt) <(sort b.txt)\nvimdiff a b                                  # interaktiv\ncmp -s a b && echo bir-xil                    # binary, jim\n```\n`diff` exit code: 0 — bir xil, 1 — farq bor, 2 — xato. Skriptda `set -e` bilan ehtiyot."
+  },
+  "33382": {
+    "a": "```sh\nsha256sum app-1.5.0.tar.gz\nsha256sum -c app-1.5.0.tar.gz.sha256       # rasmiy checksum bilan\nsha256sum *.tar.gz > SHA256SUMS\nsha256sum -c SHA256SUMS --quiet\n\n# ko'chirishdan keyin\nssh backup sha256sum /backups/db.sql.gz\n```\n- Checksum faqat checksum ishonchli manbadan kelsa ma'noli (HTTPS, GPG imzo: `gpg --verify`).\n- `rsync -c` — fayllarni hash bo'yicha solishtiradi.\n- Katta fayllar uchun tezroq: `b3sum` (BLAKE3)."
+  },
+  "33383": {
+    "a": "```sh\nfile backup.tar.gz          # gzip compressed data\nfile /usr/bin/ls            # ELF 64-bit ... dynamically linked\nstat -c '%n %s bayt %U:%G %a %y' app.log\ntouch -d '2026-10-01 00:00' marker && find . -newer marker\nbasename /var/log/nginx/access.log .log    # access\ndirname  /var/log/nginx/access.log         # /var/log/nginx\nrealpath ./../conf\n```\nVaqtlar: mtime — mazmun o'zgardi, ctime — metadata (chmod/chown) o'zgardi, atime — o'qildi (ko'pincha `relatime` bilan kam yangilanadi). \"Yaratilgan vaqt\" — `stat`dagi Birth (FS qo'llasa)."
+  },
+  "33384": {
+    "a": "```sh\n# to'g'ri\nwhile IFS= read -r host; do\n  ssh -n \"$host\" uptime          # -n: ssh stdin'ni yutib qo'ymasin!\ndone < hosts.txt\n\n# xato: \"my file.txt\" ikkiga bo'linadi\nfor f in $(cat list.txt); do ...; done\n\n# o'zgaruvchi saqlanishi uchun pipe emas, process substitution\ncount=0\nwhile read -r _; do count=$((count+1)); done < <(grep ERROR app.log)\necho \"$count\"\n```\nKlassik bug: siklda `ssh` faqat birinchi host'da ishlaydi — ssh qolgan stdin'ni o'qib oladi; `ssh -n` yoki `< /dev/null`."
+  },
+  "33385": {
+    "a": "```sh\nlsblk                                            # avval qurilmani ANIQ toping\nsudo dd if=ubuntu.iso of=/dev/sdX bs=4M status=progress conv=fsync\ndd if=/dev/zero of=test.img bs=1M count=1024     # 1GB fayl\nsudo dd if=/dev/sda of=mbr.bin bs=512 count=1     # MBR zaxirasi\ndd if=/dev/zero of=/tmp/t bs=1M count=1024 oflag=direct   # yozish tezligi (taxminiy)\n```\n- `if` = input, `of` = output. Teskari yozish = ma'lumot yo'qoladi.\n- Haqiqiy disk benchmark uchun `fio` (dd ketma-ket bitta oqim, cache ta'sir qiladi).\n- Bo'sh fayl tez yaratish: `fallocate -l 1G f` yoki `truncate -s 1G f` (sparse)."
+  },
+  "33386": {
+    "a": "```sh\ndf -h /var        # 100%\ndu -sh /var       # ancha kam — farq \"deleted but open\" fayllarda\nsudo lsof +L1 | grep /var/log\n# java  1234 app  7w  REG  ... 21474836480 0 /var/log/app.log (deleted)\n\n: | sudo tee /proc/1234/fd/7 > /dev/null    # truncate, jarayon yozishda davom etadi\n# yoki: sudo truncate -s 0 /proc/1234/fd/7\nsudo systemctl reload app                    # faylni qayta ochadi\n```\nOldini olish: katta log'ni `rm` emas, `truncate -s 0 file` yoki `: > file` bilan tozalang; logrotate'da `postrotate` (reload) yoki `copytruncate`."
+  }
+}

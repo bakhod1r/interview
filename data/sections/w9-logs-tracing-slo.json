@@ -1,0 +1,120 @@
+{
+  "id": "w9",
+  "name": "Logs, tracing & SLO",
+  "domain": "obs",
+  "topics": [
+    "Logs, tracing & SLO"
+  ],
+  "questions": [
+    {
+      "id": 33314,
+      "code": "WL01",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Log level'lar (DEBUG, INFO, WARN, ERROR) qachon qaysi biri ishlatiladi?",
+      "explanation": "DEBUG — ishlab chiquvchi tafsilotlari (prod'da odatda o'chiq); INFO — muhim biznes/tizim hodisalari (start, deploy, buyurtma yaratildi); WARN — g'alati, lekin tizim ishlayapti (retry muvaffaqiyatli); ERROR — operatsiya bajarilmadi, e'tibor kerak."
+    },
+    {
+      "id": 33315,
+      "code": "WL02",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Strukturaviy (structured) log nima va nega oddiy matndan yaxshi?",
+      "explanation": "Log — JSON kabi kalit-qiymat juftliklari: `level`, `msg`, `request_id`, `user_id`, `duration_ms`. Mashina parse qiladi, maydon bo'yicha qidirish, filtrlash va agregatsiya oson."
+    },
+    {
+      "id": 33316,
+      "code": "WL03",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Konteyner va Kubernetes'da loglar qayerga yoziladi va qanday o'qiladi?",
+      "explanation": "Ilova stdout/stderr'ga yozadi (faylga emas); container runtime ularni node'da `/var/log/pods/` ga saqlaydi; `kubectl logs` o'qiydi. Markaziy saqlash uchun node'dagi agent (Fluent Bit, Promtail/Alloy, Vector) Loki/Elasticsearch'ga yuboradi."
+    },
+    {
+      "id": 33317,
+      "code": "WL04",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Loki va ELK (Elasticsearch) farqi?",
+      "explanation": "ELK — har log matnini to'liq indekslaydi: kuchli full-text qidiruv, lekin qimmat (disk, RAM). Loki — faqat label'larni indekslaydi, log matnini siqib object storage'da saqlaydi: arzon, Grafana bilan; qidiruv label bo'yicha filtr + grep."
+    },
+    {
+      "id": 33318,
+      "code": "WL05",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "SLI, SLO va SLA farqi?",
+      "explanation": "SLI — o'lchanadigan ko'rsatkich (muvaffaqiyatli so'rovlar ulushi, p99 latency). SLO — ichki maqsad (oyiga 99.9% muvaffaqiyatli). SLA — mijoz bilan shartnoma, buzilsa jarima; SLA odatda SLO'dan yumshoqroq."
+    },
+    {
+      "id": 33319,
+      "code": "WL06",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Golden signals (latency, traffic, errors, saturation) nima?",
+      "explanation": "Google SRE'ning 4 asosiy signali: latency — javob vaqti (muvaffaqiyatli va xatoli alohida); traffic — yuk (RPS); errors — xato ulushi; saturation — resurs qanchalik to'lgan (CPU, navbat, connection pool)."
+    },
+    {
+      "id": 33320,
+      "code": "WL07",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Blackbox (tashqi) monitoring va health check endpoint nima?",
+      "explanation": "Blackbox — tizimni tashqaridan foydalanuvchi kabi tekshirish (HTTP 200, TLS muddati, DNS) — blackbox_exporter, uptime servislar. Health endpoint (`/healthz`, `/ready`) — ilova o'z holatini bildiradi; LB, K8s probe va monitoring foydalanadi."
+    },
+    {
+      "id": 33321,
+      "code": "WL08",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Distributed tracing nima: trace, span, trace_id?",
+      "explanation": "Trace — bitta so'rovning butun tizim bo'ylab yo'li; span — bitta operatsiya (HTTP chaqiruv, DB so'rov) boshlanish va davomiyligi bilan; trace_id header orqali (`traceparent`) servislar orasida uzatiladi. Qaysi qism sekinligini ko'rsatadi."
+    },
+    {
+      "id": 33322,
+      "code": "WL09",
+      "level": "M",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "OpenTelemetry Collector nima va nega ilova to'g'ridan backend'ga yubormasligi kerak?",
+      "explanation": "Collector — telemetry (trace, metric, log) qabul qiladi, qayta ishlaydi (batch, sampling, PII tozalash, atribut qo'shish) va bir yoki bir nechta backend'ga eksport qiladi. Ilova vendor'dan mustaqil bo'ladi, retry/buffer markazda."
+    },
+    {
+      "id": 33323,
+      "code": "WL10",
+      "level": "M",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "SLO burn rate alert nima va oddiy threshold alertdan nega yaxshi?",
+      "explanation": "Burn rate — error budget qanchalik tez sarflanayotgani (1 = oy oxirida aynan tugaydi). Multi-window alert: tez yonish (1 soatda 14.4x) — page, sekin (6 soatda 6x) — ticket. Qisqa spike'lar uchun shovqin yo'q, haqiqiy muammo esa tez ushlanadi."
+    }
+  ]
+}

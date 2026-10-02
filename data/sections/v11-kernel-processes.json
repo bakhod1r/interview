@@ -225,6 +225,28 @@
       "section": "v11",
       "question": "`/proc/PID/` ichida nimalar bor va debugda qanday foydalanasan?",
       "explanation": "cmdline, environ, status (VmRSS, Threads, State), limits, fd/ (ochiq fayllar), cwd, exe, maps, stack, io, cgroup, oom_score. Hech qanday vositasiz jarayonni o'rganish mumkin."
+    },
+    {
+      "id": 33412,
+      "code": "WM01",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Kernel modullari: `lsmod`, `modprobe`, `modinfo` va modulni boot'da yuklash?",
+      "explanation": "Modul — kernel'ga runtime'da yuklanadigan kod (drayver, filesystem, netfilter). `lsmod` — yuklanganlar, `modprobe` — dependency'lari bilan yuklash/olib tashlash, `modinfo` — ma'lumot. Doimiy: `/etc/modules-load.d/`, parametr: `/etc/modprobe.d/`."
+    },
+    {
+      "id": 33413,
+      "code": "WM02",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Server hardware ma'lumotini qanday olasiz: `lscpu`, `free`, `lsblk`, `dmidecode`, `lspci`?",
+      "explanation": "lscpu — CPU (yadro, thread, NUMA, virtualizatsiya); free — RAM; lsblk — disklar; dmidecode — BIOS, motherboard, RAM slotlari (root); lspci/lsusb — qurilmalar; `nproc` — mavjud CPU soni."
     }
   ]
 }

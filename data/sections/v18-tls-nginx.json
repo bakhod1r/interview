@@ -93,6 +93,116 @@
       "section": "v18",
       "question": "Nginx performance va himoya: worker'lar, keepalive, gzip, caching, rate limiting.",
       "explanation": "`worker_processes auto`, `worker_connections`, `worker_rlimit_nofile`; keepalive client/upstream; gzip/brotli; `proxy_cache`; `limit_req_zone` + `limit_conn`; `server_tokens off`; timeout'lar (slowloris)."
+    },
+    {
+      "id": 33214,
+      "code": "WN01",
+      "level": "J",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx reverse proxy sifatida qanday sozlanadi (`proxy_pass`)?",
+      "explanation": "Nginx client so'rovini qabul qilib backend'ga (`proxy_pass`) uzatadi; asl Host va client IP'ni header'lar orqali o'tkazish kerak."
+    },
+    {
+      "id": 33215,
+      "code": "WN02",
+      "level": "J",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx konfiguratsiyasini tekshirish va qayta yuklash: `nginx -t`, reload va restart farqi?",
+      "explanation": "`nginx -t` — sintaksis va fayllarni tekshiradi. reload (`nginx -s reload`/`systemctl reload nginx`) — yangi worker'lar yangi config bilan, eskilari mavjud ulanishlarni tugatadi: downtime yo'q. restart — hamma ulanish uziladi."
+    },
+    {
+      "id": 33216,
+      "code": "WN03",
+      "level": "J",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "`server` va `location` bloklari qanday tanlanadi?",
+      "explanation": "`server` — `listen` port va `server_name` (Host header) bo'yicha tanlanadi; mos kelmasa `default_server`. `location` — URI bo'yicha: `=` aniq, `^~` prefix (regex'ni to'xtatadi), `~`/`~*` regex (tartib bo'yicha), aks holda eng uzun prefix."
+    },
+    {
+      "id": 33217,
+      "code": "WN04",
+      "level": "J",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Let's Encrypt (certbot) bilan HTTPS qanday yoqiladi va yangilanadi?",
+      "explanation": "certbot ACME protokoli orqali domen egaligini tekshiradi (HTTP-01 yoki DNS-01), 90 kunlik sertifikat oladi, Nginx config'ga qo'shadi. Yangilash systemd timer/cron bilan avtomatik (`certbot renew`)."
+    },
+    {
+      "id": 33218,
+      "code": "WN05",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "HTTP'dan HTTPS'ga redirect va zamonaviy TLS sozlamalari?",
+      "explanation": "80-port'da 301 redirect, 443'da `ssl_protocols TLSv1.2 TLSv1.3`, kuchli cipher'lar, HTTP/2, HSTS header, OCSP stapling."
+    },
+    {
+      "id": 33219,
+      "code": "WN06",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx bilan load balancing: `upstream`, algoritmlar, health check?",
+      "explanation": "`upstream` blokida backend'lar; default round-robin, `least_conn`, `ip_hash` (sticky). Open-source Nginx'da passive health check: `max_fails`/`fail_timeout` — xato bergan server vaqtincha chiqariladi."
+    },
+    {
+      "id": 33220,
+      "code": "WN07",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "502 Bad Gateway va 504 Gateway Timeout — farqi va qanday debug qilinadi?",
+      "explanation": "502 — Nginx backend'dan yaroqli javob ololmadi (backend o'chgan, port noto'g'ri, ulanish rad etildi, crash). 504 — backend ulandi, lekin `proxy_read_timeout` ichida javob bermadi (sekin so'rov, DB lock)."
+    },
+    {
+      "id": 33221,
+      "code": "WN08",
+      "level": "M",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx'da rate limiting va asosiy himoya sozlamalari?",
+      "explanation": "`limit_req_zone` (leaky bucket) IP bo'yicha so'rov tezligini cheklaydi, `limit_conn` — bir vaqtdagi ulanishlar. Qo'shimcha: `client_max_body_size`, `server_tokens off`, security header'lar, timeout'lar."
+    },
+    {
+      "id": 33222,
+      "code": "WN09",
+      "level": "S",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx performance: worker'lar, keepalive, gzip, caching qanday sozlanadi?",
+      "explanation": "`worker_processes auto` (CPU yadrolari), `worker_connections` va `worker_rlimit_nofile`, client va upstream keepalive, `gzip`/brotli matn uchun, statik fayllar uchun `sendfile` va `expires`, `proxy_cache` bilan backend javoblarini cache."
+    },
+    {
+      "id": 33223,
+      "code": "WN10",
+      "level": "S",
+      "type": "card",
+      "topic": "TLS & Nginx",
+      "domain": "linux",
+      "section": "v18",
+      "question": "Nginx'da WebSocket va gRPC proxy qilishning o'ziga xosligi?",
+      "explanation": "WebSocket — HTTP/1.1 Upgrade: `Upgrade` va `Connection` header'larini uzatish va uzoq `proxy_read_timeout`. gRPC — HTTP/2 talab qiladi: `grpc_pass`, `http2` yoqilgan listener."
     }
   ]
 }

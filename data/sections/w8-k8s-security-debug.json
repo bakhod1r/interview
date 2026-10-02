@@ -1,0 +1,296 @@
+{
+  "id": "w8",
+  "name": "K8s security & troubleshooting",
+  "domain": "k8s",
+  "topics": [
+    "Security & troubleshooting"
+  ],
+  "questions": [
+    {
+      "id": 33291,
+      "code": "WD01",
+      "level": "J",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "CrashLoopBackOff'ni qanday debug qilasiz?",
+      "explanation": "Container start bo'lib, darhol yiqilyapti va K8s restart'lar orasidagi kutishni oshiryapti. `kubectl logs --previous`, `describe pod` (exit code, Last State, events), config/secret/env, probe'lar, resurslarni tekshiring."
+    },
+    {
+      "id": 33292,
+      "code": "WD02",
+      "level": "J",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "ImagePullBackOff sabablari va yechimi?",
+      "explanation": "Node image'ni torta olmayapti: noto'g'ri nom/tag, private registry credential yo'q (`imagePullSecrets`), registry rate limit (Docker Hub), tarmoq/DNS, arxitektura mos emas (arm64 vs amd64)."
+    },
+    {
+      "id": 33293,
+      "code": "WD03",
+      "level": "J",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "`kubectl exec`, `port-forward`, `debug` bilan pod ichini qanday tekshirasiz?",
+      "explanation": "exec — ishlayotgan container ichida buyruq; port-forward — pod/service portini lokalga ochish; `kubectl debug` — distroless image'da shell yo'q bo'lsa vaqtinchalik debug container qo'shish."
+    },
+    {
+      "id": 33294,
+      "code": "WD04",
+      "level": "J",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Pod ichidan Service'ga ulanmayapti — DNS va network'ni qanday tekshirasiz?",
+      "explanation": "Service mavjudmi va selector pod label'lariga mosmi (`kubectl get endpoints`), pod ready'mi, DNS nom to'g'rimi (`svc.ns.svc.cluster.local`), port/targetPort, NetworkPolicy, CoreDNS sog'ligi."
+    },
+    {
+      "id": 33295,
+      "code": "WD05",
+      "level": "J",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "ServiceAccount nima va pod nega default token'ni olmasligi kerak?",
+      "explanation": "ServiceAccount — pod'ning K8s API (va IRSA orqali cloud) uchun identity'si. Default bo'yicha token pod'ga mount qilinadi; API kerak bo'lmagan pod uchun `automountServiceAccountToken: false` — pod buzilsa hujumchi API'dan foydalana olmaydi."
+    },
+    {
+      "id": 33392,
+      "code": "WD16",
+      "level": "J",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "`crictl` nima va node'da container'larni qachon u bilan tekshirasiz?",
+      "explanation": "`crictl` — CRI runtime (containerd, CRI-O) uchun CLI. K8s 1.24'dan dockershim yo'q, node'da `docker ps` ishlamasligi mumkin. Kubelet yoki API ishlamay qolganda node ichida pod/container/image holatini ko'rish uchun."
+    },
+    {
+      "id": 33296,
+      "code": "WD06",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Pod Security Standards: privileged, baseline, restricted va securityContext?",
+      "explanation": "PSS — uch daraja; Pod Security Admission namespace label'i orqali qo'llaydi. restricted: root emas, privilege escalation yo'q, capabilities drop ALL, seccomp RuntimeDefault, hostPath/hostNetwork yo'q."
+    },
+    {
+      "id": 33297,
+      "code": "WD07",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "RBAC'ni least privilege bilan qanday loyihalaysiz va tekshirasiz?",
+      "explanation": "Namespace darajasida Role + RoleBinding, ClusterRole faqat zarur bo'lsa; aniq verb va resource (`*` yo'q); odamlar SSO guruhlari orqali; `kubectl auth can-i` bilan tekshirish. `secrets` list/get, `pods/exec`, `escalate`, `bind`, `impersonate` — xavfli huquqlar."
+    },
+    {
+      "id": 33298,
+      "code": "WD08",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "NetworkPolicy bilan default-deny va kerakli trafikni ruxsat berish?",
+      "explanation": "Default'da hamma pod hammaga ulanadi. Namespace'da default-deny (ingress va egress) qo'yib, keyin aniq ruxsatlar: ingress-controller -> api, api -> db, hamma -> DNS (53). CNI qo'llab-quvvatlashi kerak (Calico, Cilium)."
+    },
+    {
+      "id": 33299,
+      "code": "WD09",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Kubernetes Secret'larni xavfsiz boshqarish: External Secrets, Sealed Secrets, SOPS?",
+      "explanation": "K8s Secret faqat base64 — shifr emas. Himoya: etcd encryption at rest (KMS), RBAC, Git'da ochiq secret yo'q. Git'ga: Sealed Secrets/SOPS (shifrlangan); yoki External Secrets Operator — Vault/AWS Secrets Manager'dan sync."
+    },
+    {
+      "id": 33300,
+      "code": "WD10",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "OOMKilled pod'ni qanday tahlil qilasiz?",
+      "explanation": "Container memory limitdan oshgan va kernel cgroup OOM killer o'ldirgan (exit 137). Haqiqiy foydalanish trendini ko'ring (leak yoki pik), limit to'g'rimi, runtime limitni biladimi (Go GOMEMLIMIT, JVM -XX:MaxRAMPercentage)."
+    },
+    {
+      "id": 33301,
+      "code": "WD11",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Ingress/LoadBalancer orqali 502/503 — qayerdan qidirasiz?",
+      "explanation": "Zanjirni qatlamma-qatlam tekshiring: DNS -> LB (target health) -> Ingress controller loglari -> Service endpoints -> pod readiness/loglar. 503 ko'pincha endpoint yo'q; 502 — backend ulanishni uzdi (keepalive timeout nomuvofiqligi, pod o'chayotgan)."
+    },
+    {
+      "id": 33393,
+      "code": "WD17",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Static pod nima va kubeadm cluster'da control plane qanday ishga tushadi?",
+      "explanation": "Static pod — kubelet to'g'ridan `/etc/kubernetes/manifests/` papkasidan o'qib ishga tushiradigan pod, apiserver'siz. kubeadm control plane komponentlarini (apiserver, etcd, scheduler, controller-manager) shunday ishga tushiradi; API'da 'mirror pod' sifatida ko'rinadi, lekin `kubectl delete` bilan o'chmaydi."
+    },
+    {
+      "id": 33394,
+      "code": "WD18",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Admission controller va webhook'lar (mutating/validating) nima?",
+      "explanation": "So'rov autentifikatsiya va RBAC'dan keyin, etcd'ga yozilishidan oldin admission bosqichidan o'tadi. Mutating webhook obyektni o'zgartiradi (sidecar inject, default qo'shish), validating — qabul qiladi yoki rad etadi (siyosat). Kyverno, Gatekeeper, Istio injector shunday ishlaydi."
+    },
+    {
+      "id": 33395,
+      "code": "WD19",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "ownerReferences, garbage collection va finalizer'lar: nega namespace yoki pod 'Terminating'da osilib qoladi?",
+      "explanation": "ownerReferences obyektlarni bog'laydi (Deployment -> ReplicaSet -> Pod): egasi o'chsa, garbage collector bolalarini o'chiradi. Finalizer — o'chirishdan oldin bajarilishi kerak bo'lgan tozalash belgisi; controller uni olib tashlamaguncha obyekt Terminating'da qoladi."
+    },
+    {
+      "id": 33396,
+      "code": "WD20",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "`dnsPolicy` va `hostNetwork`: pod DNS va tarmog'i qachon node'nikidan foydalanadi?",
+      "explanation": "`hostNetwork: true` — pod node'ning network namespace'ida (node IP va portlari): CNI agentlari, monitoring uchun. `dnsPolicy`: `ClusterFirst` (default, CoreDNS), `Default` (node'ning resolv.conf), `ClusterFirstWithHostNet` (hostNetwork pod ham cluster DNS ishlatsin), `None` + `dnsConfig`."
+    },
+    {
+      "id": 33422,
+      "code": "WS01",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Pod soatlab `Terminating` holatida qoldi. Sababi va xavfsiz yechim?",
+      "explanation": "Odatda finalizer tugamagan (PV detach, controller o'lgan) yoki node yo'q / kubelet javob bermayapti. Avval sabab: describe, finalizers, node holati. `--force --grace-period=0` oxirgi chora — StatefulSet'da ikki nusxa xavfi."
+    },
+    {
+      "id": 33423,
+      "code": "WS02",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Pod `Exit Code 143` bilan tugadi. 137 dan farqi?",
+      "explanation": "143 = 128+15 — SIGTERM bilan to'xtatildi (odatda normal: deploy, scale down, liveness fail). 137 = 128+9 — SIGKILL: OOMKilled yoki grace period tugaganidan keyin majburan o'ldirilgan."
+    },
+    {
+      "id": 33425,
+      "code": "WS04",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "cert-manager nima va Ingress uchun TLS sertifikatni qanday avtomatlashtiradi?",
+      "explanation": "cert-manager — K8s controller: Issuer/ClusterIssuer (Let's Encrypt, Vault, private CA) orqali sertifikat oladi, Secret'ga yozadi va muddati tugashidan oldin avtomatik yangilaydi. Ingress annotation bilan ishlaydi."
+    },
+    {
+      "id": 33426,
+      "code": "WS05",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "`subPath` bilan mount qilingan ConfigMap yangilanmaydi. Nega?",
+      "explanation": "Oddiy ConfigMap volume symlink orqali avtomatik yangilanadi (~1 daqiqa). subPath bitta faylni bind-mount qiladi — symlink almashinuvini ko'rmaydi, yangilanish pod restart'gacha kelmaydi."
+    },
+    {
+      "id": 33429,
+      "code": "WS06",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "`kubectl get events` nima ko'rsatadi va debug'da qanday ishlatiladi?",
+      "explanation": "Events — scheduler, kubelet, controller'larning qisqa muddatli xabarlari (FailedScheduling, BackOff, Unhealthy, FailedMount). Default ~1 soat saqlanadi, shuning uchun incident tarixi uchun eksport kerak."
+    },
+    {
+      "id": 33302,
+      "code": "WD12",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Supply chain xavfsizligi: image scanning, signing (cosign), admission policy?",
+      "explanation": "CI'da image scan (Trivy/Grype) va SBOM; image'ni cosign bilan imzolash (keyless, OIDC); cluster'da admission (Kyverno/Gatekeeper/sigstore policy-controller) faqat imzolangan, ishonchli registry'dan, digest bilan image'larni qabul qiladi."
+    },
+    {
+      "id": 33303,
+      "code": "WD13",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Multi-tenancy: bir cluster'da ko'p jamoani qanday izolyatsiya qilasiz?",
+      "explanation": "Soft multi-tenancy: namespace per team + RBAC + ResourceQuota/LimitRange + NetworkPolicy default-deny + PSS restricted + alohida node pool (taint) kerak bo'lsa. Hard (ishonchsiz tenant): alohida cluster yoki vCluster, sandbox runtime (gVisor/Kata)."
+    },
+    {
+      "id": 33304,
+      "code": "WD14",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Kubernetes'da incident: 'hamma servislar sekin' — tizimli qanday tekshirasiz?",
+      "explanation": "Umumiy simptom = umumiy komponent: avval cluster darajasi (apiserver latency, CoreDNS, node'lar holati, CNI, ingress), keyin umumiy dependency (DB, cache), keyin o'zgarishlar (oxirgi deploy, upgrade, config). Metrika bilan gipotezalarni birma-bir yoping."
+    },
+    {
+      "id": 33305,
+      "code": "WD15",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Velero va cluster disaster recovery strategiyasi?",
+      "explanation": "DR = obyektlar (manifest) + persistent data. GitOps obyektlarni qayta yaratadi; Velero K8s obyektlari va PV snapshot'larini object storage'ga zaxiralaydi. DB uchun ilova darajasidagi backup (WAL/PITR). RTO/RPO bo'yicha muntazam tiklash mashqi."
+    },
+    {
+      "id": 33424,
+      "code": "WS03",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Kubernetes'da `ndots:5` nima va tashqi DNS so'rovlari nega sekin?",
+      "explanation": "Pod resolv.conf'ida ndots:5: nomda 5 tadan kam nuqta bo'lsa, avval search domain'lar (ns.svc.cluster.local, svc.cluster.local, …) sinab ko'riladi. `api.stripe.com` uchun 4-5 ta keraksiz so'rov — CoreDNS yuki va latency."
+    }
+  ]
+}

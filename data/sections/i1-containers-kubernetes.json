@@ -7,150 +7,6 @@
   ],
   "questions": [
     {
-      "id": 2009,
-      "code": "I10",
-      "level": "M",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Liveness va readiness probe farqi?",
-      "explanation": "Tipik xato: liveness probe'ni DB'ga bog'lash — DB bir daqiqa sekinlashса, Kubernetes hamma podlarni restart qilib incidentni kuchaytiradi. Qoida: liveness faqat 'jarayon tirikmi' (yengil, bog'liqliksiz), readiness bog'liqliklarni tekshirishi mumkin. Sekin startlar uchun startupProbe."
-    },
-    {
-      "id": 2010,
-      "code": "I11",
-      "level": "M",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Pod tez-tez OOMKilled bo'lyapti va latency sakrayapti. Bu manifestda nima muammo?",
-      "snippet": "resources:\n  requests:\n    cpu: \"2\"\n    memory: \"2Gi\"\n  limits:\n    cpu: \"2\"\n    memory: \"256Mi\"",
-      "explanation": "CPU — siqiladigan resurs: limitdan oshsa throttle (sekinlashadi). Memory — siqilmaydi: limitdan oshsa OOMKill. Amaliyot: memory request = limit (Guaranteed QoS), CPU request qo'yib limitni ko'pincha qo'ymaslik (throttling'dan qochish). Qiymatlarni taxmin emas, real profil (VPA yoki metrika) asosida."
-    },
-    {
-      "id": 2011,
-      "code": "I12",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Rolling update paytida qisqa uzilishlar bo'lyapti. Qaysi to'plam buni yopadi?",
-      "explanation": "Uzilishning ikki sababi: 1) yangi pod tayyor bo'lmasdan trafik oldi (readiness yo'q), 2) eski pod query o'rtasida o'ldirildi (graceful shutdown yo'q). PDB node drain/cluster upgrade paytida bir vaqtda qancha pod yo'qolishini cheklaydi. terminationGracePeriodSeconds shutdown vaqtidan katta bo'lsin."
-    },
-    {
-      "id": 2012,
-      "code": "I13",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Deployment va StatefulSet farqi? Postgres'ni Kubernetes'da ishlatasizmi?",
-      "explanation": "Senior javob: 'mumkin, lekin kerakmi?' Konteyner DB'ni sekinlashtirmaydi — murakkablik operatsiyada. Test/dev muhit uchun — bemalol."
-    },
-    {
-      "id": 30025,
-      "code": "SN26",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Go servis podda deploy paytida 5xx beradi, keyin tinchiydi. Eng ehtimolli sabab va yechim?",
-      "explanation": "Ikki tomonli muammo: (1) start — readiness probe haqiqiy dependency tayyorligini (DB pool, migratsiya, kesh warm) tekshirishi kerak; (2) stop — `preStop` sleep (5-15s) + graceful shutdown: SIGTERM'da yangi ulanish qabul qilinmaydi, mavjudlari tugatiladi, `terminationGracePeriodSeconds` shundan katta. Endpoint propagatsiyasi asinxron — shuning uchun sleep kerak."
-    },
-    {
-      "id": 30026,
-      "code": "SN27",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Go servisga `limits.memory: 512Mi` qo'yilgan, OOMKilled bo'lyapti. To'g'ri chora?",
-      "explanation": "Go GC default soft limitni bilmaydi: heap 2x o'sib limitdan oshadi va cgroup OOM killer o'ldiradi (Go panic ham bermaydi). `GOMEMLIMIT=400MiB` soft limit — GC agressivlashadi. `GOGC` bilan birga ishlatiladi. Ustiga `GOMAXPROCS` CPU limitga moslanishi kerak (automaxprocs), aks holda throttling va latency."
-    },
-    {
-      "id": 30027,
-      "code": "SN28",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "CPU `limits` qo'yilgan podda p99 latency portlaydi, CPU ishlatish esa 40%. Sabab?",
-      "explanation": "O'rtacha ishlatish past bo'lishi mumkin, lekin burst paytda kvota tugaydi. Yechimlar: limitni oshirish yoki latency-sezgir servisda CPU limitni olib tashlash (faqat `requests` + to'g'ri sizing), GOMAXPROCS'ni kvotaga moslash, goroutine parallelizmini kamaytirish. `container_cpu_cfs_throttled_seconds_total` — asosiy dalil."
-    },
-    {
-      "id": 30028,
-      "code": "SN29",
-      "level": "St",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "HPA CPU bo'yicha skale qiladi, lekin Kafka consumer lag o'sib ketyapti. To'g'ri yondashuv?",
-      "explanation": "Consumer I/O'ga bog'liq bo'lishi mumkin — CPU signal bermaydi. KEDA lag'ni to'g'ridan-to'g'ri o'qib skale qiladi. Muhim cheklov: consumer'lar soni partition sonidan oshsa foyda yo'q (ortiqchasi bo'sh turadi) — demak partition soni oldindan rejalashtiriladi va rebalance narxi (stop-the-world) hisobga olinadi."
-    },
-    {
-      "id": 30261,
-      "code": "SN262",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "`requests` va `limits` farqi va QoS klasslariga ta'siri?",
-      "explanation": "Amaliy siyosat: xotirada `requests = limits` (Guaranteed) — chunki xotira siqilmaydigan resurs va OOM keladi; CPU'da `requests` aniq, `limits` ehtiyotkorlik bilan (latency-sezgir servisda throttling zarar qiladi). Klaster sig'imini rejalashtirishda `requests` yig'indisi muhim, `limits` esa overcommit darajasini belgilaydi."
-    },
-    {
-      "id": 30262,
-      "code": "SN263",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "`livenessProbe` va `readinessProbe` ni noto'g'ri sozlash qanday incident keltiradi?",
-      "explanation": "Qoida: liveness — 'jarayon o'zini tiklay olmaydigan holatda qotib qoldimi' (deadlock) uchun, faqat mahalliy tekshiruv; readiness — 'hozir trafik qabul qila olamanmi'; startupProbe — sekin ishga tushish uchun (liveness'ni erta o'ldirmasligi uchun). `failureThreshold` va `periodSeconds` real ish vaqtiga moslanadi."
-    },
-    {
-      "id": 30263,
-      "code": "SN264",
-      "level": "St",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Deploy paytida 100% mavjudlikni saqlash uchun qaysi obyektlar birga kerak?",
-      "explanation": "PDB ayniqsa muhim: klaster avtoskaler yoki node yangilanishi bir vaqtda ko'p podni chiqarib tashlamasligi uchun. `maxUnavailable: 0` bilan yangi pod tayyor bo'lgach eskisi o'chadi. Bularsiz 'rolling update' amalda qisqa downtime yoki 5xx to'lqini beradi — eng ko'p uchraydigan 'sababsiz xatolar' manbasi."
-    },
-    {
-      "id": 30447,
-      "code": "SN448",
-      "level": "St",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Service trafikni podlarga qanday yetkazadi (kube-proxy)?",
-      "explanation": "Amaliy oqibatlar: iptables rejimida minglab Service bo'lsa qoidalarni yangilash sekundlarga cho'ziladi (endpoint o'zgarishi kech yetadi — deploy paytida 5xx); IPVS/eBPF kattaroq klasterlarda barqarorroq. Balansirovka L4 darajasida — HTTP/2/gRPC uchun yetarli emas (ulanish darajasida taqsimlanadi), shuning uchun client-side LB yoki mesh kerak."
-    },
-    {
-      "id": 30448,
-      "code": "SN449",
-      "level": "S",
-      "type": "card",
-      "topic": "Kubernetes",
-      "domain": "k8s",
-      "section": "i1",
-      "question": "Service mesh (sidecar) qanday narxga ega va qachon oqlanadi?",
-      "explanation": "Kichik tizimda (3-5 servis, bitta til) kutubxona darajasidagi yechim (gRPC interceptor + OTel) arzonroq va shaffofroq. Mesh'ning haqiqiy qiymati — siyosatni koddan ajratish va ko'p jamoada bir xil xatti-harakat. Sidecarsiz variantlar (ambient mesh, eBPF) narxni kamaytiradi, lekin yetuklik darajasi tekshirilishi kerak."
-    },
-    {
       "id": 33109,
       "code": "DK76",
       "level": "J",
@@ -215,6 +71,29 @@
       "section": "i1",
       "question": "Namespace nima va nima uchun ishlatiladi?",
       "explanation": "Klaster ichida mantiqiy bo'linish: nom ziddiyatsiz, RBAC, ResourceQuota, LimitRange, NetworkPolicy namespace bo'yicha. Xavfsizlik chegarasi emas (node va kernel umumiy)."
+    },
+    {
+      "id": 2009,
+      "code": "I10",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Liveness va readiness probe farqi?",
+      "explanation": "Tipik xato: liveness probe'ni DB'ga bog'lash — DB bir daqiqa sekinlashса, Kubernetes hamma podlarni restart qilib incidentni kuchaytiradi. Qoida: liveness faqat 'jarayon tirikmi' (yengil, bog'liqliksiz), readiness bog'liqliklarni tekshirishi mumkin. Sekin startlar uchun startupProbe."
+    },
+    {
+      "id": 2010,
+      "code": "I11",
+      "level": "M",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Pod tez-tez OOMKilled bo'lyapti va latency sakrayapti. Bu manifestda nima muammo?",
+      "snippet": "resources:\n  requests:\n    cpu: \"2\"\n    memory: \"2Gi\"\n  limits:\n    cpu: \"2\"\n    memory: \"256Mi\"",
+      "explanation": "CPU — siqiladigan resurs: limitdan oshsa throttle (sekinlashadi). Memory — siqilmaydi: limitdan oshsa OOMKill. Amaliyot: memory request = limit (Guaranteed QoS), CPU request qo'yib limitni ko'pincha qo'ymaslik (throttling'dan qochish). Qiymatlarni taxmin emas, real profil (VPA yoki metrika) asosida."
     },
     {
       "id": 33115,
@@ -305,6 +184,94 @@
       "explanation": "Default — hamma pod hamma pod bilan gaplashadi. NetworkPolicy ingress/egress'ni label bo'yicha cheklaydi; CNI qo'llashi kerak (Calico, Cilium; flannel yo'q)."
     },
     {
+      "id": 2011,
+      "code": "I12",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Rolling update paytida qisqa uzilishlar bo'lyapti. Qaysi to'plam buni yopadi?",
+      "explanation": "Uzilishning ikki sababi: 1) yangi pod tayyor bo'lmasdan trafik oldi (readiness yo'q), 2) eski pod query o'rtasida o'ldirildi (graceful shutdown yo'q). PDB node drain/cluster upgrade paytida bir vaqtda qancha pod yo'qolishini cheklaydi. terminationGracePeriodSeconds shutdown vaqtidan katta bo'lsin."
+    },
+    {
+      "id": 2012,
+      "code": "I13",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Deployment va StatefulSet farqi? Postgres'ni Kubernetes'da ishlatasizmi?",
+      "explanation": "Senior javob: 'mumkin, lekin kerakmi?' Konteyner DB'ni sekinlashtirmaydi — murakkablik operatsiyada. Test/dev muhit uchun — bemalol."
+    },
+    {
+      "id": 30025,
+      "code": "SN26",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Go servis podda deploy paytida 5xx beradi, keyin tinchiydi. Eng ehtimolli sabab va yechim?",
+      "explanation": "Ikki tomonli muammo: (1) start — readiness probe haqiqiy dependency tayyorligini (DB pool, migratsiya, kesh warm) tekshirishi kerak; (2) stop — `preStop` sleep (5-15s) + graceful shutdown: SIGTERM'da yangi ulanish qabul qilinmaydi, mavjudlari tugatiladi, `terminationGracePeriodSeconds` shundan katta. Endpoint propagatsiyasi asinxron — shuning uchun sleep kerak."
+    },
+    {
+      "id": 30026,
+      "code": "SN27",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Go servisga `limits.memory: 512Mi` qo'yilgan, OOMKilled bo'lyapti. To'g'ri chora?",
+      "explanation": "Go GC default soft limitni bilmaydi: heap 2x o'sib limitdan oshadi va cgroup OOM killer o'ldiradi (Go panic ham bermaydi). `GOMEMLIMIT=400MiB` soft limit — GC agressivlashadi. `GOGC` bilan birga ishlatiladi. Ustiga `GOMAXPROCS` CPU limitga moslanishi kerak (automaxprocs), aks holda throttling va latency."
+    },
+    {
+      "id": 30027,
+      "code": "SN28",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "CPU `limits` qo'yilgan podda p99 latency portlaydi, CPU ishlatish esa 40%. Sabab?",
+      "explanation": "O'rtacha ishlatish past bo'lishi mumkin, lekin burst paytda kvota tugaydi. Yechimlar: limitni oshirish yoki latency-sezgir servisda CPU limitni olib tashlash (faqat `requests` + to'g'ri sizing), GOMAXPROCS'ni kvotaga moslash, goroutine parallelizmini kamaytirish. `container_cpu_cfs_throttled_seconds_total` — asosiy dalil."
+    },
+    {
+      "id": 30261,
+      "code": "SN262",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "`requests` va `limits` farqi va QoS klasslariga ta'siri?",
+      "explanation": "Amaliy siyosat: xotirada `requests = limits` (Guaranteed) — chunki xotira siqilmaydigan resurs va OOM keladi; CPU'da `requests` aniq, `limits` ehtiyotkorlik bilan (latency-sezgir servisda throttling zarar qiladi). Klaster sig'imini rejalashtirishda `requests` yig'indisi muhim, `limits` esa overcommit darajasini belgilaydi."
+    },
+    {
+      "id": 30262,
+      "code": "SN263",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "`livenessProbe` va `readinessProbe` ni noto'g'ri sozlash qanday incident keltiradi?",
+      "explanation": "Qoida: liveness — 'jarayon o'zini tiklay olmaydigan holatda qotib qoldimi' (deadlock) uchun, faqat mahalliy tekshiruv; readiness — 'hozir trafik qabul qila olamanmi'; startupProbe — sekin ishga tushish uchun (liveness'ni erta o'ldirmasligi uchun). `failureThreshold` va `periodSeconds` real ish vaqtiga moslanadi."
+    },
+    {
+      "id": 30448,
+      "code": "SN449",
+      "level": "S",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Service mesh (sidecar) qanday narxga ega va qachon oqlanadi?",
+      "explanation": "Kichik tizimda (3-5 servis, bitta til) kutubxona darajasidagi yechim (gRPC interceptor + OTel) arzonroq va shaffofroq. Mesh'ning haqiqiy qiymati — siyosatni koddan ajratish va ko'p jamoada bir xil xatti-harakat. Sidecarsiz variantlar (ambient mesh, eBPF) narxni kamaytiradi, lekin yetuklik darajasi tekshirilishi kerak."
+    },
+    {
       "id": 33123,
       "code": "DK90",
       "level": "S",
@@ -314,6 +281,39 @@
       "section": "i1",
       "question": "Pod yaratilishidan ishga tushishigacha nima sodir bo'ladi (kubectl apply -> container)?",
       "explanation": "kubectl -> apiserver (authn, authz, admission) -> etcd; Deployment controller ReplicaSet, u Pod yaratadi; scheduler node tanlaydi (filter+score) va bind; kubelet CRI orqali containerd: image pull, CNI network, volume mount, container start; probe'lar; endpoint'ga qo'shiladi."
+    },
+    {
+      "id": 30028,
+      "code": "SN29",
+      "level": "St",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "HPA CPU bo'yicha skale qiladi, lekin Kafka consumer lag o'sib ketyapti. To'g'ri yondashuv?",
+      "explanation": "Consumer I/O'ga bog'liq bo'lishi mumkin — CPU signal bermaydi. KEDA lag'ni to'g'ridan-to'g'ri o'qib skale qiladi. Muhim cheklov: consumer'lar soni partition sonidan oshsa foyda yo'q (ortiqchasi bo'sh turadi) — demak partition soni oldindan rejalashtiriladi va rebalance narxi (stop-the-world) hisobga olinadi."
+    },
+    {
+      "id": 30263,
+      "code": "SN264",
+      "level": "St",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Deploy paytida 100% mavjudlikni saqlash uchun qaysi obyektlar birga kerak?",
+      "explanation": "PDB ayniqsa muhim: klaster avtoskaler yoki node yangilanishi bir vaqtda ko'p podni chiqarib tashlamasligi uchun. `maxUnavailable: 0` bilan yangi pod tayyor bo'lgach eskisi o'chadi. Bularsiz 'rolling update' amalda qisqa downtime yoki 5xx to'lqini beradi — eng ko'p uchraydigan 'sababsiz xatolar' manbasi."
+    },
+    {
+      "id": 30447,
+      "code": "SN448",
+      "level": "St",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Service trafikni podlarga qanday yetkazadi (kube-proxy)?",
+      "explanation": "Amaliy oqibatlar: iptables rejimida minglab Service bo'lsa qoidalarni yangilash sekundlarga cho'ziladi (endpoint o'zgarishi kech yetadi — deploy paytida 5xx); IPVS/eBPF kattaroq klasterlarda barqarorroq. Balansirovka L4 darajasida — HTTP/2/gRPC uchun yetarli emas (ulanish darajasida taqsimlanadi), shuning uchun client-side LB yoki mesh kerak."
     }
   ]
 }

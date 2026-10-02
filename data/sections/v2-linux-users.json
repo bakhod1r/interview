@@ -214,6 +214,17 @@
       "section": "v2",
       "question": "Fayl ruxsatlari to'g'ri ko'rinadi, lekin servis `Permission denied` beradi. Qaysi qatlamlarni tekshirasan?",
       "explanation": "Yo'lning har bir katalogida `x` (traverse) ruxsati, egasi/guruh (servis qaysi user bilan ishlaydi, supplementary group yangilanmagan), ACL/mask, mount opsiyalari (noexec, ro), SELinux/AppArmor, systemd sandbox (ProtectSystem/ProtectHome/ReadWritePaths), capabilities (port < 1024), chattr +i."
+    },
+    {
+      "id": 33415,
+      "code": "WU01",
+      "level": "J",
+      "type": "card",
+      "topic": "Linux users",
+      "domain": "linux",
+      "section": "v2",
+      "question": "Login qila olmaydigan servis user'i qanday yaratiladi va `/etc/skel` nima?",
+      "explanation": "Servis uchun system user: `useradd --system --no-create-home --shell /usr/sbin/nologin app`. `/etc/skel` — yangi oddiy user'ning home katalogiga nusxalanadigan shablon fayllar (`.bashrc`, `.profile`)."
     }
   ]
 }

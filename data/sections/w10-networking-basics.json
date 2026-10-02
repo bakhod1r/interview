@@ -1,0 +1,120 @@
+{
+  "id": "w10",
+  "name": "Networking basics",
+  "domain": "net",
+  "topics": [
+    "Networking basics"
+  ],
+  "questions": [
+    {
+      "id": 33342,
+      "code": "WB01",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "OSI va TCP/IP modellari: qaysi protokol qaysi qatlamda?",
+      "explanation": "TCP/IP 4 qatlam: Link (Ethernet, ARP), Internet (IP, ICMP), Transport (TCP, UDP), Application (HTTP, DNS, SSH, TLS). OSI 7 qatlam — nazariy model; amaliyotda 'L4' (TCP/port) va 'L7' (HTTP) atamalari ko'p ishlatiladi."
+    },
+    {
+      "id": 33343,
+      "code": "WB02",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "TCP va UDP farqi? Qaysi protokollar qaysi birini ishlatadi?",
+      "explanation": "TCP — ulanishli (3-way handshake), tartib va yetkazishni kafolatlaydi, retransmit, flow/congestion control. UDP — ulanishsiz, kafolatsiz, kam overhead. TCP: HTTP/1.1-2, SSH, DB. UDP: DNS, video/ovoz, QUIC (HTTP/3), DHCP."
+    },
+    {
+      "id": 33344,
+      "code": "WB03",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "IP manzil, subnet mask va CIDR: `10.0.1.0/24` nimani anglatadi?",
+      "explanation": "`/24` — birinchi 24 bit tarmoq, qolgan 8 bit host: 256 manzil (10.0.1.0–10.0.1.255), ishlatiladigani 254 (AWS'da 251 — 5 tasi band). `/16` = 65 536 manzil. Private diapazonlar: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16."
+    },
+    {
+      "id": 33345,
+      "code": "WB04",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "Mashhur portlarni bilasizmi: 22, 53, 80, 443, 5432, 6379, 3306, 9092?",
+      "explanation": "22 SSH, 53 DNS, 80 HTTP, 443 HTTPS, 25/587 SMTP, 3306 MySQL, 5432 PostgreSQL, 6379 Redis, 27017 MongoDB, 9092 Kafka, 5672 RabbitMQ, 9090 Prometheus, 6443 Kubernetes API, 2379 etcd."
+    },
+    {
+      "id": 33346,
+      "code": "WB05",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "DNS qanday ishlaydi va asosiy record turlari?",
+      "explanation": "Client resolver'ga so'raydi; resolver cache'da bo'lmasa root -> TLD (.com) -> authoritative server zanjiri bo'yicha javob topadi va TTL davomida cache'laydi. Record'lar: A (IPv4), AAAA (IPv6), CNAME (alias), MX (pochta), TXT (tasdiqlash, SPF), NS (zona serverlari)."
+    },
+    {
+      "id": 33347,
+      "code": "WB06",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "HTTP status kodlari guruhlari va DevOps uchun muhimlari?",
+      "explanation": "1xx info, 2xx muvaffaqiyat, 3xx redirect, 4xx client xatosi, 5xx server xatosi. Muhimlari: 200, 201, 204, 301/302, 304, 400, 401, 403, 404, 429, 500, 502, 503, 504."
+    },
+    {
+      "id": 33348,
+      "code": "WB07",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "`curl` bilan HTTP muammolarini qanday debug qilasiz?",
+      "explanation": "`curl -v` — so'rov/javob header'lari va TLS; `-I` — faqat header; `-L` — redirect'ga ergashish; `--resolve` — DNS'siz aniq IP'ga; `-w` — vaqt bo'linishi (DNS, connect, TLS, TTFB)."
+    },
+    {
+      "id": 33349,
+      "code": "WB08",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "NAT nima va nega private IP'li server internetga chiqa oladi, lekin unga kirib bo'lmaydi?",
+      "explanation": "NAT — private manzilni public manzilga almashtiradi. Ichkaridan chiqqan ulanish uchun router/NAT gateway mapping saqlaydi va javobni qaytaradi; tashqaridan boshlangan ulanish uchun mapping yo'q, shuning uchun kirib bo'lmaydi."
+    },
+    {
+      "id": 33350,
+      "code": "WB09",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "`traceroute`/`mtr` va `tcpdump` bilan tarmoq muammosini qanday topasiz?",
+      "explanation": "traceroute/mtr — paket yo'lidagi hop'lar va qayerda kechikish/yo'qotish boshlanishini ko'rsatadi. tcpdump — interfeysdagi haqiqiy paketlarni ushlaydi: SYN ketdi-yu javob yo'qmi (firewall), RST keldimi (port yopiq), retransmit'lar bormi."
+    },
+    {
+      "id": 33351,
+      "code": "WB10",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "MTU nima va MTU muammosi qanday belgilar beradi?",
+      "explanation": "MTU — bir paketning maksimal hajmi (Ethernet 1500). Tunnel/overlay (VPN, VXLAN, WireGuard) header qo'shadi; DF bitli katta paketlar tashlanadi va ICMP 'frag needed' bloklangan bo'lsa — kichik so'rovlar ishlaydi, katta javoblar (TLS handshake, katta fayl) osilib qoladi."
+    }
+  ]
+}

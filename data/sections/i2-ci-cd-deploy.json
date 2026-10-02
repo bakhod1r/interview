@@ -22,6 +22,28 @@
       "explanation": "CI — branch uzoq yashamasligi haqida. CD ikki ma'noda: Continuous Delivery (har build deploy qilishga tayyor, tugma bosiladi) va Continuous Deployment (avtomatik production'ga). Uzoq feature branch — merge do'zaxi; yechim: kichik PR + feature flag."
     },
     {
+      "id": 30546,
+      "code": "DO12",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "`git merge` va `git rebase` farqi?",
+      "explanation": "Oltin qoida: umumiy (push qilingan, boshqalar ishlatayotgan) branchni rebase qilmang — boshqalar tarixi buziladi. O'z feature branchingizni main ustiga rebase qilish odatiy. Majburiy push kerak bo'lsa `--force-with-lease` (boshqaning commitini ustidan yozib yubormaydi)."
+    },
+    {
+      "id": 33369,
+      "code": "SV01",
+      "level": "J",
+      "type": "card",
+      "topic": "Secrets",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "HashiCorp Vault nima va oddiy `.env` fayldan nimasi yaxshi?",
+      "explanation": "Vault — markazlashgan secret ombori: shifrlangan saqlash, kirish policy bilan, audit log, versiya, va dynamic secret (har ilovaga vaqtinchalik DB login). .env — shifrlanmagan, audit yo'q, aylantirish qo'lda."
+    },
+    {
       "id": 2014,
       "code": "I15",
       "level": "M",
@@ -44,6 +66,62 @@
       "explanation": "Amaliy signal: 'git'ga tushib qolsa nima qilasiz?' — javob: darhol revoke/rotate, keyin tarixni tozalash (tozalash yetarli emas, key allaqachon ochiq)."
     },
     {
+      "id": 30547,
+      "code": "DO13",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Tasodifan secret (API kalit) commit qilinib, push bo'ldi. To'g'ri harakat?",
+      "explanation": "Tarix tozalansa ham fork, klon, CI keshi, GitHub cache'da qolishi mumkin — shuning uchun rotatsiya birinchi. Oldini olish: pre-commit gitleaks/trufflehog, GitHub push protection, sirlarni .env + .gitignore emas, secret manager'da saqlash."
+    },
+    {
+      "id": 30548,
+      "code": "DO14",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Qaysi commit bug keltirganini 500 ta commit ichidan tez topish?",
+      "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.4.0\n# har qadamda test qilib: git bisect good | bad\n# yoki avtomatik:\ngit bisect run ./test.sh",
+      "explanation": "Skript exit 0 = good, 1–127 = bad, 125 = skip (build bo'lmaydigan commit). Tugagach `git bisect reset`. Kichik, atomar commitlar bisect'ni foydali qiladi."
+    },
+    {
+      "id": 30550,
+      "code": "DO16",
+      "level": "M",
+      "type": "card",
+      "topic": "GitOps",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "GitOps nima?",
+      "explanation": "Afzalliklar: CI'ga klaster kalitlari berilmaydi (pull), audit — git log, rollback — git revert, drift avtomatik tuzatiladi. CI image build qilib, config repo'dagi image tegini yangilaydi; CD'ni agent bajaradi."
+    },
+    {
+      "id": 30551,
+      "code": "DO17",
+      "level": "M",
+      "type": "card",
+      "topic": "GitOps",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Helm chart'da `values.yaml` va muhitlar?",
+      "explanation": "Alternativa — Kustomize (base + overlays, shablonsiz patch). `helm upgrade --install --atomic` xato bo'lsa o'zi rollback qiladi. Sirlarni values'da ochiq saqlamang: sealed-secrets, external-secrets yoki SOPS."
+    },
+    {
+      "id": 33370,
+      "code": "SV02",
+      "level": "M",
+      "type": "card",
+      "topic": "Secrets",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Ilova Vault'ga qanday autentifikatsiya qiladi? \"Secret zero\" muammosi nima?",
+      "explanation": "Vault'dan secret olish uchun ham credential kerak — bu secret zero. Yechim: platforma identitetidan foydalanish — Kubernetes auth (ServiceAccount token), AWS IAM auth, CI'da OIDC (JWT). Statik token qo'yilmaydi."
+    },
+    {
       "id": 2016,
       "code": "I17",
       "level": "S",
@@ -64,28 +142,6 @@
       "section": "i2",
       "question": "DB migratsiyasi deploy pipeline'ining qaysi qadamida bajarilishi kerak?",
       "explanation": "Senior signal: 'migratsiya va kod deploy'i bir atomik qadam emas' degan tushuncha. Ma'lumot o'chirish (DROP COLUMN) odatda bir necha kun/hafta keyin, kuzatuvdan so'ng."
-    },
-    {
-      "id": 2018,
-      "code": "I19",
-      "level": "St",
-      "type": "card",
-      "topic": "CI/CD",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "Katta feature'ni uzoq branchda emas, feature flag bilan qilishning asosiy afzalligi?",
-      "explanation": "Narxi: flaglar texnik qarz — muddati o'tganini o'chirish tartibi bo'lishi kerak, aks holda kodda o'nlab shart qoladi. Kill switch sifatida ham qimmatli: incidentda deploy'siz o'chirish. Flag holati kuzatiladigan va audit qilinadigan bo'lsin."
-    },
-    {
-      "id": 14018,
-      "code": "SR19",
-      "level": "St",
-      "type": "card",
-      "topic": "Deploy",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "Feature flag tizimini va bosqichli rollout jarayonini loyihalang.",
-      "explanation": "Staff signal: flagni release vositasi sifatida emas, xavfni boshqarish tizimi sifatida ko'rish va texnik qarzni boshqarish rejasini aytish."
     },
     {
       "id": 30030,
@@ -132,17 +188,6 @@
       "explanation": "K8s `Secret` default holatda etcd'da faqat base64 (shifrlanmagan, agar encryption-at-rest yoqilmagan bo'lsa) va RBAC noto'g'ri bo'lsa o'qiladi. Eng yaxshisi: DB uchun dinamik, qisqa muddatli credential (Vault) — leak bo'lsa ham tez o'lik; aks holda KMS bilan shifrlash, avtomatik rotation, va audit. Sirlar log'da va crash dump'da chiqmasligi tekshiriladi."
     },
     {
-      "id": 30034,
-      "code": "SN35",
-      "level": "St",
-      "type": "card",
-      "topic": "CI/CD",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "CI 40 daqiqa ketadi, jamoa relizdan qo'rqadi. Qanday tuzatasiz?",
-      "explanation": "Relizdan qo'rqish odatda sekin CI + flaky test + og'riqli rollback kombinatsiyasi. Uchtasi ham alohida hal qilinadi; faqat CI tezlashtirish yetmaydi."
-    },
-    {
       "id": 30264,
       "code": "SN265",
       "level": "S",
@@ -165,49 +210,26 @@
       "explanation": "OIDC federatsiyasi (GitHub Actions → AWS/GCP) eng katta yutuq: uzoq yashovchi kalit umuman bo'lmaydi. Qo'shimcha xatarlar: PR'dan kelgan kod sirni chiqarib yuborishi (`pull_request_target` tuzog'i), artefaktlarda qolgan sirlar, va build log'lari. Sir aniqlansa rotation protsedurasi oldindan yozilgan bo'lishi kerak."
     },
     {
-      "id": 30477,
-      "code": "SN478",
-      "level": "St",
+      "id": 30270,
+      "code": "SN271",
+      "level": "S",
       "type": "card",
       "topic": "CI/CD",
       "domain": "cicd",
       "section": "i2",
-      "question": "Build reproducibility (takrorlanuvchanlik) nega muhim?",
-      "explanation": "Amaliy minimum: image tag sifatida commit SHA (mutable `latest` emas), `go.sum` bilan qotirilgan bog'liqliklar, bazaviy image digest bo'yicha (`@sha256:...`), va artefakt imzosi (cosign) + SBOM. Shunda incident paytida 'qaysi kod, qaysi bog'liqliklar' savoli sekundlarda javob topadi."
+      "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
+      "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
     },
     {
-      "id": 30546,
-      "code": "DO12",
-      "level": "J",
+      "id": 30271,
+      "code": "SN272",
+      "level": "S",
       "type": "card",
-      "topic": "Git",
+      "topic": "CI/CD",
       "domain": "cicd",
       "section": "i2",
-      "question": "`git merge` va `git rebase` farqi?",
-      "explanation": "Oltin qoida: umumiy (push qilingan, boshqalar ishlatayotgan) branchni rebase qilmang — boshqalar tarixi buziladi. O'z feature branchingizni main ustiga rebase qilish odatiy. Majburiy push kerak bo'lsa `--force-with-lease` (boshqaning commitini ustidan yozib yubormaydi)."
-    },
-    {
-      "id": 30547,
-      "code": "DO13",
-      "level": "M",
-      "type": "card",
-      "topic": "Git",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "Tasodifan secret (API kalit) commit qilinib, push bo'ldi. To'g'ri harakat?",
-      "explanation": "Tarix tozalansa ham fork, klon, CI keshi, GitHub cache'da qolishi mumkin — shuning uchun rotatsiya birinchi. Oldini olish: pre-commit gitleaks/trufflehog, GitHub push protection, sirlarni .env + .gitignore emas, secret manager'da saqlash."
-    },
-    {
-      "id": 30548,
-      "code": "DO14",
-      "level": "M",
-      "type": "card",
-      "topic": "Git",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "Qaysi commit bug keltirganini 500 ta commit ichidan tez topish?",
-      "snippet": "git bisect start\ngit bisect bad HEAD\ngit bisect good v1.4.0\n# har qadamda test qilib: git bisect good | bad\n# yoki avtomatik:\ngit bisect run ./test.sh",
-      "explanation": "Skript exit 0 = good, 1–127 = bad, 125 = skip (build bo'lmaydigan commit). Tugagach `git bisect reset`. Kichik, atomar commitlar bisect'ni foydali qiladi."
+      "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
+      "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
     },
     {
       "id": 30549,
@@ -219,28 +241,6 @@
       "section": "i2",
       "question": "Trunk-based development va GitFlow — CI/CD uchun qaysi biri va nega?",
       "explanation": "DORA tadqiqotlari trunk-based'ni yuqori samarali jamoalar bilan bog'laydi. Talab: kuchli avtotestlar, main har doim deploy qilinadigan holatda, branch protection va majburiy CI."
-    },
-    {
-      "id": 30550,
-      "code": "DO16",
-      "level": "M",
-      "type": "card",
-      "topic": "GitOps",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "GitOps nima?",
-      "explanation": "Afzalliklar: CI'ga klaster kalitlari berilmaydi (pull), audit — git log, rollback — git revert, drift avtomatik tuzatiladi. CI image build qilib, config repo'dagi image tegini yangilaydi; CD'ni agent bajaradi."
-    },
-    {
-      "id": 30551,
-      "code": "DO17",
-      "level": "M",
-      "type": "card",
-      "topic": "GitOps",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "Helm chart'da `values.yaml` va muhitlar?",
-      "explanation": "Alternativa — Kustomize (base + overlays, shablonsiz patch). `helm upgrade --install --atomic` xato bo'lsa o'zi rollback qiladi. Sirlarni values'da ochiq saqlamang: sealed-secrets, external-secrets yoki SOPS."
     },
     {
       "id": 30552,
@@ -265,6 +265,50 @@
       "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
     },
     {
+      "id": 2018,
+      "code": "I19",
+      "level": "St",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Katta feature'ni uzoq branchda emas, feature flag bilan qilishning asosiy afzalligi?",
+      "explanation": "Narxi: flaglar texnik qarz — muddati o'tganini o'chirish tartibi bo'lishi kerak, aks holda kodda o'nlab shart qoladi. Kill switch sifatida ham qimmatli: incidentda deploy'siz o'chirish. Flag holati kuzatiladigan va audit qilinadigan bo'lsin."
+    },
+    {
+      "id": 14018,
+      "code": "SR19",
+      "level": "St",
+      "type": "card",
+      "topic": "Deploy",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Feature flag tizimini va bosqichli rollout jarayonini loyihalang.",
+      "explanation": "Staff signal: flagni release vositasi sifatida emas, xavfni boshqarish tizimi sifatida ko'rish va texnik qarzni boshqarish rejasini aytish."
+    },
+    {
+      "id": 30034,
+      "code": "SN35",
+      "level": "St",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "CI 40 daqiqa ketadi, jamoa relizdan qo'rqadi. Qanday tuzatasiz?",
+      "explanation": "Relizdan qo'rqish odatda sekin CI + flaky test + og'riqli rollback kombinatsiyasi. Uchtasi ham alohida hal qilinadi; faqat CI tezlashtirish yetmaydi."
+    },
+    {
+      "id": 30477,
+      "code": "SN478",
+      "level": "St",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Build reproducibility (takrorlanuvchanlik) nega muhim?",
+      "explanation": "Amaliy minimum: image tag sifatida commit SHA (mutable `latest` emas), `go.sum` bilan qotirilgan bog'liqliklar, bazaviy image digest bo'yicha (`@sha256:...`), va artefakt imzosi (cosign) + SBOM. Shunda incident paytida 'qaysi kod, qaysi bog'liqliklar' savoli sekundlarda javob topadi."
+    },
+    {
       "id": 30554,
       "code": "DO20",
       "level": "St",
@@ -277,26 +321,26 @@
       "source": "https://sre.google/sre-book/table-of-contents/"
     },
     {
-      "id": 30270,
-      "code": "SN271",
-      "level": "S",
+      "id": 33416,
+      "code": "WI01",
+      "level": "J",
       "type": "card",
       "topic": "CI/CD",
       "domain": "cicd",
       "section": "i2",
-      "question": "Git'da productionga ketgan buzuq commit'ni orqaga qaytarish uchun nima ishlatiladi?",
-      "explanation": "Qoida: umumiy (pushed) tarixni qayta yozmaslik. `revert` audit izini saqlaydi va CI/CD orqali normal deploy bo'ladi. Nozik joy: revert qilingan o'zgarishni keyin qaytarish uchun 'revert of revert' kerak bo'ladi; migratsiya bo'lgan relizda esa kod revert'i DB sxemasi bilan mos bo'lishini alohida tekshirish shart."
+      "question": "CI'da matrix build va cache nima uchun kerak?",
+      "explanation": "Matrix — bitta job'ni bir nechta kombinatsiyada (Go versiyalari, OS, arxitektura) parallel ishga tushirish. Cache — dependency'lar (Go modules, npm, Docker layer) ni build'lar orasida saqlash: pipeline tezlashadi."
     },
     {
-      "id": 30271,
-      "code": "SN272",
-      "level": "S",
+      "id": 33417,
+      "code": "WI02",
+      "level": "M",
       "type": "card",
       "topic": "CI/CD",
       "domain": "cicd",
       "section": "i2",
-      "question": "Regressiya qaysi commit'da paydo bo'lganini topish uchun?",
-      "explanation": "1000 commit uchun ~10 tekshiruv. `git bisect run` bilan butun jarayon avtomatik bo'ladi — shuning uchun regressiyani takrorlaydigan minimal test yozish birinchi qadam. `git blame` faqat qator kimning qo'lidan chiqqanini ko'rsatadi, xatti-harakat o'zgarishini emas."
+      "question": "SAST, DAST, SCA va SonarQube quality gate — pipeline'da qayerda turadi?",
+      "explanation": "SAST — manba kodni statik tahlil (Semgrep, CodeQL, gosec); SCA — dependency zaifliklari va litsenziya (Dependabot, Trivy, govulncheck); DAST — ishlayotgan ilovaga tashqaridan hujum (OWASP ZAP), staging'da. SonarQube — sifat va xavfsizlik metrikalari, quality gate PR'ni bloklaydi."
     }
   ]
 }

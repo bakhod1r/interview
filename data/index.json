@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T13:31:22.535Z",
-  "total": 2008,
+  "generatedAt": "2026-10-02T14:10:44.516Z",
+  "total": 2266,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -37,7 +37,9 @@
     "obs": "Observability",
     "net": "Networking",
     "cloud": "Cloud",
-    "soft": "Soft skills"
+    "soft": "Soft skills",
+    "git": "Git",
+    "iac": "IaC"
   },
   "sections": [
     {
@@ -436,14 +438,14 @@
       "id": "v9",
       "name": "Shell commands & text editors",
       "domain": "linux",
-      "count": 16,
+      "count": 39,
       "file": "sections/v9-shell-commands-editors.json"
     },
     {
       "id": "v10",
       "name": "Find, xargs & archives",
       "domain": "linux",
-      "count": 15,
+      "count": 20,
       "file": "sections/v10-find-xargs-archives.json"
     },
     {
@@ -464,7 +466,7 @@
       "id": "v2",
       "name": "Linux users, groups, permissions",
       "domain": "linux",
-      "count": 19,
+      "count": 20,
       "file": "sections/v2-linux-users.json"
     },
     {
@@ -506,7 +508,7 @@
       "id": "v11",
       "name": "Kernel & processes",
       "domain": "linux",
-      "count": 20,
+      "count": 22,
       "file": "sections/v11-kernel-processes.json"
     },
     {
@@ -520,7 +522,7 @@
       "id": "v13",
       "name": "Linux networking & security",
       "domain": "linux",
-      "count": 23,
+      "count": 24,
       "file": "sections/v13-linux-net-security.json"
     },
     {
@@ -534,14 +536,14 @@
       "id": "v15",
       "name": "SSH & remote access",
       "domain": "linux",
-      "count": 14,
+      "count": 15,
       "file": "sections/v15-ssh.json"
     },
     {
       "id": "v18",
       "name": "TLS, certificates & Nginx",
       "domain": "linux",
-      "count": 8,
+      "count": 18,
       "file": "sections/v18-tls-nginx.json"
     },
     {
@@ -559,10 +561,17 @@
       "file": "sections/v20-server-ops.json"
     },
     {
+      "id": "w1",
+      "name": "Git",
+      "domain": "git",
+      "count": 25,
+      "file": "sections/w1-git.json"
+    },
+    {
       "id": "k1",
       "name": "Docker basics",
       "domain": "docker",
-      "count": 26,
+      "count": 36,
       "file": "sections/k1-docker.json"
     },
     {
@@ -608,6 +617,34 @@
       "file": "sections/i1-containers-kubernetes.json"
     },
     {
+      "id": "w6",
+      "name": "K8s workloads & Helm",
+      "domain": "k8s",
+      "count": 31,
+      "file": "sections/w6-k8s-workloads-helm.json"
+    },
+    {
+      "id": "w7",
+      "name": "K8s scheduling, scaling & storage",
+      "domain": "k8s",
+      "count": 15,
+      "file": "sections/w7-k8s-scheduling-scaling.json"
+    },
+    {
+      "id": "w8",
+      "name": "K8s security & troubleshooting",
+      "domain": "k8s",
+      "count": 26,
+      "file": "sections/w8-k8s-security-debug.json"
+    },
+    {
+      "id": "k4",
+      "name": "Helm & ArgoCD",
+      "domain": "k8s",
+      "count": 8,
+      "file": "sections/k4-helm-argocd.json"
+    },
+    {
       "id": "t11",
       "name": "Kubernetes gotchas",
       "domain": "k8s",
@@ -618,7 +655,7 @@
       "id": "i2",
       "name": "CI/CD & deploy",
       "domain": "cicd",
-      "count": 26,
+      "count": 30,
       "file": "sections/i2-ci-cd-deploy.json"
     },
     {
@@ -643,6 +680,20 @@
       "file": "sections/i10-jenkins.json"
     },
     {
+      "id": "w2",
+      "name": "Terraform",
+      "domain": "iac",
+      "count": 23,
+      "file": "sections/w2-terraform.json"
+    },
+    {
+      "id": "w3",
+      "name": "Ansible",
+      "domain": "iac",
+      "count": 16,
+      "file": "sections/w3-ansible.json"
+    },
+    {
       "id": "i3",
       "name": "Observability & SRE",
       "domain": "obs",
@@ -650,11 +701,32 @@
       "file": "sections/i3-observability-sre.json"
     },
     {
+      "id": "w4",
+      "name": "Prometheus & Grafana",
+      "domain": "obs",
+      "count": 11,
+      "file": "sections/w4-prometheus-grafana.json"
+    },
+    {
+      "id": "w9",
+      "name": "Logs, tracing & SLO",
+      "domain": "obs",
+      "count": 10,
+      "file": "sections/w9-logs-tracing-slo.json"
+    },
+    {
       "id": "i4",
       "name": "Networking & protocols",
       "domain": "net",
       "count": 18,
       "file": "sections/i4-networking-protocols.json"
+    },
+    {
+      "id": "w10",
+      "name": "Networking basics",
+      "domain": "net",
+      "count": 10,
+      "file": "sections/w10-networking-basics.json"
     },
     {
       "id": "t13",
@@ -669,6 +741,13 @@
       "domain": "cloud",
       "count": 26,
       "file": "sections/i5-cloud-os-operations.json"
+    },
+    {
+      "id": "w5",
+      "name": "AWS basics",
+      "domain": "cloud",
+      "count": 26,
+      "file": "sections/w5-aws-basics.json"
     },
     {
       "id": "b1",

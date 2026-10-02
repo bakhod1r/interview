@@ -1,0 +1,26 @@
+{
+  "33363": {
+    "a": "```dockerfile\nARG GO_VERSION=1.23          # faqat build paytida\nFROM golang:${GO_VERSION} AS build\nENV CGO_ENABLED=0            # build va runtime'da ham\n```\n\n| | ARG | ENV |\n|---|---|---|\n| Build vaqtida | Bor | Bor |\n| Container ishlayotganda | Yo'q | Bor |\n| Berish | `--build-arg` | `-e`, Dockerfile, compose |\n\n**Secret uchun (BuildKit):**\n```dockerfile\nRUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci\n```\n`docker build --secret id=npmrc,src=$HOME/.npmrc .` — secret hech qaysi layer'ga yozilmaydi."
+  },
+  "33364": {
+    "a": "```dockerfile\nCOPY go.mod go.sum ./          # oddiy, aniq\nCOPY --from=build /app /app    # multi-stage\nCOPY --chown=app:app . .\n\nADD rootfs.tar.gz /            # avtomatik ochiladi — shu holda ADD o'rinli\n```\n\nURL'dan yuklash uchun `ADD` o'rniga `RUN curl ... && sha256sum -c` — checksum tekshiriladi, cache nazorat qilinadi."
+  },
+  "33365": {
+    "a": "```sh\ndocker ps -a                              # STATUS: Exited (code)\ndocker logs <id>\ndocker inspect <id> --format '{{.State.ExitCode}} {{.State.OOMKilled}}'\ndocker run -it --entrypoint sh myimage    # ichiga kirib qo'lda ishga tushirish\n```\n\n| Belgi | Sabab |\n|---|---|\n| Exit 0, log bo'sh | Process fon'ga o'tdi (`nginx` → `daemon off;`, `service x start`) |\n| Exit 1 | Config/env yo'q, DB'ga ulanmadi |\n| Exit 127 | Binary topilmadi (alpine'da glibc binary, noto'g'ri path) |\n| Exit 137 + OOMKilled | Memory limit |\n| `exec format error` | Arxitektura mos emas (arm64 image amd64'da) |\n\n**Qoida:** container'da bitta process foreground'da ishlaydi; `tail -f /dev/null` bilan \"tirik ushlash\" — xato yashiradi."
+  },
+  "33366": {
+    "a": "```\nhost: postgres 127.0.0.1:5432\n +-- container (o'z netns) --> localhost = container'ning o'zi --> connection refused\n```\n\n| Holat | Yechim |\n|---|---|\n| DB ham container (compose) | `DB_HOST=db` — service nomi, Docker DNS |\n| DB host'da | `host.docker.internal` (Linux'da `--add-host=host.docker.internal:host-gateway`) + DB `listen_addresses` faqat 127.0.0.1 bo'lmasin |\n| Tez sinov | `--network host` (Linux), prod uchun emas |\n\nTeskari holat ham bor: app container ichida `127.0.0.1:8080`da tinglasa, `-p 8080:8080` ishlamaydi — `0.0.0.0`ga bind qilish kerak."
+  },
+  "33367": {
+    "a": "```sh\ntrivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 registry/api:1.4.0\n```\n\n```yaml\n# GitHub Actions\n- uses: aquasecurity/trivy-action@0.28.0\n  with:\n    image-ref: registry/api:${{ github.sha }}\n    severity: HIGH,CRITICAL\n    ignore-unfixed: true\n    exit-code: \"1\"\n```\n\n**Middle amaliyoti:**\n- `--ignore-unfixed` — tuzatib bo'lmaydigan CVE pipeline'ni bloklamasin.\n- Istisno `.trivyignore`da sabab va muddat bilan.\n- Base image yangilanadi, lekin sizning image avtomatik yangilanmaydi — haftalik rebuild + Renovate/Dependabot.\n- `USER 10001` — non-root, `readOnlyRootFilesystem`."
+  },
+  "33368": {
+    "a": "```dockerfile\n# syntax=docker/dockerfile:1\nFROM golang:1.23 AS build\nWORKDIR /src\nCOPY go.mod go.sum ./\nRUN --mount=type=cache,target=/go/pkg/mod go mod download\nCOPY . .\nRUN --mount=type=cache,target=/go/pkg/mod \\\n    --mount=type=cache,target=/root/.cache/go-build \\\n    go build -o /app ./cmd/api\n```\n\nCI runner har safar toza — lokal cache yo'q. Remote cache:\n```sh\ndocker buildx build \\\n  --cache-from type=registry,ref=registry/api:buildcache \\\n  --cache-to   type=registry,ref=registry/api:buildcache,mode=max \\\n  -t registry/api:$SHA --push .\n```\nGitHub Actions'da `type=gha`.\n\nTartib: o'lchash → `.dockerignore` (`.git`, `node_modules`) → layer tartibi → cache mount → remote cache."
+  },
+  "33369": {
+    "a": "| | `.env` / config | Vault |\n|---|---|---|\n| Saqlash | Ochiq matn diskda | Shifrlangan |\n| Kim o'qidi | Noma'lum | Audit log |\n| Ruxsat | Fayl huquqi | Policy (path bo'yicha) |\n| Aylantirish (rotation) | Qo'lda, deploy bilan | Avtomatik, TTL |\n| Dynamic secret | Yo'q | Har so'rovga yangi DB user, muddati tugasa o'chadi |\n\n```sh\nvault kv put secret/api db_password=...\nvault kv get -field=db_password secret/api\n```\n\nAlternativa: AWS Secrets Manager / GCP Secret Manager — cloud ichida bo'lsangiz oddiyroq."
+  },
+  "33370": {
+    "a": "```\nPod (ServiceAccount JWT) --> Vault kubernetes auth --> TokenReview (K8s API) tasdiqlaydi\n                                  |\n                          role: api -> policy: read secret/data/api/*\n                                  v\n                         qisqa muddatli Vault token --> secret\n```\n\n```sh\nvault write auth/kubernetes/role/api \\\n  bound_service_account_names=api bound_service_account_namespaces=prod \\\n  policies=api-read ttl=1h\n```\n\nPod'ga yetkazish usullari: Vault Agent sidecar (faylga yozadi, yangilaydi), Vault CSI provider, yoki External Secrets Operator (K8s Secret'ga sinxronlaydi — oddiy, lekin Secret etcd'da qoladi).\n\n**Middle nuqtalar:** policy least privilege (path bo'yicha), token TTL qisqa, audit device yoqilgan, Vault o'zi HA + unseal (auto-unseal KMS bilan)."
+  }
+}

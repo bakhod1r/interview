@@ -159,6 +159,17 @@
       "section": "v15",
       "question": "SSH host key, user key va sertifikat rotatsiyasini qanday rejalashtirasan? Xodim ketganda nima qilinadi?",
       "explanation": "Offboarding: IdP'da hisobni o'chirish -> SSH sertifikatlar avtomatik tugaydi (qisqa TTL) yoki authorized_keys'dan kalitni hamma serverdan olib tashlash (config management), umumiy secret'lar rotatsiyasi, audit. Host key rotatsiyasi: `UpdateHostKeys`, host sertifikat."
+    },
+    {
+      "id": 33411,
+      "code": "WH01",
+      "level": "J",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "\"Host key verification failed\" / \"REMOTE HOST IDENTIFICATION HAS CHANGED\" nimani anglatadi?",
+      "explanation": "SSH client `~/.ssh/known_hosts`da saqlangan server kalitini yangi kalit bilan solishtirdi va mos kelmadi. Sabab: server qayta o'rnatilgan, IP boshqa serverga berilgan — yoki MITM hujumi. Ko'r-ko'rona o'chirmasdan, kalit o'zgarishini tasdiqlang."
     }
   ]
 }

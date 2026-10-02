@@ -1,0 +1,35 @@
+{
+  "33352": {
+    "a": "```sh\nzcat access.log.2.gz | head          # o'qish, fayl joyida qoladi\ngunzip access.log.2.gz               # access.log.2 yaratiladi, .gz o'chadi\ngunzip -k access.log.2.gz            # -k: .gz ham qoladi\ngzip -dc access.log.2.gz             # = zcat (-d ochish, -c stdout)\n```\n- `zcat` = `gunzip -c`.\n- Log tahlilida `zcat` afzal: diskka ochilgan nusxa yozilmaydi (to'lgan diskda muhim), arxiv buzilmaydi.\n- macOS'da `zcat` `.Z` kutishi mumkin — `gzcat` yoki `gzip -dc`."
+  },
+  "33353": {
+    "a": "```sh\nls /var/log/nginx/\n# access.log  access.log.1  access.log.2.gz  access.log.3.gz\n\nzgrep \" 500 \" /var/log/nginx/access.log*        # oddiy va .gz fayllar\nzcat -f /var/log/nginx/access.log* | grep -c \" 500 \"\n\n# eskidan yangiga tartibda\nls -tr /var/log/nginx/access.log* | xargs zcat -f | awk '{print $9}' | sort | uniq -c\n```\n`zgrep` `grep` flaglarini qabul qiladi: `zgrep -i`, `-c`, `-E`, `-h` (fayl nomisiz).\nGotcha: `zcat app.log` (siqilmagan) — \"not in gzip format\" xatosi; `-f` qo'ying yoki `zgrep` ishlating."
+  },
+  "33354": {
+    "a": "| Siqish | cat | grep | less |\n|---|---|---|---|\n| gzip (.gz) | `zcat` | `zgrep` | `zless` |\n| bzip2 (.bz2) | `bzcat` | `bzgrep` | `bzless` |\n| xz (.xz) | `xzcat` | `xzgrep` | `xzless` |\n| zstd (.zst) | `zstdcat` | `zstdgrep` | `zstdless` |\n\n```sh\nzless /var/log/syslog.3.gz          # / bilan qidirish, q chiqish\nzdiff config.v1.gz config.v2.gz\nxzcat backup.sql.xz | head -50\n```\n`less` ko'p tizimlarda `lesspipe` orqali `.gz`ni o'zi ham ocha oladi."
+  },
+  "33355": {
+    "a": "```sh\n# DB tiklash\nzcat dump.sql.gz | psql -h db -U app appdb\ngunzip -c dump.sql.gz | mysql appdb\n\n# backup — oraliq fayl yo'q\npg_dump appdb | gzip -6 > appdb-$(date +%F).sql.gz\npg_dump appdb | zstd -T0 > appdb.sql.zst          # tezroq, ko'p yadro\n\n# tarmoq orqali\nssh db1 'pg_dump appdb | gzip' > appdb.sql.gz\nzcat appdb.sql.gz | ssh db2 psql appdb\n\n# yaxlitlikni tekshirish\ngzip -t dump.sql.gz && echo OK\n```\nGotcha: pipe'da xato yashirinadi — `set -o pipefail`, aks holda `pg_dump` yiqilsa ham bo'sh/yarim `.gz` \"muvaffaqiyatli\" yaratiladi."
+  },
+  "33356": {
+    "a": "```sh\ntime zcat big.log.gz | grep -c ERROR\ntime pigz -dc big.log.gz | LC_ALL=C grep -c ERROR       # odatda tezroq\n\n# ko'p fayl parallel\nls access.log.*.gz | xargs -P 8 -I{} sh -c 'zcat {} | grep -c \" 500 \"' | paste -sd+ | bc\n\n# zgrep -F: regex emas, oddiy matn — tezroq\nzgrep -F \"order_id=42\" app.log.*.gz\n```\nlogrotate'da `compresscmd /usr/bin/zstd` + `compressext .zst` — keyin `zstdcat`/`zstdgrep`.\nMuntazam qidiruv kerak bo'lsa — grep emas, markaziy log tizimi (Loki/ELK)."
+  },
+  "33357": {
+    "a": "```\nstdin --> [tee file.log] --> stdout (ekran yoki keyingi pipe)\n                  |\n                  v\n               file.log\n```\n```sh\n./deploy.sh | tee deploy.log              # ekranda ham, faylda ham\n./deploy.sh 2>&1 | tee -a deploy.log      # stderr ham, append\nping -c 3 8.8.8.8 | tee ping.txt | grep time=\nmake build | tee build.log | grep -i error\n```\nBir nechta fayl: `cmd | tee a.log b.log`."
+  },
+  "33358": {
+    "a": "```sh\nsudo echo \"nameserver 1.1.1.1\" > /etc/resolv.conf\n# bash: /etc/resolv.conf: Permission denied\n\necho \"nameserver 1.1.1.1\" | sudo tee /etc/resolv.conf          # ustidan yozish\necho \"vm.swappiness=10\"   | sudo tee -a /etc/sysctl.conf       # qo'shish\necho \"deb ... main\"       | sudo tee /etc/apt/sources.list.d/x.list > /dev/null   # ekranga chiqarmaslik\n\n# muqobil\nsudo sh -c 'echo \"x\" >> /etc/file'\n```\n`> /dev/null` — `tee`ning stdout'ini yashirish (secret bo'lsa ayniqsa).\nGotcha: `-a`ni unutish = faylning butun mazmuni o'chadi."
+  },
+  "33359": {
+    "a": "```vim\n:w !sudo tee % > /dev/null\n```\n- `:w !cmd` — buferni faylga emas, buyruq stdin'iga yozadi.\n- `%` — joriy fayl yo'li.\n- Vim \"fayl tashqarida o'zgardi\" deydi — `L` bosing.\n\nYaxshiroq odat: tizim fayllarini `sudoedit /etc/nginx/nginx.conf` (yoki `sudo -e`) bilan oching — muharrir oddiy user sifatida ishlaydi, faqat saqlash root bilan; `sudo vim` muharrirning o'zini (plaginlar bilan) root qiladi."
+  },
+  "33360": {
+    "a": "```sh\nfalse | tee out.log; echo $?           # 0  — xato yashirindi!\n\nset -o pipefail\nfalse | tee out.log; echo $?           # 1\n\nmake test | tee test.log\necho \"make: ${PIPESTATUS[0]}, tee: ${PIPESTATUS[1]}\"\n```\nCI'da (GitHub Actions `bash` shell default `-eo pipefail`, lekin oddiy `sh` emas) — skript boshida:\n```sh\n#!/usr/bin/env bash\nset -euo pipefail\n```\nBusiz `go test ./... | tee report.txt` testlar yiqilsa ham pipeline yashil bo'ladi."
+  },
+  "33361": {
+    "a": "```sh\n# bitta o'qish: checksum + siqilgan nusxa + qatorlar soni\ncat big.log | tee >(sha256sum > big.sha256) >(gzip > big.log.gz) | wc -l\n\n# backup'ni ham lokal, ham masofaga\npg_dump appdb | gzip | tee appdb.sql.gz | ssh backup 'cat > /backups/appdb.sql.gz'\n\n# xatolarni alohida faylga ajratish, hammasini umumiy log'ga\n./job.sh 2> >(tee -a errors.log >&2) | tee -a all.log\n```\nGotcha: `>(...)` fon jarayonlari asosiy buyruqdan **keyin** tugashi mumkin — natija faylini darhol o'qisangiz to'liq bo'lmasligi mumkin. Bash'ga xos (POSIX `sh`da yo'q)."
+  },
+  "33362": {
+    "a": "```sh\npython app.py | tee app.log             # chiqish to'planib keladi\npython -u app.py | tee app.log          # darhol\nstdbuf -oL -eL ./tool | tee tool.log    # libc stdio ishlatadigan dasturlar uchun\ngrep --line-buffered ERROR big.log | tee errors.log\n```\n- libc qoidasi: stdout TTY bo'lsa line-buffered, pipe/fayl bo'lsa full-buffered; stderr — unbuffered.\n- `stdbuf` faqat libc stdio'ga ta'sir qiladi; Go, Java o'z bufferlarini boshqaradi (Go `os.Stdout` bufferlanmaydi).\n- Konteynerlarda ham shu: `docker logs`da loglar kechiksa — `PYTHONUNBUFFERED=1`."
+  }
+}

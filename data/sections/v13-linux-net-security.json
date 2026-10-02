@@ -258,6 +258,17 @@
       "section": "v13",
       "question": "iptables qoidasi qo'shding va o'zingni serverdan chiqarib yubording. Bunga qanday yo'l qo'ymaslik kerak?",
       "explanation": "Masofadan firewall o'zgartirishda: avval ESTABLISHED va SSH'ga ruxsat, keyin DROP; avtomatik rollback (`at`/`sleep && iptables-restore`, `netplan try`, `firewall-cmd --timeout`); konsol kirish tayyor; o'zgarishni IaC orqali va canary hostda sinash."
+    },
+    {
+      "id": 33414,
+      "code": "WN11",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Network namespace va veth: konteyner tarmog'i qanday ishlaydi (`ip netns` bilan)?",
+      "explanation": "Network namespace — alohida tarmoq stek (interfeys, route, iptables). veth — ikki uchli virtual kabel: bir uchi namespace ichida, ikkinchisi host'da (yoki bridge'da). Docker/K8s CNI aynan shunday qiladi."
     }
   ]
 }

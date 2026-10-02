@@ -1,0 +1,98 @@
+{
+  "id": "k4",
+  "name": "Helm & ArgoCD",
+  "domain": "k8s",
+  "topics": [
+    "Helm & GitOps"
+  ],
+  "questions": [
+    {
+      "id": 33225,
+      "code": "KH02",
+      "level": "J",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "`helm install`, `upgrade --install`, `rollback`, `template` farqi?",
+      "explanation": "install — yangi release; upgrade --install — bor bo'lsa yangilaydi, yo'q bo'lsa o'rnatadi (CI uchun idempotent); rollback — oldingi revision'ga; template — klasterga tegmasdan YAML render qiladi."
+    },
+    {
+      "id": 33226,
+      "code": "KH03",
+      "level": "J",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "GitOps nima va ArgoCD qanday ishlaydi?",
+      "explanation": "GitOps — klaster holati Git'da deklarativ saqlanadi, agent (ArgoCD) klasterni doim Git'ga moslab turadi (pull model). Push o'rniga reconcile."
+    },
+    {
+      "id": 33227,
+      "code": "KH04",
+      "level": "M",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Helm chart'da `_helpers.tpl`, `values.yaml` va template funksiyalar (`include`, `toYaml`, `default`, `required`) qanday ishlatiladi?",
+      "explanation": "_helpers.tpl — qayta ishlatiladigan named template'lar (nom, label). include + nindent bilan YAML'ga qo'yiladi; required majburiy qiymatni tekshiradi; toYaml blokni (resources) ko'chiradi."
+    },
+    {
+      "id": 33229,
+      "code": "KH06",
+      "level": "M",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "ArgoCD'da sync policy: auto-sync, prune, self-heal nima? Qachon yoqasiz?",
+      "explanation": "auto-sync — Git o'zgarsa o'zi apply; prune — Git'dan o'chirilgan resursni klasterdan ham o'chiradi; selfHeal — kimdir kubectl bilan qo'lda o'zgartirsa qaytaradi."
+    },
+    {
+      "id": 33430,
+      "code": "KH10",
+      "level": "M",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Helm hook'lar nima? DB migratsiyani `pre-upgrade` hook bilan qilish xavflari?",
+      "explanation": "Hook — release'ning ma'lum bosqichida ishlaydigan resurs (odatda Job): pre-install, pre-upgrade, post-upgrade, test. Migratsiya uchun qulay, lekin hook fail/osilishi release'ni bloklaydi, rollback DB'ni qaytarmaydi."
+    },
+    {
+      "id": 33431,
+      "code": "KH11",
+      "level": "M",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Helm chart dependency (`Chart.lock`) va `values.schema.json` nima uchun?",
+      "explanation": "dependencies — chart ichida boshqa chart'lar (masalan redis subchart), Chart.lock aniq versiyalarni qotiradi. values.schema.json — values uchun JSON Schema: install/upgrade/lint'da noto'g'ri tip yoki majburiy maydon yo'qligini darhol ushlaydi."
+    },
+    {
+      "id": 33231,
+      "code": "KH08",
+      "level": "S",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Ko'p klaster va ko'p muhitda GitOps repo'ni qanday tuzasiz? Image tag qanday promote qilinadi?",
+      "explanation": "App kodi va deploy config alohida repo; muhit = papka/overlay; promote = PR bilan tag'ni dev→stage→prod values'ga ko'chirish. ApplicationSet bilan klasterlar generatsiya qilinadi."
+    },
+    {
+      "id": 33232,
+      "code": "KH09",
+      "level": "S",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "`helm upgrade` yarim yo'lda to'xtadi: release `pending-upgrade` holatida, keyingi upgrade xato beradi. Nima qilasiz?",
+      "explanation": "Release holatini helm history bilan ko'rish, sababni (timeout, hook, probe) topish, keyin helm rollback oxirgi deployed revision'ga. Oldini olish: --atomic, --timeout, CI'da bitta parallel deploy."
+    }
+  ]
+}

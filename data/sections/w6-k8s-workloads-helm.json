@@ -1,0 +1,351 @@
+{
+  "id": "w6",
+  "name": "K8s workloads & Helm",
+  "domain": "k8s",
+  "topics": [
+    "Workloads & Helm"
+  ],
+  "questions": [
+    {
+      "id": 33261,
+      "code": "WK01",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Kubernetes arxitekturasi: control plane va worker node komponentlari?",
+      "explanation": "Control plane: kube-apiserver (yagona kirish nuqtasi), etcd (holat), scheduler (pod'ni node'ga joylash), controller-manager (desired state'ni ushlab turish). Node: kubelet (pod'ni ishga tushiradi), container runtime (containerd), kube-proxy (Service trafigi)."
+    },
+    {
+      "id": 33262,
+      "code": "WK02",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Deployment manifestini qanday yozasiz? Asosiy maydonlar?",
+      "explanation": "`apiVersion: apps/v1`, `kind: Deployment`, `metadata`, `spec.replicas`, `spec.selector.matchLabels` (template label'lari bilan mos), `spec.template` (pod: container image, port, resources, probe'lar)."
+    },
+    {
+      "id": 33263,
+      "code": "WK03",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "`kubectl rollout` bilan deploy, status va rollback qanday qilinadi?",
+      "explanation": "`kubectl set image` yoki `apply` yangi ReplicaSet yaratadi; `rollout status` kutadi; `rollout history` revision'lar; `rollout undo` oldingi ReplicaSet'ga qaytaradi."
+    },
+    {
+      "id": 33264,
+      "code": "WK04",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Helm nima: chart, release, values?",
+      "explanation": "Helm — K8s paket menejeri. Chart — shablonlangan manifestlar to'plami; values — sozlanadigan qiymatlar; release — chart'ning cluster'ga o'rnatilgan nusxasi (revision'lar bilan)."
+    },
+    {
+      "id": 33265,
+      "code": "WK05",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Kustomize nima va Helm'dan farqi?",
+      "explanation": "Kustomize — shablonsiz: base manifest + overlay patch'lar (`kubectl apply -k`). Helm — template engine + paketlash + release tarixi. Kustomize oddiy o'z ilovalari uchun, Helm uchinchi tomon paketlari va murakkab parametrlash uchun."
+    },
+    {
+      "id": 33266,
+      "code": "WK06",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Init container va sidecar container nima?",
+      "explanation": "Init container — asosiy container'dan oldin ketma-ket ishlaydi va tugaydi (migration, kutish, fayl tayyorlash). Sidecar — asosiy bilan birga yashaydi (log shipper, proxy). K8s 1.29+ native sidecar: `initContainers` ichida `restartPolicy: Always`."
+    },
+    {
+      "id": 33306,
+      "code": "WK17",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "kubeconfig, context va namespace bilan qanday ishlaysiz?",
+      "explanation": "kubeconfig (`~/.kube/config`) — cluster'lar, user'lar va context'lar (cluster + user + namespace). `kubectl config use-context` cluster'ni almashtiradi; noto'g'ri context'da buyruq — prod'ni tasodifan o'zgartirishning klassik sababi."
+    },
+    {
+      "id": 33307,
+      "code": "WK18",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Imperative (`kubectl create/run`) va declarative (`kubectl apply -f`) farqi?",
+      "explanation": "Imperative — buyruq bilan bir martalik o'zgarish, tarix yo'q. Declarative — YAML faylda desired state, `apply` farqni qo'llaydi; Git'da saqlanadi va review qilinadi. Production'da declarative."
+    },
+    {
+      "id": 33308,
+      "code": "WK19",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Label va annotation farqi?",
+      "explanation": "Label — obyektni tanlash/guruhlash uchun (selector, `kubectl get -l`), qisqa qiymatlar. Annotation — tanlash uchun emas, qo'shimcha metadata (tool sozlamalari, checksum, izoh), uzun bo'lishi mumkin."
+    },
+    {
+      "id": 33309,
+      "code": "WK20",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "`kubectl get` natijasini qanday kengaytirib o'qiysiz: `-o wide`, `-o yaml`, `-w`, `explain`?",
+      "explanation": "`-o wide` — node va IP; `-o yaml` — to'liq obyekt (spec + status); `-w` — o'zgarishlarni kuzatish; `kubectl explain` — maydon hujjatlari; jsonpath — aniq qiymat olish."
+    },
+    {
+      "id": 33310,
+      "code": "WK21",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Deployment'ni qo'lda qanday scale qilasiz va bu GitOps bilan qanday to'qnashadi?",
+      "explanation": "`kubectl scale deploy/api --replicas=5` darhol pod sonini o'zgartiradi. Lekin manifestda (Git'da) 3 bo'lsa, keyingi apply/sync uni 3 ga qaytaradi; HPA bo'lsa, HPA boshqaradi."
+    },
+    {
+      "id": 33311,
+      "code": "WK22",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Service DNS nomlari qanday tuziladi?",
+      "explanation": "Har Service DNS oladi: `<service>.<namespace>.svc.cluster.local`. Bir namespace ichida faqat `<service>` yetarli, boshqa namespace'dan `<service>.<namespace>`. Headless service'da pod'lar: `<pod>.<service>.<ns>.svc.cluster.local`."
+    },
+    {
+      "id": 33312,
+      "code": "WK23",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "ConfigMap'ni pod'ga env sifatida va fayl sifatida qanday berasiz?",
+      "explanation": "`envFrom`/`valueFrom.configMapKeyRef` — environment variable; `volumes.configMap` — fayl. Env pod start'da bir marta o'qiladi (o'zgarsa restart kerak); fayl mount avtomatik yangilanadi (subPath'siz)."
+    },
+    {
+      "id": 33313,
+      "code": "WK24",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Pod hayot sikli: Pending, ContainerCreating, Running, Succeeded, Failed, Terminating?",
+      "explanation": "Pending — scheduler joy topmagan yoki image tortilmoqda; ContainerCreating — volume/network/image tayyorlanmoqda; Running — kamida bitta container ishlayapti; Succeeded/Failed — barcha container'lar tugagan (Job); Terminating — o'chirilmoqda (grace period)."
+    },
+    {
+      "id": 33387,
+      "code": "WK25",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Lokal Kubernetes: minikube, kind, k3s farqi va qachon qaysi biri?",
+      "explanation": "minikube — bitta node'li lokal cluster (VM yoki Docker), add-on'lar ko'p, o'rganish uchun qulay. kind — K8s node'lari Docker container sifatida, tez, CI va multi-node test uchun. k3s — yengil, production'ga yaroqli distributiv (edge, IoT, kichik server)."
+    },
+    {
+      "id": 33388,
+      "code": "WK26",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "`imagePullPolicy` qanday ishlaydi va nega `latest` tag xavfli?",
+      "explanation": "`Always` — har pod start'da registry'dan tekshiradi; `IfNotPresent` — node'da bo'lsa olmaydi; `Never` — faqat lokal. Tag `latest` bo'lsa default `Always`, boshqa tag'da `IfNotPresent`. `latest` qaysi versiya ishlayotganini noaniq qiladi va rollback'ni buzadi."
+    },
+    {
+      "id": 33389,
+      "code": "WK27",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "`kubectl cordon`, `uncordon`, `drain` nima qiladi?",
+      "explanation": "cordon — node'ni unschedulable qiladi (yangi pod tushmaydi, mavjudlari qoladi); drain — cordon + pod'larni PDB'ni hurmat qilib evict qiladi (maintenance oldidan); uncordon — node'ni qayta ishga qaytaradi."
+    },
+    {
+      "id": 33390,
+      "code": "WK28",
+      "level": "J",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "k9s, Lens, `kubectl` plugin'lari (krew) — kundalik ishni qanday tezlashtiradi?",
+      "explanation": "k9s — terminal UI: resurslarni ko'rish, log, exec, describe bitta tugma bilan. Lens/Headlamp — grafik IDE. krew — kubectl plugin menejeri (ctx, ns, neat, tree, stern)."
+    },
+    {
+      "id": 33267,
+      "code": "WK07",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Rolling update strategiyasi: `maxSurge`, `maxUnavailable`, `minReadySeconds`?",
+      "explanation": "maxSurge — replicas'dan ortiq nechta yangi pod bo'lishi mumkin; maxUnavailable — nechta pod mavjud bo'lmasligi mumkin; minReadySeconds — pod ready bo'lgach shuncha vaqt barqaror tursa available hisoblanadi."
+    },
+    {
+      "id": 33268,
+      "code": "WK08",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Graceful shutdown: pod o'chirilganda nima bo'ladi va 5xx'siz qanday to'xtatiladi?",
+      "explanation": "Pod Terminating bo'ladi: endpoint'lardan olib tashlash va SIGTERM parallel boshlanadi. Ilova SIGTERM'da yangi ulanish qabul qilishni to'xtatib, mavjudlarini tugatishi; `preStop` sleep endpoint yangilanishiga vaqt beradi; `terminationGracePeriodSeconds`dan keyin SIGKILL."
+    },
+    {
+      "id": 33269,
+      "code": "WK09",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "PodDisruptionBudget (PDB) nima va qachon kerak?",
+      "explanation": "PDB voluntary disruption'larda (node drain, cluster upgrade, autoscaler scale-down) bir vaqtda nechta pod o'chirilishi mumkinligini cheklaydi. Node crash'dan himoya qilmaydi."
+    },
+    {
+      "id": 33270,
+      "code": "WK10",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "StatefulSet qanday kafolatlar beradi va headless Service bilan bog'liqligi?",
+      "explanation": "StatefulSet: barqaror nom (`db-0`, `db-1`), barqaror DNS (`db-0.db.ns.svc`), har podga alohida PVC (`volumeClaimTemplates`), tartibli start/stop. Headless Service (`clusterIP: None`) har pod uchun DNS yozuvini beradi."
+    },
+    {
+      "id": 33271,
+      "code": "WK11",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Helm chart'ni qanday yaxshi yozasiz: values, helpers, hooks, tekshiruv?",
+      "explanation": "Values'da faqat haqiqatan o'zgaradigan narsalar, `_helpers.tpl`da nom/label'lar, `values.schema.json` bilan validatsiya, hooks (pre-upgrade migration Job) ehtiyot bilan, CI'da `helm lint` + `helm template` + kubeconform."
+    },
+    {
+      "id": 33272,
+      "code": "WK12",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Job va CronJob'ni production'da to'g'ri sozlash: retry, parallelism, concurrencyPolicy?",
+      "explanation": "Job: `backoffLimit` (retry), `activeDeadlineSeconds` (umumiy timeout), `ttlSecondsAfterFinished` (tozalash), `completions`/`parallelism`. CronJob: `concurrencyPolicy: Forbid`, `startingDeadlineSeconds`, history limit'lar. Ish idempotent bo'lishi shart."
+    },
+    {
+      "id": 33391,
+      "code": "WK29",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Downward API nima va pod o'z nomi, namespace'i, resurs limitini qanday biladi?",
+      "explanation": "Downward API pod/container ma'lumotlarini (nom, namespace, node, IP, label, requests/limits) env yoki fayl sifatida container'ga beradi — API'ga murojaatsiz va RBAC'siz."
+    },
+    {
+      "id": 33427,
+      "code": "WK30",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Ingress `pathType`: `Exact`, `Prefix`, `ImplementationSpecific` farqi?",
+      "explanation": "Exact — faqat aynan shu yo'l; Prefix — `/` bilan ajratilgan segment bo'yicha prefiks (`/api` → `/api/x` ha, `/apix` yo'q); ImplementationSpecific — controller'ga bog'liq (nginx'da regex). Eng uzun mos kelgan yo'l yutadi."
+    },
+    {
+      "id": 33428,
+      "code": "WK31",
+      "level": "M",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "`kubectl apply` (client-side) va Server-Side Apply farqi? Field ownership nima?",
+      "explanation": "Client-side apply oxirgi holatni `last-applied-configuration` annotation'da saqlaydi. SSA — API server har field'ning egasini (manager) kuzatadi; ikki tool bir field'ni o'zgartirsa conflict beradi. GitOps va controller'lar birga ishlaganda drift'ni oldini oladi."
+    },
+    {
+      "id": 33273,
+      "code": "WK13",
+      "level": "S",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Blue-green va canary deploy'ni Kubernetes'da qanday qilasiz?",
+      "explanation": "Blue-green: ikkita Deployment, Service selector'ini bir zumda almashtirish. Canary: trafikni foiz bo'yicha bo'lish — Ingress/Gateway weight, service mesh yoki Argo Rollouts/Flagger metrikaga qarab avtomatik oshiradi yoki rollback qiladi."
+    },
+    {
+      "id": 33274,
+      "code": "WK14",
+      "level": "S",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Operator va CRD nima? O'zingiz operator yozishingiz kerakmi?",
+      "explanation": "CRD — K8s API'ga yangi resurs turi qo'shadi; Operator — shu resursni reconcile qiluvchi controller, domen bilimini (DB failover, backup) avtomatlashtiradi. Ko'pincha tayyor operator yetarli; o'zingiz yozish — murakkab, uzoq muddatli qo'llab-quvvatlash talab qiladi."
+    },
+    {
+      "id": 33275,
+      "code": "WK15",
+      "level": "S",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "GitOps (Argo CD/Flux) qanday ishlaydi va push-based CD'dan farqi?",
+      "explanation": "GitOps: Git — yagona haqiqat manbai; cluster ichidagi agent (Argo CD/Flux) Git'ni kuzatadi va cluster'ni unga moslab sync qiladi (pull). CI cluster'ga credential bilan kirmaydi; drift avtomatik tuzatiladi; rollback = git revert."
+    },
+    {
+      "id": 33276,
+      "code": "WK16",
+      "level": "S",
+      "type": "card",
+      "topic": "Workloads & Helm",
+      "domain": "k8s",
+      "section": "w6",
+      "question": "Cluster upgrade'ni (masalan EKS 1.30 -> 1.31) qanday xavfsiz o'tkazasiz?",
+      "explanation": "Release notes va deprecated API'larni tekshirish (pluto/kubent), add-on'lar mosligi, avval staging, control plane bitta minor versiyaga, keyin node group'lar (surge, drain PDB bilan), monitoring va rollback rejasi."
+    }
+  ]
+}

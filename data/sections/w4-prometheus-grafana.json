@@ -1,0 +1,131 @@
+{
+  "id": "w4",
+  "name": "Prometheus & Grafana",
+  "domain": "obs",
+  "topics": [
+    "Prometheus & Grafana"
+  ],
+  "questions": [
+    {
+      "id": 33196,
+      "code": "WP01",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus qanday ishlaydi: pull model, exporter, scrape?",
+      "explanation": "Prometheus har `scrape_interval`da target'larning `/metrics` endpoint'idan HTTP orqali metrikalarni tortadi (pull) va o'z TSDB'sida saqlaydi. Exporter — o'z metrikasini bermaydigan tizim uchun tarjimon (node_exporter, postgres_exporter)."
+    },
+    {
+      "id": 33197,
+      "code": "WP02",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus metrika turlari: counter, gauge, histogram, summary?",
+      "explanation": "counter — faqat o'sadi (request soni), `rate()` bilan ishlatiladi; gauge — yuqoriga/pastga (xotira, navbat uzunligi); histogram — bucket'lar bo'yicha taqsimot (latency), server tomonda quantile; summary — client tomonda quantile, agregatsiya qilib bo'lmaydi."
+    },
+    {
+      "id": 33198,
+      "code": "WP03",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Asosiy PromQL so'rovlar: rate, sum by, histogram_quantile?",
+      "explanation": "`rate(counter[5m])` — sekundiga o'rtacha o'sish; `sum by (label)` — agregatsiya; `histogram_quantile(0.99, sum by (le) (rate(..._bucket[5m])))` — p99."
+    },
+    {
+      "id": 33246,
+      "code": "WP09",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "`rate()` va `irate()` farqi, nega counter'ga to'g'ridan-to'g'ri qaralmaydi?",
+      "explanation": "Counter faqat o'sadi va restart'da 0 ga tushadi — xom qiymat ma'nosiz. rate() oraliqdagi o'rtacha sekundlik o'sish (reset'ni hisobga oladi); irate() oxirgi ikki nuqta — sakrashli, alert'ga yaramaydi."
+    },
+    {
+      "id": 33247,
+      "code": "WP10",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Exporter nima? Eng ko'p ishlatiladiganlari?",
+      "explanation": "Exporter — tizim metrikasini Prometheus formatida /metrics da beradigan process. node_exporter (server), cAdvisor/kube-state-metrics (K8s), postgres/redis exporter, blackbox_exporter (tashqi probe)."
+    },
+    {
+      "id": 33199,
+      "code": "WP04",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Label'lar va kardinallik: nega `user_id`ni label qilish xavfli?",
+      "explanation": "Har unikal label kombinatsiyasi = alohida time series. `user_id`, `request_id`, to'liq URL kabi chegarasiz qiymatlar millionlab series yaratadi — xotira, sekin so'rov, Prometheus OOM."
+    },
+    {
+      "id": 33200,
+      "code": "WP05",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Alerting qoidasi va Alertmanager qanday ishlaydi?",
+      "explanation": "Prometheus alert rule'ni baholaydi; shart `for` davomida rost bo'lsa alert firing bo'ladi va Alertmanager'ga yuboriladi. Alertmanager group/dedupe, route (jamoa bo'yicha), inhibit, silence va notify qiladi."
+    },
+    {
+      "id": 33201,
+      "code": "WP06",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Grafana'da yaxshi dashboard qanday quriladi?",
+      "explanation": "Yuqorida servis sog'ligi (RED: rate, errors, duration p50/p95/p99), keyin resurslar (USE), variable'lar (env, service), bir xil vaqt oralig'i, birliklar va threshold'lar. Dashboard kod sifatida (JSON/Terraform/provisioning)."
+    },
+    {
+      "id": 33202,
+      "code": "WP07",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "node_exporter bilan server monitoringi: qaysi metrikalarga qaraladi?",
+      "explanation": "CPU (usage, iowait, steal), load, memory (MemAvailable), disk (bo'sh joy, inode, IO util/latency), network (trafik, xatolar), filesystem read-only, systemd servislar."
+    },
+    {
+      "id": 33250,
+      "code": "WP13",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Kubernetes'da Prometheus target'larni qanday topadi? ServiceMonitor nima?",
+      "explanation": "kubernetes_sd_configs — K8s API'dan pod/service/endpoint'larni topadi, relabel bilan filtrlaydi. Prometheus Operator'da ServiceMonitor/PodMonitor CRD — label selector bilan deklarativ scrape."
+    },
+    {
+      "id": 33203,
+      "code": "WP08",
+      "level": "S",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus'ni scale qilish va uzoq muddat saqlash: federation, remote_write, Thanos/Mimir?",
+      "explanation": "Bitta Prometheus vertikal scale bo'ladi va lokal disk (odatda 15-30 kun). Ko'p cluster va uzoq retention uchun: remote_write yoki Thanos sidecar orqali object storage'ga, global query (Thanos/Mimir/VictoriaMetrics), HA juftlik + dedupe."
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+{
+  "33261": {
+    "a": "```\nkubectl --> [kube-apiserver] <--> [etcd]\n               ^     ^\n     [scheduler]     [controller-manager]\n               |\n   ------------+-------------\n   [node: kubelet + containerd + kube-proxy] x N\n```\n- Hamma komponent faqat **apiserver** orqali gaplashadi, etcd'ga to'g'ridan faqat apiserver.\n- Model: declarative — siz desired state yozasiz, controller'lar reconcile loop bilan real holatni unga yaqinlashtiradi.\n- Managed (EKS/GKE/AKS) — control plane'ni provider boshqaradi."
+  },
+  "33262": {
+    "a": "```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata: { name: api, labels: { app: api } }\nspec:\n  replicas: 3\n  selector: { matchLabels: { app: api } }\n  template:\n    metadata: { labels: { app: api } }\n    spec:\n      containers:\n      - name: api\n        image: ghcr.io/acme/api:1.4.0\n        ports: [{ containerPort: 8080 }]\n        resources:\n          requests: { cpu: 100m, memory: 128Mi }\n          limits:   { memory: 256Mi }\n        readinessProbe: { httpGet: { path: /healthz, port: 8080 } }\n```\nGotcha: `selector` immutable — o'zgartirish uchun Deployment'ni qayta yaratish kerak.\nTekshirish: `kubectl apply --dry-run=server -f api.yaml`, `kubectl diff -f`."
+  },
+  "33263": {
+    "a": "```sh\nkubectl set image deploy/api api=ghcr.io/acme/api:1.5.0\nkubectl rollout status deploy/api --timeout=5m\nkubectl rollout history deploy/api\nkubectl rollout undo deploy/api                 # oldingi\nkubectl rollout undo deploy/api --to-revision=3\nkubectl rollout restart deploy/api              # pod'larni qayta yaratish (config o'zgarganda)\nkubectl rollout pause/resume deploy/api\n```\n`revisionHistoryLimit` (default 10) — eski ReplicaSet'lar soni.\nGitOps'da `undo` vaqtinchalik: Git'dagi holat qaytib yozadi — rollback Git revert orqali."
+  },
+  "33264": {
+    "a": "```sh\nhelm repo add bitnami https://charts.bitnami.com/bitnami\nhelm install redis bitnami/redis -n cache --create-namespace -f values-prod.yaml\nhelm upgrade --install api ./charts/api -f values-prod.yaml --set image.tag=1.5.0\nhelm list -A\nhelm history api\nhelm rollback api 3\nhelm template ./charts/api -f values-prod.yaml   # render, cluster'siz\n```\nChart tuzilmasi: `Chart.yaml`, `values.yaml`, `templates/` (Go template), `charts/` (dependency).\n`upgrade --install --atomic --wait` — muvaffaqiyatsiz bo'lsa avtomatik rollback."
+  },
+  "33265": {
+    "a": "```\nbase/       deployment.yaml service.yaml kustomization.yaml\noverlays/\n  prod/     kustomization.yaml  (replicas: 5, image tag, patch)\n```\n```yaml\n# overlays/prod/kustomization.yaml\nresources: [../../base]\nnamespace: prod\nimages: [{ name: ghcr.io/acme/api, newTag: \"1.5.0\" }]\nreplicas: [{ name: api, count: 5 }]\npatches: [{ path: resources-patch.yaml }]\n```\n| | Helm | Kustomize |\n|---|---|---|\n| Usul | template | patch/overlay |\n| Release/rollback | bor | yo'q (GitOps beradi) |\n| O'qish | render qilish kerak | toza YAML |\nKo'p jamoa ikkalasini birga: Helm chart + Kustomize post-render."
+  },
+  "33266": {
+    "a": "```yaml\nspec:\n  initContainers:\n  - name: wait-db\n    image: busybox\n    command: [\"sh\",\"-c\",\"until nc -z postgres 5432; do sleep 2; done\"]\n  - name: log-agent              # native sidecar (1.29+)\n    image: fluent-bit\n    restartPolicy: Always\n  containers:\n  - name: api\n    image: acme/api\n```\nNative sidecar afzalligi: asosiy container'dan **oldin** start, **keyin** to'xtaydi; Job tugashini bloklamaydi.\nGotcha: DB migration'ni init container'da qilish — har replika parallel migration qiladi; alohida Job yoki lock kerak."
+  },
+  "33267": {
+    "a": "```yaml\nspec:\n  replicas: 10\n  minReadySeconds: 10\n  progressDeadlineSeconds: 600\n  strategy:\n    type: RollingUpdate\n    rollingUpdate: { maxSurge: 25%, maxUnavailable: 0 }\n```\n- `maxUnavailable: 0` — sig'im kamaymaydi (ko'proq resurs kerak).\n- Readiness probe'siz rolling update \"ko'r\" — ishga tushmagan pod'ga trafik ketadi.\n- `progressDeadlineSeconds` o'tsa rollout `ProgressDeadlineExceeded` — CI shuni kutib fail qilishi kerak.\n- `Recreate` — hammasini o'chirib keyin yangisi (downtime, lekin ikki versiya birga ishlamaydi)."
+  },
+  "33268": {
+    "a": "```\ndelete pod -> [endpoint'dan chiqarish] ... kube-proxy/LB yangilanishi (soniyalar)\n           -> preStop (sleep 5) -> SIGTERM -> ilova drain -> exit\n           -> grace period (30s) tugasa SIGKILL\n```\n```yaml\nspec:\n  terminationGracePeriodSeconds: 40\n  containers:\n  - lifecycle:\n      preStop: { exec: { command: [\"sleep\", \"5\"] } }   # yoki sleep action (1.30+)\n```\nGo: `signal.NotifyContext(ctx, syscall.SIGTERM)` + `srv.Shutdown(ctx)`.\nGotcha: shell form `CMD` — PID 1 `sh`, SIGTERM ilovaga yetmaydi -> exec form."
+  },
+  "33269": {
+    "a": "```yaml\napiVersion: policy/v1\nkind: PodDisruptionBudget\nmetadata: { name: api }\nspec:\n  minAvailable: 2          # yoki maxUnavailable: 1\n  selector: { matchLabels: { app: api } }\n```\n- `kubectl drain` PDB'ni hurmat qiladi (eviction API).\n- Gotcha: `replicas: 1` + `minAvailable: 1` — drain abadiy osiladi, upgrade bloklanadi.\n- Deployment rolling update PDB'ga bo'ysunmaydi (o'z maxUnavailable'i bor).\n- Quorum tizimlari (etcd, Kafka, ZK): `maxUnavailable: 1`."
+  },
+  "33270": {
+    "a": "```yaml\napiVersion: apps/v1\nkind: StatefulSet\nspec:\n  serviceName: db            # headless service nomi\n  replicas: 3\n  podManagementPolicy: OrderedReady\n  volumeClaimTemplates:\n  - metadata: { name: data }\n    spec: { accessModes: [ReadWriteOnce], resources: { requests: { storage: 50Gi } } }\n```\n- Pod qayta yaratilsa **o'sha** PVC'ga ulanadi.\n- StatefulSet o'chirilganda PVC'lar qoladi (ma'lumot xavfsizligi) — `persistentVolumeClaimRetentionPolicy` bilan boshqariladi.\n- Replikatsiya, failover, backup'ni StatefulSet bermaydi — buni Operator (CloudNativePG, Strimzi) qiladi."
+  },
+  "33271": {
+    "a": "```yaml\n# templates/deployment.yaml\nmetadata:\n  name: {{ include \"api.fullname\" . }}\n  labels: {{- include \"api.labels\" . | nindent 4 }}\nspec:\n  template:\n    metadata:\n      annotations:\n        checksum/config: {{ include (print $.Template.BasePath \"/configmap.yaml\") . | sha256sum }}\n```\n- `checksum/config` — ConfigMap o'zgarsa pod'lar avtomatik rollout.\n- Hook: `\"helm.sh/hook\": pre-upgrade` + `hook-delete-policy`; hook fail bo'lsa release fail.\n- `required` funksiyasi: `{{ required \"image.tag kerak\" .Values.image.tag }}`.\n- CI: `helm lint`, `helm template | kubeconform -strict`, `helm unittest`."
+  },
+  "33272": {
+    "a": "```yaml\napiVersion: batch/v1\nkind: CronJob\nspec:\n  schedule: \"0 3 * * *\"\n  timeZone: \"Asia/Tashkent\"\n  concurrencyPolicy: Forbid\n  startingDeadlineSeconds: 600\n  successfulJobsHistoryLimit: 3\n  failedJobsHistoryLimit: 5\n  jobTemplate:\n    spec:\n      backoffLimit: 3\n      activeDeadlineSeconds: 3600\n      ttlSecondsAfterFinished: 86400\n      template:\n        spec: { restartPolicy: OnFailure, containers: [...] }\n```\nCronJob \"at least once\" — ba'zan ikki marta ishga tushishi mumkin, ba'zan o'tkazib yuboriladi: idempotentlik va monitoring (oxirgi muvaffaqiyatli vaqt metrikasi) kerak."
+  },
+  "33273": {
+    "a": "- **Oddiy canary:** `api-stable` 9 replika + `api-canary` 1 replika, bitta Service — ~10% (replika soniga bog'liq, aniq emas).\n- **Gateway API weight:**\n```yaml\nrules:\n- backendRefs:\n  - { name: api-stable, port: 80, weight: 95 }\n  - { name: api-canary, port: 80, weight: 5 }\n```\n- **Argo Rollouts:** steps (5% -> 25% -> 50% -> 100%), har qadamda Prometheus AnalysisTemplate (error rate < 1%), fail bo'lsa avtomatik abort.\n\nShartlar: backward-compatible DB migration (expand/contract), ikki versiya bir vaqtda ishlay olishi, canary metrikalari versiya label'i bilan ajratilgan."
+  },
+  "33274": {
+    "a": "```yaml\napiVersion: postgresql.cnpg.io/v1\nkind: Cluster\nmetadata: { name: pg }\nspec:\n  instances: 3\n  storage: { size: 100Gi }\n  backup: { barmanObjectStore: { destinationPath: s3://acme-pg-backup } }\n```\nOperator reconcile loop: kuzat (watch) -> real holatni o'qi -> farqni hisobla -> harakat -> status yoz. Idempotent bo'lishi shart.\n\nO'zingiz yozish (kubebuilder/controller-runtime) — faqat ichki platforma uchun takrorlanadigan murakkab operatsiya bo'lsa. Aks holda Helm + GitOps yetarli. Xavf: buggy operator butun cluster'ga zarar yetkazadi."
+  },
+  "33275": {
+    "a": "```\nCI: test -> image build -> push -> config repo'da image tag PR\n                                         |\nArgo CD (cluster ichida) <--- poll/webhook\n   -> diff -> sync -> health check\n```\n| | Push (CI kubectl apply) | GitOps (pull) |\n|---|---|---|\n| Cluster credential | CI'da | cluster ichida |\n| Drift | aniqlanmaydi | aniqlanadi, self-heal |\n| Audit | CI loglari | Git tarixi |\n\nAmaliyot: app kod repo va config (environment) repo alohida; App-of-apps / ApplicationSet ko'p cluster uchun; secret'lar SOPS/Sealed Secrets/External Secrets bilan."
+  },
+  "33276": {
+    "a": "Tartib:\n1. **Tayyorgarlik:** deprecated/removed API'lar — `kubent`, `pluto detect-helm`; manifest va Helm chart'larni yangilash.\n2. Add-on'lar mosligi: CNI, CoreDNS, kube-proxy, ingress controller, cert-manager, CSI.\n3. **Staging** cluster'da to'liq sinov.\n4. Control plane: faqat +1 minor (skip yo'q). Control plane rollback qilib bo'lmaydi.\n5. Node'lar: yangi node group yaratish -> `cordon` + `drain` (PDB) -> eski'larni o'chirish (blue-green node'lar).\n6. Kuzatish: error rate, pending pod'lar, DNS.\n\nKubelet control plane'dan ko'pi bilan 3 minor orqada bo'lishi mumkin (1.28+). Upgrade'ni muntazam qiling — 4 versiya orqada qolish eng xavfli."
+  },
+  "33277": {
+    "a": "Scheduler **requests** ga qaraydi, haqiqiy foydalanishga emas.\n```sh\nkubectl describe pod api-xyz\n# Events: 0/5 nodes are available: 3 Insufficient cpu,\n#         2 node(s) had untolerated taint {dedicated: gpu}\n```\nPending sabablari: requests juda katta, taint, affinity mos emas, PVC boshqa AZ'da, ResourceQuota.\nEvent matni — eng tez diagnostika."
+  },
+  "33278": {
+    "a": "```sh\nkubectl taint nodes gpu-1 dedicated=gpu:NoSchedule\nkubectl label nodes gpu-1 accelerator=nvidia\n```\n```yaml\nspec:\n  tolerations:\n  - { key: dedicated, value: gpu, effect: NoSchedule }\n  affinity:\n    nodeAffinity:\n      requiredDuringSchedulingIgnoredDuringExecution:\n        nodeSelectorTerms:\n        - matchExpressions: [{ key: accelerator, operator: In, values: [nvidia] }]\n```\nGPU node'ni faqat GPU workload'ga ajratish uchun **ikkalasi** kerak: taint begonalarni haydaydi, affinity GPU pod'ni u yerga tortadi.\nEffect'lar: `NoSchedule`, `PreferNoSchedule`, `NoExecute` (mavjud pod'larni ham chiqaradi)."
+  },
+  "33279": {
+    "a": "```yaml\nvolumes:\n- name: tmp\n  emptyDir: { sizeLimit: 1Gi }      # medium: Memory -> tmpfs (RAM limitga kiradi)\n- name: cfg\n  configMap: { name: api-config }\n- name: data\n  persistentVolumeClaim: { claimName: api-data }\n```\n- hostPath — container node'ga chiqish yo'li; Pod Security `restricted` uni taqiqlaydi.\n- configMap mount yangilanadi (~1 daqiqa), lekin `subPath` bilan mount qilingani **yangilanmaydi**; env orqali berilgani ham yangilanmaydi (restart kerak)."
+  },
+  "33280": {
+    "a": "| Mode | Qisqa | Misol backend |\n|---|---|---|\n| ReadWriteOnce | RWO | EBS, PD, Azure Disk |\n| ReadOnlyMany | ROX | NFS, oldindan to'ldirilgan disk |\n| ReadWriteMany | RWX | EFS, NFS, CephFS |\n| ReadWriteOncePod | RWOP | CSI drayverlar (1.29 GA) |\n\nGotcha: RWO = bitta **node**, bitta pod emas — shu node'dagi ikki pod ikkalasi yozishi mumkin.\nEBS AZ'ga bog'langan: pod boshqa AZ'dagi node'ga tushsa volume ulanmaydi — StorageClass'da `volumeBindingMode: WaitForFirstConsumer`."
+  },
+  "33281": {
+    "a": "```yaml\nstartupProbe:\n  httpGet: { path: /healthz, port: 8080 }\n  failureThreshold: 30\n  periodSeconds: 2          # 60s gacha start uchun\nreadinessProbe:\n  httpGet: { path: /ready, port: 8080 }\n  periodSeconds: 5\nlivenessProbe:\n  httpGet: { path: /healthz, port: 8080 }\n  periodSeconds: 10\n  failureThreshold: 3\n```\nAnti-pattern: liveness ichida DB/Redis tekshirish — DB sekinlashsa **hamma** pod restart, kaskad incident. Liveness faqat jarayonning o'zi tirikligini tekshirsin; dependency holati — readiness'da (ehtiyotkorlik bilan)."
+  },
+  "33282": {
+    "a": "```yaml\ntopologySpreadConstraints:\n- maxSkew: 1\n  topologyKey: topology.kubernetes.io/zone\n  whenUnsatisfiable: DoNotSchedule\n  labelSelector: { matchLabels: { app: api } }\n- maxSkew: 1\n  topologyKey: kubernetes.io/hostname\n  whenUnsatisfiable: ScheduleAnyway\n  labelSelector: { matchLabels: { app: api } }\n```\n- `DoNotSchedule` — qat'iy (pod Pending bo'lishi mumkin), `ScheduleAnyway` — afzallik.\n- Required anti-affinity katta cluster'da scheduler'ni sekinlashtiradi va replica > node bo'lsa Pending — spread constraints afzalroq.\n- Scale-down'da balans saqlanmaydi — descheduler."
+  },
+  "33283": {
+    "a": "```\nyuk oshdi -> HPA replica 5->15 -> 10 pod Pending (joy yo'q)\n          -> Karpenter mos instance tanlab node qo'shadi (~1 daqiqa)\nyuk tushdi -> HPA kamaytiradi -> bo'sh node'lar konsolidatsiya qilinadi\n```\n```yaml\napiVersion: autoscaling/v2\nkind: HorizontalPodAutoscaler\nspec:\n  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: api }\n  minReplicas: 3\n  maxReplicas: 30\n  metrics:\n  - type: Resource\n    resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }\n  behavior:\n    scaleDown: { stabilizationWindowSeconds: 300 }\n```\nVPA odatda `updateMode: \"Off\"` — faqat tavsiya, requests'ni to'g'ri tanlash uchun."
+  },
+  "33284": {
+    "a": "```yaml\napiVersion: keda.sh/v1alpha1\nkind: ScaledObject\nspec:\n  scaleTargetRef: { name: order-consumer }\n  minReplicaCount: 0\n  maxReplicaCount: 24          # partition sonidan oshmasin\n  triggers:\n  - type: kafka\n    metadata:\n      bootstrapServers: kafka:9092\n      consumerGroup: orders\n      topic: orders\n      lagThreshold: \"500\"\n```\nCPU consumer uchun yomon signal: IO kutayotgan consumer CPU past, lag esa o'sadi.\nKafka: consumer soni > partition soni — ortiqchalari bo'sh turadi.\nScale-to-zero: birinchi xabarga cold start kechikishi."
+  },
+  "33285": {
+    "a": "```yaml\napiVersion: storage.k8s.io/v1\nkind: StorageClass\nmetadata: { name: gp3-retain }\nprovisioner: ebs.csi.aws.com\nparameters: { type: gp3, encrypted: \"true\" }\nreclaimPolicy: Retain\nallowVolumeExpansion: true\nvolumeBindingMode: WaitForFirstConsumer\n```\n- Muhim DB uchun `Retain` — tasodifiy `kubectl delete pvc` ma'lumotni o'chirmaydi.\n- `allowVolumeExpansion` — PVC hajmini oshirish (kamaytirish mumkin emas).\n- Backup: VolumeSnapshot (CSI) yoki Velero; ilova darajasidagi backup (pg_dump/WAL) baribir kerak."
+  },
+  "33286": {
+    "a": "```yaml\napiVersion: v1\nkind: ResourceQuota\nmetadata: { name: team-a, namespace: team-a }\nspec:\n  hard:\n    requests.cpu: \"20\"\n    requests.memory: 64Gi\n    limits.memory: 96Gi\n    pods: \"100\"\n    services.loadbalancers: \"2\"\n---\napiVersion: v1\nkind: LimitRange\nspec:\n  limits:\n  - type: Container\n    default:        { memory: 256Mi }\n    defaultRequest: { cpu: 100m, memory: 128Mi }\n```\nGotcha: quota'da `requests.cpu` bo'lsa requests'siz pod **rad etiladi** — LimitRange default bilan birga ishlating."
+  },
+  "33287": {
+    "a": "Belgilar: `container_cpu_cfs_throttled_periods_total / container_cpu_cfs_periods_total` yuqori, CPU usage < limit.\n\n```yaml\nresources:\n  requests: { cpu: \"500m\", memory: 512Mi }\n  limits:   { memory: 512Mi }            # CPU limit yo'q\nenv:\n- name: GOMAXPROCS\n  valueFrom: { resourceFieldRef: { resource: requests.cpu, divisor: \"1\" } }\n```\nGo 1.25+ GOMAXPROCS'ni cgroup limitiga avtomatik moslaydi (oldin `automaxprocs`).\nTrade-off: limit'siz — noisy neighbor xavfi (requests bo'yicha adolatli ulush baribir kafolatlangan). Multi-tenant/to'lovli cluster'da limit kerak bo'lishi mumkin.\nMemory limit esa **qo'yiladi**: memory siqib bo'lmaydi, oshsa OOMKill."
+  },
+  "33288": {
+    "a": "```sh\nkubectl describe node ip-10-0-1-5\n# Conditions: MemoryPressure True, DiskPressure False\nkubectl get pods -A --field-selector=status.phase=Failed\n# Reason: Evicted, Message: The node was low on resource: ephemeral-storage\n```\n- Kernel OOM killer (cgroup limit) va kubelet eviction — **turli** mexanizmlar.\n- Ephemeral storage: container log'lari va emptyDir ham hisoblanadi — `ephemeral-storage` requests/limits qo'ying.\n- PriorityClass: muhim tizim pod'lari pastroq prioritetdagilarni preempt qiladi.\n- `system-reserved`/`kube-reserved` — kubelet va OS uchun joy qoldirish, aks holda node NotReady."
+  },
+  "33289": {
+    "a": "Metrikalar:\n- requests / allocatable (rezervatsiya) va usage / requests (samaradorlik). Odatiy holat: requests 70%, usage 25% — pul behuda.\n- Kubecost/OpenCost — namespace/jamoa bo'yicha xarajat.\n\nUsullar:\n1. Right-sizing: VPA recommender yoki Goldilocks.\n2. Karpenter `consolidationPolicy: WhenEmptyOrUnderutilized`, instance turlarini keng ruxsat.\n3. **Overprovisioning:** past prioritetli \"pause\" pod'lar joy egallab turadi; haqiqiy pod kelsa ular preempt bo'ladi va darhol joy ochiladi.\n4. Spot: stateless workload'lar, PDB va topology spread bilan; interruption handler.\n5. Kichik node'lar — daemonset overhead ulushi katta; juda katta node — blast radius katta."
+  },
+  "33290": {
+    "a": "```sh\nETCDCTL_API=3 etcdctl snapshot save /backup/etcd-$(date +%F).db \\\n  --endpoints=https://127.0.0.1:2379 --cacert=ca.crt --cert=etcd.crt --key=etcd.key\netcdctl endpoint status --write-out=table\netcdctl defrag\n```\n- Disk: SSD, `wal_fsync_duration_seconds` p99 < 10ms; sekin disk = leader election'lar, API sekin.\n- Hajm limiti (default 2GB, max ~8GB) — ko'p Event/CRD obyekt; defrag va compaction.\n- Secret'lar: apiserver `EncryptionConfiguration` (KMS).\n- Managed K8s'da etcd provider'da — lekin cluster obyektlarini Velero/GitOps bilan tiklash rejasi baribir kerak."
+  },
+  "33291": {
+    "a": "```sh\nkubectl get pod api-xyz\nkubectl describe pod api-xyz        # Last State: Terminated, Exit Code, Reason\nkubectl logs api-xyz --previous     # yiqilgan container logi\nkubectl get events --sort-by=.lastTimestamp -n prod\n```\n| Exit code | Ma'nosi |\n|---|---|\n| 1 | ilova xatosi (config, DB ulanmadi) |\n| 137 | SIGKILL — OOMKilled yoki liveness |\n| 139 | segfault |\n| 143 | SIGTERM |\n| 127/126 | buyruq topilmadi / bajarib bo'lmaydi |\n\nTez-tez sabablar: noto'g'ri env/secret, DB mavjud emas, liveness juda agressiv, noto'g'ri `command`/entrypoint."
+  },
+  "33292": {
+    "a": "```sh\nkubectl describe pod api-xyz\n# Failed to pull image \"acme/api:1.5\": ... not found\n# ... 401 Unauthorized\n# ... toomanyrequests: You have reached your pull rate limit\n```\nYechimlar:\n```sh\nkubectl create secret docker-registry regcred --docker-server=ghcr.io \\\n  --docker-username=bot --docker-password=$TOKEN -n prod\n```\n```yaml\nspec: { imagePullSecrets: [{ name: regcred }] }\n```\n- Cloud'da: node IAM role (ECR), ServiceAccount'ga biriktirish.\n- Docker Hub limiti: pull-through cache yoki o'z registry'ingiz.\n- `exec format error` — image boshqa arxitektura uchun; multi-arch build (`buildx --platform linux/amd64,linux/arm64`)."
+  },
+  "33293": {
+    "a": "```sh\nkubectl exec -it api-xyz -- sh\nkubectl port-forward svc/api 8080:80          # localhost:8080 -> service\nkubectl debug -it api-xyz --image=nicolaka/netshoot --target=api   # ephemeral container\nkubectl debug node/ip-10-0-1-5 -it --image=ubuntu                  # node'ga\nkubectl run tmp --rm -it --image=busybox -- nslookup api.prod.svc.cluster.local\n```\nDistroless/scratch image'da `exec sh` ishlamaydi — `debug --target` bilan bir xil process namespace'da tool'lar ishlatiladi.\nProd'da exec huquqi RBAC bilan cheklangan va audit qilinishi kerak."
+  },
+  "33294": {
+    "a": "```sh\nkubectl get svc api -o wide\nkubectl get endpointslices -l kubernetes.io/service-name=api   # bo'sh = selector/readiness muammo\nkubectl run t --rm -it --image=nicolaka/netshoot -- bash\n  nslookup api.prod.svc.cluster.local\n  curl -v http://api.prod:80/healthz\nkubectl -n kube-system logs -l k8s-app=kube-dns\nkubectl get networkpolicy -n prod\n```\nEng ko'p sabab: **endpoints bo'sh** — label typo yoki pod'lar readiness'dan o'tmagan.\n`targetPort` container porti bilan, `port` — Service porti."
+  },
+  "33295": {
+    "a": "```yaml\napiVersion: v1\nkind: ServiceAccount\nmetadata:\n  name: api\n  annotations:\n    eks.amazonaws.com/role-arn: arn:aws:iam::123:role/api-s3-read   # IRSA\nautomountServiceAccountToken: false\n```\n- Har ilovaga alohida SA, minimal RBAC.\n- Token'lar endi qisqa muddatli va audience bilan (projected, 1.24+).\n- `default` SA'ga hech qachon Role bog'lamang — hamma pod meros oladi."
+  },
+  "33296": {
+    "a": "```sh\nkubectl label ns prod pod-security.kubernetes.io/enforce=restricted \\\n  pod-security.kubernetes.io/warn=restricted\n```\n```yaml\nsecurityContext:              # pod\n  runAsNonRoot: true\n  runAsUser: 10001\n  seccompProfile: { type: RuntimeDefault }\ncontainers:\n- securityContext:\n    allowPrivilegeEscalation: false\n    readOnlyRootFilesystem: true\n    capabilities: { drop: [\"ALL\"] }\n```\nPodSecurityPolicy 1.25'da o'chirilgan. Murakkabroq qoidalar (faqat ishonchli registry, label majburiy) — Kyverno yoki OPA Gatekeeper."
+  },
+  "33297": {
+    "a": "```yaml\nkind: Role\nmetadata: { name: deployer, namespace: prod }\nrules:\n- apiGroups: [\"apps\"]\n  resources: [\"deployments\"]\n  verbs: [\"get\",\"list\",\"watch\",\"patch\"]\n---\nkind: RoleBinding\nsubjects: [{ kind: ServiceAccount, name: ci-deployer, namespace: prod }]\nroleRef: { kind: Role, name: deployer, apiGroup: rbac.authorization.k8s.io }\n```\n```sh\nkubectl auth can-i --list --as=system:serviceaccount:prod:ci-deployer -n prod\nkubectl auth can-i create pods/exec --as=jane -n prod\n```\nGotcha: `create pods` huquqi = istalgan SA bilan pod yaratib uning token'ini olish = amalda yuqoriroq huquq."
+  },
+  "33298": {
+    "a": "```yaml\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata: { name: default-deny, namespace: prod }\nspec: { podSelector: {}, policyTypes: [Ingress, Egress] }\n---\nkind: NetworkPolicy\nmetadata: { name: api-to-db, namespace: prod }\nspec:\n  podSelector: { matchLabels: { app: postgres } }\n  ingress:\n  - from: [{ podSelector: { matchLabels: { app: api } } }]\n    ports: [{ port: 5432 }]\n```\nGotcha: egress deny qilinganda **DNS**ni (kube-dns, UDP/TCP 53) ruxsat bermasangiz hamma narsa \"sinadi\".\nFlannel NetworkPolicy'ni qo'llamaydi — policy yoziladi, lekin hech narsa bloklanmaydi."
+  },
+  "33299": {
+    "a": "| Usul | Qanday | Afzalligi |\n|---|---|---|\n| External Secrets Operator | ExternalSecret CR -> secret manager'dan K8s Secret | markazlashgan, rotation |\n| Sealed Secrets | cluster public key bilan shifrlangan CR Git'da | oddiy, GitOps |\n| SOPS (+ KMS/age) | YAML qiymatlari shifrlangan | Flux/Helm bilan |\n| Secrets Store CSI | fayl sifatida mount, K8s Secret'siz | etcd'da yo'q |\n\n```yaml\napiVersion: external-secrets.io/v1\nkind: ExternalSecret\nspec:\n  refreshInterval: 1h\n  secretStoreRef: { name: aws-sm, kind: ClusterSecretStore }\n  target: { name: db-credentials }\n  data: [{ secretKey: password, remoteRef: { key: prod/db, property: password } }]\n```"
+  },
+  "33300": {
+    "a": "```sh\nkubectl describe pod api-xyz | grep -A3 \"Last State\"\n#   Reason: OOMKilled   Exit Code: 137\nkubectl top pod api-xyz --containers\n```\n```promql\nmax by (pod) (container_memory_working_set_bytes{container=\"api\"})\nincrease(kube_pod_container_status_restarts_total[1h])\n```\n- Tekis o'sish -> leak (pprof heap profil).\n- Pik -> katta so'rov/batch; streaming, limit.\n- Go: `GOMEMLIMIT` ~ limitning 80-90% — GC limitga yaqinlashganda agressivroq.\n- Node darajasida OOM (node-level) — boshqa: `dmesg`, node MemoryPressure."
+  },
+  "33301": {
+    "a": "```sh\nkubectl -n ingress-nginx logs deploy/ingress-nginx-controller | grep \" 502 \"\nkubectl get endpointslices -l kubernetes.io/service-name=api -n prod\nkubectl describe ingress api -n prod\n```\nKlassik sabablar:\n- Deploy paytida 502: preStop/graceful shutdown yo'q.\n- Tasodifiy 502: backend keepalive timeout < LB/proxy idle timeout — backend ulanishni yopadi, proxy yopilgan ulanishga yozadi. Backend idle timeout **kattaroq** bo'lsin.\n- 503 hamma joyda: selector xato yoki readiness hech qachon o'tmaydi.\n- 504: `proxy-read-timeout` va sekin endpoint."
+  },
+  "33302": {
+    "a": "```sh\ntrivy image --severity HIGH,CRITICAL --exit-code 1 ghcr.io/acme/api:1.5.0\nsyft ghcr.io/acme/api:1.5.0 -o spdx-json > sbom.json\ncosign sign --yes ghcr.io/acme/api@sha256:abc...\ncosign verify ghcr.io/acme/api@sha256:abc... \\\n  --certificate-identity-regexp 'https://github.com/acme/.*' \\\n  --certificate-oidc-issuer https://token.actions.githubusercontent.com\n```\nKyverno `verifyImages` qoidasi — imzosiz image rad etiladi.\nQo'shimcha: minimal base (distroless), tag emas **digest** bilan deploy, SLSA provenance, runtime detection (Falco)."
+  },
+  "33303": {
+    "a": "Qatlamlar:\n| Xavf | Nazorat |\n|---|---|\n| Huquq | namespace RBAC, SSO guruhlari |\n| Resurs | ResourceQuota, LimitRange, PriorityClass |\n| Tarmoq | default-deny NetworkPolicy |\n| Kernel | PSS restricted, seccomp, node pool ajratish |\n| Xarajat | label/namespace bo'yicha OpenCost |\n| Policy | Kyverno: majburiy label, ruxsat etilgan registry |\n\nTrade-off: ko'p kichik cluster — kuchli izolyatsiya, lekin operatsion xarajat (upgrade, add-on'lar x N). Odatiy: bitta cluster muhit (prod/non-prod) bo'yicha, namespace jamoa bo'yicha; regulyatsiya talab qilsa — alohida cluster."
+  },
+  "33304": {
+    "a": "Tartib:\n1. **Nima o'zgardi?** deploy/upgrade/config (`kubectl get events -A`, GitOps tarixi).\n2. **Node'lar:** `kubectl get nodes`, `top nodes`, NotReady, pressure, CPU steal.\n3. **DNS:** CoreDNS latency/xatolar — klassik \"hamma narsa sekin\" sababi (ndots:5 + tashqi domen -> 5 ta keraksiz so'rov). NodeLocal DNSCache.\n4. **Tarmoq:** conntrack to'lishi (`nf_conntrack: table full`), CNI IP tugashi.\n5. **Umumiy dependency:** DB connections, Redis latency.\n6. **Throttling:** CPU limit throttling hamma pod'larda.\n```promql\nhistogram_quantile(0.99, sum by (le) (rate(coredns_dns_request_duration_seconds_bucket[5m])))\n```\nContainment: trafik kamaytirish/rate limit, oxirgi o'zgarishni rollback — root cause'ni keyin."
+  },
+  "33305": {
+    "a": "```sh\nvelero schedule create daily --schedule \"0 2 * * *\" --include-namespaces prod --ttl 720h\nvelero backup describe daily-2026... --details\nvelero restore create --from-backup daily-2026... --namespace-mappings prod:prod-restore\n```\nStrategiya:\n- Cluster \"cattle\": Terraform + GitOps bilan yangi cluster'ni 1 soatda ko'tarish mumkin bo'lsin.\n- Stateful: managed DB (RDS) yoki operator backup'lari (CNPG -> S3) — PV snapshot crash-consistent, app-consistent emas.\n- Backup boshqa region/account'da (ransomware, account kompromat).\n- **Restore drill** chorakda — tekshirilmagan backup ishonchsiz."
+  },
+  "33306": {
+    "a": "```sh\nkubectl config get-contexts\nkubectl config current-context\nkubectl config use-context prod-eu\nkubectl config set-context --current --namespace=payments\nkubectl get pods -n kube-system        # bir martalik namespace\nKUBECONFIG=~/.kube/dev.yaml kubectl get nodes\n```\nXavfsizlik odatlari:\n- Prompt'da context ko'rinsin (kube-ps1, starship).\n- `kubectx`/`kubens` — tez almashish.\n- Prod uchun alohida, faqat o'qish huquqli kubeconfig; yozish faqat CI/GitOps orqali."
+  },
+  "33307": {
+    "a": "```sh\n# imperative: tez sinov, o'rganish\nkubectl create deployment web --image=nginx --replicas=2\nkubectl expose deployment web --port=80\n\n# YAML skeletini olish uchun imperative + dry-run\nkubectl create deployment web --image=nginx --dry-run=client -o yaml > web.yaml\n\n# declarative\nkubectl apply -f web.yaml\nkubectl apply -f k8s/            # butun papka\nkubectl diff -f web.yaml         # nima o'zgarishini ko'rish\n```\nGotcha: `kubectl edit` yoki `scale` bilan qo'lda o'zgartirilgan narsa keyingi `apply`/GitOps sync'da qaytib ketadi."
+  },
+  "33308": {
+    "a": "```yaml\nmetadata:\n  labels:\n    app.kubernetes.io/name: api\n    app.kubernetes.io/version: \"1.5.0\"\n    team: payments\n  annotations:\n    prometheus.io/scrape: \"true\"\n    kubernetes.io/change-cause: \"image 1.5.0\"\n```\n```sh\nkubectl get pods -l app.kubernetes.io/name=api,team=payments\nkubectl get pods --show-labels\nkubectl label pod api-xyz debug=true\n```\nService, Deployment, NetworkPolicy — hammasi **label selector** orqali pod'larni topadi. Label xato = Service bo'sh."
+  },
+  "33309": {
+    "a": "```sh\nkubectl get pods -o wide                      # NODE, IP\nkubectl get pod api-xyz -o yaml | less\nkubectl get pods -w                           # real-time\nkubectl get pods -A --field-selector=status.phase!=Running\nkubectl get deploy api -o jsonpath='{.spec.template.spec.containers[0].image}'\nkubectl explain deployment.spec.strategy --recursive\nkubectl api-resources                         # mavjud resurs turlari va qisqa nomlar\n```\n`status` qismi — controller'lar yozadi (conditions, readyReplicas), `spec` — siz yozasiz."
+  },
+  "33310": {
+    "a": "```sh\nkubectl scale deploy/api --replicas=5\nkubectl get deploy api        # READY 5/5\n```\nQoidalar:\n- Doimiy o'zgarish — manifestda (`replicas: 5`) va PR orqali.\n- HPA bor bo'lsa manifestdan `replicas` maydonini olib tashlang yoki GitOps'da ignore qiling, aks holda har sync HPA bilan \"kurashadi\".\n- Favqulodda vaqtinchalik scale — incident vaqtida ok, keyin Git'ga yozib qo'ying."
+  },
+  "33311": {
+    "a": "```\napi                                  # bir namespace ichida\napi.payments                         # boshqa namespace'dan\napi.payments.svc.cluster.local       # to'liq (FQDN)\npostgres-0.postgres.db.svc.cluster.local   # StatefulSet pod'i\n```\n```sh\nkubectl run t --rm -it --image=busybox -- nslookup api.payments\ncat /etc/resolv.conf   # pod ichida: search payments.svc.cluster.local svc.cluster.local ...\n```\n`ndots:5` sababli tashqi domenlar (`api.stripe.com`) avval search ro'yxati bilan sinab ko'riladi — oxiriga nuqta (`api.stripe.com.`) qo'yish yoki `dnsConfig` bilan kamaytirish mumkin."
+  },
+  "33312": {
+    "a": "```yaml\napiVersion: v1\nkind: ConfigMap\nmetadata: { name: api-config }\ndata:\n  LOG_LEVEL: info\n  app.yaml: |\n    timeout: 5s\n---\nspec:\n  containers:\n  - name: api\n    envFrom: [{ configMapRef: { name: api-config } }]\n    env:\n    - name: DB_PASSWORD\n      valueFrom: { secretKeyRef: { name: db, key: password } }\n    volumeMounts: [{ name: cfg, mountPath: /etc/api }]\n  volumes: [{ name: cfg, configMap: { name: api-config } }]\n```\n```sh\nkubectl create configmap api-config --from-file=app.yaml --from-literal=LOG_LEVEL=info\nkubectl rollout restart deploy/api     # env o'zgarishini qo'llash\n```"
+  },
+  "33313": {
+    "a": "| Holat | Odatiy sabab | Qayerga qarash |\n|---|---|---|\n| Pending | resurs yetmaydi, taint, PVC | `describe pod` Events |\n| ContainerCreating (uzoq) | volume ulanmayapti, CNI IP yo'q, secret yo'q | Events |\n| Running, lekin 0/1 READY | readiness o'tmayapti | probe, loglar |\n| CrashLoopBackOff | ilova yiqilyapti | `logs --previous` |\n| Terminating (osilgan) | finalizer, node yo'q | `get pod -o yaml` finalizers |\n\nOsilgan Terminating: `kubectl delete pod x --grace-period=0 --force` — faqat sababni tushungandan keyin (StatefulSet'da ikki nusxa xavfi)."
+  },
+  "33314": {
+    "a": "Qoidalar:\n- Har ERROR — kimdir nimadir qilishi kerak bo'lgan holat. Kutilgan holat (foydalanuvchi noto'g'ri parol) — ERROR emas.\n- Bitta xato bir marta loglansin (har qatlamda qayta log — shovqin).\n- Level'ni restart'siz o'zgartirish imkoni (env/config) — incident paytida DEBUG yoqish.\n- Secret, parol, token, to'liq karta raqami **hech qachon** logga yozilmaydi."
+  },
+  "33315": {
+    "a": "```\n# matn — grep bilan qiyin\n2026-10-02 12:00:01 ERROR payment failed for order 42 after 3 retries\n\n# structured\n{\"ts\":\"2026-10-02T12:00:01Z\",\"level\":\"error\",\"msg\":\"payment failed\",\n \"order_id\":42,\"retries\":3,\"request_id\":\"a1b2\",\"service\":\"payments\"}\n```\nGo: `log/slog`:\n```go\nlogger := slog.New(slog.NewJSONHandler(os.Stdout, nil))\nlogger.Error(\"payment failed\", \"order_id\", 42, \"retries\", 3)\n```\n`request_id`/`trace_id` — bitta so'rovning hamma servislardagi loglarini bog'laydi."
+  },
+  "33316": {
+    "a": "```sh\nkubectl logs deploy/api                    # bitta pod\nkubectl logs -l app=api --all-containers --prefix --since=10m\nkubectl logs api-xyz -c sidecar -f\nkubectl logs api-xyz --previous            # yiqilgan container\ndocker logs -f --tail 100 api\njournalctl -u nginx -f --since \"10 min ago\"   # systemd servis\n```\n- Pod o'chsa, uning loglari node'dan ham ketadi — shuning uchun markaziy log tizimi kerak.\n- Log rotation: kubelet `containerLogMaxSize`; Docker `max-size` — aks holda disk to'ladi."
+  },
+  "33317": {
+    "a": "| | ELK/OpenSearch | Loki |\n|---|---|---|\n| Indeks | to'liq matn | faqat label'lar |\n| Narx | yuqori | past (S3) |\n| Qidiruv | tez full-text, agregatsiya | label tanlash + grep, katta oraliqda sekinroq |\n| UI | Kibana | Grafana |\n\nLogQL:\n```\n{namespace=\"prod\", app=\"api\"} |= \"error\" | json | duration_ms > 500\nsum by (app) (rate({namespace=\"prod\"} |= \"error\" [5m]))\n```\nLoki'da ham kardinallik qoidasi: `user_id`ni label qilmang — log matnida qoldiring."
+  },
+  "33318": {
+    "a": "Misol:\n- **SLI:** `5xx bo'lmagan so'rovlar / jami so'rovlar`\n- **SLO:** 30 kunda 99.9%\n- **Error budget:** 0.1% = 30 kunda ~43 daqiqa \"ruxsat etilgan\" nosozlik.\n- **SLA:** 99.5%, buzilsa 10% kredit.\n\n| SLO | Oyiga ruxsat etilgan downtime |\n|---|---|\n| 99% | ~7.2 soat |\n| 99.9% | ~43 daqiqa |\n| 99.99% | ~4.3 daqiqa |\n\nError budget tugasa — feature emas, reliability ishiga e'tibor. 100% SLO — noto'g'ri maqsad."
+  },
+  "33319": {
+    "a": "Har servis dashboard'ining birinchi qatori:\n```promql\nsum(rate(http_requests_total[5m]))                                  # traffic\nsum(rate(http_requests_total{code=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m]))  # errors\nhistogram_quantile(0.99, sum by (le)(rate(http_request_duration_seconds_bucket[5m])))  # latency\n```\nSaturation: DB pool band ulanishlar, Kafka lag, CPU throttling, disk to'lishi.\nO'rtacha latency yolg'on gapiradi — p95/p99 qarang: 1% foydalanuvchi 5 soniya kutayotgan bo'lishi mumkin."
+  },
+  "33320": {
+    "a": "```yaml\n# blackbox_exporter probe\n- job_name: blackbox-http\n  metrics_path: /probe\n  params: { module: [http_2xx] }\n  static_configs: [{ targets: [\"https://shop.example.com/healthz\"] }]\n```\n```promql\nprobe_success == 0\nprobe_ssl_earliest_cert_expiry - time() < 14*86400   # sertifikat 14 kunda tugaydi\n```\nWhitebox (ichki metrikalar) \"server sog'\" deyishi mumkin, lekin DNS yoki LB buzilgan bo'lsa foydalanuvchi baribir ko'rmaydi — ikkalasi ham kerak."
+  },
+  "33321": {
+    "a": "```\ntrace a1b2 ------------------------------------------- 480ms\n  gateway   [=============================================]\n  orders      [===================================]   410ms\n  postgres      [=====]  45ms\n  payments              [==========================]  320ms  <- sekin\n```\n- Standart: OpenTelemetry (SDK + Collector), W3C `traceparent` header.\n- Backend: Jaeger, Tempo, Zipkin, vendor (Datadog).\n- Logga `trace_id` qo'shing — log'dan trace'ga o'tish.\n- Sampling: hammasini saqlash qimmat — 1-10% + xatolar/sekinlarni saqlash (tail sampling)."
+  },
+  "33322": {
+    "a": "```yaml\nreceivers:  { otlp: { protocols: { grpc: {}, http: {} } } }\nprocessors:\n  memory_limiter: { limit_mib: 512 }\n  batch: {}\n  attributes: { actions: [{ key: user.email, action: delete }] }\n  tail_sampling:\n    policies:\n    - { name: errors, type: status_code, status_code: { status_codes: [ERROR] } }\n    - { name: slow,   type: latency, latency: { threshold_ms: 1000 } }\nexporters:  { otlp/tempo: { endpoint: tempo:4317 } }\nservice:\n  pipelines:\n    traces: { receivers: [otlp], processors: [memory_limiter, tail_sampling, batch], exporters: [otlp/tempo] }\n```\nJoylash: agent (DaemonSet/sidecar) + gateway (markaziy). Tail sampling bitta trace'ning hamma span'lari bitta collector'ga tushishini talab qiladi."
+  },
+  "33323": {
+    "a": "```promql\n# 99.9% SLO, 1h va 5m oynalar, 14.4x\n(\n  sum(rate(http_requests_total{code=~\"5..\"}[1h])) / sum(rate(http_requests_total[1h]))\n) > (14.4 * 0.001)\nand\n(\n  sum(rate(http_requests_total{code=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m]))\n) > (14.4 * 0.001)\n```\n14.4x 1 soat davom etsa = oylik budget'ning 2% i ketdi.\n\"error > 1% 5 daqiqa\" kabi alert — kichik trafikda shovqinli, katta budget yonishini esa kech sezadi. Tool'lar: Sloth, Pyrra."
+  },
+  "33324": {
+    "a": "```hcl\nvariable \"instance_type\" {\n  type        = string\n  default     = \"t3.micro\"\n  description = \"EC2 o'lchami\"\n  validation {\n    condition     = can(regex(\"^t3\\\\.\", var.instance_type))\n    error_message = \"Faqat t3 oilasi.\"\n  }\n}\n```\n```sh\nterraform plan -var-file=envs/prod.tfvars\nexport TF_VAR_db_password=$(aws secretsmanager get-secret-value ...)\n```\nPrecedence (pastdan yuqoriga): env `TF_VAR_` < `terraform.tfvars` < `*.auto.tfvars` < `-var`/`-var-file` (buyruq qatorida)."
+  },
+  "33325": {
+    "a": "```sh\nterraform fmt -recursive -check     # CI: formatlanmagan bo'lsa fail\nterraform validate\nterraform init -upgrade             # provider'ni constraint ichida yangilash, lock yangilanadi\nterraform providers lock -platform=linux_amd64 -platform=darwin_arm64\n```\n```hcl\nrequired_providers {\n  aws = { source = \"hashicorp/aws\", version = \"~> 5.60\" }   # 5.x, >= 5.60\n}\n```\n`.terraform/` papka — commit qilinmaydi (`.gitignore`), lock fayl — qilinadi."
+  },
+  "33326": {
+    "a": "```hcl\nlocals {\n  name = \"${var.project}-${var.env}\"\n  tags = { project = var.project, env = var.env, managed_by = \"terraform\" }\n}\n\nresource \"aws_s3_bucket\" \"logs\" {\n  bucket = \"${local.name}-logs\"\n  tags   = local.tags\n}\n\noutput \"bucket_name\" { value = aws_s3_bucket.logs.bucket }\noutput \"db_password\" { value = random_password.db.result  sensitive = true }\n```\n`depends_on` — masalan IAM policy biriktirilishini kutish kerak, lekin atributga murojaat yo'q. Ko'p ishlatilsa — dizayn noaniq belgisi; avval implicit reference qidiring.\nProvider darajasida `default_tags` — hamma resursga tag avtomatik."
+  },
+  "33327": {
+    "a": "```\n  # aws_db_instance.main must be replaced\n-/+ resource \"aws_db_instance\" \"main\" {\n      ~ identifier = \"prod-db\" -> \"prod-main-db\" # forces replacement\n```\nTekshiruv ro'yxati:\n1. Qaysi maydon replace chaqiryapti — ba'zi atributlar immutable (nom, AZ, engine).\n2. Rename bo'lsa — `moved` blok (manzil o'zgarishi) yoki atributni qaytarish.\n3. DB/disk bo'lsa: snapshot, `prevent_destroy`, maintenance oyna.\n4. CI'da plan'da destroy/replace bo'lsa qo'shimcha approval talab qiling.\n\nMajburiy qayta yaratish kerak bo'lsa: `terraform apply -replace=aws_instance.web`."
+  },
+  "33328": {
+    "a": "```hcl\ndata \"aws_caller_identity\" \"current\" {}\ndata \"aws_vpc\" \"shared\" { tags = { Name = \"shared-prod\" } }\ndata \"aws_subnets\" \"private\" {\n  filter { name = \"vpc-id\" values = [data.aws_vpc.shared.id] }\n  tags = { tier = \"private\" }\n}\n\nresource \"aws_instance\" \"app\" {\n  subnet_id = data.aws_subnets.private.ids[0]\n}\n```\nGotcha: `most_recent = true` AMI data source — yangi AMI chiqqanda plan instance'ni **replace** qiladi. Prod'da AMI ID'ni pin qiling yoki `ignore_changes = [ami]`."
+  },
+  "33329": {
+    "a": "```yaml\n# GitHub Actions (qisqartirilgan)\npermissions: { id-token: write, contents: read, pull-requests: write }\njobs:\n  plan:\n    steps:\n    - uses: aws-actions/configure-aws-credentials@v4\n      with: { role-to-assume: arn:aws:iam::123:role/tf-plan, aws-region: eu-central-1 }\n    - run: terraform init -input=false\n    - run: terraform fmt -check && terraform validate\n    - run: terraform plan -input=false -out=tf.plan\n  apply:\n    if: github.ref == 'refs/heads/main'\n    environment: production        # manual approval\n    concurrency: tf-prod\n    steps:\n    - run: terraform apply -input=false tf.plan\n```\nPlan role — faqat o'qish; apply role — yozish, faqat main branch'dan assume qilinadi. Tayyor yechimlar: Atlantis, HCP Terraform, Spacelift."
+  },
+  "33330": {
+    "a": "```sh\nansible all -i inventory.ini -m ping\nansible web -i inventory.ini -a \"uptime\"\nansible web -m ansible.builtin.apt -a \"name=htop state=present\" --become\nansible db  -m ansible.builtin.service -a \"name=postgresql state=restarted\" --become\nansible web -m ansible.builtin.setup -a \"filter=ansible_distribution*\"   # facts\nansible all -m ping --limit web1\n```\nTakrorlanadigan ish — ad-hoc emas, playbook'ga (Git'da, review bilan)."
+  },
+  "33331": {
+    "a": "```ini\n# inventory.ini\n[web]\nweb1 ansible_host=10.0.1.10\n[web:vars]\nansible_user=deploy\nansible_ssh_private_key_file=~/.ssh/deploy_ed25519\n```\n```yaml\n- hosts: web\n  become: true            # sudo\n  become_user: root\n```\n```sh\nansible-playbook site.yml --ask-become-pass   # sudo parol so'raydi\n```\nBirinchi ulanishda host key tasdiqi: `known_hosts`ni oldindan to'ldiring (ssh-keyscan) — `host_key_checking = False` faqat vaqtinchalik lab uchun."
+  },
+  "33332": {
+    "a": "```yaml\n- name: Debian'da paket\n  ansible.builtin.apt: { name: nginx, state: present }\n  when: ansible_facts['os_family'] == \"Debian\"\n\n- name: RHEL'da paket\n  ansible.builtin.dnf: { name: nginx, state: present }\n  when: ansible_facts['os_family'] == \"RedHat\"\n\n- ansible.builtin.debug:\n    msg: \"{{ ansible_facts['hostname'] }} - {{ ansible_facts['memtotal_mb'] }} MB\"\n```\n`register` + `when`: oldingi task natijasiga qarab:\n```yaml\n- ansible.builtin.command: systemctl is-active app\n  register: st\n  failed_when: false\n- ansible.builtin.debug: { msg: \"app o'chiq\" }\n  when: st.rc != 0\n```\nFacts kerak bo'lmasa `gather_facts: false` — tezroq."
+  },
+  "33333": {
+    "a": "```sh\nansible-galaxy role init roles/nginx\nansible-lint\nansible-playbook site.yml --syntax-check\nansible-playbook site.yml --check --diff --limit staging\nmolecule test        # create -> converge -> idempotence -> verify -> destroy\n```\nMolecule `idempotence` bosqichi: ikkinchi converge'da `changed=0` bo'lmasa test fail.\nKolleksiyalar va versiyalar `requirements.yml`da pin: `ansible-galaxy install -r requirements.yml`."
+  },
+  "33334": {
+    "a": "| Kim | EC2 (IaaS) | RDS (managed) | Lambda/S3 |\n|---|---|---|---|\n| AWS | hardware, tarmoq, hypervisor | + OS, DB patch | + runtime |\n| Siz | OS patch, SG, IAM, ma'lumot | SG, IAM, backup sozlamasi, ma'lumot | IAM, kod, bucket policy, ma'lumot |\n\nManaged servis qancha ko'p bo'lsa — sizning javobgarligingiz shuncha kam, lekin **IAM va ma'lumot doim sizda**.\nKo'p incident'lar: public S3 bucket, ochiq SG, oqib ketgan access key — hammasi mijoz tomoni."
+  },
+  "33335": {
+    "a": "```sh\naws configure sso                    # IAM Identity Center, qisqa muddatli token\naws sso login --profile prod-readonly\nexport AWS_PROFILE=dev\naws sts get-caller-identity          # qaysi account / role\naws s3 ls --profile prod-readonly\naws ec2 describe-instances --query 'Reservations[].Instances[].[InstanceId,State.Name]' --output table\n```\nCredential qidiruv tartibi: env (`AWS_ACCESS_KEY_ID`) -> SSO/profile -> container/instance role.\nUzoq muddatli access key laptop'da — xavf; SSO yoki role afzal."
+  },
+  "33336": {
+    "a": "| | EBS | EFS | S3 |\n|---|---|---|---|\n| Turi | blok | fayl (NFS) | object |\n| Ulanish | 1 instance (odatda) | ko'p instance | HTTP API |\n| AZ | bitta AZ | multi-AZ | region |\n| Misol | OS disk, DB | umumiy fayllar, CMS | backup, rasm, log, static sayt |\n| Narx | o'rtacha | qimmat | arzon |\n\nEBS backup — snapshot (S3'da, incremental). gp3 — default tanlov (gp2'dan arzon, IOPS alohida sozlanadi).\nEBS AZ'ga bog'liq: instance boshqa AZ'ga ko'chsa snapshot'dan yangi volume kerak."
+  },
+  "33337": {
+    "a": "```\nexample.com        A (alias) -> my-alb-123.eu-central-1.elb.amazonaws.com\nwww.example.com    CNAME     -> example.com\nexample.com        MX        10 mail.example.com\n_acme.example.com  TXT       \"verification=...\"\n```\n- Apex (`example.com`) CNAME bo'la olmaydi — alias ishlatiladi.\n- TTL: migratsiyadan oldin pasaytiring (300s), keyin oshiring.\n- Routing policy'lar: simple, weighted (canary), latency, failover (health check bilan), geolocation.\n```sh\ndig +short example.com\ndig NS example.com\n```"
+  },
+  "33338": {
+    "a": "```\nALB -> Target Group <- ASG (min 2, desired 3, max 10, 2-3 AZ)\n                         ^ Launch Template v7 (AMI, t3.small, user_data)\n```\n- Health check: `ELB` turini tanlang — ilova javob bermasa ham instance almashtiriladi (`EC2` faqat VM holatini ko'radi).\n- Target tracking: \"o'rtacha CPU 50%\".\n- Yangi versiya: Launch Template yangi version + **Instance Refresh** (rolling).\n- Instance'lar stateless bo'lishi kerak: ma'lumot S3/RDS'da, sessiya Redis'da — har qanday instance o'chirilishi mumkin."
+  },
+  "33339": {
+    "a": "```sh\naws ecr create-repository --repository-name api --image-scanning-configuration scanOnPush=true\naws ecr get-login-password --region eu-central-1 | \\\n  docker login --username AWS --password-stdin 123456789012.dkr.ecr.eu-central-1.amazonaws.com\ndocker tag api:1.5.0 123456789012.dkr.ecr.eu-central-1.amazonaws.com/api:1.5.0\ndocker push 123456789012.dkr.ecr.eu-central-1.amazonaws.com/api:1.5.0\n```\n- Tag immutability yoqing — `1.5.0` ustidan yozib bo'lmasin.\n- Lifecycle policy: oxirgi 50 ta tag'li image, tag'siz'larni 7 kunda o'chirish.\n- CI'dan push: GitHub OIDC -> IAM role (access key emas)."
+  },
+  "33340": {
+    "a": "| Mezon | Lambda | ECS/EKS |\n|---|---|---|\n| Davomiylik | ≤ 15 daqiqa | cheksiz |\n| Yuk | notekis, kam | doimiy, yuqori |\n| Cold start | bor (Go'da ~100ms) | yo'q |\n| Ops | minimal | ko'proq |\n| Narx | so'rov x vaqt x xotira | soat |\n\nGotcha'lar:\n- Har concurrent invocation — alohida DB ulanishi: RDS Proxy kerak.\n- Retry: asinxron event'lar avtomatik qayta yuboriladi — handler idempotent bo'lsin, DLQ sozlang.\n- Concurrency limit (account bo'yicha) — bitta funksiya hammani bo'g'ishi mumkin: reserved concurrency."
+  },
+  "33341": {
+    "a": "| | Secrets Manager | Parameter Store |\n|---|---|---|\n| Rotation | built-in (Lambda) | yo'q |\n| Narx | ~$0.40/secret/oy + API | standard bepul |\n| Hajm | 64KB | 4KB (advanced 8KB) |\n| Versiyalar | staging labels | versiyalar |\n\n```sh\naws secretsmanager get-secret-value --secret-id prod/db --query SecretString --output text\naws ssm get-parameter --name /prod/api/log_level\naws ssm get-parameters-by-path --path /prod/api --with-decryption\n```\nIlovaga: env'ga build vaqtida emas, runtime'da o'qish (yoki ECS/EKS integratsiyasi — External Secrets). Rotation'dan keyin ilova yangi qiymatni qayta o'qiy olishi kerak."
+  },
+  "33342": {
+    "a": "| OSI | TCP/IP | Misol | Qurilma/tool |\n|---|---|---|---|\n| 7 Application | Application | HTTP, DNS, SSH | ALB, Nginx (L7) |\n| 6 Presentation | | TLS, encoding | |\n| 5 Session | | | |\n| 4 Transport | Transport | TCP, UDP (port) | NLB (L4), firewall |\n| 3 Network | Internet | IP, ICMP | router |\n| 2 Data link | Link | Ethernet, ARP, MAC | switch |\n| 1 Physical | | kabel, Wi-Fi | |\n\nDebug'da qatlamma-qatlam pastdan yuqoriga: link -> IP (`ping`) -> port (`nc -zv`) -> TLS (`openssl s_client`) -> HTTP (`curl -v`)."
+  },
+  "33343": {
+    "a": "```\nTCP handshake:  client --SYN--> server\n                client <-SYN/ACK-- server\n                client --ACK--> server\n```\n| | TCP | UDP |\n|---|---|---|\n| Ulanish | bor | yo'q |\n| Kafolat | tartib, yetkazish | yo'q |\n| Overhead | yuqoriroq | past |\n| Misol | HTTPS, SSH, Postgres | DNS, VoIP, QUIC |\n\n```sh\nss -tulpn          # t=TCP u=UDP l=listening p=process n=raqam\nnc -zv host 5432   # TCP port ochiqmi\nnc -zvu host 53    # UDP (natija ishonchsiz — javob bo'lmasligi mumkin)\n```"
+  },
+  "33344": {
+    "a": "| CIDR | Mask | Manzillar |\n|---|---|---|\n| /32 | 255.255.255.255 | 1 (bitta host) |\n| /28 | 255.255.255.240 | 16 |\n| /24 | 255.255.255.0 | 256 |\n| /16 | 255.255.0.0 | 65 536 |\n| /0 | 0.0.0.0 | hammasi (`0.0.0.0/0` = internet) |\n\nFormula: manzillar = 2^(32 - prefiks).\n```sh\nip -4 addr show          # interfeys IP va prefiks\nipcalc 10.0.1.0/24       # hisoblash\n```\nMaxsus: `127.0.0.0/8` loopback, `169.254.0.0/16` link-local (cloud metadata `169.254.169.254`), `100.64.0.0/10` CGNAT."
+  },
+  "33345": {
+    "a": "| Port | Servis |\n|---|---|\n| 22 | SSH |\n| 53 | DNS (UDP + TCP) |\n| 80 / 443 | HTTP / HTTPS |\n| 3306 | MySQL |\n| 5432 | PostgreSQL |\n| 6379 | Redis |\n| 27017 | MongoDB |\n| 9092 | Kafka |\n| 5672 / 15672 | RabbitMQ / boshqaruv UI |\n| 9090 / 9100 | Prometheus / node_exporter |\n| 6443 | Kubernetes API |\n\n0–1023 — privileged portlar (root yoki `CAP_NET_BIND_SERVICE` kerak).\nQaysi jarayon portni egallagan: `sudo ss -ltnp 'sport = :8080'` yoki `lsof -i :8080`."
+  },
+  "33346": {
+    "a": "```\napp -> /etc/hosts -> lokal resolver (systemd-resolved) -> rekursiv resolver (8.8.8.8 / VPC DNS)\n          -> root -> .com -> example.com authoritative -> A 93.184.216.34 (TTL 300)\n```\n```sh\ndig example.com +short\ndig example.com A +trace          # butun zanjir\ndig @8.8.8.8 example.com          # aniq server'dan\ndig -x 93.184.216.34              # reverse (PTR)\nresolvectl status; cat /etc/resolv.conf\n```\n\"DNS o'zgartirdim, ishlamayapti\" — ko'pincha eski TTL hali cache'da. Migratsiyadan oldin TTL'ni pasaytiring."
+  },
+  "33347": {
+    "a": "| Kod | Ma'nosi | DevOps nuqtai nazaridan |\n|---|---|---|\n| 301/302 | redirect | HTTP->HTTPS, loop'ga ehtiyot |\n| 401 | autentifikatsiya yo'q | token yo'q/eskirgan |\n| 403 | ruxsat yo'q | IAM/WAF/fayl huquqi |\n| 404 | topilmadi | noto'g'ri route, Ingress path |\n| 429 | juda ko'p so'rov | rate limit |\n| 500 | ilova xatosi | ilova loglari |\n| 502 | proxy backend'dan yaroqli javob ololmadi | backend o'chgan/crash |\n| 503 | servis mavjud emas | endpoint yo'q, overload |\n| 504 | proxy kutib charchadi | backend sekin |\n\nAlert'lar odatda 5xx ulushi bo'yicha; 4xx o'sishi esa client yoki deploy (API o'zgarishi) belgisi bo'lishi mumkin."
+  },
+  "33348": {
+    "a": "```sh\ncurl -v https://api.example.com/healthz\ncurl -sI https://example.com                     # status + header\ncurl -L http://example.com                       # redirect zanjiri\ncurl --resolve api.example.com:443:10.0.1.10 https://api.example.com/   # aniq backend\ncurl -H \"Host: api.example.com\" http://10.0.1.10/\ncurl -X POST -H 'Content-Type: application/json' -d '{\"a\":1}' https://api/x\ncurl -o /dev/null -s -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total} code=%{http_code}\\n' https://example.com\n```\n`-k` (TLS tekshiruvsiz) — faqat diagnostika, skript/prod'da hech qachon."
+  },
+  "33349": {
+    "a": "```\n10.0.11.5:43122 --> [NAT GW 3.120.5.9:61001] --> api.github.com:443\n                <--  javob mapping orqali qaytadi\ninternet --> 3.120.5.9:61001 (mapping yo'q) --> rad etiladi\n```\n- Kiruvchi trafik uchun: load balancer, port forwarding (DNAT) yoki public IP.\n- Tashqi servis sizning IP'ingizni allowlist qilsa — NAT GW'ning Elastic IP'si beriladi.\n- Ko'p ulanishda NAT port'lari tugashi mumkin (SNAT port exhaustion) — connection pooling.\n- Docker ham NAT ishlatadi: `-p 8080:80` = DNAT, container'dan chiqish = MASQUERADE."
+  },
+  "33350": {
+    "a": "```sh\nmtr -rwc 100 api.example.com            # hop'lar bo'yicha loss va latency\ntraceroute -T -p 443 api.example.com    # TCP bilan (ICMP bloklangan bo'lsa)\n\nsudo tcpdump -ni eth0 host 10.0.2.10 and port 5432\nsudo tcpdump -ni any 'tcp[tcpflags] & (tcp-syn|tcp-rst) != 0'\nsudo tcpdump -ni eth0 port 53 -w dns.pcap      # Wireshark'da ochish\n```\nO'qish:\n- `SYN` ketdi, javob yo'q -> firewall/SG paketni tashlayapti (timeout).\n- `SYN` -> `RST` -> port yopiq yoki servis ishlamayapti (connection refused).\n- mtr'da o'rtadagi hop'da loss, lekin oxirida yo'q -> router ICMP'ni cheklagan, muammo emas."
+  },
+  "33351": {
+    "a": "Belgilar: `ping` ishlaydi, `curl` TLS handshake'da yoki katta javobda osiladi; SSH ulanadi, lekin `ls` katta katalogda qotadi.\n```sh\nip link show eth0                       # mtu 1500 / 9001 (AWS jumbo)\nping -M do -s 1472 10.0.2.10            # 1472 + 28 = 1500, DF bilan\nping -M do -s 1400 10.0.2.10\ntracepath 10.0.2.10                     # yo'l MTU\n```\nYechimlar: tunnel interfeysida MTU'ni kamaytirish (masalan WireGuard 1420), TCP MSS clamping (`iptables ... --clamp-mss-to-pmtu`), ICMP type 3 code 4'ni bloklamaslik.\nK8s CNI overlay'da pod MTU node MTU'dan kichik bo'lishi kerak."
+  }
+}

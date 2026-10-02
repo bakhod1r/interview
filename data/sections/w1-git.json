@@ -1,0 +1,285 @@
+{
+  "id": "w1",
+  "name": "Git",
+  "domain": "git",
+  "topics": [
+    "Git"
+  ],
+  "questions": [
+    {
+      "id": 33152,
+      "code": "WG01",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Git'da working directory, staging area (index) va repository farqi?",
+      "explanation": "Working tree = disk'dagi fayllar; index = keyingi commit'ga tayyorlangan snapshot (`git add`); repository = `.git` ichidagi commit'lar tarixi."
+    },
+    {
+      "id": 33153,
+      "code": "WG02",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git clone`, `git fetch`, `git pull`, `git push` farqi?",
+      "explanation": "clone = repo nusxasi; fetch = remote o'zgarishlarni olib keladi, branch'ga tegmaydi; pull = fetch + merge (yoki rebase); push = local commit'larni remote'ga yuboradi."
+    },
+    {
+      "id": 33154,
+      "code": "WG03",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Branch nima va `git switch`/`git checkout` bilan qanday ishlanadi?",
+      "explanation": "Branch — commit'ga ko'rsatkich (pointer), arzon. `git switch -c feat` yaratadi va o'tadi; HEAD joriy branch'ni ko'rsatadi."
+    },
+    {
+      "id": 33155,
+      "code": "WG04",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Merge conflict qanday paydo bo'ladi va qanday hal qilinadi?",
+      "explanation": "Ikki branch bir faylning bir joyini turlicha o'zgartirsa Git o'zi tanlay olmaydi. Markerlarni (`<<<<<<<`, `=======`, `>>>>>>>`) qo'lda tuzatib, `git add` + `git commit` (yoki `rebase --continue`)."
+    },
+    {
+      "id": 33156,
+      "code": "WG05",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`.gitignore` nima uchun kerak va allaqachon commit qilingan faylni qanday ignore qilasiz?",
+      "explanation": "Build artefakt, `.env`, `node_modules` kabi fayllarni track qilmaslik uchun. Track qilingan fayl ignore'ga qo'shilsa ham kuzatilaveradi — `git rm --cached file` kerak."
+    },
+    {
+      "id": 33157,
+      "code": "WG06",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git log`, `git diff`, `git show`, `git blame` nima uchun ishlatiladi?",
+      "explanation": "log = commit tarixi; diff = farq; show = bitta commit tafsiloti; blame = har qatorni kim/qaysi commit o'zgartirgan."
+    },
+    {
+      "id": 33158,
+      "code": "WG07",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Yaxshi commit message qanday yoziladi?",
+      "explanation": "Qisqa sarlavha (≤50 belgi, buyruq maylida), bo'sh qator, keyin NEGA o'zgargani. Bitta commit = bitta mantiqiy o'zgarish. Conventional Commits (`feat:`, `fix:`) avtomatlashtirishga yordam beradi."
+    },
+    {
+      "id": 33159,
+      "code": "WG08",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git merge` va `git rebase` farqi? Qachon qaysi biri?",
+      "explanation": "Merge tarixni saqlaydi va merge commit qo'shadi; rebase commit'larni yangi bazaga qayta yozadi (yangi hash), tarix chiziqli. Shared (push qilingan) branch'ni rebase qilmang."
+    },
+    {
+      "id": 33160,
+      "code": "WG09",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git reset --soft`, `--mixed`, `--hard` va `git revert` farqi?",
+      "explanation": "reset HEAD'ni orqaga suradi: soft — index va fayllar qoladi; mixed — fayllar qoladi, index tozalanadi; hard — hammasi o'chadi. revert — yangi teskari commit, tarix buzilmaydi (push qilinganda shu)."
+    },
+    {
+      "id": 33161,
+      "code": "WG10",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git stash` nima va qachon ishlatiladi?",
+      "explanation": "Commit qilinmagan o'zgarishlarni vaqtincha saqlab, working tree'ni toza qiladi (boshqa branch'ga o'tish uchun). `stash pop` qaytaradi."
+    },
+    {
+      "id": 33162,
+      "code": "WG11",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git cherry-pick` nima va qachon ishlatiladi?",
+      "explanation": "Boshqa branch'dagi bitta commit'ni joriy branch'ga nusxalaydi (yangi hash bilan). Hotfix'ni release branch'ga o'tkazishda."
+    },
+    {
+      "id": 33163,
+      "code": "WG12",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git reflog` nima va yo'qolgan commit'ni qanday tiklaysiz?",
+      "explanation": "Reflog — HEAD va branch'lar qayerda bo'lganining local jurnali (~90 kun). `reset --hard` yoki o'chirilgan branch'dan keyin ham commit hash topiladi va tiklanadi."
+    },
+    {
+      "id": 33164,
+      "code": "WG13",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Trunk-based development va GitFlow farqi? CI/CD uchun qaysi biri?",
+      "explanation": "GitFlow: develop/release/hotfix branch'lar, sekin release uchun. Trunk-based: qisqa (kunlik) branch'lar `main`ga tez merge, feature flag bilan — CD uchun mos, merge konflikt kam."
+    },
+    {
+      "id": 33165,
+      "code": "WG14",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Tasodifan secret (API key) commit qilinib push bo'ldi. To'g'ri tartib?",
+      "explanation": "Birinchi — secret'ni darhol revoke/rotate qilish (u allaqachon oshkor deb hisoblanadi). Keyin tarixdan tozalash (`git filter-repo`/BFG), force push, boshqalarga re-clone. Oldini olish: pre-commit secret scanner."
+    },
+    {
+      "id": 33166,
+      "code": "WG15",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git bisect` bilan bug kiritgan commit'ni qanday topasiz?",
+      "explanation": "Binary search: yaxshi va yomon commit beriladi, Git o'rtadagini checkout qiladi, siz good/bad deysiz. 1000 commit ~10 qadamda. `git bisect run ./test.sh` avtomatlashtiradi."
+    },
+    {
+      "id": 33167,
+      "code": "WG16",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Remote bilan ishlash: `origin`, `upstream`, fork workflow?",
+      "explanation": "`origin` — odatda sizning clone manbangiz (fork), `upstream` — asl repo. Fork workflow: upstream'dan fetch, o'z branch'ingizni rebase, origin'ga push, PR."
+    },
+    {
+      "id": 33168,
+      "code": "WG17",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Tag nima, lightweight va annotated tag farqi? Release'da qanday ishlatiladi?",
+      "explanation": "Tag — commit'ga doimiy nom (`v1.4.0`). Annotated tag — muallif, sana, message saqlanadi va imzolanishi mumkin; release uchun shu. Tag'lar alohida push qilinadi."
+    },
+    {
+      "id": 33169,
+      "code": "WG18",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Git hook'lar nima? pre-commit va CI tekshiruvlarining farqi?",
+      "explanation": "Hook — Git hodisasida ishlaydigan skript (`.git/hooks/`). pre-commit tez lokal tekshiruv (lint, format, secret scan); lekin `--no-verify` bilan chetlab o'tiladi, shuning uchun CI'da ham takrorlanadi."
+    },
+    {
+      "id": 33170,
+      "code": "WG19",
+      "level": "S",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Monorepo va polyrepo trade-off'lari? Katta monorepo'da Git'ni tezlashtirish?",
+      "explanation": "Monorepo: atomic cross-service o'zgarish, yagona tooling; lekin CI va Git hajmi og'irlashadi. Polyrepo: mustaqil, lekin versiyalar/dependency muvofiqlash qiyin. Tezlashtirish: sparse-checkout, partial clone, shallow clone, path-filtered CI."
+    },
+    {
+      "id": 33171,
+      "code": "WG20",
+      "level": "S",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Git ichki modeli: blob, tree, commit obyektlari va SHA qanday bog'langan?",
+      "explanation": "Hammasi content-addressed obyekt: blob = fayl mazmuni, tree = katalog (nom → blob/tree), commit = root tree + parent(lar) + muallif + message. Hash mazmundan olinadi — o'zgarish yangi hash beradi, tarix o'zgarmas (immutable)."
+    },
+    {
+      "id": 33172,
+      "code": "WG21",
+      "level": "S",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Branch protection va code review jarayonini production repo uchun qanday sozlaysiz?",
+      "explanation": "`main`ga to'g'ridan push yo'q: PR, kamida 1-2 approve, CODEOWNERS, required CI check'lar, linear/up-to-date branch, signed commit (ixtiyoriy), force push va o'chirish taqiqlangan."
+    },
+    {
+      "id": 33173,
+      "code": "WG22",
+      "level": "S",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Katta binary fayllar (dataset, model, video) Git'da nega muammo va yechim?",
+      "explanation": "Git har versiyani to'liq saqlaydi; clone hamma tarixni yuklaydi — repo GB'larga shishadi. Yechim: Git LFS (pointer + alohida storage) yoki artefaktlarni S3/registry'da saqlash."
+    },
+    {
+      "id": 33406,
+      "code": "WG23",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git clean` va `git restore` bilan working tree'ni qanday tozalaysiz?",
+      "explanation": "`git restore file` — track qilingan fayldagi commit qilinmagan o'zgarishni bekor qiladi; `git restore --staged` — index'dan chiqaradi; `git clean` — untracked fayllarni o'chiradi (`-n` avval ko'rish, `-d` kataloglar, `-x` ignore qilinganlar ham)."
+    },
+    {
+      "id": 33407,
+      "code": "WG24",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Semantic versioning (SemVer) nima: MAJOR.MINOR.PATCH?",
+      "explanation": "MAJOR — backward-incompatible o'zgarish; MINOR — yangi funksiya, moslik saqlanadi; PATCH — faqat bug fix. Pre-release: `1.5.0-rc.1`. Dependency constraint'lar (`~>`, `^`) shu qoidaga tayanadi."
+    },
+    {
+      "id": 33408,
+      "code": "WG25",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git submodule` nima, qanday muammolari bor va muqobillari?",
+      "explanation": "Submodule — boshqa repo'ni aniq commit'da pin qilib ichiga joylash. Muammolar: clone'da avtomatik kelmaydi, detached HEAD, yangilash qo'lda, CI'da qo'shimcha qadam. Muqobil: paket menejeri (Go modules, npm), subtree, monorepo."
+    }
+  ]
+}

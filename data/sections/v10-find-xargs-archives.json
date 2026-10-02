@@ -170,6 +170,61 @@
       "section": "v10",
       "question": "`xz`, `bzip2`, `zstd`, `7z` flaglari va katta fayllarni siqish/bo'lish amaliyoti.",
       "explanation": "Hammasi gzip'ga o'xshash interfeys: -d ochish, -k saqlash, -c stdout, -1..-9 (zstd -19, --ultra -22), -T threads (xz -T0, zstd -T0). xz eng yaxshi nisbat, sekin; zstd tez va yaxshi — zamonaviy default. `split` bilan bo'laklash, `sha256sum` bilan tekshirish."
+    },
+    {
+      "id": 33352,
+      "code": "WZ01",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`zcat` nima qiladi va `gunzip`dan farqi nima?",
+      "explanation": "`zcat file.gz` siqilgan faylni ochib, mazmunini stdout'ga chiqaradi; diskdagi `.gz` fayl o'zgarmaydi. `gunzip file.gz` esa faylni ochib `file` qilib yozadi va `.gz`ni o'chiradi."
+    },
+    {
+      "id": 33353,
+      "code": "WZ02",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "Rotatsiya qilingan loglarda (`app.log`, `app.log.1`, `app.log.2.gz` ...) qanday qidirasiz?",
+      "explanation": "Siqilmaganlarni `grep`, siqilganlarni `zgrep`/`zcat` bilan; yoki hammasini bitta oqimga birlashtirish: `zcat -f app.log*` (`-f` siqilmagan faylni ham o'zgarishsiz chiqaradi)."
+    },
+    {
+      "id": 33354,
+      "code": "WZ03",
+      "level": "J",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "`zless`, `zgrep`, `zdiff`, `zmore` — `z*` oilasi nima uchun?",
+      "explanation": "Oddiy vositalarning (`less`, `grep`, `diff`, `more`) siqilgan fayllar uchun o'ramlari: faylni oldin ochmasdan to'g'ridan ishlaydi. bzip2 uchun `bzcat/bzgrep`, xz uchun `xzcat/xzgrep`, zstd uchun `zstdcat`."
+    },
+    {
+      "id": 33355,
+      "code": "WZ04",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "Siqilgan dump yoki arxivni ochmasdan (diskka yozmasdan) qanday ishlatasiz?",
+      "explanation": "Pipe orqali: `zcat dump.sql.gz | psql`, `zcat big.csv.gz | awk ...`, `tar xzf - < file`. Disk joyi tejaladi va IO bir marta bo'ladi. Teskarisi ham: `pg_dump | gzip > dump.sql.gz`."
+    },
+    {
+      "id": 33356,
+      "code": "WZ05",
+      "level": "M",
+      "type": "card",
+      "topic": "Find & archives",
+      "domain": "linux",
+      "section": "v10",
+      "question": "Katta `.gz` log'ni tez tahlil qilish: `zcat` sekin bo'lsa nima qilasiz?",
+      "explanation": "`gzip` ochish bitta yadroda ishlaydi. Tezlashtirish: `pigz -dc` (parallel), bir nechta faylni `xargs -P` bilan parallel, `LC_ALL=C grep`, kerakli qismini erta filtrlash; yangi loglar uchun `zstd` (ochish ancha tez)."
     }
   ]
 }

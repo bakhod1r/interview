@@ -1,0 +1,186 @@
+{
+  "id": "w3",
+  "name": "Ansible",
+  "domain": "iac",
+  "topics": [
+    "Ansible"
+  ],
+  "questions": [
+    {
+      "id": 33188,
+      "code": "WA01",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible nima va Terraform'dan farqi?",
+      "explanation": "Ansible — configuration management: mavjud serverlarga SSH orqali paket o'rnatish, fayl, servis sozlash. Agentless. Terraform — infratuzilma yaratish (provisioning) va state saqlaydi. Ko'pincha birga: Terraform server yaratadi, Ansible sozlaydi."
+    },
+    {
+      "id": 33189,
+      "code": "WA02",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Inventory, playbook, task, module, role nima?",
+      "explanation": "inventory — hostlar va guruhlar ro'yxati; playbook — YAML: qaysi hostlarda qaysi task'lar; task — bitta modul chaqiruvi; module — ish bajaruvchi (apt, copy, service); role — qayta ishlatiladigan task/template/handler to'plami."
+    },
+    {
+      "id": 33190,
+      "code": "WA03",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Idempotentlik Ansible'da nimani anglatadi?",
+      "explanation": "Playbook'ni necha marta ishga tushirsangiz ham natija bir xil: kerakli holat allaqachon bo'lsa modul hech narsa o'zgartirmaydi (`ok`, `changed` emas). `shell`/`command` default bo'yicha idempotent emas."
+    },
+    {
+      "id": 33241,
+      "code": "WA10",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`--check` va `--diff` nima uchun kerak?",
+      "explanation": "--check — dry run, hech narsa o'zgartirmaydi, nima o'zgarishini ko'rsatadi; --diff — fayl/template farqini chiqaradi. Prod'da apply'dan oldin ishlatiladi."
+    },
+    {
+      "id": 33191,
+      "code": "WA04",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Handler nima va qachon ishlatiladi?",
+      "explanation": "Handler — faqat `notify` qilgan task `changed` bo'lsa, play oxirida bir marta ishlaydigan task. Masalan, config o'zgarganda nginx'ni reload qilish (o'zgarmasa reload yo'q)."
+    },
+    {
+      "id": 33192,
+      "code": "WA05",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Variable'lar, `group_vars`/`host_vars` va precedence qanday ishlaydi?",
+      "explanation": "Variable'lar ko'p joyda: role defaults (eng past), inventory, group_vars, host_vars, play vars, `-e` extra vars (eng yuqori). Aniq joyga qo'ying, aks holda qaysi qiymat ishlagani noaniq bo'ladi."
+    },
+    {
+      "id": 33193,
+      "code": "WA06",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Jinja2 template va `template` modulidan qanday foydalaniladi?",
+      "explanation": "`.j2` fayl ichida `{{ var }}`, `{% for %}`, filtrlar; `template` modul render qilib serverga yozadi. Config fayllarni muhitga moslashtirish uchun."
+    },
+    {
+      "id": 33194,
+      "code": "WA07",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible Vault nima va secret'lar qanday saqlanadi?",
+      "explanation": "Vault — fayl yoki qiymatni AES256 bilan shifrlaydi, Git'da shifrlangan holda saqlanadi. Ishga tushirishda parol/parol fayli bilan ochiladi. Muqobil: tashqi secret manager lookup (HashiCorp Vault, AWS Secrets Manager)."
+    },
+    {
+      "id": 33243,
+      "code": "WA12",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Role tuzilmasi va Ansible Galaxy / collections nima?",
+      "explanation": "Role — standart papkalar (tasks, handlers, templates, defaults, vars, meta). Galaxy — tayyor role/collection'lar ombori; requirements.yml bilan versiyasi qotiriladi."
+    },
+    {
+      "id": 33244,
+      "code": "WA13",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Dynamic inventory nima? Cloud'da nega static inventory yaramaydi?",
+      "explanation": "Dynamic inventory — host ro'yxatini cloud API'dan (AWS EC2, GCP) olish, tag bo'yicha guruhlash. Autoscaling'da IP'lar o'zgaradi, static fayl eskiradi."
+    },
+    {
+      "id": 33195,
+      "code": "WA08",
+      "level": "S",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible'ni katta flot (yuzlab server) uchun qanday tezlashtirasiz va xavfsiz rollout qilasiz?",
+      "explanation": "Tezlik: `forks` oshirish, SSH pipelining va ControlPersist, fact gathering'ni cheklash/caching. Xavfsiz rollout: `serial` (batch), `max_fail_percentage`, load balancer'dan chiqarish, `--check --diff`, `--limit` bilan canary."
+    },
+    {
+      "id": 33330,
+      "code": "WA15",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible ad-hoc buyruqlar nima va qachon ishlatiladi?",
+      "explanation": "Playbook'siz bitta modulni ko'p hostda ishga tushirish: tezkor tekshiruv yoki bir martalik amal (ping, uptime, paket holati, servis restart)."
+    },
+    {
+      "id": 33331,
+      "code": "WA16",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`become`, SSH kalitlar va Ansible ulanishi qanday sozlanadi?",
+      "explanation": "Ansible SSH bilan ulanadi (agent kerak emas, faqat Python). `ansible_user`, kalit fayl inventory/ansible.cfg'da; root kerak bo'lgan task'lar uchun `become: true` (sudo)."
+    },
+    {
+      "id": 33332,
+      "code": "WA17",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Facts nima va `when` shartlari bilan qanday ishlatiladi?",
+      "explanation": "Facts — Ansible playbook boshida host haqida yig'adigan ma'lumot (OS, IP, xotira, CPU). `when` bilan task'ni shartli bajarish: masalan, Debian'da `apt`, RHEL'da `dnf`."
+    },
+    {
+      "id": 33333,
+      "code": "WA18",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Role tuzilmasi va Ansible kodini qanday test qilasiz (ansible-lint, Molecule)?",
+      "explanation": "Role: `tasks/`, `handlers/`, `templates/`, `defaults/`, `vars/`, `meta/`. Tekshiruv: `ansible-lint` (best practice), `--syntax-check`, `--check --diff`, Molecule — role'ni konteyner/VM'da ishga tushirib idempotentlikni sinash."
+    },
+    {
+      "id": 33409,
+      "code": "WA09",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`delegate_to`, `run_once` va `local_action` qachon kerak?",
+      "explanation": "delegate_to — task'ni joriy host nomidan, lekin boshqa host'da bajarish (LB'dan chiqarish, DNS yozuvi). run_once — butun guruh uchun bir marta (DB migration). local_action/`delegate_to: localhost` — boshqaruvchi mashinada (API chaqiruv)."
+    }
+  ]
+}
