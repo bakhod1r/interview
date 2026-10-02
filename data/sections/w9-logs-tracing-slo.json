@@ -115,6 +115,39 @@
       "section": "w9",
       "question": "SLO burn rate alert nima va oddiy threshold alertdan nega yaxshi?",
       "explanation": "Burn rate — error budget qanchalik tez sarflanayotgani (1 = oy oxirida aynan tugaydi). Multi-window alert: tez yonish (1 soatda 14.4x) — page, sekin (6 soatda 6x) — ticket. Qisqa spike'lar uchun shovqin yo'q, haqiqiy muammo esa tez ushlanadi."
+    },
+    {
+      "id": 42240,
+      "code": "WL11",
+      "level": "S",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Senariy: tunda alert: p99 latency 3 barobar oshdi, error rate normal. On-call sifatida birinchi 15 daqiqa?",
+      "explanation": "Ta'sirni baholang (qaysi endpoint, qancha foydalanuvchi, SLO burn), so'nggi o'zgarishlarni tekshiring (deploy, config, trafik), RED/USE dashboard'dan qaysi qatlam sekinligini (trace) aniqlang, dependency'larni (DB, cache, tashqi API) tekshiring. Containment (rollback, scale) — avval, root cause — keyin. Kommunikatsiya: incident kanali, status."
+    },
+    {
+      "id": 42241,
+      "code": "WL12",
+      "level": "S",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Incident management: rollar (Incident Commander, comms), severity darajalari va postmortem qanday tashkil qilinadi?",
+      "explanation": "Severity ta'sir bo'yicha (SEV1 — ko'p foydalanuvchi/pul yo'qotish). Rollar: Incident Commander (koordinatsiya, qaror), Ops/tech lead (tuzatish), Comms (stakeholder va status page), scribe (vaqt chizig'i). Postmortem — blameless: vaqt chizig'i, ta'sir, root cause va contributing factors, egasi va muddati bor action item'lar."
+    },
+    {
+      "id": 42242,
+      "code": "WL13",
+      "level": "St",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Observability xarajati daromaddan tez o'syapti (log, metrika, trace). Qanday optimallashtirasiz?",
+      "explanation": "Har signalning qiymatini o'lchang: kim ishlatadi, qaysi alert/dashboard. Log: DEBUG o'chirish, sampling, qisqa retention + arxiv (S3), keraksiz maydonlar. Metrika: kardinallik, ishlatilmaydigan metrikalarni drop, recording rules. Trace: tail sampling. Tiered storage va vendor'dan open-source'ga (yoki aksincha) ko'chishni TCO bo'yicha baholash."
     }
   ]
 }

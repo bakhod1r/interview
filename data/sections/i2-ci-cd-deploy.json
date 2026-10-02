@@ -451,6 +451,50 @@
       "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
       "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
       "source": "https://sre.google/sre-book/table-of-contents/"
+    },
+    {
+      "id": 42236,
+      "code": "WI03",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Senariy: CI pipeline 45 daqiqa davom etadi, jamoa kamroq commit qilyapti. Qanday tezlashtirasiz?",
+      "explanation": "Avval o'lchang: qaysi bosqich qancha (critical path). Keyin: parallel job'lar, dependency va Docker layer cache, faqat o'zgargan qismni test/build (affected), testlarni shard'lash, flaky va sekin testlarni ajratish, kuchliroq yoki doimiy runner'lar. Maqsad — PR feedback 10 daqiqadan kam."
+    },
+    {
+      "id": 42237,
+      "code": "WI04",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Senariy: production deploy'dan keyin 5xx o'sdi. Rollback yoki roll-forward — qanday qaror qilasiz?",
+      "explanation": "Default — tezkor rollback (ma'lum yaxshi holatga qaytish), ayniqsa sabab noaniq bo'lsa. Roll-forward faqat: sabab aniq, fix kichik va tez, yoki rollback imkonsiz (orqaga mos kelmaydigan DB migration, tashqi kontrakt o'zgargan). Qaror mezonlari oldindan runbook'da yozilgan bo'lishi kerak."
+    },
+    {
+      "id": 42238,
+      "code": "WI05",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Deployment pipeline'ida secret'lar va credential'larni qanday himoya qilasiz?",
+      "explanation": "Uzoq muddatli kalitlar yo'q: cloud'ga OIDC federation (qisqa muddatli token), secret'lar secret manager'da va faqat kerakli job/environment'ga, PR'lardan (fork) secret'larga kirish yo'q, log'da maskalash, runner izolyatsiyasi, uchinchi tomon action'larni SHA bilan pin qilish."
+    },
+    {
+      "id": 42239,
+      "code": "WI06",
+      "level": "St",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "DORA metrikalari nima va ularni jamoani yaxshilash uchun qanday ishlatasiz (va ishlatmaysiz)?",
+      "explanation": "Deployment frequency, lead time for changes, change failure rate, time to restore (MTTR) — yetkazib berish tezligi va barqarorligini o'lchaydi. Ular tizim va jarayonni yaxshilash uchun, jamoalarni solishtirish yoki jazolash uchun emas (Goodhart qonuni)."
     }
   ]
 }

@@ -60,6 +60,28 @@
       "section": "t15",
       "question": "Bind mount qilingan `node_modules`/vendor papka host'dagisi bilan almashib, ilova ishlamay qoldi. Nega?",
       "explanation": "Bind mount ./:/app image'dagi /app/node_modules ni yashiradi; host'da u yo'q yoki boshqa OS uchun (macOS native modul). Yechim: anonim volume bilan qayta yashirish."
+    },
+    {
+      "id": 42274,
+      "code": "DX30",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "compose",
+      "section": "t15",
+      "question": "`docker compose up -d` ikkinchi marta ishga tushirilganda o'zgarmagan service'lar ham qayta yaratildi. Nega?",
+      "explanation": "Compose konfiguratsiya hash'ini solishtiradi: interpolatsiya qilingan qiymat (masalan `$(date)`, tasodifiy env, o'zgargan `.env`) yoki `pull_policy: always` bilan yangi image digest — hash o'zgaradi va container qayta yaratiladi."
+    },
+    {
+      "id": 42275,
+      "code": "DX31",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "compose",
+      "section": "t15",
+      "question": "Compose'da ikkita loyiha bir xil papka nomidan ishga tushirildi va bir-birining container/volume'larini o'chirib yubordi. Nega?",
+      "explanation": "Project name default papka nomidan olinadi. Ikki xil joydagi `app/` papkasi bir xil loyiha nomini oladi — `down -v` boshqa loyihaning volume'larini ham o'chiradi."
     }
   ]
 }

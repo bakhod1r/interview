@@ -357,6 +357,94 @@
       "section": "w8",
       "question": "Istio sidecar va Ambient mesh farqi?",
       "explanation": "Sidecar rejimi — har pod'ga Envoy: to'liq L7, lekin har pod'ga CPU/RAM narxi, pod restart bilan upgrade, latency. Ambient — sidecar'siz: node darajasida ztunnel (L4 mTLS, identity) va kerak bo'lsa namespace'ga waypoint proxy (L7). Narx va operatsiya yuki ancha kam."
+    },
+    {
+      "id": 42224,
+      "code": "WD21",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Senariy: deploy'dan keyin yangi pod'lar Ready bo'lmayapti, rollout osilib qoldi, eski pod'lar hali trafik olyapti. Qanday harakat qilasiz?",
+      "explanation": "Avval foydalanuvchiga ta'sir yo'qligini tasdiqlang (eski pod'lar xizmat qilyapti, maxUnavailable=0 ishlagan). Keyin `rollout status`, yangi pod `describe`/loglari bilan sababni toping (readiness, config, dependency). Tez tuzatib bo'lmasa — `rollout undo` yoki Git revert; keyin root cause."
+    },
+    {
+      "id": 42225,
+      "code": "WD22",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Senariy: cluster'da birdaniga ko'p pod Pending, Cluster Autoscaler node qo'shmayapti. Tekshiruv tartibi?",
+      "explanation": "Pending sababini event'dan oling; keyin autoscaler loglari: max node limitiga yetganmi, instance turi/AZ'da sig'im yo'qmi (InsufficientInstanceCapacity), pod biror node group'ga umuman sig'maydimi (juda katta requests, taint/affinity), subnet IP tugaganmi, cloud quota."
+    },
+    {
+      "id": 42226,
+      "code": "WD23",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Senariy: bitta node NotReady bo'ldi. Nima bo'ladi va nima qilasiz?",
+      "explanation": "Kubelet heartbeat kelmaydi -> node NotReady; ~5 daqiqadan keyin (`tolerationSeconds: 300`) pod'lar evict qilinib boshqa node'larda qayta yaratiladi (Deployment). StatefulSet pod'i avtomatik ko'chmaydi (ikki nusxa xavfi). Node'da: kubelet, containerd, disk/memory pressure, tarmoq."
+    },
+    {
+      "id": 42227,
+      "code": "WD24",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Senariy: CoreDNS so'rovlarida timeout, ilovalar tasodifiy 'i/o timeout' xatosini beryapti. Diagnostika va yechim?",
+      "explanation": "Tez-tez sabablar: CoreDNS replica kam/CPU throttling, conntrack race (UDP, ayniqsa A va AAAA parallel so'rov), ndots:5 tufayli ko'p keraksiz so'rov, upstream DNS limiti (AWS VPC resolver ~1024 pps/ENI). Yechim: NodeLocal DNSCache, CoreDNS scale, ndots pasaytirish, cache."
+    },
+    {
+      "id": 42228,
+      "code": "WD25",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Senariy: prod namespace'da kimdir `kubectl delete deployment` qildi. Qanday tiklaysiz va keyin nima o'zgartirasiz?",
+      "explanation": "GitOps bo'lsa — Argo CD/Flux o'zi qayta yaratadi (self-heal) yoki sync tugmasi. Bo'lmasa — Git'dagi manifest yoki Helm `rollback`/`upgrade`, Velero backup. Keyin: kim, nega — audit log; RBAC'dan prod write'ni olib tashlash, delete uchun himoya."
+    },
+    {
+      "id": 42229,
+      "code": "WD26",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Senariy: pod'lar tasodifan qayta ishga tushyapti, exit code 137, lekin memory grafikda limitdan past. Sabab?",
+      "explanation": "137 = SIGKILL. Memory metrikasi scrape oralig'ida qisqa pikni ko'rmasligi mumkin (OOM tez sodir bo'ladi). Boshqa sabablar: liveness probe fail (kubelet o'ldiradi), node darajasidagi OOM yoki eviction, preStop/grace period tugashi. `describe pod` Reason (OOMKilled / Error) va event'lar farqlaydi."
+    },
+    {
+      "id": 42230,
+      "code": "WD27",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Senariy: Ingress orqali ba'zi so'rovlar 413 yoki 499/504 qaytaryapti, to'g'ridan pod'ga yuborilganda ishlaydi. Nimaga qaraysiz?",
+      "explanation": "Proxy qatlami cheklovlari: 413 — `proxy-body-size` (nginx default 1m); 504 — `proxy-read-timeout` (60s); 499 — client (yoki oldingi LB) ulanishni proxy javob berishidan oldin yopgan — odatda LB idle timeout ingress timeout'dan qisqa. Har qatlamdagi timeout'lar zanjiri mos bo'lishi kerak."
+    },
+    {
+      "id": 42231,
+      "code": "WD28",
+      "level": "St",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Platform jamoasi sifatida 30 ta jamoaga Kubernetes'ni qanday 'mahsulot' qilib berasiz?",
+      "explanation": "Golden path: tayyor shablon (servis skeleti + Helm chart/Kustomize base + CI + GitOps + dashboard + alert'lar), self-service (namespace, DB, secret so'rovi kod orqali), guardrail'lar (policy-as-code, quota, PSS) va jamoalarga K8s ichki tafsilotlarini minimal ko'rsatish. Muvaffaqiyat — adoption, lead time va incident metrikalari bilan o'lchanadi."
     }
   ]
 }

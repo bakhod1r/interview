@@ -104,6 +104,72 @@
       "section": "t14",
       "question": "`latest` tag bilan deploy qilindi, lekin serverda eski versiya ishlayapti. Nega?",
       "explanation": "Docker lokal latest mavjud bo'lsa qayta pull qilmaydi. latest — oddiy tag, avtomatik yangilanmaydi. Aniq versiya yoki digest ishlat, kerak bo'lsa --pull always."
+    },
+    {
+      "id": 42255,
+      "code": "DX11",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "docker",
+      "section": "t14",
+      "question": "`HEALTHCHECK` muvaffaqiyatsiz, container `unhealthy` — lekin Docker uni qayta ishga tushirmayapti. Nega?",
+      "explanation": "Oddiy dockerd'da HEALTHCHECK faqat status beradi; restart policy faqat process chiqishiga (exit) qaraydi. Unhealthy'da restart Swarm/K8s yoki autoheal kabi tashqi vositada."
+    },
+    {
+      "id": 42256,
+      "code": "DX12",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "docker",
+      "section": "t14",
+      "question": "Container'da `apt-get install` ishlaydi, lekin host'ga ko'chirilgan `.so` / binary boshqa distroda `GLIBC_2.34 not found` beradi. Nega va qanday oldini olasiz?",
+      "explanation": "Dinamik link qilingan binary build qilingan muhitdagi glibc versiyasiga bog'liq. Builder va runtime image bir xil libc'da bo'lishi yoki statik (CGO_ENABLED=0 / musl) build kerak."
+    },
+    {
+      "id": 42257,
+      "code": "DX13",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "docker",
+      "section": "t14",
+      "question": "Container log'lari `docker logs` da bor, lekin app 2 kun ishlagach disk 100% to'ldi. Container o'chirilmagan. Sabab?",
+      "explanation": "Default json-file log driver'da rotation yo'q: /var/lib/docker/containers/<id>/*-json.log cheksiz o'sadi. max-size/max-file yoki local driver kerak."
+    },
+    {
+      "id": 42258,
+      "code": "DX14",
+      "level": "St",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "docker",
+      "section": "t14",
+      "question": "Docker host'da `/var/lib/docker` overlay2 inode'lari tugadi (`No space left on device`, lekin `df -h` 40% bo'sh). Nima bo'ldi va qanday oldini olasiz?",
+      "explanation": "Ko'p kichik faylli image/layer'lar inode'larni tugatdi (`df -i` 100%). Prune, alohida XFS/ext4 (ko'proq inode) disk, image GC siyosati, monitoring df -i."
+    },
+    {
+      "id": 42259,
+      "code": "DX15",
+      "level": "St",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "docker",
+      "section": "t14",
+      "question": "Container'da vaqt zonasi va soat: log'lardagi vaqt host'dan 5 soat farq qiladi, TLS sertifikat esa \"not yet valid\" deydi. Bu ikki muammo bir xilmi?",
+      "explanation": "Yo'q. Timezone — userspace (TZ env, /etc/localtime), faqat ko'rinish. Soat esa kernel'dan, container'da alohida emas — 'not yet valid' host clock (NTP) noto'g'ri ekanini bildiradi."
+    },
+    {
+      "id": 42260,
+      "code": "DX16",
+      "level": "P",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "docker",
+      "section": "t14",
+      "question": "Production'da bitta host'dagi `dockerd` qayta ishga tushirildi (upgrade) va barcha container'lar o'chdi. Tizim darajasida bunday blast radius'ni qanday kamaytirasiz?",
+      "explanation": "`live-restore` bilan container'lar daemon restart'da tirik qoladi. Kattaroq darajada: host bitta failure domain — orchestrator, replicas boshqa host'larda, rolling node upgrade (drain), immutable node'lar."
     }
   ]
 }

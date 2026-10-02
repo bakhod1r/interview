@@ -214,6 +214,204 @@
       "section": "k2",
       "question": "Compose bilan zero-downtime deploy qanday qilasan?",
       "explanation": "Compose up -d container'ni recreate qiladi — qisqa uzilish. Yechim: reverse proxy (Traefik/nginx) + scale 2 va navbat bilan almashtirish, yoki blue/green ikki service."
+    },
+    {
+      "id": 42208,
+      "code": "RC08",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Server reboot bo'ldi — Compose bilan ishlagan servislar ko'tarilmadi. Nega va qanday tuzatasan?",
+      "explanation": "Compose o'zi daemon emas; restart policy bo'lmasa container reboot'dan keyin turmaydi. `restart: unless-stopped` va docker.service enabled bo'lishi kerak."
+    },
+    {
+      "id": 42209,
+      "code": "RC09",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "`docker compose up -d` dan keyin `WARN Found orphan containers` va eski service hali ishlayapti, port band. Nima qilasan?",
+      "explanation": "compose.yaml'dan service o'chirilgan yoki nomi o'zgargan — eski container project label bilan qolgan. `docker compose up -d --remove-orphans`. Avval nimani o'chirayotganingni ko'r."
+    },
+    {
+      "id": 42210,
+      "code": "RC10",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da `db` healthy, lekin `api` start bo'lishi bilan `connection refused` beradi va yiqiladi. Qanday hal qilasan?",
+      "explanation": "depends_on default faqat start tartibi. `condition: service_healthy` + db'da to'g'ri healthcheck (pg_isready). Plus app ichida retry — prod'da DB qayta ishga tushishi mumkin."
+    },
+    {
+      "id": 42211,
+      "code": "RC11",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose bilan prod serverda `docker compose pull && up -d` qilindi — 20-30 soniya sayt ochilmadi. Qanday qisqartirasan?",
+      "explanation": "up -d container'ni stop → yangi start qiladi; start + warm-up vaqtida downtime. Yechim: oldin pull, healthcheck, reverse proxy (Traefik/nginx) orqali 2 replica navbatma-navbat yoki docker-rollout; jiddiy bo'lsa Swarm/K8s."
+    },
+    {
+      "id": 42212,
+      "code": "RC12",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'dagi Postgres volume'i noto'g'ri `down -v` bilan o'chdi. Nima qilasan va keyin qanday oldini olasan?",
+      "explanation": "Tiklash faqat backup'dan (pg_dump/WAL arxiv). Oldini olish: external volume, alohida backup (pg_dump cron yoki pgBackRest offsite), restore testi, prod'da qo'lda `-v` ishlatmaslik."
+    },
+    {
+      "id": 42261,
+      "code": "DX17",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da volume e'lon qilish: named volume va bind mount yozilishi qanday farq qiladi?",
+      "explanation": "Named volume: `db-data:/var/lib/postgresql/data` + yuqori darajadagi `volumes:` bo'limi; Docker boshqaradi. Bind mount: `./src:/app` — host yo'li, dev uchun."
+    },
+    {
+      "id": 42262,
+      "code": "DX18",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "`docker compose run` va `docker compose exec` farqi?",
+      "explanation": "`exec` ishlab turgan container ichida buyruq bajaradi. `run` yangi bir martalik container yaratadi (portlar default ochilmaydi), migratsiya yoki skript uchun."
+    },
+    {
+      "id": 42263,
+      "code": "DX19",
+      "level": "J",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose fayl nomi: `docker-compose.yml` va `compose.yaml`, `docker-compose` va `docker compose` farqi?",
+      "explanation": "`compose.yaml` hozirgi tavsiya etilgan nom (eski nom ham o'qiladi). `docker-compose` — eski Python v1 (EOL), `docker compose` — Go'da yozilgan v2 CLI plugin."
+    },
+    {
+      "id": 42264,
+      "code": "DX20",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da `restart` policy'lari va `healthcheck` qanday ishlaydi? Unhealthy container qayta ishga tushadimi?",
+      "explanation": "`restart: unless-stopped`/`always`/`on-failure` faqat process exit'ga reaksiya qiladi. healthcheck status beradi va `depends_on: service_healthy` uchun ishlatiladi, lekin unhealthy'da restart yo'q."
+    },
+    {
+      "id": 42265,
+      "code": "DX21",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da `extends`, YAML anchor (`x-` extension) va `include` — takrorni qanday kamaytirasiz?",
+      "explanation": "`x-*` + YAML anchor bitta fayl ichida umumiy blok uchun; `extends` boshqa service/fayldan meros; `include` (Compose 2.20+) boshqa compose loyihasini butunicha qo'shadi."
+    },
+    {
+      "id": 42266,
+      "code": "DX22",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "`docker compose config` nima uchun kerak va CI'da qanday foydalanasiz?",
+      "explanation": "Barcha fayllar, override, .env interpolatsiya va profile'lardan keyingi yakuniy modelni chiqaradi va validatsiya qiladi. CI'da sintaksis/interpolatsiya xatosini deploy'dan oldin ushlaydi."
+    },
+    {
+      "id": 42267,
+      "code": "DX23",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da `env_file` va `--env-file` farqi?",
+      "explanation": "`env_file:` service ichidagi container env'iga o'zgaruvchi beradi. `--env-file` (va loyihaning `.env`) esa compose.yaml'ni interpolatsiya qilish uchun — container'ga avtomatik o'tmaydi."
+    },
+    {
+      "id": 42268,
+      "code": "DX24",
+      "level": "M",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da GPU va device'larni container'ga qanday berasiz?",
+      "explanation": "`deploy.resources.reservations.devices` (driver: nvidia, capabilities: [gpu]) — NVIDIA Container Toolkit kerak. Oddiy device uchun `devices: - /dev/ttyUSB0`."
+    },
+    {
+      "id": 42269,
+      "code": "DX25",
+      "level": "S",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose stack'ni bitta VM'da prod'da ishlatyapsiz. Deploy paytida downtime va rollback'ni qanday hal qilasiz?",
+      "explanation": "Image'ni tag/digest bilan pin, `pull` avval, reverse proxy (Traefik/Caddy) orqasida ikki nusxa (blue/green yoki scale 2 → yangi → eski o'chir), healthcheck, rollback = oldingi tag bilan `up -d`."
+    },
+    {
+      "id": 42270,
+      "code": "DX26",
+      "level": "S",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da DB'ni backup qilish va restore'ni test qilish qanday tashkil qilinadi?",
+      "explanation": "Volume'ni ishlab turgan DB'dan nusxalash emas — mantiqiy dump (pg_dump) yoki DB'ning o'z backup vositasi; off-host saqlash; restore'ni muntazam alohida container'da test qilish."
+    },
+    {
+      "id": 42271,
+      "code": "DX27",
+      "level": "S",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose loyihasida service'lar sonini va resurslarni qanday cheklaysiz, bitta servis butun host'ni o'ldirmasligi uchun?",
+      "explanation": "Har service'ga `mem_limit`/`cpus` (yoki `deploy.resources.limits`), `pids_limit`, log rotation, `ulimits`, restart backoff. Host'ga OS va dockerd uchun zaxira qoldirish."
+    },
+    {
+      "id": 42272,
+      "code": "DX28",
+      "level": "St",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Jamoangiz lokal dev uchun Compose ishlatadi, prod esa K8s. Dev/prod parity'ni qanday saqlaysiz?",
+      "explanation": "Bitta image (bir xil Dockerfile/digest) dev va prod'da; config faqat env orqali (12-factor); Compose'ni manba deb emas, dev qulayligi deb ko'rish; integration testlar CI'da prod'ga yaqin muhitda (kind/k3d) ham."
+    },
+    {
+      "id": 42273,
+      "code": "DX29",
+      "level": "St",
+      "type": "card",
+      "topic": "Compose",
+      "domain": "compose",
+      "section": "k2",
+      "question": "Compose'da yozilgan 15 servisli tizim o'smoqda. Qachon va qanday Compose'dan orchestrator'ga o'tasiz?",
+      "explanation": "Signallar: bir host yetmaydi, HA kerak (host o'limi = outage), zero-downtime deploy qo'lda skript bo'lib ketgan, ko'p jamoa. Bosqichma-bosqich: avval stateless servislar, state managed servisga."
     }
   ]
 }

@@ -489,6 +489,28 @@
       "section": "v20",
       "question": "Immutable infrastructure: SSH'siz server'lar g'oyasi. Qachon to'g'ri, qachon ortiqcha?",
       "explanation": "Server o'zgartirilmaydi — yangi image (Packer/container) quriladi va almashtiriladi. Plyus: drift yo'q, bashorat qilinadigan, rollback oson, xavfsizlik. Minus: build pipeline, observability yetuk bo'lishi shart, kichik jamoaga og'ir."
+    },
+    {
+      "id": 42243,
+      "code": "WR01",
+      "level": "S",
+      "type": "card",
+      "topic": "Server operations",
+      "domain": "linux",
+      "section": "v20",
+      "question": "Senariy: serverda `fork: retry: Resource temporarily unavailable`, SSH ham qiyin ochilyapti. Sabab va yechim?",
+      "explanation": "PID yoki thread limiti tugagan (fork bomb, thread leak, zombie'lar, `ulimit -u` yoki cgroup `pids.max`, `kernel.pid_max`). Mavjud sessiyadan yoki konsoldan aybdor jarayonni topib to'xtatish; keyin limitlar va leak sababini tuzatish."
+    },
+    {
+      "id": 42244,
+      "code": "WR02",
+      "level": "S",
+      "type": "card",
+      "topic": "Server operations",
+      "domain": "linux",
+      "section": "v20",
+      "question": "Senariy: server soati 3 daqiqa orqada qoldi — qanday muammolar chiqadi va qanday tuzatiladi?",
+      "explanation": "TLS (sertifikat 'hali kuchga kirmagan'), JWT/token (nbf/exp), AWS imzolangan so'rovlar (`RequestTimeTooSkewed`, 5 daqiqa), Kerberos, log/trace vaqt tartibi, distributed lock'lar va cron buziladi. chrony/NTP'ni tekshirish; katta farqni `makestep` bilan tuzatish, ishlayotgan tizimda sakrash ehtiyotkorlik bilan."
     }
   ]
 }

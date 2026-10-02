@@ -335,6 +335,50 @@
       "section": "w5",
       "question": "Ko'p AZ'li yuqori mavjudlikdagi (HA) web arxitekturani AWS'da qanday qurasiz?",
       "explanation": "ALB (ko'p AZ) → ASG yoki EKS (kamida 2-3 AZ) → RDS Multi-AZ + read replica, ElastiCache, S3 + CloudFront. Har AZ'da NAT GW. Stateless app, health check, backup va DR rejasi."
+    },
+    {
+      "id": 42232,
+      "code": "WC31",
+      "level": "S",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Senariy: AWS access key GitHub'ga oqib ketdi va kimdir EC2'larda crypto-miner ishga tushirdi. Incident response tartibi?",
+      "explanation": "Containment birinchi: kalitni darhol deactivate qiling, sessiyalarni bekor qiling (inline deny policy `aws:TokenIssueTime`), begona resurslarni to'xtating (snapshot olib). Keyin CloudTrail bilan ko'lamni aniqlash, persistence (yangi IAM user/role, kalitlar) qidirish, tozalash, AWS Support bilan billing."
+    },
+    {
+      "id": 42233,
+      "code": "WC32",
+      "level": "S",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Senariy: RDS CPU 100%, ilova sekin. Birinchi qadamlar va uzoq muddatli yechim?",
+      "explanation": "Avval qaysi so'rov yuklayotganini toping (Performance Insights / `pg_stat_activity`, `pg_stat_statements`), yangi deploy yoki trafik o'zgarishi bilan bog'lang. Tez choralar: og'ir so'rovni to'xtatish, feature flag, read replica'ga o'qishni ko'chirish. Keyin: indeks/so'rov tuzatish, connection pooling, kerak bo'lsa instance kattalashtirish."
+    },
+    {
+      "id": 42234,
+      "code": "WC33",
+      "level": "S",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Senariy: bitta AZ ishdan chiqdi. Arxitekturangiz omon qoldimi — nimalarni oldindan tekshirgan bo'lishingiz kerak?",
+      "explanation": "Har qatlam kamida 2-3 AZ'da va qolgan AZ'lar to'liq yukni ko'tara oladimi (N+1 sig'im): ALB, ASG/node group'lar, NAT GW har AZ'da, RDS Multi-AZ, ElastiCache replica boshqa AZ'da, EBS'ga bog'liq stateful pod'lar. Game day bilan amalda sinalgan bo'lishi kerak."
+    },
+    {
+      "id": 42235,
+      "code": "WC34",
+      "level": "St",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Cloud xarajati yiliga 40% o'syapti. FinOps jarayonini qanday quriladi?",
+      "explanation": "Ko'rinish (tag/account bo'yicha xarajat egasi), mas'uliyat (jamoalar o'z budjeti va unit cost'ini ko'radi), optimallashtirish (rightsizing, commitments, arxitektura) va boshqaruv (budget alert, policy). Maqsad xarajatni kamaytirish emas, unit economics (1 buyurtma narxi) ni nazorat qilish."
     }
   ]
 }

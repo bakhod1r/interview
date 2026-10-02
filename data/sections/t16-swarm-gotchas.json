@@ -60,6 +60,50 @@
       "section": "t16",
       "question": "Node qayta ulangandan keyin task'lar notekis: bitta node'da hammasi, yangisida hech narsa. Nega?",
       "explanation": "Swarm ishlab turgan task'larni avtomatik qayta balanslamaydi; faqat yangi task'larni joylaydi. docker service update --force bilan qayta taqsimlanadi."
+    },
+    {
+      "id": 42289,
+      "code": "DX45",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Swarm service'ni yangilagandan keyin image yangi tag bilan pull bo'lmadi — eski versiya ishlayapti. Sabab?",
+      "explanation": "Swarm tag'ni deploy paytida digest'ga resolve qiladi va pin qiladi. Bir xil tag qayta push qilinsa, `service update` konfiguratsiya o'zgarmagani uchun hech narsa qilmaydi; `--with-registry-auth` bo'lmasa worker digest'ni olmay qolishi ham mumkin."
+    },
+    {
+      "id": 42290,
+      "code": "DX46",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Swarm'da service `global` mode'da, lekin yangi qo'shilgan node'da task ishga tushmadi. Nega?",
+      "explanation": "Global service har mos node'da bitta task — lekin `constraints` (label/role) yangi node'ga mos kelmasa, node `drain`/`pause` bo'lsa, reservation yetmasa yoki image arxitekturasi (arm64) mos kelmasa task joylashmaydi."
+    },
+    {
+      "id": 42312,
+      "code": "SW22",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Swarm'da healthcheck'li service update qilinmoqda va har doim rollback bo'lyapti, lekin yangi versiya qo'lda ishga tushirilsa ishlaydi. Sabab?",
+      "explanation": "Ko'pincha `update_config.monitor` healthcheck'ning `start_period + interval*retries` dan qisqa: task hali `starting` holatida yoki birinchi tekshiruvlar yiqilganda Swarm uni failure deb hisoblaydi. Yoki healthcheck buyrug'i yangi image'da yo'q (distroless)."
+    },
+    {
+      "id": 42313,
+      "code": "SW23",
+      "level": "S",
+      "type": "card",
+      "topic": "Infra gotcha",
+      "domain": "swarm",
+      "section": "t16",
+      "question": "Overlay network'da IP manzillar tugadi: yangi task'lar `Pending` (\"could not allocate IP\"). Nega?",
+      "explanation": "Default overlay subnet /24 (~256 manzil); har task, har VIP va har node'ning load-balancer endpoint'i IP oladi. Ko'p replika yoki rolling update (start-first'da ikki baravar) bilan tugaydi. Yechim: kattaroq subnet bilan network yaratish."
     }
   ]
 }

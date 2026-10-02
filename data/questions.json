@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T17:01:33.031Z",
-  "total": 4563,
+  "generatedAt": "2026-10-02T17:21:44.853Z",
+  "total": 4676,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -20295,6 +20295,28 @@
           "section": "v20",
           "question": "Immutable infrastructure: SSH'siz server'lar g'oyasi. Qachon to'g'ri, qachon ortiqcha?",
           "explanation": "Server o'zgartirilmaydi — yangi image (Packer/container) quriladi va almashtiriladi. Plyus: drift yo'q, bashorat qilinadigan, rollback oson, xavfsizlik. Minus: build pipeline, observability yetuk bo'lishi shart, kichik jamoaga og'ir."
+        },
+        {
+          "id": 42243,
+          "code": "WR01",
+          "level": "S",
+          "type": "card",
+          "topic": "Server operations",
+          "domain": "linux",
+          "section": "v20",
+          "question": "Senariy: serverda `fork: retry: Resource temporarily unavailable`, SSH ham qiyin ochilyapti. Sabab va yechim?",
+          "explanation": "PID yoki thread limiti tugagan (fork bomb, thread leak, zombie'lar, `ulimit -u` yoki cgroup `pids.max`, `kernel.pid_max`). Mavjud sessiyadan yoki konsoldan aybdor jarayonni topib to'xtatish; keyin limitlar va leak sababini tuzatish."
+        },
+        {
+          "id": 42244,
+          "code": "WR02",
+          "level": "S",
+          "type": "card",
+          "topic": "Server operations",
+          "domain": "linux",
+          "section": "v20",
+          "question": "Senariy: server soati 3 daqiqa orqada qoldi — qanday muammolar chiqadi va qanday tuzatiladi?",
+          "explanation": "TLS (sertifikat 'hali kuchga kirmagan'), JWT/token (nbf/exp), AWS imzolangan so'rovlar (`RequestTimeTooSkewed`, 5 daqiqa), Kerberos, log/trace vaqt tartibi, distributed lock'lar va cron buziladi. chrony/NTP'ni tekshirish; katta farqni `makestep` bilan tuzatish, ishlayotgan tizimda sakrash ehtiyotkorlik bilan."
         }
       ]
     },
@@ -25291,6 +25313,259 @@
           "section": "k1",
           "question": "Docker build CI'da sekin (har safar 10+ daqiqa). Qanday tezlashtirasiz?",
           "explanation": "Layer tartibi (dependency avval, kod keyin), .dockerignore, BuildKit cache mount, CI'da remote cache (registry yoki gha), multi-stage parallel. O'lchash: build log'da qaysi qadam CACHED emas."
+        },
+        {
+          "id": 42201,
+          "code": "RC01",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Container `Exited (137)` bilan o'lyapti, log'da xato yo'q. Nima qilasan?",
+          "explanation": "137 = 128+9 (SIGKILL). Ko'pincha cgroup OOM. `docker inspect` OOMKilled ni ko'r, limit vs real memory, runtime limitni biladimi (GOMEMLIMIT, MaxRAMPercentage)."
+        },
+        {
+          "id": 42202,
+          "code": "RC02",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Container ichida DNS ishlamayapti (`Temporary failure in name resolution`), host'da ishlaydi. Sabab?",
+          "explanation": "Host /etc/resolv.conf 127.0.0.53 (systemd-resolved) — container'dan unga yetib bo'lmaydi, Docker 8.8.8.8 ga fallback qiladi, korporativ tarmoq uni bloklaydi. Fix: daemon.json \"dns\", yoki --dns."
+        },
+        {
+          "id": 42203,
+          "code": "RC03",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker o'rnatilgandan keyin ofis/VPN'dagi `172.17.x.x` serverlarga ulanib bo'lmay qoldi. Nega?",
+          "explanation": "docker0 bridge default 172.17.0.0/16 — route jadvalida ofis subnet'i bilan to'qnashdi, trafik bridge'ga ketyapti. Fix: daemon.json bip va default-address-pools bilan boshqa diapazon."
+        },
+        {
+          "id": 42204,
+          "code": "RC04",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`systemctl restart docker` yoki Docker update qilinganda prod'dagi barcha container'lar o'chdi. Qanday oldini olasan?",
+          "explanation": "Default'da dockerd o'lsa container'lar ham to'xtaydi. `\"live-restore\": true` — daemon restart vaqtida container'lar ishlashda davom etadi. Plus restart policy, maintenance oynasi."
+        },
+        {
+          "id": 42205,
+          "code": "RC05",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Image'dan secret (API key) chiqib qoldi: Dockerfile'da `COPY .env` keyin `RUN rm .env` qilingan edi. Nima bo'ldi va nima qilasan?",
+          "explanation": "Har RUN/COPY alohida layer — rm faqat keyingi layer'da yashiradi, eski layer'da fayl qoladi (`docker save`, `dive`). Darhol key'ni rotate qil, keyin BuildKit secret mount, .dockerignore."
+        },
+        {
+          "id": 42206,
+          "code": "RC06",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Container ichida app sekin, `docker stats` CPU 50% ko'rsatadi, lekin p99 latency yuqori. Nima tekshirasan?",
+          "explanation": "CPU quota throttling: --cpus limiti qisqa burst'larni 100ms davrda kesadi. cgroup cpu.stat nr_throttled ni ko'r. Fix: limitni oshir/olib tashla, runtime thread soni (GOMAXPROCS) limitga mos."
+        },
+        {
+          "id": 42207,
+          "code": "RC07",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Bir host'da 40 container, `docker ps` qotib qoldi, yangi container start bo'lmaydi. Qanday tekshirasan?",
+          "explanation": "Daemon holati: journalctl -u docker, disk/inode (df -h, df -i /var/lib/docker), PID limit, containerd. Ko'pincha disk to'la yoki log fayllar katta. Mitigate: joy bo'shatish, keyin root cause."
+        },
+        {
+          "id": 42218,
+          "code": "WX01",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "BuildKit secret va cache mount'lar: `RUN --mount=type=secret` va `type=cache` nima beradi?",
+          "explanation": "secret mount — build vaqtida token/kalitni faqat bitta RUN uchun fayl sifatida beradi, image layer'iga va tarixga tushmaydi. cache mount — paket menejeri cache'ini (go mod, apt, npm) build'lar orasida saqlaydi, layer'ga kirmaydi — tez va kichik image."
+        },
+        {
+          "id": 42219,
+          "code": "WX02",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Image ichida nima borligini qanday tekshirasiz: `docker history`, `inspect`, `dive`?",
+          "explanation": "`docker history` — har layer qaysi instruksiya va hajm; `docker inspect` — config (ENV, CMD, user, label, digest); `dive` — layer'lar bo'yicha fayl tizimi va isrof qilingan joy. Secret yoki keraksiz fayl image'ga tushib qolganini aniqlash uchun."
+        },
+        {
+          "id": 42220,
+          "code": "WX03",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "distroless va scratch image'lar: afzalliklari va debug qilish qiyinchiligi?",
+          "explanation": "scratch — bo'sh image (faqat statik binary); distroless — minimal runtime (CA sertifikatlar, tzdata, nonroot user), shell va paket menejeri yo'q. Kichik hajm, kam CVE, hujum yuzasi kichik. Debug: `kubectl debug --target`, `-debug` tag'li distroless variantlari."
+        },
+        {
+          "id": 42221,
+          "code": "WX04",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`docker save/load` va `docker export/import` farqi?",
+          "explanation": "save/load — image'ni barcha layer, tag va metadata bilan tar'ga (registry'siz ko'chirish, air-gapped muhit). export/import — **container**ning fayl tizimini tekis tar sifatida, tarix va CMD/ENV'siz."
+        },
+        {
+          "id": 42222,
+          "code": "WX05",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`docker inspect` va `docker stats`, `docker events` bilan ishlayotgan container haqida nima bilish mumkin?",
+          "explanation": "inspect — to'liq konfiguratsiya va holat (IP, mount'lar, restart soni, exit code, OOMKilled, health); stats — real vaqtdagi CPU/RAM/IO; events — Docker daemon hodisalari oqimi (start, die, oom, health_status)."
+        },
+        {
+          "id": 42223,
+          "code": "WX06",
+          "level": "S",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker daemon yoki dockerd restart bo'lganda container'lar to'xtamasligi uchun nima qilinadi (`live-restore`)?",
+          "explanation": "Default'da dockerd to'xtasa container'lar ham to'xtaydi. `\"live-restore\": true` — daemon yangilanish/restart paytida container'lar ishlashda davom etadi (containerd-shim ushlab turadi). Swarm rejimida ishlamaydi."
+        },
+        {
+          "id": 42245,
+          "code": "DX1",
+          "level": "S",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Container ichida PID 1 bo'lish nimani anglatadi? Signal va zombie bilan bog'liq qanday maxsus qoidalar bor?",
+          "explanation": "PID 1 uchun kernel default signal handler'larni qo'llamaydi: handler o'rnatilmagan SIGTERM e'tiborsiz qoladi. PID 1 orphan process'larni reap qilishi ham shart."
+        },
+        {
+          "id": 42246,
+          "code": "DX2",
+          "level": "S",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker image'ni qanday \"reproducible\" qilasiz: bir xil source'dan har safar bir xil digest?",
+          "explanation": "Base image'ni digest bilan pin, paket versiyalarini pin, timestamp'ni SOURCE_DATE_EPOCH bilan muzlatish, BuildKit rewrite-timestamp, lockfile."
+        },
+        {
+          "id": 42247,
+          "code": "DX3",
+          "level": "S",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Container ichida Go servis CPU limit `--cpus=2` bilan, lekin host'da 64 core. Qanday muammo bor va qanday tuzatiladi?",
+          "explanation": "Go 1.25 gacha GOMAXPROCS host core soniga teng edi: 64 thread 2 core kvotasida CFS throttling va latency spike beradi. GOMAXPROCS'ni limitga moslash kerak."
+        },
+        {
+          "id": 42248,
+          "code": "DX4",
+          "level": "S",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker registry pull rate limit yoki registry o'chishi production deploy'ni to'xtatdi. Qanday himoyalanasiz?",
+          "explanation": "Pull-through cache / mirror registry, image'larni o'z registry'ga ko'chirish (ECR/Harbor), digest pin, node'larda pre-pull. Tashqi registry critical path'da bo'lmasin."
+        },
+        {
+          "id": 42249,
+          "code": "DX5",
+          "level": "St",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Kompaniya bo'ylab container image standartini qanday belgilaysiz (base image, scanning, signing, ownership)?",
+          "explanation": "Golden base image'lar (owned, patched), CI'da majburiy scan + SBOM + signing, admission'da policy (faqat imzolangan, ichki registry), patch SLA va ownership."
+        },
+        {
+          "id": 42250,
+          "code": "DX6",
+          "level": "St",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker'dan containerd/Podman'ga o'tish (masalan K8s dockershim olib tashlangani) — qanday rejalashtirasiz?",
+          "explanation": "Image'lar OCI bo'lgani uchun o'zgarmaydi; o'zgaradigan narsa runtime'ga bog'liq joylar: docker.sock mount, DinD build, log format, monitoring agentlari, CLI skriptlar."
+        },
+        {
+          "id": 42251,
+          "code": "DX7",
+          "level": "St",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Multi-tenant platformada boshqa jamoalarning ishonchsiz kodini container'da ishlatish kerak. runc yetarlimi?",
+          "explanation": "Yo'q: runc'da barcha container'lar bitta kernel'ni bo'lishadi, kernel CVE = escape. Ishonchsiz kod uchun gVisor/Kata/Firecracker, alohida node pool, qattiq seccomp."
+        },
+        {
+          "id": 42252,
+          "code": "DX8",
+          "level": "St",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Image hajmi va cold start: 2 GB ML image'li servis autoscale paytida 3 daqiqada ko'tarilyapti. Nima qilasiz?",
+          "explanation": "Pull vaqti asosiy sabab. Image'ni bo'lish (model'ni alohida artifact), lazy pulling (stargz/SOCI), node'da pre-pull/cache, layer tartibi, zstd siqish."
+        },
+        {
+          "id": 42253,
+          "code": "DX9",
+          "level": "P",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Container platformasini noldan loyihalashda build, distribute, run va observe qatlamlarida qaysi qarorlar eng qimmat (qaytarib bo'lmaydigan)?",
+          "explanation": "Qaytarib bo'lmaydiganlari: image identity modeli (digest + imzo), registry topologiyasi, multi-tenancy chegarasi (namespace vs cluster vs VM), runtime izolyatsiya darajasi. Tool tanlovi esa arzon o'zgaradi."
+        },
+        {
+          "id": 42254,
+          "code": "DX10",
+          "level": "P",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "\"Hammasini container'ga o'tkazamiz\" taklifi bor. Qaysi workload'lar container uchun yomon nomzod va qanday baholaysiz?",
+          "explanation": "Yomon nomzodlar: kernel/hardware'ga yaqin (DPDK, GPU driver), og'ir stateful DB (operatsion tajriba yo'q bo'lsa), litsenziya host'ga bog'liq, juda kam o'zgaradigan legacy. Baholash: qiymat (deploy tezligi, zichlik) vs xavf va operatsion narx."
         }
       ]
     },
@@ -26130,6 +26405,72 @@
           "section": "t14",
           "question": "`latest` tag bilan deploy qilindi, lekin serverda eski versiya ishlayapti. Nega?",
           "explanation": "Docker lokal latest mavjud bo'lsa qayta pull qilmaydi. latest — oddiy tag, avtomatik yangilanmaydi. Aniq versiya yoki digest ishlat, kerak bo'lsa --pull always."
+        },
+        {
+          "id": 42255,
+          "code": "DX11",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "docker",
+          "section": "t14",
+          "question": "`HEALTHCHECK` muvaffaqiyatsiz, container `unhealthy` — lekin Docker uni qayta ishga tushirmayapti. Nega?",
+          "explanation": "Oddiy dockerd'da HEALTHCHECK faqat status beradi; restart policy faqat process chiqishiga (exit) qaraydi. Unhealthy'da restart Swarm/K8s yoki autoheal kabi tashqi vositada."
+        },
+        {
+          "id": 42256,
+          "code": "DX12",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "docker",
+          "section": "t14",
+          "question": "Container'da `apt-get install` ishlaydi, lekin host'ga ko'chirilgan `.so` / binary boshqa distroda `GLIBC_2.34 not found` beradi. Nega va qanday oldini olasiz?",
+          "explanation": "Dinamik link qilingan binary build qilingan muhitdagi glibc versiyasiga bog'liq. Builder va runtime image bir xil libc'da bo'lishi yoki statik (CGO_ENABLED=0 / musl) build kerak."
+        },
+        {
+          "id": 42257,
+          "code": "DX13",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "docker",
+          "section": "t14",
+          "question": "Container log'lari `docker logs` da bor, lekin app 2 kun ishlagach disk 100% to'ldi. Container o'chirilmagan. Sabab?",
+          "explanation": "Default json-file log driver'da rotation yo'q: /var/lib/docker/containers/<id>/*-json.log cheksiz o'sadi. max-size/max-file yoki local driver kerak."
+        },
+        {
+          "id": 42258,
+          "code": "DX14",
+          "level": "St",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "docker",
+          "section": "t14",
+          "question": "Docker host'da `/var/lib/docker` overlay2 inode'lari tugadi (`No space left on device`, lekin `df -h` 40% bo'sh). Nima bo'ldi va qanday oldini olasiz?",
+          "explanation": "Ko'p kichik faylli image/layer'lar inode'larni tugatdi (`df -i` 100%). Prune, alohida XFS/ext4 (ko'proq inode) disk, image GC siyosati, monitoring df -i."
+        },
+        {
+          "id": 42259,
+          "code": "DX15",
+          "level": "St",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "docker",
+          "section": "t14",
+          "question": "Container'da vaqt zonasi va soat: log'lardagi vaqt host'dan 5 soat farq qiladi, TLS sertifikat esa \"not yet valid\" deydi. Bu ikki muammo bir xilmi?",
+          "explanation": "Yo'q. Timezone — userspace (TZ env, /etc/localtime), faqat ko'rinish. Soat esa kernel'dan, container'da alohida emas — 'not yet valid' host clock (NTP) noto'g'ri ekanini bildiradi."
+        },
+        {
+          "id": 42260,
+          "code": "DX16",
+          "level": "P",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "docker",
+          "section": "t14",
+          "question": "Production'da bitta host'dagi `dockerd` qayta ishga tushirildi (upgrade) va barcha container'lar o'chdi. Tizim darajasida bunday blast radius'ni qanday kamaytirasiz?",
+          "explanation": "`live-restore` bilan container'lar daemon restart'da tirik qoladi. Kattaroq darajada: host bitta failure domain — orchestrator, replicas boshqa host'larda, rolling node upgrade (drain), immutable node'lar."
         }
       ]
     },
@@ -26349,6 +26690,204 @@
           "section": "k2",
           "question": "Compose bilan zero-downtime deploy qanday qilasan?",
           "explanation": "Compose up -d container'ni recreate qiladi — qisqa uzilish. Yechim: reverse proxy (Traefik/nginx) + scale 2 va navbat bilan almashtirish, yoki blue/green ikki service."
+        },
+        {
+          "id": 42208,
+          "code": "RC08",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Server reboot bo'ldi — Compose bilan ishlagan servislar ko'tarilmadi. Nega va qanday tuzatasan?",
+          "explanation": "Compose o'zi daemon emas; restart policy bo'lmasa container reboot'dan keyin turmaydi. `restart: unless-stopped` va docker.service enabled bo'lishi kerak."
+        },
+        {
+          "id": 42209,
+          "code": "RC09",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose up -d` dan keyin `WARN Found orphan containers` va eski service hali ishlayapti, port band. Nima qilasan?",
+          "explanation": "compose.yaml'dan service o'chirilgan yoki nomi o'zgargan — eski container project label bilan qolgan. `docker compose up -d --remove-orphans`. Avval nimani o'chirayotganingni ko'r."
+        },
+        {
+          "id": 42210,
+          "code": "RC10",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `db` healthy, lekin `api` start bo'lishi bilan `connection refused` beradi va yiqiladi. Qanday hal qilasan?",
+          "explanation": "depends_on default faqat start tartibi. `condition: service_healthy` + db'da to'g'ri healthcheck (pg_isready). Plus app ichida retry — prod'da DB qayta ishga tushishi mumkin."
+        },
+        {
+          "id": 42211,
+          "code": "RC11",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose bilan prod serverda `docker compose pull && up -d` qilindi — 20-30 soniya sayt ochilmadi. Qanday qisqartirasan?",
+          "explanation": "up -d container'ni stop → yangi start qiladi; start + warm-up vaqtida downtime. Yechim: oldin pull, healthcheck, reverse proxy (Traefik/nginx) orqali 2 replica navbatma-navbat yoki docker-rollout; jiddiy bo'lsa Swarm/K8s."
+        },
+        {
+          "id": 42212,
+          "code": "RC12",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'dagi Postgres volume'i noto'g'ri `down -v` bilan o'chdi. Nima qilasan va keyin qanday oldini olasan?",
+          "explanation": "Tiklash faqat backup'dan (pg_dump/WAL arxiv). Oldini olish: external volume, alohida backup (pg_dump cron yoki pgBackRest offsite), restore testi, prod'da qo'lda `-v` ishlatmaslik."
+        },
+        {
+          "id": 42261,
+          "code": "DX17",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da volume e'lon qilish: named volume va bind mount yozilishi qanday farq qiladi?",
+          "explanation": "Named volume: `db-data:/var/lib/postgresql/data` + yuqori darajadagi `volumes:` bo'limi; Docker boshqaradi. Bind mount: `./src:/app` — host yo'li, dev uchun."
+        },
+        {
+          "id": 42262,
+          "code": "DX18",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose run` va `docker compose exec` farqi?",
+          "explanation": "`exec` ishlab turgan container ichida buyruq bajaradi. `run` yangi bir martalik container yaratadi (portlar default ochilmaydi), migratsiya yoki skript uchun."
+        },
+        {
+          "id": 42263,
+          "code": "DX19",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose fayl nomi: `docker-compose.yml` va `compose.yaml`, `docker-compose` va `docker compose` farqi?",
+          "explanation": "`compose.yaml` hozirgi tavsiya etilgan nom (eski nom ham o'qiladi). `docker-compose` — eski Python v1 (EOL), `docker compose` — Go'da yozilgan v2 CLI plugin."
+        },
+        {
+          "id": 42264,
+          "code": "DX20",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `restart` policy'lari va `healthcheck` qanday ishlaydi? Unhealthy container qayta ishga tushadimi?",
+          "explanation": "`restart: unless-stopped`/`always`/`on-failure` faqat process exit'ga reaksiya qiladi. healthcheck status beradi va `depends_on: service_healthy` uchun ishlatiladi, lekin unhealthy'da restart yo'q."
+        },
+        {
+          "id": 42265,
+          "code": "DX21",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `extends`, YAML anchor (`x-` extension) va `include` — takrorni qanday kamaytirasiz?",
+          "explanation": "`x-*` + YAML anchor bitta fayl ichida umumiy blok uchun; `extends` boshqa service/fayldan meros; `include` (Compose 2.20+) boshqa compose loyihasini butunicha qo'shadi."
+        },
+        {
+          "id": 42266,
+          "code": "DX22",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose config` nima uchun kerak va CI'da qanday foydalanasiz?",
+          "explanation": "Barcha fayllar, override, .env interpolatsiya va profile'lardan keyingi yakuniy modelni chiqaradi va validatsiya qiladi. CI'da sintaksis/interpolatsiya xatosini deploy'dan oldin ushlaydi."
+        },
+        {
+          "id": 42267,
+          "code": "DX23",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `env_file` va `--env-file` farqi?",
+          "explanation": "`env_file:` service ichidagi container env'iga o'zgaruvchi beradi. `--env-file` (va loyihaning `.env`) esa compose.yaml'ni interpolatsiya qilish uchun — container'ga avtomatik o'tmaydi."
+        },
+        {
+          "id": 42268,
+          "code": "DX24",
+          "level": "M",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da GPU va device'larni container'ga qanday berasiz?",
+          "explanation": "`deploy.resources.reservations.devices` (driver: nvidia, capabilities: [gpu]) — NVIDIA Container Toolkit kerak. Oddiy device uchun `devices: - /dev/ttyUSB0`."
+        },
+        {
+          "id": 42269,
+          "code": "DX25",
+          "level": "S",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose stack'ni bitta VM'da prod'da ishlatyapsiz. Deploy paytida downtime va rollback'ni qanday hal qilasiz?",
+          "explanation": "Image'ni tag/digest bilan pin, `pull` avval, reverse proxy (Traefik/Caddy) orqasida ikki nusxa (blue/green yoki scale 2 → yangi → eski o'chir), healthcheck, rollback = oldingi tag bilan `up -d`."
+        },
+        {
+          "id": 42270,
+          "code": "DX26",
+          "level": "S",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da DB'ni backup qilish va restore'ni test qilish qanday tashkil qilinadi?",
+          "explanation": "Volume'ni ishlab turgan DB'dan nusxalash emas — mantiqiy dump (pg_dump) yoki DB'ning o'z backup vositasi; off-host saqlash; restore'ni muntazam alohida container'da test qilish."
+        },
+        {
+          "id": 42271,
+          "code": "DX27",
+          "level": "S",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose loyihasida service'lar sonini va resurslarni qanday cheklaysiz, bitta servis butun host'ni o'ldirmasligi uchun?",
+          "explanation": "Har service'ga `mem_limit`/`cpus` (yoki `deploy.resources.limits`), `pids_limit`, log rotation, `ulimits`, restart backoff. Host'ga OS va dockerd uchun zaxira qoldirish."
+        },
+        {
+          "id": 42272,
+          "code": "DX28",
+          "level": "St",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Jamoangiz lokal dev uchun Compose ishlatadi, prod esa K8s. Dev/prod parity'ni qanday saqlaysiz?",
+          "explanation": "Bitta image (bir xil Dockerfile/digest) dev va prod'da; config faqat env orqali (12-factor); Compose'ni manba deb emas, dev qulayligi deb ko'rish; integration testlar CI'da prod'ga yaqin muhitda (kind/k3d) ham."
+        },
+        {
+          "id": 42273,
+          "code": "DX29",
+          "level": "St",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da yozilgan 15 servisli tizim o'smoqda. Qachon va qanday Compose'dan orchestrator'ga o'tasiz?",
+          "explanation": "Signallar: bir host yetmaydi, HA kerak (host o'limi = outage), zero-downtime deploy qo'lda skript bo'lib ketgan, ko'p jamoa. Bosqichma-bosqich: avval stateless servislar, state managed servisga."
         }
       ]
     },
@@ -26414,6 +26953,28 @@
           "section": "t15",
           "question": "Bind mount qilingan `node_modules`/vendor papka host'dagisi bilan almashib, ilova ishlamay qoldi. Nega?",
           "explanation": "Bind mount ./:/app image'dagi /app/node_modules ni yashiradi; host'da u yo'q yoki boshqa OS uchun (macOS native modul). Yechim: anonim volume bilan qayta yashirish."
+        },
+        {
+          "id": 42274,
+          "code": "DX30",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "compose",
+          "section": "t15",
+          "question": "`docker compose up -d` ikkinchi marta ishga tushirilganda o'zgarmagan service'lar ham qayta yaratildi. Nega?",
+          "explanation": "Compose konfiguratsiya hash'ini solishtiradi: interpolatsiya qilingan qiymat (masalan `$(date)`, tasodifiy env, o'zgargan `.env`) yoki `pull_policy: always` bilan yangi image digest — hash o'zgaradi va container qayta yaratiladi."
+        },
+        {
+          "id": 42275,
+          "code": "DX31",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "compose",
+          "section": "t15",
+          "question": "Compose'da ikkita loyiha bir xil papka nomidan ishga tushirildi va bir-birining container/volume'larini o'chirib yubordi. Nega?",
+          "explanation": "Project name default papka nomidan olinadi. Ikki xil joydagi `app/` papkasi bir xil loyiha nomini oladi — `down -v` boshqa loyihaning volume'larini ham o'chiradi."
         }
       ]
     },
@@ -26633,6 +27194,435 @@
           "section": "k3",
           "question": "Swarm klasterini backup va disaster recovery qanday qilinadi?",
           "explanation": "Manager'dagi /var/lib/docker/swarm (Raft, secret, config) ni Docker to'xtatib backup qilinadi. Tiklash: yangi node'ga ko'chirib --force-new-cluster. Ilova ma'lumotlari (volume) alohida backup."
+        },
+        {
+          "id": 42213,
+          "code": "RC13",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da service update qilindi, lekin replika'lar `Rejected`/`Pending`, update `paused`. Qanday debug qilasan?",
+          "explanation": "docker service ps --no-trunc xato sababini ko'rsatadi (image pull, resource, constraint, port). update_config failure_action pause bo'lgani uchun to'xtadi. Tuzat yoki `docker service rollback`."
+        },
+        {
+          "id": 42214,
+          "code": "RC14",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Yangi node Swarm'ga join bo'ldi, lekin u yerdagi task'lar boshqa service'larga ulana olmayapti. Nima tekshirasan?",
+          "explanation": "Overlay uchun portlar ochiq bo'lishi kerak: 2377/tcp (manager), 7946/tcp+udp (gossip), 4789/udp (VXLAN), encrypted overlay'da ESP (proto 50). Cloud SG/firewall, MTU."
+        },
+        {
+          "id": 42215,
+          "code": "RC15",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "3 manager'dan 2 tasi o'chdi (quorum yo'q). Qanday tiklaysan?",
+          "explanation": "Qolgan manager'da `docker swarm init --force-new-cluster` — u yagona manager bo'lib, state saqlanadi. Keyin yangi manager'lar join, toq son (3/5). Oldin /var/lib/docker/swarm backup."
+        },
+        {
+          "id": 42216,
+          "code": "RC16",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Node o'chdi, Swarm Postgres task'ini boshqa node'ga ko'chirdi — DB bo'sh holda ko'tarildi. Nima bo'ldi?",
+          "explanation": "Local volume node'ga bog'langan: yangi node'da yangi bo'sh volume yaratildi. Stateful service'ni constraint bilan node'ga pin qil yoki shared/replicated storage; DB'ni Swarm'dan tashqarida (managed) yaxshiroq."
+        },
+        {
+          "id": 42217,
+          "code": "RC17",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm worker join token Slack'da tarqalib ketdi. Nima qilasan?",
+          "explanation": "Token'ni darhol rotate: `docker swarm join-token --rotate worker` (manager ham bo'lsa uni ham). Begona node qo'shilganmi — docker node ls, keraksizini rm. Eski token bilan join'lar endi rad etiladi."
+        },
+        {
+          "id": 42276,
+          "code": "DX32",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm klasterini qanday yaratasiz va node qo'shasiz?",
+          "explanation": "`docker swarm init --advertise-addr <ip>` manager yaratadi va join token beradi; boshqa node'lar `docker swarm join --token <token> <manager>:2377` bilan qo'shiladi."
+        },
+        {
+          "id": 42277,
+          "code": "DX33",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "`docker service ps` va `docker service ls` nimani ko'rsatadi?",
+          "explanation": "`service ls` — service'lar va REPLICAS (masalan 3/3). `service ps <svc>` — har task: qaysi node'da, holati (Running/Failed/Shutdown), xato matni va tarix."
+        },
+        {
+          "id": 42278,
+          "code": "DX34",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da stack fayli (`docker stack deploy -c`) va oddiy Compose fayldan farqi nima?",
+          "explanation": "Format bir xil (Compose spec), lekin stack `build:` ni qo'llamaydi (image registry'da tayyor bo'lishi kerak), `deploy:` bo'limi (replicas, update_config, placement) ishlaydi, `depends_on` e'tiborsiz."
+        },
+        {
+          "id": 42279,
+          "code": "DX35",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da `update_config` parametrlari: `parallelism`, `delay`, `order`, `failure_action`, `monitor` — har biri nima qiladi?",
+          "explanation": "parallelism — bir vaqtda nechta task yangilanadi; delay — partiyalar orasida kutish; order: start-first (avval yangi, keyin eski o'chadi) yoki stop-first; failure_action: pause/rollback/continue; monitor — task'ni muvaffaqiyatli deb hisoblashdan oldin kuzatish vaqti."
+        },
+        {
+          "id": 42280,
+          "code": "DX36",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da `endpoint_mode: vip` va `dnsrr` farqi? Qachon dnsrr kerak?",
+          "explanation": "vip: service bitta virtual IP oladi, IPVS load balance qiladi. dnsrr: DNS barcha task IP'larini qaytaradi, client o'zi tanlaydi — tashqi LB, client-side balancing yoki VIP bilan mos kelmaydigan protokollar uchun."
+        },
+        {
+          "id": 42281,
+          "code": "DX37",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm node'ida disk/memory to'ldi va task'lar boshqa node'larga ko'chdi. Resurs reservation va limit qanday ishlaydi?",
+          "explanation": "`reservations` — scheduler uchun: node'da shuncha bo'sh resurs bo'lmasa task joylashmaydi. `limits` — runtime cgroup chegarasi. Reservation'siz scheduler node'larni haddan tashqari to'ldiradi."
+        },
+        {
+          "id": 42282,
+          "code": "DX38",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da `mode: host` va `mode: ingress` port publish farqi?",
+          "explanation": "ingress: routing mesh — har node'ning portiga kelgan so'rov istalgan task'ga yo'naltiriladi, client IP yo'qoladi. host: port faqat task ishlayotgan node'da ochiladi, client IP saqlanadi, bir node'da bitta task."
+        },
+        {
+          "id": 42283,
+          "code": "DX39",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da node label'lar va `placement.preferences` (spread) bilan AZ bo'ylab taqsimlash qanday qilinadi?",
+          "explanation": "Node'larga `docker node update --label-add zone=a` beriladi; `placement.preferences: - spread: node.labels.zone` task'larni zone'lar bo'ylab teng tarqatadi; `constraints` esa qat'iy filtr."
+        },
+        {
+          "id": 42284,
+          "code": "DX40",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da Raft log va manager node'lar: manager'da workload ishlatish kerakmi? Manager'larni qanday himoyalaysiz?",
+          "explanation": "Prod'da manager'larni drain qilib faqat boshqaruv uchun qoldirish tavsiya etiladi: workload resurs bosimi Raft heartbeat'ni kechiktirib leader election va quorum muammosiga olib keladi. Autolock, TLS, firewall bilan himoya."
+        },
+        {
+          "id": 42285,
+          "code": "DX41",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm overlay network'da servislar orasida vaqti-vaqti bilan ulanish uzilishlari va timeout'lar. Nimalarni tekshirasiz?",
+          "explanation": "MTU (VXLAN 50 bayt overhead, cloud'da MTU kichik), 4789/udp va 7946 portlari firewall'da, IPVS idle connection timeout (900s) uzoq ulanishlarni uzadi, conntrack to'lishi, subnet to'qnashuvi."
+        },
+        {
+          "id": 42286,
+          "code": "DX42",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da secret rotation qanday qilinadi, agar secret o'zgarmas (immutable) bo'lsa?",
+          "explanation": "Secret o'zgartirib bo'lmaydi: yangi nom bilan yaratiladi (`db_pass_v2`), service `--secret-rm` / `--secret-add` bilan yangilanadi (rolling update), eski secret keyin o'chiriladi. Stack'da nomga versiya/hash qo'shiladi."
+        },
+        {
+          "id": 42287,
+          "code": "DX43",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm klasterini upgrade qilish (Docker Engine versiyasi) qanday zero-downtime bajariladi?",
+          "explanation": "Node-by-node: avval worker'lar (drain → upgrade → active), keyin manager'lar bittadan (quorum saqlanishi uchun), leader oxirida. Versiyalar aralash ishlashi qisqa vaqtga ruxsat etiladi."
+        },
+        {
+          "id": 42288,
+          "code": "DX44",
+          "level": "St",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Kichik kompaniyada (3 dasturchi, 10 servis) Swarm ishlatilyapti. Board K8s'ga o'tishni talab qilyapti. Qanday baholaysiz?",
+          "explanation": "Qarorni texnik moda emas, o'lchangan og'riq va narx bo'yicha qil: Swarm hozir qaysi talabni bajara olmayapti? K8s'ning operatsion narxi (odam vaqti), managed variant, ekotizim foydasi va Swarm'ning uzoq muddatli qo'llab-quvvatlanish xavfi."
+        },
+        {
+          "id": 42291,
+          "code": "SW1",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "`docker service scale` va `docker service update --replicas` farqi? Replika sonini qanday o'zgartirasiz?",
+          "explanation": "Ikkalasi ham replika sonini o'zgartiradi. `scale` bir nechta service'ni bitta buyruqda o'zgartira oladi; `update --replicas` boshqa parametrlar bilan birga. Stack'da esa manba — stack fayl."
+        },
+        {
+          "id": 42292,
+          "code": "SW2",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da service discovery: servis nomi va `tasks.<servis>` DNS nomi farqi?",
+          "explanation": "`api` nomi VIP'ga resolve bo'ladi (bitta IP, load balance). `tasks.api` esa har bir task'ning IP'larini qaytaradi — client o'zi tanlashi yoki barcha peer'larni topishi uchun."
+        },
+        {
+          "id": 42293,
+          "code": "SW3",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da job mode (`replicated-job`, `global-job`) nima? Qachon ishlatiladi?",
+          "explanation": "Docker 20.10+ da bir martalik vazifa: task muvaffaqiyatli tugasa qayta ishga tushmaydi. Migratsiya, batch, har node'da bir marta tozalash skripti uchun."
+        },
+        {
+          "id": 42294,
+          "code": "SW4",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "`docker service rollback` nima qiladi?",
+          "explanation": "Service'ni oldingi spec'ga (oldingi image, env, config) qaytaradi. Swarm faqat bitta oldingi versiyani saqlaydi."
+        },
+        {
+          "id": 42295,
+          "code": "SW5",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da Traefik'ni reverse proxy sifatida qanday ishlatasiz (label-based routing)?",
+          "explanation": "Traefik Swarm provider orqali service label'larini o'qiydi va routing qoidalarini avtomatik yaratadi. Label'lar `deploy.labels` da (service darajasi), Traefik manager'da docker.sock bilan yoki socket-proxy orqali ishlaydi."
+        },
+        {
+          "id": 42296,
+          "code": "SW6",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da autoscaling bormi? CPU yuklamasiga qarab replikalarni qanday oshirasiz?",
+          "explanation": "Native autoscaling yo'q. Tashqi tsikl kerak: Prometheus metrikasi → skript/tool (masalan orbiter, swarm-autoscaler) → `docker service scale`. Node autoscaling ham alohida (cloud ASG)."
+        },
+        {
+          "id": 42297,
+          "code": "SW7",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "CI/CD'dan Swarm'ga deploy qanday qilinadi? Manager'ga SSH yoki docker context?",
+          "explanation": "CI image'ni build/push qiladi, keyin manager'ga ulanib `docker stack deploy --with-registry-auth` bajaradi. Ulanish: `DOCKER_HOST=ssh://deploy@manager` yoki docker context, TLS'li 2376. Docker API'ni ochiq tarmoqqa chiqarmaslik."
+        },
+        {
+          "id": 42298,
+          "code": "SW8",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da log'lar: har service uchun log driver va markaziy yig'ish qanday sozlanadi?",
+          "explanation": "`logging:` bo'limida service darajasida driver (json-file/local rotation bilan, fluentd, gelf, loki plugin). `docker service logs` faqat json-file/local/journald bilan ishlaydi. Markaziy yig'ish odatda global agent (Promtail/Fluent Bit) bilan."
+        },
+        {
+          "id": 42299,
+          "code": "SW9",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da named volume va stateful service: task boshqa node'ga ko'chsa ma'lumot nima bo'ladi? Qanday hal qilinadi?",
+          "explanation": "Default `local` volume node'ga bog'liq — task boshqa node'da bo'sh volume bilan ko'tariladi. Yechim: constraint bilan node'ga bog'lash, tarmoq storage (NFS, cloud volume plugin / CSI — Docker 23+ da Swarm CSI), yoki state'ni Swarm'dan tashqarida saqlash."
+        },
+        {
+          "id": 42300,
+          "code": "SW10",
+          "level": "M",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm configs: `docker config` bilan nginx.conf'ni qanday berasiz va yangilaysiz?",
+          "explanation": "Config — immutable, Raft'da saqlanadigan fayl, task'ga fayl sifatida mount qilinadi (shifrlanmagan, secret'dan farqi). Yangilash = yangi nomli config + service update. Stack'da nomga versiya/hash qo'shiladi."
+        },
+        {
+          "id": 42301,
+          "code": "SW11",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'ning ichki arxitekturasi: orchestrator, allocator, scheduler, dispatcher qanday ishlaydi?",
+          "explanation": "Manager'da desired state Raft'da. Orchestrator spec'ni task'larga aylantiradi, allocator IP/network beradi, scheduler task'ni node'ga biriktiradi, dispatcher worker'larga task beradi va heartbeat oladi. Worker agent task'ni containerd orqali ishga tushiradi."
+        },
+        {
+          "id": 42302,
+          "code": "SW12",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm mTLS: node sertifikatlari, root CA rotation va sertifikat muddati qanday boshqariladi?",
+          "explanation": "Swarm o'z CA'sini yaratadi; har node mTLS sertifikat oladi, default 90 kunda avtomatik yangilanadi. `docker swarm ca --rotate` root CA'ni almashtiradi (CA kaliti sizib chiqsa). Tashqi CA ham ulanadi."
+        },
+        {
+          "id": 42303,
+          "code": "SW13",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da bir nechta jamoa bitta klasterda ishlaydi. Izolyatsiya (network, resurs, ruxsat) qanday ta'minlanadi?",
+          "explanation": "Swarm'da namespace/RBAC yo'q (faqat Mirantis MKE'da). Izolyatsiya: alohida overlay network'lar (encrypted), node label bilan node pool, reservation/limit. Lekin manager'ga kirgan har kim hamma narsani boshqaradi — haqiqiy multi-tenant uchun alohida klaster."
+        },
+        {
+          "id": 42304,
+          "code": "SW14",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da zero-downtime deploy uchun nima kerak: `start-first` yetarlimi?",
+          "explanation": "Yetarli emas: healthcheck (task healthy bo'lgunga qadar trafik bermaslik), graceful shutdown (SIGTERM, `stop_grace_period`), routing mesh/IPVS'dan chiqish vaqti, connection draining, backward-compatible DB migratsiya kerak."
+        },
+        {
+          "id": 42305,
+          "code": "SW15",
+          "level": "S",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm manager'larida yuqori CPU/xotira va `docker service ls` sekin. Sabablari va yechimi?",
+          "explanation": "Raft holati juda katta: ko'p task tarixi, ko'p service/secret, tez-tez update. Yoki manager'da workload. Yechim: `task-history-limit` kamaytirish, workload'ni drain, manager'larga tez disk, keraksiz stack'larni tozalash."
+        },
+        {
+          "id": 42306,
+          "code": "SW16",
+          "level": "St",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm klasterini ko'p region (multi-region) bo'ylab yoyish kerakmi? Qanday DR strategiya tanlaysiz?",
+          "explanation": "Bitta Swarm klasterini regionlar bo'ylab yoyma: Raft latency'ga sezgir, region uzilishi quorum'ni buzadi. Har regionda alohida klaster + global trafik boshqaruvi (DNS/GSLB) + ma'lumot replikatsiyasi. DR = qayta deploy qilish imkoniyati (stack fayl git'da) + ma'lumot."
+        },
+        {
+          "id": 42307,
+          "code": "SW17",
+          "level": "St",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da secret'larni boshqarish: Swarm secret yetarlimi yoki Vault kerakmi?",
+          "explanation": "Swarm secret: Raft'da shifrlangan, tmpfs orqali beriladi, lekin rotation, audit, dinamik credential, access policy yo'q. Kichik tizimga yetarli; compliance, ko'p jamoa, qisqa muddatli credential kerak bo'lsa Vault (yoki cloud secret manager) + Swarm secret'ni faqat bootstrap uchun."
+        },
+        {
+          "id": 42308,
+          "code": "SW18",
+          "level": "St",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm yoki Nomad yoki managed K8s yoki ECS: 30 kishilik jamoa uchun platforma tanlash mezonlarini qanday tuzasiz?",
+          "explanation": "Mezonlar: jamoaning operatsion quvvati, workload turlari (stateless/stateful/batch/GPU), ekotizim ehtiyoji, cloud strategiyasi (lock-in), yollash bozori, narx (odam vaqti + infra), chiqish narxi. Qarorni og'irlikli matritsa va pilot bilan qil."
+        },
+        {
+          "id": 42309,
+          "code": "SW19",
+          "level": "St",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'dan Kubernetes'ga migratsiyani qanday rejalashtirasiz (50 servis, zero-downtime talab)?",
+          "explanation": "Bosqichma-bosqich, strangler pattern: ikkala platforma parallel, umumiy edge (LB/proxy) orqali trafikni servis-servis ko'chirish. Avval observability va CI/CD, keyin stateless servislar, state oxirida yoki managed. Har qadamda rollback = trafikni qaytarish."
+        },
+        {
+          "id": 42310,
+          "code": "SW20",
+          "level": "P",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm kabi \"oddiy\" orchestrator va K8s kabi kengaytiriladigan platforma o'rtasidagi tanlov — bu aslida qaysi chuqurroq arxitektura qarori?",
+          "explanation": "Bu qaror: platforma 'mahsulot' (cheklangan, fikrlangan, kam variant) yoki 'framework' (kengaytiriladigan, API/CRD, o'z platformangizni qurasiz). Swarm — opinionated tool, K8s — platforma qurish uchun platforma. Tashkilot o'zining platforma jamoasiga investitsiya qiladimi — shu asosiy savol."
+        },
+        {
+          "id": 42311,
+          "code": "SW21",
+          "level": "P",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Siz tizim arxitektorisiz: nega Swarm, K8s va boshqa orchestrator'lar \"desired state + reconciliation loop\" modelini tanlagan? Bu modelning chegaralari qayerda?",
+          "explanation": "Imperativ buyruqlar partial failure'da noaniq holat qoldiradi; deklarativ desired state + doimiy reconciliation esa har qanday nosozlikdan keyin tizimni o'zi tiklaydi (level-triggered). Chegaralari: eventual consistency, kuzatish qiyin, tartib va bir martalik amallar (migratsiya), state'li tizimlar uchun noto'liq."
         }
       ]
     },
@@ -26698,6 +27688,50 @@
           "section": "t16",
           "question": "Node qayta ulangandan keyin task'lar notekis: bitta node'da hammasi, yangisida hech narsa. Nega?",
           "explanation": "Swarm ishlab turgan task'larni avtomatik qayta balanslamaydi; faqat yangi task'larni joylaydi. docker service update --force bilan qayta taqsimlanadi."
+        },
+        {
+          "id": 42289,
+          "code": "DX45",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "swarm",
+          "section": "t16",
+          "question": "Swarm service'ni yangilagandan keyin image yangi tag bilan pull bo'lmadi — eski versiya ishlayapti. Sabab?",
+          "explanation": "Swarm tag'ni deploy paytida digest'ga resolve qiladi va pin qiladi. Bir xil tag qayta push qilinsa, `service update` konfiguratsiya o'zgarmagani uchun hech narsa qilmaydi; `--with-registry-auth` bo'lmasa worker digest'ni olmay qolishi ham mumkin."
+        },
+        {
+          "id": 42290,
+          "code": "DX46",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "swarm",
+          "section": "t16",
+          "question": "Swarm'da service `global` mode'da, lekin yangi qo'shilgan node'da task ishga tushmadi. Nega?",
+          "explanation": "Global service har mos node'da bitta task — lekin `constraints` (label/role) yangi node'ga mos kelmasa, node `drain`/`pause` bo'lsa, reservation yetmasa yoki image arxitekturasi (arm64) mos kelmasa task joylashmaydi."
+        },
+        {
+          "id": 42312,
+          "code": "SW22",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "swarm",
+          "section": "t16",
+          "question": "Swarm'da healthcheck'li service update qilinmoqda va har doim rollback bo'lyapti, lekin yangi versiya qo'lda ishga tushirilsa ishlaydi. Sabab?",
+          "explanation": "Ko'pincha `update_config.monitor` healthcheck'ning `start_period + interval*retries` dan qisqa: task hali `starting` holatida yoki birinchi tekshiruvlar yiqilganda Swarm uni failure deb hisoblaydi. Yoki healthcheck buyrug'i yangi image'da yo'q (distroless)."
+        },
+        {
+          "id": 42313,
+          "code": "SW23",
+          "level": "S",
+          "type": "card",
+          "topic": "Infra gotcha",
+          "domain": "swarm",
+          "section": "t16",
+          "question": "Overlay network'da IP manzillar tugadi: yangi task'lar `Pending` (\"could not allocate IP\"). Nega?",
+          "explanation": "Default overlay subnet /24 (~256 manzil); har task, har VIP va har node'ning load-balancer endpoint'i IP oladi. Ko'p replika yoki rolling update (start-first'da ikki baravar) bilan tugaydi. Yechim: kattaroq subnet bilan network yaratish."
         }
       ]
     },
@@ -27971,6 +29005,94 @@
           "section": "w8",
           "question": "Istio sidecar va Ambient mesh farqi?",
           "explanation": "Sidecar rejimi — har pod'ga Envoy: to'liq L7, lekin har pod'ga CPU/RAM narxi, pod restart bilan upgrade, latency. Ambient — sidecar'siz: node darajasida ztunnel (L4 mTLS, identity) va kerak bo'lsa namespace'ga waypoint proxy (L7). Narx va operatsiya yuki ancha kam."
+        },
+        {
+          "id": 42224,
+          "code": "WD21",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Senariy: deploy'dan keyin yangi pod'lar Ready bo'lmayapti, rollout osilib qoldi, eski pod'lar hali trafik olyapti. Qanday harakat qilasiz?",
+          "explanation": "Avval foydalanuvchiga ta'sir yo'qligini tasdiqlang (eski pod'lar xizmat qilyapti, maxUnavailable=0 ishlagan). Keyin `rollout status`, yangi pod `describe`/loglari bilan sababni toping (readiness, config, dependency). Tez tuzatib bo'lmasa — `rollout undo` yoki Git revert; keyin root cause."
+        },
+        {
+          "id": 42225,
+          "code": "WD22",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Senariy: cluster'da birdaniga ko'p pod Pending, Cluster Autoscaler node qo'shmayapti. Tekshiruv tartibi?",
+          "explanation": "Pending sababini event'dan oling; keyin autoscaler loglari: max node limitiga yetganmi, instance turi/AZ'da sig'im yo'qmi (InsufficientInstanceCapacity), pod biror node group'ga umuman sig'maydimi (juda katta requests, taint/affinity), subnet IP tugaganmi, cloud quota."
+        },
+        {
+          "id": 42226,
+          "code": "WD23",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Senariy: bitta node NotReady bo'ldi. Nima bo'ladi va nima qilasiz?",
+          "explanation": "Kubelet heartbeat kelmaydi -> node NotReady; ~5 daqiqadan keyin (`tolerationSeconds: 300`) pod'lar evict qilinib boshqa node'larda qayta yaratiladi (Deployment). StatefulSet pod'i avtomatik ko'chmaydi (ikki nusxa xavfi). Node'da: kubelet, containerd, disk/memory pressure, tarmoq."
+        },
+        {
+          "id": 42227,
+          "code": "WD24",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Senariy: CoreDNS so'rovlarida timeout, ilovalar tasodifiy 'i/o timeout' xatosini beryapti. Diagnostika va yechim?",
+          "explanation": "Tez-tez sabablar: CoreDNS replica kam/CPU throttling, conntrack race (UDP, ayniqsa A va AAAA parallel so'rov), ndots:5 tufayli ko'p keraksiz so'rov, upstream DNS limiti (AWS VPC resolver ~1024 pps/ENI). Yechim: NodeLocal DNSCache, CoreDNS scale, ndots pasaytirish, cache."
+        },
+        {
+          "id": 42228,
+          "code": "WD25",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Senariy: prod namespace'da kimdir `kubectl delete deployment` qildi. Qanday tiklaysiz va keyin nima o'zgartirasiz?",
+          "explanation": "GitOps bo'lsa — Argo CD/Flux o'zi qayta yaratadi (self-heal) yoki sync tugmasi. Bo'lmasa — Git'dagi manifest yoki Helm `rollback`/`upgrade`, Velero backup. Keyin: kim, nega — audit log; RBAC'dan prod write'ni olib tashlash, delete uchun himoya."
+        },
+        {
+          "id": 42229,
+          "code": "WD26",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Senariy: pod'lar tasodifan qayta ishga tushyapti, exit code 137, lekin memory grafikda limitdan past. Sabab?",
+          "explanation": "137 = SIGKILL. Memory metrikasi scrape oralig'ida qisqa pikni ko'rmasligi mumkin (OOM tez sodir bo'ladi). Boshqa sabablar: liveness probe fail (kubelet o'ldiradi), node darajasidagi OOM yoki eviction, preStop/grace period tugashi. `describe pod` Reason (OOMKilled / Error) va event'lar farqlaydi."
+        },
+        {
+          "id": 42230,
+          "code": "WD27",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Senariy: Ingress orqali ba'zi so'rovlar 413 yoki 499/504 qaytaryapti, to'g'ridan pod'ga yuborilganda ishlaydi. Nimaga qaraysiz?",
+          "explanation": "Proxy qatlami cheklovlari: 413 — `proxy-body-size` (nginx default 1m); 504 — `proxy-read-timeout` (60s); 499 — client (yoki oldingi LB) ulanishni proxy javob berishidan oldin yopgan — odatda LB idle timeout ingress timeout'dan qisqa. Har qatlamdagi timeout'lar zanjiri mos bo'lishi kerak."
+        },
+        {
+          "id": 42231,
+          "code": "WD28",
+          "level": "St",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Platform jamoasi sifatida 30 ta jamoaga Kubernetes'ni qanday 'mahsulot' qilib berasiz?",
+          "explanation": "Golden path: tayyor shablon (servis skeleti + Helm chart/Kustomize base + CI + GitOps + dashboard + alert'lar), self-service (namespace, DB, secret so'rovi kod orqali), guardrail'lar (policy-as-code, quota, PSS) va jamoalarga K8s ichki tafsilotlarini minimal ko'rsatish. Muvaffaqiyat — adoption, lead time va incident metrikalari bilan o'lchanadi."
         }
       ]
     },
@@ -30946,6 +32068,50 @@
           "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
           "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
           "source": "https://sre.google/sre-book/table-of-contents/"
+        },
+        {
+          "id": 42236,
+          "code": "WI03",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Senariy: CI pipeline 45 daqiqa davom etadi, jamoa kamroq commit qilyapti. Qanday tezlashtirasiz?",
+          "explanation": "Avval o'lchang: qaysi bosqich qancha (critical path). Keyin: parallel job'lar, dependency va Docker layer cache, faqat o'zgargan qismni test/build (affected), testlarni shard'lash, flaky va sekin testlarni ajratish, kuchliroq yoki doimiy runner'lar. Maqsad — PR feedback 10 daqiqadan kam."
+        },
+        {
+          "id": 42237,
+          "code": "WI04",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Senariy: production deploy'dan keyin 5xx o'sdi. Rollback yoki roll-forward — qanday qaror qilasiz?",
+          "explanation": "Default — tezkor rollback (ma'lum yaxshi holatga qaytish), ayniqsa sabab noaniq bo'lsa. Roll-forward faqat: sabab aniq, fix kichik va tez, yoki rollback imkonsiz (orqaga mos kelmaydigan DB migration, tashqi kontrakt o'zgargan). Qaror mezonlari oldindan runbook'da yozilgan bo'lishi kerak."
+        },
+        {
+          "id": 42238,
+          "code": "WI05",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Deployment pipeline'ida secret'lar va credential'larni qanday himoya qilasiz?",
+          "explanation": "Uzoq muddatli kalitlar yo'q: cloud'ga OIDC federation (qisqa muddatli token), secret'lar secret manager'da va faqat kerakli job/environment'ga, PR'lardan (fork) secret'larga kirish yo'q, log'da maskalash, runner izolyatsiyasi, uchinchi tomon action'larni SHA bilan pin qilish."
+        },
+        {
+          "id": 42239,
+          "code": "WI06",
+          "level": "St",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "DORA metrikalari nima va ularni jamoani yaxshilash uchun qanday ishlatasiz (va ishlatmaysiz)?",
+          "explanation": "Deployment frequency, lead time for changes, change failure rate, time to restore (MTTR) — yetkazib berish tezligi va barqarorligini o'lchaydi. Ular tizim va jarayonni yaxshilash uchun, jamoalarni solishtirish yoki jazolash uchun emas (Goodhart qonuni)."
         }
       ]
     },
@@ -38190,6 +39356,39 @@
           "section": "w9",
           "question": "SLO burn rate alert nima va oddiy threshold alertdan nega yaxshi?",
           "explanation": "Burn rate — error budget qanchalik tez sarflanayotgani (1 = oy oxirida aynan tugaydi). Multi-window alert: tez yonish (1 soatda 14.4x) — page, sekin (6 soatda 6x) — ticket. Qisqa spike'lar uchun shovqin yo'q, haqiqiy muammo esa tez ushlanadi."
+        },
+        {
+          "id": 42240,
+          "code": "WL11",
+          "level": "S",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Senariy: tunda alert: p99 latency 3 barobar oshdi, error rate normal. On-call sifatida birinchi 15 daqiqa?",
+          "explanation": "Ta'sirni baholang (qaysi endpoint, qancha foydalanuvchi, SLO burn), so'nggi o'zgarishlarni tekshiring (deploy, config, trafik), RED/USE dashboard'dan qaysi qatlam sekinligini (trace) aniqlang, dependency'larni (DB, cache, tashqi API) tekshiring. Containment (rollback, scale) — avval, root cause — keyin. Kommunikatsiya: incident kanali, status."
+        },
+        {
+          "id": 42241,
+          "code": "WL12",
+          "level": "S",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Incident management: rollar (Incident Commander, comms), severity darajalari va postmortem qanday tashkil qilinadi?",
+          "explanation": "Severity ta'sir bo'yicha (SEV1 — ko'p foydalanuvchi/pul yo'qotish). Rollar: Incident Commander (koordinatsiya, qaror), Ops/tech lead (tuzatish), Comms (stakeholder va status page), scribe (vaqt chizig'i). Postmortem — blameless: vaqt chizig'i, ta'sir, root cause va contributing factors, egasi va muddati bor action item'lar."
+        },
+        {
+          "id": 42242,
+          "code": "WL13",
+          "level": "St",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Observability xarajati daromaddan tez o'syapti (log, metrika, trace). Qanday optimallashtirasiz?",
+          "explanation": "Har signalning qiymatini o'lchang: kim ishlatadi, qaysi alert/dashboard. Log: DEBUG o'chirish, sampling, qisqa retention + arxiv (S3), keraksiz maydonlar. Metrika: kardinallik, ishlatilmaydigan metrikalarni drop, recording rules. Trace: tail sampling. Tiered storage va vendor'dan open-source'ga (yoki aksincha) ko'chishni TCO bo'yicha baholash."
         }
       ]
     },
@@ -44186,6 +45385,50 @@
           "section": "w5",
           "question": "Ko'p AZ'li yuqori mavjudlikdagi (HA) web arxitekturani AWS'da qanday qurasiz?",
           "explanation": "ALB (ko'p AZ) → ASG yoki EKS (kamida 2-3 AZ) → RDS Multi-AZ + read replica, ElastiCache, S3 + CloudFront. Har AZ'da NAT GW. Stateless app, health check, backup va DR rejasi."
+        },
+        {
+          "id": 42232,
+          "code": "WC31",
+          "level": "S",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Senariy: AWS access key GitHub'ga oqib ketdi va kimdir EC2'larda crypto-miner ishga tushirdi. Incident response tartibi?",
+          "explanation": "Containment birinchi: kalitni darhol deactivate qiling, sessiyalarni bekor qiling (inline deny policy `aws:TokenIssueTime`), begona resurslarni to'xtating (snapshot olib). Keyin CloudTrail bilan ko'lamni aniqlash, persistence (yangi IAM user/role, kalitlar) qidirish, tozalash, AWS Support bilan billing."
+        },
+        {
+          "id": 42233,
+          "code": "WC32",
+          "level": "S",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Senariy: RDS CPU 100%, ilova sekin. Birinchi qadamlar va uzoq muddatli yechim?",
+          "explanation": "Avval qaysi so'rov yuklayotganini toping (Performance Insights / `pg_stat_activity`, `pg_stat_statements`), yangi deploy yoki trafik o'zgarishi bilan bog'lang. Tez choralar: og'ir so'rovni to'xtatish, feature flag, read replica'ga o'qishni ko'chirish. Keyin: indeks/so'rov tuzatish, connection pooling, kerak bo'lsa instance kattalashtirish."
+        },
+        {
+          "id": 42234,
+          "code": "WC33",
+          "level": "S",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Senariy: bitta AZ ishdan chiqdi. Arxitekturangiz omon qoldimi — nimalarni oldindan tekshirgan bo'lishingiz kerak?",
+          "explanation": "Har qatlam kamida 2-3 AZ'da va qolgan AZ'lar to'liq yukni ko'tara oladimi (N+1 sig'im): ALB, ASG/node group'lar, NAT GW har AZ'da, RDS Multi-AZ, ElastiCache replica boshqa AZ'da, EBS'ga bog'liq stateful pod'lar. Game day bilan amalda sinalgan bo'lishi kerak."
+        },
+        {
+          "id": 42235,
+          "code": "WC34",
+          "level": "St",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Cloud xarajati yiliga 40% o'syapti. FinOps jarayonini qanday quriladi?",
+          "explanation": "Ko'rinish (tag/account bo'yicha xarajat egasi), mas'uliyat (jamoalar o'z budjeti va unit cost'ini ko'radi), optimallashtirish (rightsizing, commitments, arxitektura) va boshqaruv (budget alert, policy). Maqsad xarajatni kamaytirish emas, unit economics (1 buyurtma narxi) ni nazorat qilish."
         }
       ]
     },

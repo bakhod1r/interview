@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-02T17:01:32.917Z",
-  "total": 4563,
+  "generatedAt": "2026-10-02T17:21:44.853Z",
+  "total": 4676,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -559,7 +559,7 @@
       "id": "v20",
       "name": "Server bilan ishlash",
       "domain": "linux",
-      "count": 44,
+      "count": 46,
       "file": "sections/v20-server-ops.json"
     },
     {
@@ -615,7 +615,7 @@
       "id": "k1",
       "name": "Docker basics",
       "domain": "docker",
-      "count": 37,
+      "count": 60,
       "file": "sections/k1-docker.json"
     },
     {
@@ -629,35 +629,35 @@
       "id": "t14",
       "name": "Docker gotchas",
       "domain": "docker",
-      "count": 9,
+      "count": 15,
       "file": "sections/t14-docker-gotchas.json"
     },
     {
       "id": "k2",
       "name": "Docker Compose",
       "domain": "compose",
-      "count": 19,
+      "count": 37,
       "file": "sections/k2-docker-compose.json"
     },
     {
       "id": "t15",
       "name": "Docker Compose gotchas",
       "domain": "compose",
-      "count": 5,
+      "count": 7,
       "file": "sections/t15-compose-gotchas.json"
     },
     {
       "id": "k3",
       "name": "Docker Swarm",
       "domain": "swarm",
-      "count": 19,
+      "count": 58,
       "file": "sections/k3-docker-swarm.json"
     },
     {
       "id": "t16",
       "name": "Docker Swarm gotchas",
       "domain": "swarm",
-      "count": 5,
+      "count": 9,
       "file": "sections/t16-swarm-gotchas.json"
     },
     {
@@ -685,7 +685,7 @@
       "id": "w8",
       "name": "K8s security & troubleshooting",
       "domain": "k8s",
-      "count": 32,
+      "count": 40,
       "file": "sections/w8-k8s-security-debug.json"
     },
     {
@@ -720,7 +720,7 @@
       "id": "i2",
       "name": "CI/CD & deploy",
       "domain": "cicd",
-      "count": 40,
+      "count": 44,
       "file": "sections/i2-ci-cd-deploy.json"
     },
     {
@@ -825,7 +825,7 @@
       "id": "w9",
       "name": "Logs, tracing & SLO",
       "domain": "obs",
-      "count": 10,
+      "count": 13,
       "file": "sections/w9-logs-tracing-slo.json"
     },
     {
@@ -902,7 +902,7 @@
       "id": "w5",
       "name": "AWS basics",
       "domain": "cloud",
-      "count": 30,
+      "count": 34,
       "file": "sections/w5-aws-basics.json"
     },
     {
