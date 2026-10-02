@@ -44,6 +44,17 @@
       "explanation": "Vault — markazlashgan secret ombori: shifrlangan saqlash, kirish policy bilan, audit log, versiya, va dynamic secret (har ilovaga vaqtinchalik DB login). .env — shifrlanmagan, audit yo'q, aylantirish qo'lda."
     },
     {
+      "id": 33416,
+      "code": "WI01",
+      "level": "J",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "CI'da matrix build va cache nima uchun kerak?",
+      "explanation": "Matrix — bitta job'ni bir nechta kombinatsiyada (Go versiyalari, OS, arxitektura) parallel ishga tushirish. Cache — dependency'lar (Go modules, npm, Docker layer) ni build'lar orasida saqlash: pipeline tezlashadi."
+    },
+    {
       "id": 2014,
       "code": "I15",
       "level": "M",
@@ -120,6 +131,61 @@
       "section": "i2",
       "question": "Ilova Vault'ga qanday autentifikatsiya qiladi? \"Secret zero\" muammosi nima?",
       "explanation": "Vault'dan secret olish uchun ham credential kerak — bu secret zero. Yechim: platforma identitetidan foydalanish — Kubernetes auth (ServiceAccount token), AWS IAM auth, CI'da OIDC (JWT). Statik token qo'yilmaydi."
+    },
+    {
+      "id": 33417,
+      "code": "WI02",
+      "level": "M",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "SAST, DAST, SCA va SonarQube quality gate — pipeline'da qayerda turadi?",
+      "explanation": "SAST — manba kodni statik tahlil (Semgrep, CodeQL, gosec); SCA — dependency zaifliklari va litsenziya (Dependabot, Trivy, govulncheck); DAST — ishlayotgan ilovaga tashqaridan hujum (OWASP ZAP), staging'da. SonarQube — sifat va xavfsizlik metrikalari, quality gate PR'ni bloklaydi."
+    },
+    {
+      "id": 33446,
+      "code": "SV03",
+      "level": "M",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Conventional Commits va semantic-release / release-please: versiya va changelog qanday avtomatlashadi?",
+      "explanation": "Commit xabari formati (`feat:`, `fix:`, `feat!:`) tool'ga keyingi SemVer'ni aniqlash imkonini beradi: fix → PATCH, feat → MINOR, BREAKING → MAJOR. CI tag, changelog va release'ni o'zi yaratadi."
+    },
+    {
+      "id": 33447,
+      "code": "SV04",
+      "level": "M",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Renovate / Dependabot nima va dependency yangilashni qanday xavfsiz avtomatlashtirasiz?",
+      "explanation": "Bot dependency, base image, GitHub Action, Helm chart, Terraform provider versiyalarini kuzatib PR ochadi. CI testdan o'tsa patch'larni automerge, major'larni qo'lda. Eskirgan dependency — xavfsizlik qarzi."
+    },
+    {
+      "id": 33448,
+      "code": "SV05",
+      "level": "M",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Preview (ephemeral) environment nima va qanday quriladi?",
+      "explanation": "Har PR uchun vaqtinchalik to'liq muhit (alohida namespace + URL): reviewer va QA o'zgarishni jonli ko'radi. PR yopilganda avtomatik o'chiriladi. Narx va data (seed) asosiy muammo."
+    },
+    {
+      "id": 33470,
+      "code": "SV06",
+      "level": "M",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "DORA metrikalari nima va DevOps samaradorligini qanday o'lchaysiz?",
+      "explanation": "To'rt metrika: deployment frequency, lead time for changes, change failure rate, time to restore (MTTR). Birinchi ikkitasi — tezlik, keyingi ikkitasi — barqarorlik. Yaxshi jamoalar ikkalasida ham kuchli — tezlik va ishonchlilik bir-biriga zid emas."
     },
     {
       "id": 2016,
@@ -265,6 +331,72 @@
       "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
     },
     {
+      "id": 33471,
+      "code": "SV07",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Internal tool / platformani o'zimiz quramizmi yoki managed servis olamizmi (build vs buy)? Qanday qaror qilasiz?",
+      "explanation": "Asosiy savol: bu bizning raqobat ustunligimizmi? Yo'q bo'lsa — managed. Hisoblanadi: umumiy egalik narxi (TCO: odam vaqti, on-call, yangilash), vendor lock-in, talablar (compliance, data joylashuvi), jamoa ko'nikmasi va masshtab."
+    },
+    {
+      "id": 33496,
+      "code": "SV08",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Sigstore: cosign keyless signing, Fulcio va Rekor qanday ishlaydi?",
+      "explanation": "Keyless: CI OIDC token (GitHub Actions identity) bilan Fulcio'dan 10 daqiqalik sertifikat oladi, image'ni vaqtinchalik kalit bilan imzolaydi, imzo Rekor (ochiq transparency log)ga yoziladi. Tekshirishda: \"bu image aynan shu repo'ning shu workflow'idan imzolangan\" — uzoq yashaydigan kalit saqlash shart emas."
+    },
+    {
+      "id": 33506,
+      "code": "SV09",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "SBOM nima? CycloneDX va SPDX, VEX nima uchun kerak?",
+      "explanation": "SBOM — artefakt ichidagi barcha komponentlar va versiyalar ro'yxati. Yangi CVE chiqsa (Log4Shell kabi) \"qaysi image'larimizda bor?\" savoliga daqiqalarda javob beradi. CycloneDX (OWASP, xavfsizlikka yo'naltirilgan) va SPDX (Linux Foundation, litsenziyaga kuchli) — formatlar. VEX — \"bu CVE bizga ta'sir qilmaydi, sababi...\" degan bayonot."
+    },
+    {
+      "id": 33507,
+      "code": "SV10",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "SLSA darajalari nima va hermetic/reproducible build nega muhim?",
+      "explanation": "SLSA — supply chain kafolatlari darajalari: L1 — provenance (qanday build qilingani hujjati) bor; L2 — hosted build platformasi imzolagan provenance; L3 — build izolyatsiyalangan, provenance soxtalashtirib bo'lmaydi. Hermetic build — tarmoqsiz, faqat e'lon qilingan input'lar bilan; reproducible — bir xil input → bit-bit bir xil natija."
+    },
+    {
+      "id": 33508,
+      "code": "SV11",
+      "level": "S",
+      "type": "card",
+      "topic": "CI/CD",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Tekton nima va GitHub Actions/GitLab CI'dan farqi?",
+      "explanation": "Tekton — Kubernetes-native CI/CD framework: Task, Pipeline, PipelineRun CRD'lar, har step — container. Platforma jamoasi o'z CI platformasini qurish uchun (OpenShift Pipelines asosi). GitHub Actions/GitLab CI — tayyor mahsulot, UI va ekotizim bilan."
+    },
+    {
+      "id": 33509,
+      "code": "SV12",
+      "level": "S",
+      "type": "card",
+      "topic": "Secrets",
+      "domain": "cicd",
+      "section": "i2",
+      "question": "Vault dynamic secrets nima? Hardcoded DB parollaridan qanday migratsiya qilasiz?",
+      "explanation": "Dynamic secret — Vault har so'rovga yangi, TTL'li DB user yaratadi va muddati tugasa o'zi o'chiradi. Oqib ketgan credential tez eskiradi, har ilova/pod alohida user — audit aniq. Migratsiya bosqichma-bosqich: avval statik secret'ni Vault KV'ga, keyin dynamic'ga."
+    },
+    {
       "id": 2018,
       "code": "I19",
       "level": "St",
@@ -319,28 +451,6 @@
       "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
       "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
       "source": "https://sre.google/sre-book/table-of-contents/"
-    },
-    {
-      "id": 33416,
-      "code": "WI01",
-      "level": "J",
-      "type": "card",
-      "topic": "CI/CD",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "CI'da matrix build va cache nima uchun kerak?",
-      "explanation": "Matrix — bitta job'ni bir nechta kombinatsiyada (Go versiyalari, OS, arxitektura) parallel ishga tushirish. Cache — dependency'lar (Go modules, npm, Docker layer) ni build'lar orasida saqlash: pipeline tezlashadi."
-    },
-    {
-      "id": 33417,
-      "code": "WI02",
-      "level": "M",
-      "type": "card",
-      "topic": "CI/CD",
-      "domain": "cicd",
-      "section": "i2",
-      "question": "SAST, DAST, SCA va SonarQube quality gate — pipeline'da qayerda turadi?",
-      "explanation": "SAST — manba kodni statik tahlil (Semgrep, CodeQL, gosec); SCA — dependency zaifliklari va litsenziya (Dependabot, Trivy, govulncheck); DAST — ishlayotgan ilovaga tashqaridan hujum (OWASP ZAP), staging'da. SonarQube — sifat va xavfsizlik metrikalari, quality gate PR'ni bloklaydi."
     }
   ]
 }

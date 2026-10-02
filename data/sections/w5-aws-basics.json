@@ -73,83 +73,6 @@
       "explanation": "Security Group — instance/ENI darajasida, stateful (javob trafik avtomatik ruxsat), faqat allow qoidalar. NACL — subnet darajasida, stateless (kirish va chiqish alohida), allow va deny, tartib raqami bilan."
     },
     {
-      "id": 33210,
-      "code": "WC07",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "ALB va NLB farqi? Qachon qaysi biri?",
-      "explanation": "ALB — L7 (HTTP/HTTPS): path/host routing, TLS termination, WAF, gRPC. NLB — L4 (TCP/UDP/TLS): juda past latency, statik IP, client IP saqlanadi, millionlab ulanish. HTTP API uchun ALB, TCP protokollar (DB proxy, MQTT, gaming) uchun NLB."
-    },
-    {
-      "id": 33211,
-      "code": "WC08",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "RDS nima beradi va backup/HA qanday ishlaydi?",
-      "explanation": "RDS — managed PostgreSQL/MySQL: patching, backup, monitoring AWS'da. Automated backup + PITR (retention 1-35 kun), snapshot'lar. Multi-AZ — boshqa AZ'da sinxron standby, avtomatik failover (~1-2 daqiqa). Read replica — asinxron, o'qishni scale qilish uchun."
-    },
-    {
-      "id": 33212,
-      "code": "WC09",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "CloudWatch nima: metrics, logs, alarms?",
-      "explanation": "CloudWatch — AWS'ning monitoring xizmati: servis metrikalari (EC2 CPU, ALB 5xx, RDS connections), log group'lar, alarm'lar (SNS orqali xabar yoki autoscaling). EC2 ichki metrikalari (memory, disk) uchun CloudWatch agent kerak."
-    },
-    {
-      "id": 33213,
-      "code": "WC10",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "AWS'da xarajatni (cost) nazorat qilish uchun junior nimalarni bilishi kerak?",
-      "explanation": "Budget va billing alert, tag'lar (team/env), unutilgan resurslar (to'xtatilgan EC2 EBS'i, eski snapshot, bog'lanmagan Elastic IP, bo'sh LB), NAT GW va cross-AZ/egress trafik, log retention, to'g'ri o'lcham va Savings Plans."
-    },
-    {
-      "id": 33254,
-      "code": "WC13",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "EC2'dagi app S3'ga qanday kirishi kerak? Access key'ni serverga qo'yish nega yomon?",
-      "explanation": "IAM role (instance profile) — vaqtinchalik, avtomatik aylanadigan credential IMDS orqali. Statik access key oqib ketadi, aylantirilmaydi, kimniki ekani noaniq. K8s'da IRSA / EKS Pod Identity."
-    },
-    {
-      "id": 33255,
-      "code": "WC14",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "Private subnet'dagi instance internetga chiqa olmayapti. Nimalarni tekshirasiz?",
-      "explanation": "Route table (0.0.0.0/0 → NAT Gateway), NAT Gateway public subnet'da va uning route'i IGW'ga, Security Group outbound, NACL (stateless — ephemeral portlar), DNS."
-    },
-    {
-      "id": 33256,
-      "code": "WC15",
-      "level": "S",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "Ko'p AZ'li yuqori mavjudlikdagi (HA) web arxitekturani AWS'da qanday qurasiz?",
-      "explanation": "ALB (ko'p AZ) → ASG yoki EKS (kamida 2-3 AZ) → RDS Multi-AZ + read replica, ElastiCache, S3 + CloudFront. Har AZ'da NAT GW. Stateless app, health check, backup va DR rejasi."
-    },
-    {
       "id": 33334,
       "code": "WC17",
       "level": "J",
@@ -216,28 +139,6 @@
       "explanation": "ECR — AWS'ning private Docker/OCI registry'si: IAM bilan kirish, image scanning, lifecycle policy (eski image'larni tozalash). EKS/ECS node'lar IAM role bilan pull qiladi."
     },
     {
-      "id": 33340,
-      "code": "WC23",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "Lambda qachon mos va qachon mos emas?",
-      "explanation": "Mos: event-driven, qisqa (≤15 daqiqa), notekis yuk (S3 event, SQS, cron, kichik API) — server boshqaruvi yo'q, ishlatilganicha to'lov. Mos emas: uzoq jarayonlar, doimiy yuqori yuk (qimmatroq), past latency talabi (cold start), ko'p DB ulanishi, katta state."
-    },
-    {
-      "id": 33341,
-      "code": "WC24",
-      "level": "M",
-      "type": "card",
-      "topic": "AWS basics",
-      "domain": "cloud",
-      "section": "w5",
-      "question": "Secrets Manager va SSM Parameter Store farqi?",
-      "explanation": "Ikkalasi config/secret saqlaydi, KMS bilan shifrlaydi, IAM bilan cheklanadi. Secrets Manager — avtomatik rotation (RDS bilan integratsiya), cross-account, pullik (secret boshiga). Parameter Store — arzon/bepul (standard), oddiy config va secret'lar uchun, rotation yo'q."
-    },
-    {
       "id": 33401,
       "code": "WC11",
       "level": "J",
@@ -258,6 +159,105 @@
       "section": "w5",
       "question": "ECS va Fargate nima, EKS'dan farqi?",
       "explanation": "ECS — AWS'ning o'z container orchestrator'i (task definition, service), oddiy. Fargate — serverless compute: EC2 node boshqarmasdan container ishlatish (ECS yoki EKS bilan). EKS — managed Kubernetes: ekotizim va portativlik, lekin murakkabroq."
+    },
+    {
+      "id": 33454,
+      "code": "WC27",
+      "level": "J",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "AWS Secrets Manager va SSM Parameter Store farqi?",
+      "explanation": "Ikkalasi ham secret/config saqlaydi (KMS bilan shifrlangan). Secrets Manager — avtomatik rotation (RDS bilan), cross-region replika, pullik har secret uchun. Parameter Store — oddiy config va secret uchun arzon/bepul (standard), rotation yo'q."
+    },
+    {
+      "id": 33210,
+      "code": "WC07",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "ALB va NLB farqi? Qachon qaysi biri?",
+      "explanation": "ALB — L7 (HTTP/HTTPS): path/host routing, TLS termination, WAF, gRPC. NLB — L4 (TCP/UDP/TLS): juda past latency, statik IP, client IP saqlanadi, millionlab ulanish. HTTP API uchun ALB, TCP protokollar (DB proxy, MQTT, gaming) uchun NLB."
+    },
+    {
+      "id": 33211,
+      "code": "WC08",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "RDS nima beradi va backup/HA qanday ishlaydi?",
+      "explanation": "RDS — managed PostgreSQL/MySQL: patching, backup, monitoring AWS'da. Automated backup + PITR (retention 1-35 kun), snapshot'lar. Multi-AZ — boshqa AZ'da sinxron standby, avtomatik failover (~1-2 daqiqa). Read replica — asinxron, o'qishni scale qilish uchun."
+    },
+    {
+      "id": 33212,
+      "code": "WC09",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "CloudWatch nima: metrics, logs, alarms?",
+      "explanation": "CloudWatch — AWS'ning monitoring xizmati: servis metrikalari (EC2 CPU, ALB 5xx, RDS connections), log group'lar, alarm'lar (SNS orqali xabar yoki autoscaling). EC2 ichki metrikalari (memory, disk) uchun CloudWatch agent kerak."
+    },
+    {
+      "id": 33213,
+      "code": "WC10",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "AWS'da xarajatni (cost) nazorat qilish uchun junior nimalarni bilishi kerak?",
+      "explanation": "Budget va billing alert, tag'lar (team/env), unutilgan resurslar (to'xtatilgan EC2 EBS'i, eski snapshot, bog'lanmagan Elastic IP, bo'sh LB), NAT GW va cross-AZ/egress trafik, log retention, to'g'ri o'lcham va Savings Plans."
+    },
+    {
+      "id": 33254,
+      "code": "WC13",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "EC2'dagi app S3'ga qanday kirishi kerak? Access key'ni serverga qo'yish nega yomon?",
+      "explanation": "IAM role (instance profile) — vaqtinchalik, avtomatik aylanadigan credential IMDS orqali. Statik access key oqib ketadi, aylantirilmaydi, kimniki ekani noaniq. K8s'da IRSA / EKS Pod Identity."
+    },
+    {
+      "id": 33255,
+      "code": "WC14",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Private subnet'dagi instance internetga chiqa olmayapti. Nimalarni tekshirasiz?",
+      "explanation": "Route table (0.0.0.0/0 → NAT Gateway), NAT Gateway public subnet'da va uning route'i IGW'ga, Security Group outbound, NACL (stateless — ephemeral portlar), DNS."
+    },
+    {
+      "id": 33340,
+      "code": "WC23",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Lambda qachon mos va qachon mos emas?",
+      "explanation": "Mos: event-driven, qisqa (≤15 daqiqa), notekis yuk (S3 event, SQS, cron, kichik API) — server boshqaruvi yo'q, ishlatilganicha to'lov. Mos emas: uzoq jarayonlar, doimiy yuqori yuk (qimmatroq), past latency talabi (cold start), ko'p DB ulanishi, katta state."
+    },
+    {
+      "id": 33341,
+      "code": "WC24",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Secrets Manager va SSM Parameter Store farqi?",
+      "explanation": "Ikkalasi config/secret saqlaydi, KMS bilan shifrlaydi, IAM bilan cheklanadi. Secrets Manager — avtomatik rotation (RDS bilan integratsiya), cross-account, pullik (secret boshiga). Parameter Store — arzon/bepul (standard), oddiy config va secret'lar uchun, rotation yo'q."
     },
     {
       "id": 33403,
@@ -291,6 +291,50 @@
       "section": "w5",
       "question": "VPC peering, Transit Gateway va PrivateLink farqi?",
       "explanation": "Peering — ikki VPC'ni to'g'ridan bog'lash (tranzitiv emas, CIDR kesishmasligi kerak). Transit Gateway — hub: ko'p VPC va on-prem'ni markaziy marshrutlash. PrivateLink — bitta servisni (NLB ortidagi) boshqa VPC'ga xususiy endpoint sifatida berish, tarmoqlarni to'liq ulamasdan."
+    },
+    {
+      "id": 33455,
+      "code": "WC28",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Kimdir prod Security Group'da 22-portni `0.0.0.0/0` ga ochib qo'ydi. Qanday aniqlaysiz, tuzatasiz va oldini olasiz?",
+      "explanation": "Darhol qoidani olib tashlash, CloudTrail'dan kim/qachon (AuthorizeSecurityGroupIngress), shu oraliqda SSH kirishlarini tekshirish. Oldini olish: SSH o'rniga SSM Session Manager, AWS Config qoidasi bilan avtomatik remediation, IaC'dan tashqari o'zgarishni taqiqlash."
+    },
+    {
+      "id": 33456,
+      "code": "WC29",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "S3 bucket'dagi ma'lumotga ruxsatsiz kirilganiga shubha bor. Qanday tekshirasiz?",
+      "explanation": "CloudTrail data events (GetObject) yoki S3 server access log'lari — kim (principal), qaysi IP, qaysi obyekt. Bucket policy, ACL, presigned URL, oqib ketgan access key'ni tekshirish. Keyin: kalitni o'chirish, Block Public Access, policy'ni toraytirish."
+    },
+    {
+      "id": 33505,
+      "code": "WC30",
+      "level": "M",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "EKS'da pod'ga AWS ruxsatini qanday berasiz: IRSA va EKS Pod Identity?",
+      "explanation": "Node IAM role'ini hamma pod ulashsa — least privilege buziladi. IRSA: ServiceAccount annotation + OIDC provider, pod web identity token bilan role'ni assume qiladi. Pod Identity (yangi): EKS agent orqali, OIDC sozlamasiz, association API bilan — ko'p klasterda oddiyroq."
+    },
+    {
+      "id": 33256,
+      "code": "WC15",
+      "level": "S",
+      "type": "card",
+      "topic": "AWS basics",
+      "domain": "cloud",
+      "section": "w5",
+      "question": "Ko'p AZ'li yuqori mavjudlikdagi (HA) web arxitekturani AWS'da qanday qurasiz?",
+      "explanation": "ALB (ko'p AZ) → ASG yoki EKS (kamida 2-3 AZ) → RDS Multi-AZ + read replica, ElastiCache, S3 + CloudFront. Har AZ'da NAT GW. Stateless app, health check, backup va DR rejasi."
     }
   ]
 }

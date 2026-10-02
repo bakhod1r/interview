@@ -1,0 +1,65 @@
+{
+  "id": "w12",
+  "name": "GCP basics",
+  "domain": "cloud",
+  "topics": [
+    "GCP"
+  ],
+  "questions": [
+    {
+      "id": 33519,
+      "code": "GC01",
+      "level": "J",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "GCP resurs ierarxiyasi va asosiy servislar: Organization, Folder, Project. AWS bilan solishtirish?",
+      "explanation": "Organization → Folder → Project → Resource. Project — billing, API, IAM va quota chegarasi (AWS account'ga yaqin). IAM policy yuqoridan pastga meros qoladi."
+    },
+    {
+      "id": 33522,
+      "code": "GC04",
+      "level": "J",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "Cloud Run nima va qachon Kubernetes o'rniga ishlatiladi?",
+      "explanation": "Cloud Run — container'ni serverless ishga tushiradi: HTTP so'rovga qarab 0 dan N gacha avtomatik scale, faqat ishlatilgan vaqt uchun to'lov, klaster boshqaruvi yo'q. Stateless HTTP servis, webhook, cron job uchun ideal."
+    },
+    {
+      "id": 33520,
+      "code": "GC02",
+      "level": "M",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "GCP'da service account va Workload Identity Federation: kalitsiz autentifikatsiya qanday ishlaydi?",
+      "explanation": "Service account — ilova identiteti. JSON key yuklab olish — eng ko'p uchraydigan oqish manbai. GKE'da Workload Identity (K8s SA ↔ GCP SA), tashqi CI'da Workload Identity Federation (GitHub OIDC token → GCP qisqa token) — kalit yo'q."
+    },
+    {
+      "id": 33521,
+      "code": "GC03",
+      "level": "M",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "GKE Autopilot va Standard farqi? Qachon qaysi biri?",
+      "explanation": "Standard — node'larni o'zingiz boshqarasiz (node pool, machine type, DaemonSet erkin), node uchun to'laysiz. Autopilot — Google node'larni boshqaradi, pod requests uchun to'laysiz, xavfsizlik cheklovlari (privileged yo'q, hostPath cheklangan)."
+    },
+    {
+      "id": 33523,
+      "code": "GC05",
+      "level": "M",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "GCP IAM: basic, predefined va custom role'lar; nega `roles/editor` xavfli?",
+      "explanation": "Basic role'lar (Owner, Editor, Viewer) — juda keng, minglab permission. Predefined — servisga xos (`roles/storage.objectViewer`). Custom — aniq permission ro'yxati. Editor deyarli hamma resursni o'zgartira oladi — least privilege'ga zid, default compute SA'ga berilgani xavf."
+    }
+  ]
+}

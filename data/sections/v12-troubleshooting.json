@@ -29,29 +29,6 @@
       "explanation": "Linux'da load = running + runnable + D-state. Yuqori iowait, to'yingan disk (%util ~100) yoki osilib qolgan tarmoq fayl tizimi odatiy sabablar. Load'ni yadrolar soni bilan solishtiring (`nproc`)."
     },
     {
-      "id": 30544,
-      "code": "DO10",
-      "level": "S",
-      "type": "card",
-      "topic": "Troubleshooting",
-      "domain": "linux",
-      "section": "v12",
-      "question": "Production serverda ilova sekinlashdi. Linux darajasida qanday tekshirasan?",
-      "explanation": "Brendan Gregg'ning '60 soniyada Linux tahlili' ro'yxati — intervyuda tizimli yondashuvni ko'rsatish muhim, tasodifiy buyruqlarni emas.",
-      "source": "https://www.brendangregg.com/usemethod.html"
-    },
-    {
-      "id": 30564,
-      "code": "LX10",
-      "level": "S",
-      "type": "card",
-      "topic": "Troubleshooting",
-      "domain": "linux",
-      "section": "v12",
-      "question": "Jarayon osilib qoldi, CPU 0%. Nima qilayotganini qanday ko'rasan?",
-      "explanation": "Odatiy topilmalar: futex (lock kutish — deadlock), read on socket (timeout'siz tarmoq chaqiruvi), connect (DNS/firewall), flock. strace production'da ehtiyotkorlik bilan — jarayonni sezilarli sekinlashtiradi; eBPF vositalar (bpftrace, offcputime) yengilroq."
-    },
-    {
       "id": 30565,
       "code": "LX11",
       "level": "M",
@@ -95,28 +72,6 @@
       "section": "v12",
       "question": "`No space left on device`, lekin `df -h` 40% bo'sh ko'rsatyapti. Sabab?",
       "explanation": "Inode soni ext4'da format vaqtida belgilanadi. Topish: `find / -xdev -type f | cut -d/ -f2-3 | sort | uniq -c | sort -n | tail`. XFS inode'larni dinamik ajratadi."
-    },
-    {
-      "id": 30570,
-      "code": "LX16",
-      "level": "S",
-      "type": "card",
-      "topic": "Troubleshooting",
-      "domain": "linux",
-      "section": "v12",
-      "question": "`fsync` nima uchun kerak va DB'lar uchun nega muhim?",
-      "explanation": "Postgres WAL commit'da fsync qiladi (synchronous_commit). 'fsyncgate' (2018): fsync xatosidan keyin qayta urinish xavfsiz emasligi aniqlandi — Postgres endi panic qiladi. Yangi fayl uchun katalogni ham fsync qilish kerak. Atomik yozish: vaqtinchalik faylga yozish, fsync, rename."
-    },
-    {
-      "id": 30582,
-      "code": "LX28",
-      "level": "St",
-      "type": "card",
-      "topic": "Troubleshooting",
-      "domain": "linux",
-      "section": "v12",
-      "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
-      "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
     },
     {
       "id": 31315,
@@ -174,6 +129,73 @@
       "explanation": "lsof: kim faylni/portni ochgan, o'chirilgan lekin ochiq fayllar, FD soni. strace: jarayon qaysi syscall'da osilgan, qaysi faylni topolmayapti, vaqt qayerga ketyapti."
     },
     {
+      "id": 31323,
+      "code": "DX39",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Disk IO bottleneck'ni qanday aniqlaysan va qaysi jarayon aybdor?",
+      "explanation": "`iostat -xz 1` (await, %util, aqu-sz), `vmstat` wa/b, `iotop -oPa`, `pidstat -d 1`, D-state jarayonlar. Keyin sabab: swap, log, DB checkpoint, backup, noatime yo'q."
+    },
+    {
+      "id": 31325,
+      "code": "DX41",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`free -h`, `/proc/meminfo` va \"Linux RAM'ni yeyapti\" (page cache) — qanday o'qiysan?",
+      "explanation": "Bo'sh RAM — isrof; kernel uni page cache uchun ishlatadi va kerak bo'lganda qaytaradi. Haqiqiy ko'rsatkich — `available`, `free` emas. Muammo belgisi: available past + swap faol + OOM."
+    },
+    {
+      "id": 32050,
+      "code": "DZ06",
+      "level": "M",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`sar` (sysstat) nima va o'tgan voqeani qanday tahlil qilasan? (\"Kecha soat 3 da server sekinlashgan\")",
+      "explanation": "sar har 10 daqiqada (sozlanadi) CPU, RAM, IO, tarmoq statistikasini `/var/log/sysstat` (`/var/log/sa`)ga yozadi. Real vaqt vositalari (top) o'tmishni ko'rsatmaydi — sar ko'rsatadi. `sar -u/-r/-b/-d/-n DEV/-q -f fayl -s -e`."
+    },
+    {
+      "id": 30544,
+      "code": "DO10",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Production serverda ilova sekinlashdi. Linux darajasida qanday tekshirasan?",
+      "explanation": "Brendan Gregg'ning '60 soniyada Linux tahlili' ro'yxati — intervyuda tizimli yondashuvni ko'rsatish muhim, tasodifiy buyruqlarni emas.",
+      "source": "https://www.brendangregg.com/usemethod.html"
+    },
+    {
+      "id": 30564,
+      "code": "LX10",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Jarayon osilib qoldi, CPU 0%. Nima qilayotganini qanday ko'rasan?",
+      "explanation": "Odatiy topilmalar: futex (lock kutish — deadlock), read on socket (timeout'siz tarmoq chaqiruvi), connect (DNS/firewall), flock. strace production'da ehtiyotkorlik bilan — jarayonni sezilarli sekinlashtiradi; eBPF vositalar (bpftrace, offcputime) yengilroq."
+    },
+    {
+      "id": 30570,
+      "code": "LX16",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`fsync` nima uchun kerak va DB'lar uchun nega muhim?",
+      "explanation": "Postgres WAL commit'da fsync qiladi (synchronous_commit). 'fsyncgate' (2018): fsync xatosidan keyin qayta urinish xavfsiz emasligi aniqlandi — Postgres endi panic qiladi. Yangi fayl uchun katalogni ham fsync qilish kerak. Atomik yozish: vaqtinchalik faylga yozish, fsync, rename."
+    },
+    {
       "id": 31320,
       "code": "DX36",
       "level": "S",
@@ -207,17 +229,6 @@
       "explanation": "top -> PID; `top -H -p PID` -> thread; `perf top -p PID` / `perf record -g` -> flame graph; til darajasida: Go pprof, Java jstack/async-profiler, Python py-spy. Aniqla: user CPU (ilova) yoki sys (kernel, syscall, lock)."
     },
     {
-      "id": 31323,
-      "code": "DX39",
-      "level": "M",
-      "type": "card",
-      "topic": "Troubleshooting",
-      "domain": "linux",
-      "section": "v12",
-      "question": "Disk IO bottleneck'ni qanday aniqlaysan va qaysi jarayon aybdor?",
-      "explanation": "`iostat -xz 1` (await, %util, aqu-sz), `vmstat` wa/b, `iotop -oPa`, `pidstat -d 1`, D-state jarayonlar. Keyin sabab: swap, log, DB checkpoint, backup, noatime yo'q."
-    },
-    {
       "id": 31324,
       "code": "DX40",
       "level": "S",
@@ -229,17 +240,6 @@
       "explanation": "Jarayon 120s+ D-state'da (uninterruptible IO). Sabab: disk/NFS/iSCSI javob bermayapti, FS freeze, kernel lock. kill -9 ham ishlamaydi. Asosiy qurilmani tekshir."
     },
     {
-      "id": 31325,
-      "code": "DX41",
-      "level": "M",
-      "type": "card",
-      "topic": "Troubleshooting",
-      "domain": "linux",
-      "section": "v12",
-      "question": "`free -h`, `/proc/meminfo` va \"Linux RAM'ni yeyapti\" (page cache) — qanday o'qiysan?",
-      "explanation": "Bo'sh RAM — isrof; kernel uni page cache uchun ishlatadi va kerak bo'lganda qaytaradi. Haqiqiy ko'rsatkich — `available`, `free` emas. Muammo belgisi: available past + swap faol + OOM."
-    },
-    {
       "id": 31326,
       "code": "DX42",
       "level": "S",
@@ -249,17 +249,6 @@
       "section": "v12",
       "question": "Incident paytida va keyin: qanday ishlash tartibi (mitigate vs root cause, postmortem)?",
       "explanation": "Avval ta'sirni kamaytir (rollback, trafik yo'naltirish, scale, restart) — lekin dalilni saqla. Kommunikatsiya: incident commander, status update. Keyin blameless postmortem: timeline, root cause, contributing factors, action items."
-    },
-    {
-      "id": 32050,
-      "code": "DZ06",
-      "level": "M",
-      "type": "card",
-      "topic": "Troubleshooting",
-      "domain": "linux",
-      "section": "v12",
-      "question": "`sar` (sysstat) nima va o'tgan voqeani qanday tahlil qilasan? (\"Kecha soat 3 da server sekinlashgan\")",
-      "explanation": "sar har 10 daqiqada (sozlanadi) CPU, RAM, IO, tarmoq statistikasini `/var/log/sysstat` (`/var/log/sa`)ga yozadi. Real vaqt vositalari (top) o'tmishni ko'rsatmaydi — sar ko'rsatadi. `sar -u/-r/-b/-d/-n DEV/-q -f fayl -s -e`."
     },
     {
       "id": 32051,
@@ -359,6 +348,28 @@
       "section": "v12",
       "question": "Server time-wait/ephemeral port tugadi: `connect: cannot assign requested address`. Nima bu?",
       "explanation": "Chiquvchi ulanishlar uchun lokal port (ephemeral, `ip_local_port_range`) bitta (src IP, dst IP, dst port) to'plamiga ~28k. Ko'p qisqa ulanish + TIME_WAIT 60s = port tugaydi. Yechim: connection pooling/keep-alive, `tcp_tw_reuse=1`, port diapazonini kengaytirish, ko'p dst IP/src IP."
+    },
+    {
+      "id": 33511,
+      "code": "DW12",
+      "level": "S",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`vm.dirty_ratio` va `vm.dirty_background_ratio` nima? Yozish paytida ilova nega to'satdan qotib qoladi?",
+      "explanation": "Yozilgan data avval page cache'da \"dirty\" bo'lib turadi. dirty_background_ratio'ga yetsa kernel fonda diskka yozishni boshlaydi; dirty_ratio'ga yetsa yozayotgan process o'zi bloklanadi va diskka yozishga majbur — latency sakrashi."
+    },
+    {
+      "id": 30582,
+      "code": "LX28",
+      "level": "St",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
+      "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
     }
   ]
 }

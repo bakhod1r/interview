@@ -7,6 +7,39 @@
   ],
   "questions": [
     {
+      "id": 30557,
+      "code": "LX3",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "`>` , `>>` va `2>&1` nima qiladi?",
+      "explanation": "Tartib muhim: `cmd > out.log 2>&1` ikkalasini faylga yozadi, `cmd 2>&1 > out.log` esa stderr'ni ekranda qoldiradi (u stdout'ning ESKI manziliga ko'chirildi). Bash'da qisqasi: `&> out.log`."
+    },
+    {
+      "id": 30671,
+      "code": "LX37",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "sh, bash, zsh, fish farqi?",
+      "explanation": "Skript uchun: portable kerak bo'lsa `#!/bin/sh` va faqat POSIX sintaksis; bash xususiyatlari ishlatilsa `#!/usr/bin/env bash`. Alpine konteynerida bash yo'q (busybox ash) — bash skript ishlamaydi. `echo $0` / `echo $SHELL` — joriy shell."
+    },
+    {
+      "id": 30672,
+      "code": "LX38",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Environment variable va shell variable farqi?",
+      "explanation": "`VAR=x cmd` — faqat shu buyruq uchun env. Child o'zgartirsa ham parent'ga qaytmaydi. Doimiy qilish: ~/.bashrc (interaktiv), ~/.profile (login), /etc/environment. `env`, `printenv` — ko'rish. `/proc/<pid>/environ` — ishlab turgan jarayon env'i."
+    },
+    {
       "id": 31215,
       "code": "LS01",
       "level": "J",
@@ -60,6 +93,107 @@
       "section": "v6",
       "question": "Glob (wildcard) va regex farqi? `*`, `?`, `[abc]`, `**`.",
       "explanation": "Glob — shell fayl nomlarini kengaytiradi (`*.log`), regex — matn pattern (grep). `*` glob'da istalgan belgilar, regex'da oldingi belgining takrori."
+    },
+    {
+      "id": 31256,
+      "code": "LS14",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Shell'da o'zgaruvchi qanday e'lon qilinadi? `x = 5` nega xato?",
+      "explanation": "`x=5` — `=` atrofida bo'sh joy yo'q. `x = 5` shell uchun `x` buyrug'ini `=` va `5` argumentlari bilan chaqirish. O'qish: `\"$x\"`, `export` — bola jarayonlarga uzatish."
+    },
+    {
+      "id": 31257,
+      "code": "LS15",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "`if` sharti: `[ ]`, `[[ ]]`, `test` va `(( ))` farqi?",
+      "explanation": "`[`/`test` — POSIX buyruq, quoting shart. `[[ ]]` — bash keyword: splitting yo'q, `&&`/`||`, `=~` regex, pattern. `(( ))` — arifmetik solishtirish."
+    },
+    {
+      "id": 31258,
+      "code": "LS16",
+      "level": "J",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Bash'da `for`, `while`, `until` sikllari; faylni qatorma-qator qanday to'g'ri o'qiladi?",
+      "explanation": "`for x in list`, `for ((i=0;i<n;i++))`, `while cond`. Fayl o'qish: `while IFS= read -r line; do ...; done < file` — `for line in $(cat f)` emas."
+    },
+    {
+      "id": 30579,
+      "code": "LX25",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Bu bash skriptda qanday xavf bor?",
+      "snippet": "#!/bin/bash\ncd $DEPLOY_DIR\nrm -rf *\ncp -r build/* .",
+      "explanation": "`set -e` — xatoda to'xtash, `-u` — aniqlanmagan o'zgaruvchi xato, `-o pipefail` — pipe'dagi har qanday xato. Qo'shtirnoqsiz o'zgaruvchi bo'shliq va glob bilan bo'linadi. ShellCheck bu xatolarning ko'pini topadi. Mashhur misol: Steam'ning `rm -rf \"$STEAMROOT/\"*` bug'i."
+    },
+    {
+      "id": 30673,
+      "code": "LX39",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": ".bashrc va .bash_profile qachon o'qiladi?",
+      "explanation": "Cron va skriptlar (non-interactive) ikkalasini ham o'qimaydi — 'terminalda ishlaydi, cron'da ishlamaydi' muammosining sababi (PATH, env). Yechim: skriptda to'liq yo'l va kerakli env'ni aniq berish."
+    },
+    {
+      "id": 30674,
+      "code": "LX40",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Natija nima?",
+      "snippet": "x=5\necho '$x'\necho \"$x\"\necho $(echo hi)\necho `date +%Y`",
+      "explanation": "`$()` backtick'dan afzal: ichma-ich yozish oson va o'qilishi aniq. Qo'shtirnoqsiz `$x` word splitting va glob'ga uchraydi — fayl nomida bo'shliq bo'lsa skript buziladi. Qoida: har doim \"$var\"."
+    },
+    {
+      "id": 30675,
+      "code": "LX41",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Exit code: `$?` nima va 0, 1, 127, 130, 137 nimani bildiradi?",
+      "explanation": "128+N — N-signal bilan o'ldirilgan. 126 — bajarish huquqi yo'q, 139 — SIGSEGV (128+11), 143 — SIGTERM. `&&` / `||` exit code'ga qarab zanjir qiladi. Pipe'da $? — oxirgi buyruqniki; hammasi: ${PIPESTATUS[@]} yoki set -o pipefail."
+    },
+    {
+      "id": 30676,
+      "code": "LX42",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "`source script.sh` va `./script.sh` farqi?",
+      "explanation": "Shuning uchun `.env` fayllar va virtualenv `activate` source qilinadi. `bash script.sh` — +x kerak emas, shebang e'tiborga olinmaydi."
+    },
+    {
+      "id": 30691,
+      "code": "LX57",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Dastur qayerdan topiladi: `PATH` va `which`/`type`?",
+      "explanation": "Xavfsizlik: PATH'ga `.` qo'shmang — joriy katalogdagi zararli `ls` ishga tushishi mumkin. Cron'da PATH qisqa (/usr/bin:/bin) — to'liq yo'l ishlating. Kutubxonalar uchun o'xshash: ldconfig, LD_LIBRARY_PATH, `ldd binary`."
     },
     {
       "id": 31220,
@@ -117,72 +251,6 @@
       "explanation": "`trap 'cleanup' EXIT INT TERM` — chiqishda/signal'da funksiya chaqiriladi. Temp fayl, lock, fon jarayonlarni tozalash. SIGKILL'ni ushlab bo'lmaydi."
     },
     {
-      "id": 31225,
-      "code": "LS11",
-      "level": "S",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Konteyner ENTRYPOINT'da shell form va exec form farqi; nega `exec` muhim?",
-      "explanation": "Shell form (`CMD app`) — `/bin/sh -c app`, PID 1 = sh, SIGTERM ilovaga yetmaydi, 10s keyin SIGKILL. Exec form `[\"app\"]` yoki wrapper'da `exec app` — ilova PID 1."
-    },
-    {
-      "id": 31226,
-      "code": "LS12",
-      "level": "S",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Production bash skript uchun qanday standartlar qo'llaysan? Qachon bash emas?",
-      "explanation": "`set -euo pipefail`, quoting, `shellcheck`, `trap` cleanup, idempotentlik, `mktemp`, log + exit code, `--dry-run`. 100+ qator, JSON, murakkab logika — Go/Python."
-    },
-    {
-      "id": 31227,
-      "code": "LS13",
-      "level": "S",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
-      "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
-    },
-    {
-      "id": 31256,
-      "code": "LS14",
-      "level": "J",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Shell'da o'zgaruvchi qanday e'lon qilinadi? `x = 5` nega xato?",
-      "explanation": "`x=5` — `=` atrofida bo'sh joy yo'q. `x = 5` shell uchun `x` buyrug'ini `=` va `5` argumentlari bilan chaqirish. O'qish: `\"$x\"`, `export` — bola jarayonlarga uzatish."
-    },
-    {
-      "id": 31257,
-      "code": "LS15",
-      "level": "J",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "`if` sharti: `[ ]`, `[[ ]]`, `test` va `(( ))` farqi?",
-      "explanation": "`[`/`test` — POSIX buyruq, quoting shart. `[[ ]]` — bash keyword: splitting yo'q, `&&`/`||`, `=~` regex, pattern. `(( ))` — arifmetik solishtirish."
-    },
-    {
-      "id": 31258,
-      "code": "LS16",
-      "level": "J",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Bash'da `for`, `while`, `until` sikllari; faylni qatorma-qator qanday to'g'ri o'qiladi?",
-      "explanation": "`for x in list`, `for ((i=0;i<n;i++))`, `while cond`. Fayl o'qish: `while IFS= read -r line; do ...; done < file` — `for line in $(cat f)` emas."
-    },
-    {
       "id": 31259,
       "code": "LS17",
       "level": "M",
@@ -238,6 +306,61 @@
       "explanation": "`$(( a + b ))` — butun son, tez, builtin. `expr` — eski, tashqi. Kasr son — `bc` yoki `awk`."
     },
     {
+      "id": 33482,
+      "code": "SH01",
+      "level": "M",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "YAML'ni CLI'da qanday o'zgartirasiz? `yq` va `sed` bilan YAML tahrirlash nega xavfli?",
+      "explanation": "YAML — tuzilmali format: sed qator bo'yicha ishlaydi, indent/kalit takrorini bilmaydi va noto'g'ri joyni o'zgartiradi. yq (mikefarah) YAML'ni parse qilib yo'l bo'yicha o'zgartiradi — CI'da image tag yangilash uchun standart."
+    },
+    {
+      "id": 30677,
+      "code": "LX43",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Pipe (`|`) qanday ishlaydi?",
+      "explanation": "`yes | head -1` shu sababli tugaydi (SIGPIPE). Named pipe (FIFO): `mkfifo`. `cmd1 | cmd2` da o'zgaruvchiga yozish subshell'da bo'ladi (bash'da `while read` pipe ichida o'zgaruvchi yo'qolishi) — yechim: `< <(cmd)` process substitution yoki `shopt -s lastpipe`."
+    },
+    {
+      "id": 31225,
+      "code": "LS11",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Konteyner ENTRYPOINT'da shell form va exec form farqi; nega `exec` muhim?",
+      "explanation": "Shell form (`CMD app`) — `/bin/sh -c app`, PID 1 = sh, SIGTERM ilovaga yetmaydi, 10s keyin SIGKILL. Exec form `[\"app\"]` yoki wrapper'da `exec app` — ilova PID 1."
+    },
+    {
+      "id": 31226,
+      "code": "LS12",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Production bash skript uchun qanday standartlar qo'llaysan? Qachon bash emas?",
+      "explanation": "`set -euo pipefail`, quoting, `shellcheck`, `trap` cleanup, idempotentlik, `mktemp`, log + exit code, `--dry-run`. 100+ qator, JSON, murakkab logika — Go/Python."
+    },
+    {
+      "id": 31227,
+      "code": "LS13",
+      "level": "S",
+      "type": "card",
+      "topic": "Shell",
+      "domain": "linux",
+      "section": "v6",
+      "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
+      "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
+    },
+    {
       "id": 31264,
       "code": "LS22",
       "level": "S",
@@ -258,118 +381,6 @@
       "section": "v6",
       "question": "Parallel ish va concurrency shell'da: `&`, `wait`, `xargs -P`, `flock`?",
       "explanation": "`cmd &` fon, `wait` — hammasini kutish (`wait -n` — birinchisini). Cheklangan parallellik — `xargs -P N` yoki GNU `parallel`. Bir vaqtda ikki nusxa ishlamasligi — `flock`."
-    },
-    {
-      "id": 30671,
-      "code": "LX37",
-      "level": "J",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "sh, bash, zsh, fish farqi?",
-      "explanation": "Skript uchun: portable kerak bo'lsa `#!/bin/sh` va faqat POSIX sintaksis; bash xususiyatlari ishlatilsa `#!/usr/bin/env bash`. Alpine konteynerida bash yo'q (busybox ash) — bash skript ishlamaydi. `echo $0` / `echo $SHELL` — joriy shell."
-    },
-    {
-      "id": 30672,
-      "code": "LX38",
-      "level": "J",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Environment variable va shell variable farqi?",
-      "explanation": "`VAR=x cmd` — faqat shu buyruq uchun env. Child o'zgartirsa ham parent'ga qaytmaydi. Doimiy qilish: ~/.bashrc (interaktiv), ~/.profile (login), /etc/environment. `env`, `printenv` — ko'rish. `/proc/<pid>/environ` — ishlab turgan jarayon env'i."
-    },
-    {
-      "id": 30673,
-      "code": "LX39",
-      "level": "M",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": ".bashrc va .bash_profile qachon o'qiladi?",
-      "explanation": "Cron va skriptlar (non-interactive) ikkalasini ham o'qimaydi — 'terminalda ishlaydi, cron'da ishlamaydi' muammosining sababi (PATH, env). Yechim: skriptda to'liq yo'l va kerakli env'ni aniq berish."
-    },
-    {
-      "id": 30674,
-      "code": "LX40",
-      "level": "M",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Natija nima?",
-      "snippet": "x=5\necho '$x'\necho \"$x\"\necho $(echo hi)\necho `date +%Y`",
-      "explanation": "`$()` backtick'dan afzal: ichma-ich yozish oson va o'qilishi aniq. Qo'shtirnoqsiz `$x` word splitting va glob'ga uchraydi — fayl nomida bo'shliq bo'lsa skript buziladi. Qoida: har doim \"$var\"."
-    },
-    {
-      "id": 30675,
-      "code": "LX41",
-      "level": "M",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Exit code: `$?` nima va 0, 1, 127, 130, 137 nimani bildiradi?",
-      "explanation": "128+N — N-signal bilan o'ldirilgan. 126 — bajarish huquqi yo'q, 139 — SIGSEGV (128+11), 143 — SIGTERM. `&&` / `||` exit code'ga qarab zanjir qiladi. Pipe'da $? — oxirgi buyruqniki; hammasi: ${PIPESTATUS[@]} yoki set -o pipefail."
-    },
-    {
-      "id": 30676,
-      "code": "LX42",
-      "level": "M",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "`source script.sh` va `./script.sh` farqi?",
-      "explanation": "Shuning uchun `.env` fayllar va virtualenv `activate` source qilinadi. `bash script.sh` — +x kerak emas, shebang e'tiborga olinmaydi."
-    },
-    {
-      "id": 30557,
-      "code": "LX3",
-      "level": "J",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "`>` , `>>` va `2>&1` nima qiladi?",
-      "explanation": "Tartib muhim: `cmd > out.log 2>&1` ikkalasini faylga yozadi, `cmd 2>&1 > out.log` esa stderr'ni ekranda qoldiradi (u stdout'ning ESKI manziliga ko'chirildi). Bash'da qisqasi: `&> out.log`."
-    },
-    {
-      "id": 30579,
-      "code": "LX25",
-      "level": "M",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Bu bash skriptda qanday xavf bor?",
-      "snippet": "#!/bin/bash\ncd $DEPLOY_DIR\nrm -rf *\ncp -r build/* .",
-      "explanation": "`set -e` — xatoda to'xtash, `-u` — aniqlanmagan o'zgaruvchi xato, `-o pipefail` — pipe'dagi har qanday xato. Qo'shtirnoqsiz o'zgaruvchi bo'shliq va glob bilan bo'linadi. ShellCheck bu xatolarning ko'pini topadi. Mashhur misol: Steam'ning `rm -rf \"$STEAMROOT/\"*` bug'i."
-    },
-    {
-      "id": 30677,
-      "code": "LX43",
-      "level": "S",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Pipe (`|`) qanday ishlaydi?",
-      "explanation": "`yes | head -1` shu sababli tugaydi (SIGPIPE). Named pipe (FIFO): `mkfifo`. `cmd1 | cmd2` da o'zgaruvchiga yozish subshell'da bo'ladi (bash'da `while read` pipe ichida o'zgaruvchi yo'qolishi) — yechim: `< <(cmd)` process substitution yoki `shopt -s lastpipe`."
-    },
-    {
-      "id": 30691,
-      "code": "LX57",
-      "level": "M",
-      "type": "card",
-      "topic": "Shell",
-      "domain": "linux",
-      "section": "v6",
-      "question": "Dastur qayerdan topiladi: `PATH` va `which`/`type`?",
-      "explanation": "Xavfsizlik: PATH'ga `.` qo'shmang — joriy katalogdagi zararli `ls` ishga tushishi mumkin. Cron'da PATH qisqa (/usr/bin:/bin) — to'liq yo'l ishlating. Kutubxonalar uchun o'xshash: ldconfig, LD_LIBRARY_PATH, `ldd binary`."
     }
   ]
 }

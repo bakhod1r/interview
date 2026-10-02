@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-02T14:10:44.516Z",
-  "total": 2266,
+  "total": 2363,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -431,7 +431,7 @@
       "id": "v6",
       "name": "Shell",
       "domain": "linux",
-      "count": 33,
+      "count": 34,
       "file": "sections/v6-shell.json"
     },
     {
@@ -501,21 +501,21 @@
       "id": "v14",
       "name": "systemd, services & cron",
       "domain": "linux",
-      "count": 20,
+      "count": 21,
       "file": "sections/v14-systemd-services.json"
     },
     {
       "id": "v11",
       "name": "Kernel & processes",
       "domain": "linux",
-      "count": 22,
+      "count": 25,
       "file": "sections/v11-kernel-processes.json"
     },
     {
       "id": "v12",
       "name": "Memory, disk & troubleshooting",
       "domain": "linux",
-      "count": 32,
+      "count": 33,
       "file": "sections/v12-troubleshooting.json"
     },
     {
@@ -550,7 +550,7 @@
       "id": "v19",
       "name": "Ops: time, backup, automation",
       "domain": "linux",
-      "count": 14,
+      "count": 15,
       "file": "sections/v19-ops-practices.json"
     },
     {
@@ -564,14 +564,14 @@
       "id": "w1",
       "name": "Git",
       "domain": "git",
-      "count": 25,
+      "count": 28,
       "file": "sections/w1-git.json"
     },
     {
       "id": "k1",
       "name": "Docker basics",
       "domain": "docker",
-      "count": 36,
+      "count": 37,
       "file": "sections/k1-docker.json"
     },
     {
@@ -627,21 +627,21 @@
       "id": "w7",
       "name": "K8s scheduling, scaling & storage",
       "domain": "k8s",
-      "count": 15,
+      "count": 21,
       "file": "sections/w7-k8s-scheduling-scaling.json"
     },
     {
       "id": "w8",
       "name": "K8s security & troubleshooting",
       "domain": "k8s",
-      "count": 26,
+      "count": 32,
       "file": "sections/w8-k8s-security-debug.json"
     },
     {
       "id": "k4",
       "name": "Helm & ArgoCD",
       "domain": "k8s",
-      "count": 8,
+      "count": 12,
       "file": "sections/k4-helm-argocd.json"
     },
     {
@@ -655,7 +655,7 @@
       "id": "i2",
       "name": "CI/CD & deploy",
       "domain": "cicd",
-      "count": 30,
+      "count": 40,
       "file": "sections/i2-ci-cd-deploy.json"
     },
     {
@@ -683,28 +683,35 @@
       "id": "w2",
       "name": "Terraform",
       "domain": "iac",
-      "count": 23,
+      "count": 36,
       "file": "sections/w2-terraform.json"
     },
     {
       "id": "w3",
       "name": "Ansible",
       "domain": "iac",
-      "count": 16,
+      "count": 23,
       "file": "sections/w3-ansible.json"
+    },
+    {
+      "id": "w13",
+      "name": "Chef, Puppet, SaltStack",
+      "domain": "iac",
+      "count": 5,
+      "file": "sections/w13-chef-puppet-salt.json"
     },
     {
       "id": "i3",
       "name": "Observability & SRE",
       "domain": "obs",
-      "count": 18,
+      "count": 22,
       "file": "sections/i3-observability-sre.json"
     },
     {
       "id": "w4",
       "name": "Prometheus & Grafana",
       "domain": "obs",
-      "count": 11,
+      "count": 22,
       "file": "sections/w4-prometheus-grafana.json"
     },
     {
@@ -725,7 +732,7 @@
       "id": "w10",
       "name": "Networking basics",
       "domain": "net",
-      "count": 10,
+      "count": 15,
       "file": "sections/w10-networking-basics.json"
     },
     {
@@ -746,8 +753,22 @@
       "id": "w5",
       "name": "AWS basics",
       "domain": "cloud",
-      "count": 26,
+      "count": 30,
       "file": "sections/w5-aws-basics.json"
+    },
+    {
+      "id": "w11",
+      "name": "Azure basics",
+      "domain": "cloud",
+      "count": 6,
+      "file": "sections/w11-azure-basics.json"
+    },
+    {
+      "id": "w12",
+      "name": "GCP basics",
+      "domain": "cloud",
+      "count": 5,
+      "file": "sections/w12-gcp-basics.json"
     },
     {
       "id": "b1",

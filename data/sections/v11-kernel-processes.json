@@ -7,6 +7,28 @@
   ],
   "questions": [
     {
+      "id": 30558,
+      "code": "LX4",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Jarayonni terminal yopilgandan keyin ham ishlab turishi uchun?",
+      "explanation": "Terminal yopilganda SIGHUP yuboriladi — nohup uni e'tiborsiz qoldiradi. Lekin nohup bilan restart, log, resurs cheklovi yo'q — uzoq yashaydigan servis uchun systemd yoki konteyner orkestratori to'g'ri yo'l."
+    },
+    {
+      "id": 30559,
+      "code": "LX5",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "`/proc` katalogi nima?",
+      "explanation": "`ps`, `top`, `free` ham ma'lumotni /proc'dan o'qiydi. /proc/<pid>/fd — ochiq fayllar, /proc/<pid>/limits — ulimit'lar, /proc/<pid>/status — VmRSS va h.k. /sys — qurilmalar va cgroups uchun shunga o'xshash."
+    },
+    {
       "id": 30663,
       "code": "LX29",
       "level": "J",
@@ -27,6 +49,116 @@
       "section": "v11",
       "question": "System call nima? Misol keltiring.",
       "explanation": "Odatda to'g'ridan-to'g'ri emas, libc orqali chaqiriladi (printf -> write). Syscall — kontekst almashuvi, arzon emas; shuning uchun bufferlash (bufio), batching, io_uring/epoll kabi mexanizmlar. `strace -c ./app` — syscall statistikasi."
+    },
+    {
+      "id": 31336,
+      "code": "DX52",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Signal'lar: SIGTERM, SIGKILL, SIGHUP, SIGINT, SIGSTOP farqi? `kill`, `pkill`, `killall`.",
+      "explanation": "SIGTERM(15) — iltimos to'xta (ushlanadi). SIGKILL(9) — majburiy, ushlanmaydi. SIGHUP(1) — terminal uzildi / daemonlarda config reload. SIGINT(2) — Ctrl+C. SIGSTOP(19)/SIGCONT — pauza/davom (Ctrl+Z = SIGTSTP)."
+    },
+    {
+      "id": 31337,
+      "code": "DX53",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Foreground/background: `&`, Ctrl+Z, `bg`, `fg`, `jobs`, `nohup`, `disown`, tmux/screen.",
+      "explanation": "`cmd &` — background; Ctrl+Z to'xtatadi; bg/fg davom ettiradi; jobs ro'yxat. Terminal yopilganda SIGHUP keladi — nohup/disown/setsid yoki tmux bilan himoya. Uzoq ish uchun eng yaxshisi tmux yoki systemd-run."
+    },
+    {
+      "id": 33412,
+      "code": "WM01",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Kernel modullari: `lsmod`, `modprobe`, `modinfo` va modulni boot'da yuklash?",
+      "explanation": "Modul — kernel'ga runtime'da yuklanadigan kod (drayver, filesystem, netfilter). `lsmod` — yuklanganlar, `modprobe` — dependency'lari bilan yuklash/olib tashlash, `modinfo` — ma'lumot. Doimiy: `/etc/modules-load.d/`, parametr: `/etc/modprobe.d/`."
+    },
+    {
+      "id": 33413,
+      "code": "WM02",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Server hardware ma'lumotini qanday olasiz: `lscpu`, `free`, `lsblk`, `dmidecode`, `lspci`?",
+      "explanation": "lscpu — CPU (yadro, thread, NUMA, virtualizatsiya); free — RAM; lsblk — disklar; dmidecode — BIOS, motherboard, RAM slotlari (root); lspci/lsusb — qurilmalar; `nproc` — mavjud CPU soni."
+    },
+    {
+      "id": 33463,
+      "code": "LX59",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "File descriptor nima? stdin/stdout/stderr va `2>&1` qanday ishlaydi?",
+      "explanation": "File descriptor — process ochgan fayl/socket/pipe uchun kernel bergan butun son. 0=stdin, 1=stdout, 2=stderr. `2>&1` — stderr'ni stdout ketayotgan joyga yo'naltiradi. Har ulanish ham FD — limit (`ulimit -n`) shundan."
+    },
+    {
+      "id": 30543,
+      "code": "DO9",
+      "level": "M",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Servis `kill -9` o'rniga `kill -15` (SIGTERM) bilan to'xtatilishi nega muhim?",
+      "explanation": "Kubernetes ham avval SIGTERM yuboradi, terminationGracePeriodSeconds (default 30s)dan keyin SIGKILL. Konteynerda PID 1 muammosi: shell-form ENTRYPOINT signalni ilovaga uzatmaydi — exec-form yoki tini ishlating."
+    },
+    {
+      "id": 30545,
+      "code": "DO11",
+      "level": "M",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "systemd servisi crash bo'lsa avtomatik qayta ishga tushishi uchun?",
+      "explanation": "`StartLimitIntervalSec`/`StartLimitBurst` cheksiz restart tsiklini to'xtatadi. Resurs cheklovlari ham unit'da: MemoryMax, CPUQuota (cgroups). Xavfsizlik: User=, NoNewPrivileges=yes, ProtectSystem=strict."
+    },
+    {
+      "id": 30561,
+      "code": "LX7",
+      "level": "M",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Zombie jarayon nima va uni qanday yo'qotasan?",
+      "explanation": "Zombie allaqachon o'lik — unga signal ta'sir qilmaydi. Ko'p zombie PID tugashiga olib keladi (pid_max). Konteynerda PID 1 bo'lgan ilova wait() qilmasa zombie yig'iladi — tini yoki `docker run --init` ishlatiladi. Orphan esa — ota-jarayoni o'lgan, lekin o'zi tirik jarayon."
+    },
+    {
+      "id": 30562,
+      "code": "LX8",
+      "level": "M",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "`ps aux` dagi STAT ustunidagi `D` holati nimani bildiradi?",
+      "explanation": "Boshqa holatlar: R — ishlayapti/navbatda, S — interruptible sleep, T — to'xtatilgan, Z — zombie. Ko'p D-holat jarayonlar load average'ni oshiradi, CPU esa bo'sh turadi. Sabab: sekin disk, osilgan NFS, yadro drayveri."
+    },
+    {
+      "id": 30563,
+      "code": "LX9",
+      "level": "M",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "`fork()` va `exec()` farqi?",
+      "explanation": "Copy-on-write tufayli fork arzon — sahifalar faqat yozilganda nusxalanadi. Redis BGSAVE shu mexanizmdan foydalanadi (katta yozish yukida xotira ikki barobarga yaqinlashishi mumkin). Dockerfile'da exec-form ENTRYPOINT ilovani to'g'ridan-to'g'ri PID 1 qiladi."
     },
     {
       "id": 30665,
@@ -73,105 +205,6 @@
       "explanation": "Noto'g'ri manzilga murojaat esa — segfault (SIGSEGV). Sahifa odatda 4KB; Huge Pages (2MB) TLB miss'ni kamaytiradi (DB'lar uchun), THP ba'zan latency spike beradi. `ps -o min_flt,maj_flt`, `/usr/bin/time -v`."
     },
     {
-      "id": 30669,
-      "code": "LX35",
-      "level": "S",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "Kernel panic va kernel oops farqi?",
-      "explanation": "Tahlil: kdump/kexec bilan crash dump yig'ish, `crash` vositasi. Production'da `kernel.panic_on_oops=1` — beqaror holatda ishlashdan ko'ra reboot yaxshiroq. Bulutda serial console loglari muhim."
-    },
-    {
-      "id": 30670,
-      "code": "LX36",
-      "level": "S",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "eBPF nima va nega DevOps'da mashhur?",
-      "explanation": "Vositalar: bcc (execsnoop, opensnoop, biolatency, tcpretrans), bpftrace bir qatorli skriptlar. strace'dan farqli — production'da xavfsiz. Kubernetes'da kube-proxy o'rnini (Cilium) iptables'siz bosadi."
-    },
-    {
-      "id": 30563,
-      "code": "LX9",
-      "level": "M",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "`fork()` va `exec()` farqi?",
-      "explanation": "Copy-on-write tufayli fork arzon — sahifalar faqat yozilganda nusxalanadi. Redis BGSAVE shu mexanizmdan foydalanadi (katta yozish yukida xotira ikki barobarga yaqinlashishi mumkin). Dockerfile'da exec-form ENTRYPOINT ilovani to'g'ridan-to'g'ri PID 1 qiladi."
-    },
-    {
-      "id": 30561,
-      "code": "LX7",
-      "level": "M",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "Zombie jarayon nima va uni qanday yo'qotasan?",
-      "explanation": "Zombie allaqachon o'lik — unga signal ta'sir qilmaydi. Ko'p zombie PID tugashiga olib keladi (pid_max). Konteynerda PID 1 bo'lgan ilova wait() qilmasa zombie yig'iladi — tini yoki `docker run --init` ishlatiladi. Orphan esa — ota-jarayoni o'lgan, lekin o'zi tirik jarayon."
-    },
-    {
-      "id": 30562,
-      "code": "LX8",
-      "level": "M",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "`ps aux` dagi STAT ustunidagi `D` holati nimani bildiradi?",
-      "explanation": "Boshqa holatlar: R — ishlayapti/navbatda, S — interruptible sleep, T — to'xtatilgan, Z — zombie. Ko'p D-holat jarayonlar load average'ni oshiradi, CPU esa bo'sh turadi. Sabab: sekin disk, osilgan NFS, yadro drayveri."
-    },
-    {
-      "id": 30558,
-      "code": "LX4",
-      "level": "J",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "Jarayonni terminal yopilgandan keyin ham ishlab turishi uchun?",
-      "explanation": "Terminal yopilganda SIGHUP yuboriladi — nohup uni e'tiborsiz qoldiradi. Lekin nohup bilan restart, log, resurs cheklovi yo'q — uzoq yashaydigan servis uchun systemd yoki konteyner orkestratori to'g'ri yo'l."
-    },
-    {
-      "id": 30543,
-      "code": "DO9",
-      "level": "M",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "Servis `kill -9` o'rniga `kill -15` (SIGTERM) bilan to'xtatilishi nega muhim?",
-      "explanation": "Kubernetes ham avval SIGTERM yuboradi, terminationGracePeriodSeconds (default 30s)dan keyin SIGKILL. Konteynerda PID 1 muammosi: shell-form ENTRYPOINT signalni ilovaga uzatmaydi — exec-form yoki tini ishlating."
-    },
-    {
-      "id": 30545,
-      "code": "DO11",
-      "level": "M",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "systemd servisi crash bo'lsa avtomatik qayta ishga tushishi uchun?",
-      "explanation": "`StartLimitIntervalSec`/`StartLimitBurst` cheksiz restart tsiklini to'xtatadi. Resurs cheklovlari ham unit'da: MemoryMax, CPUQuota (cgroups). Xavfsizlik: User=, NoNewPrivileges=yes, ProtectSystem=strict."
-    },
-    {
-      "id": 30559,
-      "code": "LX5",
-      "level": "J",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "`/proc` katalogi nima?",
-      "explanation": "`ps`, `top`, `free` ham ma'lumotni /proc'dan o'qiydi. /proc/<pid>/fd — ochiq fayllar, /proc/<pid>/limits — ulimit'lar, /proc/<pid>/status — VmRSS va h.k. /sys — qurilmalar va cgroups uchun shunga o'xshash."
-    },
-    {
       "id": 30692,
       "code": "LX58",
       "level": "M",
@@ -181,28 +214,6 @@
       "section": "v11",
       "question": "`ls -l /etc/passwd` buyrug'ini bajarganda nima sodir bo'ladi (shell'dan kernelgacha)?",
       "explanation": "Bu savol kernel, shell, fayl tizimi va jarayon tushunchalarini bitta zanjirda tekshiradi. `strace ls -l /etc/passwd` bilan o'zingiz ko'rib chiqing."
-    },
-    {
-      "id": 31336,
-      "code": "DX52",
-      "level": "J",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "Signal'lar: SIGTERM, SIGKILL, SIGHUP, SIGINT, SIGSTOP farqi? `kill`, `pkill`, `killall`.",
-      "explanation": "SIGTERM(15) — iltimos to'xta (ushlanadi). SIGKILL(9) — majburiy, ushlanmaydi. SIGHUP(1) — terminal uzildi / daemonlarda config reload. SIGINT(2) — Ctrl+C. SIGSTOP(19)/SIGCONT — pauza/davom (Ctrl+Z = SIGTSTP)."
-    },
-    {
-      "id": 31337,
-      "code": "DX53",
-      "level": "J",
-      "type": "card",
-      "topic": "Kernel & processes",
-      "domain": "linux",
-      "section": "v11",
-      "question": "Foreground/background: `&`, Ctrl+Z, `bg`, `fg`, `jobs`, `nohup`, `disown`, tmux/screen.",
-      "explanation": "`cmd &` — background; Ctrl+Z to'xtatadi; bg/fg davom ettiradi; jobs ro'yxat. Terminal yopilganda SIGHUP keladi — nohup/disown/setsid yoki tmux bilan himoya. Uzoq ish uchun eng yaxshisi tmux yoki systemd-run."
     },
     {
       "id": 31338,
@@ -227,26 +238,48 @@
       "explanation": "cmdline, environ, status (VmRSS, Threads, State), limits, fd/ (ochiq fayllar), cwd, exe, maps, stack, io, cgroup, oom_score. Hech qanday vositasiz jarayonni o'rganish mumkin."
     },
     {
-      "id": 33412,
-      "code": "WM01",
-      "level": "J",
+      "id": 33464,
+      "code": "LX60",
+      "level": "M",
       "type": "card",
       "topic": "Kernel & processes",
       "domain": "linux",
       "section": "v11",
-      "question": "Kernel modullari: `lsmod`, `modprobe`, `modinfo` va modulni boot'da yuklash?",
-      "explanation": "Modul — kernel'ga runtime'da yuklanadigan kod (drayver, filesystem, netfilter). `lsmod` — yuklanganlar, `modprobe` — dependency'lari bilan yuklash/olib tashlash, `modinfo` — ma'lumot. Doimiy: `/etc/modules-load.d/`, parametr: `/etc/modprobe.d/`."
+      "question": "Linux'da process va thread farqi? `fork()` va `exec()` nima qiladi?",
+      "explanation": "Process — alohida xotira manzil maydoni; thread — bitta process ichida xotirani bo'lishadi (Linux'da ikkalasi ham `clone()` bilan yaratilgan task). fork — joriy process nusxasi (copy-on-write); exec — process ichidagi dasturni boshqasiga almashtiradi. Shell buyruqni fork+exec bilan ishga tushiradi."
     },
     {
-      "id": 33413,
-      "code": "WM02",
-      "level": "J",
+      "id": 30669,
+      "code": "LX35",
+      "level": "S",
       "type": "card",
       "topic": "Kernel & processes",
       "domain": "linux",
       "section": "v11",
-      "question": "Server hardware ma'lumotini qanday olasiz: `lscpu`, `free`, `lsblk`, `dmidecode`, `lspci`?",
-      "explanation": "lscpu — CPU (yadro, thread, NUMA, virtualizatsiya); free — RAM; lsblk — disklar; dmidecode — BIOS, motherboard, RAM slotlari (root); lspci/lsusb — qurilmalar; `nproc` — mavjud CPU soni."
+      "question": "Kernel panic va kernel oops farqi?",
+      "explanation": "Tahlil: kdump/kexec bilan crash dump yig'ish, `crash` vositasi. Production'da `kernel.panic_on_oops=1` — beqaror holatda ishlashdan ko'ra reboot yaxshiroq. Bulutda serial console loglari muhim."
+    },
+    {
+      "id": 30670,
+      "code": "LX36",
+      "level": "S",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "eBPF nima va nega DevOps'da mashhur?",
+      "explanation": "Vositalar: bcc (execsnoop, opensnoop, biolatency, tcpretrans), bpftrace bir qatorli skriptlar. strace'dan farqli — production'da xavfsiz. Kubernetes'da kube-proxy o'rnini (Cilium) iptables'siz bosadi."
+    },
+    {
+      "id": 33510,
+      "code": "LX61",
+      "level": "St",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "`epoll`, `select`/`poll` va `io_uring` farqi? Nega Nginx/Go yuz minglab ulanishni ko'taradi?",
+      "explanation": "select/poll har chaqiruvda barcha FD'larni kernel'ga beradi va tekshiradi — O(n). epoll — kernel tayyor FD'lar ro'yxatini o'zi yuritadi, faqat tayyorlarini qaytaradi — O(tayyorlar). io_uring — umumiy ring buffer'lar orqali asinxron I/O: syscall soni minimal, disk I/O ham haqiqiy async."
     }
   ]
 }

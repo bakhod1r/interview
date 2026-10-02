@@ -51,6 +51,50 @@
       "explanation": "--check — dry run, hech narsa o'zgartirmaydi, nima o'zgarishini ko'rsatadi; --diff — fayl/template farqini chiqaradi. Prod'da apply'dan oldin ishlatiladi."
     },
     {
+      "id": 33330,
+      "code": "WA15",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible ad-hoc buyruqlar nima va qachon ishlatiladi?",
+      "explanation": "Playbook'siz bitta modulni ko'p hostda ishga tushirish: tezkor tekshiruv yoki bir martalik amal (ping, uptime, paket holati, servis restart)."
+    },
+    {
+      "id": 33331,
+      "code": "WA16",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`become`, SSH kalitlar va Ansible ulanishi qanday sozlanadi?",
+      "explanation": "Ansible SSH bilan ulanadi (agent kerak emas, faqat Python). `ansible_user`, kalit fayl inventory/ansible.cfg'da; root kerak bo'lgan task'lar uchun `become: true` (sudo)."
+    },
+    {
+      "id": 33332,
+      "code": "WA17",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Facts nima va `when` shartlari bilan qanday ishlatiladi?",
+      "explanation": "Facts — Ansible playbook boshida host haqida yig'adigan ma'lumot (OS, IP, xotira, CPU). `when` bilan task'ni shartli bajarish: masalan, Debian'da `apt`, RHEL'da `dnf`."
+    },
+    {
+      "id": 33457,
+      "code": "WA22",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`loop` va `with_items` farqi? Ansible'da sikl qanday yoziladi?",
+      "explanation": "`loop` — zamonaviy, umumiy sintaksis (Ansible 2.5+); `with_items` va boshqa `with_*` — eski lookup asosidagi shakl, hali ishlaydi. `with_items` ro'yxatni bir daraja tekislaydi (flatten), `loop` esa tekislamaydi."
+    },
+    {
       "id": 33191,
       "code": "WA04",
       "level": "M",
@@ -117,50 +161,6 @@
       "explanation": "Dynamic inventory — host ro'yxatini cloud API'dan (AWS EC2, GCP) olish, tag bo'yicha guruhlash. Autoscaling'da IP'lar o'zgaradi, static fayl eskiradi."
     },
     {
-      "id": 33195,
-      "code": "WA08",
-      "level": "S",
-      "type": "card",
-      "topic": "Ansible",
-      "domain": "iac",
-      "section": "w3",
-      "question": "Ansible'ni katta flot (yuzlab server) uchun qanday tezlashtirasiz va xavfsiz rollout qilasiz?",
-      "explanation": "Tezlik: `forks` oshirish, SSH pipelining va ControlPersist, fact gathering'ni cheklash/caching. Xavfsiz rollout: `serial` (batch), `max_fail_percentage`, load balancer'dan chiqarish, `--check --diff`, `--limit` bilan canary."
-    },
-    {
-      "id": 33330,
-      "code": "WA15",
-      "level": "J",
-      "type": "card",
-      "topic": "Ansible",
-      "domain": "iac",
-      "section": "w3",
-      "question": "Ansible ad-hoc buyruqlar nima va qachon ishlatiladi?",
-      "explanation": "Playbook'siz bitta modulni ko'p hostda ishga tushirish: tezkor tekshiruv yoki bir martalik amal (ping, uptime, paket holati, servis restart)."
-    },
-    {
-      "id": 33331,
-      "code": "WA16",
-      "level": "J",
-      "type": "card",
-      "topic": "Ansible",
-      "domain": "iac",
-      "section": "w3",
-      "question": "`become`, SSH kalitlar va Ansible ulanishi qanday sozlanadi?",
-      "explanation": "Ansible SSH bilan ulanadi (agent kerak emas, faqat Python). `ansible_user`, kalit fayl inventory/ansible.cfg'da; root kerak bo'lgan task'lar uchun `become: true` (sudo)."
-    },
-    {
-      "id": 33332,
-      "code": "WA17",
-      "level": "J",
-      "type": "card",
-      "topic": "Ansible",
-      "domain": "iac",
-      "section": "w3",
-      "question": "Facts nima va `when` shartlari bilan qanday ishlatiladi?",
-      "explanation": "Facts — Ansible playbook boshida host haqida yig'adigan ma'lumot (OS, IP, xotira, CPU). `when` bilan task'ni shartli bajarish: masalan, Debian'da `apt`, RHEL'da `dnf`."
-    },
-    {
       "id": 33333,
       "code": "WA18",
       "level": "M",
@@ -181,6 +181,83 @@
       "section": "w3",
       "question": "`delegate_to`, `run_once` va `local_action` qachon kerak?",
       "explanation": "delegate_to — task'ni joriy host nomidan, lekin boshqa host'da bajarish (LB'dan chiqarish, DNS yozuvi). run_once — butun guruh uchun bir marta (DB migration). local_action/`delegate_to: localhost` — boshqaruvchi mashinada (API chaqiruv)."
+    },
+    {
+      "id": 33441,
+      "code": "WA19",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible'da xatolarni boshqarish: `block`/`rescue`/`always`, `ignore_errors`, `failed_when`?",
+      "explanation": "block — task'larni guruhlaydi; rescue — blokda xato bo'lsa ishlaydi (rollback); always — har doim (tozalash). ignore_errors xatoni yutadi — kam ishlatiladi; failed_when — xato shartini aniq belgilaydi."
+    },
+    {
+      "id": 33442,
+      "code": "WA20",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`tags`, `--start-at-task`, `--limit` bilan playbook'ning bir qismini qanday ishga tushirasiz?",
+      "explanation": "tags — task/role'larni belgilash va `--tags`/`--skip-tags` bilan tanlash; --limit — hostlarni toraytirish; --start-at-task — yarim qolgan joydan davom etish. Katta playbook'da tez va xavfsiz o'zgarish uchun."
+    },
+    {
+      "id": 33443,
+      "code": "WA21",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Uzoq ishlaydigan task (backup, katta yuklash) SSH timeout'ga tushyapti. `async` va `poll` qanday yordam beradi?",
+      "explanation": "async — task'ni fonda maksimal N soniya ishlashga ruxsat beradi; poll — necha soniyada holatni tekshirish. poll: 0 — kutmasdan keyingi task'ga o'tadi, keyin async_status bilan natija olinadi."
+    },
+    {
+      "id": 33458,
+      "code": "WA23",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`import_tasks` va `include_tasks` farqi (statik vs dinamik)?",
+      "explanation": "import_* — playbook parse vaqtida statik qo'shiladi: tag/when ichidagi har task'ga o'tadi, lekin loop ishlatib bo'lmaydi. include_* — ishga tushish vaqtida dinamik: loop va o'zgaruvchiga qarab fayl tanlash mumkin, tag/when faqat include'ning o'ziga tegishli."
+    },
+    {
+      "id": 33459,
+      "code": "WA24",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`strategy: linear` va `free`, `forks` nima? Ansible'ni qanday tezlashtirasiz?",
+      "explanation": "linear (default) — har task barcha hostlarda tugagach keyingisiga o'tadi; free — har host o'z tezligida oldinga ketadi. forks — bir vaqtda nechta hostga ulanish (default 5). Tezlashtirish: forks oshirish, pipelining, fact caching, gather_facts o'chirish."
+    },
+    {
+      "id": 33460,
+      "code": "WA25",
+      "level": "M",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Push va pull rejim: `ansible-pull` qachon kerak?",
+      "explanation": "Default push: control node SSH bilan hostlarga boradi. ansible-pull — har host o'zi Git'dan playbook'ni olib, lokal ishga tushiradi (cron/timer). Ko'p, vaqtinchalik yoki NAT ortidagi hostlar uchun mos."
+    },
+    {
+      "id": 33195,
+      "code": "WA08",
+      "level": "S",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible'ni katta flot (yuzlab server) uchun qanday tezlashtirasiz va xavfsiz rollout qilasiz?",
+      "explanation": "Tezlik: `forks` oshirish, SSH pipelining va ControlPersist, fact gathering'ni cheklash/caching. Xavfsiz rollout: `serial` (batch), `max_fail_percentage`, load balancer'dan chiqarish, `--check --diff`, `--limit` bilan canary."
     }
   ]
 }

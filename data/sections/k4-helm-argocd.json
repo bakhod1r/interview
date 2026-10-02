@@ -73,6 +73,39 @@
       "explanation": "dependencies — chart ichida boshqa chart'lar (masalan redis subchart), Chart.lock aniq versiyalarni qotiradi. values.schema.json — values uchun JSON Schema: install/upgrade/lint'da noto'g'ri tip yoki majburiy maydon yo'qligini darhol ushlaydi."
     },
     {
+      "id": 33444,
+      "code": "KH12",
+      "level": "M",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "ArgoCD sync waves va sync hooks (`PreSync`, `PostSync`) nima? Qachon kerak?",
+      "explanation": "sync-wave annotation resurslarni tartib bilan apply qiladi (avval CRD/namespace, keyin app). Hooks — sync oldidan/keyin ishlaydigan Job'lar: PreSync'da DB migratsiya, PostSync'da smoke test, SyncFail'da xabar."
+    },
+    {
+      "id": 33478,
+      "code": "KH14",
+      "level": "M",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "ArgoCD va Flux farqi? Qaysi birini tanlaysiz?",
+      "explanation": "Ikkalasi ham CNCF graduated GitOps pull-agent. ArgoCD — kuchli UI, Application CRD, multi-cluster markazdan, SSO/RBAC. Flux — UI'siz, kichik controller'lar to'plami (source, kustomize, helm), Kubernetes-native, image automation ichida."
+    },
+    {
+      "id": 33479,
+      "code": "KH15",
+      "level": "M",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "GitOps'da rollback qanday qilinadi? Nega `kubectl rollout undo` yoki ArgoCD UI'dagi rollback yetarli emas?",
+      "explanation": "To'g'ri rollback — Git'da `git revert` (yoki oldingi image tag'ga PR): Git yana haqiqat manbai bo'ladi. Klasterda qo'lda undo qilinsa, Git o'zgarmagan — self-heal yoki keyingi sync buzuq versiyani qaytaradi."
+    },
+    {
       "id": 33231,
       "code": "KH08",
       "level": "S",
@@ -93,6 +126,17 @@
       "section": "k4",
       "question": "`helm upgrade` yarim yo'lda to'xtadi: release `pending-upgrade` holatida, keyingi upgrade xato beradi. Nima qilasiz?",
       "explanation": "Release holatini helm history bilan ko'rish, sababni (timeout, hook, probe) topish, keyin helm rollback oxirgi deployed revision'ga. Oldini olish: --atomic, --timeout, CI'da bitta parallel deploy."
+    },
+    {
+      "id": 33445,
+      "code": "KH13",
+      "level": "S",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Argo Rollouts bilan canary: metrika asosida avtomatik rollback qanday ishlaydi?",
+      "explanation": "Rollout CRD Deployment o'rniga: trafikni bosqichma-bosqich (5% → 25% → 100%) ko'chiradi; AnalysisTemplate Prometheus'dan error rate/latency so'raydi. Shart buzilsa — avtomatik abort va eski versiyaga qaytish."
     }
   ]
 }

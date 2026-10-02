@@ -238,6 +238,28 @@
       "explanation": "Events — scheduler, kubelet, controller'larning qisqa muddatli xabarlari (FailedScheduling, BackOff, Unhealthy, FailedMount). Default ~1 soat saqlanadi, shuning uchun incident tarixi uchun eksport kerak."
     },
     {
+      "id": 33453,
+      "code": "WS07",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "K8s node diski container log'lari bilan to'ldi, pod'lar evict bo'lyapti. Qanday tuzatasiz?",
+      "explanation": "Kubelet log rotation sozlamalari (containerLogMaxSize, containerLogMaxFiles), ortiqcha log yozayotgan app'ni topish, ephemeral-storage requests/limits. Darhol: eski log va ishlatilmayotgan image'larni tozalash."
+    },
+    {
+      "id": 33462,
+      "code": "WS08",
+      "level": "M",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Kubernetes Secret'lar etcd'da qanday saqlanadi? Encryption at rest qanday yoqiladi?",
+      "explanation": "Default'da Secret etcd'da faqat base64 — shifrlanmagan. kube-apiserver'ga EncryptionConfiguration beriladi (aescbc/secretbox yoki KMS provider). Managed klasterlarda (EKS) KMS envelope encryption opsiyasi."
+    },
+    {
       "id": 33302,
       "code": "WD12",
       "level": "S",
@@ -291,6 +313,50 @@
       "section": "w8",
       "question": "Kubernetes'da `ndots:5` nima va tashqi DNS so'rovlari nega sekin?",
       "explanation": "Pod resolv.conf'ida ndots:5: nomda 5 tadan kam nuqta bo'lsa, avval search domain'lar (ns.svc.cluster.local, svc.cluster.local, …) sinab ko'riladi. `api.stripe.com` uchun 4-5 ta keraksiz so'rov — CoreDNS yuki va latency."
+    },
+    {
+      "id": 33501,
+      "code": "WS10",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Cilium va eBPF asosidagi CNI nima beradi? Hubble nima?",
+      "explanation": "Cilium — eBPF bilan pod tarmog'i, NetworkPolicy (L3/L4 va L7: HTTP yo'l, gRPC metod, DNS nom bo'yicha), kube-proxy almashtirish, shifrlash (WireGuard/IPsec). Hubble — eBPF orqali har oqimni ko'rish: kim kimga, qaysi policy drop qildi."
+    },
+    {
+      "id": 33504,
+      "code": "WS12",
+      "level": "S",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Kubernetes audit logging nima va qanday sozlanadi?",
+      "explanation": "API server har so'rovni (kim, qaysi resurs, qaysi amal, natija) audit policy bo'yicha yozadi. Xavfsizlik tekshiruvi va \"kim prod deployment'ni o'chirdi?\" savoliga javob. Daraja: None, Metadata, Request, RequestResponse."
+    },
+    {
+      "id": 33493,
+      "code": "WS09",
+      "level": "St",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Kyverno va OPA Gatekeeper farqi? Policy as code'ni klasterga qanday joriy qilasiz?",
+      "explanation": "Ikkalasi admission webhook. Kyverno — policy YAML'da, K8s-native, validate + mutate + generate + image verify. Gatekeeper — Rego tilida (ConstraintTemplate + Constraint), OPA ekotizimi bilan umumiy til, murakkab mantiq uchun kuchli."
+    },
+    {
+      "id": 33502,
+      "code": "WS11",
+      "level": "St",
+      "type": "card",
+      "topic": "Security & troubleshooting",
+      "domain": "k8s",
+      "section": "w8",
+      "question": "Istio sidecar va Ambient mesh farqi?",
+      "explanation": "Sidecar rejimi — har pod'ga Envoy: to'liq L7, lekin har pod'ga CPU/RAM narxi, pod restart bilan upgrade, latency. Ambient — sidecar'siz: node darajasida ztunnel (L4 mTLS, identity) va kerak bo'lsa namespace'ga waypoint proxy (L7). Narx va operatsiya yuki ancha kam."
     }
   ]
 }

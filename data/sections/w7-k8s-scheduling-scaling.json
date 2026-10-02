@@ -117,6 +117,17 @@
       "explanation": "ResourceQuota — namespace bo'yicha umumiy limit (jami CPU/memory requests, pod soni, PVC, LoadBalancer). LimitRange — har container uchun default va min/max requests/limits. Ko'p jamoali cluster'da bir jamoa hammani bo'g'ib qo'ymasligi uchun."
     },
     {
+      "id": 33397,
+      "code": "WS15",
+      "level": "M",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "PriorityClass va preemption qanday ishlaydi?",
+      "explanation": "PriorityClass pod'ga raqamli ustuvorlik beradi. Joy bo'lmasa scheduler past prioritetli pod'larni evict qilib (preempt) yuqori prioritetlisiga joy ochadi. Tizim pod'lari `system-cluster-critical`/`system-node-critical`."
+    },
+    {
       "id": 33287,
       "code": "WS11",
       "level": "S",
@@ -161,15 +172,70 @@
       "explanation": "etcd — butun cluster holati (hamma obyekt, Secret'lar). Raft konsensus: 3 yoki 5 a'zo, kvorum yo'qolsa API yozishni to'xtatadi. Tez disk (fsync latency), muntazam snapshot, encryption at rest, faqat apiserver kirishi."
     },
     {
-      "id": 33397,
-      "code": "WS15",
-      "level": "M",
+      "id": 33495,
+      "code": "WK02",
+      "level": "S",
       "type": "card",
       "topic": "Scheduling & scaling",
       "domain": "k8s",
       "section": "w7",
-      "question": "PriorityClass va preemption qanday ishlaydi?",
-      "explanation": "PriorityClass pod'ga raqamli ustuvorlik beradi. Joy bo'lmasa scheduler past prioritetli pod'larni evict qilib (preempt) yuqori prioritetlisiga joy ochadi. Tizim pod'lari `system-cluster-critical`/`system-node-critical`."
+      "question": "Karpenter qanday ishlaydi va Cluster Autoscaler'dan farqi? Consolidation va disruption budget nima?",
+      "explanation": "Cluster Autoscaler oldindan belgilangan node group'larni kattalashtiradi/kichraytiradi. Karpenter Pending pod'larning talablariga qarab to'g'ridan-to'g'ri mos instance turini tanlab yaratadi (tezroq, bin-packing yaxshi) va consolidation bilan bo'sh/kam yuklangan node'larni almashtiradi."
+    },
+    {
+      "id": 33500,
+      "code": "WK05",
+      "level": "S",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "kube-proxy iptables va IPVS rejimlari, eBPF (Cilium) bilan almashtirish — farqi?",
+      "explanation": "iptables — har Service/endpoint uchun qoidalar zanjiri: ketma-ket tekshiruv O(n), minglab Service'da qoida yangilash sekin. IPVS — kernel hash table load balancer: O(1), ko'p algoritm. Cilium eBPF — kube-proxy'ni butunlay almashtiradi: socket darajasida LB, conntrack kamroq, observability (Hubble)."
+    },
+    {
+      "id": 33494,
+      "code": "WK01",
+      "level": "St",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Kubernetes API Priority and Fairness (APF) nima? Bitta controller API server'ni bo'g'ib qo'ysa nima bo'ladi?",
+      "explanation": "APF — kube-apiserver'ga keladigan so'rovlarni FlowSchema bo'yicha priority level'larga ajratadi va har biriga ulush beradi (fair queuing). Bitta noto'g'ri yozilgan controller yoki CI'dagi `kubectl get -A` bo'roni kubelet/leader election kabi kritik so'rovlarni bo'g'ib qo'ymaydi."
+    },
+    {
+      "id": 33498,
+      "code": "WK03",
+      "level": "St",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "etcd compaction va defragmentation nima? `mvcc: database space exceeded` xatosi nima?",
+      "explanation": "etcd MVCC — har kalitning eski revision'larini saqlaydi. Compaction eski revision'larni mantiqan o'chiradi (apiserver har 5 daqiqada qiladi), lekin disk bo'shamaydi — defrag faylni qayta yozib joyni qaytaradi. DB hajmi quota'ga (default 2GB, max ~8GB) yetsa etcd alarm qo'yib yozishni to'xtatadi — klaster read-only."
+    },
+    {
+      "id": 33499,
+      "code": "WK04",
+      "level": "St",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "etcd quorum va split-brain: nega 3 yoki 5 a'zo, 2 yoki 4 emas? Quorum yo'qolsa nima bo'ladi?",
+      "explanation": "etcd Raft: yozish uchun ko'pchilik (quorum = n/2+1) tasdig'i kerak. 3 a'zo — 1 ta nosozlikka chidaydi, 4 a'zo ham faqat 1 taga (quorum 3) — ortiqcha narx. Network bo'linsa faqat ko'pchilik tomoni yozadi, ozchilik read-only — split-brain bo'lmaydi. Quorum yo'qolsa API server yoza olmaydi: yangi pod, deploy yo'q (ishlab turgan pod'lar ishlayveradi)."
+    },
+    {
+      "id": 33503,
+      "code": "WK06",
+      "level": "St",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Cluster API va vcluster nima? Ko'p klasterni qanday boshqarasiz?",
+      "explanation": "Cluster API (CAPI) — Kubernetes klasterlarini o'zini CRD sifatida boshqarish: management klaster workload klasterlarni deklarativ yaratadi/upgrade qiladi. vcluster — bitta host klaster ichida virtual klasterlar (o'z API server'i, pod'lar host'da ishlaydi): arzon izolyatsiya, dev/test va multi-tenancy uchun."
     }
   ]
 }

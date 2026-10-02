@@ -1,0 +1,76 @@
+{
+  "id": "w11",
+  "name": "Azure basics",
+  "domain": "cloud",
+  "topics": [
+    "Azure"
+  ],
+  "questions": [
+    {
+      "id": 33513,
+      "code": "AZ01",
+      "level": "J",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Azure resurs ierarxiyasi: Management Group, Subscription, Resource Group, Resource. AWS'dagi qaysi tushunchalarga mos?",
+      "explanation": "Management Group — subscription'larni guruhlaydi (AWS Organizations OU); Subscription — billing va limit chegarasi (AWS account); Resource Group — bir hayot siklidagi resurslar konteyneri (AWS'da aniq mosi yo'q, tag'larga yaqin); Resource — VM, DB va h.k."
+    },
+    {
+      "id": 33514,
+      "code": "AZ02",
+      "level": "J",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Azure'da VNet, Subnet, NSG va Azure Firewall farqi?",
+      "explanation": "VNet — izolyatsiyalangan tarmoq (AWS VPC), Subnet — uning qismi. NSG — subnet yoki NIC'ga qo'yiladigan stateful L3/L4 qoidalar (SG + NACL o'rtasidagi narsa). Azure Firewall — markaziy boshqariladigan, FQDN/L7 filtrlaydigan firewall servisi (hub VNet'da)."
+    },
+    {
+      "id": 33518,
+      "code": "AZ06",
+      "level": "J",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Azure DevOps Pipelines va GitHub Actions: Azure'ga deploy qilishning zamonaviy usuli?",
+      "explanation": "Ikkalasi YAML pipeline. Zamonaviy Azure auth — workload identity federation (OIDC): service connection yoki `azure/login` secret'siz, federated credential bilan. Client secret saqlash eski usul."
+    },
+    {
+      "id": 33515,
+      "code": "AZ03",
+      "level": "M",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Managed Identity nima? System-assigned va user-assigned farqi?",
+      "explanation": "Managed Identity — Azure resursi (VM, App Service, AKS pod) uchun Entra ID identiteti: kod secret saqlamasdan token oladi (AWS IAM role'ga mos). System-assigned resurs bilan yaratiladi va o'chadi; user-assigned — alohida resurs, bir nechta resursga biriktiriladi."
+    },
+    {
+      "id": 33516,
+      "code": "AZ04",
+      "level": "M",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Azure RBAC va Azure Policy farqi?",
+      "explanation": "RBAC — KIM nima qila oladi (role assignment: principal + role + scope). Policy — NIMA yaratilishi mumkin (qoidalar: faqat ma'lum region, tag majburiy, public IP taqiqlangan) — ruxsati bor odam uchun ham. Ikkalasi management group'dan pastga meros qoladi."
+    },
+    {
+      "id": 33517,
+      "code": "AZ05",
+      "level": "M",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "AKS'ni production uchun qanday sozlaysiz (asosiy qarorlar)?",
+      "explanation": "Qarorlar: tarmoq (Azure CNI Overlay yoki CNI Cilium), system va user node pool'larni ajratish, availability zone'lar, Workload Identity, private cluster yoki authorized IP, cluster autoscaler, upgrade kanali, Azure Monitor/Managed Prometheus, Key Vault CSI."
+    }
+  ]
+}

@@ -11,28 +11,6 @@
   ],
   "questions": [
     {
-      "id": 1025,
-      "code": "B26",
-      "level": "P",
-      "type": "card",
-      "topic": "SRE",
-      "domain": "obs",
-      "section": "i3",
-      "question": "SLO 99.9% (oylik), error budget tugadi. Yetuk tashkilot nima qiladi?",
-      "explanation": "99.9% ≈ oyiga 43 daqiqa. Error budget — tezlik va ishonchlilik o'rtasidagi kelishuv; ma'no faqat oqibat bo'lganda. SLO userga ko'rinadigan SLI'ga (success'li query'lar %, p99 latency) asoslanadi, CPU'ga emas."
-    },
-    {
-      "id": 1028,
-      "code": "B29",
-      "level": "P",
-      "type": "card",
-      "topic": "SRE",
-      "domain": "obs",
-      "section": "i3",
-      "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
-      "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
-    },
-    {
       "id": 2019,
       "code": "I20",
       "level": "J",
@@ -42,6 +20,17 @@
       "section": "i3",
       "question": "Log, metrika va trace farqi?",
       "explanation": "Ishlatish tartibi: metrika 'muammo bor va qayerda' (alert), trace 'qaysi qadam sekin', log 'aniq nima bo'ldi'. Metrika arzon va agregat; log qimmat (hajm); trace odatda sampling bilan. Uchalasini bog'lovchi element — trace_id."
+    },
+    {
+      "id": 33485,
+      "code": "SR32",
+      "level": "J",
+      "type": "card",
+      "topic": "Logging",
+      "domain": "obs",
+      "section": "i3",
+      "question": "MTTD, MTTR, MTBF nima va ularni qanday yaxshilaysiz?",
+      "explanation": "MTTD — muammo boshlanishidan aniqlanishigacha; MTTR — aniqlanishdan tiklanishgacha (ba'zan boshlanishdan); MTBF — nosozliklar orasidagi o'rtacha vaqt. Zamonaviy fikr: nosozlikni yo'q qilib bo'lmaydi — MTTD va MTTR'ni kamaytirish ko'proq foyda beradi."
     },
     {
       "id": 2020,
@@ -67,6 +56,28 @@
       "explanation": "Distributed tracing — kontekstni uzatishga asoslangan (W3C traceparent). OpenTelemetry auto-instrumentation buni ko'pincha o'zi qiladi, lekin qo'lda yozilgan client, message queue (headerni xabar atributiga qo'yish) va async ish (goroutine/thread) — tipik uzilish nuqtalari."
     },
     {
+      "id": 33484,
+      "code": "SR31",
+      "level": "M",
+      "type": "card",
+      "topic": "Logging",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Toil nima va uni qanday kamaytirasiz?",
+      "explanation": "Toil — qo'lda, takrorlanadigan, avtomatlashtirsa bo'ladigan, uzoq muddatli qiymat bermaydigan va servis o'sishi bilan chiziqli o'sadigan operatsion ish. SRE maqsadi: toil vaqtning ~50% dan oshmasin, qolgani muhandislik (avtomatlashtirish)."
+    },
+    {
+      "id": 33486,
+      "code": "SR33",
+      "level": "M",
+      "type": "card",
+      "topic": "Logging",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Chaos engineering va GameDay nima? Qanday xavfsiz boshlaysiz?",
+      "explanation": "Chaos engineering — tizimga ataylab nosozlik kiritib (pod o'ldirish, latency, AZ yo'qolishi) gipotezani tekshirish: \"X bo'lsa foydalanuvchi sezmaydi\". GameDay — jamoa bilan rejalashtirilgan mashq: ham tizimni, ham odamlar/runbook'ni sinaydi."
+    },
+    {
       "id": 2022,
       "code": "I23",
       "level": "S",
@@ -87,17 +98,6 @@
       "section": "i3",
       "question": "Alertlar juda ko'p, jamoa ularga e'tibor bermay qo'ydi. Nima qilasiz?",
       "explanation": "Senior/Staff signal: alert charchashi — texnik emas, jarayon muammosi. O'lchov: haftada nechta page, nechtasi harakatga olib keldi."
-    },
-    {
-      "id": 2024,
-      "code": "I25",
-      "level": "St",
-      "type": "card",
-      "topic": "Metrics",
-      "domain": "obs",
-      "section": "i3",
-      "question": "Metrika tizimi hisobi keskin oshdi (kardinallik portlashi). Sabab va yechim?",
-      "explanation": "Staff signal: observability xarajatini mahsulot xarajati sifatida boshqarish — qaysi signal qancha turadi va qancha qiymat beradi."
     },
     {
       "id": 14029,
@@ -156,17 +156,6 @@
       "explanation": "Log qimmat va qidirish sekin; metrika agregat uchun, trace sababni topish uchun arzonroq. Amaliy chora: request log'ni faqat xato/sekin holatlarda to'liq yozish, `trace_id`ni har log qatoriga qo'yish (log↔trace bog'lanadi), PII maskalash, retention siyosati (7 kun hot, 90 kun arxiv)."
     },
     {
-      "id": 30039,
-      "code": "SN40",
-      "level": "St",
-      "type": "card",
-      "topic": "SRE",
-      "domain": "obs",
-      "section": "i3",
-      "question": "Yangi servis uchun SLO'ni qanday belgilaysiz va error budget bilan nima qilasiz?",
-      "explanation": "Senior'dan kutiladigan asosiy g'oya: SLO — muhandislik qarorlarini boshqaradigan budjet, shunchaki grafik emas. Va o'lchash foydalanuvchi ko'rgan joyda bo'lishi kerak."
-    },
-    {
       "id": 30266,
       "code": "SN267",
       "level": "S",
@@ -200,6 +189,39 @@
       "explanation": "Eng ko'p uchraydigan bo'shliq — asinxron chegara: Kafka'ga yozishda `traceparent` xabar headeriga solinmasa trace uziladi va 'ish qayerda sekinlashdi' savoliga javob yo'qoladi. Ikkinchi bo'shliq: log va trace bog'lanmagan (`trace_id` log maydoni sifatida yozilishi kerak). Span atributlari kardinalligi ham nazorat qilinadi."
     },
     {
+      "id": 33492,
+      "code": "SR34",
+      "level": "S",
+      "type": "card",
+      "topic": "Logging",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Distributed tracing'da head-based va tail-based sampling farqi?",
+      "explanation": "Head-based — trace boshida (birinchi span) tasodifiy qaror (masalan 1%): arzon, lekin noyob xato/sekin so'rovlar ko'pincha tashlanadi. Tail-based — trace tugagach qaror (OTel Collector'da): xato va sekin trace'larni 100% saqlaydi, lekin collector barcha span'larni xotirada ushlashi kerak."
+    },
+    {
+      "id": 2024,
+      "code": "I25",
+      "level": "St",
+      "type": "card",
+      "topic": "Metrics",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Metrika tizimi hisobi keskin oshdi (kardinallik portlashi). Sabab va yechim?",
+      "explanation": "Staff signal: observability xarajatini mahsulot xarajati sifatida boshqarish — qaysi signal qancha turadi va qancha qiymat beradi."
+    },
+    {
+      "id": 30039,
+      "code": "SN40",
+      "level": "St",
+      "type": "card",
+      "topic": "SRE",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Yangi servis uchun SLO'ni qanday belgilaysiz va error budget bilan nima qilasiz?",
+      "explanation": "Senior'dan kutiladigan asosiy g'oya: SLO — muhandislik qarorlarini boshqaradigan budjet, shunchaki grafik emas. Va o'lchash foydalanuvchi ko'rgan joyda bo'lishi kerak."
+    },
+    {
       "id": 30450,
       "code": "SN451",
       "level": "St",
@@ -209,6 +231,28 @@
       "section": "i3",
       "question": "Prometheus'da yuqori kardinallik nega xavfli va qanday nazorat qilinadi?",
       "explanation": "Qoida: metrika — agregat (nima bo'lyapti), trace/log — individual (qaysi so'rovda). Foydali label'lar: servis, endpoint shabloni (`/users/:id`, konkret ID emas), status klassi, metod. Kardinallikni kuzatish uchun `topk(10, count by (__name__)({__name__=~\".+\"}))` kabi so'rovlar va scrape darajasidagi limitlar (`sample_limit`) ishlatiladi."
+    },
+    {
+      "id": 1025,
+      "code": "B26",
+      "level": "P",
+      "type": "card",
+      "topic": "SRE",
+      "domain": "obs",
+      "section": "i3",
+      "question": "SLO 99.9% (oylik), error budget tugadi. Yetuk tashkilot nima qiladi?",
+      "explanation": "99.9% ≈ oyiga 43 daqiqa. Error budget — tezlik va ishonchlilik o'rtasidagi kelishuv; ma'no faqat oqibat bo'lganda. SLO userga ko'rinadigan SLI'ga (success'li query'lar %, p99 latency) asoslanadi, CPU'ga emas."
+    },
+    {
+      "id": 1028,
+      "code": "B29",
+      "level": "P",
+      "type": "card",
+      "topic": "SRE",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
+      "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
     }
   ]
 }

@@ -327,6 +327,17 @@
       "explanation": "Docker-in-Docker privileged talab qiladi. Kaniko — Dockerfile'ni userspace'da, daemon'siz build qiladi; BuildKit rootless rejimi; Buildah/Podman — daemon'siz. Hammasi OCI image chiqaradi."
     },
     {
+      "id": 33461,
+      "code": "KM11",
+      "level": "M",
+      "type": "card",
+      "topic": "Docker",
+      "domain": "docker",
+      "section": "k1",
+      "question": "Container'ni read-only rejimda qanday ishga tushirasiz va nega?",
+      "explanation": "`--read-only` root filesystem'ni faqat o'qishga qiladi: hujumchi binary yoza olmaydi, app tasodifan konteyner ichiga data yozmaydi. Yozish kerak joylar — tmpfs yoki volume."
+    },
+    {
       "id": 30029,
       "code": "SN30",
       "level": "S",

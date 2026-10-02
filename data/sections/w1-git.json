@@ -84,6 +84,28 @@
       "explanation": "Qisqa sarlavha (≤50 belgi, buyruq maylida), bo'sh qator, keyin NEGA o'zgargani. Bitta commit = bitta mantiqiy o'zgarish. Conventional Commits (`feat:`, `fix:`) avtomatlashtirishga yordam beradi."
     },
     {
+      "id": 33406,
+      "code": "WG23",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git clean` va `git restore` bilan working tree'ni qanday tozalaysiz?",
+      "explanation": "`git restore file` — track qilingan fayldagi commit qilinmagan o'zgarishni bekor qiladi; `git restore --staged` — index'dan chiqaradi; `git clean` — untracked fayllarni o'chiradi (`-n` avval ko'rish, `-d` kataloglar, `-x` ignore qilinganlar ham)."
+    },
+    {
+      "id": 33407,
+      "code": "WG24",
+      "level": "J",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "Semantic versioning (SemVer) nima: MAJOR.MINOR.PATCH?",
+      "explanation": "MAJOR — backward-incompatible o'zgarish; MINOR — yangi funksiya, moslik saqlanadi; PATCH — faqat bug fix. Pre-release: `1.5.0-rc.1`. Dependency constraint'lar (`~>`, `^`) shu qoidaga tayanadi."
+    },
+    {
       "id": 33159,
       "code": "WG08",
       "level": "M",
@@ -205,6 +227,39 @@
       "explanation": "Hook — Git hodisasida ishlaydigan skript (`.git/hooks/`). pre-commit tez lokal tekshiruv (lint, format, secret scan); lekin `--no-verify` bilan chetlab o'tiladi, shuning uchun CI'da ham takrorlanadi."
     },
     {
+      "id": 33408,
+      "code": "WG25",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git submodule` nima, qanday muammolari bor va muqobillari?",
+      "explanation": "Submodule — boshqa repo'ni aniq commit'da pin qilib ichiga joylash. Muammolar: clone'da avtomatik kelmaydi, detached HEAD, yangilash qo'lda, CI'da qo'shimcha qadam. Muqobil: paket menejeri (Go modules, npm), subtree, monorepo."
+    },
+    {
+      "id": 33480,
+      "code": "WG26",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git push --force` va `--force-with-lease` farqi? Qachon force push qilinadi?",
+      "explanation": "--force remote branch'ni so'zsiz qayta yozadi — hamkasbning push'i yo'qolishi mumkin. --force-with-lease faqat remote siz oxirgi ko'rgan holatda bo'lsa yozadi, aks holda rad etadi. Rebase'dan keyin o'z feature branch'ingizda ishlatiladi; main'ga hech qachon."
+    },
+    {
+      "id": 33481,
+      "code": "WG27",
+      "level": "M",
+      "type": "card",
+      "topic": "Git",
+      "domain": "git",
+      "section": "w1",
+      "question": "`git worktree` nima va qachon foydali?",
+      "explanation": "Bitta repo'dan bir nechta working directory: har birida boshqa branch, umumiy .git obyektlari bilan. Stash/clone'siz hotfix qilish, uzoq testni bir branch'da qoldirib boshqasida ishlash uchun."
+    },
+    {
       "id": 33170,
       "code": "WG19",
       "level": "S",
@@ -249,37 +304,15 @@
       "explanation": "Git har versiyani to'liq saqlaydi; clone hamma tarixni yuklaydi — repo GB'larga shishadi. Yechim: Git LFS (pointer + alohida storage) yoki artefaktlarni S3/registry'da saqlash."
     },
     {
-      "id": 33406,
-      "code": "WG23",
-      "level": "J",
+      "id": 33497,
+      "code": "WG28",
+      "level": "S",
       "type": "card",
       "topic": "Git",
       "domain": "git",
       "section": "w1",
-      "question": "`git clean` va `git restore` bilan working tree'ni qanday tozalaysiz?",
-      "explanation": "`git restore file` — track qilingan fayldagi commit qilinmagan o'zgarishni bekor qiladi; `git restore --staged` — index'dan chiqaradi; `git clean` — untracked fayllarni o'chiradi (`-n` avval ko'rish, `-d` kataloglar, `-x` ignore qilinganlar ham)."
-    },
-    {
-      "id": 33407,
-      "code": "WG24",
-      "level": "J",
-      "type": "card",
-      "topic": "Git",
-      "domain": "git",
-      "section": "w1",
-      "question": "Semantic versioning (SemVer) nima: MAJOR.MINOR.PATCH?",
-      "explanation": "MAJOR — backward-incompatible o'zgarish; MINOR — yangi funksiya, moslik saqlanadi; PATCH — faqat bug fix. Pre-release: `1.5.0-rc.1`. Dependency constraint'lar (`~>`, `^`) shu qoidaga tayanadi."
-    },
-    {
-      "id": 33408,
-      "code": "WG25",
-      "level": "M",
-      "type": "card",
-      "topic": "Git",
-      "domain": "git",
-      "section": "w1",
-      "question": "`git submodule` nima, qanday muammolari bor va muqobillari?",
-      "explanation": "Submodule — boshqa repo'ni aniq commit'da pin qilib ichiga joylash. Muammolar: clone'da avtomatik kelmaydi, detached HEAD, yangilash qo'lda, CI'da qo'shimcha qadam. Muqobil: paket menejeri (Go modules, npm), subtree, monorepo."
+      "question": "Git ichki tuzilmasi: blob, tree, commit, tag obyektlari va SHA qanday bog'langan?",
+      "explanation": "Git — content-addressable storage: har obyekt mazmunining hash'i bilan saqlanadi. blob — fayl mazmuni, tree — papka (nom → blob/tree), commit — root tree + parent(lar) + muallif + xabar, annotated tag — commit'ga imzoli ko'rsatkich. Branch — commit hash yozilgan oddiy fayl."
     }
   ]
 }

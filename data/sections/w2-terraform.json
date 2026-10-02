@@ -51,6 +51,72 @@
       "explanation": "State (`terraform.tfstate`) — kod'dagi resource va real dunyodagi obyekt (ID) o'rtasidagi xarita. Terraform shu orqali nimani yaratish/o'zgartirish/o'chirishni biladi. Unda secret'lar ham bo'lishi mumkin — Git'ga commit qilinmaydi."
     },
     {
+      "id": 33324,
+      "code": "WT18",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Variable'larga qiymat berish usullari: `tfvars`, `-var`, `TF_VAR_`, default?",
+      "explanation": "Qiymat manbalari: `default`, `terraform.tfvars`/`*.auto.tfvars` (avtomatik), `-var-file=prod.tfvars`, `-var 'x=y'`, env `TF_VAR_x`. Muhitlar uchun alohida tfvars fayl, secret'lar uchun env yoki secret manager."
+    },
+    {
+      "id": 33325,
+      "code": "WT19",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`terraform fmt`, `validate` va `.terraform.lock.hcl` nima uchun?",
+      "explanation": "fmt — kodni standart formatga keltiradi; validate — sintaksis va ichki moslikni tekshiradi (cloud'ga murojaatsiz); lock fayl — provider'larning aniq versiya va hash'larini qotiradi, hamma joyda bir xil provider ishlaydi. Lock fayl Git'ga commit qilinadi."
+    },
+    {
+      "id": 33326,
+      "code": "WT20",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`locals`, `output` va `depends_on` qachon ishlatiladi?",
+      "explanation": "locals — takrorlanadigan ifodalarga nom (nom prefiksi, umumiy tag'lar); output — natijani ko'rsatish yoki boshqa modul/stack'ga berish; depends_on — reference orqali ko'rinmaydigan bog'liqlikni majburlash (kam ishlatiladi)."
+    },
+    {
+      "id": 33327,
+      "code": "WT21",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform plan'da `-/+` (replace) ko'rsangiz nima qilasiz?",
+      "explanation": "Resurs o'chirib qayta yaratiladi — ma'lumot yo'qolishi yoki downtime bo'lishi mumkin. Qaysi atribut sabab bo'lganini (`# forces replacement`) toping; kerak bo'lmasa kodni o'zgartiring, kerak bo'lsa rejalashtiring (create_before_destroy, snapshot, oyna)."
+    },
+    {
+      "id": 33328,
+      "code": "WT22",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Data source va resource farqi? Qachon `data` ishlatiladi?",
+      "explanation": "resource — Terraform yaratadi va boshqaradi (o'chirishi ham mumkin). data — mavjud narsani faqat o'qiydi (boshqa jamoa yaratgan VPC, eng yangi AMI, joriy account ID) — o'zgartirmaydi va o'chirmaydi."
+    },
+    {
+      "id": 33398,
+      "code": "WT15",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`terraform console`, `graph`, `output`, `show` qanday yordam beradi?",
+      "explanation": "console — ifoda va funksiyalarni interaktiv sinash (state'dagi qiymatlar bilan); graph — dependency grafigi (DOT); output — chiqish qiymatlari; show — state yoki saqlangan plan'ni o'qiladigan ko'rinishda."
+    },
+    {
       "id": 33178,
       "code": "WT05",
       "level": "M",
@@ -128,6 +194,127 @@
       "explanation": "Ko'p jamoalar katalog/stack bo'yicha ajratadi (`envs/prod`, alohida state va backend key, alohida cloud account). Workspace'lar bir xil kod + bir nechta state uchun qulay, lekin prod/dev'ni tasodifan aralashtirish xavfi bor."
     },
     {
+      "id": 33329,
+      "code": "WT23",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform uchun CI/CD pipeline qanday quriladi?",
+      "explanation": "PR: fmt/validate/tflint/checkov + `plan` (natija PR izohida). Merge'dan keyin: aynan saqlangan plan'ni `apply`. Cloud'ga kirish OIDC orqali (static key yo'q), prod apply uchun approval, bir vaqtda bitta apply (lock/concurrency)."
+    },
+    {
+      "id": 33399,
+      "code": "WT16",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`dynamic` blok nima va qachon ishlatiladi?",
+      "explanation": "Resurs ichidagi takrorlanuvchi nested bloklarni (ingress qoidalari, tag'lar, setting'lar) ro'yxatdan generatsiya qiladi. Ortiqcha ishlatish kodni o'qishni qiyinlashtiradi."
+    },
+    {
+      "id": 33400,
+      "code": "WT17",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Provisioner'lar (`local-exec`, `remote-exec`) va `terraform_data` — nega 'oxirgi chora'?",
+      "explanation": "Provisioner — resurs yaratilgandan keyin skript ishga tushirish. Terraform ularning natijasini state'da kuzatmaydi, idempotent emas, xato bo'lsa resurs 'tainted'. Afzal: cloud-init/user_data, Ansible, image (Packer), provider'ning native resursi."
+    },
+    {
+      "id": 33432,
+      "code": "WT24",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`terraform state mv`, `state rm`, `state list/show` qachon kerak?",
+      "explanation": "state list/show — state'da nima borligini ko'rish; state mv — resurs adresini o'zgartirish (refactor, endi `moved` blok afzal); state rm — resursni Terraform boshqaruvidan chiqarish (resurs cloud'da qoladi)."
+    },
+    {
+      "id": 33433,
+      "code": "WT25",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`Error acquiring the state lock`. `terraform force-unlock` qachon xavfsiz?",
+      "explanation": "Lock — boshqa apply ishlayotganini bildiradi. Avval lock egasi (Who, Created, Operation) aniq ishlamayotganini tekshirish kerak (CI job o'ldirilgan). Shundagina force-unlock <ID>. Ishlayotgan apply'ni ochsangiz state buziladi."
+    },
+    {
+      "id": 33434,
+      "code": "WT26",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`-target` flag nima va nega anti-pattern hisoblanadi?",
+      "explanation": "-target faqat ko'rsatilgan resurs va uning bog'liqliklarini plan/apply qiladi. Favqulodda holat uchun; doimiy ishlatilsa qolgan o'zgarishlar apply qilinmay qoladi, state va kod ajralib ketadi."
+    },
+    {
+      "id": 33435,
+      "code": "WT27",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Provider alias nima? Bitta konfiguratsiyada ikki region yoki ikki AWS akkauntga qanday resurs yaratasiz?",
+      "explanation": "Bir provider'ning bir nechta konfiguratsiyasi `alias` bilan yoziladi va resurs/modulga `provider = aws.us` yoki `providers = {}` bilan beriladi. Misol: CloudFront sertifikati us-east-1 da, qolgani eu-central-1 da."
+    },
+    {
+      "id": 33436,
+      "code": "WT28",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Boshqa jamoaning Terraform natijasini (VPC ID, subnet'lar) qanday ishlatasiz: `terraform_remote_state` yoki data source?",
+      "explanation": "terraform_remote_state boshqa state'ning output'larini o'qiydi — oddiy, lekin butun state'ga o'qish huquqi kerak va jamoalarni qattiq bog'laydi. Data source (tag bo'yicha qidirish) yoki SSM Parameter Store orqali kelishilgan qiymat — bo'shroq bog'lanish."
+    },
+    {
+      "id": 33438,
+      "code": "WT30",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`.tfstate` fayl tasodifan Git'ga commit qilindi. Nima qilasiz?",
+      "explanation": "State ichida secret'lar ochiq matnda (DB parol, kalitlar). Fayl git tarixidan o'chirish yetarli emas — secret'lar oqib ketgan deb hisoblanadi: hammasini aylantirish (rotate), keyin tarixni tozalash, state'ni remote backend'ga o'tkazish, `.gitignore`."
+    },
+    {
+      "id": 33439,
+      "code": "WT31",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Backend'ni o'zgartirish: lokal state'ni S3'ga qanday ko'chirasiz? `-migrate-state` va `-reconfigure` farqi?",
+      "explanation": "backend blokini o'zgartirib `terraform init -migrate-state` — eski state yangi backend'ga ko'chiriladi. `-reconfigure` — ko'chirmasdan yangi backend bilan boshlaydi (state allaqachon u yerda bo'lsa yoki ataylab)."
+    },
+    {
+      "id": 33440,
+      "code": "WT32",
+      "level": "M",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`precondition`/`postcondition` va `check` bloklari nima uchun?",
+      "explanation": "Variable validation faqat bitta o'zgaruvchini tekshiradi. precondition — resurs yaratishdan oldin shart (masalan AMI to'g'ri arxitekturada), postcondition — yaratilgandan keyin natija; check — apply'ni to'xtatmaydigan doimiy tekshiruv (health)."
+    },
+    {
       "id": 33185,
       "code": "WT12",
       "level": "S",
@@ -161,103 +348,59 @@
       "explanation": "Terraform/OpenTofu: multi-cloud, katta ekotizim, HCL. OpenTofu — MPL litsenziyali fork (BSL'dan keyin). Pulumi: haqiqiy dasturlash tili. CloudFormation/CDK: faqat AWS, state AWS boshqaradi. Tanlov: jamoa ko'nikmasi, multi-cloud ehtiyoji, litsenziya, ekotizim."
     },
     {
-      "id": 33324,
-      "code": "WT18",
-      "level": "J",
+      "id": 33437,
+      "code": "WT29",
+      "level": "S",
       "type": "card",
       "topic": "Terraform",
       "domain": "iac",
       "section": "w2",
-      "question": "Variable'larga qiymat berish usullari: `tfvars`, `-var`, `TF_VAR_`, default?",
-      "explanation": "Qiymat manbalari: `default`, `terraform.tfvars`/`*.auto.tfvars` (avtomatik), `-var-file=prod.tfvars`, `-var 'x=y'`, env `TF_VAR_x`. Muhitlar uchun alohida tfvars fayl, secret'lar uchun env yoki secret manager."
+      "question": "Kimdir staging'da `terraform destroy`ni yarim yo'lda to'xtatdi. Qanday tiklaysiz?",
+      "explanation": "Avval holatni muzlatish (boshqa apply yo'q), lock tekshirish, `plan` bilan nima o'chgan/qolganini ko'rish. Stateless resurslar `apply` bilan qayta yaratiladi; data (DB, S3) — backup/snapshot'dan. Keyin oldini olish: prevent_destroy, IAM'da destroy cheklovi, faqat CI'dan apply."
     },
     {
-      "id": 33325,
-      "code": "WT19",
-      "level": "J",
+      "id": 33488,
+      "code": "WT34",
+      "level": "S",
       "type": "card",
       "topic": "Terraform",
       "domain": "iac",
       "section": "w2",
-      "question": "`terraform fmt`, `validate` va `.terraform.lock.hcl` nima uchun?",
-      "explanation": "fmt — kodni standart formatga keltiradi; validate — sintaksis va ichki moslikni tekshiradi (cloud'ga murojaatsiz); lock fayl — provider'larning aniq versiya va hash'larini qotiradi, hamma joyda bir xil provider ishlaydi. Lock fayl Git'ga commit qilinadi."
+      "question": "Terragrunt nima muammoni hal qiladi? Uning `dependency` va `include` bloklari nima?",
+      "explanation": "Terragrunt — Terraform ustidagi wrapper: ko'p muhit/ko'p modulda takrorlanadigan backend/provider config'ni DRY qiladi, modullar orasidagi bog'liqlikni (`dependency`) e'lon qiladi va `run-all` bilan tartib bilan apply qiladi."
     },
     {
-      "id": 33326,
-      "code": "WT20",
-      "level": "J",
+      "id": 33489,
+      "code": "WT35",
+      "level": "S",
       "type": "card",
       "topic": "Terraform",
       "domain": "iac",
       "section": "w2",
-      "question": "`locals`, `output` va `depends_on` qachon ishlatiladi?",
-      "explanation": "locals — takrorlanadigan ifodalarga nom (nom prefiksi, umumiy tag'lar); output — natijani ko'rsatish yoki boshqa modul/stack'ga berish; depends_on — reference orqali ko'rinmaydigan bog'liqlikni majburlash (kam ishlatiladi)."
+      "question": "Terraform modullarini qanday test qilasiz: `terraform test`, Terratest, policy as code?",
+      "explanation": "Qatlamlar: statik (fmt, validate, tflint, Checkov/Trivy), policy (OPA/Conftest yoki Sentinel — plan JSON ustida), unit/integration (`terraform test` — mock provider yoki haqiqiy apply), e2e (Terratest, Go — resursni yaratib, haqiqatan ishlashini tekshirib, o'chiradi)."
     },
     {
-      "id": 33327,
-      "code": "WT21",
-      "level": "J",
+      "id": 33490,
+      "code": "WT36",
+      "level": "S",
       "type": "card",
       "topic": "Terraform",
       "domain": "iac",
       "section": "w2",
-      "question": "Terraform plan'da `-/+` (replace) ko'rsangiz nima qilasiz?",
-      "explanation": "Resurs o'chirib qayta yaratiladi — ma'lumot yo'qolishi yoki downtime bo'lishi mumkin. Qaysi atribut sabab bo'lganini (`# forces replacement`) toping; kerak bo'lmasa kodni o'zgartiring, kerak bo'lsa rejalashtiring (create_before_destroy, snapshot, oyna)."
+      "question": "OpenTofu state encryption nima va nega muhim?",
+      "explanation": "Terraform state'da secret'lar ochiq saqlanadi; backend encryption (S3 SSE) faqat diskda himoya qiladi — bucket'ni o'qiy olgan har kim ko'radi. OpenTofu 1.7+ state va plan'ni client tomonda (AES-GCM, kalit KMS/PBKDF2 dan) shifrlaydi."
     },
     {
-      "id": 33328,
-      "code": "WT22",
-      "level": "J",
+      "id": 33487,
+      "code": "WT33",
+      "level": "St",
       "type": "card",
       "topic": "Terraform",
       "domain": "iac",
       "section": "w2",
-      "question": "Data source va resource farqi? Qachon `data` ishlatiladi?",
-      "explanation": "resource — Terraform yaratadi va boshqaradi (o'chirishi ham mumkin). data — mavjud narsani faqat o'qiydi (boshqa jamoa yaratgan VPC, eng yangi AMI, joriy account ID) — o'zgartirmaydi va o'chirmaydi."
-    },
-    {
-      "id": 33329,
-      "code": "WT23",
-      "level": "M",
-      "type": "card",
-      "topic": "Terraform",
-      "domain": "iac",
-      "section": "w2",
-      "question": "Terraform uchun CI/CD pipeline qanday quriladi?",
-      "explanation": "PR: fmt/validate/tflint/checkov + `plan` (natija PR izohida). Merge'dan keyin: aynan saqlangan plan'ni `apply`. Cloud'ga kirish OIDC orqali (static key yo'q), prod apply uchun approval, bir vaqtda bitta apply (lock/concurrency)."
-    },
-    {
-      "id": 33398,
-      "code": "WT15",
-      "level": "J",
-      "type": "card",
-      "topic": "Terraform",
-      "domain": "iac",
-      "section": "w2",
-      "question": "`terraform console`, `graph`, `output`, `show` qanday yordam beradi?",
-      "explanation": "console — ifoda va funksiyalarni interaktiv sinash (state'dagi qiymatlar bilan); graph — dependency grafigi (DOT); output — chiqish qiymatlari; show — state yoki saqlangan plan'ni o'qiladigan ko'rinishda."
-    },
-    {
-      "id": 33399,
-      "code": "WT16",
-      "level": "M",
-      "type": "card",
-      "topic": "Terraform",
-      "domain": "iac",
-      "section": "w2",
-      "question": "`dynamic` blok nima va qachon ishlatiladi?",
-      "explanation": "Resurs ichidagi takrorlanuvchi nested bloklarni (ingress qoidalari, tag'lar, setting'lar) ro'yxatdan generatsiya qiladi. Ortiqcha ishlatish kodni o'qishni qiyinlashtiradi."
-    },
-    {
-      "id": 33400,
-      "code": "WT17",
-      "level": "M",
-      "type": "card",
-      "topic": "Terraform",
-      "domain": "iac",
-      "section": "w2",
-      "question": "Provisioner'lar (`local-exec`, `remote-exec`) va `terraform_data` — nega 'oxirgi chora'?",
-      "explanation": "Provisioner — resurs yaratilgandan keyin skript ishga tushirish. Terraform ularning natijasini state'da kuzatmaydi, idempotent emas, xato bo'lsa resurs 'tainted'. Afzal: cloud-init/user_data, Ansible, image (Packer), provider'ning native resursi."
+      "question": "Crossplane nima va Terraform'dan farqi? Qachon tanlaysiz?",
+      "explanation": "Crossplane — cloud resurslarini Kubernetes CRD sifatida boshqaradigan controller: doimiy reconcile (drift o'zi tuzaladi), state fayl yo'q (holat K8s API'da). Composition/XRD bilan platforma jamoasi dasturchilarga o'z \"Database\" API'sini beradi. Narx: K8s'ga to'liq bog'liqlik, debug murakkab."
     }
   ]
 }

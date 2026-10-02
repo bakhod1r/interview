@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-02T14:10:44.516Z",
-  "total": 2266,
+  "total": 2363,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -15304,6 +15304,39 @@
       ],
       "questions": [
         {
+          "id": 30557,
+          "code": "LX3",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "`>` , `>>` va `2>&1` nima qiladi?",
+          "explanation": "Tartib muhim: `cmd > out.log 2>&1` ikkalasini faylga yozadi, `cmd 2>&1 > out.log` esa stderr'ni ekranda qoldiradi (u stdout'ning ESKI manziliga ko'chirildi). Bash'da qisqasi: `&> out.log`."
+        },
+        {
+          "id": 30671,
+          "code": "LX37",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "sh, bash, zsh, fish farqi?",
+          "explanation": "Skript uchun: portable kerak bo'lsa `#!/bin/sh` va faqat POSIX sintaksis; bash xususiyatlari ishlatilsa `#!/usr/bin/env bash`. Alpine konteynerida bash yo'q (busybox ash) — bash skript ishlamaydi. `echo $0` / `echo $SHELL` — joriy shell."
+        },
+        {
+          "id": 30672,
+          "code": "LX38",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Environment variable va shell variable farqi?",
+          "explanation": "`VAR=x cmd` — faqat shu buyruq uchun env. Child o'zgartirsa ham parent'ga qaytmaydi. Doimiy qilish: ~/.bashrc (interaktiv), ~/.profile (login), /etc/environment. `env`, `printenv` — ko'rish. `/proc/<pid>/environ` — ishlab turgan jarayon env'i."
+        },
+        {
           "id": 31215,
           "code": "LS01",
           "level": "J",
@@ -15357,6 +15390,107 @@
           "section": "v6",
           "question": "Glob (wildcard) va regex farqi? `*`, `?`, `[abc]`, `**`.",
           "explanation": "Glob — shell fayl nomlarini kengaytiradi (`*.log`), regex — matn pattern (grep). `*` glob'da istalgan belgilar, regex'da oldingi belgining takrori."
+        },
+        {
+          "id": 31256,
+          "code": "LS14",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Shell'da o'zgaruvchi qanday e'lon qilinadi? `x = 5` nega xato?",
+          "explanation": "`x=5` — `=` atrofida bo'sh joy yo'q. `x = 5` shell uchun `x` buyrug'ini `=` va `5` argumentlari bilan chaqirish. O'qish: `\"$x\"`, `export` — bola jarayonlarga uzatish."
+        },
+        {
+          "id": 31257,
+          "code": "LS15",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "`if` sharti: `[ ]`, `[[ ]]`, `test` va `(( ))` farqi?",
+          "explanation": "`[`/`test` — POSIX buyruq, quoting shart. `[[ ]]` — bash keyword: splitting yo'q, `&&`/`||`, `=~` regex, pattern. `(( ))` — arifmetik solishtirish."
+        },
+        {
+          "id": 31258,
+          "code": "LS16",
+          "level": "J",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Bash'da `for`, `while`, `until` sikllari; faylni qatorma-qator qanday to'g'ri o'qiladi?",
+          "explanation": "`for x in list`, `for ((i=0;i<n;i++))`, `while cond`. Fayl o'qish: `while IFS= read -r line; do ...; done < file` — `for line in $(cat f)` emas."
+        },
+        {
+          "id": 30579,
+          "code": "LX25",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Bu bash skriptda qanday xavf bor?",
+          "snippet": "#!/bin/bash\ncd $DEPLOY_DIR\nrm -rf *\ncp -r build/* .",
+          "explanation": "`set -e` — xatoda to'xtash, `-u` — aniqlanmagan o'zgaruvchi xato, `-o pipefail` — pipe'dagi har qanday xato. Qo'shtirnoqsiz o'zgaruvchi bo'shliq va glob bilan bo'linadi. ShellCheck bu xatolarning ko'pini topadi. Mashhur misol: Steam'ning `rm -rf \"$STEAMROOT/\"*` bug'i."
+        },
+        {
+          "id": 30673,
+          "code": "LX39",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": ".bashrc va .bash_profile qachon o'qiladi?",
+          "explanation": "Cron va skriptlar (non-interactive) ikkalasini ham o'qimaydi — 'terminalda ishlaydi, cron'da ishlamaydi' muammosining sababi (PATH, env). Yechim: skriptda to'liq yo'l va kerakli env'ni aniq berish."
+        },
+        {
+          "id": 30674,
+          "code": "LX40",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Natija nima?",
+          "snippet": "x=5\necho '$x'\necho \"$x\"\necho $(echo hi)\necho `date +%Y`",
+          "explanation": "`$()` backtick'dan afzal: ichma-ich yozish oson va o'qilishi aniq. Qo'shtirnoqsiz `$x` word splitting va glob'ga uchraydi — fayl nomida bo'shliq bo'lsa skript buziladi. Qoida: har doim \"$var\"."
+        },
+        {
+          "id": 30675,
+          "code": "LX41",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Exit code: `$?` nima va 0, 1, 127, 130, 137 nimani bildiradi?",
+          "explanation": "128+N — N-signal bilan o'ldirilgan. 126 — bajarish huquqi yo'q, 139 — SIGSEGV (128+11), 143 — SIGTERM. `&&` / `||` exit code'ga qarab zanjir qiladi. Pipe'da $? — oxirgi buyruqniki; hammasi: ${PIPESTATUS[@]} yoki set -o pipefail."
+        },
+        {
+          "id": 30676,
+          "code": "LX42",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "`source script.sh` va `./script.sh` farqi?",
+          "explanation": "Shuning uchun `.env` fayllar va virtualenv `activate` source qilinadi. `bash script.sh` — +x kerak emas, shebang e'tiborga olinmaydi."
+        },
+        {
+          "id": 30691,
+          "code": "LX57",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Dastur qayerdan topiladi: `PATH` va `which`/`type`?",
+          "explanation": "Xavfsizlik: PATH'ga `.` qo'shmang — joriy katalogdagi zararli `ls` ishga tushishi mumkin. Cron'da PATH qisqa (/usr/bin:/bin) — to'liq yo'l ishlating. Kutubxonalar uchun o'xshash: ldconfig, LD_LIBRARY_PATH, `ldd binary`."
         },
         {
           "id": 31220,
@@ -15414,72 +15548,6 @@
           "explanation": "`trap 'cleanup' EXIT INT TERM` — chiqishda/signal'da funksiya chaqiriladi. Temp fayl, lock, fon jarayonlarni tozalash. SIGKILL'ni ushlab bo'lmaydi."
         },
         {
-          "id": 31225,
-          "code": "LS11",
-          "level": "S",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Konteyner ENTRYPOINT'da shell form va exec form farqi; nega `exec` muhim?",
-          "explanation": "Shell form (`CMD app`) — `/bin/sh -c app`, PID 1 = sh, SIGTERM ilovaga yetmaydi, 10s keyin SIGKILL. Exec form `[\"app\"]` yoki wrapper'da `exec app` — ilova PID 1."
-        },
-        {
-          "id": 31226,
-          "code": "LS12",
-          "level": "S",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Production bash skript uchun qanday standartlar qo'llaysan? Qachon bash emas?",
-          "explanation": "`set -euo pipefail`, quoting, `shellcheck`, `trap` cleanup, idempotentlik, `mktemp`, log + exit code, `--dry-run`. 100+ qator, JSON, murakkab logika — Go/Python."
-        },
-        {
-          "id": 31227,
-          "code": "LS13",
-          "level": "S",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
-          "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
-        },
-        {
-          "id": 31256,
-          "code": "LS14",
-          "level": "J",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Shell'da o'zgaruvchi qanday e'lon qilinadi? `x = 5` nega xato?",
-          "explanation": "`x=5` — `=` atrofida bo'sh joy yo'q. `x = 5` shell uchun `x` buyrug'ini `=` va `5` argumentlari bilan chaqirish. O'qish: `\"$x\"`, `export` — bola jarayonlarga uzatish."
-        },
-        {
-          "id": 31257,
-          "code": "LS15",
-          "level": "J",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "`if` sharti: `[ ]`, `[[ ]]`, `test` va `(( ))` farqi?",
-          "explanation": "`[`/`test` — POSIX buyruq, quoting shart. `[[ ]]` — bash keyword: splitting yo'q, `&&`/`||`, `=~` regex, pattern. `(( ))` — arifmetik solishtirish."
-        },
-        {
-          "id": 31258,
-          "code": "LS16",
-          "level": "J",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Bash'da `for`, `while`, `until` sikllari; faylni qatorma-qator qanday to'g'ri o'qiladi?",
-          "explanation": "`for x in list`, `for ((i=0;i<n;i++))`, `while cond`. Fayl o'qish: `while IFS= read -r line; do ...; done < file` — `for line in $(cat f)` emas."
-        },
-        {
           "id": 31259,
           "code": "LS17",
           "level": "M",
@@ -15535,6 +15603,61 @@
           "explanation": "`$(( a + b ))` — butun son, tez, builtin. `expr` — eski, tashqi. Kasr son — `bc` yoki `awk`."
         },
         {
+          "id": 33482,
+          "code": "SH01",
+          "level": "M",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "YAML'ni CLI'da qanday o'zgartirasiz? `yq` va `sed` bilan YAML tahrirlash nega xavfli?",
+          "explanation": "YAML — tuzilmali format: sed qator bo'yicha ishlaydi, indent/kalit takrorini bilmaydi va noto'g'ri joyni o'zgartiradi. yq (mikefarah) YAML'ni parse qilib yo'l bo'yicha o'zgartiradi — CI'da image tag yangilash uchun standart."
+        },
+        {
+          "id": 30677,
+          "code": "LX43",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Pipe (`|`) qanday ishlaydi?",
+          "explanation": "`yes | head -1` shu sababli tugaydi (SIGPIPE). Named pipe (FIFO): `mkfifo`. `cmd1 | cmd2` da o'zgaruvchiga yozish subshell'da bo'ladi (bash'da `while read` pipe ichida o'zgaruvchi yo'qolishi) — yechim: `< <(cmd)` process substitution yoki `shopt -s lastpipe`."
+        },
+        {
+          "id": 31225,
+          "code": "LS11",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Konteyner ENTRYPOINT'da shell form va exec form farqi; nega `exec` muhim?",
+          "explanation": "Shell form (`CMD app`) — `/bin/sh -c app`, PID 1 = sh, SIGTERM ilovaga yetmaydi, 10s keyin SIGKILL. Exec form `[\"app\"]` yoki wrapper'da `exec app` — ilova PID 1."
+        },
+        {
+          "id": 31226,
+          "code": "LS12",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Production bash skript uchun qanday standartlar qo'llaysan? Qachon bash emas?",
+          "explanation": "`set -euo pipefail`, quoting, `shellcheck`, `trap` cleanup, idempotentlik, `mktemp`, log + exit code, `--dry-run`. 100+ qator, JSON, murakkab logika — Go/Python."
+        },
+        {
+          "id": 31227,
+          "code": "LS13",
+          "level": "S",
+          "type": "card",
+          "topic": "Shell",
+          "domain": "linux",
+          "section": "v6",
+          "question": "Buyruq qanday topiladi va bajariladi: alias, function, builtin, PATH — tartib?",
+          "explanation": "Bash tartibi: alias, keyword, function, builtin, keyin `PATH` (hash cache). `type -a cmd` hammasini ko'rsatadi. `command`/`\\cmd` alias'ni chetlab o'tadi."
+        },
+        {
           "id": 31264,
           "code": "LS22",
           "level": "S",
@@ -15555,118 +15678,6 @@
           "section": "v6",
           "question": "Parallel ish va concurrency shell'da: `&`, `wait`, `xargs -P`, `flock`?",
           "explanation": "`cmd &` fon, `wait` — hammasini kutish (`wait -n` — birinchisini). Cheklangan parallellik — `xargs -P N` yoki GNU `parallel`. Bir vaqtda ikki nusxa ishlamasligi — `flock`."
-        },
-        {
-          "id": 30671,
-          "code": "LX37",
-          "level": "J",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "sh, bash, zsh, fish farqi?",
-          "explanation": "Skript uchun: portable kerak bo'lsa `#!/bin/sh` va faqat POSIX sintaksis; bash xususiyatlari ishlatilsa `#!/usr/bin/env bash`. Alpine konteynerida bash yo'q (busybox ash) — bash skript ishlamaydi. `echo $0` / `echo $SHELL` — joriy shell."
-        },
-        {
-          "id": 30672,
-          "code": "LX38",
-          "level": "J",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Environment variable va shell variable farqi?",
-          "explanation": "`VAR=x cmd` — faqat shu buyruq uchun env. Child o'zgartirsa ham parent'ga qaytmaydi. Doimiy qilish: ~/.bashrc (interaktiv), ~/.profile (login), /etc/environment. `env`, `printenv` — ko'rish. `/proc/<pid>/environ` — ishlab turgan jarayon env'i."
-        },
-        {
-          "id": 30673,
-          "code": "LX39",
-          "level": "M",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": ".bashrc va .bash_profile qachon o'qiladi?",
-          "explanation": "Cron va skriptlar (non-interactive) ikkalasini ham o'qimaydi — 'terminalda ishlaydi, cron'da ishlamaydi' muammosining sababi (PATH, env). Yechim: skriptda to'liq yo'l va kerakli env'ni aniq berish."
-        },
-        {
-          "id": 30674,
-          "code": "LX40",
-          "level": "M",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Natija nima?",
-          "snippet": "x=5\necho '$x'\necho \"$x\"\necho $(echo hi)\necho `date +%Y`",
-          "explanation": "`$()` backtick'dan afzal: ichma-ich yozish oson va o'qilishi aniq. Qo'shtirnoqsiz `$x` word splitting va glob'ga uchraydi — fayl nomida bo'shliq bo'lsa skript buziladi. Qoida: har doim \"$var\"."
-        },
-        {
-          "id": 30675,
-          "code": "LX41",
-          "level": "M",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Exit code: `$?` nima va 0, 1, 127, 130, 137 nimani bildiradi?",
-          "explanation": "128+N — N-signal bilan o'ldirilgan. 126 — bajarish huquqi yo'q, 139 — SIGSEGV (128+11), 143 — SIGTERM. `&&` / `||` exit code'ga qarab zanjir qiladi. Pipe'da $? — oxirgi buyruqniki; hammasi: ${PIPESTATUS[@]} yoki set -o pipefail."
-        },
-        {
-          "id": 30676,
-          "code": "LX42",
-          "level": "M",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "`source script.sh` va `./script.sh` farqi?",
-          "explanation": "Shuning uchun `.env` fayllar va virtualenv `activate` source qilinadi. `bash script.sh` — +x kerak emas, shebang e'tiborga olinmaydi."
-        },
-        {
-          "id": 30557,
-          "code": "LX3",
-          "level": "J",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "`>` , `>>` va `2>&1` nima qiladi?",
-          "explanation": "Tartib muhim: `cmd > out.log 2>&1` ikkalasini faylga yozadi, `cmd 2>&1 > out.log` esa stderr'ni ekranda qoldiradi (u stdout'ning ESKI manziliga ko'chirildi). Bash'da qisqasi: `&> out.log`."
-        },
-        {
-          "id": 30579,
-          "code": "LX25",
-          "level": "M",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Bu bash skriptda qanday xavf bor?",
-          "snippet": "#!/bin/bash\ncd $DEPLOY_DIR\nrm -rf *\ncp -r build/* .",
-          "explanation": "`set -e` — xatoda to'xtash, `-u` — aniqlanmagan o'zgaruvchi xato, `-o pipefail` — pipe'dagi har qanday xato. Qo'shtirnoqsiz o'zgaruvchi bo'shliq va glob bilan bo'linadi. ShellCheck bu xatolarning ko'pini topadi. Mashhur misol: Steam'ning `rm -rf \"$STEAMROOT/\"*` bug'i."
-        },
-        {
-          "id": 30677,
-          "code": "LX43",
-          "level": "S",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Pipe (`|`) qanday ishlaydi?",
-          "explanation": "`yes | head -1` shu sababli tugaydi (SIGPIPE). Named pipe (FIFO): `mkfifo`. `cmd1 | cmd2` da o'zgaruvchiga yozish subshell'da bo'ladi (bash'da `while read` pipe ichida o'zgaruvchi yo'qolishi) — yechim: `< <(cmd)` process substitution yoki `shopt -s lastpipe`."
-        },
-        {
-          "id": 30691,
-          "code": "LX57",
-          "level": "M",
-          "type": "card",
-          "topic": "Shell",
-          "domain": "linux",
-          "section": "v6",
-          "question": "Dastur qayerdan topiladi: `PATH` va `which`/`type`?",
-          "explanation": "Xavfsizlik: PATH'ga `.` qo'shmang — joriy katalogdagi zararli `ls` ishga tushishi mumkin. Cron'da PATH qisqa (/usr/bin:/bin) — to'liq yo'l ishlating. Kutubxonalar uchun o'xshash: ldconfig, LD_LIBRARY_PATH, `ldd binary`."
         }
       ]
     },
@@ -17925,6 +17936,28 @@
           "explanation": "`systemctl status app` -> `journalctl -u app -e` / `-b` -> unit faylni ko'r (`systemctl cat app`) -> qo'lda ishga tushirib ko'r."
         },
         {
+          "id": 31298,
+          "code": "DX14",
+          "level": "J",
+          "type": "card",
+          "topic": "systemd & services",
+          "domain": "linux",
+          "section": "v14",
+          "question": "crontab sintaksisi: `*/5 * * * *` nima? `crontab -e/-l` va `/etc/crontab` farqi?",
+          "explanation": "5 maydon: daqiqa soat kun oy hafta_kuni. */5 — har 5 daqiqada. crontab -e — user crontab'i; /etc/crontab va /etc/cron.d/* — tizim, 6-maydon user nomi."
+        },
+        {
+          "id": 33465,
+          "code": "DW16",
+          "level": "J",
+          "type": "card",
+          "topic": "systemd & services",
+          "domain": "linux",
+          "section": "v14",
+          "question": "`cron`, `anacron` va systemd timer farqi?",
+          "explanation": "cron — aniq vaqtda ishlaydi, server o'chiq bo'lsa o'tkazib yuboradi. anacron — kunlik/haftalik ishlarni server yoqilganda bajarib qo'yadi (laptop, vaqti-vaqti bilan o'chadigan server). systemd timer — ikkalasining imkoniyati: `Persistent=true`, log journald'da, bog'liqliklar."
+        },
+        {
           "id": 31290,
           "code": "DX06",
           "level": "M",
@@ -18013,17 +18046,6 @@
           "explanation": "cron — oddiy, klassik. timer — unit bilan birlashgan: log journald'da, dependency, Persistent= (o'tkazib yuborilganini bajaradi), RandomizedDelaySec, resource limit."
         },
         {
-          "id": 31298,
-          "code": "DX14",
-          "level": "J",
-          "type": "card",
-          "topic": "systemd & services",
-          "domain": "linux",
-          "section": "v14",
-          "question": "crontab sintaksisi: `*/5 * * * *` nima? `crontab -e/-l` va `/etc/crontab` farqi?",
-          "explanation": "5 maydon: daqiqa soat kun oy hafta_kuni. */5 — har 5 daqiqada. crontab -e — user crontab'i; /etc/crontab va /etc/cron.d/* — tizim, 6-maydon user nomi."
-        },
-        {
           "id": 31299,
           "code": "DX15",
           "level": "M",
@@ -18100,6 +18122,28 @@
       ],
       "questions": [
         {
+          "id": 30558,
+          "code": "LX4",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Jarayonni terminal yopilgandan keyin ham ishlab turishi uchun?",
+          "explanation": "Terminal yopilganda SIGHUP yuboriladi — nohup uni e'tiborsiz qoldiradi. Lekin nohup bilan restart, log, resurs cheklovi yo'q — uzoq yashaydigan servis uchun systemd yoki konteyner orkestratori to'g'ri yo'l."
+        },
+        {
+          "id": 30559,
+          "code": "LX5",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "`/proc` katalogi nima?",
+          "explanation": "`ps`, `top`, `free` ham ma'lumotni /proc'dan o'qiydi. /proc/<pid>/fd — ochiq fayllar, /proc/<pid>/limits — ulimit'lar, /proc/<pid>/status — VmRSS va h.k. /sys — qurilmalar va cgroups uchun shunga o'xshash."
+        },
+        {
           "id": 30663,
           "code": "LX29",
           "level": "J",
@@ -18120,6 +18164,116 @@
           "section": "v11",
           "question": "System call nima? Misol keltiring.",
           "explanation": "Odatda to'g'ridan-to'g'ri emas, libc orqali chaqiriladi (printf -> write). Syscall — kontekst almashuvi, arzon emas; shuning uchun bufferlash (bufio), batching, io_uring/epoll kabi mexanizmlar. `strace -c ./app` — syscall statistikasi."
+        },
+        {
+          "id": 31336,
+          "code": "DX52",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Signal'lar: SIGTERM, SIGKILL, SIGHUP, SIGINT, SIGSTOP farqi? `kill`, `pkill`, `killall`.",
+          "explanation": "SIGTERM(15) — iltimos to'xta (ushlanadi). SIGKILL(9) — majburiy, ushlanmaydi. SIGHUP(1) — terminal uzildi / daemonlarda config reload. SIGINT(2) — Ctrl+C. SIGSTOP(19)/SIGCONT — pauza/davom (Ctrl+Z = SIGTSTP)."
+        },
+        {
+          "id": 31337,
+          "code": "DX53",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Foreground/background: `&`, Ctrl+Z, `bg`, `fg`, `jobs`, `nohup`, `disown`, tmux/screen.",
+          "explanation": "`cmd &` — background; Ctrl+Z to'xtatadi; bg/fg davom ettiradi; jobs ro'yxat. Terminal yopilganda SIGHUP keladi — nohup/disown/setsid yoki tmux bilan himoya. Uzoq ish uchun eng yaxshisi tmux yoki systemd-run."
+        },
+        {
+          "id": 33412,
+          "code": "WM01",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Kernel modullari: `lsmod`, `modprobe`, `modinfo` va modulni boot'da yuklash?",
+          "explanation": "Modul — kernel'ga runtime'da yuklanadigan kod (drayver, filesystem, netfilter). `lsmod` — yuklanganlar, `modprobe` — dependency'lari bilan yuklash/olib tashlash, `modinfo` — ma'lumot. Doimiy: `/etc/modules-load.d/`, parametr: `/etc/modprobe.d/`."
+        },
+        {
+          "id": 33413,
+          "code": "WM02",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Server hardware ma'lumotini qanday olasiz: `lscpu`, `free`, `lsblk`, `dmidecode`, `lspci`?",
+          "explanation": "lscpu — CPU (yadro, thread, NUMA, virtualizatsiya); free — RAM; lsblk — disklar; dmidecode — BIOS, motherboard, RAM slotlari (root); lspci/lsusb — qurilmalar; `nproc` — mavjud CPU soni."
+        },
+        {
+          "id": 33463,
+          "code": "LX59",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "File descriptor nima? stdin/stdout/stderr va `2>&1` qanday ishlaydi?",
+          "explanation": "File descriptor — process ochgan fayl/socket/pipe uchun kernel bergan butun son. 0=stdin, 1=stdout, 2=stderr. `2>&1` — stderr'ni stdout ketayotgan joyga yo'naltiradi. Har ulanish ham FD — limit (`ulimit -n`) shundan."
+        },
+        {
+          "id": 30543,
+          "code": "DO9",
+          "level": "M",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Servis `kill -9` o'rniga `kill -15` (SIGTERM) bilan to'xtatilishi nega muhim?",
+          "explanation": "Kubernetes ham avval SIGTERM yuboradi, terminationGracePeriodSeconds (default 30s)dan keyin SIGKILL. Konteynerda PID 1 muammosi: shell-form ENTRYPOINT signalni ilovaga uzatmaydi — exec-form yoki tini ishlating."
+        },
+        {
+          "id": 30545,
+          "code": "DO11",
+          "level": "M",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "systemd servisi crash bo'lsa avtomatik qayta ishga tushishi uchun?",
+          "explanation": "`StartLimitIntervalSec`/`StartLimitBurst` cheksiz restart tsiklini to'xtatadi. Resurs cheklovlari ham unit'da: MemoryMax, CPUQuota (cgroups). Xavfsizlik: User=, NoNewPrivileges=yes, ProtectSystem=strict."
+        },
+        {
+          "id": 30561,
+          "code": "LX7",
+          "level": "M",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Zombie jarayon nima va uni qanday yo'qotasan?",
+          "explanation": "Zombie allaqachon o'lik — unga signal ta'sir qilmaydi. Ko'p zombie PID tugashiga olib keladi (pid_max). Konteynerda PID 1 bo'lgan ilova wait() qilmasa zombie yig'iladi — tini yoki `docker run --init` ishlatiladi. Orphan esa — ota-jarayoni o'lgan, lekin o'zi tirik jarayon."
+        },
+        {
+          "id": 30562,
+          "code": "LX8",
+          "level": "M",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "`ps aux` dagi STAT ustunidagi `D` holati nimani bildiradi?",
+          "explanation": "Boshqa holatlar: R — ishlayapti/navbatda, S — interruptible sleep, T — to'xtatilgan, Z — zombie. Ko'p D-holat jarayonlar load average'ni oshiradi, CPU esa bo'sh turadi. Sabab: sekin disk, osilgan NFS, yadro drayveri."
+        },
+        {
+          "id": 30563,
+          "code": "LX9",
+          "level": "M",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "`fork()` va `exec()` farqi?",
+          "explanation": "Copy-on-write tufayli fork arzon — sahifalar faqat yozilganda nusxalanadi. Redis BGSAVE shu mexanizmdan foydalanadi (katta yozish yukida xotira ikki barobarga yaqinlashishi mumkin). Dockerfile'da exec-form ENTRYPOINT ilovani to'g'ridan-to'g'ri PID 1 qiladi."
         },
         {
           "id": 30665,
@@ -18166,105 +18320,6 @@
           "explanation": "Noto'g'ri manzilga murojaat esa — segfault (SIGSEGV). Sahifa odatda 4KB; Huge Pages (2MB) TLB miss'ni kamaytiradi (DB'lar uchun), THP ba'zan latency spike beradi. `ps -o min_flt,maj_flt`, `/usr/bin/time -v`."
         },
         {
-          "id": 30669,
-          "code": "LX35",
-          "level": "S",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "Kernel panic va kernel oops farqi?",
-          "explanation": "Tahlil: kdump/kexec bilan crash dump yig'ish, `crash` vositasi. Production'da `kernel.panic_on_oops=1` — beqaror holatda ishlashdan ko'ra reboot yaxshiroq. Bulutda serial console loglari muhim."
-        },
-        {
-          "id": 30670,
-          "code": "LX36",
-          "level": "S",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "eBPF nima va nega DevOps'da mashhur?",
-          "explanation": "Vositalar: bcc (execsnoop, opensnoop, biolatency, tcpretrans), bpftrace bir qatorli skriptlar. strace'dan farqli — production'da xavfsiz. Kubernetes'da kube-proxy o'rnini (Cilium) iptables'siz bosadi."
-        },
-        {
-          "id": 30563,
-          "code": "LX9",
-          "level": "M",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "`fork()` va `exec()` farqi?",
-          "explanation": "Copy-on-write tufayli fork arzon — sahifalar faqat yozilganda nusxalanadi. Redis BGSAVE shu mexanizmdan foydalanadi (katta yozish yukida xotira ikki barobarga yaqinlashishi mumkin). Dockerfile'da exec-form ENTRYPOINT ilovani to'g'ridan-to'g'ri PID 1 qiladi."
-        },
-        {
-          "id": 30561,
-          "code": "LX7",
-          "level": "M",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "Zombie jarayon nima va uni qanday yo'qotasan?",
-          "explanation": "Zombie allaqachon o'lik — unga signal ta'sir qilmaydi. Ko'p zombie PID tugashiga olib keladi (pid_max). Konteynerda PID 1 bo'lgan ilova wait() qilmasa zombie yig'iladi — tini yoki `docker run --init` ishlatiladi. Orphan esa — ota-jarayoni o'lgan, lekin o'zi tirik jarayon."
-        },
-        {
-          "id": 30562,
-          "code": "LX8",
-          "level": "M",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "`ps aux` dagi STAT ustunidagi `D` holati nimani bildiradi?",
-          "explanation": "Boshqa holatlar: R — ishlayapti/navbatda, S — interruptible sleep, T — to'xtatilgan, Z — zombie. Ko'p D-holat jarayonlar load average'ni oshiradi, CPU esa bo'sh turadi. Sabab: sekin disk, osilgan NFS, yadro drayveri."
-        },
-        {
-          "id": 30558,
-          "code": "LX4",
-          "level": "J",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "Jarayonni terminal yopilgandan keyin ham ishlab turishi uchun?",
-          "explanation": "Terminal yopilganda SIGHUP yuboriladi — nohup uni e'tiborsiz qoldiradi. Lekin nohup bilan restart, log, resurs cheklovi yo'q — uzoq yashaydigan servis uchun systemd yoki konteyner orkestratori to'g'ri yo'l."
-        },
-        {
-          "id": 30543,
-          "code": "DO9",
-          "level": "M",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "Servis `kill -9` o'rniga `kill -15` (SIGTERM) bilan to'xtatilishi nega muhim?",
-          "explanation": "Kubernetes ham avval SIGTERM yuboradi, terminationGracePeriodSeconds (default 30s)dan keyin SIGKILL. Konteynerda PID 1 muammosi: shell-form ENTRYPOINT signalni ilovaga uzatmaydi — exec-form yoki tini ishlating."
-        },
-        {
-          "id": 30545,
-          "code": "DO11",
-          "level": "M",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "systemd servisi crash bo'lsa avtomatik qayta ishga tushishi uchun?",
-          "explanation": "`StartLimitIntervalSec`/`StartLimitBurst` cheksiz restart tsiklini to'xtatadi. Resurs cheklovlari ham unit'da: MemoryMax, CPUQuota (cgroups). Xavfsizlik: User=, NoNewPrivileges=yes, ProtectSystem=strict."
-        },
-        {
-          "id": 30559,
-          "code": "LX5",
-          "level": "J",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "`/proc` katalogi nima?",
-          "explanation": "`ps`, `top`, `free` ham ma'lumotni /proc'dan o'qiydi. /proc/<pid>/fd — ochiq fayllar, /proc/<pid>/limits — ulimit'lar, /proc/<pid>/status — VmRSS va h.k. /sys — qurilmalar va cgroups uchun shunga o'xshash."
-        },
-        {
           "id": 30692,
           "code": "LX58",
           "level": "M",
@@ -18274,28 +18329,6 @@
           "section": "v11",
           "question": "`ls -l /etc/passwd` buyrug'ini bajarganda nima sodir bo'ladi (shell'dan kernelgacha)?",
           "explanation": "Bu savol kernel, shell, fayl tizimi va jarayon tushunchalarini bitta zanjirda tekshiradi. `strace ls -l /etc/passwd` bilan o'zingiz ko'rib chiqing."
-        },
-        {
-          "id": 31336,
-          "code": "DX52",
-          "level": "J",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "Signal'lar: SIGTERM, SIGKILL, SIGHUP, SIGINT, SIGSTOP farqi? `kill`, `pkill`, `killall`.",
-          "explanation": "SIGTERM(15) — iltimos to'xta (ushlanadi). SIGKILL(9) — majburiy, ushlanmaydi. SIGHUP(1) — terminal uzildi / daemonlarda config reload. SIGINT(2) — Ctrl+C. SIGSTOP(19)/SIGCONT — pauza/davom (Ctrl+Z = SIGTSTP)."
-        },
-        {
-          "id": 31337,
-          "code": "DX53",
-          "level": "J",
-          "type": "card",
-          "topic": "Kernel & processes",
-          "domain": "linux",
-          "section": "v11",
-          "question": "Foreground/background: `&`, Ctrl+Z, `bg`, `fg`, `jobs`, `nohup`, `disown`, tmux/screen.",
-          "explanation": "`cmd &` — background; Ctrl+Z to'xtatadi; bg/fg davom ettiradi; jobs ro'yxat. Terminal yopilganda SIGHUP keladi — nohup/disown/setsid yoki tmux bilan himoya. Uzoq ish uchun eng yaxshisi tmux yoki systemd-run."
         },
         {
           "id": 31338,
@@ -18320,26 +18353,48 @@
           "explanation": "cmdline, environ, status (VmRSS, Threads, State), limits, fd/ (ochiq fayllar), cwd, exe, maps, stack, io, cgroup, oom_score. Hech qanday vositasiz jarayonni o'rganish mumkin."
         },
         {
-          "id": 33412,
-          "code": "WM01",
-          "level": "J",
+          "id": 33464,
+          "code": "LX60",
+          "level": "M",
           "type": "card",
           "topic": "Kernel & processes",
           "domain": "linux",
           "section": "v11",
-          "question": "Kernel modullari: `lsmod`, `modprobe`, `modinfo` va modulni boot'da yuklash?",
-          "explanation": "Modul — kernel'ga runtime'da yuklanadigan kod (drayver, filesystem, netfilter). `lsmod` — yuklanganlar, `modprobe` — dependency'lari bilan yuklash/olib tashlash, `modinfo` — ma'lumot. Doimiy: `/etc/modules-load.d/`, parametr: `/etc/modprobe.d/`."
+          "question": "Linux'da process va thread farqi? `fork()` va `exec()` nima qiladi?",
+          "explanation": "Process — alohida xotira manzil maydoni; thread — bitta process ichida xotirani bo'lishadi (Linux'da ikkalasi ham `clone()` bilan yaratilgan task). fork — joriy process nusxasi (copy-on-write); exec — process ichidagi dasturni boshqasiga almashtiradi. Shell buyruqni fork+exec bilan ishga tushiradi."
         },
         {
-          "id": 33413,
-          "code": "WM02",
-          "level": "J",
+          "id": 30669,
+          "code": "LX35",
+          "level": "S",
           "type": "card",
           "topic": "Kernel & processes",
           "domain": "linux",
           "section": "v11",
-          "question": "Server hardware ma'lumotini qanday olasiz: `lscpu`, `free`, `lsblk`, `dmidecode`, `lspci`?",
-          "explanation": "lscpu — CPU (yadro, thread, NUMA, virtualizatsiya); free — RAM; lsblk — disklar; dmidecode — BIOS, motherboard, RAM slotlari (root); lspci/lsusb — qurilmalar; `nproc` — mavjud CPU soni."
+          "question": "Kernel panic va kernel oops farqi?",
+          "explanation": "Tahlil: kdump/kexec bilan crash dump yig'ish, `crash` vositasi. Production'da `kernel.panic_on_oops=1` — beqaror holatda ishlashdan ko'ra reboot yaxshiroq. Bulutda serial console loglari muhim."
+        },
+        {
+          "id": 30670,
+          "code": "LX36",
+          "level": "S",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "eBPF nima va nega DevOps'da mashhur?",
+          "explanation": "Vositalar: bcc (execsnoop, opensnoop, biolatency, tcpretrans), bpftrace bir qatorli skriptlar. strace'dan farqli — production'da xavfsiz. Kubernetes'da kube-proxy o'rnini (Cilium) iptables'siz bosadi."
+        },
+        {
+          "id": 33510,
+          "code": "LX61",
+          "level": "St",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "`epoll`, `select`/`poll` va `io_uring` farqi? Nega Nginx/Go yuz minglab ulanishni ko'taradi?",
+          "explanation": "select/poll har chaqiruvda barcha FD'larni kernel'ga beradi va tekshiradi — O(n). epoll — kernel tayyor FD'lar ro'yxatini o'zi yuritadi, faqat tayyorlarini qaytaradi — O(tayyorlar). io_uring — umumiy ring buffer'lar orqali asinxron I/O: syscall soni minimal, disk I/O ham haqiqiy async."
         }
       ]
     },
@@ -18372,29 +18427,6 @@
           "section": "v12",
           "question": "Load average 16, CPU foydalanish esa 10%. Nima bo'lishi mumkin?",
           "explanation": "Linux'da load = running + runnable + D-state. Yuqori iowait, to'yingan disk (%util ~100) yoki osilib qolgan tarmoq fayl tizimi odatiy sabablar. Load'ni yadrolar soni bilan solishtiring (`nproc`)."
-        },
-        {
-          "id": 30544,
-          "code": "DO10",
-          "level": "S",
-          "type": "card",
-          "topic": "Troubleshooting",
-          "domain": "linux",
-          "section": "v12",
-          "question": "Production serverda ilova sekinlashdi. Linux darajasida qanday tekshirasan?",
-          "explanation": "Brendan Gregg'ning '60 soniyada Linux tahlili' ro'yxati — intervyuda tizimli yondashuvni ko'rsatish muhim, tasodifiy buyruqlarni emas.",
-          "source": "https://www.brendangregg.com/usemethod.html"
-        },
-        {
-          "id": 30564,
-          "code": "LX10",
-          "level": "S",
-          "type": "card",
-          "topic": "Troubleshooting",
-          "domain": "linux",
-          "section": "v12",
-          "question": "Jarayon osilib qoldi, CPU 0%. Nima qilayotganini qanday ko'rasan?",
-          "explanation": "Odatiy topilmalar: futex (lock kutish — deadlock), read on socket (timeout'siz tarmoq chaqiruvi), connect (DNS/firewall), flock. strace production'da ehtiyotkorlik bilan — jarayonni sezilarli sekinlashtiradi; eBPF vositalar (bpftrace, offcputime) yengilroq."
         },
         {
           "id": 30565,
@@ -18440,28 +18472,6 @@
           "section": "v12",
           "question": "`No space left on device`, lekin `df -h` 40% bo'sh ko'rsatyapti. Sabab?",
           "explanation": "Inode soni ext4'da format vaqtida belgilanadi. Topish: `find / -xdev -type f | cut -d/ -f2-3 | sort | uniq -c | sort -n | tail`. XFS inode'larni dinamik ajratadi."
-        },
-        {
-          "id": 30570,
-          "code": "LX16",
-          "level": "S",
-          "type": "card",
-          "topic": "Troubleshooting",
-          "domain": "linux",
-          "section": "v12",
-          "question": "`fsync` nima uchun kerak va DB'lar uchun nega muhim?",
-          "explanation": "Postgres WAL commit'da fsync qiladi (synchronous_commit). 'fsyncgate' (2018): fsync xatosidan keyin qayta urinish xavfsiz emasligi aniqlandi — Postgres endi panic qiladi. Yangi fayl uchun katalogni ham fsync qilish kerak. Atomik yozish: vaqtinchalik faylga yozish, fsync, rename."
-        },
-        {
-          "id": 30582,
-          "code": "LX28",
-          "level": "St",
-          "type": "card",
-          "topic": "Troubleshooting",
-          "domain": "linux",
-          "section": "v12",
-          "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
-          "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
         },
         {
           "id": 31315,
@@ -18519,6 +18529,73 @@
           "explanation": "lsof: kim faylni/portni ochgan, o'chirilgan lekin ochiq fayllar, FD soni. strace: jarayon qaysi syscall'da osilgan, qaysi faylni topolmayapti, vaqt qayerga ketyapti."
         },
         {
+          "id": 31323,
+          "code": "DX39",
+          "level": "M",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "Disk IO bottleneck'ni qanday aniqlaysan va qaysi jarayon aybdor?",
+          "explanation": "`iostat -xz 1` (await, %util, aqu-sz), `vmstat` wa/b, `iotop -oPa`, `pidstat -d 1`, D-state jarayonlar. Keyin sabab: swap, log, DB checkpoint, backup, noatime yo'q."
+        },
+        {
+          "id": 31325,
+          "code": "DX41",
+          "level": "M",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`free -h`, `/proc/meminfo` va \"Linux RAM'ni yeyapti\" (page cache) — qanday o'qiysan?",
+          "explanation": "Bo'sh RAM — isrof; kernel uni page cache uchun ishlatadi va kerak bo'lganda qaytaradi. Haqiqiy ko'rsatkich — `available`, `free` emas. Muammo belgisi: available past + swap faol + OOM."
+        },
+        {
+          "id": 32050,
+          "code": "DZ06",
+          "level": "M",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`sar` (sysstat) nima va o'tgan voqeani qanday tahlil qilasan? (\"Kecha soat 3 da server sekinlashgan\")",
+          "explanation": "sar har 10 daqiqada (sozlanadi) CPU, RAM, IO, tarmoq statistikasini `/var/log/sysstat` (`/var/log/sa`)ga yozadi. Real vaqt vositalari (top) o'tmishni ko'rsatmaydi — sar ko'rsatadi. `sar -u/-r/-b/-d/-n DEV/-q -f fayl -s -e`."
+        },
+        {
+          "id": 30544,
+          "code": "DO10",
+          "level": "S",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "Production serverda ilova sekinlashdi. Linux darajasida qanday tekshirasan?",
+          "explanation": "Brendan Gregg'ning '60 soniyada Linux tahlili' ro'yxati — intervyuda tizimli yondashuvni ko'rsatish muhim, tasodifiy buyruqlarni emas.",
+          "source": "https://www.brendangregg.com/usemethod.html"
+        },
+        {
+          "id": 30564,
+          "code": "LX10",
+          "level": "S",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "Jarayon osilib qoldi, CPU 0%. Nima qilayotganini qanday ko'rasan?",
+          "explanation": "Odatiy topilmalar: futex (lock kutish — deadlock), read on socket (timeout'siz tarmoq chaqiruvi), connect (DNS/firewall), flock. strace production'da ehtiyotkorlik bilan — jarayonni sezilarli sekinlashtiradi; eBPF vositalar (bpftrace, offcputime) yengilroq."
+        },
+        {
+          "id": 30570,
+          "code": "LX16",
+          "level": "S",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`fsync` nima uchun kerak va DB'lar uchun nega muhim?",
+          "explanation": "Postgres WAL commit'da fsync qiladi (synchronous_commit). 'fsyncgate' (2018): fsync xatosidan keyin qayta urinish xavfsiz emasligi aniqlandi — Postgres endi panic qiladi. Yangi fayl uchun katalogni ham fsync qilish kerak. Atomik yozish: vaqtinchalik faylga yozish, fsync, rename."
+        },
+        {
           "id": 31320,
           "code": "DX36",
           "level": "S",
@@ -18552,17 +18629,6 @@
           "explanation": "top -> PID; `top -H -p PID` -> thread; `perf top -p PID` / `perf record -g` -> flame graph; til darajasida: Go pprof, Java jstack/async-profiler, Python py-spy. Aniqla: user CPU (ilova) yoki sys (kernel, syscall, lock)."
         },
         {
-          "id": 31323,
-          "code": "DX39",
-          "level": "M",
-          "type": "card",
-          "topic": "Troubleshooting",
-          "domain": "linux",
-          "section": "v12",
-          "question": "Disk IO bottleneck'ni qanday aniqlaysan va qaysi jarayon aybdor?",
-          "explanation": "`iostat -xz 1` (await, %util, aqu-sz), `vmstat` wa/b, `iotop -oPa`, `pidstat -d 1`, D-state jarayonlar. Keyin sabab: swap, log, DB checkpoint, backup, noatime yo'q."
-        },
-        {
           "id": 31324,
           "code": "DX40",
           "level": "S",
@@ -18574,17 +18640,6 @@
           "explanation": "Jarayon 120s+ D-state'da (uninterruptible IO). Sabab: disk/NFS/iSCSI javob bermayapti, FS freeze, kernel lock. kill -9 ham ishlamaydi. Asosiy qurilmani tekshir."
         },
         {
-          "id": 31325,
-          "code": "DX41",
-          "level": "M",
-          "type": "card",
-          "topic": "Troubleshooting",
-          "domain": "linux",
-          "section": "v12",
-          "question": "`free -h`, `/proc/meminfo` va \"Linux RAM'ni yeyapti\" (page cache) — qanday o'qiysan?",
-          "explanation": "Bo'sh RAM — isrof; kernel uni page cache uchun ishlatadi va kerak bo'lganda qaytaradi. Haqiqiy ko'rsatkich — `available`, `free` emas. Muammo belgisi: available past + swap faol + OOM."
-        },
-        {
           "id": 31326,
           "code": "DX42",
           "level": "S",
@@ -18594,17 +18649,6 @@
           "section": "v12",
           "question": "Incident paytida va keyin: qanday ishlash tartibi (mitigate vs root cause, postmortem)?",
           "explanation": "Avval ta'sirni kamaytir (rollback, trafik yo'naltirish, scale, restart) — lekin dalilni saqla. Kommunikatsiya: incident commander, status update. Keyin blameless postmortem: timeline, root cause, contributing factors, action items."
-        },
-        {
-          "id": 32050,
-          "code": "DZ06",
-          "level": "M",
-          "type": "card",
-          "topic": "Troubleshooting",
-          "domain": "linux",
-          "section": "v12",
-          "question": "`sar` (sysstat) nima va o'tgan voqeani qanday tahlil qilasan? (\"Kecha soat 3 da server sekinlashgan\")",
-          "explanation": "sar har 10 daqiqada (sozlanadi) CPU, RAM, IO, tarmoq statistikasini `/var/log/sysstat` (`/var/log/sa`)ga yozadi. Real vaqt vositalari (top) o'tmishni ko'rsatmaydi — sar ko'rsatadi. `sar -u/-r/-b/-d/-n DEV/-q -f fayl -s -e`."
         },
         {
           "id": 32051,
@@ -18704,6 +18748,28 @@
           "section": "v12",
           "question": "Server time-wait/ephemeral port tugadi: `connect: cannot assign requested address`. Nima bu?",
           "explanation": "Chiquvchi ulanishlar uchun lokal port (ephemeral, `ip_local_port_range`) bitta (src IP, dst IP, dst port) to'plamiga ~28k. Ko'p qisqa ulanish + TIME_WAIT 60s = port tugaydi. Yechim: connection pooling/keep-alive, `tcp_tw_reuse=1`, port diapazonini kengaytirish, ko'p dst IP/src IP."
+        },
+        {
+          "id": 33511,
+          "code": "DW12",
+          "level": "S",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`vm.dirty_ratio` va `vm.dirty_background_ratio` nima? Yozish paytida ilova nega to'satdan qotib qoladi?",
+          "explanation": "Yozilgan data avval page cache'da \"dirty\" bo'lib turadi. dirty_background_ratio'ga yetsa kernel fonda diskka yozishni boshlaydi; dirty_ratio'ga yetsa yozayotgan process o'zi bloklanadi va diskka yozishga majbur — latency sakrashi."
+        },
+        {
+          "id": 30582,
+          "code": "LX28",
+          "level": "St",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
+          "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
         }
       ]
     },
@@ -19581,6 +19647,17 @@
           "explanation": "Server soati siljiydi; noto'g'ri vaqt — TLS xatolari (sertifikat \"hali amal qilmaydi\"), JWT exp, log korrelyatsiyasi, Kerberos, distributed DB/consensus, cron. chrony — zamonaviy NTP client (RHEL/Ubuntu), timesyncd — oddiy."
         },
         {
+          "id": 32045,
+          "code": "DZ01",
+          "level": "J",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Linux'da loglar qayerda? `/var/log` tuzilmasi, rsyslog va journald munosabati.",
+          "explanation": "journald — systemd'ning binary log'i (`journalctl`). rsyslog — klassik matnli loglar `/var/log/*` ga (journald'dan oladi). Asosiylar: syslog/messages, auth.log/secure, kern.log, dmesg, nginx/, apt/dnf loglari."
+        },
+        {
           "id": 31376,
           "code": "DY30",
           "level": "M",
@@ -19603,17 +19680,6 @@
           "explanation": "Namespaces — nimani ko'rishni ajratadi (pid, net, mnt, uts, ipc, user, cgroup, time). cgroups — qancha resurs ishlatishni cheklaydi (cpu, memory, io, pids). Konteyner = oddiy jarayon + namespaces + cgroups + overlayfs + capabilities/seccomp."
         },
         {
-          "id": 31378,
-          "code": "DY32",
-          "level": "S",
-          "type": "card",
-          "topic": "Ops practices",
-          "domain": "linux",
-          "section": "v19",
-          "question": "Server buzilgan (hacked) deb shubha qilasan. Nima qilasan?",
-          "explanation": "Vahima qilib o'chirma/reboot qilma — dalil yo'qoladi. Izolyatsiya (tarmoqdan ajrat, snapshot), dalil yig'ish (jarayonlar, ulanishlar, loglar, xotira), ta'sirni baholash, credential'larni almashtir, serverni qayta qurish (tozalashga ishonma), root cause va postmortem."
-        },
-        {
           "id": 31379,
           "code": "DY33",
           "level": "M",
@@ -19623,28 +19689,6 @@
           "section": "v19",
           "question": "Ansible asoslari: inventory, ad-hoc buyruq, playbook, idempotency. Nega shell skript emas?",
           "explanation": "Agentless (SSH orqali). Inventory — hostlar va guruhlar. Ad-hoc: `ansible web -m ping`. Playbook — YAML'da istalgan holat (desired state); modullar idempotent: 2-marta ishlatsang o'zgarish bo'lmaydi (changed=0). Skriptdan farqi: idempotency, parallel, xatolarni boshqarish, dry-run (`--check --diff`)."
-        },
-        {
-          "id": 31380,
-          "code": "DY34",
-          "level": "S",
-          "type": "card",
-          "topic": "Ops practices",
-          "domain": "linux",
-          "section": "v19",
-          "question": "Linux serverga monitoring/alerting: nimani kuzatasan? (node_exporter, USE, alert misollari)",
-          "explanation": "USE: har resurs uchun Utilization, Saturation, Errors — CPU, RAM, disk, tarmoq, FD. node_exporter -> Prometheus -> Grafana/Alertmanager. Alert simptom bo'yicha va harakatga undaydigan bo'lsin (disk 4 soatda to'ladi, emas \"disk 80%\")."
-        },
-        {
-          "id": 32045,
-          "code": "DZ01",
-          "level": "J",
-          "type": "card",
-          "topic": "Ops practices",
-          "domain": "linux",
-          "section": "v19",
-          "question": "Linux'da loglar qayerda? `/var/log` tuzilmasi, rsyslog va journald munosabati.",
-          "explanation": "journald — systemd'ning binary log'i (`journalctl`). rsyslog — klassik matnli loglar `/var/log/*` ga (journald'dan oladi). Asosiylar: syslog/messages, auth.log/secure, kern.log, dmesg, nginx/, apt/dnf loglari."
         },
         {
           "id": 32046,
@@ -19658,17 +19702,6 @@
           "explanation": "rsyslog: `*.* @@logserver:514` (TCP; `@` — UDP). Zamonaviy: agent (Fluent Bit/Vector/Promtail/Filebeat) -> Loki/Elasticsearch/OpenSearch -> Grafana/Kibana. Nega: server o'lsa loglar saqlanadi, korrelyatsiya, qidiruv, audit (buzg'unchi lokal logni o'chira oladi)."
         },
         {
-          "id": 32053,
-          "code": "DZ09",
-          "level": "S",
-          "type": "card",
-          "topic": "Ops practices",
-          "domain": "linux",
-          "section": "v19",
-          "question": "Ishlab turgan servisni eski serverdan yangisiga minimal downtime bilan ko'chirish rejasi.",
-          "explanation": "Yangi serverni IaC bilan qur -> ma'lumotni oldindan sinxronla (rsync / DB replikatsiya) -> DNS TTL'ni oldindan kamaytir -> parallel test -> qisqa freeze: oxirgi delta sync -> trafikni almashtir (LB/DNS) -> kuzat -> rollback rejasi tayyor -> eski serverni bir muddat saqla."
-        },
-        {
           "id": 32054,
           "code": "DZ10",
           "level": "M",
@@ -19678,6 +19711,61 @@
           "section": "v19",
           "question": "\"Kecha ishlagan edi, bugun ishlamayapti\" — nima o'zgarganini qanday topasan?",
           "explanation": "O'zgarishlarni yig': deploy tarixi, paket yangilanishlari (apt/dnf history), config fayllar (mtime, etckeeper/git), reboot va kernel, sertifikat muddati, disk to'lishi, tashqi bog'liqliklar (DNS, API, DB), cron. Keyin vaqt chizig'ini muammo boshlangan vaqt bilan solishtir."
+        },
+        {
+          "id": 33145,
+          "code": "DW22",
+          "level": "M",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Server sozlamalarini qo'lda o'zgartirish (snowflake) va config drift muammosi. Qanday oldini olasan?",
+          "explanation": "Qo'lda o'zgarishlar hujjatsiz qoladi, serverlar bir-biridan farqlanadi, qayta qurib bo'lmaydi. Yechim: hamma narsa kod (Ansible/Terraform) + git review, drift aniqlash (`--check`, `terraform plan`), immutable infra, SSH'ni cheklash, /etc'ni etckeeper bilan kuzatish."
+        },
+        {
+          "id": 33483,
+          "code": "DW24",
+          "level": "M",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Ops avtomatlashtirish uchun qachon Bash, qachon Python (yoki Go)?",
+          "explanation": "Bash — buyruqlarni zanjirlash, kichik glue script (~50 qatorgacha). Python — JSON/API, xato boshqaruvi, test, murakkab mantiq (boto3, kubernetes client). Go — tarqatiladigan CLI/operator, bitta binary. Bash'da murakkab mantiq — xato yashirinadigan joy."
+        },
+        {
+          "id": 31378,
+          "code": "DY32",
+          "level": "S",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Server buzilgan (hacked) deb shubha qilasan. Nima qilasan?",
+          "explanation": "Vahima qilib o'chirma/reboot qilma — dalil yo'qoladi. Izolyatsiya (tarmoqdan ajrat, snapshot), dalil yig'ish (jarayonlar, ulanishlar, loglar, xotira), ta'sirni baholash, credential'larni almashtir, serverni qayta qurish (tozalashga ishonma), root cause va postmortem."
+        },
+        {
+          "id": 31380,
+          "code": "DY34",
+          "level": "S",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Linux serverga monitoring/alerting: nimani kuzatasan? (node_exporter, USE, alert misollari)",
+          "explanation": "USE: har resurs uchun Utilization, Saturation, Errors — CPU, RAM, disk, tarmoq, FD. node_exporter -> Prometheus -> Grafana/Alertmanager. Alert simptom bo'yicha va harakatga undaydigan bo'lsin (disk 4 soatda to'ladi, emas \"disk 80%\")."
+        },
+        {
+          "id": 32053,
+          "code": "DZ09",
+          "level": "S",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Ishlab turgan servisni eski serverdan yangisiga minimal downtime bilan ko'chirish rejasi.",
+          "explanation": "Yangi serverni IaC bilan qur -> ma'lumotni oldindan sinxronla (rsync / DB replikatsiya) -> DNS TTL'ni oldindan kamaytir -> parallel test -> qisqa freeze: oxirgi delta sync -> trafikni almashtir (LB/DNS) -> kuzat -> rollback rejasi tayyor -> eski serverni bir muddat saqla."
         },
         {
           "id": 33143,
@@ -19700,17 +19788,6 @@
           "section": "v19",
           "question": "Disaster recovery: server/datacenter butunlay yo'qoldi. Tiklanish rejasi nimalardan iborat bo'ladi?",
           "explanation": "RPO/RTO maqsadlari -> nima tiklanadi (infra kod sifatida, ma'lumot backup/replika, secret'lar, DNS) -> boshqa region/zona -> runbook -> muntazam DR drill. \"Backup bor\" yetarli emas — tiklanish vaqti o'lchangan bo'lishi kerak."
-        },
-        {
-          "id": 33145,
-          "code": "DW22",
-          "level": "M",
-          "type": "card",
-          "topic": "Ops practices",
-          "domain": "linux",
-          "section": "v19",
-          "question": "Server sozlamalarini qo'lda o'zgartirish (snowflake) va config drift muammosi. Qanday oldini olasan?",
-          "explanation": "Qo'lda o'zgarishlar hujjatsiz qoladi, serverlar bir-biridan farqlanadi, qayta qurib bo'lmaydi. Yechim: hamma narsa kod (Ansible/Terraform) + git review, drift aniqlash (`--check`, `terraform plan`), immutable infra, SSH'ni cheklash, /etc'ni etckeeper bilan kuzatish."
         },
         {
           "id": 33146,
@@ -20305,6 +20382,28 @@
           "explanation": "Qisqa sarlavha (≤50 belgi, buyruq maylida), bo'sh qator, keyin NEGA o'zgargani. Bitta commit = bitta mantiqiy o'zgarish. Conventional Commits (`feat:`, `fix:`) avtomatlashtirishga yordam beradi."
         },
         {
+          "id": 33406,
+          "code": "WG23",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git clean` va `git restore` bilan working tree'ni qanday tozalaysiz?",
+          "explanation": "`git restore file` — track qilingan fayldagi commit qilinmagan o'zgarishni bekor qiladi; `git restore --staged` — index'dan chiqaradi; `git clean` — untracked fayllarni o'chiradi (`-n` avval ko'rish, `-d` kataloglar, `-x` ignore qilinganlar ham)."
+        },
+        {
+          "id": 33407,
+          "code": "WG24",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Semantic versioning (SemVer) nima: MAJOR.MINOR.PATCH?",
+          "explanation": "MAJOR — backward-incompatible o'zgarish; MINOR — yangi funksiya, moslik saqlanadi; PATCH — faqat bug fix. Pre-release: `1.5.0-rc.1`. Dependency constraint'lar (`~>`, `^`) shu qoidaga tayanadi."
+        },
+        {
           "id": 33159,
           "code": "WG08",
           "level": "M",
@@ -20426,6 +20525,39 @@
           "explanation": "Hook — Git hodisasida ishlaydigan skript (`.git/hooks/`). pre-commit tez lokal tekshiruv (lint, format, secret scan); lekin `--no-verify` bilan chetlab o'tiladi, shuning uchun CI'da ham takrorlanadi."
         },
         {
+          "id": 33408,
+          "code": "WG25",
+          "level": "M",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git submodule` nima, qanday muammolari bor va muqobillari?",
+          "explanation": "Submodule — boshqa repo'ni aniq commit'da pin qilib ichiga joylash. Muammolar: clone'da avtomatik kelmaydi, detached HEAD, yangilash qo'lda, CI'da qo'shimcha qadam. Muqobil: paket menejeri (Go modules, npm), subtree, monorepo."
+        },
+        {
+          "id": 33480,
+          "code": "WG26",
+          "level": "M",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git push --force` va `--force-with-lease` farqi? Qachon force push qilinadi?",
+          "explanation": "--force remote branch'ni so'zsiz qayta yozadi — hamkasbning push'i yo'qolishi mumkin. --force-with-lease faqat remote siz oxirgi ko'rgan holatda bo'lsa yozadi, aks holda rad etadi. Rebase'dan keyin o'z feature branch'ingizda ishlatiladi; main'ga hech qachon."
+        },
+        {
+          "id": 33481,
+          "code": "WG27",
+          "level": "M",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git worktree` nima va qachon foydali?",
+          "explanation": "Bitta repo'dan bir nechta working directory: har birida boshqa branch, umumiy .git obyektlari bilan. Stash/clone'siz hotfix qilish, uzoq testni bir branch'da qoldirib boshqasida ishlash uchun."
+        },
+        {
           "id": 33170,
           "code": "WG19",
           "level": "S",
@@ -20470,37 +20602,15 @@
           "explanation": "Git har versiyani to'liq saqlaydi; clone hamma tarixni yuklaydi — repo GB'larga shishadi. Yechim: Git LFS (pointer + alohida storage) yoki artefaktlarni S3/registry'da saqlash."
         },
         {
-          "id": 33406,
-          "code": "WG23",
-          "level": "J",
+          "id": 33497,
+          "code": "WG28",
+          "level": "S",
           "type": "card",
           "topic": "Git",
           "domain": "git",
           "section": "w1",
-          "question": "`git clean` va `git restore` bilan working tree'ni qanday tozalaysiz?",
-          "explanation": "`git restore file` — track qilingan fayldagi commit qilinmagan o'zgarishni bekor qiladi; `git restore --staged` — index'dan chiqaradi; `git clean` — untracked fayllarni o'chiradi (`-n` avval ko'rish, `-d` kataloglar, `-x` ignore qilinganlar ham)."
-        },
-        {
-          "id": 33407,
-          "code": "WG24",
-          "level": "J",
-          "type": "card",
-          "topic": "Git",
-          "domain": "git",
-          "section": "w1",
-          "question": "Semantic versioning (SemVer) nima: MAJOR.MINOR.PATCH?",
-          "explanation": "MAJOR — backward-incompatible o'zgarish; MINOR — yangi funksiya, moslik saqlanadi; PATCH — faqat bug fix. Pre-release: `1.5.0-rc.1`. Dependency constraint'lar (`~>`, `^`) shu qoidaga tayanadi."
-        },
-        {
-          "id": 33408,
-          "code": "WG25",
-          "level": "M",
-          "type": "card",
-          "topic": "Git",
-          "domain": "git",
-          "section": "w1",
-          "question": "`git submodule` nima, qanday muammolari bor va muqobillari?",
-          "explanation": "Submodule — boshqa repo'ni aniq commit'da pin qilib ichiga joylash. Muammolar: clone'da avtomatik kelmaydi, detached HEAD, yangilash qo'lda, CI'da qo'shimcha qadam. Muqobil: paket menejeri (Go modules, npm), subtree, monorepo."
+          "question": "Git ichki tuzilmasi: blob, tree, commit, tag obyektlari va SHA qanday bog'langan?",
+          "explanation": "Git — content-addressable storage: har obyekt mazmunining hash'i bilan saqlanadi. blob — fayl mazmuni, tree — papka (nom → blob/tree), commit — root tree + parent(lar) + muallif + xabar, annotated tag — commit'ga imzoli ko'rsatkich. Branch — commit hash yozilgan oddiy fayl."
         }
       ]
     },
@@ -20831,6 +20941,17 @@
           "section": "k1",
           "question": "Docker'ni ishlatmasdan CI'da (Kubernetes runner'da) image qanday build qilinadi? Kaniko, BuildKit, Buildah?",
           "explanation": "Docker-in-Docker privileged talab qiladi. Kaniko — Dockerfile'ni userspace'da, daemon'siz build qiladi; BuildKit rootless rejimi; Buildah/Podman — daemon'siz. Hammasi OCI image chiqaradi."
+        },
+        {
+          "id": 33461,
+          "code": "KM11",
+          "level": "M",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Container'ni read-only rejimda qanday ishga tushirasiz va nega?",
+          "explanation": "`--read-only` root filesystem'ni faqat o'qishga qiladi: hujumchi binary yoza olmaydi, app tasodifan konteyner ichiga data yozmaydi. Yozish kerak joylar — tmpfs yoki volume."
         },
         {
           "id": 30029,
@@ -22377,6 +22498,17 @@
           "explanation": "ResourceQuota — namespace bo'yicha umumiy limit (jami CPU/memory requests, pod soni, PVC, LoadBalancer). LimitRange — har container uchun default va min/max requests/limits. Ko'p jamoali cluster'da bir jamoa hammani bo'g'ib qo'ymasligi uchun."
         },
         {
+          "id": 33397,
+          "code": "WS15",
+          "level": "M",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "PriorityClass va preemption qanday ishlaydi?",
+          "explanation": "PriorityClass pod'ga raqamli ustuvorlik beradi. Joy bo'lmasa scheduler past prioritetli pod'larni evict qilib (preempt) yuqori prioritetlisiga joy ochadi. Tizim pod'lari `system-cluster-critical`/`system-node-critical`."
+        },
+        {
           "id": 33287,
           "code": "WS11",
           "level": "S",
@@ -22421,15 +22553,70 @@
           "explanation": "etcd — butun cluster holati (hamma obyekt, Secret'lar). Raft konsensus: 3 yoki 5 a'zo, kvorum yo'qolsa API yozishni to'xtatadi. Tez disk (fsync latency), muntazam snapshot, encryption at rest, faqat apiserver kirishi."
         },
         {
-          "id": 33397,
-          "code": "WS15",
-          "level": "M",
+          "id": 33495,
+          "code": "WK02",
+          "level": "S",
           "type": "card",
           "topic": "Scheduling & scaling",
           "domain": "k8s",
           "section": "w7",
-          "question": "PriorityClass va preemption qanday ishlaydi?",
-          "explanation": "PriorityClass pod'ga raqamli ustuvorlik beradi. Joy bo'lmasa scheduler past prioritetli pod'larni evict qilib (preempt) yuqori prioritetlisiga joy ochadi. Tizim pod'lari `system-cluster-critical`/`system-node-critical`."
+          "question": "Karpenter qanday ishlaydi va Cluster Autoscaler'dan farqi? Consolidation va disruption budget nima?",
+          "explanation": "Cluster Autoscaler oldindan belgilangan node group'larni kattalashtiradi/kichraytiradi. Karpenter Pending pod'larning talablariga qarab to'g'ridan-to'g'ri mos instance turini tanlab yaratadi (tezroq, bin-packing yaxshi) va consolidation bilan bo'sh/kam yuklangan node'larni almashtiradi."
+        },
+        {
+          "id": 33500,
+          "code": "WK05",
+          "level": "S",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "kube-proxy iptables va IPVS rejimlari, eBPF (Cilium) bilan almashtirish — farqi?",
+          "explanation": "iptables — har Service/endpoint uchun qoidalar zanjiri: ketma-ket tekshiruv O(n), minglab Service'da qoida yangilash sekin. IPVS — kernel hash table load balancer: O(1), ko'p algoritm. Cilium eBPF — kube-proxy'ni butunlay almashtiradi: socket darajasida LB, conntrack kamroq, observability (Hubble)."
+        },
+        {
+          "id": 33494,
+          "code": "WK01",
+          "level": "St",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "Kubernetes API Priority and Fairness (APF) nima? Bitta controller API server'ni bo'g'ib qo'ysa nima bo'ladi?",
+          "explanation": "APF — kube-apiserver'ga keladigan so'rovlarni FlowSchema bo'yicha priority level'larga ajratadi va har biriga ulush beradi (fair queuing). Bitta noto'g'ri yozilgan controller yoki CI'dagi `kubectl get -A` bo'roni kubelet/leader election kabi kritik so'rovlarni bo'g'ib qo'ymaydi."
+        },
+        {
+          "id": 33498,
+          "code": "WK03",
+          "level": "St",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "etcd compaction va defragmentation nima? `mvcc: database space exceeded` xatosi nima?",
+          "explanation": "etcd MVCC — har kalitning eski revision'larini saqlaydi. Compaction eski revision'larni mantiqan o'chiradi (apiserver har 5 daqiqada qiladi), lekin disk bo'shamaydi — defrag faylni qayta yozib joyni qaytaradi. DB hajmi quota'ga (default 2GB, max ~8GB) yetsa etcd alarm qo'yib yozishni to'xtatadi — klaster read-only."
+        },
+        {
+          "id": 33499,
+          "code": "WK04",
+          "level": "St",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "etcd quorum va split-brain: nega 3 yoki 5 a'zo, 2 yoki 4 emas? Quorum yo'qolsa nima bo'ladi?",
+          "explanation": "etcd Raft: yozish uchun ko'pchilik (quorum = n/2+1) tasdig'i kerak. 3 a'zo — 1 ta nosozlikka chidaydi, 4 a'zo ham faqat 1 taga (quorum 3) — ortiqcha narx. Network bo'linsa faqat ko'pchilik tomoni yozadi, ozchilik read-only — split-brain bo'lmaydi. Quorum yo'qolsa API server yoza olmaydi: yangi pod, deploy yo'q (ishlab turgan pod'lar ishlayveradi)."
+        },
+        {
+          "id": 33503,
+          "code": "WK06",
+          "level": "St",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "Cluster API va vcluster nima? Ko'p klasterni qanday boshqarasiz?",
+          "explanation": "Cluster API (CAPI) — Kubernetes klasterlarini o'zini CRD sifatida boshqarish: management klaster workload klasterlarni deklarativ yaratadi/upgrade qiladi. vcluster — bitta host klaster ichida virtual klasterlar (o'z API server'i, pod'lar host'da ishlaydi): arzon izolyatsiya, dev/test va multi-tenancy uchun."
         }
       ]
     },
@@ -22673,6 +22860,28 @@
           "explanation": "Events — scheduler, kubelet, controller'larning qisqa muddatli xabarlari (FailedScheduling, BackOff, Unhealthy, FailedMount). Default ~1 soat saqlanadi, shuning uchun incident tarixi uchun eksport kerak."
         },
         {
+          "id": 33453,
+          "code": "WS07",
+          "level": "M",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "K8s node diski container log'lari bilan to'ldi, pod'lar evict bo'lyapti. Qanday tuzatasiz?",
+          "explanation": "Kubelet log rotation sozlamalari (containerLogMaxSize, containerLogMaxFiles), ortiqcha log yozayotgan app'ni topish, ephemeral-storage requests/limits. Darhol: eski log va ishlatilmayotgan image'larni tozalash."
+        },
+        {
+          "id": 33462,
+          "code": "WS08",
+          "level": "M",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Kubernetes Secret'lar etcd'da qanday saqlanadi? Encryption at rest qanday yoqiladi?",
+          "explanation": "Default'da Secret etcd'da faqat base64 — shifrlanmagan. kube-apiserver'ga EncryptionConfiguration beriladi (aescbc/secretbox yoki KMS provider). Managed klasterlarda (EKS) KMS envelope encryption opsiyasi."
+        },
+        {
           "id": 33302,
           "code": "WD12",
           "level": "S",
@@ -22726,6 +22935,50 @@
           "section": "w8",
           "question": "Kubernetes'da `ndots:5` nima va tashqi DNS so'rovlari nega sekin?",
           "explanation": "Pod resolv.conf'ida ndots:5: nomda 5 tadan kam nuqta bo'lsa, avval search domain'lar (ns.svc.cluster.local, svc.cluster.local, …) sinab ko'riladi. `api.stripe.com` uchun 4-5 ta keraksiz so'rov — CoreDNS yuki va latency."
+        },
+        {
+          "id": 33501,
+          "code": "WS10",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Cilium va eBPF asosidagi CNI nima beradi? Hubble nima?",
+          "explanation": "Cilium — eBPF bilan pod tarmog'i, NetworkPolicy (L3/L4 va L7: HTTP yo'l, gRPC metod, DNS nom bo'yicha), kube-proxy almashtirish, shifrlash (WireGuard/IPsec). Hubble — eBPF orqali har oqimni ko'rish: kim kimga, qaysi policy drop qildi."
+        },
+        {
+          "id": 33504,
+          "code": "WS12",
+          "level": "S",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Kubernetes audit logging nima va qanday sozlanadi?",
+          "explanation": "API server har so'rovni (kim, qaysi resurs, qaysi amal, natija) audit policy bo'yicha yozadi. Xavfsizlik tekshiruvi va \"kim prod deployment'ni o'chirdi?\" savoliga javob. Daraja: None, Metadata, Request, RequestResponse."
+        },
+        {
+          "id": 33493,
+          "code": "WS09",
+          "level": "St",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Kyverno va OPA Gatekeeper farqi? Policy as code'ni klasterga qanday joriy qilasiz?",
+          "explanation": "Ikkalasi admission webhook. Kyverno — policy YAML'da, K8s-native, validate + mutate + generate + image verify. Gatekeeper — Rego tilida (ConstraintTemplate + Constraint), OPA ekotizimi bilan umumiy til, murakkab mantiq uchun kuchli."
+        },
+        {
+          "id": 33502,
+          "code": "WS11",
+          "level": "St",
+          "type": "card",
+          "topic": "Security & troubleshooting",
+          "domain": "k8s",
+          "section": "w8",
+          "question": "Istio sidecar va Ambient mesh farqi?",
+          "explanation": "Sidecar rejimi — har pod'ga Envoy: to'liq L7, lekin har pod'ga CPU/RAM narxi, pod restart bilan upgrade, latency. Ambient — sidecar'siz: node darajasida ztunnel (L4 mTLS, identity) va kerak bo'lsa namespace'ga waypoint proxy (L7). Narx va operatsiya yuki ancha kam."
         }
       ]
     },
@@ -22804,6 +23057,39 @@
           "explanation": "dependencies — chart ichida boshqa chart'lar (masalan redis subchart), Chart.lock aniq versiyalarni qotiradi. values.schema.json — values uchun JSON Schema: install/upgrade/lint'da noto'g'ri tip yoki majburiy maydon yo'qligini darhol ushlaydi."
         },
         {
+          "id": 33444,
+          "code": "KH12",
+          "level": "M",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "ArgoCD sync waves va sync hooks (`PreSync`, `PostSync`) nima? Qachon kerak?",
+          "explanation": "sync-wave annotation resurslarni tartib bilan apply qiladi (avval CRD/namespace, keyin app). Hooks — sync oldidan/keyin ishlaydigan Job'lar: PreSync'da DB migratsiya, PostSync'da smoke test, SyncFail'da xabar."
+        },
+        {
+          "id": 33478,
+          "code": "KH14",
+          "level": "M",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "ArgoCD va Flux farqi? Qaysi birini tanlaysiz?",
+          "explanation": "Ikkalasi ham CNCF graduated GitOps pull-agent. ArgoCD — kuchli UI, Application CRD, multi-cluster markazdan, SSO/RBAC. Flux — UI'siz, kichik controller'lar to'plami (source, kustomize, helm), Kubernetes-native, image automation ichida."
+        },
+        {
+          "id": 33479,
+          "code": "KH15",
+          "level": "M",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "GitOps'da rollback qanday qilinadi? Nega `kubectl rollout undo` yoki ArgoCD UI'dagi rollback yetarli emas?",
+          "explanation": "To'g'ri rollback — Git'da `git revert` (yoki oldingi image tag'ga PR): Git yana haqiqat manbai bo'ladi. Klasterda qo'lda undo qilinsa, Git o'zgarmagan — self-heal yoki keyingi sync buzuq versiyani qaytaradi."
+        },
+        {
           "id": 33231,
           "code": "KH08",
           "level": "S",
@@ -22824,6 +23110,17 @@
           "section": "k4",
           "question": "`helm upgrade` yarim yo'lda to'xtadi: release `pending-upgrade` holatida, keyingi upgrade xato beradi. Nima qilasiz?",
           "explanation": "Release holatini helm history bilan ko'rish, sababni (timeout, hook, probe) topish, keyin helm rollback oxirgi deployed revision'ga. Oldini olish: --atomic, --timeout, CI'da bitta parallel deploy."
+        },
+        {
+          "id": 33445,
+          "code": "KH13",
+          "level": "S",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "Argo Rollouts bilan canary: metrika asosida avtomatik rollback qanday ishlaydi?",
+          "explanation": "Rollout CRD Deployment o'rniga: trafikni bosqichma-bosqich (5% → 25% → 100%) ko'chiradi; AnalysisTemplate Prometheus'dan error rate/latency so'raydi. Shart buzilsa — avtomatik abort va eski versiyaga qaytish."
         }
       ]
     },
@@ -22950,6 +23247,17 @@
           "explanation": "Vault — markazlashgan secret ombori: shifrlangan saqlash, kirish policy bilan, audit log, versiya, va dynamic secret (har ilovaga vaqtinchalik DB login). .env — shifrlanmagan, audit yo'q, aylantirish qo'lda."
         },
         {
+          "id": 33416,
+          "code": "WI01",
+          "level": "J",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "CI'da matrix build va cache nima uchun kerak?",
+          "explanation": "Matrix — bitta job'ni bir nechta kombinatsiyada (Go versiyalari, OS, arxitektura) parallel ishga tushirish. Cache — dependency'lar (Go modules, npm, Docker layer) ni build'lar orasida saqlash: pipeline tezlashadi."
+        },
+        {
           "id": 2014,
           "code": "I15",
           "level": "M",
@@ -23026,6 +23334,61 @@
           "section": "i2",
           "question": "Ilova Vault'ga qanday autentifikatsiya qiladi? \"Secret zero\" muammosi nima?",
           "explanation": "Vault'dan secret olish uchun ham credential kerak — bu secret zero. Yechim: platforma identitetidan foydalanish — Kubernetes auth (ServiceAccount token), AWS IAM auth, CI'da OIDC (JWT). Statik token qo'yilmaydi."
+        },
+        {
+          "id": 33417,
+          "code": "WI02",
+          "level": "M",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "SAST, DAST, SCA va SonarQube quality gate — pipeline'da qayerda turadi?",
+          "explanation": "SAST — manba kodni statik tahlil (Semgrep, CodeQL, gosec); SCA — dependency zaifliklari va litsenziya (Dependabot, Trivy, govulncheck); DAST — ishlayotgan ilovaga tashqaridan hujum (OWASP ZAP), staging'da. SonarQube — sifat va xavfsizlik metrikalari, quality gate PR'ni bloklaydi."
+        },
+        {
+          "id": 33446,
+          "code": "SV03",
+          "level": "M",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Conventional Commits va semantic-release / release-please: versiya va changelog qanday avtomatlashadi?",
+          "explanation": "Commit xabari formati (`feat:`, `fix:`, `feat!:`) tool'ga keyingi SemVer'ni aniqlash imkonini beradi: fix → PATCH, feat → MINOR, BREAKING → MAJOR. CI tag, changelog va release'ni o'zi yaratadi."
+        },
+        {
+          "id": 33447,
+          "code": "SV04",
+          "level": "M",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Renovate / Dependabot nima va dependency yangilashni qanday xavfsiz avtomatlashtirasiz?",
+          "explanation": "Bot dependency, base image, GitHub Action, Helm chart, Terraform provider versiyalarini kuzatib PR ochadi. CI testdan o'tsa patch'larni automerge, major'larni qo'lda. Eskirgan dependency — xavfsizlik qarzi."
+        },
+        {
+          "id": 33448,
+          "code": "SV05",
+          "level": "M",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Preview (ephemeral) environment nima va qanday quriladi?",
+          "explanation": "Har PR uchun vaqtinchalik to'liq muhit (alohida namespace + URL): reviewer va QA o'zgarishni jonli ko'radi. PR yopilganda avtomatik o'chiriladi. Narx va data (seed) asosiy muammo."
+        },
+        {
+          "id": 33470,
+          "code": "SV06",
+          "level": "M",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "DORA metrikalari nima va DevOps samaradorligini qanday o'lchaysiz?",
+          "explanation": "To'rt metrika: deployment frequency, lead time for changes, change failure rate, time to restore (MTTR). Birinchi ikkitasi — tezlik, keyingi ikkitasi — barqarorlik. Yaxshi jamoalar ikkalasida ham kuchli — tezlik va ishonchlilik bir-biriga zid emas."
         },
         {
           "id": 2016,
@@ -23171,6 +23534,72 @@
           "explanation": "Reproducibility: prod'da nima ishlayotganini aniq bilish kerak. Digest bo'yicha pin qilish registry'da tegni ustidan yozib yuborishdan ham himoyalaydi."
         },
         {
+          "id": 33471,
+          "code": "SV07",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Internal tool / platformani o'zimiz quramizmi yoki managed servis olamizmi (build vs buy)? Qanday qaror qilasiz?",
+          "explanation": "Asosiy savol: bu bizning raqobat ustunligimizmi? Yo'q bo'lsa — managed. Hisoblanadi: umumiy egalik narxi (TCO: odam vaqti, on-call, yangilash), vendor lock-in, talablar (compliance, data joylashuvi), jamoa ko'nikmasi va masshtab."
+        },
+        {
+          "id": 33496,
+          "code": "SV08",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Sigstore: cosign keyless signing, Fulcio va Rekor qanday ishlaydi?",
+          "explanation": "Keyless: CI OIDC token (GitHub Actions identity) bilan Fulcio'dan 10 daqiqalik sertifikat oladi, image'ni vaqtinchalik kalit bilan imzolaydi, imzo Rekor (ochiq transparency log)ga yoziladi. Tekshirishda: \"bu image aynan shu repo'ning shu workflow'idan imzolangan\" — uzoq yashaydigan kalit saqlash shart emas."
+        },
+        {
+          "id": 33506,
+          "code": "SV09",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "SBOM nima? CycloneDX va SPDX, VEX nima uchun kerak?",
+          "explanation": "SBOM — artefakt ichidagi barcha komponentlar va versiyalar ro'yxati. Yangi CVE chiqsa (Log4Shell kabi) \"qaysi image'larimizda bor?\" savoliga daqiqalarda javob beradi. CycloneDX (OWASP, xavfsizlikka yo'naltirilgan) va SPDX (Linux Foundation, litsenziyaga kuchli) — formatlar. VEX — \"bu CVE bizga ta'sir qilmaydi, sababi...\" degan bayonot."
+        },
+        {
+          "id": 33507,
+          "code": "SV10",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "SLSA darajalari nima va hermetic/reproducible build nega muhim?",
+          "explanation": "SLSA — supply chain kafolatlari darajalari: L1 — provenance (qanday build qilingani hujjati) bor; L2 — hosted build platformasi imzolagan provenance; L3 — build izolyatsiyalangan, provenance soxtalashtirib bo'lmaydi. Hermetic build — tarmoqsiz, faqat e'lon qilingan input'lar bilan; reproducible — bir xil input → bit-bit bir xil natija."
+        },
+        {
+          "id": 33508,
+          "code": "SV11",
+          "level": "S",
+          "type": "card",
+          "topic": "CI/CD",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Tekton nima va GitHub Actions/GitLab CI'dan farqi?",
+          "explanation": "Tekton — Kubernetes-native CI/CD framework: Task, Pipeline, PipelineRun CRD'lar, har step — container. Platforma jamoasi o'z CI platformasini qurish uchun (OpenShift Pipelines asosi). GitHub Actions/GitLab CI — tayyor mahsulot, UI va ekotizim bilan."
+        },
+        {
+          "id": 33509,
+          "code": "SV12",
+          "level": "S",
+          "type": "card",
+          "topic": "Secrets",
+          "domain": "cicd",
+          "section": "i2",
+          "question": "Vault dynamic secrets nima? Hardcoded DB parollaridan qanday migratsiya qilasiz?",
+          "explanation": "Dynamic secret — Vault har so'rovga yangi, TTL'li DB user yaratadi va muddati tugasa o'zi o'chiradi. Oqib ketgan credential tez eskiradi, har ilova/pod alohida user — audit aniq. Migratsiya bosqichma-bosqich: avval statik secret'ni Vault KV'ga, keyin dynamic'ga."
+        },
+        {
           "id": 2018,
           "code": "I19",
           "level": "St",
@@ -23225,28 +23654,6 @@
           "question": "DevOps madaniyatini jamoaga qanday joriy qilasan? DevOps va SRE farqi nima?",
           "explanation": "'class SRE implements DevOps' — mashhur ibora. Intervyuda konkret metrika va misol bilan javob kuchli ko'rinadi.",
           "source": "https://sre.google/sre-book/table-of-contents/"
-        },
-        {
-          "id": 33416,
-          "code": "WI01",
-          "level": "J",
-          "type": "card",
-          "topic": "CI/CD",
-          "domain": "cicd",
-          "section": "i2",
-          "question": "CI'da matrix build va cache nima uchun kerak?",
-          "explanation": "Matrix — bitta job'ni bir nechta kombinatsiyada (Go versiyalari, OS, arxitektura) parallel ishga tushirish. Cache — dependency'lar (Go modules, npm, Docker layer) ni build'lar orasida saqlash: pipeline tezlashadi."
-        },
-        {
-          "id": 33417,
-          "code": "WI02",
-          "level": "M",
-          "type": "card",
-          "topic": "CI/CD",
-          "domain": "cicd",
-          "section": "i2",
-          "question": "SAST, DAST, SCA va SonarQube quality gate — pipeline'da qayerda turadi?",
-          "explanation": "SAST — manba kodni statik tahlil (Semgrep, CodeQL, gosec); SCA — dependency zaifliklari va litsenziya (Dependabot, Trivy, govulncheck); DAST — ishlayotgan ilovaga tashqaridan hujum (OWASP ZAP), staging'da. SonarQube — sifat va xavfsizlik metrikalari, quality gate PR'ni bloklaydi."
         }
       ]
     },
@@ -24323,6 +24730,72 @@
           "explanation": "State (`terraform.tfstate`) — kod'dagi resource va real dunyodagi obyekt (ID) o'rtasidagi xarita. Terraform shu orqali nimani yaratish/o'zgartirish/o'chirishni biladi. Unda secret'lar ham bo'lishi mumkin — Git'ga commit qilinmaydi."
         },
         {
+          "id": 33324,
+          "code": "WT18",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Variable'larga qiymat berish usullari: `tfvars`, `-var`, `TF_VAR_`, default?",
+          "explanation": "Qiymat manbalari: `default`, `terraform.tfvars`/`*.auto.tfvars` (avtomatik), `-var-file=prod.tfvars`, `-var 'x=y'`, env `TF_VAR_x`. Muhitlar uchun alohida tfvars fayl, secret'lar uchun env yoki secret manager."
+        },
+        {
+          "id": 33325,
+          "code": "WT19",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`terraform fmt`, `validate` va `.terraform.lock.hcl` nima uchun?",
+          "explanation": "fmt — kodni standart formatga keltiradi; validate — sintaksis va ichki moslikni tekshiradi (cloud'ga murojaatsiz); lock fayl — provider'larning aniq versiya va hash'larini qotiradi, hamma joyda bir xil provider ishlaydi. Lock fayl Git'ga commit qilinadi."
+        },
+        {
+          "id": 33326,
+          "code": "WT20",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`locals`, `output` va `depends_on` qachon ishlatiladi?",
+          "explanation": "locals — takrorlanadigan ifodalarga nom (nom prefiksi, umumiy tag'lar); output — natijani ko'rsatish yoki boshqa modul/stack'ga berish; depends_on — reference orqali ko'rinmaydigan bog'liqlikni majburlash (kam ishlatiladi)."
+        },
+        {
+          "id": 33327,
+          "code": "WT21",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform plan'da `-/+` (replace) ko'rsangiz nima qilasiz?",
+          "explanation": "Resurs o'chirib qayta yaratiladi — ma'lumot yo'qolishi yoki downtime bo'lishi mumkin. Qaysi atribut sabab bo'lganini (`# forces replacement`) toping; kerak bo'lmasa kodni o'zgartiring, kerak bo'lsa rejalashtiring (create_before_destroy, snapshot, oyna)."
+        },
+        {
+          "id": 33328,
+          "code": "WT22",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Data source va resource farqi? Qachon `data` ishlatiladi?",
+          "explanation": "resource — Terraform yaratadi va boshqaradi (o'chirishi ham mumkin). data — mavjud narsani faqat o'qiydi (boshqa jamoa yaratgan VPC, eng yangi AMI, joriy account ID) — o'zgartirmaydi va o'chirmaydi."
+        },
+        {
+          "id": 33398,
+          "code": "WT15",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`terraform console`, `graph`, `output`, `show` qanday yordam beradi?",
+          "explanation": "console — ifoda va funksiyalarni interaktiv sinash (state'dagi qiymatlar bilan); graph — dependency grafigi (DOT); output — chiqish qiymatlari; show — state yoki saqlangan plan'ni o'qiladigan ko'rinishda."
+        },
+        {
           "id": 33178,
           "code": "WT05",
           "level": "M",
@@ -24400,6 +24873,127 @@
           "explanation": "Ko'p jamoalar katalog/stack bo'yicha ajratadi (`envs/prod`, alohida state va backend key, alohida cloud account). Workspace'lar bir xil kod + bir nechta state uchun qulay, lekin prod/dev'ni tasodifan aralashtirish xavfi bor."
         },
         {
+          "id": 33329,
+          "code": "WT23",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform uchun CI/CD pipeline qanday quriladi?",
+          "explanation": "PR: fmt/validate/tflint/checkov + `plan` (natija PR izohida). Merge'dan keyin: aynan saqlangan plan'ni `apply`. Cloud'ga kirish OIDC orqali (static key yo'q), prod apply uchun approval, bir vaqtda bitta apply (lock/concurrency)."
+        },
+        {
+          "id": 33399,
+          "code": "WT16",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`dynamic` blok nima va qachon ishlatiladi?",
+          "explanation": "Resurs ichidagi takrorlanuvchi nested bloklarni (ingress qoidalari, tag'lar, setting'lar) ro'yxatdan generatsiya qiladi. Ortiqcha ishlatish kodni o'qishni qiyinlashtiradi."
+        },
+        {
+          "id": 33400,
+          "code": "WT17",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Provisioner'lar (`local-exec`, `remote-exec`) va `terraform_data` — nega 'oxirgi chora'?",
+          "explanation": "Provisioner — resurs yaratilgandan keyin skript ishga tushirish. Terraform ularning natijasini state'da kuzatmaydi, idempotent emas, xato bo'lsa resurs 'tainted'. Afzal: cloud-init/user_data, Ansible, image (Packer), provider'ning native resursi."
+        },
+        {
+          "id": 33432,
+          "code": "WT24",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`terraform state mv`, `state rm`, `state list/show` qachon kerak?",
+          "explanation": "state list/show — state'da nima borligini ko'rish; state mv — resurs adresini o'zgartirish (refactor, endi `moved` blok afzal); state rm — resursni Terraform boshqaruvidan chiqarish (resurs cloud'da qoladi)."
+        },
+        {
+          "id": 33433,
+          "code": "WT25",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`Error acquiring the state lock`. `terraform force-unlock` qachon xavfsiz?",
+          "explanation": "Lock — boshqa apply ishlayotganini bildiradi. Avval lock egasi (Who, Created, Operation) aniq ishlamayotganini tekshirish kerak (CI job o'ldirilgan). Shundagina force-unlock <ID>. Ishlayotgan apply'ni ochsangiz state buziladi."
+        },
+        {
+          "id": 33434,
+          "code": "WT26",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`-target` flag nima va nega anti-pattern hisoblanadi?",
+          "explanation": "-target faqat ko'rsatilgan resurs va uning bog'liqliklarini plan/apply qiladi. Favqulodda holat uchun; doimiy ishlatilsa qolgan o'zgarishlar apply qilinmay qoladi, state va kod ajralib ketadi."
+        },
+        {
+          "id": 33435,
+          "code": "WT27",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Provider alias nima? Bitta konfiguratsiyada ikki region yoki ikki AWS akkauntga qanday resurs yaratasiz?",
+          "explanation": "Bir provider'ning bir nechta konfiguratsiyasi `alias` bilan yoziladi va resurs/modulga `provider = aws.us` yoki `providers = {}` bilan beriladi. Misol: CloudFront sertifikati us-east-1 da, qolgani eu-central-1 da."
+        },
+        {
+          "id": 33436,
+          "code": "WT28",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Boshqa jamoaning Terraform natijasini (VPC ID, subnet'lar) qanday ishlatasiz: `terraform_remote_state` yoki data source?",
+          "explanation": "terraform_remote_state boshqa state'ning output'larini o'qiydi — oddiy, lekin butun state'ga o'qish huquqi kerak va jamoalarni qattiq bog'laydi. Data source (tag bo'yicha qidirish) yoki SSM Parameter Store orqali kelishilgan qiymat — bo'shroq bog'lanish."
+        },
+        {
+          "id": 33438,
+          "code": "WT30",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`.tfstate` fayl tasodifan Git'ga commit qilindi. Nima qilasiz?",
+          "explanation": "State ichida secret'lar ochiq matnda (DB parol, kalitlar). Fayl git tarixidan o'chirish yetarli emas — secret'lar oqib ketgan deb hisoblanadi: hammasini aylantirish (rotate), keyin tarixni tozalash, state'ni remote backend'ga o'tkazish, `.gitignore`."
+        },
+        {
+          "id": 33439,
+          "code": "WT31",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Backend'ni o'zgartirish: lokal state'ni S3'ga qanday ko'chirasiz? `-migrate-state` va `-reconfigure` farqi?",
+          "explanation": "backend blokini o'zgartirib `terraform init -migrate-state` — eski state yangi backend'ga ko'chiriladi. `-reconfigure` — ko'chirmasdan yangi backend bilan boshlaydi (state allaqachon u yerda bo'lsa yoki ataylab)."
+        },
+        {
+          "id": 33440,
+          "code": "WT32",
+          "level": "M",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`precondition`/`postcondition` va `check` bloklari nima uchun?",
+          "explanation": "Variable validation faqat bitta o'zgaruvchini tekshiradi. precondition — resurs yaratishdan oldin shart (masalan AMI to'g'ri arxitekturada), postcondition — yaratilgandan keyin natija; check — apply'ni to'xtatmaydigan doimiy tekshiruv (health)."
+        },
+        {
           "id": 33185,
           "code": "WT12",
           "level": "S",
@@ -24433,103 +25027,59 @@
           "explanation": "Terraform/OpenTofu: multi-cloud, katta ekotizim, HCL. OpenTofu — MPL litsenziyali fork (BSL'dan keyin). Pulumi: haqiqiy dasturlash tili. CloudFormation/CDK: faqat AWS, state AWS boshqaradi. Tanlov: jamoa ko'nikmasi, multi-cloud ehtiyoji, litsenziya, ekotizim."
         },
         {
-          "id": 33324,
-          "code": "WT18",
-          "level": "J",
+          "id": 33437,
+          "code": "WT29",
+          "level": "S",
           "type": "card",
           "topic": "Terraform",
           "domain": "iac",
           "section": "w2",
-          "question": "Variable'larga qiymat berish usullari: `tfvars`, `-var`, `TF_VAR_`, default?",
-          "explanation": "Qiymat manbalari: `default`, `terraform.tfvars`/`*.auto.tfvars` (avtomatik), `-var-file=prod.tfvars`, `-var 'x=y'`, env `TF_VAR_x`. Muhitlar uchun alohida tfvars fayl, secret'lar uchun env yoki secret manager."
+          "question": "Kimdir staging'da `terraform destroy`ni yarim yo'lda to'xtatdi. Qanday tiklaysiz?",
+          "explanation": "Avval holatni muzlatish (boshqa apply yo'q), lock tekshirish, `plan` bilan nima o'chgan/qolganini ko'rish. Stateless resurslar `apply` bilan qayta yaratiladi; data (DB, S3) — backup/snapshot'dan. Keyin oldini olish: prevent_destroy, IAM'da destroy cheklovi, faqat CI'dan apply."
         },
         {
-          "id": 33325,
-          "code": "WT19",
-          "level": "J",
+          "id": 33488,
+          "code": "WT34",
+          "level": "S",
           "type": "card",
           "topic": "Terraform",
           "domain": "iac",
           "section": "w2",
-          "question": "`terraform fmt`, `validate` va `.terraform.lock.hcl` nima uchun?",
-          "explanation": "fmt — kodni standart formatga keltiradi; validate — sintaksis va ichki moslikni tekshiradi (cloud'ga murojaatsiz); lock fayl — provider'larning aniq versiya va hash'larini qotiradi, hamma joyda bir xil provider ishlaydi. Lock fayl Git'ga commit qilinadi."
+          "question": "Terragrunt nima muammoni hal qiladi? Uning `dependency` va `include` bloklari nima?",
+          "explanation": "Terragrunt — Terraform ustidagi wrapper: ko'p muhit/ko'p modulda takrorlanadigan backend/provider config'ni DRY qiladi, modullar orasidagi bog'liqlikni (`dependency`) e'lon qiladi va `run-all` bilan tartib bilan apply qiladi."
         },
         {
-          "id": 33326,
-          "code": "WT20",
-          "level": "J",
+          "id": 33489,
+          "code": "WT35",
+          "level": "S",
           "type": "card",
           "topic": "Terraform",
           "domain": "iac",
           "section": "w2",
-          "question": "`locals`, `output` va `depends_on` qachon ishlatiladi?",
-          "explanation": "locals — takrorlanadigan ifodalarga nom (nom prefiksi, umumiy tag'lar); output — natijani ko'rsatish yoki boshqa modul/stack'ga berish; depends_on — reference orqali ko'rinmaydigan bog'liqlikni majburlash (kam ishlatiladi)."
+          "question": "Terraform modullarini qanday test qilasiz: `terraform test`, Terratest, policy as code?",
+          "explanation": "Qatlamlar: statik (fmt, validate, tflint, Checkov/Trivy), policy (OPA/Conftest yoki Sentinel — plan JSON ustida), unit/integration (`terraform test` — mock provider yoki haqiqiy apply), e2e (Terratest, Go — resursni yaratib, haqiqatan ishlashini tekshirib, o'chiradi)."
         },
         {
-          "id": 33327,
-          "code": "WT21",
-          "level": "J",
+          "id": 33490,
+          "code": "WT36",
+          "level": "S",
           "type": "card",
           "topic": "Terraform",
           "domain": "iac",
           "section": "w2",
-          "question": "Terraform plan'da `-/+` (replace) ko'rsangiz nima qilasiz?",
-          "explanation": "Resurs o'chirib qayta yaratiladi — ma'lumot yo'qolishi yoki downtime bo'lishi mumkin. Qaysi atribut sabab bo'lganini (`# forces replacement`) toping; kerak bo'lmasa kodni o'zgartiring, kerak bo'lsa rejalashtiring (create_before_destroy, snapshot, oyna)."
+          "question": "OpenTofu state encryption nima va nega muhim?",
+          "explanation": "Terraform state'da secret'lar ochiq saqlanadi; backend encryption (S3 SSE) faqat diskda himoya qiladi — bucket'ni o'qiy olgan har kim ko'radi. OpenTofu 1.7+ state va plan'ni client tomonda (AES-GCM, kalit KMS/PBKDF2 dan) shifrlaydi."
         },
         {
-          "id": 33328,
-          "code": "WT22",
-          "level": "J",
+          "id": 33487,
+          "code": "WT33",
+          "level": "St",
           "type": "card",
           "topic": "Terraform",
           "domain": "iac",
           "section": "w2",
-          "question": "Data source va resource farqi? Qachon `data` ishlatiladi?",
-          "explanation": "resource — Terraform yaratadi va boshqaradi (o'chirishi ham mumkin). data — mavjud narsani faqat o'qiydi (boshqa jamoa yaratgan VPC, eng yangi AMI, joriy account ID) — o'zgartirmaydi va o'chirmaydi."
-        },
-        {
-          "id": 33329,
-          "code": "WT23",
-          "level": "M",
-          "type": "card",
-          "topic": "Terraform",
-          "domain": "iac",
-          "section": "w2",
-          "question": "Terraform uchun CI/CD pipeline qanday quriladi?",
-          "explanation": "PR: fmt/validate/tflint/checkov + `plan` (natija PR izohida). Merge'dan keyin: aynan saqlangan plan'ni `apply`. Cloud'ga kirish OIDC orqali (static key yo'q), prod apply uchun approval, bir vaqtda bitta apply (lock/concurrency)."
-        },
-        {
-          "id": 33398,
-          "code": "WT15",
-          "level": "J",
-          "type": "card",
-          "topic": "Terraform",
-          "domain": "iac",
-          "section": "w2",
-          "question": "`terraform console`, `graph`, `output`, `show` qanday yordam beradi?",
-          "explanation": "console — ifoda va funksiyalarni interaktiv sinash (state'dagi qiymatlar bilan); graph — dependency grafigi (DOT); output — chiqish qiymatlari; show — state yoki saqlangan plan'ni o'qiladigan ko'rinishda."
-        },
-        {
-          "id": 33399,
-          "code": "WT16",
-          "level": "M",
-          "type": "card",
-          "topic": "Terraform",
-          "domain": "iac",
-          "section": "w2",
-          "question": "`dynamic` blok nima va qachon ishlatiladi?",
-          "explanation": "Resurs ichidagi takrorlanuvchi nested bloklarni (ingress qoidalari, tag'lar, setting'lar) ro'yxatdan generatsiya qiladi. Ortiqcha ishlatish kodni o'qishni qiyinlashtiradi."
-        },
-        {
-          "id": 33400,
-          "code": "WT17",
-          "level": "M",
-          "type": "card",
-          "topic": "Terraform",
-          "domain": "iac",
-          "section": "w2",
-          "question": "Provisioner'lar (`local-exec`, `remote-exec`) va `terraform_data` — nega 'oxirgi chora'?",
-          "explanation": "Provisioner — resurs yaratilgandan keyin skript ishga tushirish. Terraform ularning natijasini state'da kuzatmaydi, idempotent emas, xato bo'lsa resurs 'tainted'. Afzal: cloud-init/user_data, Ansible, image (Packer), provider'ning native resursi."
+          "question": "Crossplane nima va Terraform'dan farqi? Qachon tanlaysiz?",
+          "explanation": "Crossplane — cloud resurslarini Kubernetes CRD sifatida boshqaradigan controller: doimiy reconcile (drift o'zi tuzaladi), state fayl yo'q (holat K8s API'da). Composition/XRD bilan platforma jamoasi dasturchilarga o'z \"Database\" API'sini beradi. Narx: K8s'ga to'liq bog'liqlik, debug murakkab."
         }
       ]
     },
@@ -24584,6 +25134,50 @@
           "section": "w3",
           "question": "`--check` va `--diff` nima uchun kerak?",
           "explanation": "--check — dry run, hech narsa o'zgartirmaydi, nima o'zgarishini ko'rsatadi; --diff — fayl/template farqini chiqaradi. Prod'da apply'dan oldin ishlatiladi."
+        },
+        {
+          "id": 33330,
+          "code": "WA15",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Ansible ad-hoc buyruqlar nima va qachon ishlatiladi?",
+          "explanation": "Playbook'siz bitta modulni ko'p hostda ishga tushirish: tezkor tekshiruv yoki bir martalik amal (ping, uptime, paket holati, servis restart)."
+        },
+        {
+          "id": 33331,
+          "code": "WA16",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`become`, SSH kalitlar va Ansible ulanishi qanday sozlanadi?",
+          "explanation": "Ansible SSH bilan ulanadi (agent kerak emas, faqat Python). `ansible_user`, kalit fayl inventory/ansible.cfg'da; root kerak bo'lgan task'lar uchun `become: true` (sudo)."
+        },
+        {
+          "id": 33332,
+          "code": "WA17",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Facts nima va `when` shartlari bilan qanday ishlatiladi?",
+          "explanation": "Facts — Ansible playbook boshida host haqida yig'adigan ma'lumot (OS, IP, xotira, CPU). `when` bilan task'ni shartli bajarish: masalan, Debian'da `apt`, RHEL'da `dnf`."
+        },
+        {
+          "id": 33457,
+          "code": "WA22",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`loop` va `with_items` farqi? Ansible'da sikl qanday yoziladi?",
+          "explanation": "`loop` — zamonaviy, umumiy sintaksis (Ansible 2.5+); `with_items` va boshqa `with_*` — eski lookup asosidagi shakl, hali ishlaydi. `with_items` ro'yxatni bir daraja tekislaydi (flatten), `loop` esa tekislamaydi."
         },
         {
           "id": 33191,
@@ -24652,50 +25246,6 @@
           "explanation": "Dynamic inventory — host ro'yxatini cloud API'dan (AWS EC2, GCP) olish, tag bo'yicha guruhlash. Autoscaling'da IP'lar o'zgaradi, static fayl eskiradi."
         },
         {
-          "id": 33195,
-          "code": "WA08",
-          "level": "S",
-          "type": "card",
-          "topic": "Ansible",
-          "domain": "iac",
-          "section": "w3",
-          "question": "Ansible'ni katta flot (yuzlab server) uchun qanday tezlashtirasiz va xavfsiz rollout qilasiz?",
-          "explanation": "Tezlik: `forks` oshirish, SSH pipelining va ControlPersist, fact gathering'ni cheklash/caching. Xavfsiz rollout: `serial` (batch), `max_fail_percentage`, load balancer'dan chiqarish, `--check --diff`, `--limit` bilan canary."
-        },
-        {
-          "id": 33330,
-          "code": "WA15",
-          "level": "J",
-          "type": "card",
-          "topic": "Ansible",
-          "domain": "iac",
-          "section": "w3",
-          "question": "Ansible ad-hoc buyruqlar nima va qachon ishlatiladi?",
-          "explanation": "Playbook'siz bitta modulni ko'p hostda ishga tushirish: tezkor tekshiruv yoki bir martalik amal (ping, uptime, paket holati, servis restart)."
-        },
-        {
-          "id": 33331,
-          "code": "WA16",
-          "level": "J",
-          "type": "card",
-          "topic": "Ansible",
-          "domain": "iac",
-          "section": "w3",
-          "question": "`become`, SSH kalitlar va Ansible ulanishi qanday sozlanadi?",
-          "explanation": "Ansible SSH bilan ulanadi (agent kerak emas, faqat Python). `ansible_user`, kalit fayl inventory/ansible.cfg'da; root kerak bo'lgan task'lar uchun `become: true` (sudo)."
-        },
-        {
-          "id": 33332,
-          "code": "WA17",
-          "level": "J",
-          "type": "card",
-          "topic": "Ansible",
-          "domain": "iac",
-          "section": "w3",
-          "question": "Facts nima va `when` shartlari bilan qanday ishlatiladi?",
-          "explanation": "Facts — Ansible playbook boshida host haqida yig'adigan ma'lumot (OS, IP, xotira, CPU). `when` bilan task'ni shartli bajarish: masalan, Debian'da `apt`, RHEL'da `dnf`."
-        },
-        {
           "id": 33333,
           "code": "WA18",
           "level": "M",
@@ -24716,6 +25266,148 @@
           "section": "w3",
           "question": "`delegate_to`, `run_once` va `local_action` qachon kerak?",
           "explanation": "delegate_to — task'ni joriy host nomidan, lekin boshqa host'da bajarish (LB'dan chiqarish, DNS yozuvi). run_once — butun guruh uchun bir marta (DB migration). local_action/`delegate_to: localhost` — boshqaruvchi mashinada (API chaqiruv)."
+        },
+        {
+          "id": 33441,
+          "code": "WA19",
+          "level": "M",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Ansible'da xatolarni boshqarish: `block`/`rescue`/`always`, `ignore_errors`, `failed_when`?",
+          "explanation": "block — task'larni guruhlaydi; rescue — blokda xato bo'lsa ishlaydi (rollback); always — har doim (tozalash). ignore_errors xatoni yutadi — kam ishlatiladi; failed_when — xato shartini aniq belgilaydi."
+        },
+        {
+          "id": 33442,
+          "code": "WA20",
+          "level": "M",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`tags`, `--start-at-task`, `--limit` bilan playbook'ning bir qismini qanday ishga tushirasiz?",
+          "explanation": "tags — task/role'larni belgilash va `--tags`/`--skip-tags` bilan tanlash; --limit — hostlarni toraytirish; --start-at-task — yarim qolgan joydan davom etish. Katta playbook'da tez va xavfsiz o'zgarish uchun."
+        },
+        {
+          "id": 33443,
+          "code": "WA21",
+          "level": "M",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Uzoq ishlaydigan task (backup, katta yuklash) SSH timeout'ga tushyapti. `async` va `poll` qanday yordam beradi?",
+          "explanation": "async — task'ni fonda maksimal N soniya ishlashga ruxsat beradi; poll — necha soniyada holatni tekshirish. poll: 0 — kutmasdan keyingi task'ga o'tadi, keyin async_status bilan natija olinadi."
+        },
+        {
+          "id": 33458,
+          "code": "WA23",
+          "level": "M",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`import_tasks` va `include_tasks` farqi (statik vs dinamik)?",
+          "explanation": "import_* — playbook parse vaqtida statik qo'shiladi: tag/when ichidagi har task'ga o'tadi, lekin loop ishlatib bo'lmaydi. include_* — ishga tushish vaqtida dinamik: loop va o'zgaruvchiga qarab fayl tanlash mumkin, tag/when faqat include'ning o'ziga tegishli."
+        },
+        {
+          "id": 33459,
+          "code": "WA24",
+          "level": "M",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`strategy: linear` va `free`, `forks` nima? Ansible'ni qanday tezlashtirasiz?",
+          "explanation": "linear (default) — har task barcha hostlarda tugagach keyingisiga o'tadi; free — har host o'z tezligida oldinga ketadi. forks — bir vaqtda nechta hostga ulanish (default 5). Tezlashtirish: forks oshirish, pipelining, fact caching, gather_facts o'chirish."
+        },
+        {
+          "id": 33460,
+          "code": "WA25",
+          "level": "M",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Push va pull rejim: `ansible-pull` qachon kerak?",
+          "explanation": "Default push: control node SSH bilan hostlarga boradi. ansible-pull — har host o'zi Git'dan playbook'ni olib, lokal ishga tushiradi (cron/timer). Ko'p, vaqtinchalik yoki NAT ortidagi hostlar uchun mos."
+        },
+        {
+          "id": 33195,
+          "code": "WA08",
+          "level": "S",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Ansible'ni katta flot (yuzlab server) uchun qanday tezlashtirasiz va xavfsiz rollout qilasiz?",
+          "explanation": "Tezlik: `forks` oshirish, SSH pipelining va ControlPersist, fact gathering'ni cheklash/caching. Xavfsiz rollout: `serial` (batch), `max_fail_percentage`, load balancer'dan chiqarish, `--check --diff`, `--limit` bilan canary."
+        }
+      ]
+    },
+    {
+      "id": "w13",
+      "name": "Chef, Puppet, SaltStack",
+      "domain": "iac",
+      "topics": [
+        "Config management"
+      ],
+      "questions": [
+        {
+          "id": 33524,
+          "code": "CM01",
+          "level": "J",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Chef, Puppet, SaltStack va Ansible farqi: agent va push/pull modeli?",
+          "explanation": "Puppet va Chef — agent asosida, pull model (agent markaziy serverdan har 30 daqiqada konfiguratsiya oladi va qo'llaydi). Salt — agent (minion) + ZeroMQ event bus, push va tez parallel ijro. Ansible — agentsiz, SSH push."
+        },
+        {
+          "id": 33525,
+          "code": "CM02",
+          "level": "M",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Puppet'da manifest, module, catalog, Hiera va Facter nima?",
+          "explanation": "Manifest (.pp) — resurslarning kerakli holati; module — manifest/template/fayllar paketi; Facter — node faktlari (OS, IP); Hiera — ma'lumotni koddan ajratish (muhit/rol bo'yicha qiymatlar); catalog — server faktlar asosida node uchun kompilyatsiya qilgan aniq holat, agent uni qo'llaydi."
+        },
+        {
+          "id": 33526,
+          "code": "CM03",
+          "level": "M",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Chef'da cookbook, recipe, resource, run-list va Test Kitchen nima?",
+          "explanation": "Recipe — Ruby DSL'da resurslar; cookbook — recipe, template, attribute'lar to'plami; run-list — node'ga qaysi recipe/role qo'llanishi; chef-client agent Chef Server'dan olib qo'llaydi. Test Kitchen — cookbook'ni vaqtinchalik VM/container'da sinash (InSpec bilan tekshirish)."
+        },
+        {
+          "id": 33527,
+          "code": "CM04",
+          "level": "M",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "SaltStack: master/minion, state, grain va pillar nima?",
+          "explanation": "Master buyruq yuboradi, minion'lar ZeroMQ orqali tinglaydi — minglab hostda soniyalarda ijro. State (.sls) — kerakli holat; grain — minion faktlari (OS, rol); pillar — master'dagi maxfiy/xos ma'lumot, faqat mos minion'ga beriladi."
+        },
+        {
+          "id": 33528,
+          "code": "CM05",
+          "level": "S",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Puppet/Chef'dagi legacy flot'ni zamonaviy yondashuvga (Ansible, immutable image, K8s) qanday ko'chirasiz?",
+          "explanation": "Big-bang emas — strangler: avval inventarizatsiya (nima boshqariladi, kim egasi), yangi xizmatlar yangi usulda, eski node'lar bosqichma-bosqich. Immutable image (Packer + Ansible) bilan konfiguratsiya build vaqtiga ko'chadi, runtime agent kerak bo'lmaydi."
         }
       ]
     },
@@ -24732,28 +25424,6 @@
       ],
       "questions": [
         {
-          "id": 1025,
-          "code": "B26",
-          "level": "P",
-          "type": "card",
-          "topic": "SRE",
-          "domain": "obs",
-          "section": "i3",
-          "question": "SLO 99.9% (oylik), error budget tugadi. Yetuk tashkilot nima qiladi?",
-          "explanation": "99.9% ≈ oyiga 43 daqiqa. Error budget — tezlik va ishonchlilik o'rtasidagi kelishuv; ma'no faqat oqibat bo'lganda. SLO userga ko'rinadigan SLI'ga (success'li query'lar %, p99 latency) asoslanadi, CPU'ga emas."
-        },
-        {
-          "id": 1028,
-          "code": "B29",
-          "level": "P",
-          "type": "card",
-          "topic": "SRE",
-          "domain": "obs",
-          "section": "i3",
-          "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
-          "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
-        },
-        {
           "id": 2019,
           "code": "I20",
           "level": "J",
@@ -24763,6 +25433,17 @@
           "section": "i3",
           "question": "Log, metrika va trace farqi?",
           "explanation": "Ishlatish tartibi: metrika 'muammo bor va qayerda' (alert), trace 'qaysi qadam sekin', log 'aniq nima bo'ldi'. Metrika arzon va agregat; log qimmat (hajm); trace odatda sampling bilan. Uchalasini bog'lovchi element — trace_id."
+        },
+        {
+          "id": 33485,
+          "code": "SR32",
+          "level": "J",
+          "type": "card",
+          "topic": "Logging",
+          "domain": "obs",
+          "section": "i3",
+          "question": "MTTD, MTTR, MTBF nima va ularni qanday yaxshilaysiz?",
+          "explanation": "MTTD — muammo boshlanishidan aniqlanishigacha; MTTR — aniqlanishdan tiklanishgacha (ba'zan boshlanishdan); MTBF — nosozliklar orasidagi o'rtacha vaqt. Zamonaviy fikr: nosozlikni yo'q qilib bo'lmaydi — MTTD va MTTR'ni kamaytirish ko'proq foyda beradi."
         },
         {
           "id": 2020,
@@ -24788,6 +25469,28 @@
           "explanation": "Distributed tracing — kontekstni uzatishga asoslangan (W3C traceparent). OpenTelemetry auto-instrumentation buni ko'pincha o'zi qiladi, lekin qo'lda yozilgan client, message queue (headerni xabar atributiga qo'yish) va async ish (goroutine/thread) — tipik uzilish nuqtalari."
         },
         {
+          "id": 33484,
+          "code": "SR31",
+          "level": "M",
+          "type": "card",
+          "topic": "Logging",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Toil nima va uni qanday kamaytirasiz?",
+          "explanation": "Toil — qo'lda, takrorlanadigan, avtomatlashtirsa bo'ladigan, uzoq muddatli qiymat bermaydigan va servis o'sishi bilan chiziqli o'sadigan operatsion ish. SRE maqsadi: toil vaqtning ~50% dan oshmasin, qolgani muhandislik (avtomatlashtirish)."
+        },
+        {
+          "id": 33486,
+          "code": "SR33",
+          "level": "M",
+          "type": "card",
+          "topic": "Logging",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Chaos engineering va GameDay nima? Qanday xavfsiz boshlaysiz?",
+          "explanation": "Chaos engineering — tizimga ataylab nosozlik kiritib (pod o'ldirish, latency, AZ yo'qolishi) gipotezani tekshirish: \"X bo'lsa foydalanuvchi sezmaydi\". GameDay — jamoa bilan rejalashtirilgan mashq: ham tizimni, ham odamlar/runbook'ni sinaydi."
+        },
+        {
           "id": 2022,
           "code": "I23",
           "level": "S",
@@ -24808,17 +25511,6 @@
           "section": "i3",
           "question": "Alertlar juda ko'p, jamoa ularga e'tibor bermay qo'ydi. Nima qilasiz?",
           "explanation": "Senior/Staff signal: alert charchashi — texnik emas, jarayon muammosi. O'lchov: haftada nechta page, nechtasi harakatga olib keldi."
-        },
-        {
-          "id": 2024,
-          "code": "I25",
-          "level": "St",
-          "type": "card",
-          "topic": "Metrics",
-          "domain": "obs",
-          "section": "i3",
-          "question": "Metrika tizimi hisobi keskin oshdi (kardinallik portlashi). Sabab va yechim?",
-          "explanation": "Staff signal: observability xarajatini mahsulot xarajati sifatida boshqarish — qaysi signal qancha turadi va qancha qiymat beradi."
         },
         {
           "id": 14029,
@@ -24877,17 +25569,6 @@
           "explanation": "Log qimmat va qidirish sekin; metrika agregat uchun, trace sababni topish uchun arzonroq. Amaliy chora: request log'ni faqat xato/sekin holatlarda to'liq yozish, `trace_id`ni har log qatoriga qo'yish (log↔trace bog'lanadi), PII maskalash, retention siyosati (7 kun hot, 90 kun arxiv)."
         },
         {
-          "id": 30039,
-          "code": "SN40",
-          "level": "St",
-          "type": "card",
-          "topic": "SRE",
-          "domain": "obs",
-          "section": "i3",
-          "question": "Yangi servis uchun SLO'ni qanday belgilaysiz va error budget bilan nima qilasiz?",
-          "explanation": "Senior'dan kutiladigan asosiy g'oya: SLO — muhandislik qarorlarini boshqaradigan budjet, shunchaki grafik emas. Va o'lchash foydalanuvchi ko'rgan joyda bo'lishi kerak."
-        },
-        {
           "id": 30266,
           "code": "SN267",
           "level": "S",
@@ -24921,6 +25602,39 @@
           "explanation": "Eng ko'p uchraydigan bo'shliq — asinxron chegara: Kafka'ga yozishda `traceparent` xabar headeriga solinmasa trace uziladi va 'ish qayerda sekinlashdi' savoliga javob yo'qoladi. Ikkinchi bo'shliq: log va trace bog'lanmagan (`trace_id` log maydoni sifatida yozilishi kerak). Span atributlari kardinalligi ham nazorat qilinadi."
         },
         {
+          "id": 33492,
+          "code": "SR34",
+          "level": "S",
+          "type": "card",
+          "topic": "Logging",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Distributed tracing'da head-based va tail-based sampling farqi?",
+          "explanation": "Head-based — trace boshida (birinchi span) tasodifiy qaror (masalan 1%): arzon, lekin noyob xato/sekin so'rovlar ko'pincha tashlanadi. Tail-based — trace tugagach qaror (OTel Collector'da): xato va sekin trace'larni 100% saqlaydi, lekin collector barcha span'larni xotirada ushlashi kerak."
+        },
+        {
+          "id": 2024,
+          "code": "I25",
+          "level": "St",
+          "type": "card",
+          "topic": "Metrics",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Metrika tizimi hisobi keskin oshdi (kardinallik portlashi). Sabab va yechim?",
+          "explanation": "Staff signal: observability xarajatini mahsulot xarajati sifatida boshqarish — qaysi signal qancha turadi va qancha qiymat beradi."
+        },
+        {
+          "id": 30039,
+          "code": "SN40",
+          "level": "St",
+          "type": "card",
+          "topic": "SRE",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Yangi servis uchun SLO'ni qanday belgilaysiz va error budget bilan nima qilasiz?",
+          "explanation": "Senior'dan kutiladigan asosiy g'oya: SLO — muhandislik qarorlarini boshqaradigan budjet, shunchaki grafik emas. Va o'lchash foydalanuvchi ko'rgan joyda bo'lishi kerak."
+        },
+        {
           "id": 30450,
           "code": "SN451",
           "level": "St",
@@ -24930,6 +25644,28 @@
           "section": "i3",
           "question": "Prometheus'da yuqori kardinallik nega xavfli va qanday nazorat qilinadi?",
           "explanation": "Qoida: metrika — agregat (nima bo'lyapti), trace/log — individual (qaysi so'rovda). Foydali label'lar: servis, endpoint shabloni (`/users/:id`, konkret ID emas), status klassi, metod. Kardinallikni kuzatish uchun `topk(10, count by (__name__)({__name__=~\".+\"}))` kabi so'rovlar va scrape darajasidagi limitlar (`sample_limit`) ishlatiladi."
+        },
+        {
+          "id": 1025,
+          "code": "B26",
+          "level": "P",
+          "type": "card",
+          "topic": "SRE",
+          "domain": "obs",
+          "section": "i3",
+          "question": "SLO 99.9% (oylik), error budget tugadi. Yetuk tashkilot nima qiladi?",
+          "explanation": "99.9% ≈ oyiga 43 daqiqa. Error budget — tezlik va ishonchlilik o'rtasidagi kelishuv; ma'no faqat oqibat bo'lganda. SLO userga ko'rinadigan SLI'ga (success'li query'lar %, p99 latency) asoslanadi, CPU'ga emas."
+        },
+        {
+          "id": 1028,
+          "code": "B29",
+          "level": "P",
+          "type": "card",
+          "topic": "SRE",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
+          "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
         }
       ]
     },
@@ -24997,6 +25733,28 @@
           "explanation": "Exporter — tizim metrikasini Prometheus formatida /metrics da beradigan process. node_exporter (server), cAdvisor/kube-state-metrics (K8s), postgres/redis exporter, blackbox_exporter (tashqi probe)."
         },
         {
+          "id": 33449,
+          "code": "WP14",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "PromQL'da `increase()` va `rate()` farqi? Instant vector va range vector nima?",
+          "explanation": "rate — oraliqdagi sekundlik o'rtacha o'sish; increase — oraliqdagi umumiy o'sish (= rate × oraliq soniyalari). Range vector `x[5m]` — har series uchun nuqtalar to'plami; rate/increase uni instant vector'ga (bitta qiymat) aylantiradi."
+        },
+        {
+          "id": 33473,
+          "code": "WP19",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "`up` metrikasi, `job` va `instance` label'lari nima?",
+          "explanation": "Prometheus har scrape uchun avtomatik `up` yaratadi: 1 — target javob berdi, 0 — scrape fail. `job` — scrape_config nomi, `instance` — target manzili. `up == 0` eng asosiy \"exporter/servis o'ldi\" alert'i."
+        },
+        {
           "id": 33199,
           "code": "WP04",
           "level": "M",
@@ -25052,6 +25810,83 @@
           "explanation": "kubernetes_sd_configs — K8s API'dan pod/service/endpoint'larni topadi, relabel bilan filtrlaydi. Prometheus Operator'da ServiceMonitor/PodMonitor CRD — label selector bilan deklarativ scrape."
         },
         {
+          "id": 33450,
+          "code": "WP15",
+          "level": "M",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "`relabel_configs` va `metric_relabel_configs` farqi?",
+          "explanation": "relabel_configs — scrape'dan OLDIN target'lar ustida ishlaydi (qaysi target scrape qilinadi, label'lar qanday nomlanadi). metric_relabel_configs — scrape'dan KEYIN har bir sample ustida (keraksiz metrika/label'ni tashlash, saqlashdan oldin)."
+        },
+        {
+          "id": 33451,
+          "code": "WP16",
+          "level": "M",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Kubernetes'da container CPU va memory foydalanishini requests/limits'ga nisbatan foizda qanday hisoblaysiz (PromQL)?",
+          "explanation": "cAdvisor counter'i `container_cpu_usage_seconds_total`dan rate olinadi va kube-state-metrics'dagi requests/limits bilan bo'linadi. Memory uchun `container_memory_working_set_bytes` (OOM shu bo'yicha)."
+        },
+        {
+          "id": 33452,
+          "code": "WP17",
+          "level": "M",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Alertmanager config'ni noto'g'ri o'zgartirib, prod alert'lari ishlamay qoldi. Bunday holatni qanday oldini olasiz?",
+          "explanation": "Config Git'da, CI'da `amtool check-config` va `promtool check rules`, routing testi (`amtool config routes test`). Deploy'dan keyin doim yonib turadigan Watchdog alert va tashqi dead man's switch — alert zanjiri o'lsa xabar beradi."
+        },
+        {
+          "id": 33472,
+          "code": "WP18",
+          "level": "M",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Recording rule va alerting rule farqi? Recording rule qachon kerak?",
+          "explanation": "Recording rule — og'ir PromQL natijasini oldindan hisoblab yangi metrika sifatida saqlaydi (dashboard tez, alert sodda). Alerting rule — shart bajarilsa alert yaratadi. Ikkalasi ham `evaluation_interval` bo'yicha hisoblanadi."
+        },
+        {
+          "id": 33474,
+          "code": "WP20",
+          "level": "M",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Prometheus'ni HA (yuqori mavjud) qanday qilasiz? Retention va disk qanday hisoblanadi?",
+          "explanation": "Klassik usul: bir xil config bilan ikkita Prometheus replika, Alertmanager klasteri (o'zi dublikat alertlarni yo'qotadi). So'rovda dublikatni olib tashlash uchun Thanos Querier/Mimir. Retention vaqt yoki hajm bo'yicha; disk ≈ sample/s × sample hajmi × vaqt."
+        },
+        {
+          "id": 33475,
+          "code": "WP21",
+          "level": "M",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Grafana'da templating variable'lar va annotation'lar nima uchun?",
+          "explanation": "Variable — dashboard tepasidagi dropdown (namespace, service, instance): bitta dashboard ko'p servis uchun. Annotation — grafikda vertikal belgi (deploy, incident): \"latency deploy'dan keyin oshdimi?\" savoliga darhol javob."
+        },
+        {
+          "id": 33477,
+          "code": "WP23",
+          "level": "M",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Exemplar nima va metrikadan trace'ga qanday o'tiladi?",
+          "explanation": "Exemplar — histogram sample'iga biriktirilgan trace_id. Grafana grafigida latency sakrashidagi nuqtani bosib, aynan shu sekin so'rovning trace'ini (Tempo/Jaeger) ochish mumkin — metrika va trace orasida ko'prik."
+        },
+        {
           "id": 33203,
           "code": "WP08",
           "level": "S",
@@ -25061,6 +25896,28 @@
           "section": "w4",
           "question": "Prometheus'ni scale qilish va uzoq muddat saqlash: federation, remote_write, Thanos/Mimir?",
           "explanation": "Bitta Prometheus vertikal scale bo'ladi va lokal disk (odatda 15-30 kun). Ko'p cluster va uzoq retention uchun: remote_write yoki Thanos sidecar orqali object storage'ga, global query (Thanos/Mimir/VictoriaMetrics), HA juftlik + dedupe."
+        },
+        {
+          "id": 33476,
+          "code": "WP22",
+          "level": "S",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Prometheus'da staleness nima? Target yo'qolganda grafikda nima bo'ladi?",
+          "explanation": "Series 5 daqiqa (lookback delta) davomida yangi sample olmasa yoki target scrape'dan yo'qolsa, Prometheus unga stale marker yozadi — series grafikda darhol uziladi. Busiz oxirgi qiymat 5 daqiqa \"osilib\" ko'rinardi."
+        },
+        {
+          "id": 33491,
+          "code": "WP24",
+          "level": "St",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Thanos arxitekturasi: Sidecar, Store Gateway, Querier, Compactor, Ruler nima qiladi?",
+          "explanation": "Sidecar — Prometheus yonida, 2 soatlik blok'larni object storage'ga yuklaydi va so'nggi data'ni beradi. Store Gateway — eski blok'larni S3'dan o'qib beradi. Querier — hammasidan so'rab, replika dublikatlarini olib tashlaydi (global view). Compactor — blok'larni birlashtiradi, downsampling, retention. Ruler — global data ustida rule/alert."
         }
       ]
     },
@@ -25491,6 +26348,17 @@
           "explanation": "NAT — private manzilni public manzilga almashtiradi. Ichkaridan chiqqan ulanish uchun router/NAT gateway mapping saqlaydi va javobni qaytaradi; tashqaridan boshlangan ulanish uchun mapping yo'q, shuning uchun kirib bo'lmaydi."
         },
         {
+          "id": 33466,
+          "code": "WN01",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "DHCP qanday ishlaydi (DORA)? IP olinmasa nimani tekshirasiz?",
+          "explanation": "Discover → Offer → Request → Acknowledge: klient broadcast bilan server qidiradi, server IP taklif qiladi, klient so'raydi, server tasdiqlaydi (lease muddati bilan). IP, gateway, DNS shu bilan keladi."
+        },
+        {
           "id": 33350,
           "code": "WB09",
           "level": "M",
@@ -25511,6 +26379,50 @@
           "section": "w10",
           "question": "MTU nima va MTU muammosi qanday belgilar beradi?",
           "explanation": "MTU — bir paketning maksimal hajmi (Ethernet 1500). Tunnel/overlay (VPN, VXLAN, WireGuard) header qo'shadi; DF bitli katta paketlar tashlanadi va ICMP 'frag needed' bloklangan bo'lsa — kichik so'rovlar ishlaydi, katta javoblar (TLS handshake, katta fayl) osilib qoladi."
+        },
+        {
+          "id": 33467,
+          "code": "WN02",
+          "level": "M",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "SYN flood, half-open ulanish va SYN cookies nima?",
+          "explanation": "SYN flood — hujumchi ko'p SYN yuborib ACK qaytarmaydi, server SYN backlog'ini half-open ulanishlar bilan to'ldiradi va haqiqiy klientlar ulana olmaydi. SYN cookies — backlog to'lganda holatni saqlamasdan, ma'lumotni SYN-ACK sequence raqamiga kodlaydi."
+        },
+        {
+          "id": 33468,
+          "code": "WN03",
+          "level": "M",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Anycast nima va DNS/CDN'da nega ishlatiladi?",
+          "explanation": "Anycast — bitta IP manzil dunyoning ko'p joyida e'lon qilinadi (BGP); trafik tarmoq bo'yicha eng yaqin nuqtaga boradi. Natija: past latency, avtomatik failover (bir nuqta o'chsa route yo'qoladi), DDoS yuki taqsimlanadi."
+        },
+        {
+          "id": 33469,
+          "code": "WN04",
+          "level": "S",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "VXLAN va overlay tarmoq nima? Kubernetes CNI'larda qanday ishlatiladi?",
+          "explanation": "Overlay — fizik (underlay) tarmoq ustida virtual L2 tarmoq: pod paketi UDP (VXLAN, port 4789) ichiga o'raladi va node'lar orasida tunnel orqali ketadi. Afzal: underlay'ga tegmaydi; narx: encapsulation overhead va MTU kamayishi (~50 bayt)."
+        },
+        {
+          "id": 33512,
+          "code": "WN05",
+          "level": "S",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "TCP congestion control: CUBIC va BBR farqi? Qachon BBR yoqiladi?",
+          "explanation": "CUBIC (Linux default) — paket yo'qolishini tirbandlik signali deb oladi va tezlikni kesadi; yo'qotishli/uzoq tarmoqda (mobil, xalqaro) throughput past. BBR — o'tkazuvchanlik va RTT'ni o'lchab tezlikni modellashtiradi; yo'qotishga kamroq sezgir, bufferbloat kam — CDN/video/uzoq masofali trafikda tezroq."
         }
       ]
     },
@@ -26000,83 +26912,6 @@
           "explanation": "Security Group — instance/ENI darajasida, stateful (javob trafik avtomatik ruxsat), faqat allow qoidalar. NACL — subnet darajasida, stateless (kirish va chiqish alohida), allow va deny, tartib raqami bilan."
         },
         {
-          "id": 33210,
-          "code": "WC07",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "ALB va NLB farqi? Qachon qaysi biri?",
-          "explanation": "ALB — L7 (HTTP/HTTPS): path/host routing, TLS termination, WAF, gRPC. NLB — L4 (TCP/UDP/TLS): juda past latency, statik IP, client IP saqlanadi, millionlab ulanish. HTTP API uchun ALB, TCP protokollar (DB proxy, MQTT, gaming) uchun NLB."
-        },
-        {
-          "id": 33211,
-          "code": "WC08",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "RDS nima beradi va backup/HA qanday ishlaydi?",
-          "explanation": "RDS — managed PostgreSQL/MySQL: patching, backup, monitoring AWS'da. Automated backup + PITR (retention 1-35 kun), snapshot'lar. Multi-AZ — boshqa AZ'da sinxron standby, avtomatik failover (~1-2 daqiqa). Read replica — asinxron, o'qishni scale qilish uchun."
-        },
-        {
-          "id": 33212,
-          "code": "WC09",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "CloudWatch nima: metrics, logs, alarms?",
-          "explanation": "CloudWatch — AWS'ning monitoring xizmati: servis metrikalari (EC2 CPU, ALB 5xx, RDS connections), log group'lar, alarm'lar (SNS orqali xabar yoki autoscaling). EC2 ichki metrikalari (memory, disk) uchun CloudWatch agent kerak."
-        },
-        {
-          "id": 33213,
-          "code": "WC10",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "AWS'da xarajatni (cost) nazorat qilish uchun junior nimalarni bilishi kerak?",
-          "explanation": "Budget va billing alert, tag'lar (team/env), unutilgan resurslar (to'xtatilgan EC2 EBS'i, eski snapshot, bog'lanmagan Elastic IP, bo'sh LB), NAT GW va cross-AZ/egress trafik, log retention, to'g'ri o'lcham va Savings Plans."
-        },
-        {
-          "id": 33254,
-          "code": "WC13",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "EC2'dagi app S3'ga qanday kirishi kerak? Access key'ni serverga qo'yish nega yomon?",
-          "explanation": "IAM role (instance profile) — vaqtinchalik, avtomatik aylanadigan credential IMDS orqali. Statik access key oqib ketadi, aylantirilmaydi, kimniki ekani noaniq. K8s'da IRSA / EKS Pod Identity."
-        },
-        {
-          "id": 33255,
-          "code": "WC14",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "Private subnet'dagi instance internetga chiqa olmayapti. Nimalarni tekshirasiz?",
-          "explanation": "Route table (0.0.0.0/0 → NAT Gateway), NAT Gateway public subnet'da va uning route'i IGW'ga, Security Group outbound, NACL (stateless — ephemeral portlar), DNS."
-        },
-        {
-          "id": 33256,
-          "code": "WC15",
-          "level": "S",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "Ko'p AZ'li yuqori mavjudlikdagi (HA) web arxitekturani AWS'da qanday qurasiz?",
-          "explanation": "ALB (ko'p AZ) → ASG yoki EKS (kamida 2-3 AZ) → RDS Multi-AZ + read replica, ElastiCache, S3 + CloudFront. Har AZ'da NAT GW. Stateless app, health check, backup va DR rejasi."
-        },
-        {
           "id": 33334,
           "code": "WC17",
           "level": "J",
@@ -26143,28 +26978,6 @@
           "explanation": "ECR — AWS'ning private Docker/OCI registry'si: IAM bilan kirish, image scanning, lifecycle policy (eski image'larni tozalash). EKS/ECS node'lar IAM role bilan pull qiladi."
         },
         {
-          "id": 33340,
-          "code": "WC23",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "Lambda qachon mos va qachon mos emas?",
-          "explanation": "Mos: event-driven, qisqa (≤15 daqiqa), notekis yuk (S3 event, SQS, cron, kichik API) — server boshqaruvi yo'q, ishlatilganicha to'lov. Mos emas: uzoq jarayonlar, doimiy yuqori yuk (qimmatroq), past latency talabi (cold start), ko'p DB ulanishi, katta state."
-        },
-        {
-          "id": 33341,
-          "code": "WC24",
-          "level": "M",
-          "type": "card",
-          "topic": "AWS basics",
-          "domain": "cloud",
-          "section": "w5",
-          "question": "Secrets Manager va SSM Parameter Store farqi?",
-          "explanation": "Ikkalasi config/secret saqlaydi, KMS bilan shifrlaydi, IAM bilan cheklanadi. Secrets Manager — avtomatik rotation (RDS bilan integratsiya), cross-account, pullik (secret boshiga). Parameter Store — arzon/bepul (standard), oddiy config va secret'lar uchun, rotation yo'q."
-        },
-        {
           "id": 33401,
           "code": "WC11",
           "level": "J",
@@ -26185,6 +26998,105 @@
           "section": "w5",
           "question": "ECS va Fargate nima, EKS'dan farqi?",
           "explanation": "ECS — AWS'ning o'z container orchestrator'i (task definition, service), oddiy. Fargate — serverless compute: EC2 node boshqarmasdan container ishlatish (ECS yoki EKS bilan). EKS — managed Kubernetes: ekotizim va portativlik, lekin murakkabroq."
+        },
+        {
+          "id": 33454,
+          "code": "WC27",
+          "level": "J",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "AWS Secrets Manager va SSM Parameter Store farqi?",
+          "explanation": "Ikkalasi ham secret/config saqlaydi (KMS bilan shifrlangan). Secrets Manager — avtomatik rotation (RDS bilan), cross-region replika, pullik har secret uchun. Parameter Store — oddiy config va secret uchun arzon/bepul (standard), rotation yo'q."
+        },
+        {
+          "id": 33210,
+          "code": "WC07",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "ALB va NLB farqi? Qachon qaysi biri?",
+          "explanation": "ALB — L7 (HTTP/HTTPS): path/host routing, TLS termination, WAF, gRPC. NLB — L4 (TCP/UDP/TLS): juda past latency, statik IP, client IP saqlanadi, millionlab ulanish. HTTP API uchun ALB, TCP protokollar (DB proxy, MQTT, gaming) uchun NLB."
+        },
+        {
+          "id": 33211,
+          "code": "WC08",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "RDS nima beradi va backup/HA qanday ishlaydi?",
+          "explanation": "RDS — managed PostgreSQL/MySQL: patching, backup, monitoring AWS'da. Automated backup + PITR (retention 1-35 kun), snapshot'lar. Multi-AZ — boshqa AZ'da sinxron standby, avtomatik failover (~1-2 daqiqa). Read replica — asinxron, o'qishni scale qilish uchun."
+        },
+        {
+          "id": 33212,
+          "code": "WC09",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "CloudWatch nima: metrics, logs, alarms?",
+          "explanation": "CloudWatch — AWS'ning monitoring xizmati: servis metrikalari (EC2 CPU, ALB 5xx, RDS connections), log group'lar, alarm'lar (SNS orqali xabar yoki autoscaling). EC2 ichki metrikalari (memory, disk) uchun CloudWatch agent kerak."
+        },
+        {
+          "id": 33213,
+          "code": "WC10",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "AWS'da xarajatni (cost) nazorat qilish uchun junior nimalarni bilishi kerak?",
+          "explanation": "Budget va billing alert, tag'lar (team/env), unutilgan resurslar (to'xtatilgan EC2 EBS'i, eski snapshot, bog'lanmagan Elastic IP, bo'sh LB), NAT GW va cross-AZ/egress trafik, log retention, to'g'ri o'lcham va Savings Plans."
+        },
+        {
+          "id": 33254,
+          "code": "WC13",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "EC2'dagi app S3'ga qanday kirishi kerak? Access key'ni serverga qo'yish nega yomon?",
+          "explanation": "IAM role (instance profile) — vaqtinchalik, avtomatik aylanadigan credential IMDS orqali. Statik access key oqib ketadi, aylantirilmaydi, kimniki ekani noaniq. K8s'da IRSA / EKS Pod Identity."
+        },
+        {
+          "id": 33255,
+          "code": "WC14",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Private subnet'dagi instance internetga chiqa olmayapti. Nimalarni tekshirasiz?",
+          "explanation": "Route table (0.0.0.0/0 → NAT Gateway), NAT Gateway public subnet'da va uning route'i IGW'ga, Security Group outbound, NACL (stateless — ephemeral portlar), DNS."
+        },
+        {
+          "id": 33340,
+          "code": "WC23",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Lambda qachon mos va qachon mos emas?",
+          "explanation": "Mos: event-driven, qisqa (≤15 daqiqa), notekis yuk (S3 event, SQS, cron, kichik API) — server boshqaruvi yo'q, ishlatilganicha to'lov. Mos emas: uzoq jarayonlar, doimiy yuqori yuk (qimmatroq), past latency talabi (cold start), ko'p DB ulanishi, katta state."
+        },
+        {
+          "id": 33341,
+          "code": "WC24",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Secrets Manager va SSM Parameter Store farqi?",
+          "explanation": "Ikkalasi config/secret saqlaydi, KMS bilan shifrlaydi, IAM bilan cheklanadi. Secrets Manager — avtomatik rotation (RDS bilan integratsiya), cross-account, pullik (secret boshiga). Parameter Store — arzon/bepul (standard), oddiy config va secret'lar uchun, rotation yo'q."
         },
         {
           "id": 33403,
@@ -26218,6 +27130,191 @@
           "section": "w5",
           "question": "VPC peering, Transit Gateway va PrivateLink farqi?",
           "explanation": "Peering — ikki VPC'ni to'g'ridan bog'lash (tranzitiv emas, CIDR kesishmasligi kerak). Transit Gateway — hub: ko'p VPC va on-prem'ni markaziy marshrutlash. PrivateLink — bitta servisni (NLB ortidagi) boshqa VPC'ga xususiy endpoint sifatida berish, tarmoqlarni to'liq ulamasdan."
+        },
+        {
+          "id": 33455,
+          "code": "WC28",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Kimdir prod Security Group'da 22-portni `0.0.0.0/0` ga ochib qo'ydi. Qanday aniqlaysiz, tuzatasiz va oldini olasiz?",
+          "explanation": "Darhol qoidani olib tashlash, CloudTrail'dan kim/qachon (AuthorizeSecurityGroupIngress), shu oraliqda SSH kirishlarini tekshirish. Oldini olish: SSH o'rniga SSM Session Manager, AWS Config qoidasi bilan avtomatik remediation, IaC'dan tashqari o'zgarishni taqiqlash."
+        },
+        {
+          "id": 33456,
+          "code": "WC29",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "S3 bucket'dagi ma'lumotga ruxsatsiz kirilganiga shubha bor. Qanday tekshirasiz?",
+          "explanation": "CloudTrail data events (GetObject) yoki S3 server access log'lari — kim (principal), qaysi IP, qaysi obyekt. Bucket policy, ACL, presigned URL, oqib ketgan access key'ni tekshirish. Keyin: kalitni o'chirish, Block Public Access, policy'ni toraytirish."
+        },
+        {
+          "id": 33505,
+          "code": "WC30",
+          "level": "M",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "EKS'da pod'ga AWS ruxsatini qanday berasiz: IRSA va EKS Pod Identity?",
+          "explanation": "Node IAM role'ini hamma pod ulashsa — least privilege buziladi. IRSA: ServiceAccount annotation + OIDC provider, pod web identity token bilan role'ni assume qiladi. Pod Identity (yangi): EKS agent orqali, OIDC sozlamasiz, association API bilan — ko'p klasterda oddiyroq."
+        },
+        {
+          "id": 33256,
+          "code": "WC15",
+          "level": "S",
+          "type": "card",
+          "topic": "AWS basics",
+          "domain": "cloud",
+          "section": "w5",
+          "question": "Ko'p AZ'li yuqori mavjudlikdagi (HA) web arxitekturani AWS'da qanday qurasiz?",
+          "explanation": "ALB (ko'p AZ) → ASG yoki EKS (kamida 2-3 AZ) → RDS Multi-AZ + read replica, ElastiCache, S3 + CloudFront. Har AZ'da NAT GW. Stateless app, health check, backup va DR rejasi."
+        }
+      ]
+    },
+    {
+      "id": "w11",
+      "name": "Azure basics",
+      "domain": "cloud",
+      "topics": [
+        "Azure"
+      ],
+      "questions": [
+        {
+          "id": 33513,
+          "code": "AZ01",
+          "level": "J",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Azure resurs ierarxiyasi: Management Group, Subscription, Resource Group, Resource. AWS'dagi qaysi tushunchalarga mos?",
+          "explanation": "Management Group — subscription'larni guruhlaydi (AWS Organizations OU); Subscription — billing va limit chegarasi (AWS account); Resource Group — bir hayot siklidagi resurslar konteyneri (AWS'da aniq mosi yo'q, tag'larga yaqin); Resource — VM, DB va h.k."
+        },
+        {
+          "id": 33514,
+          "code": "AZ02",
+          "level": "J",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Azure'da VNet, Subnet, NSG va Azure Firewall farqi?",
+          "explanation": "VNet — izolyatsiyalangan tarmoq (AWS VPC), Subnet — uning qismi. NSG — subnet yoki NIC'ga qo'yiladigan stateful L3/L4 qoidalar (SG + NACL o'rtasidagi narsa). Azure Firewall — markaziy boshqariladigan, FQDN/L7 filtrlaydigan firewall servisi (hub VNet'da)."
+        },
+        {
+          "id": 33518,
+          "code": "AZ06",
+          "level": "J",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Azure DevOps Pipelines va GitHub Actions: Azure'ga deploy qilishning zamonaviy usuli?",
+          "explanation": "Ikkalasi YAML pipeline. Zamonaviy Azure auth — workload identity federation (OIDC): service connection yoki `azure/login` secret'siz, federated credential bilan. Client secret saqlash eski usul."
+        },
+        {
+          "id": 33515,
+          "code": "AZ03",
+          "level": "M",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Managed Identity nima? System-assigned va user-assigned farqi?",
+          "explanation": "Managed Identity — Azure resursi (VM, App Service, AKS pod) uchun Entra ID identiteti: kod secret saqlamasdan token oladi (AWS IAM role'ga mos). System-assigned resurs bilan yaratiladi va o'chadi; user-assigned — alohida resurs, bir nechta resursga biriktiriladi."
+        },
+        {
+          "id": 33516,
+          "code": "AZ04",
+          "level": "M",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Azure RBAC va Azure Policy farqi?",
+          "explanation": "RBAC — KIM nima qila oladi (role assignment: principal + role + scope). Policy — NIMA yaratilishi mumkin (qoidalar: faqat ma'lum region, tag majburiy, public IP taqiqlangan) — ruxsati bor odam uchun ham. Ikkalasi management group'dan pastga meros qoladi."
+        },
+        {
+          "id": 33517,
+          "code": "AZ05",
+          "level": "M",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "AKS'ni production uchun qanday sozlaysiz (asosiy qarorlar)?",
+          "explanation": "Qarorlar: tarmoq (Azure CNI Overlay yoki CNI Cilium), system va user node pool'larni ajratish, availability zone'lar, Workload Identity, private cluster yoki authorized IP, cluster autoscaler, upgrade kanali, Azure Monitor/Managed Prometheus, Key Vault CSI."
+        }
+      ]
+    },
+    {
+      "id": "w12",
+      "name": "GCP basics",
+      "domain": "cloud",
+      "topics": [
+        "GCP"
+      ],
+      "questions": [
+        {
+          "id": 33519,
+          "code": "GC01",
+          "level": "J",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "GCP resurs ierarxiyasi va asosiy servislar: Organization, Folder, Project. AWS bilan solishtirish?",
+          "explanation": "Organization → Folder → Project → Resource. Project — billing, API, IAM va quota chegarasi (AWS account'ga yaqin). IAM policy yuqoridan pastga meros qoladi."
+        },
+        {
+          "id": 33522,
+          "code": "GC04",
+          "level": "J",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "Cloud Run nima va qachon Kubernetes o'rniga ishlatiladi?",
+          "explanation": "Cloud Run — container'ni serverless ishga tushiradi: HTTP so'rovga qarab 0 dan N gacha avtomatik scale, faqat ishlatilgan vaqt uchun to'lov, klaster boshqaruvi yo'q. Stateless HTTP servis, webhook, cron job uchun ideal."
+        },
+        {
+          "id": 33520,
+          "code": "GC02",
+          "level": "M",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "GCP'da service account va Workload Identity Federation: kalitsiz autentifikatsiya qanday ishlaydi?",
+          "explanation": "Service account — ilova identiteti. JSON key yuklab olish — eng ko'p uchraydigan oqish manbai. GKE'da Workload Identity (K8s SA ↔ GCP SA), tashqi CI'da Workload Identity Federation (GitHub OIDC token → GCP qisqa token) — kalit yo'q."
+        },
+        {
+          "id": 33521,
+          "code": "GC03",
+          "level": "M",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "GKE Autopilot va Standard farqi? Qachon qaysi biri?",
+          "explanation": "Standard — node'larni o'zingiz boshqarasiz (node pool, machine type, DaemonSet erkin), node uchun to'laysiz. Autopilot — Google node'larni boshqaradi, pod requests uchun to'laysiz, xavfsizlik cheklovlari (privileged yo'q, hostPath cheklangan)."
+        },
+        {
+          "id": 33523,
+          "code": "GC05",
+          "level": "M",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "GCP IAM: basic, predefined va custom role'lar; nega `roles/editor` xavfli?",
+          "explanation": "Basic role'lar (Owner, Editor, Viewer) — juda keng, minglab permission. Predefined — servisga xos (`roles/storage.objectViewer`). Custom — aniq permission ro'yxati. Editor deyarli hamma resursni o'zgartira oladi — least privilege'ga zid, default compute SA'ga berilgani xavf."
         }
       ]
     },

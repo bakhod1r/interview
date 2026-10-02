@@ -1,0 +1,65 @@
+{
+  "id": "w13",
+  "name": "Chef, Puppet, SaltStack",
+  "domain": "iac",
+  "topics": [
+    "Config management"
+  ],
+  "questions": [
+    {
+      "id": 33524,
+      "code": "CM01",
+      "level": "J",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Chef, Puppet, SaltStack va Ansible farqi: agent va push/pull modeli?",
+      "explanation": "Puppet va Chef — agent asosida, pull model (agent markaziy serverdan har 30 daqiqada konfiguratsiya oladi va qo'llaydi). Salt — agent (minion) + ZeroMQ event bus, push va tez parallel ijro. Ansible — agentsiz, SSH push."
+    },
+    {
+      "id": 33525,
+      "code": "CM02",
+      "level": "M",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Puppet'da manifest, module, catalog, Hiera va Facter nima?",
+      "explanation": "Manifest (.pp) — resurslarning kerakli holati; module — manifest/template/fayllar paketi; Facter — node faktlari (OS, IP); Hiera — ma'lumotni koddan ajratish (muhit/rol bo'yicha qiymatlar); catalog — server faktlar asosida node uchun kompilyatsiya qilgan aniq holat, agent uni qo'llaydi."
+    },
+    {
+      "id": 33526,
+      "code": "CM03",
+      "level": "M",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Chef'da cookbook, recipe, resource, run-list va Test Kitchen nima?",
+      "explanation": "Recipe — Ruby DSL'da resurslar; cookbook — recipe, template, attribute'lar to'plami; run-list — node'ga qaysi recipe/role qo'llanishi; chef-client agent Chef Server'dan olib qo'llaydi. Test Kitchen — cookbook'ni vaqtinchalik VM/container'da sinash (InSpec bilan tekshirish)."
+    },
+    {
+      "id": 33527,
+      "code": "CM04",
+      "level": "M",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "SaltStack: master/minion, state, grain va pillar nima?",
+      "explanation": "Master buyruq yuboradi, minion'lar ZeroMQ orqali tinglaydi — minglab hostda soniyalarda ijro. State (.sls) — kerakli holat; grain — minion faktlari (OS, rol); pillar — master'dagi maxfiy/xos ma'lumot, faqat mos minion'ga beriladi."
+    },
+    {
+      "id": 33528,
+      "code": "CM05",
+      "level": "S",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Puppet/Chef'dagi legacy flot'ni zamonaviy yondashuvga (Ansible, immutable image, K8s) qanday ko'chirasiz?",
+      "explanation": "Big-bang emas — strangler: avval inventarizatsiya (nima boshqariladi, kim egasi), yangi xizmatlar yangi usulda, eski node'lar bosqichma-bosqich. Immutable image (Packer + Ansible) bilan konfiguratsiya build vaqtiga ko'chadi, runtime agent kerak bo'lmaydi."
+    }
+  ]
+}

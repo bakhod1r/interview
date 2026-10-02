@@ -95,6 +95,17 @@
       "explanation": "NAT — private manzilni public manzilga almashtiradi. Ichkaridan chiqqan ulanish uchun router/NAT gateway mapping saqlaydi va javobni qaytaradi; tashqaridan boshlangan ulanish uchun mapping yo'q, shuning uchun kirib bo'lmaydi."
     },
     {
+      "id": 33466,
+      "code": "WN01",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "DHCP qanday ishlaydi (DORA)? IP olinmasa nimani tekshirasiz?",
+      "explanation": "Discover → Offer → Request → Acknowledge: klient broadcast bilan server qidiradi, server IP taklif qiladi, klient so'raydi, server tasdiqlaydi (lease muddati bilan). IP, gateway, DNS shu bilan keladi."
+    },
+    {
       "id": 33350,
       "code": "WB09",
       "level": "M",
@@ -115,6 +126,50 @@
       "section": "w10",
       "question": "MTU nima va MTU muammosi qanday belgilar beradi?",
       "explanation": "MTU — bir paketning maksimal hajmi (Ethernet 1500). Tunnel/overlay (VPN, VXLAN, WireGuard) header qo'shadi; DF bitli katta paketlar tashlanadi va ICMP 'frag needed' bloklangan bo'lsa — kichik so'rovlar ishlaydi, katta javoblar (TLS handshake, katta fayl) osilib qoladi."
+    },
+    {
+      "id": 33467,
+      "code": "WN02",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "SYN flood, half-open ulanish va SYN cookies nima?",
+      "explanation": "SYN flood — hujumchi ko'p SYN yuborib ACK qaytarmaydi, server SYN backlog'ini half-open ulanishlar bilan to'ldiradi va haqiqiy klientlar ulana olmaydi. SYN cookies — backlog to'lganda holatni saqlamasdan, ma'lumotni SYN-ACK sequence raqamiga kodlaydi."
+    },
+    {
+      "id": 33468,
+      "code": "WN03",
+      "level": "M",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "Anycast nima va DNS/CDN'da nega ishlatiladi?",
+      "explanation": "Anycast — bitta IP manzil dunyoning ko'p joyida e'lon qilinadi (BGP); trafik tarmoq bo'yicha eng yaqin nuqtaga boradi. Natija: past latency, avtomatik failover (bir nuqta o'chsa route yo'qoladi), DDoS yuki taqsimlanadi."
+    },
+    {
+      "id": 33469,
+      "code": "WN04",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "VXLAN va overlay tarmoq nima? Kubernetes CNI'larda qanday ishlatiladi?",
+      "explanation": "Overlay — fizik (underlay) tarmoq ustida virtual L2 tarmoq: pod paketi UDP (VXLAN, port 4789) ichiga o'raladi va node'lar orasida tunnel orqali ketadi. Afzal: underlay'ga tegmaydi; narx: encapsulation overhead va MTU kamayishi (~50 bayt)."
+    },
+    {
+      "id": 33512,
+      "code": "WN05",
+      "level": "S",
+      "type": "card",
+      "topic": "Networking basics",
+      "domain": "net",
+      "section": "w10",
+      "question": "TCP congestion control: CUBIC va BBR farqi? Qachon BBR yoqiladi?",
+      "explanation": "CUBIC (Linux default) — paket yo'qolishini tirbandlik signali deb oladi va tezlikni kesadi; yo'qotishli/uzoq tarmoqda (mobil, xalqaro) throughput past. BBR — o'tkazuvchanlik va RTT'ni o'lchab tezlikni modellashtiradi; yo'qotishga kamroq sezgir, bufferbloat kam — CDN/video/uzoq masofali trafikda tezroq."
     }
   ]
 }

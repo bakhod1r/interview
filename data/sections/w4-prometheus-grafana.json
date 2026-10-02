@@ -62,6 +62,28 @@
       "explanation": "Exporter — tizim metrikasini Prometheus formatida /metrics da beradigan process. node_exporter (server), cAdvisor/kube-state-metrics (K8s), postgres/redis exporter, blackbox_exporter (tashqi probe)."
     },
     {
+      "id": 33449,
+      "code": "WP14",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "PromQL'da `increase()` va `rate()` farqi? Instant vector va range vector nima?",
+      "explanation": "rate — oraliqdagi sekundlik o'rtacha o'sish; increase — oraliqdagi umumiy o'sish (= rate × oraliq soniyalari). Range vector `x[5m]` — har series uchun nuqtalar to'plami; rate/increase uni instant vector'ga (bitta qiymat) aylantiradi."
+    },
+    {
+      "id": 33473,
+      "code": "WP19",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "`up` metrikasi, `job` va `instance` label'lari nima?",
+      "explanation": "Prometheus har scrape uchun avtomatik `up` yaratadi: 1 — target javob berdi, 0 — scrape fail. `job` — scrape_config nomi, `instance` — target manzili. `up == 0` eng asosiy \"exporter/servis o'ldi\" alert'i."
+    },
+    {
       "id": 33199,
       "code": "WP04",
       "level": "M",
@@ -117,6 +139,83 @@
       "explanation": "kubernetes_sd_configs — K8s API'dan pod/service/endpoint'larni topadi, relabel bilan filtrlaydi. Prometheus Operator'da ServiceMonitor/PodMonitor CRD — label selector bilan deklarativ scrape."
     },
     {
+      "id": 33450,
+      "code": "WP15",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "`relabel_configs` va `metric_relabel_configs` farqi?",
+      "explanation": "relabel_configs — scrape'dan OLDIN target'lar ustida ishlaydi (qaysi target scrape qilinadi, label'lar qanday nomlanadi). metric_relabel_configs — scrape'dan KEYIN har bir sample ustida (keraksiz metrika/label'ni tashlash, saqlashdan oldin)."
+    },
+    {
+      "id": 33451,
+      "code": "WP16",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Kubernetes'da container CPU va memory foydalanishini requests/limits'ga nisbatan foizda qanday hisoblaysiz (PromQL)?",
+      "explanation": "cAdvisor counter'i `container_cpu_usage_seconds_total`dan rate olinadi va kube-state-metrics'dagi requests/limits bilan bo'linadi. Memory uchun `container_memory_working_set_bytes` (OOM shu bo'yicha)."
+    },
+    {
+      "id": 33452,
+      "code": "WP17",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Alertmanager config'ni noto'g'ri o'zgartirib, prod alert'lari ishlamay qoldi. Bunday holatni qanday oldini olasiz?",
+      "explanation": "Config Git'da, CI'da `amtool check-config` va `promtool check rules`, routing testi (`amtool config routes test`). Deploy'dan keyin doim yonib turadigan Watchdog alert va tashqi dead man's switch — alert zanjiri o'lsa xabar beradi."
+    },
+    {
+      "id": 33472,
+      "code": "WP18",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Recording rule va alerting rule farqi? Recording rule qachon kerak?",
+      "explanation": "Recording rule — og'ir PromQL natijasini oldindan hisoblab yangi metrika sifatida saqlaydi (dashboard tez, alert sodda). Alerting rule — shart bajarilsa alert yaratadi. Ikkalasi ham `evaluation_interval` bo'yicha hisoblanadi."
+    },
+    {
+      "id": 33474,
+      "code": "WP20",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus'ni HA (yuqori mavjud) qanday qilasiz? Retention va disk qanday hisoblanadi?",
+      "explanation": "Klassik usul: bir xil config bilan ikkita Prometheus replika, Alertmanager klasteri (o'zi dublikat alertlarni yo'qotadi). So'rovda dublikatni olib tashlash uchun Thanos Querier/Mimir. Retention vaqt yoki hajm bo'yicha; disk ≈ sample/s × sample hajmi × vaqt."
+    },
+    {
+      "id": 33475,
+      "code": "WP21",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Grafana'da templating variable'lar va annotation'lar nima uchun?",
+      "explanation": "Variable — dashboard tepasidagi dropdown (namespace, service, instance): bitta dashboard ko'p servis uchun. Annotation — grafikda vertikal belgi (deploy, incident): \"latency deploy'dan keyin oshdimi?\" savoliga darhol javob."
+    },
+    {
+      "id": 33477,
+      "code": "WP23",
+      "level": "M",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Exemplar nima va metrikadan trace'ga qanday o'tiladi?",
+      "explanation": "Exemplar — histogram sample'iga biriktirilgan trace_id. Grafana grafigida latency sakrashidagi nuqtani bosib, aynan shu sekin so'rovning trace'ini (Tempo/Jaeger) ochish mumkin — metrika va trace orasida ko'prik."
+    },
+    {
       "id": 33203,
       "code": "WP08",
       "level": "S",
@@ -126,6 +225,28 @@
       "section": "w4",
       "question": "Prometheus'ni scale qilish va uzoq muddat saqlash: federation, remote_write, Thanos/Mimir?",
       "explanation": "Bitta Prometheus vertikal scale bo'ladi va lokal disk (odatda 15-30 kun). Ko'p cluster va uzoq retention uchun: remote_write yoki Thanos sidecar orqali object storage'ga, global query (Thanos/Mimir/VictoriaMetrics), HA juftlik + dedupe."
+    },
+    {
+      "id": 33476,
+      "code": "WP22",
+      "level": "S",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus'da staleness nima? Target yo'qolganda grafikda nima bo'ladi?",
+      "explanation": "Series 5 daqiqa (lookback delta) davomida yangi sample olmasa yoki target scrape'dan yo'qolsa, Prometheus unga stale marker yozadi — series grafikda darhol uziladi. Busiz oxirgi qiymat 5 daqiqa \"osilib\" ko'rinardi."
+    },
+    {
+      "id": 33491,
+      "code": "WP24",
+      "level": "St",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Thanos arxitekturasi: Sidecar, Store Gateway, Querier, Compactor, Ruler nima qiladi?",
+      "explanation": "Sidecar — Prometheus yonida, 2 soatlik blok'larni object storage'ga yuklaydi va so'nggi data'ni beradi. Store Gateway — eski blok'larni S3'dan o'qib beradi. Querier — hammasidan so'rab, replika dublikatlarini olib tashlaydi (global view). Compactor — blok'larni birlashtiradi, downsampling, retention. Ruler — global data ustida rule/alert."
     }
   ]
 }

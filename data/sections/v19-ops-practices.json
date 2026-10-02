@@ -18,6 +18,17 @@
       "explanation": "Server soati siljiydi; noto'g'ri vaqt — TLS xatolari (sertifikat \"hali amal qilmaydi\"), JWT exp, log korrelyatsiyasi, Kerberos, distributed DB/consensus, cron. chrony — zamonaviy NTP client (RHEL/Ubuntu), timesyncd — oddiy."
     },
     {
+      "id": 32045,
+      "code": "DZ01",
+      "level": "J",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Linux'da loglar qayerda? `/var/log` tuzilmasi, rsyslog va journald munosabati.",
+      "explanation": "journald — systemd'ning binary log'i (`journalctl`). rsyslog — klassik matnli loglar `/var/log/*` ga (journald'dan oladi). Asosiylar: syslog/messages, auth.log/secure, kern.log, dmesg, nginx/, apt/dnf loglari."
+    },
+    {
       "id": 31376,
       "code": "DY30",
       "level": "M",
@@ -40,17 +51,6 @@
       "explanation": "Namespaces — nimani ko'rishni ajratadi (pid, net, mnt, uts, ipc, user, cgroup, time). cgroups — qancha resurs ishlatishni cheklaydi (cpu, memory, io, pids). Konteyner = oddiy jarayon + namespaces + cgroups + overlayfs + capabilities/seccomp."
     },
     {
-      "id": 31378,
-      "code": "DY32",
-      "level": "S",
-      "type": "card",
-      "topic": "Ops practices",
-      "domain": "linux",
-      "section": "v19",
-      "question": "Server buzilgan (hacked) deb shubha qilasan. Nima qilasan?",
-      "explanation": "Vahima qilib o'chirma/reboot qilma — dalil yo'qoladi. Izolyatsiya (tarmoqdan ajrat, snapshot), dalil yig'ish (jarayonlar, ulanishlar, loglar, xotira), ta'sirni baholash, credential'larni almashtir, serverni qayta qurish (tozalashga ishonma), root cause va postmortem."
-    },
-    {
       "id": 31379,
       "code": "DY33",
       "level": "M",
@@ -60,28 +60,6 @@
       "section": "v19",
       "question": "Ansible asoslari: inventory, ad-hoc buyruq, playbook, idempotency. Nega shell skript emas?",
       "explanation": "Agentless (SSH orqali). Inventory — hostlar va guruhlar. Ad-hoc: `ansible web -m ping`. Playbook — YAML'da istalgan holat (desired state); modullar idempotent: 2-marta ishlatsang o'zgarish bo'lmaydi (changed=0). Skriptdan farqi: idempotency, parallel, xatolarni boshqarish, dry-run (`--check --diff`)."
-    },
-    {
-      "id": 31380,
-      "code": "DY34",
-      "level": "S",
-      "type": "card",
-      "topic": "Ops practices",
-      "domain": "linux",
-      "section": "v19",
-      "question": "Linux serverga monitoring/alerting: nimani kuzatasan? (node_exporter, USE, alert misollari)",
-      "explanation": "USE: har resurs uchun Utilization, Saturation, Errors — CPU, RAM, disk, tarmoq, FD. node_exporter -> Prometheus -> Grafana/Alertmanager. Alert simptom bo'yicha va harakatga undaydigan bo'lsin (disk 4 soatda to'ladi, emas \"disk 80%\")."
-    },
-    {
-      "id": 32045,
-      "code": "DZ01",
-      "level": "J",
-      "type": "card",
-      "topic": "Ops practices",
-      "domain": "linux",
-      "section": "v19",
-      "question": "Linux'da loglar qayerda? `/var/log` tuzilmasi, rsyslog va journald munosabati.",
-      "explanation": "journald — systemd'ning binary log'i (`journalctl`). rsyslog — klassik matnli loglar `/var/log/*` ga (journald'dan oladi). Asosiylar: syslog/messages, auth.log/secure, kern.log, dmesg, nginx/, apt/dnf loglari."
     },
     {
       "id": 32046,
@@ -95,17 +73,6 @@
       "explanation": "rsyslog: `*.* @@logserver:514` (TCP; `@` — UDP). Zamonaviy: agent (Fluent Bit/Vector/Promtail/Filebeat) -> Loki/Elasticsearch/OpenSearch -> Grafana/Kibana. Nega: server o'lsa loglar saqlanadi, korrelyatsiya, qidiruv, audit (buzg'unchi lokal logni o'chira oladi)."
     },
     {
-      "id": 32053,
-      "code": "DZ09",
-      "level": "S",
-      "type": "card",
-      "topic": "Ops practices",
-      "domain": "linux",
-      "section": "v19",
-      "question": "Ishlab turgan servisni eski serverdan yangisiga minimal downtime bilan ko'chirish rejasi.",
-      "explanation": "Yangi serverni IaC bilan qur -> ma'lumotni oldindan sinxronla (rsync / DB replikatsiya) -> DNS TTL'ni oldindan kamaytir -> parallel test -> qisqa freeze: oxirgi delta sync -> trafikni almashtir (LB/DNS) -> kuzat -> rollback rejasi tayyor -> eski serverni bir muddat saqla."
-    },
-    {
       "id": 32054,
       "code": "DZ10",
       "level": "M",
@@ -115,6 +82,61 @@
       "section": "v19",
       "question": "\"Kecha ishlagan edi, bugun ishlamayapti\" — nima o'zgarganini qanday topasan?",
       "explanation": "O'zgarishlarni yig': deploy tarixi, paket yangilanishlari (apt/dnf history), config fayllar (mtime, etckeeper/git), reboot va kernel, sertifikat muddati, disk to'lishi, tashqi bog'liqliklar (DNS, API, DB), cron. Keyin vaqt chizig'ini muammo boshlangan vaqt bilan solishtir."
+    },
+    {
+      "id": 33145,
+      "code": "DW22",
+      "level": "M",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Server sozlamalarini qo'lda o'zgartirish (snowflake) va config drift muammosi. Qanday oldini olasan?",
+      "explanation": "Qo'lda o'zgarishlar hujjatsiz qoladi, serverlar bir-biridan farqlanadi, qayta qurib bo'lmaydi. Yechim: hamma narsa kod (Ansible/Terraform) + git review, drift aniqlash (`--check`, `terraform plan`), immutable infra, SSH'ni cheklash, /etc'ni etckeeper bilan kuzatish."
+    },
+    {
+      "id": 33483,
+      "code": "DW24",
+      "level": "M",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Ops avtomatlashtirish uchun qachon Bash, qachon Python (yoki Go)?",
+      "explanation": "Bash — buyruqlarni zanjirlash, kichik glue script (~50 qatorgacha). Python — JSON/API, xato boshqaruvi, test, murakkab mantiq (boto3, kubernetes client). Go — tarqatiladigan CLI/operator, bitta binary. Bash'da murakkab mantiq — xato yashirinadigan joy."
+    },
+    {
+      "id": 31378,
+      "code": "DY32",
+      "level": "S",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Server buzilgan (hacked) deb shubha qilasan. Nima qilasan?",
+      "explanation": "Vahima qilib o'chirma/reboot qilma — dalil yo'qoladi. Izolyatsiya (tarmoqdan ajrat, snapshot), dalil yig'ish (jarayonlar, ulanishlar, loglar, xotira), ta'sirni baholash, credential'larni almashtir, serverni qayta qurish (tozalashga ishonma), root cause va postmortem."
+    },
+    {
+      "id": 31380,
+      "code": "DY34",
+      "level": "S",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Linux serverga monitoring/alerting: nimani kuzatasan? (node_exporter, USE, alert misollari)",
+      "explanation": "USE: har resurs uchun Utilization, Saturation, Errors — CPU, RAM, disk, tarmoq, FD. node_exporter -> Prometheus -> Grafana/Alertmanager. Alert simptom bo'yicha va harakatga undaydigan bo'lsin (disk 4 soatda to'ladi, emas \"disk 80%\")."
+    },
+    {
+      "id": 32053,
+      "code": "DZ09",
+      "level": "S",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Ishlab turgan servisni eski serverdan yangisiga minimal downtime bilan ko'chirish rejasi.",
+      "explanation": "Yangi serverni IaC bilan qur -> ma'lumotni oldindan sinxronla (rsync / DB replikatsiya) -> DNS TTL'ni oldindan kamaytir -> parallel test -> qisqa freeze: oxirgi delta sync -> trafikni almashtir (LB/DNS) -> kuzat -> rollback rejasi tayyor -> eski serverni bir muddat saqla."
     },
     {
       "id": 33143,
@@ -137,17 +159,6 @@
       "section": "v19",
       "question": "Disaster recovery: server/datacenter butunlay yo'qoldi. Tiklanish rejasi nimalardan iborat bo'ladi?",
       "explanation": "RPO/RTO maqsadlari -> nima tiklanadi (infra kod sifatida, ma'lumot backup/replika, secret'lar, DNS) -> boshqa region/zona -> runbook -> muntazam DR drill. \"Backup bor\" yetarli emas — tiklanish vaqti o'lchangan bo'lishi kerak."
-    },
-    {
-      "id": 33145,
-      "code": "DW22",
-      "level": "M",
-      "type": "card",
-      "topic": "Ops practices",
-      "domain": "linux",
-      "section": "v19",
-      "question": "Server sozlamalarini qo'lda o'zgartirish (snowflake) va config drift muammosi. Qanday oldini olasan?",
-      "explanation": "Qo'lda o'zgarishlar hujjatsiz qoladi, serverlar bir-biridan farqlanadi, qayta qurib bo'lmaydi. Yechim: hamma narsa kod (Ansible/Terraform) + git review, drift aniqlash (`--check`, `terraform plan`), immutable infra, SSH'ni cheklash, /etc'ni etckeeper bilan kuzatish."
     },
     {
       "id": 33146,
