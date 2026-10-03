@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-02T17:21:44.853Z",
-  "total": 4676,
+  "total": 5060,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -475,7 +475,7 @@
       "id": "v3",
       "name": "Package management",
       "domain": "linux",
-      "count": 12,
+      "count": 17,
       "file": "sections/v3-package-management.json"
     },
     {
@@ -489,7 +489,7 @@
       "id": "v16",
       "name": "Disks, partitions & RAID",
       "domain": "linux",
-      "count": 10,
+      "count": 15,
       "file": "sections/v16-disks-raid.json"
     },
     {
@@ -503,42 +503,42 @@
       "id": "v14",
       "name": "systemd, services & cron",
       "domain": "linux",
-      "count": 21,
+      "count": 22,
       "file": "sections/v14-systemd-services.json"
     },
     {
       "id": "v11",
       "name": "Kernel & processes",
       "domain": "linux",
-      "count": 25,
+      "count": 31,
       "file": "sections/v11-kernel-processes.json"
     },
     {
       "id": "v12",
       "name": "Memory, disk & troubleshooting",
       "domain": "linux",
-      "count": 33,
+      "count": 40,
       "file": "sections/v12-troubleshooting.json"
     },
     {
       "id": "v13",
       "name": "Linux networking & security",
       "domain": "linux",
-      "count": 24,
+      "count": 30,
       "file": "sections/v13-linux-net-security.json"
     },
     {
       "id": "v17",
       "name": "TCP/IP & network config",
       "domain": "linux",
-      "count": 17,
+      "count": 25,
       "file": "sections/v17-tcpip-netconfig.json"
     },
     {
       "id": "v15",
       "name": "SSH & remote access",
       "domain": "linux",
-      "count": 15,
+      "count": 16,
       "file": "sections/v15-ssh.json"
     },
     {
@@ -552,7 +552,7 @@
       "id": "v19",
       "name": "Ops: time, backup, automation",
       "domain": "linux",
-      "count": 15,
+      "count": 21,
       "file": "sections/v19-ops-practices.json"
     },
     {
@@ -587,7 +587,7 @@
       "id": "w1",
       "name": "Git",
       "domain": "git",
-      "count": 28,
+      "count": 69,
       "file": "sections/w1-git.json"
     },
     {
@@ -615,7 +615,7 @@
       "id": "k1",
       "name": "Docker basics",
       "domain": "docker",
-      "count": 60,
+      "count": 97,
       "file": "sections/k1-docker.json"
     },
     {
@@ -636,7 +636,7 @@
       "id": "k2",
       "name": "Docker Compose",
       "domain": "compose",
-      "count": 37,
+      "count": 79,
       "file": "sections/k2-docker-compose.json"
     },
     {
@@ -650,7 +650,7 @@
       "id": "k3",
       "name": "Docker Swarm",
       "domain": "swarm",
-      "count": 58,
+      "count": 95,
       "file": "sections/k3-docker-swarm.json"
     },
     {
@@ -664,7 +664,7 @@
       "id": "i1",
       "name": "Kubernetes",
       "domain": "k8s",
-      "count": 28,
+      "count": 32,
       "file": "sections/i1-containers-kubernetes.json"
     },
     {
@@ -678,7 +678,7 @@
       "id": "w7",
       "name": "K8s scheduling, scaling & storage",
       "domain": "k8s",
-      "count": 21,
+      "count": 27,
       "file": "sections/w7-k8s-scheduling-scaling.json"
     },
     {
@@ -692,7 +692,7 @@
       "id": "k4",
       "name": "Helm & ArgoCD",
       "domain": "k8s",
-      "count": 12,
+      "count": 17,
       "file": "sections/k4-helm-argocd.json"
     },
     {
@@ -727,7 +727,7 @@
       "id": "i8",
       "name": "GitHub Actions",
       "domain": "cicd",
-      "count": 30,
+      "count": 31,
       "file": "sections/i8-github-actions.json"
     },
     {
@@ -769,21 +769,21 @@
       "id": "w2",
       "name": "Terraform",
       "domain": "iac",
-      "count": 36,
+      "count": 51,
       "file": "sections/w2-terraform.json"
     },
     {
       "id": "w3",
       "name": "Ansible",
       "domain": "iac",
-      "count": 23,
+      "count": 35,
       "file": "sections/w3-ansible.json"
     },
     {
       "id": "w13",
       "name": "Chef, Puppet, SaltStack",
       "domain": "iac",
-      "count": 5,
+      "count": 9,
       "file": "sections/w13-chef-puppet-salt.json"
     },
     {
@@ -811,21 +811,21 @@
       "id": "i3",
       "name": "Observability & SRE",
       "domain": "obs",
-      "count": 22,
+      "count": 35,
       "file": "sections/i3-observability-sre.json"
     },
     {
       "id": "w4",
       "name": "Prometheus & Grafana",
       "domain": "obs",
-      "count": 22,
+      "count": 32,
       "file": "sections/w4-prometheus-grafana.json"
     },
     {
       "id": "w9",
       "name": "Logs, tracing & SLO",
       "domain": "obs",
-      "count": 13,
+      "count": 23,
       "file": "sections/w9-logs-tracing-slo.json"
     },
     {
@@ -853,14 +853,14 @@
       "id": "i4",
       "name": "Networking & protocols",
       "domain": "net",
-      "count": 18,
+      "count": 23,
       "file": "sections/i4-networking-protocols.json"
     },
     {
       "id": "w10",
       "name": "Networking basics",
       "domain": "net",
-      "count": 15,
+      "count": 49,
       "file": "sections/w10-networking-basics.json"
     },
     {
@@ -895,7 +895,7 @@
       "id": "i5",
       "name": "Cloud, OS, operations",
       "domain": "cloud",
-      "count": 26,
+      "count": 31,
       "file": "sections/i5-cloud-os-operations.json"
     },
     {
@@ -909,14 +909,14 @@
       "id": "w11",
       "name": "Azure basics",
       "domain": "cloud",
-      "count": 6,
+      "count": 10,
       "file": "sections/w11-azure-basics.json"
     },
     {
       "id": "w12",
       "name": "GCP basics",
       "domain": "cloud",
-      "count": 5,
+      "count": 9,
       "file": "sections/w12-gcp-basics.json"
     },
     {
@@ -944,7 +944,7 @@
       "id": "h1",
       "name": "Bash & Python scripting",
       "domain": "auto",
-      "count": 60,
+      "count": 110,
       "file": "sections/h1-bash-python-scripting.json"
     },
     {

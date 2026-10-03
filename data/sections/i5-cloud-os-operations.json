@@ -297,6 +297,61 @@
       "section": "i5",
       "question": "Katta kompaniyada Terraform kodini qanday tashkil qilasan (modullar, muhitlar, state)?",
       "explanation": "Asosiy g'oya: kichik, mustaqil state'lar va hamma o'zgarish PR orqali. Monolit state — har apply butun infratuzilmani xavf ostiga qo'yadi."
+    },
+    {
+      "id": 34048,
+      "code": "JR48",
+      "level": "J",
+      "type": "card",
+      "topic": "Cloud",
+      "domain": "cloud",
+      "section": "i5",
+      "question": "IaaS, PaaS, SaaS farqi?",
+      "explanation": "IaaS — VM/tarmoq (EC2). PaaS — platforma, kodni yuklaysiz (Heroku, App Engine). SaaS — tayyor dastur (Gmail, Slack)."
+    },
+    {
+      "id": 34049,
+      "code": "JR49",
+      "level": "J",
+      "type": "card",
+      "topic": "Cloud",
+      "domain": "cloud",
+      "section": "i5",
+      "question": "Region va Availability Zone farqi?",
+      "explanation": "Region — geografik hudud (eu-central-1). AZ — region ichidagi alohida data center(lar), mustaqil elektr/tarmoq."
+    },
+    {
+      "id": 34050,
+      "code": "JR50",
+      "level": "J",
+      "type": "card",
+      "topic": "Cloud",
+      "domain": "cloud",
+      "section": "i5",
+      "question": "Cloud'da shared responsibility model nima?",
+      "explanation": "Provider — cloud'ning o'zi xavfsizligi (hardware, DC). Mijoz — cloud ichidagi narsalar (data, IAM, OS patch, firewall)."
+    },
+    {
+      "id": 34051,
+      "code": "JR51",
+      "level": "J",
+      "type": "card",
+      "topic": "Cloud",
+      "domain": "cloud",
+      "section": "i5",
+      "question": "Scale up (vertical) va scale out (horizontal) farqi?",
+      "explanation": "Vertical — kattaroq mashina. Horizontal — ko'proq mashina. Horizontal uchun ilova stateless bo'lishi kerak."
+    },
+    {
+      "id": 34052,
+      "code": "JR52",
+      "level": "J",
+      "type": "card",
+      "topic": "Cloud",
+      "domain": "cloud",
+      "section": "i5",
+      "question": "Cloud xarajatini nazorat qilishning oddiy usullari?",
+      "explanation": "Budget alert, tag'lar, ishlatilmayotgan resurslarni o'chirish, to'g'ri o'lcham, reserved/spot instance."
     }
   ]
 }

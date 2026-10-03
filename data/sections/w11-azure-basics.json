@@ -71,6 +71,50 @@
       "section": "w11",
       "question": "AKS'ni production uchun qanday sozlaysiz (asosiy qarorlar)?",
       "explanation": "Qarorlar: tarmoq (Azure CNI Overlay yoki CNI Cilium), system va user node pool'larni ajratish, availability zone'lar, Workload Identity, private cluster yoki authorized IP, cluster autoscaler, upgrade kanali, Azure Monitor/Managed Prometheus, Key Vault CSI."
+    },
+    {
+      "id": 34059,
+      "code": "JR59",
+      "level": "J",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Azure'da Resource Group nima?",
+      "explanation": "Bog'liq resurslar uchun mantiqiy konteyner: birga boshqariladi, ruxsat beriladi, o'chiriladi va xarajati ko'riladi."
+    },
+    {
+      "id": 34060,
+      "code": "JR60",
+      "level": "J",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Azure'ning asosiy servislari AWS'da nimaga to'g'ri keladi?",
+      "explanation": "VM≈EC2, Blob Storage≈S3, VNet≈VPC, Entra ID≈IAM, AKS≈EKS, Azure SQL≈RDS, Functions≈Lambda."
+    },
+    {
+      "id": 34061,
+      "code": "JR61",
+      "level": "J",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Azure CLI bilan login va subscription tanlash?",
+      "explanation": "`az login`, `az account list`, `az account set --subscription <id>`."
+    },
+    {
+      "id": 34062,
+      "code": "JR62",
+      "level": "J",
+      "type": "card",
+      "topic": "Azure",
+      "domain": "cloud",
+      "section": "w11",
+      "question": "Managed Identity nima uchun kerak?",
+      "explanation": "Azure resursiga (VM, App Service) avtomatik identity beradi — kodda parol/secret saqlamasdan boshqa servislarga kirish."
     }
   ]
 }

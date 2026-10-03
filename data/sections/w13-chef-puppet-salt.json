@@ -60,6 +60,50 @@
       "section": "w13",
       "question": "Puppet/Chef'dagi legacy flot'ni zamonaviy yondashuvga (Ansible, immutable image, K8s) qanday ko'chirasiz?",
       "explanation": "Big-bang emas — strangler: avval inventarizatsiya (nima boshqariladi, kim egasi), yangi xizmatlar yangi usulda, eski node'lar bosqichma-bosqich. Immutable image (Packer + Ansible) bilan konfiguratsiya build vaqtiga ko'chadi, runtime agent kerak bo'lmaydi."
+    },
+    {
+      "id": 34067,
+      "code": "JR67",
+      "level": "J",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Configuration management nima va nega kerak?",
+      "explanation": "Serverlar sozlamasini kod sifatida yozib, ko'p serverda bir xil va takrorlanadigan holatga keltirish."
+    },
+    {
+      "id": 34068,
+      "code": "JR68",
+      "level": "J",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Ansible, Chef, Puppet, Salt farqi qisqacha?",
+      "explanation": "Ansible — agentless, push, YAML. Chef — agent, pull, Ruby. Puppet — agent, pull, o'z DSL. Salt — agent (ZeroMQ), push/pull, YAML."
+    },
+    {
+      "id": 34069,
+      "code": "JR69",
+      "level": "J",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Push va pull modeli farqi?",
+      "explanation": "Push — markaz serverlarga buyruq yuboradi (Ansible). Pull — agent vaqti-vaqti bilan markazdan holatni olib, o'zini moslaydi (Puppet, Chef)."
+    },
+    {
+      "id": 34070,
+      "code": "JR70",
+      "level": "J",
+      "type": "card",
+      "topic": "Config management",
+      "domain": "iac",
+      "section": "w13",
+      "question": "Declarative va imperative yondashuv farqi?",
+      "explanation": "Declarative — \"qanday holat bo'lsin\" yoziladi (Puppet, Terraform). Imperative — \"qanday qadamlar bajarilsin\" (bash skript)."
     }
   ]
 }

@@ -170,6 +170,17 @@
       "section": "v15",
       "question": "\"Host key verification failed\" / \"REMOTE HOST IDENTIFICATION HAS CHANGED\" nimani anglatadi?",
       "explanation": "SSH client `~/.ssh/known_hosts`da saqlangan server kalitini yangi kalit bilan solishtirdi va mos kelmadi. Sabab: server qayta o'rnatilgan, IP boshqa serverga berilgan — yoki MITM hujumi. Ko'r-ko'rona o'chirmasdan, kalit o'zgarishini tasdiqlang."
+    },
+    {
+      "id": 34095,
+      "code": "JR95",
+      "level": "J",
+      "type": "card",
+      "topic": "SSH",
+      "domain": "linux",
+      "section": "v15",
+      "question": "SSH key bilan login ostida qanday ishlaydi?",
+      "explanation": "Server `authorized_keys` dagi public key bilan mijozga challenge beradi; mijoz private key bilan imzolaydi; private key hech qachon tarmoqqa chiqmaydi."
     }
   ]
 }

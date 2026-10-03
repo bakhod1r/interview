@@ -247,6 +247,116 @@
       "section": "w4",
       "question": "Thanos arxitekturasi: Sidecar, Store Gateway, Querier, Compactor, Ruler nima qiladi?",
       "explanation": "Sidecar — Prometheus yonida, 2 soatlik blok'larni object storage'ga yuklaydi va so'nggi data'ni beradi. Store Gateway — eski blok'larni S3'dan o'qib beradi. Querier — hammasidan so'rab, replika dublikatlarini olib tashlaydi (global view). Compactor — blok'larni birlashtiradi, downsampling, retention. Ruler — global data ustida rule/alert."
+    },
+    {
+      "id": 34283,
+      "code": "JR283",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus konfiguratsiyasida scrape job qanday yoziladi?",
+      "explanation": "`scrape_configs` ichida `job_name` va target'lar."
+    },
+    {
+      "id": 34284,
+      "code": "JR284",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "node_exporter nima ko'rsatadi?",
+      "explanation": "Linux host metrikalari: CPU, RAM, disk, tarmoq, filesystem."
+    },
+    {
+      "id": 34285,
+      "code": "JR285",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "CPU ishlatilishi % ni PromQL bilan qanday hisoblaysiz?",
+      "explanation": "100 minus idle rejimining o'rtacha rate'i."
+    },
+    {
+      "id": 34286,
+      "code": "JR286",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Disk bo'sh joyi 10% dan kam bo'lsa alert qoidasi?",
+      "explanation": "Prometheus alerting rule: `expr`, `for`, `labels`, `annotations`."
+    },
+    {
+      "id": 34287,
+      "code": "JR287",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Alertmanager vazifasi nima?",
+      "explanation": "Prometheus'dan kelgan alert'larni guruhlaydi, takrorni o'chiradi, silence qiladi va Slack/Telegram/email/PagerDuty'ga yuboradi."
+    },
+    {
+      "id": 34288,
+      "code": "JR288",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Grafana'da data source va dashboard nima?",
+      "explanation": "Data source — ma'lumot manbai (Prometheus, Loki). Dashboard — panellar to'plami, har panel so'rov + vizualizatsiya."
+    },
+    {
+      "id": 34289,
+      "code": "JR289",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Label nima va high cardinality nega xavfli?",
+      "explanation": "Label — metrikani ajratuvchi kalit-qiymat. Har noyob kombinatsiya alohida time series; user_id kabi label millionlab series yaratib Prometheus'ni o'ldiradi."
+    },
+    {
+      "id": 34290,
+      "code": "JR290",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Blackbox exporter nima?",
+      "explanation": "Tashqaridan tekshiradi: HTTP, TCP, ICMP, DNS — sayt ochiladimi, sertifikat muddati qancha."
+    },
+    {
+      "id": 34291,
+      "code": "JR291",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus metrikalarini ilovadan qanday chiqarasiz?",
+      "explanation": "Client library (Go, Python) bilan `/metrics` endpoint ochiladi, Prometheus uni scrape qiladi."
+    },
+    {
+      "id": 34292,
+      "code": "JR292",
+      "level": "J",
+      "type": "card",
+      "topic": "Prometheus & Grafana",
+      "domain": "obs",
+      "section": "w4",
+      "question": "Prometheus ma'lumotni qancha saqlaydi?",
+      "explanation": "Default 15 kun (`--storage.tsdb.retention.time`). Uzoq muddat uchun Thanos/Mimir/VictoriaMetrics."
     }
   ]
 }

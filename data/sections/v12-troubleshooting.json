@@ -370,6 +370,83 @@
       "section": "v12",
       "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
       "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
+    },
+    {
+      "id": 34001,
+      "code": "JR1",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`free -h` chiqishida `available` va `free` ustunlari farqi nima?",
+      "explanation": "Linux bo'sh RAM'ni page cache uchun ishlatadi, shuning uchun `free` kichik bo'lishi normal. Haqiqiy ko'rsatkich — `available`."
+    },
+    {
+      "id": 34002,
+      "code": "JR2",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`df -h` va `du -sh` farqi nima?",
+      "explanation": "`df` — filesystem darajasida bo'sh/band joy; `du` — fayl/papkalar hajmini sanaydi. Farq bo'lsa — o'chirilgan, lekin ochiq turgan fayllar."
+    },
+    {
+      "id": 34003,
+      "code": "JR3",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`top` / `htop` da nimalarga qaraysiz?",
+      "explanation": "Load average, CPU (us/sy/wa), memory, eng ko'p CPU/RAM yeyayotgan jarayonlar."
+    },
+    {
+      "id": 34004,
+      "code": "JR4",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Load average nima va qachon u \"yuqori\" hisoblanadi?",
+      "explanation": "Bajarilishni kutayotgan yoki bajarilayotgan (va D-state, ya'ni I/O kutayotgan) jarayonlar o'rtacha soni. Yadro soniga nisbatan baholanadi."
+    },
+    {
+      "id": 34005,
+      "code": "JR5",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "Server sekinlashdi. Junior sifatida birinchi 5 daqiqada nimani tekshirasiz?",
+      "explanation": "Ketma-ket: `uptime`, `top`, `free -h`, `df -h`, `dmesg`/`journalctl`, xizmat loglari."
+    },
+    {
+      "id": 34006,
+      "code": "JR6",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "OOM killer nima va uning ishlaganini qanday bilasiz?",
+      "explanation": "RAM va swap tugaganda kernel eng \"og'ir\" jarayonni o'ldiradi. Izi `dmesg`/`journalctl -k` da qoladi."
+    },
+    {
+      "id": 34007,
+      "code": "JR7",
+      "level": "J",
+      "type": "card",
+      "topic": "Troubleshooting",
+      "domain": "linux",
+      "section": "v12",
+      "question": "`ps aux` chiqishida qaysi ustunlar muhim?",
+      "explanation": "USER, PID, %CPU, %MEM, VSZ/RSS, STAT, COMMAND."
     }
   ]
 }

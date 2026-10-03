@@ -280,6 +280,72 @@
       "section": "v11",
       "question": "`epoll`, `select`/`poll` va `io_uring` farqi? Nega Nginx/Go yuz minglab ulanishni ko'taradi?",
       "explanation": "select/poll har chaqiruvda barcha FD'larni kernel'ga beradi va tekshiradi — O(n). epoll — kernel tayyor FD'lar ro'yxatini o'zi yuritadi, faqat tayyorlarini qaytaradi — O(tayyorlar). io_uring — umumiy ring buffer'lar orqali asinxron I/O: syscall soni minimal, disk I/O ham haqiqiy async."
+    },
+    {
+      "id": 34077,
+      "code": "JR77",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Terminalda `ls` yozib Enter bossangiz, ostida nima bo'ladi?",
+      "explanation": "Shell buyruqni parse qiladi, PATH'dan topadi, `fork()` bilan nusxa ochadi, bolada `execve()` bilan `ls` ni yuklaydi, ota `wait()` qiladi."
+    },
+    {
+      "id": 34078,
+      "code": "JR78",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Syscall nima va nega dasturlar kernel'ga to'g'ridan-to'g'ri murojaat qilolmaydi?",
+      "explanation": "Dastur user space'da ishlaydi; disk, tarmoq, xotiraga kirish faqat kernel orqali — syscall (open, read, write, fork) bilan."
+    },
+    {
+      "id": 34079,
+      "code": "JR79",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "`kill PID` qanday ishlaydi? SIGTERM va SIGKILL farqi?",
+      "explanation": "`kill` jarayonga signal yuboradi. SIGTERM (15) — iltimos, tozalab chiq; ushlash mumkin. SIGKILL (9) — kernel darhol o'ldiradi, ushlab bo'lmaydi."
+    },
+    {
+      "id": 34080,
+      "code": "JR80",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "`/proc` papkasi nima? U diskda saqlanadimi?",
+      "explanation": "Yo'q — virtual filesystem, kernel uni o'qilganda yaratadi. Jarayonlar va tizim holati haqida ma'lumot beradi."
+    },
+    {
+      "id": 34081,
+      "code": "JR81",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "File descriptor nima?",
+      "explanation": "Jarayon ochgan fayl/socket/pipe uchun kernel bergan butun son. 0 — stdin, 1 — stdout, 2 — stderr."
+    },
+    {
+      "id": 34082,
+      "code": "JR82",
+      "level": "J",
+      "type": "card",
+      "topic": "Kernel & processes",
+      "domain": "linux",
+      "section": "v11",
+      "question": "Zombie va orphan jarayon nima?",
+      "explanation": "Zombie — tugagan, lekin ota hali `wait()` qilmagan (faqat jadvalda yozuv). Orphan — otasi o'lgan, init/systemd (PID 1) asrab oladi."
     }
   ]
 }

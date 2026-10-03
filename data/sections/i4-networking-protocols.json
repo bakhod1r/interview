@@ -205,6 +205,61 @@
       "section": "i4",
       "question": "TLS 1.3 handshake'da nima o'zgardi va 0-RTT xavfi nimada?",
       "explanation": "0-RTT ma'lumotini hujumchi yozib olib qayta yuborishi mumkin — `POST /transfer` bo'lsa ikki marta o'tkazma bo'lishi mumkin. Shuning uchun CDN/proxy'da 0-RTT faqat `GET`/idempotent yo'llarga ruxsat etiladi yoki umuman o'chiriladi. Forward secrecy: kalit o'g'irlansa ham o'tmishdagi trafikni ochib bo'lmaydi."
+    },
+    {
+      "id": 34042,
+      "code": "JR42",
+      "level": "J",
+      "type": "card",
+      "topic": "Network",
+      "domain": "net",
+      "section": "i4",
+      "question": "OSI modelining 7 qatlami va DevOps uchun muhimlari?",
+      "explanation": "Physical, Data link, Network, Transport, Session, Presentation, Application. Amalda L3 (IP), L4 (TCP/UDP), L7 (HTTP) eng ko'p uchraydi."
+    },
+    {
+      "id": 34044,
+      "code": "JR44",
+      "level": "J",
+      "type": "card",
+      "topic": "Network",
+      "domain": "net",
+      "section": "i4",
+      "question": "HTTP status kodlarining guruhlari va asosiylari?",
+      "explanation": "1xx info, 2xx muvaffaqiyat, 3xx redirect, 4xx mijoz xatosi, 5xx server xatosi."
+    },
+    {
+      "id": 34045,
+      "code": "JR45",
+      "level": "J",
+      "type": "card",
+      "topic": "Network",
+      "domain": "net",
+      "section": "i4",
+      "question": "Standart portlarni ayting: SSH, HTTP, HTTPS, DNS, PostgreSQL, MySQL, Redis.",
+      "explanation": "22, 80, 443, 53, 5432, 3306, 6379."
+    },
+    {
+      "id": 34046,
+      "code": "JR46",
+      "level": "J",
+      "type": "card",
+      "topic": "Network",
+      "domain": "net",
+      "section": "i4",
+      "question": "TCP 3-way handshake qanday ishlaydi?",
+      "explanation": "SYN → SYN-ACK → ACK. Shundan keyin data yuboriladi."
+    },
+    {
+      "id": 34047,
+      "code": "JR47",
+      "level": "J",
+      "type": "card",
+      "topic": "Network",
+      "domain": "net",
+      "section": "i4",
+      "question": "HTTPS'da TLS nima beradi?",
+      "explanation": "Shifrlash (eshitib bo'lmaydi), yaxlitlik (o'zgartirib bo'lmaydi), autentifikatsiya (sertifikat orqali server haqiqiyligi)."
     }
   ]
 }

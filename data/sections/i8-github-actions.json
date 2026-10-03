@@ -335,6 +335,17 @@
       "section": "i8",
       "question": "Ko'p repo'li organizatsiyada CI standartini qanday boshqarasiz?",
       "explanation": "Markaziy reusable workflow'lar (versiyalangan), org ruleset'lar (required workflow/check), action allowlist, default `GITHUB_TOKEN` read-only, Dependabot bilan action update, OIDC trust policy shabloni."
+    },
+    {
+      "id": 34099,
+      "code": "JR99",
+      "level": "J",
+      "type": "card",
+      "topic": "GitHub Actions",
+      "domain": "cicd",
+      "section": "i8",
+      "question": "GitHub Actions workflow ostida qanday ishlaydi?",
+      "explanation": "Event (push, PR) → GitHub `.github/workflows/*.yml` ni o'qiydi → har job uchun toza runner VM/konteyner ajratadi → step'lar ketma-ket bajariladi → natija va log GitHub'ga qaytadi."
     }
   ]
 }

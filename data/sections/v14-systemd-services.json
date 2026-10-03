@@ -236,6 +236,17 @@
       "section": "v14",
       "question": "journald yoki ilova loglarida vaqt mos kelmaydi / boot oralig'ida loglar yo'qolgan. Nima sabab?",
       "explanation": "Journal volatile (`/run/log/journal`, reboot'da yo'qoladi) — `Storage=persistent` yoki `/var/log/journal` yarat. Rate limit (`Suppressed N messages`). Vaqt: soat sinxron emas yoki timezone farqi (UTC vs local). Crash oldidagi loglar diskka flush bo'lmagan."
+    },
+    {
+      "id": 34096,
+      "code": "JR96",
+      "level": "J",
+      "type": "card",
+      "topic": "systemd & services",
+      "domain": "linux",
+      "section": "v14",
+      "question": "`systemctl start nginx` ostida nima bo'ladi?",
+      "explanation": "systemctl D-Bus orqali systemd (PID 1) ga so'rov yuboradi; systemd unit faylni o'qib, dependency'larni ishga tushiradi va jarayonni o'z cgroup'ida boshlaydi, kuzatib turadi."
     }
   ]
 }

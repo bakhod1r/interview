@@ -60,6 +60,50 @@
       "section": "w12",
       "question": "GCP IAM: basic, predefined va custom role'lar; nega `roles/editor` xavfli?",
       "explanation": "Basic role'lar (Owner, Editor, Viewer) — juda keng, minglab permission. Predefined — servisga xos (`roles/storage.objectViewer`). Custom — aniq permission ro'yxati. Editor deyarli hamma resursni o'zgartira oladi — least privilege'ga zid, default compute SA'ga berilgani xavf."
+    },
+    {
+      "id": 34063,
+      "code": "JR63",
+      "level": "J",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "GCP'da Project nima?",
+      "explanation": "Barcha resurslar, billing, API va IAM project ichida. Ierarxiya: Organization → Folder → Project → Resource."
+    },
+    {
+      "id": 34064,
+      "code": "JR64",
+      "level": "J",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "GCP'ning asosiy servislari AWS'da nimaga to'g'ri keladi?",
+      "explanation": "Compute Engine≈EC2, Cloud Storage≈S3, GKE≈EKS, Cloud SQL≈RDS, Cloud Run≈Fargate/App Runner, Cloud Functions≈Lambda."
+    },
+    {
+      "id": 34065,
+      "code": "JR65",
+      "level": "J",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "`gcloud` bilan autentifikatsiya va VM ro'yxati?",
+      "explanation": "`gcloud auth login`, `gcloud config set project`, `gcloud compute instances list`."
+    },
+    {
+      "id": 34066,
+      "code": "JR66",
+      "level": "J",
+      "type": "card",
+      "topic": "GCP",
+      "domain": "cloud",
+      "section": "w12",
+      "question": "GCP'da service account nima?",
+      "explanation": "Odam emas, ilova/VM uchun identity. IAM rollari unga beriladi."
     }
   ]
 }

@@ -137,6 +137,61 @@
       "section": "k4",
       "question": "Argo Rollouts bilan canary: metrika asosida avtomatik rollback qanday ishlaydi?",
       "explanation": "Rollout CRD Deployment o'rniga: trafikni bosqichma-bosqich (5% → 25% → 100%) ko'chiradi; AnalysisTemplate Prometheus'dan error rate/latency so'raydi. Shart buzilsa — avtomatik abort va eski versiyaga qaytish."
+    },
+    {
+      "id": 34053,
+      "code": "JR53",
+      "level": "J",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Helm nima va chart, release, values tushunchalari?",
+      "explanation": "Helm — K8s package manager. Chart — shablonlar to'plami, values — sozlamalar, release — chart'ning klasterga o'rnatilgan nusxasi."
+    },
+    {
+      "id": 34054,
+      "code": "JR54",
+      "level": "J",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Helm bilan upgrade va rollback qanday qilinadi?",
+      "explanation": "`helm upgrade --install` va `helm rollback <release> <revision>`; tarix `helm history`."
+    },
+    {
+      "id": 34055,
+      "code": "JR55",
+      "level": "J",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Chart'ni o'rnatmasdan qanday tekshirasiz?",
+      "explanation": "`helm lint`, `helm template` (YAML'ni ko'rish), `helm upgrade --dry-run`, `helm diff` plugin."
+    },
+    {
+      "id": 34056,
+      "code": "JR56",
+      "level": "J",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "Helm repo bilan qanday ishlaysiz?",
+      "explanation": "`helm repo add`, `helm repo update`, `helm search repo`, `helm show values`."
+    },
+    {
+      "id": 34058,
+      "code": "JR58",
+      "level": "J",
+      "type": "card",
+      "topic": "Helm & GitOps",
+      "domain": "k8s",
+      "section": "k4",
+      "question": "ArgoCD'da \"OutOfSync\" nima degani?",
+      "explanation": "Klasterdagi holat Git'dagidan farq qiladi — yangi commit yoki kimdir qo'lda o'zgartirgan (drift)."
     }
   ]
 }

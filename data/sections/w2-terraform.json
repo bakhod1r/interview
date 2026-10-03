@@ -401,6 +401,171 @@
       "section": "w2",
       "question": "Crossplane nima va Terraform'dan farqi? Qachon tanlaysiz?",
       "explanation": "Crossplane — cloud resurslarini Kubernetes CRD sifatida boshqaradigan controller: doimiy reconcile (drift o'zi tuzaladi), state fayl yo'q (holat K8s API'da). Composition/XRD bilan platforma jamoasi dasturchilarga o'z \"Database\" API'sini beradi. Narx: K8s'ga to'liq bog'liqlik, debug murakkab."
+    },
+    {
+      "id": 34256,
+      "code": "JR256",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform'da provider nima?",
+      "explanation": "Terraform'ni ma'lum platforma API'si (AWS, Azure, K8s, GitHub) bilan bog'laydigan plugin."
+    },
+    {
+      "id": 34257,
+      "code": "JR257",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform resource bloki qanday yoziladi?",
+      "explanation": "`resource \"<tur>\" \"<nom>\" { ... }` — tur provider'dan, nom — Terraform ichidagi lokal nom."
+    },
+    {
+      "id": 34258,
+      "code": "JR258",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Remote state nima va nega lokal state yomon?",
+      "explanation": "State'ni umumiy joyda (S3, GCS, Terraform Cloud) saqlash. Lokal state — jamoada to'qnashuv, yo'qolish, secret'lar laptopda."
+    },
+    {
+      "id": 34259,
+      "code": "JR259",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "State locking nima uchun kerak?",
+      "explanation": "Ikki kishi bir vaqtda `apply` qilsa state buzilmasligi uchun — biri ishlayotganda boshqasi kutadi."
+    },
+    {
+      "id": 34260,
+      "code": "JR260",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`terraform plan -out` va `apply plan` nima uchun?",
+      "explanation": "Ko'rib chiqilgan aynan o'sha rejani qo'llash — plan va apply orasida hech narsa o'zgarmaydi."
+    },
+    {
+      "id": 34261,
+      "code": "JR261",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform module nima?",
+      "explanation": "Qayta ishlatiladigan resurslar to'plami (papka): input variable'lar, output'lar."
+    },
+    {
+      "id": 34262,
+      "code": "JR262",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform'da `count` va `for_each` farqi?",
+      "explanation": "count — son bo'yicha nusxa (indeks 0,1,2). for_each — map/set kaliti bo'yicha; elementni o'chirsangiz boshqalari siljimaydi."
+    },
+    {
+      "id": 34263,
+      "code": "JR263",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform workspace nima?",
+      "explanation": "Bitta konfiguratsiya uchun alohida state'lar (dev, stage). Kichik farqli muhitlar uchun."
+    },
+    {
+      "id": 34264,
+      "code": "JR264",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`terraform import` nima qiladi?",
+      "explanation": "Qo'lda yaratilgan mavjud resursni Terraform state'ga qo'shadi."
+    },
+    {
+      "id": 34265,
+      "code": "JR265",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Drift nima va Terraform uni qanday aniqlaydi?",
+      "explanation": "Haqiqiy infra state/koddan farq qilishi (kimdir konsolda o'zgartirgan). `terraform plan` farqni ko'rsatadi."
+    },
+    {
+      "id": 34266,
+      "code": "JR266",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Sensitive qiymatlar (parol) Terraform'da qanday ishlatiladi?",
+      "explanation": "`sensitive = true` — chiqishda yashiradi, lekin state'da ochiq saqlanadi. Secret'ni secret manager'dan oling, state'ni shifrlang."
+    },
+    {
+      "id": 34267,
+      "code": "JR267",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`terraform destroy` xavfini qanday kamaytirasiz?",
+      "explanation": "`prevent_destroy` lifecycle, `-target` emas, plan'ni o'qish, prod'da qo'lda destroy taqiqlash."
+    },
+    {
+      "id": 34268,
+      "code": "JR268",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "`.terraform` papkasi va `.gitignore`?",
+      "explanation": "`.terraform/` — yuklangan provider va module'lar, commit qilinmaydi. `.terraform.lock.hcl` — commit qilinadi."
+    },
+    {
+      "id": 34269,
+      "code": "JR269",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform'da variable turlari va validatsiya?",
+      "explanation": "`string`, `number`, `bool`, `list()`, `map()`, `object({})`; `validation` bloki bilan tekshirish."
+    },
+    {
+      "id": 34270,
+      "code": "JR270",
+      "level": "J",
+      "type": "card",
+      "topic": "Terraform",
+      "domain": "iac",
+      "section": "w2",
+      "question": "Terraform va CloudFormation/Pulumi farqi qisqacha?",
+      "explanation": "Terraform — multi-cloud, HCL. CloudFormation — faqat AWS, YAML/JSON, state AWS'da. Pulumi — oddiy dasturlash tillari."
     }
   ]
 }

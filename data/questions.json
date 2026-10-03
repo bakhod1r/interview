@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-02T17:21:44.853Z",
-  "total": 4676,
+  "total": 5060,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -17203,6 +17203,61 @@
           "section": "v3",
           "question": "Supply chain hujumlaridan paketlarni qanday himoya qilasan?",
           "explanation": "Imzo tekshiruvi, lock/hash pin, SBOM, provenance (SLSA, Sigstore), internal mirror, minimal base image, skanerlash."
+        },
+        {
+          "id": 34031,
+          "code": "JR31",
+          "level": "J",
+          "type": "card",
+          "topic": "Package management",
+          "domain": "linux",
+          "section": "v3",
+          "question": "`apt update` va `apt upgrade` farqi?",
+          "explanation": "`update` — paket ro'yxatini (index) yangilaydi; `upgrade` — o'rnatilgan paketlarni yangi versiyaga ko'taradi."
+        },
+        {
+          "id": 34032,
+          "code": "JR32",
+          "level": "J",
+          "type": "card",
+          "topic": "Package management",
+          "domain": "linux",
+          "section": "v3",
+          "question": "Debian va RHEL oilasida paket buyruqlari qanday farq qiladi?",
+          "explanation": "Debian/Ubuntu: `apt`, `dpkg`, `.deb`. RHEL/Rocky/Fedora: `dnf` (eski `yum`), `rpm`, `.rpm`."
+        },
+        {
+          "id": 34033,
+          "code": "JR33",
+          "level": "J",
+          "type": "card",
+          "topic": "Package management",
+          "domain": "linux",
+          "section": "v3",
+          "question": "Paket qaysi versiyada o'rnatilganini va qaysi repo'dan kelishini qanday bilasiz?",
+          "explanation": "`apt policy <pkg>` (Debian) yoki `dnf info <pkg>` / `rpm -q <pkg>` (RHEL)."
+        },
+        {
+          "id": 34034,
+          "code": "JR34",
+          "level": "J",
+          "type": "card",
+          "topic": "Package management",
+          "domain": "linux",
+          "section": "v3",
+          "question": "Uchinchi tomon repo (masalan Docker) qanday qo'shiladi va nega GPG kalit kerak?",
+          "explanation": "Repo URL + GPG kalit qo'shiladi; kalit paketlarning haqiqiyligini (imzo) tekshiradi."
+        },
+        {
+          "id": 34035,
+          "code": "JR35",
+          "level": "J",
+          "type": "card",
+          "topic": "Package management",
+          "domain": "linux",
+          "section": "v3",
+          "question": "`apt remove` va `apt purge` farqi?",
+          "explanation": "`remove` — binarlarni o'chiradi, config qoladi; `purge` — config fayllar bilan birga."
         }
       ]
     },
@@ -17674,6 +17729,61 @@
           "section": "v16",
           "question": "Disk/storage performance'ni qanday o'lchaysan? `fio`, `dd` va ularning tuzoqlari.",
           "explanation": "`fio` — real yuklamaga o'xshash test (random/sequential, blok o'lchami, iodepth, direct=1). `dd` faqat taxminiy sequential va page cache tufayli aldaydi. IOPS, throughput, latency (p99) uchala metrika."
+        },
+        {
+          "id": 34020,
+          "code": "JR20",
+          "level": "J",
+          "type": "card",
+          "topic": "Disks & RAID",
+          "domain": "linux",
+          "section": "v16",
+          "question": "`lsblk` va `blkid` nima ko'rsatadi?",
+          "explanation": "`lsblk` — disk/partition daraxti, hajmi, mount point. `blkid` — UUID va filesystem turi."
+        },
+        {
+          "id": 34021,
+          "code": "JR21",
+          "level": "J",
+          "type": "card",
+          "topic": "Disks & RAID",
+          "domain": "linux",
+          "section": "v16",
+          "question": "Yangi diskni formatlab, doimiy mount qilish qadamlari?",
+          "explanation": "Partition (ixtiyoriy) → `mkfs` → `mkdir` → `mount` → `/etc/fstab` (UUID bilan) → `mount -a` bilan tekshirish."
+        },
+        {
+          "id": 34022,
+          "code": "JR22",
+          "level": "J",
+          "type": "card",
+          "topic": "Disks & RAID",
+          "domain": "linux",
+          "section": "v16",
+          "question": "MBR va GPT farqi?",
+          "explanation": "MBR — eski, 2 TB gacha va 4 primary partition. GPT — UEFI bilan, katta disklar, 128 partition, zaxira header."
+        },
+        {
+          "id": 34023,
+          "code": "JR23",
+          "level": "J",
+          "type": "card",
+          "topic": "Disks & RAID",
+          "domain": "linux",
+          "section": "v16",
+          "question": "RAID 0, 1, 5, 10 farqi?",
+          "explanation": "0 — tezlik, himoya yo'q; 1 — mirror; 5 — parity, 1 disk yo'qolishiga chidaydi; 10 — mirror+stripe, tez va ishonchli."
+        },
+        {
+          "id": 34024,
+          "code": "JR24",
+          "level": "J",
+          "type": "card",
+          "topic": "Disks & RAID",
+          "domain": "linux",
+          "section": "v16",
+          "question": "Disk sog'ligini qanday tekshirasiz?",
+          "explanation": "`smartctl` (SMART), `dmesg` dagi I/O xatolari, `iostat` bilan yuklama."
         }
       ]
     },
@@ -18112,6 +18222,17 @@
           "section": "v14",
           "question": "journald yoki ilova loglarida vaqt mos kelmaydi / boot oralig'ida loglar yo'qolgan. Nima sabab?",
           "explanation": "Journal volatile (`/run/log/journal`, reboot'da yo'qoladi) — `Storage=persistent` yoki `/var/log/journal` yarat. Rate limit (`Suppressed N messages`). Vaqt: soat sinxron emas yoki timezone farqi (UTC vs local). Crash oldidagi loglar diskka flush bo'lmagan."
+        },
+        {
+          "id": 34096,
+          "code": "JR96",
+          "level": "J",
+          "type": "card",
+          "topic": "systemd & services",
+          "domain": "linux",
+          "section": "v14",
+          "question": "`systemctl start nginx` ostida nima bo'ladi?",
+          "explanation": "systemctl D-Bus orqali systemd (PID 1) ga so'rov yuboradi; systemd unit faylni o'qib, dependency'larni ishga tushiradi va jarayonni o'z cgroup'ida boshlaydi, kuzatib turadi."
         }
       ]
     },
@@ -18397,6 +18518,72 @@
           "section": "v11",
           "question": "`epoll`, `select`/`poll` va `io_uring` farqi? Nega Nginx/Go yuz minglab ulanishni ko'taradi?",
           "explanation": "select/poll har chaqiruvda barcha FD'larni kernel'ga beradi va tekshiradi — O(n). epoll — kernel tayyor FD'lar ro'yxatini o'zi yuritadi, faqat tayyorlarini qaytaradi — O(tayyorlar). io_uring — umumiy ring buffer'lar orqali asinxron I/O: syscall soni minimal, disk I/O ham haqiqiy async."
+        },
+        {
+          "id": 34077,
+          "code": "JR77",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Terminalda `ls` yozib Enter bossangiz, ostida nima bo'ladi?",
+          "explanation": "Shell buyruqni parse qiladi, PATH'dan topadi, `fork()` bilan nusxa ochadi, bolada `execve()` bilan `ls` ni yuklaydi, ota `wait()` qiladi."
+        },
+        {
+          "id": 34078,
+          "code": "JR78",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Syscall nima va nega dasturlar kernel'ga to'g'ridan-to'g'ri murojaat qilolmaydi?",
+          "explanation": "Dastur user space'da ishlaydi; disk, tarmoq, xotiraga kirish faqat kernel orqali — syscall (open, read, write, fork) bilan."
+        },
+        {
+          "id": 34079,
+          "code": "JR79",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "`kill PID` qanday ishlaydi? SIGTERM va SIGKILL farqi?",
+          "explanation": "`kill` jarayonga signal yuboradi. SIGTERM (15) — iltimos, tozalab chiq; ushlash mumkin. SIGKILL (9) — kernel darhol o'ldiradi, ushlab bo'lmaydi."
+        },
+        {
+          "id": 34080,
+          "code": "JR80",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "`/proc` papkasi nima? U diskda saqlanadimi?",
+          "explanation": "Yo'q — virtual filesystem, kernel uni o'qilganda yaratadi. Jarayonlar va tizim holati haqida ma'lumot beradi."
+        },
+        {
+          "id": 34081,
+          "code": "JR81",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "File descriptor nima?",
+          "explanation": "Jarayon ochgan fayl/socket/pipe uchun kernel bergan butun son. 0 — stdin, 1 — stdout, 2 — stderr."
+        },
+        {
+          "id": 34082,
+          "code": "JR82",
+          "level": "J",
+          "type": "card",
+          "topic": "Kernel & processes",
+          "domain": "linux",
+          "section": "v11",
+          "question": "Zombie va orphan jarayon nima?",
+          "explanation": "Zombie — tugagan, lekin ota hali `wait()` qilmagan (faqat jadvalda yozuv). Orphan — otasi o'lgan, init/systemd (PID 1) asrab oladi."
         }
       ]
     },
@@ -18772,6 +18959,83 @@
           "section": "v12",
           "question": "Linux kernel parametrlarini (sysctl) yuqori yuklangan servis uchun qanday sozlaysan?",
           "explanation": "Intervyuda kalit: 'tuning retseptlari'ni ko'r-ko'rona ko'chirmaslik — har parametr qaysi simptomni yechishini bilish va metrika bilan isbotlash."
+        },
+        {
+          "id": 34001,
+          "code": "JR1",
+          "level": "J",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`free -h` chiqishida `available` va `free` ustunlari farqi nima?",
+          "explanation": "Linux bo'sh RAM'ni page cache uchun ishlatadi, shuning uchun `free` kichik bo'lishi normal. Haqiqiy ko'rsatkich — `available`."
+        },
+        {
+          "id": 34002,
+          "code": "JR2",
+          "level": "J",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`df -h` va `du -sh` farqi nima?",
+          "explanation": "`df` — filesystem darajasida bo'sh/band joy; `du` — fayl/papkalar hajmini sanaydi. Farq bo'lsa — o'chirilgan, lekin ochiq turgan fayllar."
+        },
+        {
+          "id": 34003,
+          "code": "JR3",
+          "level": "J",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`top` / `htop` da nimalarga qaraysiz?",
+          "explanation": "Load average, CPU (us/sy/wa), memory, eng ko'p CPU/RAM yeyayotgan jarayonlar."
+        },
+        {
+          "id": 34004,
+          "code": "JR4",
+          "level": "J",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "Load average nima va qachon u \"yuqori\" hisoblanadi?",
+          "explanation": "Bajarilishni kutayotgan yoki bajarilayotgan (va D-state, ya'ni I/O kutayotgan) jarayonlar o'rtacha soni. Yadro soniga nisbatan baholanadi."
+        },
+        {
+          "id": 34005,
+          "code": "JR5",
+          "level": "J",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "Server sekinlashdi. Junior sifatida birinchi 5 daqiqada nimani tekshirasiz?",
+          "explanation": "Ketma-ket: `uptime`, `top`, `free -h`, `df -h`, `dmesg`/`journalctl`, xizmat loglari."
+        },
+        {
+          "id": 34006,
+          "code": "JR6",
+          "level": "J",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "OOM killer nima va uning ishlaganini qanday bilasiz?",
+          "explanation": "RAM va swap tugaganda kernel eng \"og'ir\" jarayonni o'ldiradi. Izi `dmesg`/`journalctl -k` da qoladi."
+        },
+        {
+          "id": 34007,
+          "code": "JR7",
+          "level": "J",
+          "type": "card",
+          "topic": "Troubleshooting",
+          "domain": "linux",
+          "section": "v12",
+          "question": "`ps aux` chiqishida qaysi ustunlar muhim?",
+          "explanation": "USER, PID, %CPU, %MEM, VSZ/RSS, STAT, COMMAND."
         }
       ]
     },
@@ -19046,6 +19310,72 @@
           "section": "v13",
           "question": "Network namespace va veth: konteyner tarmog'i qanday ishlaydi (`ip netns` bilan)?",
           "explanation": "Network namespace — alohida tarmoq stek (interfeys, route, iptables). veth — ikki uchli virtual kabel: bir uchi namespace ichida, ikkinchisi host'da (yoki bridge'da). Docker/K8s CNI aynan shunday qiladi."
+        },
+        {
+          "id": 34008,
+          "code": "JR8",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking & security",
+          "domain": "linux",
+          "section": "v13",
+          "question": "Serverda qaysi portlar ochiq va qaysi jarayon tinglayotganini qanday bilasiz?",
+          "explanation": "`ss -tulpn` (yoki eski `netstat -tulpn`)."
+        },
+        {
+          "id": 34009,
+          "code": "JR9",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking & security",
+          "domain": "linux",
+          "section": "v13",
+          "question": "`ufw` bilan faqat SSH, HTTP, HTTPS ni qanday ochasiz?",
+          "explanation": "Default deny incoming, keyin kerakli portlarga allow. SSH'ni enable'dan oldin ochish shart."
+        },
+        {
+          "id": 34010,
+          "code": "JR10",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking & security",
+          "domain": "linux",
+          "section": "v13",
+          "question": "`iptables` da INPUT, OUTPUT, FORWARD chain'lari nima?",
+          "explanation": "INPUT — serverga kiruvchi, OUTPUT — serverdan chiquvchi, FORWARD — server orqali o'tuvchi (router) paketlar."
+        },
+        {
+          "id": 34011,
+          "code": "JR11",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking & security",
+          "domain": "linux",
+          "section": "v13",
+          "question": "`ping` ishlamasa, bu server o'chiq degani mi?",
+          "explanation": "Yo'q. ICMP firewall'da bloklangan bo'lishi mumkin. Portni `nc`/`curl` bilan tekshiring."
+        },
+        {
+          "id": 34012,
+          "code": "JR12",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking & security",
+          "domain": "linux",
+          "section": "v13",
+          "question": "fail2ban nima uchun ishlatiladi?",
+          "explanation": "Loglarda ko'p muvaffaqiyatsiz login ko'rgan IP'ni vaqtincha firewall orqali bloklaydi (brute-force himoyasi)."
+        },
+        {
+          "id": 34013,
+          "code": "JR13",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking & security",
+          "domain": "linux",
+          "section": "v13",
+          "question": "SSH serverni xavfsizlashtirishning eng oddiy 4 qadami?",
+          "explanation": "Key auth, parol login o'chirish, root login o'chirish, firewall/fail2ban."
         }
       ]
     },
@@ -19243,6 +19573,94 @@
           "section": "v17",
           "question": "Bonding/teaming va VLAN: server tarmoq redundancy'si qanday sozlanadi?",
           "explanation": "Bonding — bir nechta NIC'ni bitta mantiqiy interfeysga: `active-backup` (mode 1, switch sozlamasisiz, failover), `802.3ad` LACP (mode 4, switch'da LAG kerak, yuk taqsimoti + failover). VLAN — bitta fizik linkda bir nechta L2 tarmoq (802.1Q tag), `eth0.100`."
+        },
+        {
+          "id": 34014,
+          "code": "JR14",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "`ip a` chiqishida nimani ko'rasiz?",
+          "explanation": "Interfeyslar, holati (UP/DOWN), MAC, IPv4/IPv6 manzil va subnet mask (CIDR)."
+        },
+        {
+          "id": 34015,
+          "code": "JR15",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "`/24` subnet nimani bildiradi va unda nechta host bo'ladi?",
+          "explanation": "Birinchi 24 bit — tarmoq qismi. 256 manzil, 254 ta host (network va broadcast chiqariladi)."
+        },
+        {
+          "id": 34016,
+          "code": "JR16",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "Private IP diapazonlari qaysilar?",
+          "explanation": "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 (RFC 1918). Internetda route qilinmaydi."
+        },
+        {
+          "id": 34017,
+          "code": "JR17",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "DNS so'rovi qanday ishlaydi va `dig` bilan qanday tekshirasiz?",
+          "explanation": "Resolver → cache → root → TLD → authoritative server. `dig example.com` javob va TTL'ni ko'rsatadi."
+        },
+        {
+          "id": 34018,
+          "code": "JR18",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "`/etc/hosts` va `/etc/resolv.conf` vazifasi?",
+          "explanation": "`/etc/hosts` — qo'lda nom→IP xaritasi (DNS'dan oldin tekshiriladi). `/etc/resolv.conf` — qaysi DNS serverlardan so'rash."
+        },
+        {
+          "id": 34019,
+          "code": "JR19",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "Default gateway nima va uni qanday ko'rasiz?",
+          "explanation": "Lokal subnet'dan tashqaridagi barcha trafik yuboriladigan router. `ip r` da `default via ...`."
+        },
+        {
+          "id": 34097,
+          "code": "JR97",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "Brauzerga `https://example.com` yozganda nima bo'ladi?",
+          "explanation": "DNS → TCP handshake → TLS handshake → HTTP so'rov → server/proxy javobi → brauzer render."
+        },
+        {
+          "id": 34098,
+          "code": "JR98",
+          "level": "J",
+          "type": "card",
+          "topic": "TCP/IP",
+          "domain": "linux",
+          "section": "v17",
+          "question": "ARP nima uchun kerak?",
+          "explanation": "Bir lokal tarmoqda IP manzilni MAC manzilga aylantiradi — Ethernet freym MAC bo'yicha yuboriladi."
         }
       ]
     },
@@ -19418,6 +19836,17 @@
           "section": "v15",
           "question": "\"Host key verification failed\" / \"REMOTE HOST IDENTIFICATION HAS CHANGED\" nimani anglatadi?",
           "explanation": "SSH client `~/.ssh/known_hosts`da saqlangan server kalitini yangi kalit bilan solishtirdi va mos kelmadi. Sabab: server qayta o'rnatilgan, IP boshqa serverga berilgan — yoki MITM hujumi. Ko'r-ko'rona o'chirmasdan, kalit o'zgarishini tasdiqlang."
+        },
+        {
+          "id": 34095,
+          "code": "JR95",
+          "level": "J",
+          "type": "card",
+          "topic": "SSH",
+          "domain": "linux",
+          "section": "v15",
+          "question": "SSH key bilan login ostida qanday ishlaydi?",
+          "explanation": "Server `authorized_keys` dagi public key bilan mijozga challenge beradi; mijoz private key bilan imzolaydi; private key hech qachon tarmoqqa chiqmaydi."
         }
       ]
     },
@@ -19801,6 +20230,72 @@
           "section": "v19",
           "question": "On-call: tunda alert keldi \"API p99 latency yuqori\". Birinchi 15 daqiqada nima qilasan?",
           "explanation": "Ta'sirni aniqlash (SLO, qaysi endpoint/region, error rate) -> o'zgarishlar (deploy, config, trafik) -> dependency'lar (DB, cache, tashqi API) -> host resurslari (USE) -> mitigation (rollback, scale, feature flag, trafik cheklash) -> kommunikatsiya -> keyin chuqur tahlil."
+        },
+        {
+          "id": 34025,
+          "code": "JR25",
+          "level": "J",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "`rsync` nima va `cp`/`scp` dan nimasi yaxshi?",
+          "explanation": "Faqat o'zgargan qismlarni ko'chiradi, uzilsa davom ettiradi, ruxsat/vaqtni saqlaydi, SSH orqali ishlaydi."
+        },
+        {
+          "id": 34026,
+          "code": "JR26",
+          "level": "J",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Papkani `tar` bilan arxivlash va ochish?",
+          "explanation": "`tar -czf a.tar.gz dir/` — yaratish, `tar -xzf a.tar.gz` — ochish, `-t` — ichini ko'rish."
+        },
+        {
+          "id": 34027,
+          "code": "JR27",
+          "level": "J",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "3-2-1 backup qoidasi nima?",
+          "explanation": "3 nusxa, 2 xil saqlash turida, 1 tasi boshqa joyda (offsite)."
+        },
+        {
+          "id": 34028,
+          "code": "JR28",
+          "level": "J",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Server vaqti nega muhim va NTP sinxronini qanday tekshirasiz?",
+          "explanation": "Loglar, TLS sertifikat, token muddati, cron, distributed tizimlar to'g'ri vaqtga bog'liq. `timedatectl` bilan tekshiriladi."
+        },
+        {
+          "id": 34029,
+          "code": "JR29",
+          "level": "J",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "`logrotate` nima uchun kerak?",
+          "explanation": "Loglarni vaqt/hajm bo'yicha aylantiradi, siqadi va eskisini o'chiradi — disk to'lmasligi uchun."
+        },
+        {
+          "id": 34030,
+          "code": "JR30",
+          "level": "J",
+          "type": "card",
+          "topic": "Ops practices",
+          "domain": "linux",
+          "section": "v19",
+          "question": "Cron'da har kuni soat 02:30 da skript ishga tushirish?",
+          "explanation": "`30 2 * * * /path/script.sh` — maydonlar: daqiqa soat kun oy hafta_kuni."
         }
       ]
     },
@@ -23065,6 +23560,457 @@
           "section": "w1",
           "question": "Git ichki tuzilmasi: blob, tree, commit, tag obyektlari va SHA qanday bog'langan?",
           "explanation": "Git — content-addressable storage: har obyekt mazmunining hash'i bilan saqlanadi. blob — fayl mazmuni, tree — papka (nom → blob/tree), commit — root tree + parent(lar) + muallif + xabar, annotated tag — commit'ga imzoli ko'rsatkich. Branch — commit hash yozilgan oddiy fayl."
+        },
+        {
+          "id": 34092,
+          "code": "JR92",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git commit` ostida nima saqlanadi?",
+          "explanation": "Git `.git/objects` ga blob (fayl mazmuni), tree (papka), commit (tree + ota + muallif + xabar) obyektlarini SHA hash bilan yozadi; branch shu commit'ga ko'rsatkich."
+        },
+        {
+          "id": 34094,
+          "code": "JR94",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git push` va `git pull` ostida nima bo'ladi?",
+          "explanation": "Push — lokal commit'larni remote'ga yuborib, remote branch ko'rsatkichini siljitadi. Pull = `fetch` (yuklab olish) + `merge` yoki `rebase`."
+        },
+        {
+          "id": 34100,
+          "code": "JR100",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git init` va `git clone` farqi?",
+          "explanation": "`init` — joriy papkada bo'sh repo yaratadi. `clone` — mavjud remote repo'ni tarixi bilan nusxalaydi va `origin` ni sozlaydi."
+        },
+        {
+          "id": 34101,
+          "code": "JR101",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git config` da user.name va user.email nega kerak?",
+          "explanation": "Har commit'ga muallif sifatida yoziladi. Global yoki repo darajasida sozlanadi."
+        },
+        {
+          "id": 34102,
+          "code": "JR102",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git add .` va `git add -p` farqi?",
+          "explanation": "`.` — hamma o'zgarishni stage qiladi. `-p` — har bo'lakni (hunk) so'rab, faqat keraklisini qo'shadi."
+        },
+        {
+          "id": 34103,
+          "code": "JR103",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Oxirgi commit xabarini yoki unutilgan faylni qanday tuzatasiz?",
+          "explanation": "`git commit --amend`. Faqat push qilinmagan commit uchun xavfsiz."
+        },
+        {
+          "id": 34104,
+          "code": "JR104",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git remote -v` nima ko'rsatadi va `origin` nima?",
+          "explanation": "Remote repo nomlari va URL'lari. `origin` — clone qilingan manbaning default nomi."
+        },
+        {
+          "id": 34105,
+          "code": "JR105",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Git'da SSH va HTTPS orqali ulanish farqi?",
+          "explanation": "SSH — kalit juftligi bilan, parol so'ramaydi. HTTPS — token (PAT) yoki credential helper bilan."
+        },
+        {
+          "id": 34106,
+          "code": "JR106",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Yangi branch yaratib, uni remote'ga birinchi marta qanday push qilasiz?",
+          "explanation": "`git switch -c feature/x`, keyin `git push -u origin feature/x`."
+        },
+        {
+          "id": 34107,
+          "code": "JR107",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Branch'ni lokal va remote'da qanday o'chirasiz?",
+          "explanation": "Lokal: `git branch -d name` (`-D` majburan). Remote: `git push origin --delete name`."
+        },
+        {
+          "id": 34108,
+          "code": "JR108",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git merge` va `git rebase` farqi (sodda)?",
+          "explanation": "Merge — ikki tarixni merge commit bilan birlashtiradi. Rebase — commit'laringizni yangi bazaga qayta yozadi, tarix chiziqli bo'ladi."
+        },
+        {
+          "id": 34109,
+          "code": "JR109",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git stash` nima uchun ishlatiladi?",
+          "explanation": "Tugallanmagan o'zgarishlarni vaqtincha yashirib, toza working tree olish (boshqa branch'ga o'tish uchun)."
+        },
+        {
+          "id": 34110,
+          "code": "JR110",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git reset --soft`, `--mixed`, `--hard` farqi?",
+          "explanation": "Hammasi HEAD'ni siljitadi. soft — o'zgarishlar staged qoladi; mixed (default) — unstaged qoladi; hard — o'zgarishlar o'chadi."
+        },
+        {
+          "id": 34111,
+          "code": "JR111",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git revert` va `git reset` farqi?",
+          "explanation": "Revert — o'zgarishni bekor qiluvchi YANGI commit qo'shadi (tarix saqlanadi). Reset — tarixni orqaga suradi."
+        },
+        {
+          "id": 34112,
+          "code": "JR112",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Yo'qolgan commit'ni qanday tiklaysiz?",
+          "explanation": "`git reflog` — HEAD harakatlari tarixi; kerakli hash'ni topib `git reset` yoki yangi branch."
+        },
+        {
+          "id": 34113,
+          "code": "JR113",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git cherry-pick` nima qiladi?",
+          "explanation": "Boshqa branch'dagi bitta commit'ni joriy branch'ga nusxalaydi (yangi hash bilan)."
+        },
+        {
+          "id": 34114,
+          "code": "JR114",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Tag nima va lightweight va annotated tag farqi?",
+          "explanation": "Tag — commit'ga doimiy nom (odatda versiya). Annotated — muallif, sana, xabar bilan obyekt; lightweight — shunchaki ko'rsatkich."
+        },
+        {
+          "id": 34115,
+          "code": "JR115",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Pull request (merge request) nima va nega kerak?",
+          "explanation": "Branch'dagi o'zgarishni main'ga qo'shishdan oldin review, CI tekshiruvi va muhokama uchun so'rov."
+        },
+        {
+          "id": 34116,
+          "code": "JR116",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Squash merge nima?",
+          "explanation": "PR'dagi barcha commit'larni bitta commit qilib main'ga qo'shadi."
+        },
+        {
+          "id": 34117,
+          "code": "JR117",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git diff` ning turlari: working, staged, branch'lar orasida?",
+          "explanation": "`git diff` — unstaged, `--staged` — staged, `main..feature` — branch'lar farqi."
+        },
+        {
+          "id": 34118,
+          "code": "JR118",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git log` ni qulay ko'rish uchun qaysi flag'lar?",
+          "explanation": "`--oneline`, `--graph`, `--all`, `-p`, `--author`, `--since`."
+        },
+        {
+          "id": 34119,
+          "code": "JR119",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Git'ga secret (parol, kalit) commit qilib qo'ysangiz nima qilasiz?",
+          "explanation": "Avval secret'ni darhol bekor qilish (rotate). Tarixdan o'chirish ikkinchi qadam — u allaqachon tarqalgan deb hisoblang."
+        },
+        {
+          "id": 34120,
+          "code": "JR120",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Detached HEAD nima?",
+          "explanation": "HEAD branch'ga emas, to'g'ridan-to'g'ri commit'ga ishora qilmoqda (masalan tag yoki hash checkout qilinganda)."
+        },
+        {
+          "id": 34121,
+          "code": "JR121",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`.gitkeep` nima va Git bo'sh papkani saqlaydimi?",
+          "explanation": "Git faqat fayllarni kuzatadi, bo'sh papkani emas. `.gitkeep` — papkani saqlash uchun konventsiya fayli."
+        },
+        {
+          "id": 34122,
+          "code": "JR122",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Merge conflict belgilarini qanday o'qiysiz?",
+          "explanation": "`<<<<<<<` dan `=======` gacha — sizniki (HEAD), `=======` dan `>>>>>>>` gacha — kiruvchi branch."
+        },
+        {
+          "id": 34123,
+          "code": "JR123",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Git Flow va trunk-based development farqi?",
+          "explanation": "Git Flow — develop/release/hotfix branch'lari, kam reliz. Trunk-based — hamma qisqa branch'lar bilan main'ga tez-tez merge qiladi, CI/CD'ga mos."
+        },
+        {
+          "id": 34124,
+          "code": "JR124",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Fork va clone farqi?",
+          "explanation": "Fork — serverda (GitHub) boshqa repo'ning sizga tegishli nusxasi. Clone — repo'ni lokal kompyuterga yuklab olish."
+        },
+        {
+          "id": 34125,
+          "code": "JR125",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git fetch --prune` nima qiladi?",
+          "explanation": "Remote'da o'chirilgan branch'larning lokal `origin/*` ko'rsatkichlarini ham o'chiradi."
+        },
+        {
+          "id": 34126,
+          "code": "JR126",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Faylni Git'dan o'chirib, lekin diskda qoldirish?",
+          "explanation": "`git rm --cached file`, keyin `.gitignore` ga qo'shish."
+        },
+        {
+          "id": 34127,
+          "code": "JR127",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`HEAD~1` va `HEAD^` nima?",
+          "explanation": "Joriy commit'dan bitta oldingi (ota) commit. `HEAD~3` — uch qadam orqada."
+        },
+        {
+          "id": 34128,
+          "code": "JR128",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Git LFS nima uchun kerak?",
+          "explanation": "Katta binar fayllarni (rasm, video, model) Git tarixiga emas, alohida storage'ga saqlab, repo'da faqat ko'rsatkich qoldiradi."
+        },
+        {
+          "id": 34129,
+          "code": "JR129",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Branch protection rules nima?",
+          "explanation": "Main kabi muhim branch'ga to'g'ridan-to'g'ri push, force push va o'chirishni taqiqlash; PR, review, yashil CI talab qilish."
+        },
+        {
+          "id": 34130,
+          "code": "JR130",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "CODEOWNERS fayli nima?",
+          "explanation": "Qaysi fayl/papkaga kim mas'ul ekanini belgilaydi; PR ochilganda o'sha odamlar avtomatik review'er bo'ladi."
+        },
+        {
+          "id": 34131,
+          "code": "JR131",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Git hook nima? pre-commit misoli.",
+          "explanation": "Git voqealarida (commit, push) avtomatik ishlaydigan skript. `pre-commit` — commit'dan oldin lint/test."
+        },
+        {
+          "id": 34132,
+          "code": "JR132",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git blame` qachon foydali?",
+          "explanation": "Har qatorni oxirgi kim, qaysi commit'da o'zgartirganini ko'rsatadi — o'zgarish sababini topish uchun."
+        },
+        {
+          "id": 34133,
+          "code": "JR133",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Monorepo va polyrepo farqi?",
+          "explanation": "Monorepo — ko'p loyiha bitta repo'da. Polyrepo — har servis alohida repo."
+        },
+        {
+          "id": 34134,
+          "code": "JR134",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git bisect` nima?",
+          "explanation": "Binary search bilan bug kiritgan commit'ni topadi."
+        },
+        {
+          "id": 34135,
+          "code": "JR135",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git switch` va `git restore` nima uchun `checkout` o'rniga paydo bo'ldi?",
+          "explanation": "`checkout` ikki xil ish qilardi (branch almashtirish va fayl tiklash). Yangi buyruqlar ularni ajratadi."
+        },
+        {
+          "id": 34136,
+          "code": "JR136",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Submodule nima?",
+          "explanation": "Boshqa Git repo'ni ma'lum commit'da o'z repo'ngiz ichiga ulash."
+        },
+        {
+          "id": 34137,
+          "code": "JR137",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "`git shortlog` va `git describe` nima beradi?",
+          "explanation": "`shortlog` — mualliflar bo'yicha commit'lar (changelog uchun). `describe` — eng yaqin tag asosida versiya nomi."
+        },
+        {
+          "id": 34138,
+          "code": "JR138",
+          "level": "J",
+          "type": "card",
+          "topic": "Git",
+          "domain": "git",
+          "section": "w1",
+          "question": "Katta repo'ni tez clone qilish usullari?",
+          "explanation": "Shallow clone (`--depth`), partial clone (`--filter=blob:none`), sparse checkout."
         }
       ]
     },
@@ -25566,6 +26512,413 @@
           "section": "k1",
           "question": "\"Hammasini container'ga o'tkazamiz\" taklifi bor. Qaysi workload'lar container uchun yomon nomzod va qanday baholaysiz?",
           "explanation": "Yomon nomzodlar: kernel/hardware'ga yaqin (DPDK, GPU driver), og'ir stateful DB (operatsion tajriba yo'q bo'lsa), litsenziya host'ga bog'liq, juda kam o'zgaradigan legacy. Baholash: qiymat (deploy tezligi, zichlik) vs xavf va operatsion narx."
+        },
+        {
+          "id": 34083,
+          "code": "JR83",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`docker run nginx` buyrug'i ostida nima bo'ladi?",
+          "explanation": "CLI → dockerd API → image yo'q bo'lsa pull → containerd → runc namespace/cgroup yaratib jarayonni ishga tushiradi → tarmoq va port ulanadi."
+        },
+        {
+          "id": 34084,
+          "code": "JR84",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Konteyner VM'dan qanday farq qiladi — ostida?",
+          "explanation": "Konteyner — host kernel'ini bo'lishuvchi oddiy Linux jarayoni (namespace + cgroup bilan ajratilgan). VM — o'z kernel'i bilan to'liq virtual mashina."
+        },
+        {
+          "id": 34085,
+          "code": "JR85",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Namespace va cgroup nima?",
+          "explanation": "Namespace — jarayon nimani KO'RADI (o'z PID, tarmoq, fayl tizimi). Cgroup — qancha RESURS ishlata oladi (CPU, RAM)."
+        },
+        {
+          "id": 34086,
+          "code": "JR86",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker image layer'lari qanday ishlaydi?",
+          "explanation": "Dockerfile'dagi har o'zgartiruvchi qadam alohida read-only layer. Layer'lar cache'lanadi va image'lar orasida bo'lishiladi; konteyner ustiga yoziladigan yupqa qatlam qo'shiladi."
+        },
+        {
+          "id": 34087,
+          "code": "JR87",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`-p 8080:80` port mapping ostida qanday ishlaydi?",
+          "explanation": "Docker host'da iptables NAT (DNAT) qoidasi qo'shadi: host:8080 ga kelgan paket konteyner IP:80 ga yo'naltiriladi."
+        },
+        {
+          "id": 34139,
+          "code": "JR139",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`CMD` va `ENTRYPOINT` farqi?",
+          "explanation": "ENTRYPOINT — doim ishlaydigan asosiy buyruq. CMD — default argument'lar, `docker run` da oson almashtiriladi."
+        },
+        {
+          "id": 34140,
+          "code": "JR140",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`.dockerignore` nima uchun kerak?",
+          "explanation": "Build context'dan keraksiz fayllarni (`.git`, `node_modules`, `.env`) chiqaradi — build tez, image kichik, secret tushmaydi."
+        },
+        {
+          "id": 34141,
+          "code": "JR141",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker'da restart policy'lar?",
+          "explanation": "`no`, `on-failure[:N]`, `always`, `unless-stopped`."
+        },
+        {
+          "id": 34142,
+          "code": "JR142",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Konteyner ichiga qanday kirasiz va `exec` bilan `attach` farqi?",
+          "explanation": "`docker exec -it c sh` — yangi jarayon (shell) ochadi. `attach` — asosiy jarayon (PID 1) terminaliga ulanadi."
+        },
+        {
+          "id": 34143,
+          "code": "JR143",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Konteyner loglarini qanday ko'rasiz?",
+          "explanation": "`docker logs` — konteynerning stdout/stderr'i."
+        },
+        {
+          "id": 34144,
+          "code": "JR144",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker tarmoq turlari: bridge, host, none?",
+          "explanation": "bridge — default, izolyatsiya + NAT. host — host tarmog'ini to'g'ridan-to'g'ri ishlatadi. none — tarmoqsiz."
+        },
+        {
+          "id": 34145,
+          "code": "JR145",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Ikki konteyner bir-biri bilan nom orqali qanday gaplashadi?",
+          "explanation": "Bitta user-defined network'ga ulang — Docker ichki DNS konteyner nomini IP'ga aylantiradi."
+        },
+        {
+          "id": 34146,
+          "code": "JR146",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Image tag va digest farqi?",
+          "explanation": "Tag (`nginx:1.27`) — o'zgaruvchan nom. Digest (`sha256:...`) — mazmunning o'zgarmas hash'i."
+        },
+        {
+          "id": 34147,
+          "code": "JR147",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`latest` tag'ning muammosi nima?",
+          "explanation": "\"Eng yangi\" degani emas — shunchaki default nom. Qaysi versiya ishlayotganini bilib bo'lmaydi, rollback qiyin."
+        },
+        {
+          "id": 34148,
+          "code": "JR148",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Image hajmini kichraytirish usullari?",
+          "explanation": "Kichik base (alpine, slim, distroless), multi-stage build, keraksiz fayl va cache'ni o'chirish, `.dockerignore`."
+        },
+        {
+          "id": 34149,
+          "code": "JR149",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Konteynerni root bo'lmagan foydalanuvchi bilan ishga tushirish?",
+          "explanation": "Dockerfile'da `USER` qo'shing — konteynerdan qochish (escape) holatida zarar kamayadi."
+        },
+        {
+          "id": 34150,
+          "code": "JR150",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`HEALTHCHECK` nima?",
+          "explanation": "Docker konteyner ichidagi ilova sog'lomligini davriy tekshiradi; status `healthy`/`unhealthy`."
+        },
+        {
+          "id": 34151,
+          "code": "JR151",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Konteynerning exit code'lari nimani bildiradi (0, 1, 137, 143)?",
+          "explanation": "0 — normal, 1 — ilova xatosi, 137 — SIGKILL (ko'pincha OOM), 143 — SIGTERM bilan to'xtatilgan."
+        },
+        {
+          "id": 34152,
+          "code": "JR152",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker disk joyini qanday tozalaysiz?",
+          "explanation": "`docker system df` bilan ko'rish, `docker system prune` bilan tozalash."
+        },
+        {
+          "id": 34153,
+          "code": "JR153",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Konteynerga resurs limitini qanday qo'yasiz?",
+          "explanation": "`--memory` va `--cpus` flag'lari (cgroup orqali)."
+        },
+        {
+          "id": 34154,
+          "code": "JR154",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`docker cp` nima qiladi?",
+          "explanation": "Host va konteyner orasida fayl nusxalaydi (konteyner ishlamayotgan bo'lsa ham)."
+        },
+        {
+          "id": 34155,
+          "code": "JR155",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Environment variable'larni konteynerga berish usullari?",
+          "explanation": "`-e KEY=val`, `--env-file .env`, Dockerfile'da `ENV`."
+        },
+        {
+          "id": 34156,
+          "code": "JR156",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`docker build -t` va build context nima?",
+          "explanation": "`-t` — image nomi va tag. Context — `docker build` ga berilgan papka (odatda `.`), COPY faqat shu ichidan oladi."
+        },
+        {
+          "id": 34157,
+          "code": "JR157",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker daemon va Docker CLI farqi?",
+          "explanation": "CLI (`docker`) — mijoz. Daemon (`dockerd`) — konteynerlarni haqiqatda boshqaradigan server, socket orqali gaplashadi."
+        },
+        {
+          "id": 34158,
+          "code": "JR158",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Rootless Docker va Podman nima?",
+          "explanation": "Daemon'ni root'siz ishlatish. Podman — daemon'siz, rootless, Docker'ga mos CLI."
+        },
+        {
+          "id": 34159,
+          "code": "JR159",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker volume'ni qanday backup qilasiz?",
+          "explanation": "Vaqtinchalik konteyner bilan volume'ni mount qilib, `tar` bilan arxivlash."
+        },
+        {
+          "id": 34160,
+          "code": "JR160",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Dockerfile'da `WORKDIR` nima qiladi?",
+          "explanation": "Keyingi RUN/COPY/CMD uchun joriy papkani belgilaydi (yo'q bo'lsa yaratadi)."
+        },
+        {
+          "id": 34161,
+          "code": "JR161",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`EXPOSE` portni ochadimi?",
+          "explanation": "Yo'q — faqat hujjat (metadata). Port `-p` bilan publish qilinadi."
+        },
+        {
+          "id": 34162,
+          "code": "JR162",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Dockerfile'da layer cache qachon buziladi?",
+          "explanation": "Qadam yoki undan oldingi biror qadam o'zgarsa, keyingi barcha qadamlar qayta bajariladi. COPY uchun — fayllar mazmuni o'zgarsa."
+        },
+        {
+          "id": 34163,
+          "code": "JR163",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker Hub rate limit nima va qanday yechiladi?",
+          "explanation": "Anonim pull'lar soni cheklangan. Yechim: login qilish, mirror/proxy cache, o'z registry'ingiz."
+        },
+        {
+          "id": 34164,
+          "code": "JR164",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Image'dagi zaifliklarni qanday tekshirasiz?",
+          "explanation": "Scanner: Trivy, Grype, Docker Scout. CI'da build'dan keyin."
+        },
+        {
+          "id": 34165,
+          "code": "JR165",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "`docker stop` va `docker kill` farqi?",
+          "explanation": "`stop` — SIGTERM, 10 soniya kutadi, keyin SIGKILL. `kill` — darhol SIGKILL."
+        },
+        {
+          "id": 34166,
+          "code": "JR166",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Konteyner nega darhol to'xtab qoladi (`Exited (0)`)?",
+          "explanation": "Asosiy jarayon (PID 1) tugadi. Konteyner faqat PID 1 ishlayotgan vaqtgacha yashaydi."
+        },
+        {
+          "id": 34167,
+          "code": "JR167",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker'da `--rm` qachon ishlatiladi?",
+          "explanation": "Bir martalik konteyner tugagach avtomatik o'chirilsin uchun."
+        },
+        {
+          "id": 34168,
+          "code": "JR168",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Bitta konteynerda bir nechta jarayon (nginx + app) ishlatish yaxshimi?",
+          "explanation": "Odatda yo'q — bitta konteyner, bitta asosiy jarayon. Log, restart, scale alohida bo'ladi."
+        },
+        {
+          "id": 34169,
+          "code": "JR169",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker log driver'lari va log rotate?",
+          "explanation": "Default `json-file`; boshqalari `local`, `journald`, `syslog`, `fluentd`, `awslogs`. Rotate — `max-size`, `max-file`."
+        },
+        {
+          "id": 34170,
+          "code": "JR170",
+          "level": "J",
+          "type": "card",
+          "topic": "Docker",
+          "domain": "docker",
+          "section": "k1",
+          "question": "Docker ma'lumotlari hostda qayerda saqlanadi?",
+          "explanation": "`/var/lib/docker` — image layer'lar, konteynerlar, volume'lar."
         }
       ]
     },
@@ -26888,6 +28241,468 @@
           "section": "k2",
           "question": "Compose'da yozilgan 15 servisli tizim o'smoqda. Qachon va qanday Compose'dan orchestrator'ga o'tasiz?",
           "explanation": "Signallar: bir host yetmaydi, HA kerak (host o'limi = outage), zero-downtime deploy qo'lda skript bo'lib ketgan, ko'p jamoa. Bosqichma-bosqich: avval stateless servislar, state managed servisga."
+        },
+        {
+          "id": 34171,
+          "code": "JR171",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Oddiy `compose.yaml` ning asosiy tuzilishi?",
+          "explanation": "Yuqori darajadagi `services`, `volumes`, `networks`. Har service — image yoki build, ports, env, volumes."
+        },
+        {
+          "id": 34172,
+          "code": "JR172",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose up -d` nima qiladi?",
+          "explanation": "Fayldagi barcha service'larni (kerak bo'lsa build/pull qilib) fon rejimida ishga tushiradi."
+        },
+        {
+          "id": 34173,
+          "code": "JR173",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`depends_on` nima kafolatlaydi?",
+          "explanation": "Faqat ishga tushish tartibini. Dependency \"tayyor\" bo'lishini emas — buning uchun `condition: service_healthy`."
+        },
+        {
+          "id": 34174,
+          "code": "JR174",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da environment o'zgaruvchilarini berish usullari?",
+          "explanation": "`environment:`, `env_file:`, va loyiha papkasidagi `.env` (fayl ichidagi `${VAR}` uchun)."
+        },
+        {
+          "id": 34175,
+          "code": "JR175",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose config` nima uchun kerak?",
+          "explanation": "Barcha fayllar, `.env` va o'zgaruvchilar birlashgan yakuniy konfiguratsiyani ko'rsatadi va sintaksisni tekshiradi."
+        },
+        {
+          "id": 34176,
+          "code": "JR176",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Bir nechta compose faylni birlashtirish (override)?",
+          "explanation": "`compose.override.yaml` avtomatik qo'shiladi; boshqalari `-f` bilan, keyingisi oldingisini ustidan yozadi."
+        },
+        {
+          "id": 34177,
+          "code": "JR177",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da service'ni scale qilish?",
+          "explanation": "`docker compose up -d --scale web=3`. Bunda qat'iy host port (`8080:8080`) to'qnashadi."
+        },
+        {
+          "id": 34178,
+          "code": "JR178",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose loyiha nomi (project name) nima?",
+          "explanation": "Konteyner, network, volume nomlariga prefiks. Default — papka nomi; `-p` yoki `name:` bilan o'zgartiriladi."
+        },
+        {
+          "id": 34179,
+          "code": "JR179",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose default network qanday ishlaydi?",
+          "explanation": "Har loyiha uchun `<project>_default` network yaratiladi; service'lar bir-birini service nomi bilan topadi."
+        },
+        {
+          "id": 34180,
+          "code": "JR180",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `restart:` qiymatlari?",
+          "explanation": "`no`, `always`, `on-failure`, `unless-stopped` — Docker restart policy bilan bir xil."
+        },
+        {
+          "id": 34181,
+          "code": "JR181",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da loglarni qanday ko'rasiz?",
+          "explanation": "`docker compose logs` — barcha service'lar, rang bilan ajratilgan."
+        },
+        {
+          "id": 34182,
+          "code": "JR182",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose stop`, `down`, `rm` farqi?",
+          "explanation": "stop — to'xtatadi, konteyner qoladi. down — konteyner va network'ni o'chiradi. rm — to'xtagan konteynerlarni o'chiradi."
+        },
+        {
+          "id": 34183,
+          "code": "JR183",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da image'larni qanday yangilaysiz?",
+          "explanation": "`docker compose pull` keyin `docker compose up -d` — o'zgargan service'lar qayta yaratiladi."
+        },
+        {
+          "id": 34184,
+          "code": "JR184",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da healthcheck qanday yoziladi?",
+          "explanation": "Service ichida `healthcheck:` bloki: `test`, `interval`, `timeout`, `retries`, `start_period`."
+        },
+        {
+          "id": 34185,
+          "code": "JR185",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da resurs limitlari?",
+          "explanation": "`deploy.resources.limits` (yoki `mem_limit`, `cpus`)."
+        },
+        {
+          "id": 34186,
+          "code": "JR186",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Dev muhitda kodni konteynerga jonli ulash?",
+          "explanation": "Bind mount: `./src:/app/src` — kod o'zgarishi darhol konteynerda ko'rinadi."
+        },
+        {
+          "id": 34187,
+          "code": "JR187",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da secret'lar qanday beriladi?",
+          "explanation": "Top-level `secrets:` (fayldan) — konteynerda `/run/secrets/<nom>` fayli bo'lib ko'rinadi."
+        },
+        {
+          "id": 34188,
+          "code": "JR188",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose ps` nima ko'rsatadi?",
+          "explanation": "Loyiha service'lari konteynerlari, holati (running, exited, healthy) va portlari."
+        },
+        {
+          "id": 34189,
+          "code": "JR189",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `command` va `entrypoint` ni almashtirish?",
+          "explanation": "`command:` — Dockerfile CMD o'rniga, `entrypoint:` — ENTRYPOINT o'rniga."
+        },
+        {
+          "id": 34190,
+          "code": "JR190",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da profillar (`profiles`) nima?",
+          "explanation": "Ba'zi service'larni faqat kerak bo'lganda yoqish (masalan debug vositalari)."
+        },
+        {
+          "id": 34191,
+          "code": "JR191",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `.env` fayli qayerdan o'qiladi?",
+          "explanation": "Loyiha papkasidan (compose fayl yonida) avtomatik; `--env-file` bilan boshqasini berish mumkin."
+        },
+        {
+          "id": 34192,
+          "code": "JR192",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da named volume va bind mount qachon ishlatiladi?",
+          "explanation": "Named volume — DB kabi doimiy ma'lumot (Docker boshqaradi). Bind mount — host faylini ulash (kod, config)."
+        },
+        {
+          "id": 34193,
+          "code": "JR193",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose exec db psql -U postgres` nima qiladi?",
+          "explanation": "Ishlab turgan `db` konteyneri ichida `psql` ni ishga tushiradi."
+        },
+        {
+          "id": 34194,
+          "code": "JR194",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da port faqat localhost'ga qanday ochiladi?",
+          "explanation": "`\"127.0.0.1:5432:5432\"` — tashqaridan kirib bo'lmaydi."
+        },
+        {
+          "id": 34195,
+          "code": "JR195",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `build` bo'limi parametrlari?",
+          "explanation": "`context`, `dockerfile`, `args`, `target` (multi-stage)."
+        },
+        {
+          "id": 34196,
+          "code": "JR196",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose bilan bir martalik vazifa (migratsiya) ishga tushirish?",
+          "explanation": "`docker compose run --rm <service> <buyruq>`."
+        },
+        {
+          "id": 34197,
+          "code": "JR197",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose qachon yetarli va qachon Kubernetes/Swarm kerak?",
+          "explanation": "Compose — bitta host, dev/test, kichik prod. Ko'p host, HA, auto-heal kerak bo'lsa — orchestrator."
+        },
+        {
+          "id": 34198,
+          "code": "JR198",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose top` va `stats` nima ko'rsatadi?",
+          "explanation": "`top` — har konteyner ichidagi jarayonlar. `docker stats` — CPU/RAM/tarmoq real vaqtda."
+        },
+        {
+          "id": 34199,
+          "code": "JR199",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `networks` bilan service'larni ajratish?",
+          "explanation": "Frontend va backend network'lar — masalan proxy faqat API'ni ko'rsin, DB'ni emas."
+        },
+        {
+          "id": 34200,
+          "code": "JR200",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `extends` yoki YAML anchor nima uchun?",
+          "explanation": "Takrorlanadigan konfiguratsiyani bir joyda yozish."
+        },
+        {
+          "id": 34201,
+          "code": "JR201",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da log rotate qanday sozlanadi?",
+          "explanation": "Service'da `logging:` — driver va `max-size`, `max-file`."
+        },
+        {
+          "id": 34202,
+          "code": "JR202",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "`docker compose restart` va `up -d --force-recreate` farqi?",
+          "explanation": "restart — o'sha konteynerni qayta ishga tushiradi (yangi config qo'llanmaydi). force-recreate — konteynerni yangidan yaratadi."
+        },
+        {
+          "id": 34203,
+          "code": "JR203",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose bilan prod'ga deploy qilishda nimalarga e'tibor?",
+          "explanation": "Aniq image tag, restart policy, healthcheck, log rotate, secret'lar, resurs limit, localhost'ga bog'langan DB porti, backup."
+        },
+        {
+          "id": 34204,
+          "code": "JR204",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da ishlayotgan konteynerda o'zgaruvchini tekshirish?",
+          "explanation": "`docker compose exec api env` yoki `docker compose config`."
+        },
+        {
+          "id": 34205,
+          "code": "JR205",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `init: true` nima?",
+          "explanation": "Konteynerga kichik init (tini) qo'shadi — signal'larni to'g'ri uzatadi va zombie'larni yig'adi."
+        },
+        {
+          "id": 34206,
+          "code": "JR206",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `stop_grace_period` nima?",
+          "explanation": "`down`/`stop` da SIGTERM'dan keyin SIGKILL'gacha kutish vaqti (default 10s)."
+        },
+        {
+          "id": 34207,
+          "code": "JR207",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `tmpfs` qanday ishlatiladi?",
+          "explanation": "Konteynerda RAM'dagi vaqtinchalik papka — tez va diskka yozilmaydi."
+        },
+        {
+          "id": 34208,
+          "code": "JR208",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `docker compose events` nima?",
+          "explanation": "Konteyner voqealarini (start, die, health) real vaqtda ko'rsatadi."
+        },
+        {
+          "id": 34209,
+          "code": "JR209",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da image'ni registry'ga push qilish?",
+          "explanation": "Service'da `image:` va `build:` bo'lsa, `docker compose build` keyin `docker compose push`."
+        },
+        {
+          "id": 34210,
+          "code": "JR210",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `ports` qisqa va uzun sintaksisi?",
+          "explanation": "Qisqa: `\"8080:80\"`. Uzun: `target`, `published`, `protocol`, `host_ip`."
+        },
+        {
+          "id": 34211,
+          "code": "JR211",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose'da `docker compose ls` nima?",
+          "explanation": "Hostdagi barcha Compose loyihalari va holatini ko'rsatadi."
+        },
+        {
+          "id": 34212,
+          "code": "JR212",
+          "level": "J",
+          "type": "card",
+          "topic": "Compose",
+          "domain": "compose",
+          "section": "k2",
+          "question": "Compose faylida versiya (`version: \"3.8\"`) kerakmi?",
+          "explanation": "Yo'q — Compose v2 (Compose Specification) uni e'tiborsiz qoldiradi, ogohlantirish beradi."
         }
       ]
     },
@@ -27623,6 +29438,413 @@
           "section": "k3",
           "question": "Siz tizim arxitektorisiz: nega Swarm, K8s va boshqa orchestrator'lar \"desired state + reconciliation loop\" modelini tanlagan? Bu modelning chegaralari qayerda?",
           "explanation": "Imperativ buyruqlar partial failure'da noaniq holat qoldiradi; deklarativ desired state + doimiy reconciliation esa har qanday nosozlikdan keyin tizimni o'zi tiklaydi (level-triggered). Chegaralari: eventual consistency, kuzatish qiyin, tartib va bir martalik amallar (migratsiya), state'li tizimlar uchun noto'liq."
+        },
+        {
+          "id": 34213,
+          "code": "JR213",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "`docker swarm init` nima qiladi?",
+          "explanation": "Joriy node'ni swarm manager qiladi, worker va manager qo'shilishi uchun join token'lar yaratadi."
+        },
+        {
+          "id": 34214,
+          "code": "JR214",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da manager'lar soni nega toq bo'lishi kerak?",
+          "explanation": "Raft konsensus kvorum (ko'pchilik) talab qiladi. 3 manager — 1 tasining yo'qolishiga chidaydi; 5 — 2 tasiga."
+        },
+        {
+          "id": 34215,
+          "code": "JR215",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "`docker node ls` nima ko'rsatadi?",
+          "explanation": "Klasterdagi node'lar, holati (Ready/Down), availability (Active/Drain) va manager statusi (Leader/Reachable)."
+        },
+        {
+          "id": 34216,
+          "code": "JR216",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da node'ga label qo'yib, service'ni o'sha node'larga joylash?",
+          "explanation": "`docker node update --label-add` va service'da `--constraint`."
+        },
+        {
+          "id": 34217,
+          "code": "JR217",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da rolling update qanday sozlanadi?",
+          "explanation": "`--update-parallelism`, `--update-delay`, `--update-failure-action`."
+        },
+        {
+          "id": 34218,
+          "code": "JR218",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da routing mesh nima?",
+          "explanation": "Publish qilingan port HAR node'da ochiladi; qaysi node'ga kelsa ham so'rov ishlayotgan task'ga yo'naltiriladi."
+        },
+        {
+          "id": 34219,
+          "code": "JR219",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm secret qanday yaratiladi va ishlatiladi?",
+          "explanation": "`docker secret create` — Raft'da shifrlangan saqlanadi, task'ga `/run/secrets/<nom>` fayli sifatida beriladi."
+        },
+        {
+          "id": 34220,
+          "code": "JR220",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm config va secret farqi?",
+          "explanation": "Ikkalasi fayl sifatida mount qilinadi. Secret — shifrlangan, maxfiy ma'lumot uchun; config — oddiy sozlama (nginx.conf)."
+        },
+        {
+          "id": 34221,
+          "code": "JR221",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Stack faylda `deploy:` bo'limi nimani belgilaydi?",
+          "explanation": "Swarm'ga xos sozlamalar: replicas, update_config, restart_policy, placement, resources."
+        },
+        {
+          "id": 34222,
+          "code": "JR222",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "`docker stack deploy`, `stack ls`, `stack ps`, `stack rm`?",
+          "explanation": "Stack'ni yaratish/yangilash, ro'yxat, task'lar, o'chirish."
+        },
+        {
+          "id": 34223,
+          "code": "JR223",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da `build:` ishlaydimi?",
+          "explanation": "Yo'q — stack deploy image'ni build qilmaydi. Image registry'da bo'lishi kerak."
+        },
+        {
+          "id": 34224,
+          "code": "JR224",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da node qanday chiqariladi?",
+          "explanation": "Avval `drain`, keyin node'da `docker swarm leave`, managerda `docker node rm`."
+        },
+        {
+          "id": 34225,
+          "code": "JR225",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm task nega `Pending` holatda qoladi?",
+          "explanation": "Mos node yo'q: resurs yetmaydi, constraint mos emas, image yo'q yoki barcha node drain."
+        },
+        {
+          "id": 34226,
+          "code": "JR226",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Service loglarini qanday ko'rasiz?",
+          "explanation": "`docker service logs` — barcha replika loglari birga."
+        },
+        {
+          "id": 34227,
+          "code": "JR227",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da service'ga resurs reservation va limit?",
+          "explanation": "`--reserve-memory/--reserve-cpu` — scheduling uchun kafolat, `--limit-*` — yuqori chegara."
+        },
+        {
+          "id": 34228,
+          "code": "JR228",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm overlay network'ni qanday yaratasiz?",
+          "explanation": "`docker network create -d overlay` — node'lar orasida service'larni bog'laydi."
+        },
+        {
+          "id": 34229,
+          "code": "JR229",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm uchun qaysi portlar ochiq bo'lishi kerak?",
+          "explanation": "2377/tcp (boshqaruv), 7946/tcp+udp (node aloqasi), 4789/udp (overlay VXLAN)."
+        },
+        {
+          "id": 34230,
+          "code": "JR230",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da replica qachon boshqa node'ga ko'chadi?",
+          "explanation": "Node Down bo'lsa yoki drain qilinsa — manager task'ni boshqa node'da qayta yaratadi."
+        },
+        {
+          "id": 34231,
+          "code": "JR231",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da `--mode global` qachon ishlatiladi?",
+          "explanation": "Har node'da bittadan task kerak bo'lsa: monitoring agent, log collector."
+        },
+        {
+          "id": 34232,
+          "code": "JR232",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm join token o'g'irlansa nima qilasiz?",
+          "explanation": "Token'ni rotate qiling — eskisi bilan endi qo'shilib bo'lmaydi."
+        },
+        {
+          "id": 34233,
+          "code": "JR233",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm vs Kubernetes — qisqacha?",
+          "explanation": "Swarm — Docker'ga o'rnatilgan, juda oddiy, kichik klasterlar. K8s — kuchli, ekotizim katta, murakkab."
+        },
+        {
+          "id": 34234,
+          "code": "JR234",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "`docker service inspect --pretty` nima beradi?",
+          "explanation": "Service sozlamasini o'qiladigan ko'rinishda: image, replicas, portlar, update config."
+        },
+        {
+          "id": 34235,
+          "code": "JR235",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm manager'da ham konteyner ishlaydimi?",
+          "explanation": "Ha, default manager ham task oladi. Prod'da manager'larni drain qilib, faqat boshqaruvga qoldirish tavsiya."
+        },
+        {
+          "id": 34236,
+          "code": "JR236",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da healthcheck nima o'zgartiradi?",
+          "explanation": "Task `healthy` bo'lmaguncha ishga tushgan hisoblanmaydi; unhealthy task almashtiriladi; rolling update kutadi."
+        },
+        {
+          "id": 34237,
+          "code": "JR237",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da node promote va demote?",
+          "explanation": "`promote` — worker'ni manager qiladi, `demote` — manager'ni worker qiladi."
+        },
+        {
+          "id": 34238,
+          "code": "JR238",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da service'ni qayta ishga tushirish (image o'zgarmasa)?",
+          "explanation": "`docker service update --force` — barcha task'lar rolling tarzda qayta yaratiladi."
+        },
+        {
+          "id": 34239,
+          "code": "JR239",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da secret'ni almashtirish (rotate) tartibi?",
+          "explanation": "Yangi nom bilan secret yaratish → service'da eski secret'ni olib tashlab yangisini qo'shish (bir xil target bilan) → eski secret'ni o'chirish."
+        },
+        {
+          "id": 34240,
+          "code": "JR240",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da `restart_policy` va update `failure_action` farqi?",
+          "explanation": "restart_policy — task yiqilsa qayta ishga tushirish. failure_action — update yiqilsa nima qilish (pause, continue, rollback)."
+        },
+        {
+          "id": 34241,
+          "code": "JR241",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm klasteri holatini qanday tekshirasiz?",
+          "explanation": "`docker info` (Swarm bo'limi), `docker node ls`, `docker service ls`."
+        },
+        {
+          "id": 34242,
+          "code": "JR242",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm Raft ma'lumotlari qayerda va qanday backup qilinadi?",
+          "explanation": "Manager'da `/var/lib/docker/swarm`. Docker to'xtatilgan holda papkani nusxalash."
+        },
+        {
+          "id": 34243,
+          "code": "JR243",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da kvorum yo'qolsa nima bo'ladi?",
+          "explanation": "Klaster boshqaruvi to'xtaydi (yangi deploy, scale yo'q), lekin ishlab turgan konteynerlar ishlashda davom etadi."
+        },
+        {
+          "id": 34244,
+          "code": "JR244",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da service'ni o'chirish va bu konteynerlarga nima qiladi?",
+          "explanation": "`docker service rm` — barcha task (konteyner)lar to'xtatiladi va o'chiriladi."
+        },
+        {
+          "id": 34245,
+          "code": "JR245",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm stack'da `endpoint_mode: dnsrr` nima?",
+          "explanation": "VIP o'rniga DNS round-robin — service nomi barcha task IP'larini qaytaradi."
+        },
+        {
+          "id": 34246,
+          "code": "JR246",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da `docker service create --name web --replicas 3 -p 80:80 nginx` nima qiladi?",
+          "explanation": "3 replikali `web` service'ini yaratadi, 80-portni routing mesh orqali barcha node'larda ochadi."
+        },
+        {
+          "id": 34247,
+          "code": "JR247",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da placement preference (spread) nima?",
+          "explanation": "Task'larni label bo'yicha teng tarqatish — masalan har datacenter/AZ'ga."
+        },
+        {
+          "id": 34248,
+          "code": "JR248",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da autolock nima?",
+          "explanation": "Manager restart bo'lganda Raft kalitlarini ochish uchun unlock key talab qiladi — disk o'g'irlansa secret'lar himoyalangan."
+        },
+        {
+          "id": 34249,
+          "code": "JR249",
+          "level": "J",
+          "type": "card",
+          "topic": "Swarm",
+          "domain": "swarm",
+          "section": "k3",
+          "question": "Swarm'da image'ni yangilab deploy qilishning eng oddiy yo'li?",
+          "explanation": "`docker service update --image myapp:1.5 web` yoki stack faylda tag'ni o'zgartirib qayta `stack deploy`."
         }
       ]
     },
@@ -28051,6 +30273,50 @@
           "section": "i1",
           "question": "Service trafikni podlarga qanday yetkazadi (kube-proxy)?",
           "explanation": "Amaliy oqibatlar: iptables rejimida minglab Service bo'lsa qoidalarni yangilash sekundlarga cho'ziladi (endpoint o'zgarishi kech yetadi — deploy paytida 5xx); IPVS/eBPF kattaroq klasterlarda barqarorroq. Balansirovka L4 darajasida — HTTP/2/gRPC uchun yetarli emas (ulanish darajasida taqsimlanadi), shuning uchun client-side LB yoki mesh kerak."
+        },
+        {
+          "id": 34088,
+          "code": "JR88",
+          "level": "J",
+          "type": "card",
+          "topic": "Kubernetes",
+          "domain": "k8s",
+          "section": "i1",
+          "question": "`kubectl apply -f deploy.yaml` dan keyin pod ishga tushguncha nima bo'ladi?",
+          "explanation": "API server qabul qilib etcd'ga yozadi → Deployment controller ReplicaSet → ReplicaSet controller Pod'lar → scheduler node tanlaydi → kubelet container runtime orqali ishga tushiradi."
+        },
+        {
+          "id": 34089,
+          "code": "JR89",
+          "level": "J",
+          "type": "card",
+          "topic": "Kubernetes",
+          "domain": "k8s",
+          "section": "i1",
+          "question": "Kubernetes \"desired state\" va reconciliation loop nima?",
+          "explanation": "Siz qanday holat kerakligini yozasiz; controller'lar doim haqiqiy holatni kuzatib, farq bo'lsa tuzatadi."
+        },
+        {
+          "id": 34090,
+          "code": "JR90",
+          "level": "J",
+          "type": "card",
+          "topic": "Kubernetes",
+          "domain": "k8s",
+          "section": "i1",
+          "question": "K8s Service ostida qanday ishlaydi?",
+          "explanation": "Service barqaror virtual IP (ClusterIP) va DNS nom beradi; kube-proxy har node'da iptables/IPVS qoidalari bilan trafikni tayyor pod'larga taqsimlaydi."
+        },
+        {
+          "id": 34091,
+          "code": "JR91",
+          "level": "J",
+          "type": "card",
+          "topic": "Kubernetes",
+          "domain": "k8s",
+          "section": "i1",
+          "question": "Liveness va readiness probe ostida nima qiladi?",
+          "explanation": "kubelet ularni davriy tekshiradi. Liveness yiqilsa — konteyner restart. Readiness yiqilsa — pod Service'dan chiqariladi, lekin restart qilinmaydi."
         }
       ]
     },
@@ -28643,6 +30909,72 @@
           "section": "w7",
           "question": "Cluster API va vcluster nima? Ko'p klasterni qanday boshqarasiz?",
           "explanation": "Cluster API (CAPI) — Kubernetes klasterlarini o'zini CRD sifatida boshqarish: management klaster workload klasterlarni deklarativ yaratadi/upgrade qiladi. vcluster — bitta host klaster ichida virtual klasterlar (o'z API server'i, pod'lar host'da ishlaydi): arzon izolyatsiya, dev/test va multi-tenancy uchun."
+        },
+        {
+          "id": 34250,
+          "code": "JR250",
+          "level": "J",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "Pod uchun `requests` va `limits` farqi?",
+          "explanation": "requests — scheduler uchun kafolatlangan minimum. limits — yuqori chegara: CPU throttle qilinadi, memory oshsa OOMKill."
+        },
+        {
+          "id": 34251,
+          "code": "JR251",
+          "level": "J",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "HPA (HorizontalPodAutoscaler) nima?",
+          "explanation": "Metrika (CPU, memory, custom) bo'yicha Deployment replikalari sonini avtomatik o'zgartiradi."
+        },
+        {
+          "id": 34252,
+          "code": "JR252",
+          "level": "J",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "PVC (PersistentVolumeClaim) nima?",
+          "explanation": "Pod'ning \"menga 10Gi disk kerak\" degan so'rovi; StorageClass orqali PV avtomatik yaratiladi va bog'lanadi."
+        },
+        {
+          "id": 34253,
+          "code": "JR253",
+          "level": "J",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "StatefulSet va Deployment farqi?",
+          "explanation": "StatefulSet — barqaror nom (db-0, db-1), har pod'ga alohida PVC, tartibli ishga tushish. Deployment — bir xil, almashtiriladigan pod'lar."
+        },
+        {
+          "id": 34254,
+          "code": "JR254",
+          "level": "J",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "DaemonSet nima va qachon ishlatiladi?",
+          "explanation": "Har (yoki tanlangan) node'da bittadan pod ishlatadi — log agent, monitoring, CNI."
+        },
+        {
+          "id": 34255,
+          "code": "JR255",
+          "level": "J",
+          "type": "card",
+          "topic": "Scheduling & scaling",
+          "domain": "k8s",
+          "section": "w7",
+          "question": "Job va CronJob nima?",
+          "explanation": "Job — tugallanadigan vazifa (migratsiya). CronJob — Job'ni jadval bo'yicha ishga tushiradi."
         }
       ]
     },
@@ -29235,6 +31567,61 @@
           "section": "k4",
           "question": "Argo Rollouts bilan canary: metrika asosida avtomatik rollback qanday ishlaydi?",
           "explanation": "Rollout CRD Deployment o'rniga: trafikni bosqichma-bosqich (5% → 25% → 100%) ko'chiradi; AnalysisTemplate Prometheus'dan error rate/latency so'raydi. Shart buzilsa — avtomatik abort va eski versiyaga qaytish."
+        },
+        {
+          "id": 34053,
+          "code": "JR53",
+          "level": "J",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "Helm nima va chart, release, values tushunchalari?",
+          "explanation": "Helm — K8s package manager. Chart — shablonlar to'plami, values — sozlamalar, release — chart'ning klasterga o'rnatilgan nusxasi."
+        },
+        {
+          "id": 34054,
+          "code": "JR54",
+          "level": "J",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "Helm bilan upgrade va rollback qanday qilinadi?",
+          "explanation": "`helm upgrade --install` va `helm rollback <release> <revision>`; tarix `helm history`."
+        },
+        {
+          "id": 34055,
+          "code": "JR55",
+          "level": "J",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "Chart'ni o'rnatmasdan qanday tekshirasiz?",
+          "explanation": "`helm lint`, `helm template` (YAML'ni ko'rish), `helm upgrade --dry-run`, `helm diff` plugin."
+        },
+        {
+          "id": 34056,
+          "code": "JR56",
+          "level": "J",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "Helm repo bilan qanday ishlaysiz?",
+          "explanation": "`helm repo add`, `helm repo update`, `helm search repo`, `helm show values`."
+        },
+        {
+          "id": 34058,
+          "code": "JR58",
+          "level": "J",
+          "type": "card",
+          "topic": "Helm & GitOps",
+          "domain": "k8s",
+          "section": "k4",
+          "question": "ArgoCD'da \"OutOfSync\" nima degani?",
+          "explanation": "Klasterdagi holat Git'dagidan farq qiladi — yangi commit yoki kimdir qo'lda o'zgartirgan (drift)."
         }
       ]
     },
@@ -32452,6 +34839,17 @@
           "section": "i8",
           "question": "Ko'p repo'li organizatsiyada CI standartini qanday boshqarasiz?",
           "explanation": "Markaziy reusable workflow'lar (versiyalangan), org ruleset'lar (required workflow/check), action allowlist, default `GITHUB_TOKEN` read-only, Dependabot bilan action update, OIDC trust policy shabloni."
+        },
+        {
+          "id": 34099,
+          "code": "JR99",
+          "level": "J",
+          "type": "card",
+          "topic": "GitHub Actions",
+          "domain": "cicd",
+          "section": "i8",
+          "question": "GitHub Actions workflow ostida qanday ishlaydi?",
+          "explanation": "Event (push, PR) → GitHub `.github/workflows/*.yml` ni o'qiydi → har job uchun toza runner VM/konteyner ajratadi → step'lar ketma-ket bajariladi → natija va log GitHub'ga qaytadi."
         }
       ]
     },
@@ -35968,6 +38366,171 @@
           "section": "w2",
           "question": "Crossplane nima va Terraform'dan farqi? Qachon tanlaysiz?",
           "explanation": "Crossplane — cloud resurslarini Kubernetes CRD sifatida boshqaradigan controller: doimiy reconcile (drift o'zi tuzaladi), state fayl yo'q (holat K8s API'da). Composition/XRD bilan platforma jamoasi dasturchilarga o'z \"Database\" API'sini beradi. Narx: K8s'ga to'liq bog'liqlik, debug murakkab."
+        },
+        {
+          "id": 34256,
+          "code": "JR256",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform'da provider nima?",
+          "explanation": "Terraform'ni ma'lum platforma API'si (AWS, Azure, K8s, GitHub) bilan bog'laydigan plugin."
+        },
+        {
+          "id": 34257,
+          "code": "JR257",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform resource bloki qanday yoziladi?",
+          "explanation": "`resource \"<tur>\" \"<nom>\" { ... }` — tur provider'dan, nom — Terraform ichidagi lokal nom."
+        },
+        {
+          "id": 34258,
+          "code": "JR258",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Remote state nima va nega lokal state yomon?",
+          "explanation": "State'ni umumiy joyda (S3, GCS, Terraform Cloud) saqlash. Lokal state — jamoada to'qnashuv, yo'qolish, secret'lar laptopda."
+        },
+        {
+          "id": 34259,
+          "code": "JR259",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "State locking nima uchun kerak?",
+          "explanation": "Ikki kishi bir vaqtda `apply` qilsa state buzilmasligi uchun — biri ishlayotganda boshqasi kutadi."
+        },
+        {
+          "id": 34260,
+          "code": "JR260",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`terraform plan -out` va `apply plan` nima uchun?",
+          "explanation": "Ko'rib chiqilgan aynan o'sha rejani qo'llash — plan va apply orasida hech narsa o'zgarmaydi."
+        },
+        {
+          "id": 34261,
+          "code": "JR261",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform module nima?",
+          "explanation": "Qayta ishlatiladigan resurslar to'plami (papka): input variable'lar, output'lar."
+        },
+        {
+          "id": 34262,
+          "code": "JR262",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform'da `count` va `for_each` farqi?",
+          "explanation": "count — son bo'yicha nusxa (indeks 0,1,2). for_each — map/set kaliti bo'yicha; elementni o'chirsangiz boshqalari siljimaydi."
+        },
+        {
+          "id": 34263,
+          "code": "JR263",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform workspace nima?",
+          "explanation": "Bitta konfiguratsiya uchun alohida state'lar (dev, stage). Kichik farqli muhitlar uchun."
+        },
+        {
+          "id": 34264,
+          "code": "JR264",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`terraform import` nima qiladi?",
+          "explanation": "Qo'lda yaratilgan mavjud resursni Terraform state'ga qo'shadi."
+        },
+        {
+          "id": 34265,
+          "code": "JR265",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Drift nima va Terraform uni qanday aniqlaydi?",
+          "explanation": "Haqiqiy infra state/koddan farq qilishi (kimdir konsolda o'zgartirgan). `terraform plan` farqni ko'rsatadi."
+        },
+        {
+          "id": 34266,
+          "code": "JR266",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Sensitive qiymatlar (parol) Terraform'da qanday ishlatiladi?",
+          "explanation": "`sensitive = true` — chiqishda yashiradi, lekin state'da ochiq saqlanadi. Secret'ni secret manager'dan oling, state'ni shifrlang."
+        },
+        {
+          "id": 34267,
+          "code": "JR267",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`terraform destroy` xavfini qanday kamaytirasiz?",
+          "explanation": "`prevent_destroy` lifecycle, `-target` emas, plan'ni o'qish, prod'da qo'lda destroy taqiqlash."
+        },
+        {
+          "id": 34268,
+          "code": "JR268",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "`.terraform` papkasi va `.gitignore`?",
+          "explanation": "`.terraform/` — yuklangan provider va module'lar, commit qilinmaydi. `.terraform.lock.hcl` — commit qilinadi."
+        },
+        {
+          "id": 34269,
+          "code": "JR269",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform'da variable turlari va validatsiya?",
+          "explanation": "`string`, `number`, `bool`, `list()`, `map()`, `object({})`; `validation` bloki bilan tekshirish."
+        },
+        {
+          "id": 34270,
+          "code": "JR270",
+          "level": "J",
+          "type": "card",
+          "topic": "Terraform",
+          "domain": "iac",
+          "section": "w2",
+          "question": "Terraform va CloudFormation/Pulumi farqi qisqacha?",
+          "explanation": "Terraform — multi-cloud, HCL. CloudFormation — faqat AWS, YAML/JSON, state AWS'da. Pulumi — oddiy dasturlash tillari."
         }
       ]
     },
@@ -36231,6 +38794,138 @@
           "section": "w3",
           "question": "Ansible'ni katta flot (yuzlab server) uchun qanday tezlashtirasiz va xavfsiz rollout qilasiz?",
           "explanation": "Tezlik: `forks` oshirish, SSH pipelining va ControlPersist, fact gathering'ni cheklash/caching. Xavfsiz rollout: `serial` (batch), `max_fail_percentage`, load balancer'dan chiqarish, `--check --diff`, `--limit` bilan canary."
+        },
+        {
+          "id": 34271,
+          "code": "JR271",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Oddiy Ansible playbook misoli?",
+          "explanation": "Hosts, become, tasks — har task bitta modul."
+        },
+        {
+          "id": 34272,
+          "code": "JR272",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Inventory fayl qanday yoziladi?",
+          "explanation": "INI yoki YAML: guruhlar va hostlar, host/guruh o'zgaruvchilari."
+        },
+        {
+          "id": 34273,
+          "code": "JR273",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Handler nima?",
+          "explanation": "Faqat biror task o'zgarish (`changed`) qilganda chaqiriladigan task — masalan config o'zgarsa nginx reload."
+        },
+        {
+          "id": 34274,
+          "code": "JR274",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Ansible'da variable'lar qayerda yoziladi?",
+          "explanation": "Playbook `vars`, `group_vars/`, `host_vars/`, role `defaults/`, CLI `-e`."
+        },
+        {
+          "id": 34275,
+          "code": "JR275",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Ansible Vault nima?",
+          "explanation": "Secret'larni (parol, kalit) shifrlangan holda Git'da saqlash."
+        },
+        {
+          "id": 34276,
+          "code": "JR276",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`template` moduli va Jinja2?",
+          "explanation": "Shablon faylga variable'larni qo'yib, serverga yozadi."
+        },
+        {
+          "id": 34277,
+          "code": "JR277",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`copy`, `template`, `file`, `lineinfile` modullari farqi?",
+          "explanation": "copy — faylni o'zgarishsiz ko'chiradi; template — Jinja bilan; file — papka/ruxsat/symlink; lineinfile — bitta qatorni boshqaradi."
+        },
+        {
+          "id": 34278,
+          "code": "JR278",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Ansible role nima va tuzilishi?",
+          "explanation": "Qayta ishlatiladigan task, handler, template, default'lar to'plami."
+        },
+        {
+          "id": 34279,
+          "code": "JR279",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`command` va `shell` modullari qachon ishlatiladi?",
+          "explanation": "Mos modul bo'lmaganda. `command` — shell'siz (pipe yo'q), `shell` — pipe, redirect bilan. Ikkalasi ham default idempotent emas."
+        },
+        {
+          "id": 34280,
+          "code": "JR280",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "Playbook'ni faqat ba'zi hostlarda yoki task'larda ishlatish?",
+          "explanation": "`--limit` hostlar uchun, `--tags` task'lar uchun."
+        },
+        {
+          "id": 34281,
+          "code": "JR281",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`ansible all -m ping` nima tekshiradi?",
+          "explanation": "ICMP emas — SSH ulanish va Python borligini tekshiradi."
+        },
+        {
+          "id": 34282,
+          "code": "JR282",
+          "level": "J",
+          "type": "card",
+          "topic": "Ansible",
+          "domain": "iac",
+          "section": "w3",
+          "question": "`register` va `debug` bilan natijani ko'rish?",
+          "explanation": "`register` task natijasini o'zgaruvchiga saqlaydi, `debug` uni chiqaradi."
         }
       ]
     },
@@ -36296,6 +38991,50 @@
           "section": "w13",
           "question": "Puppet/Chef'dagi legacy flot'ni zamonaviy yondashuvga (Ansible, immutable image, K8s) qanday ko'chirasiz?",
           "explanation": "Big-bang emas — strangler: avval inventarizatsiya (nima boshqariladi, kim egasi), yangi xizmatlar yangi usulda, eski node'lar bosqichma-bosqich. Immutable image (Packer + Ansible) bilan konfiguratsiya build vaqtiga ko'chadi, runtime agent kerak bo'lmaydi."
+        },
+        {
+          "id": 34067,
+          "code": "JR67",
+          "level": "J",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Configuration management nima va nega kerak?",
+          "explanation": "Serverlar sozlamasini kod sifatida yozib, ko'p serverda bir xil va takrorlanadigan holatga keltirish."
+        },
+        {
+          "id": 34068,
+          "code": "JR68",
+          "level": "J",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Ansible, Chef, Puppet, Salt farqi qisqacha?",
+          "explanation": "Ansible — agentless, push, YAML. Chef — agent, pull, Ruby. Puppet — agent, pull, o'z DSL. Salt — agent (ZeroMQ), push/pull, YAML."
+        },
+        {
+          "id": 34069,
+          "code": "JR69",
+          "level": "J",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Push va pull modeli farqi?",
+          "explanation": "Push — markaz serverlarga buyruq yuboradi (Ansible). Pull — agent vaqti-vaqti bilan markazdan holatni olib, o'zini moslaydi (Puppet, Chef)."
+        },
+        {
+          "id": 34070,
+          "code": "JR70",
+          "level": "J",
+          "type": "card",
+          "topic": "Config management",
+          "domain": "iac",
+          "section": "w13",
+          "question": "Declarative va imperative yondashuv farqi?",
+          "explanation": "Declarative — \"qanday holat bo'lsin\" yoziladi (Puppet, Terraform). Imperative — \"qanday qadamlar bajarilsin\" (bash skript)."
         }
       ]
     },
@@ -38984,6 +41723,149 @@
           "section": "i3",
           "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
           "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
+        },
+        {
+          "id": 34036,
+          "code": "JR36",
+          "level": "J",
+          "type": "card",
+          "topic": "Metrics",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Monitoring va logging farqi nima?",
+          "explanation": "Monitoring — raqamli metrikalar vaqt bo'yicha (CPU, RPS, xato %), alert uchun. Logging — alohida hodisalar matni, sababini topish uchun."
+        },
+        {
+          "id": 34037,
+          "code": "JR37",
+          "level": "J",
+          "type": "card",
+          "topic": "Metrics",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Prometheus'da counter, gauge, histogram farqi?",
+          "explanation": "Counter — faqat o'sadi (so'rovlar soni). Gauge — tushib-ko'tariladi (RAM). Histogram — qiymatlar taqsimoti (latency)."
+        },
+        {
+          "id": 34038,
+          "code": "JR38",
+          "level": "J",
+          "type": "card",
+          "topic": "Metrics",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Yaxshi alert qanday bo'lishi kerak?",
+          "explanation": "Foydalanuvchiga ta'sir qiladigan simptomga, harakat qilish mumkin bo'lganda, aniq runbook bilan."
+        },
+        {
+          "id": 34039,
+          "code": "JR39",
+          "level": "J",
+          "type": "card",
+          "topic": "Metrics",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Golden signals (4 ta asosiy signal) qaysilar?",
+          "explanation": "Latency, Traffic, Errors, Saturation (Google SRE)."
+        },
+        {
+          "id": 34040,
+          "code": "JR40",
+          "level": "J",
+          "type": "card",
+          "topic": "Metrics",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Nega o'rtacha (average) latency yetarli emas, p95/p99 kerak?",
+          "explanation": "O'rtacha sekin so'rovlarni yashiradi. p99 — eng yomon 1% foydalanuvchi tajribasini ko'rsatadi."
+        },
+        {
+          "id": 34041,
+          "code": "JR41",
+          "level": "J",
+          "type": "card",
+          "topic": "Metrics",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Dashboard'da nimani ko'rsatish kerak?",
+          "explanation": "Avval xizmat sog'ligi (golden signals), keyin resurslar; har panel savolga javob bersin."
+        },
+        {
+          "id": 34303,
+          "code": "JR303",
+          "level": "J",
+          "type": "card",
+          "topic": "Alerting",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Postmortem (incident review) nima?",
+          "explanation": "Incident'dan keyin: nima bo'ldi, nega, qanday tuzatildi, takrorlanmasligi uchun nima qilinadi. Ayb qidirmasdan (blameless)."
+        },
+        {
+          "id": 34304,
+          "code": "JR304",
+          "level": "J",
+          "type": "card",
+          "topic": "Alerting",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Runbook nima?",
+          "explanation": "Aniq alert yoki vazifa uchun qadam-baqadam ko'rsatma — navbatchi o'ylamasdan bajara olsin."
+        },
+        {
+          "id": 34305,
+          "code": "JR305",
+          "level": "J",
+          "type": "card",
+          "topic": "Alerting",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Severity darajalari (SEV1, SEV2, ...) nima?",
+          "explanation": "Incident jiddiyligi: SEV1 — butun xizmat ishlamaydi, SEV3 — kichik ta'sir."
+        },
+        {
+          "id": 34306,
+          "code": "JR306",
+          "level": "J",
+          "type": "card",
+          "topic": "Alerting",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Synthetic monitoring nima?",
+          "explanation": "Skript foydalanuvchi harakatini (login, xarid) muntazam takrorlab tekshiradi."
+        },
+        {
+          "id": 34307,
+          "code": "JR307",
+          "level": "J",
+          "type": "card",
+          "topic": "Alerting",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Alert fatigue nima?",
+          "explanation": "Juda ko'p, foydasiz alert — odamlar ularni e'tiborsiz qoldira boshlaydi va muhimini o'tkazib yuboradi."
+        },
+        {
+          "id": 34308,
+          "code": "JR308",
+          "level": "J",
+          "type": "card",
+          "topic": "Alerting",
+          "domain": "obs",
+          "section": "i3",
+          "question": "Health check endpoint'da nimani qaytarish kerak?",
+          "explanation": "Oddiy `200 OK` (liveness) va dependency'larni tekshiradigan readiness; JSON tafsilot ixtiyoriy."
+        },
+        {
+          "id": 34309,
+          "code": "JR309",
+          "level": "J",
+          "type": "card",
+          "topic": "Alerting",
+          "domain": "obs",
+          "section": "i3",
+          "question": "APM nima?",
+          "explanation": "Application Performance Monitoring — ilova ichidan so'rov vaqti, sekin endpoint, DB so'rovlari, xatolarni kuzatish."
         }
       ]
     },
@@ -39236,6 +42118,116 @@
           "section": "w4",
           "question": "Thanos arxitekturasi: Sidecar, Store Gateway, Querier, Compactor, Ruler nima qiladi?",
           "explanation": "Sidecar — Prometheus yonida, 2 soatlik blok'larni object storage'ga yuklaydi va so'nggi data'ni beradi. Store Gateway — eski blok'larni S3'dan o'qib beradi. Querier — hammasidan so'rab, replika dublikatlarini olib tashlaydi (global view). Compactor — blok'larni birlashtiradi, downsampling, retention. Ruler — global data ustida rule/alert."
+        },
+        {
+          "id": 34283,
+          "code": "JR283",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Prometheus konfiguratsiyasida scrape job qanday yoziladi?",
+          "explanation": "`scrape_configs` ichida `job_name` va target'lar."
+        },
+        {
+          "id": 34284,
+          "code": "JR284",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "node_exporter nima ko'rsatadi?",
+          "explanation": "Linux host metrikalari: CPU, RAM, disk, tarmoq, filesystem."
+        },
+        {
+          "id": 34285,
+          "code": "JR285",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "CPU ishlatilishi % ni PromQL bilan qanday hisoblaysiz?",
+          "explanation": "100 minus idle rejimining o'rtacha rate'i."
+        },
+        {
+          "id": 34286,
+          "code": "JR286",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Disk bo'sh joyi 10% dan kam bo'lsa alert qoidasi?",
+          "explanation": "Prometheus alerting rule: `expr`, `for`, `labels`, `annotations`."
+        },
+        {
+          "id": 34287,
+          "code": "JR287",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Alertmanager vazifasi nima?",
+          "explanation": "Prometheus'dan kelgan alert'larni guruhlaydi, takrorni o'chiradi, silence qiladi va Slack/Telegram/email/PagerDuty'ga yuboradi."
+        },
+        {
+          "id": 34288,
+          "code": "JR288",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Grafana'da data source va dashboard nima?",
+          "explanation": "Data source — ma'lumot manbai (Prometheus, Loki). Dashboard — panellar to'plami, har panel so'rov + vizualizatsiya."
+        },
+        {
+          "id": 34289,
+          "code": "JR289",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Label nima va high cardinality nega xavfli?",
+          "explanation": "Label — metrikani ajratuvchi kalit-qiymat. Har noyob kombinatsiya alohida time series; user_id kabi label millionlab series yaratib Prometheus'ni o'ldiradi."
+        },
+        {
+          "id": 34290,
+          "code": "JR290",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Blackbox exporter nima?",
+          "explanation": "Tashqaridan tekshiradi: HTTP, TCP, ICMP, DNS — sayt ochiladimi, sertifikat muddati qancha."
+        },
+        {
+          "id": 34291,
+          "code": "JR291",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Prometheus metrikalarini ilovadan qanday chiqarasiz?",
+          "explanation": "Client library (Go, Python) bilan `/metrics` endpoint ochiladi, Prometheus uni scrape qiladi."
+        },
+        {
+          "id": 34292,
+          "code": "JR292",
+          "level": "J",
+          "type": "card",
+          "topic": "Prometheus & Grafana",
+          "domain": "obs",
+          "section": "w4",
+          "question": "Prometheus ma'lumotni qancha saqlaydi?",
+          "explanation": "Default 15 kun (`--storage.tsdb.retention.time`). Uzoq muddat uchun Thanos/Mimir/VictoriaMetrics."
         }
       ]
     },
@@ -39389,6 +42381,116 @@
           "section": "w9",
           "question": "Observability xarajati daromaddan tez o'syapti (log, metrika, trace). Qanday optimallashtirasiz?",
           "explanation": "Har signalning qiymatini o'lchang: kim ishlatadi, qaysi alert/dashboard. Log: DEBUG o'chirish, sampling, qisqa retention + arxiv (S3), keraksiz maydonlar. Metrika: kardinallik, ishlatilmaydigan metrikalarni drop, recording rules. Trace: tail sampling. Tiered storage va vendor'dan open-source'ga (yoki aksincha) ko'chishni TCO bo'yicha baholash."
+        },
+        {
+          "id": 34293,
+          "code": "JR293",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "`journalctl` bilan loglarni filtrlash?",
+          "explanation": "Unit, vaqt, prioritet bo'yicha."
+        },
+        {
+          "id": 34294,
+          "code": "JR294",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "`/var/log` ichida qaysi fayllar muhim?",
+          "explanation": "`syslog`/`messages` — umumiy, `auth.log`/`secure` — login, `kern.log` — kernel, ilova papkalari (nginx)."
+        },
+        {
+          "id": 34295,
+          "code": "JR295",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Logdan xatolarni tez topish uchun buyruqlar?",
+          "explanation": "`grep`, `tail -f`, `less +F`, `awk`, `sort | uniq -c`."
+        },
+        {
+          "id": 34296,
+          "code": "JR296",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Centralized logging nima uchun kerak?",
+          "explanation": "Ko'p server/konteyner loglarini bir joyga yig'ib, qidirish va alert qilish — server o'lsa ham log qoladi."
+        },
+        {
+          "id": 34297,
+          "code": "JR297",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Correlation ID (request ID) nima?",
+          "explanation": "Har so'rovga noyob ID beriladi va barcha servis loglariga yoziladi — bitta so'rov izini topish uchun."
+        },
+        {
+          "id": 34298,
+          "code": "JR298",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Error budget nima?",
+          "explanation": "SLO'dan ruxsat etilgan xato miqdori. 99.9% SLO = oyda ~43 daqiqa ishlamaslik mumkin."
+        },
+        {
+          "id": 34299,
+          "code": "JR299",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Loglarga nima yozmaslik kerak?",
+          "explanation": "Parol, token, karta raqami, shaxsiy ma'lumot (PII)."
+        },
+        {
+          "id": 34300,
+          "code": "JR300",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Log retention nega muhim?",
+          "explanation": "Loglar qimmat va diskni to'ldiradi; qonuniy talablar ham bor. Qancha va qayerda saqlashni belgilash kerak."
+        },
+        {
+          "id": 34301,
+          "code": "JR301",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "Uptime/status page nima uchun?",
+          "explanation": "Foydalanuvchilarga xizmat holati va incident'lar haqida ochiq ma'lumot berish."
+        },
+        {
+          "id": 34302,
+          "code": "JR302",
+          "level": "J",
+          "type": "card",
+          "topic": "Logs, tracing & SLO",
+          "domain": "obs",
+          "section": "w9",
+          "question": "On-call nima va junior sifatida nimani bilish kerak?",
+          "explanation": "Navbatchilik: alert kelganda javob berish. Runbook, eskalatsiya va kommunikatsiyani bilish kerak."
         }
       ]
     },
@@ -42029,6 +45131,61 @@
           "section": "i4",
           "question": "TLS 1.3 handshake'da nima o'zgardi va 0-RTT xavfi nimada?",
           "explanation": "0-RTT ma'lumotini hujumchi yozib olib qayta yuborishi mumkin — `POST /transfer` bo'lsa ikki marta o'tkazma bo'lishi mumkin. Shuning uchun CDN/proxy'da 0-RTT faqat `GET`/idempotent yo'llarga ruxsat etiladi yoki umuman o'chiriladi. Forward secrecy: kalit o'g'irlansa ham o'tmishdagi trafikni ochib bo'lmaydi."
+        },
+        {
+          "id": 34042,
+          "code": "JR42",
+          "level": "J",
+          "type": "card",
+          "topic": "Network",
+          "domain": "net",
+          "section": "i4",
+          "question": "OSI modelining 7 qatlami va DevOps uchun muhimlari?",
+          "explanation": "Physical, Data link, Network, Transport, Session, Presentation, Application. Amalda L3 (IP), L4 (TCP/UDP), L7 (HTTP) eng ko'p uchraydi."
+        },
+        {
+          "id": 34044,
+          "code": "JR44",
+          "level": "J",
+          "type": "card",
+          "topic": "Network",
+          "domain": "net",
+          "section": "i4",
+          "question": "HTTP status kodlarining guruhlari va asosiylari?",
+          "explanation": "1xx info, 2xx muvaffaqiyat, 3xx redirect, 4xx mijoz xatosi, 5xx server xatosi."
+        },
+        {
+          "id": 34045,
+          "code": "JR45",
+          "level": "J",
+          "type": "card",
+          "topic": "Network",
+          "domain": "net",
+          "section": "i4",
+          "question": "Standart portlarni ayting: SSH, HTTP, HTTPS, DNS, PostgreSQL, MySQL, Redis.",
+          "explanation": "22, 80, 443, 53, 5432, 3306, 6379."
+        },
+        {
+          "id": 34046,
+          "code": "JR46",
+          "level": "J",
+          "type": "card",
+          "topic": "Network",
+          "domain": "net",
+          "section": "i4",
+          "question": "TCP 3-way handshake qanday ishlaydi?",
+          "explanation": "SYN → SYN-ACK → ACK. Shundan keyin data yuboriladi."
+        },
+        {
+          "id": 34047,
+          "code": "JR47",
+          "level": "J",
+          "type": "card",
+          "topic": "Network",
+          "domain": "net",
+          "section": "i4",
+          "question": "HTTPS'da TLS nima beradi?",
+          "explanation": "Shifrlash (eshitib bo'lmaydi), yaxlitlik (o'zgartirib bo'lmaydi), autentifikatsiya (sertifikat orqali server haqiqiyligi)."
         }
       ]
     },
@@ -42204,6 +45361,380 @@
           "section": "w10",
           "question": "TCP congestion control: CUBIC va BBR farqi? Qachon BBR yoqiladi?",
           "explanation": "CUBIC (Linux default) — paket yo'qolishini tirbandlik signali deb oladi va tezlikni kesadi; yo'qotishli/uzoq tarmoqda (mobil, xalqaro) throughput past. BBR — o'tkazuvchanlik va RTT'ni o'lchab tezlikni modellashtiradi; yo'qotishga kamroq sezgir, bufferbloat kam — CDN/video/uzoq masofali trafikda tezroq."
+        },
+        {
+          "id": 34310,
+          "code": "JR310",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "IPv4 va IPv6 farqi?",
+          "explanation": "IPv4 — 32 bit (~4.3 mlrd manzil), IPv6 — 128 bit, manzillar amalda cheksiz, NAT shart emas."
+        },
+        {
+          "id": 34311,
+          "code": "JR311",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "MAC manzil nima?",
+          "explanation": "Tarmoq kartasining L2 (Ethernet) manzili, 48 bit; faqat lokal segmentda ishlatiladi."
+        },
+        {
+          "id": 34312,
+          "code": "JR312",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Switch va router farqi?",
+          "explanation": "Switch — bitta tarmoq ichida MAC bo'yicha (L2). Router — tarmoqlar orasida IP bo'yicha (L3)."
+        },
+        {
+          "id": 34313,
+          "code": "JR313",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Port nima va nechta port bor?",
+          "explanation": "Bitta IP ichida xizmatni ajratuvchi raqam (0–65535). 0–1023 — tizim (well-known) portlari."
+        },
+        {
+          "id": 34314,
+          "code": "JR314",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Socket nima?",
+          "explanation": "IP + port + protokol bilan aniqlangan ulanish nuqtasi; dastur tarmoq bilan socket orqali ishlaydi."
+        },
+        {
+          "id": 34315,
+          "code": "JR315",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "`curl` va `wget` farqi?",
+          "explanation": "curl — HTTP so'rovlarini tekshirish, header, method, API test uchun. wget — fayl yuklab olish, rekursiv."
+        },
+        {
+          "id": 34316,
+          "code": "JR316",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "`traceroute` / `mtr` nima ko'rsatadi?",
+          "explanation": "Paket manzilga borguncha o'tgan router'lar (hop'lar) va har birining kechikishi."
+        },
+        {
+          "id": 34317,
+          "code": "JR317",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Latency va bandwidth farqi?",
+          "explanation": "Latency — paket qancha vaqtda yetib boradi (ms). Bandwidth — sekundiga qancha ma'lumot o'tadi (Mbps)."
+        },
+        {
+          "id": 34318,
+          "code": "JR318",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "HTTP va HTTPS farqi?",
+          "explanation": "HTTPS = HTTP + TLS: shifrlangan, server autentifikatsiyasi bor. Port 80 va 443."
+        },
+        {
+          "id": 34319,
+          "code": "JR319",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "HTTP methodlari: GET, POST, PUT, PATCH, DELETE?",
+          "explanation": "GET — o'qish, POST — yaratish, PUT — to'liq almashtirish, PATCH — qisman o'zgartirish, DELETE — o'chirish."
+        },
+        {
+          "id": 34320,
+          "code": "JR320",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "HTTP header'lariga misollar?",
+          "explanation": "Host, User-Agent, Content-Type, Authorization, Cache-Control, Set-Cookie."
+        },
+        {
+          "id": 34321,
+          "code": "JR321",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Reverse proxy nima?",
+          "explanation": "Mijoz so'rovini qabul qilib, orqadagi serverlarga yo'naltiradigan server (Nginx, HAProxy, Traefik)."
+        },
+        {
+          "id": 34322,
+          "code": "JR322",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Load balancer nima va algoritmlari?",
+          "explanation": "Trafikni bir nechta serverga taqsimlaydi. Algoritmlar: round robin, least connections, IP hash."
+        },
+        {
+          "id": 34323,
+          "code": "JR323",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "DNS'da A va CNAME record farqi?",
+          "explanation": "A — nom → IPv4. CNAME — nom → boshqa nom (alias)."
+        },
+        {
+          "id": 34324,
+          "code": "JR324",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "DNS TTL nima va migratsiyada nega muhim?",
+          "explanation": "Javob cache'da qancha soniya saqlanishi. Uzun TTL — o'zgarish sekin tarqaladi."
+        },
+        {
+          "id": 34325,
+          "code": "JR325",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "MX, TXT, NS record'lari nima uchun?",
+          "explanation": "MX — pochta serveri, TXT — ixtiyoriy matn (SPF, domen tasdiqlash), NS — domenning authoritative DNS serverlari."
+        },
+        {
+          "id": 34326,
+          "code": "JR326",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Firewall nima va stateful firewall nima degani?",
+          "explanation": "Trafikni qoidalar bo'yicha o'tkazadi yoki bloklaydi. Stateful — ochilgan ulanishning javob paketlarini avtomatik o'tkazadi."
+        },
+        {
+          "id": 34327,
+          "code": "JR327",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "VPN nima va nega ishlatiladi?",
+          "explanation": "Ochiq tarmoq ustidan shifrlangan tunnel — xususiy tarmoqqa xavfsiz kirish."
+        },
+        {
+          "id": 34328,
+          "code": "JR328",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Bastion host (jump host) nima?",
+          "explanation": "Private tarmoqdagi serverlarga kirish uchun yagona ochiq SSH kirish nuqtasi."
+        },
+        {
+          "id": 34329,
+          "code": "JR329",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Ichki tarmoqdan internetga chiqish va internetdan kirish farqi (NAT gateway)?",
+          "explanation": "NAT gateway private server'larga chiquvchi trafikni beradi, lekin tashqaridan ularga kirishga yo'l qo'ymaydi."
+        },
+        {
+          "id": 34330,
+          "code": "JR330",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "`nc` (netcat) bilan port tekshirish?",
+          "explanation": "`nc -zv host port` — TCP ulanish o'rnatilishini tekshiradi."
+        },
+        {
+          "id": 34331,
+          "code": "JR331",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "\"Connection refused\" va \"Connection timed out\" farqi?",
+          "explanation": "Refused — host javob berdi, lekin portda hech kim tinglamayapti. Timeout — javob umuman kelmadi (firewall, host o'chiq, route yo'q)."
+        },
+        {
+          "id": 34332,
+          "code": "JR332",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Nginx'da oddiy reverse proxy konfiguratsiyasi?",
+          "explanation": "`location` ichida `proxy_pass` va asosiy header'lar."
+        },
+        {
+          "id": 34333,
+          "code": "JR333",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Let's Encrypt bilan bepul TLS sertifikat olish?",
+          "explanation": "certbot ACME protokoli orqali domen egaligini tekshirib, 90 kunlik sertifikat beradi va avtomatik yangilaydi."
+        },
+        {
+          "id": 34334,
+          "code": "JR334",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Sertifikat muddati qachon tugashini qanday tekshirasiz?",
+          "explanation": "`openssl s_client` bilan sertifikatni olib, `-enddate` ni o'qish."
+        },
+        {
+          "id": 34335,
+          "code": "JR335",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "CDN nima?",
+          "explanation": "Statik kontentni (rasm, JS, video) foydalanuvchiga yaqin serverlardan beradigan tarmoq — tezroq va origin yuki kam."
+        },
+        {
+          "id": 34336,
+          "code": "JR336",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "WebSocket va oddiy HTTP farqi?",
+          "explanation": "HTTP — so'rov-javob. WebSocket — bitta ulanish ustida ikki tomonlama doimiy aloqa (chat, real-time)."
+        },
+        {
+          "id": 34337,
+          "code": "JR337",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "MTU nima?",
+          "explanation": "Bitta paketning maksimal hajmi (Ethernet'da 1500 bayt). VPN/overlay tarmoqlarda kichrayadi."
+        },
+        {
+          "id": 34338,
+          "code": "JR338",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Proxy orqasida mijozning haqiqiy IP'sini qanday bilasiz?",
+          "explanation": "`X-Forwarded-For` yoki `X-Real-IP` header'i (yoki PROXY protocol)."
+        },
+        {
+          "id": 34339,
+          "code": "JR339",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Loopback interfeys va `0.0.0.0` farqi?",
+          "explanation": "`127.0.0.1` — faqat shu mashina ichidan. `0.0.0.0` da tinglash — barcha interfeyslardan kirish mumkin."
+        },
+        {
+          "id": 34340,
+          "code": "JR340",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "`ss -s` yoki `netstat` bilan TIME_WAIT ko'p bo'lsa nima degani?",
+          "explanation": "Ko'p qisqa ulanishlar yopilgan — normal, lekin juda ko'p bo'lsa ephemeral portlar tugashi mumkin."
+        },
+        {
+          "id": 34341,
+          "code": "JR341",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "Network segmentation nima uchun?",
+          "explanation": "Tarmoqni zonalarga (public, app, DB) bo'lish — bitta qism buzilsa, hujum butun tarmoqqa tarqalmasin."
+        },
+        {
+          "id": 34342,
+          "code": "JR342",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "`/etc/services` fayli nima?",
+          "explanation": "Port raqamlari va xizmat nomlari ro'yxati (masalan `ssh 22/tcp`)."
+        },
+        {
+          "id": 34343,
+          "code": "JR343",
+          "level": "J",
+          "type": "card",
+          "topic": "Networking basics",
+          "domain": "net",
+          "section": "w10",
+          "question": "`tcpdump` bilan trafikni qanday ko'rasiz?",
+          "explanation": "Interfeysdagi paketlarni filtr bilan ushlaydi — haqiqatan trafik kelyaptimi, tekshirish uchun."
         }
       ]
     },
@@ -45045,6 +48576,61 @@
           "section": "i5",
           "question": "Katta kompaniyada Terraform kodini qanday tashkil qilasan (modullar, muhitlar, state)?",
           "explanation": "Asosiy g'oya: kichik, mustaqil state'lar va hamma o'zgarish PR orqali. Monolit state — har apply butun infratuzilmani xavf ostiga qo'yadi."
+        },
+        {
+          "id": 34048,
+          "code": "JR48",
+          "level": "J",
+          "type": "card",
+          "topic": "Cloud",
+          "domain": "cloud",
+          "section": "i5",
+          "question": "IaaS, PaaS, SaaS farqi?",
+          "explanation": "IaaS — VM/tarmoq (EC2). PaaS — platforma, kodni yuklaysiz (Heroku, App Engine). SaaS — tayyor dastur (Gmail, Slack)."
+        },
+        {
+          "id": 34049,
+          "code": "JR49",
+          "level": "J",
+          "type": "card",
+          "topic": "Cloud",
+          "domain": "cloud",
+          "section": "i5",
+          "question": "Region va Availability Zone farqi?",
+          "explanation": "Region — geografik hudud (eu-central-1). AZ — region ichidagi alohida data center(lar), mustaqil elektr/tarmoq."
+        },
+        {
+          "id": 34050,
+          "code": "JR50",
+          "level": "J",
+          "type": "card",
+          "topic": "Cloud",
+          "domain": "cloud",
+          "section": "i5",
+          "question": "Cloud'da shared responsibility model nima?",
+          "explanation": "Provider — cloud'ning o'zi xavfsizligi (hardware, DC). Mijoz — cloud ichidagi narsalar (data, IAM, OS patch, firewall)."
+        },
+        {
+          "id": 34051,
+          "code": "JR51",
+          "level": "J",
+          "type": "card",
+          "topic": "Cloud",
+          "domain": "cloud",
+          "section": "i5",
+          "question": "Scale up (vertical) va scale out (horizontal) farqi?",
+          "explanation": "Vertical — kattaroq mashina. Horizontal — ko'proq mashina. Horizontal uchun ilova stateless bo'lishi kerak."
+        },
+        {
+          "id": 34052,
+          "code": "JR52",
+          "level": "J",
+          "type": "card",
+          "topic": "Cloud",
+          "domain": "cloud",
+          "section": "i5",
+          "question": "Cloud xarajatini nazorat qilishning oddiy usullari?",
+          "explanation": "Budget alert, tag'lar, ishlatilmayotgan resurslarni o'chirish, to'g'ri o'lcham, reserved/spot instance."
         }
       ]
     },
@@ -45505,6 +49091,50 @@
           "section": "w11",
           "question": "AKS'ni production uchun qanday sozlaysiz (asosiy qarorlar)?",
           "explanation": "Qarorlar: tarmoq (Azure CNI Overlay yoki CNI Cilium), system va user node pool'larni ajratish, availability zone'lar, Workload Identity, private cluster yoki authorized IP, cluster autoscaler, upgrade kanali, Azure Monitor/Managed Prometheus, Key Vault CSI."
+        },
+        {
+          "id": 34059,
+          "code": "JR59",
+          "level": "J",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Azure'da Resource Group nima?",
+          "explanation": "Bog'liq resurslar uchun mantiqiy konteyner: birga boshqariladi, ruxsat beriladi, o'chiriladi va xarajati ko'riladi."
+        },
+        {
+          "id": 34060,
+          "code": "JR60",
+          "level": "J",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Azure'ning asosiy servislari AWS'da nimaga to'g'ri keladi?",
+          "explanation": "VM≈EC2, Blob Storage≈S3, VNet≈VPC, Entra ID≈IAM, AKS≈EKS, Azure SQL≈RDS, Functions≈Lambda."
+        },
+        {
+          "id": 34061,
+          "code": "JR61",
+          "level": "J",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Azure CLI bilan login va subscription tanlash?",
+          "explanation": "`az login`, `az account list`, `az account set --subscription <id>`."
+        },
+        {
+          "id": 34062,
+          "code": "JR62",
+          "level": "J",
+          "type": "card",
+          "topic": "Azure",
+          "domain": "cloud",
+          "section": "w11",
+          "question": "Managed Identity nima uchun kerak?",
+          "explanation": "Azure resursiga (VM, App Service) avtomatik identity beradi — kodda parol/secret saqlamasdan boshqa servislarga kirish."
         }
       ]
     },
@@ -45570,6 +49200,50 @@
           "section": "w12",
           "question": "GCP IAM: basic, predefined va custom role'lar; nega `roles/editor` xavfli?",
           "explanation": "Basic role'lar (Owner, Editor, Viewer) — juda keng, minglab permission. Predefined — servisga xos (`roles/storage.objectViewer`). Custom — aniq permission ro'yxati. Editor deyarli hamma resursni o'zgartira oladi — least privilege'ga zid, default compute SA'ga berilgani xavf."
+        },
+        {
+          "id": 34063,
+          "code": "JR63",
+          "level": "J",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "GCP'da Project nima?",
+          "explanation": "Barcha resurslar, billing, API va IAM project ichida. Ierarxiya: Organization → Folder → Project → Resource."
+        },
+        {
+          "id": 34064,
+          "code": "JR64",
+          "level": "J",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "GCP'ning asosiy servislari AWS'da nimaga to'g'ri keladi?",
+          "explanation": "Compute Engine≈EC2, Cloud Storage≈S3, GKE≈EKS, Cloud SQL≈RDS, Cloud Run≈Fargate/App Runner, Cloud Functions≈Lambda."
+        },
+        {
+          "id": 34065,
+          "code": "JR65",
+          "level": "J",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "`gcloud` bilan autentifikatsiya va VM ro'yxati?",
+          "explanation": "`gcloud auth login`, `gcloud config set project`, `gcloud compute instances list`."
+        },
+        {
+          "id": 34066,
+          "code": "JR66",
+          "level": "J",
+          "type": "card",
+          "topic": "GCP",
+          "domain": "cloud",
+          "section": "w12",
+          "question": "GCP'da service account nima?",
+          "explanation": "Odam emas, ilova/VM uchun identity. IAM rollari unga beriladi."
         }
       ]
     },
@@ -49330,6 +53004,556 @@
           "question": "`rsync -avz` nima qiladi?",
           "explanation": "Fayllarni masofaga sinxronlaydi: -a (archive — ruxsatlar, vaqt, symlink saqlanadi), -v (verbose), -z (transferda siqish).",
           "source": "NotHarshhaa/DevOps-Interview-Questions"
+        },
+        {
+          "id": 34071,
+          "code": "JR71",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash skript boshida `set -euo pipefail` nima qiladi?",
+          "explanation": "`-e` xatoda to'xtaydi, `-u` e'lon qilinmagan o'zgaruvchida xato, `pipefail` pipe ichidagi xatoni ushlaydi."
+        },
+        {
+          "id": 34072,
+          "code": "JR72",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Exit code nima va uni qanday tekshirasiz?",
+          "explanation": "Buyruq tugaganda qaytaradigan son: 0 — muvaffaqiyat, boshqasi — xato. `$?` da saqlanadi."
+        },
+        {
+          "id": 34073,
+          "code": "JR73",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash'da o'zgaruvchini nega qo'shtirnoq ichida ishlatish kerak?",
+          "explanation": "Qo'shtirnoqsiz bo'shliq va `*` bo'yicha bo'linadi (word splitting, globbing) — xato fayllarga ta'sir qiladi."
+        },
+        {
+          "id": 34074,
+          "code": "JR74",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash'da `for` sikl va `if` sharti misoli?",
+          "explanation": "`for x in ...; do ...; done`, `if [[ ... ]]; then ...; fi`."
+        },
+        {
+          "id": 34075,
+          "code": "JR75",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "stdout, stderr va redirect (`>`, `>>`, `2>&1`) nima?",
+          "explanation": "stdout (1) — oddiy chiqish, stderr (2) — xatolar. `>` yozadi, `>>` qo'shadi, `2>&1` stderr'ni stdout'ga qo'shadi."
+        },
+        {
+          "id": 34076,
+          "code": "JR76",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Skriptga argument qanday uzatiladi (`$1`, `$#`, `$@`)?",
+          "explanation": "`$1..$9` — argumentlar, `$#` — soni, `$@` — hammasi, `$0` — skript nomi."
+        },
+        {
+          "id": 34344,
+          "code": "JR344",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Shebang (`#!`) qatori nima?",
+          "explanation": "Skript qaysi interpretator bilan ishlashini belgilaydi."
+        },
+        {
+          "id": 34345,
+          "code": "JR345",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash'da o'zgaruvchi e'lon qilish va ishlatish?",
+          "explanation": "`name=value` (bo'shliqsiz), `\"$name\"` bilan ishlatish."
+        },
+        {
+          "id": 34346,
+          "code": "JR346",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Buyruq natijasini o'zgaruvchiga saqlash?",
+          "explanation": "Command substitution: `$(buyruq)`."
+        },
+        {
+          "id": 34347,
+          "code": "JR347",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash'da arifmetika qanday?",
+          "explanation": "`$(( ))` — butun sonlar uchun."
+        },
+        {
+          "id": 34348,
+          "code": "JR348",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash'da `while read` bilan faylni qatorma-qator o'qish?",
+          "explanation": "`while IFS= read -r line; do ...; done < file`."
+        },
+        {
+          "id": 34349,
+          "code": "JR349",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash funksiya qanday yoziladi?",
+          "explanation": "`name() { ...; }` — argumentlar `$1`, `$2`; `local` o'zgaruvchilar."
+        },
+        {
+          "id": 34350,
+          "code": "JR350",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`$?`, `$$`, `$!` nima?",
+          "explanation": "`$?` — oxirgi buyruq exit code'i, `$$` — joriy shell PID, `$!` — oxirgi fon jarayon PID."
+        },
+        {
+          "id": 34351,
+          "code": "JR351",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`&&` va `||` qanday ishlaydi?",
+          "explanation": "`a && b` — a muvaffaqiyatli bo'lsa b. `a || b` — a xato bo'lsa b."
+        },
+        {
+          "id": 34352,
+          "code": "JR352",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`case` operatori misoli?",
+          "explanation": "Bir o'zgaruvchini bir nechta shablonga solishtirish."
+        },
+        {
+          "id": 34353,
+          "code": "JR353",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash massivlar bilan ishlash?",
+          "explanation": "`arr=(a b c)`, `\"${arr[@]}\"` — hammasi, `${#arr[@]}` — soni."
+        },
+        {
+          "id": 34354,
+          "code": "JR354",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`trap` nima uchun ishlatiladi?",
+          "explanation": "Signal yoki skript tugashida (EXIT) tozalash kodini ishga tushirish."
+        },
+        {
+          "id": 34355,
+          "code": "JR355",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash'da string bilan ishlash: uzunlik, almashtirish, kesish?",
+          "explanation": "`${#s}`, `${s/old/new}`, `${s:0:5}`, `${s%.*}`, `${s##*/}`."
+        },
+        {
+          "id": 34356,
+          "code": "JR356",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`grep`, `awk`, `sed` ni skriptda qachon ishlatasiz?",
+          "explanation": "grep — qator qidirish, awk — ustunlar bilan ishlash, sed — matnni almashtirish."
+        },
+        {
+          "id": 34357,
+          "code": "JR357",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Skriptni debug qilish usullari?",
+          "explanation": "`bash -x script.sh`, `set -x`, `shellcheck`."
+        },
+        {
+          "id": 34358,
+          "code": "JR358",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Disk 80% dan oshsa xabar beradigan oddiy skript?",
+          "explanation": "`df` natijasini `awk` bilan tekshirib, chegaradan oshganini chiqarish."
+        },
+        {
+          "id": 34359,
+          "code": "JR359",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bir nechta serverda buyruq bajaradigan skript?",
+          "explanation": "Host ro'yxati bo'ylab `ssh` bilan sikl."
+        },
+        {
+          "id": 34360,
+          "code": "JR360",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Here document (`<<EOF`) nima?",
+          "explanation": "Ko'p qatorli matnni buyruq stdin'iga berish."
+        },
+        {
+          "id": 34361,
+          "code": "JR361",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`xargs` nima uchun?",
+          "explanation": "stdin'dagi qatorlarni boshqa buyruqqa argument qilib beradi."
+        },
+        {
+          "id": 34362,
+          "code": "JR362",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash skriptda input so'rash (`read`)?",
+          "explanation": "`read -p` — prompt bilan, `-s` — yashirin (parol)."
+        },
+        {
+          "id": 34363,
+          "code": "JR363",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Skriptda vaqtinchalik fayl qanday yaratiladi?",
+          "explanation": "`mktemp` — noyob nom, xavfsiz."
+        },
+        {
+          "id": 34364,
+          "code": "JR364",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python skriptda shell buyrug'ini qanday ishga tushirasiz?",
+          "explanation": "`subprocess.run()` — ro'yxat argumentlar bilan, `check=True`."
+        },
+        {
+          "id": 34365,
+          "code": "JR365",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python'da fayl o'qish va yozish?",
+          "explanation": "`with open(...)` — fayl avtomatik yopiladi."
+        },
+        {
+          "id": 34366,
+          "code": "JR366",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python'da environment variable o'qish?",
+          "explanation": "`os.environ.get(\"KEY\", default)`."
+        },
+        {
+          "id": 34367,
+          "code": "JR367",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python'da JSON va YAML bilan ishlash?",
+          "explanation": "`json` standart kutubxonada; YAML uchun `PyYAML` (`yaml.safe_load`)."
+        },
+        {
+          "id": 34368,
+          "code": "JR368",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python'da HTTP so'rov yuborish (`requests`)?",
+          "explanation": "`requests.get/post`, timeout va status tekshiruvi bilan."
+        },
+        {
+          "id": 34369,
+          "code": "JR369",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python virtual environment (venv) nima uchun?",
+          "explanation": "Har loyiha uchun alohida paketlar — tizim Python'ini va boshqa loyihalarni buzmaslik."
+        },
+        {
+          "id": 34370,
+          "code": "JR370",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python'da xatolarni ushlash (try/except)?",
+          "explanation": "Kutilgan xatoni ushlab, tushunarli xabar va to'g'ri exit code."
+        },
+        {
+          "id": 34371,
+          "code": "JR371",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python skriptga CLI argument berish (`argparse`)?",
+          "explanation": "`argparse` — flag'lar, default, help avtomatik."
+        },
+        {
+          "id": 34372,
+          "code": "JR372",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python'da log yozish (`logging`)?",
+          "explanation": "`print` o'rniga `logging` — daraja, vaqt, format."
+        },
+        {
+          "id": 34373,
+          "code": "JR373",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Python'da papkadagi fayllarni aylanib chiqish?",
+          "explanation": "`pathlib.Path.glob` / `rglob` yoki `os.walk`."
+        },
+        {
+          "id": 34374,
+          "code": "JR374",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "boto3 bilan S3 bucket'lar ro'yxatini olish?",
+          "explanation": "boto3 — AWS SDK; credential'lar env/profil/IAM role'dan olinadi."
+        },
+        {
+          "id": 34375,
+          "code": "JR375",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash va Python'ni qachon tanlash kerak?",
+          "explanation": "Bash — qisqa, buyruqlarni bog'lovchi skriptlar. Python — mantiq, JSON/API, xato boshqaruvi, test kerak bo'lganda."
+        },
+        {
+          "id": 34376,
+          "code": "JR376",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Idempotent skript nima degani?",
+          "explanation": "Necha marta ishga tushirilsa ham natija bir xil, xato bermaydi."
+        },
+        {
+          "id": 34377,
+          "code": "JR377",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Skriptda secret (parol, token) qanday ishlatiladi?",
+          "explanation": "Env yoki secret manager'dan o'qing; kodga, Git'ga, logga yozmang."
+        },
+        {
+          "id": 34378,
+          "code": "JR378",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`${VAR:-default}` va `${VAR:?xabar}` farqi?",
+          "explanation": "`:-` — bo'sh bo'lsa default qiymat. `:?` — bo'sh bo'lsa xato bilan to'xtaydi."
+        },
+        {
+          "id": 34379,
+          "code": "JR379",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Skriptni cron yoki systemd timer'da ishga tushirishda nimalar muhim?",
+          "explanation": "To'liq yo'llar, env yo'qligi, loglash, bir vaqtda ikki nusxa ishlamasligi (lock)."
+        },
+        {
+          "id": 34380,
+          "code": "JR380",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Bash'da `[[ ]]` da string va son solishtirish?",
+          "explanation": "Stringlar: `==`, `!=`, `-z`, `-n`. Sonlar: `-eq`, `-lt`, `-gt` (yoki `(( ))`)."
+        },
+        {
+          "id": 34381,
+          "code": "JR381",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`curl` bilan API natijasini `jq` orqali parse qilish?",
+          "explanation": "`jq` — terminalda JSON filtrlash vositasi."
+        },
+        {
+          "id": 34382,
+          "code": "JR382",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Fon jarayonlar va `wait` bilan parallel ishga tushirish?",
+          "explanation": "`&` bilan fonga, `wait` bilan hammasi tugashini kutish."
+        },
+        {
+          "id": 34383,
+          "code": "JR383",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "`find` bilan eski fayllarni avtomatik o'chirish?",
+          "explanation": "`-mtime +N` va `-delete`."
+        },
+        {
+          "id": 34384,
+          "code": "JR384",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Skriptga `--help` va usage qo'shish nega muhim?",
+          "explanation": "Boshqalar (va kelajakdagi siz) skriptni to'g'ri ishlatsin; noto'g'ri argumentda tushunarli xabar."
+        },
+        {
+          "id": 34385,
+          "code": "JR385",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Dry-run rejimi nima va skriptda qanday qilinadi?",
+          "explanation": "Hech narsa o'zgartirmasdan nima qilinishini ko'rsatish."
+        },
+        {
+          "id": 34386,
+          "code": "JR386",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Makefile DevOps'da nima uchun ishlatiladi?",
+          "explanation": "Tez-tez ishlatiladigan buyruqlarni qisqa nomlar ostida yig'ish: `make build`, `make deploy`."
+        },
+        {
+          "id": 34387,
+          "code": "JR387",
+          "level": "J",
+          "type": "card",
+          "topic": "Bash & Python scripting",
+          "domain": "auto",
+          "section": "h1",
+          "question": "Retry (qayta urinish) mantiqini Bash'da yozish?",
+          "explanation": "Sikl, urinishlar soni va kutish."
         }
       ]
     },

@@ -170,6 +170,72 @@
       "section": "v19",
       "question": "On-call: tunda alert keldi \"API p99 latency yuqori\". Birinchi 15 daqiqada nima qilasan?",
       "explanation": "Ta'sirni aniqlash (SLO, qaysi endpoint/region, error rate) -> o'zgarishlar (deploy, config, trafik) -> dependency'lar (DB, cache, tashqi API) -> host resurslari (USE) -> mitigation (rollback, scale, feature flag, trafik cheklash) -> kommunikatsiya -> keyin chuqur tahlil."
+    },
+    {
+      "id": 34025,
+      "code": "JR25",
+      "level": "J",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "`rsync` nima va `cp`/`scp` dan nimasi yaxshi?",
+      "explanation": "Faqat o'zgargan qismlarni ko'chiradi, uzilsa davom ettiradi, ruxsat/vaqtni saqlaydi, SSH orqali ishlaydi."
+    },
+    {
+      "id": 34026,
+      "code": "JR26",
+      "level": "J",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Papkani `tar` bilan arxivlash va ochish?",
+      "explanation": "`tar -czf a.tar.gz dir/` — yaratish, `tar -xzf a.tar.gz` — ochish, `-t` — ichini ko'rish."
+    },
+    {
+      "id": 34027,
+      "code": "JR27",
+      "level": "J",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "3-2-1 backup qoidasi nima?",
+      "explanation": "3 nusxa, 2 xil saqlash turida, 1 tasi boshqa joyda (offsite)."
+    },
+    {
+      "id": 34028,
+      "code": "JR28",
+      "level": "J",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Server vaqti nega muhim va NTP sinxronini qanday tekshirasiz?",
+      "explanation": "Loglar, TLS sertifikat, token muddati, cron, distributed tizimlar to'g'ri vaqtga bog'liq. `timedatectl` bilan tekshiriladi."
+    },
+    {
+      "id": 34029,
+      "code": "JR29",
+      "level": "J",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "`logrotate` nima uchun kerak?",
+      "explanation": "Loglarni vaqt/hajm bo'yicha aylantiradi, siqadi va eskisini o'chiradi — disk to'lmasligi uchun."
+    },
+    {
+      "id": 34030,
+      "code": "JR30",
+      "level": "J",
+      "type": "card",
+      "topic": "Ops practices",
+      "domain": "linux",
+      "section": "v19",
+      "question": "Cron'da har kuni soat 02:30 da skript ishga tushirish?",
+      "explanation": "`30 2 * * * /path/script.sh` — maydonlar: daqiqa soat kun oy hafta_kuni."
     }
   ]
 }

@@ -1,0 +1,1154 @@
+{
+ "34001": {
+  "a": "**`free` — umuman ishlatilmayotgan RAM. `available` — yangi jarayonlarga swap'siz berilishi mumkin bo'lgan RAM (free + bo'shatsa bo'ladigan cache).**\n\n```sh\nfree -h\n#        total  used  free  shared  buff/cache  available\n# Mem:    7.7G  2.1G  300M    50M        5.3G       5.2G\n```\n\n- `free` 300M ko'rinsa ham vahima kerak emas — 5.2G `available`.\n- Kernel bo'sh RAM'ni disk cache'ga beradi: \"unused RAM is wasted RAM\".\n- Alert `available` bo'yicha qo'yiladi, `free` bo'yicha emas."
+ },
+ "34002": {
+  "a": "**`df -h` — har mount qilingan filesystem'da qancha joy band/bo'sh. `du -sh <dir>` — papka ichidagi fayllar hajmi.**\n\n```sh\ndf -h            # qaysi disk to'lgan?\ndu -sh /var/*    # /var ichida kim ko'p joy olgan?\ndu -xh / --max-depth=1 | sort -h\n```\n\n- `df` 100%, `du` kam ko'rsatsa — o'chirilgan, lekin jarayon ushlab turgan fayl: `lsof +L1`.\n- `df -i` — inode tugashini tekshiradi (kichik fayllar ko'p bo'lsa)."
+ },
+ "34003": {
+  "a": "**Asosiy ko'rsatkichlar:**\n\n- **load average** (1/5/15 min) — CPU yadrolari soniga solishtiriladi.\n- **%Cpu**: `us` (user), `sy` (kernel), `wa` (disk I/O kutish), `id` (bo'sh).\n- **MiB Mem / Swap** — RAM va swap holati.\n- Jarayonlar ro'yxati: `P` — CPU bo'yicha, `M` — memory bo'yicha saralash.\n- `k` — jarayonni o'ldirish, `1` — har yadroni alohida ko'rsatish.\n\n`wa` yuqori — muammo diskda, CPU'da emas."
+ },
+ "34004": {
+  "a": "**Load average — run queue'dagi (CPU kutayotgan + ishlayotgan) va uninterruptible I/O kutayotgan jarayonlar o'rtacha soni, 1/5/15 daqiqa bo'yicha.**\n\n```sh\nuptime   # load average: 3.20, 2.10, 1.50\nnproc    # 4\n```\n\n- 4 yadroda load 4 = to'liq band; 8 = navbat ikki baravar.\n- 1 min > 15 min — yuk o'syapti.\n- Linux'da disk I/O ham load'ga kiradi — load yuqori, CPU bo'sh bo'lsa `iostat`/`wa` ga qarang."
+ },
+ "34005": {
+  "a": "**Tartib — umumiydan xususiyga:**\n\n```sh\nuptime                 # load\ntop                    # kim CPU/RAM yeyapti\nfree -h                # RAM, swap\ndf -h; df -i           # disk, inode\ndmesg -T | tail        # OOM killer, disk xatolari\njournalctl -p err -n 50\nsystemctl --failed\n```\n\n- Avval kuzat, keyin o'zgartir — tasodifiy restart dalilni o'chiradi.\n- Nima ko'rganingni yozib bor (incident uchun)."
+ },
+ "34006": {
+  "a": "**OOM killer — memory tugaganda kernel tizimni saqlab qolish uchun jarayonni (`oom_score` eng yuqorisini) majburan o'ldiradi.**\n\n```sh\ndmesg -T | grep -i -E 'killed process|out of memory'\njournalctl -k | grep -i oom\n```\n\n- Belgisi: jarayon sababsiz yo'qolgan, exit code 137 (SIGKILL).\n- Konteynerda: `docker inspect` → `OOMKilled: true`, K8s'da `OOMKilled` status.\n- Yechim: memory leak'ni topish, limitni to'g'ri qo'yish, swap/RAM qo'shish."
+ },
+ "34007": {
+  "a": "**`ps aux` — barcha jarayonlar ro'yxati.**\n\n- `PID` — jarayon raqami.\n- `%CPU`, `%MEM` — resurs ulushi.\n- `RSS` — haqiqiy RAM'dagi hajm (KB); `VSZ` — virtual (ko'pincha katta, qo'rqmaslik kerak).\n- `STAT`: `R` ishlayapti, `S` uxlayapti, `D` I/O kutyapti, `Z` zombie, `T` to'xtatilgan.\n\n```sh\nps aux --sort=-%mem | head\nps -ef | grep nginx\npgrep -a nginx\n```"
+ },
+ "34008": {
+  "a": "```sh\nsudo ss -tulpn\n# Netid State  Local Address:Port  Process\n# tcp   LISTEN 0.0.0.0:22          sshd\n# tcp   LISTEN 127.0.0.1:5432      postgres\n```\n\n- `-t` TCP, `-u` UDP, `-l` faqat listen, `-p` jarayon, `-n` raqamlar (DNS'siz).\n- `0.0.0.0` — hamma interfeysdan ochiq; `127.0.0.1` — faqat lokal.\n- Bitta port: `ss -ltnp 'sport = :80'` yoki `lsof -i :80`."
+ },
+ "34009": {
+  "a": "```sh\nsudo ufw default deny incoming\nsudo ufw default allow outgoing\nsudo ufw allow OpenSSH      # yoki 22/tcp — AVVAL!\nsudo ufw allow 80/tcp\nsudo ufw allow 443/tcp\nsudo ufw enable\nsudo ufw status verbose\n```\n\n- SSH ochilmasdan `enable` qilinsa — o'zingizni serverdan qulflab qo'yasiz.\n- `ufw` — `iptables`/`nftables` ustidagi oddiy frontend (Ubuntu)."
+ },
+ "34010": {
+  "a": "**`filter` jadvali chain'lari:**\n\n- **INPUT** — shu hostga kelgan paketlar (masalan SSH ulanish).\n- **OUTPUT** — shu host yuborayotgan paketlar.\n- **FORWARD** — bir interfeysdan boshqasiga o'tkaziladigan paketlar (router, Docker bridge).\n\n```sh\nsudo iptables -L -n -v\nsudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT\n```\n\n- Qoidalar yuqoridan pastga tekshiriladi, birinchi mos kelgani ishlaydi.\n- Policy (`-P INPUT DROP`) — hech qaysi qoida mos kelmasa."
+ },
+ "34011": {
+  "a": "**Yo'q — ko'p cloud/firewall ICMP'ni bloklaydi.**\n\n```sh\nping -c 3 10.0.0.5\nnc -zv 10.0.0.5 22      # TCP port ochiqmi?\ncurl -I http://10.0.0.5\ntraceroute 10.0.0.5     # qayerda uzilyapti\n```\n\n- `ping` — faqat ICMP darajada ulanishni ko'rsatadi.\n- Xizmat ishlashini haqiqiy port orqali tekshirish kerak."
+ },
+ "34012": {
+  "a": "**fail2ban — loglarni kuzatib (masalan `/var/log/auth.log`), N marta xato login qilgan IP'ni firewall qoidasi bilan ban qiladi.**\n\n```sh\nsudo apt install fail2ban\nsudo fail2ban-client status sshd\nsudo fail2ban-client set sshd unbanip 1.2.3.4\n```\n\n- Sozlama: `/etc/fail2ban/jail.local` (`maxretry`, `bantime`, `findtime`).\n- To'liq himoya emas — SSH key auth va parol login'ni o'chirish asosiy chora."
+ },
+ "34013": {
+  "a": "`/etc/ssh/sshd_config`:\n\n```\nPermitRootLogin no\nPasswordAuthentication no\nPubkeyAuthentication yes\nAllowUsers deploy\n```\n\n```sh\nsudo sshd -t && sudo systemctl reload sshd\n```\n\n- O'zgartirishdan oldin key bilan kira olishingizni **boshqa sessiyada** tekshiring.\n- Qo'shimcha: `ufw`, `fail2ban`, tizimni yangilab turish."
+ },
+ "34014": {
+  "a": "```sh\nip a\n# 2: eth0: <BROADCAST,UP> mtu 1500 state UP\n#     link/ether 52:54:00:12:34:56\n#     inet 10.0.0.5/24 brd 10.0.0.255 scope global eth0\n```\n\n- `lo` — loopback (127.0.0.1).\n- `inet 10.0.0.5/24` — IP va subnet.\n- `state UP` — interfeys ishlayapti.\n- `ip r` — routing jadvali (default gateway), `ip link` — faqat L2."
+ },
+ "34015": {
+  "a": "**CIDR `/24` = mask `255.255.255.0`.**\n\n- `10.0.0.0/24` → `10.0.0.0` – `10.0.0.255`.\n- `.0` — network manzil, `.255` — broadcast → **254 host**.\n- Formula: `2^(32-prefix) - 2`.\n\n| CIDR | Manzil | Host |\n|---|---|---|\n| /24 | 256 | 254 |\n| /16 | 65536 | 65534 |\n| /28 | 16 | 14 |\n\n(AWS subnet'da yana 3 tasini zaxiraga oladi.)"
+ },
+ "34016": {
+  "a": "**RFC 1918:**\n\n- `10.0.0.0/8`\n- `172.16.0.0/12` (172.16 – 172.31)\n- `192.168.0.0/16`\n\n- Internetga chiqish NAT orqali.\n- Docker default `172.17.0.0/16` — ofis VPN bilan to'qnashishi mumkin.\n- `127.0.0.0/8` — loopback, `169.254.0.0/16` — link-local (cloud metadata `169.254.169.254`)."
+ },
+ "34017": {
+  "a": "**Oqim:** ilova → `/etc/hosts` → lokal resolver (`/etc/resolv.conf`) → recursive resolver → root → `.com` → domen authoritative serveri.\n\n```sh\ndig example.com          # A record\ndig +short example.com\ndig example.com MX\ndig @8.8.8.8 example.com # boshqa DNS orqali\nnslookup example.com\n```\n\n- Asosiy record'lar: `A` (IPv4), `AAAA` (IPv6), `CNAME` (alias), `MX` (pochta), `TXT`, `NS`.\n- TTL — javob qancha cache'da turadi."
+ },
+ "34018": {
+  "a": "- **`/etc/hosts`** — statik yozuvlar:\n```\n127.0.0.1  localhost\n10.0.0.10  db.internal\n```\n- **`/etc/resolv.conf`** — DNS sozlamasi:\n```\nnameserver 1.1.1.1\nsearch corp.local\n```\n\n- Tartibni `/etc/nsswitch.conf` (`hosts: files dns`) belgilaydi.\n- systemd-resolved bo'lsa `resolv.conf` `127.0.0.53` ga ishora qiladi — `resolvectl status`."
+ },
+ "34019": {
+  "a": "```sh\nip r\n# default via 10.0.0.1 dev eth0\n# 10.0.0.0/24 dev eth0 proto kernel\n```\n\n- O'z subnet'idagi manzilga to'g'ridan-to'g'ri, qolganiga — gateway orqali.\n- Gateway yo'q/xato bo'lsa: lokal tarmoq ishlaydi, internet ishlamaydi.\n- `traceroute 8.8.8.8` — birinchi hop odatda gateway."
+ },
+ "34020": {
+  "a": "```sh\nlsblk\n# NAME   SIZE TYPE MOUNTPOINT\n# sda     50G disk\n# ├─sda1   1G part /boot\n# └─sda2  49G part /\n# sdb    100G disk\n\nsudo blkid /dev/sda2\n# UUID=\"3f2a...\" TYPE=\"ext4\"\n```\n\n- Yangi disk qo'shilganini `lsblk` da ko'rasiz (mount point yo'q).\n- `/etc/fstab` da UUID ishlatiladi — `sdX` nomi reboot'da o'zgarishi mumkin."
+ },
+ "34021": {
+  "a": "```sh\nlsblk                          # /dev/sdb ni top\nsudo mkfs.ext4 /dev/sdb\nsudo mkdir -p /data\nsudo mount /dev/sdb /data\nsudo blkid /dev/sdb            # UUID\necho 'UUID=xxxx /data ext4 defaults,nofail 0 2' | sudo tee -a /etc/fstab\nsudo umount /data && sudo mount -a   # fstab to'g'rimi?\n```\n\n- `nofail` — disk bo'lmasa ham tizim boot bo'ladi.\n- `fstab` xatosi serverni boot'da emergency mode'ga tushiradi — `mount -a` bilan tekshirish shart."
+ },
+ "34022": {
+  "a": "| | MBR | GPT |\n|---|---|---|\n| Disk hajmi | 2 TiB gacha | amalda cheksiz |\n| Partition | 4 primary (extended orqali ko'proq) | 128 (default) |\n| Boot | BIOS | UEFI |\n| Zaxira | yo'q | disk oxirida backup header |\n\n- Asboblar: `fdisk` (ikkalasi), `gdisk`/`parted` (GPT).\n- Yangi serverlar — GPT."
+ },
+ "34023": {
+  "a": "| RAID | Min disk | Foydali hajm | Nechta disk o'lsa chidaydi | Qachon |\n|---|---|---|---|---|\n| 0 | 2 | 100% | 0 | tezlik, vaqtinchalik data |\n| 1 | 2 | 50% | 1 | OS, kichik server |\n| 5 | 3 | (N-1)/N | 1 | arxiv, o'qish ko'p |\n| 10 | 4 | 50% | har juftdan 1 | DB, yozish ko'p |\n\n**RAID backup emas** — `rm -rf` yoki ransomware hamma disklarga yoziladi."
+ },
+ "34024": {
+  "a": "```sh\nsudo smartctl -H /dev/sda       # PASSED / FAILED\nsudo smartctl -a /dev/sda       # Reallocated_Sector_Ct va h.k.\ndmesg -T | grep -i -E 'i/o error|ata|nvme'\niostat -xz 1                    # %util, await\n```\n\n- `Reallocated_Sector_Ct`, `Pending_Sector` o'sib borsa — diskni almashtirishni rejalashtiring.\n- Cloud disklarda SMART ko'pincha yo'q — provider metrikalariga qarang."
+ },
+ "34025": {
+  "a": "```sh\nrsync -avz --progress /var/www/ user@backup:/srv/www/\nrsync -avz --delete src/ dst/     # dst'da ortiqchasini o'chiradi\nrsync -avzn src/ dst/             # -n = dry-run\n```\n\n- `-a` archive (ruxsat, vaqt, symlink), `-v` verbose, `-z` siqish.\n- `src/` (slash bilan) — ichidagilar; `src` — papkaning o'zi.\n- `--delete` dan oldin har doim `-n` bilan sinab ko'ring."
+ },
+ "34026": {
+  "a": "```sh\ntar -czf backup-$(date +%F).tar.gz /etc /var/www   # create, gzip\ntar -tzf backup.tar.gz | head                       # ro'yxat\ntar -xzf backup.tar.gz -C /restore                  # extract\n```\n\n- `c` create, `x` extract, `t` list, `z` gzip, `J` xz, `f` fayl nomi.\n- Backup'ni tiklashni sinab ko'rmaguncha u backup emas."
+ },
+ "34027": {
+  "a": "**3-2-1:**\n\n- **3** nusxa (asl + 2 backup);\n- **2** xil media/storage (masalan disk + S3);\n- **1** nusxa offsite (boshqa region/ofis).\n\nQo'shimcha:\n- Muntazam **restore test**.\n- Immutable/versioned backup (ransomware'dan himoya).\n- RPO (qancha data yo'qotish mumkin) va RTO (qancha vaqtda tiklash) aniq bo'lsin."
+ },
+ "34028": {
+  "a": "```sh\ntimedatectl\n#   System clock synchronized: yes\n#   NTP service: active\nsudo timedatectl set-timezone Asia/Tashkent\nchronyc tracking     # chrony ishlatilsa\n```\n\n- Vaqt farqi: TLS xatolari, JWT `exp` noto'g'ri, loglarni solishtirib bo'lmaydi.\n- Serverlarda ko'pincha UTC ishlatiladi — loglar bir xil bo'ladi."
+ },
+ "34029": {
+  "a": "`/etc/logrotate.d/myapp`:\n\n```\n/var/log/myapp/*.log {\n  daily\n  rotate 14\n  compress\n  missingok\n  notifempty\n  copytruncate\n}\n```\n\n```sh\nsudo logrotate -d /etc/logrotate.d/myapp   # dry-run\n```\n\n- `copytruncate` — ilova faylni qayta ochmasa kerak.\n- Odatda cron/systemd timer orqali kuniga bir ishlaydi."
+ },
+ "34030": {
+  "a": "```sh\ncrontab -e\n30 2 * * * /opt/backup.sh >> /var/log/backup.log 2>&1\n```\n\n| Maydon | Qiymat |\n|---|---|\n| daqiqa | 0-59 |\n| soat | 0-23 |\n| oy kuni | 1-31 |\n| oy | 1-12 |\n| hafta kuni | 0-7 (0,7 = yakshanba) |\n\n- Cron PATH minimal — to'liq yo'l yozing.\n- Chiqishni logga yo'naltiring, aks holda xato ko'rinmaydi."
+ },
+ "34031": {
+  "a": "```sh\nsudo apt update            # repo index'larini yuklaydi\nsudo apt upgrade           # o'rnatilganlarni yangilaydi\nsudo apt full-upgrade      # kerak bo'lsa paket o'chiradi/qo'shadi\napt list --upgradable\n```\n\n- `update` siz `upgrade` eski ro'yxat bilan ishlaydi.\n- Prod'da avtomatik upgrade ehtiyotkorlik bilan: `unattended-upgrades` faqat security uchun."
+ },
+ "34032": {
+  "a": "| Vazifa | Debian/Ubuntu | RHEL/Rocky |\n|---|---|---|\n| o'rnatish | `apt install nginx` | `dnf install nginx` |\n| o'chirish | `apt remove nginx` | `dnf remove nginx` |\n| qidirish | `apt search nginx` | `dnf search nginx` |\n| ma'lumot | `apt show nginx` | `dnf info nginx` |\n| fayl qaysi paketdan | `dpkg -S /usr/sbin/nginx` | `rpm -qf /usr/sbin/nginx` |\n| o'rnatilganlar | `dpkg -l` | `rpm -qa` |"
+ },
+ "34033": {
+  "a": "```sh\napt policy nginx\n# Installed: 1.24.0-1\n# Candidate: 1.24.0-2\n# 500 http://archive.ubuntu.com/ubuntu noble/main\n\ndpkg -l | grep nginx\nrpm -q nginx\n```\n\n- Version pin: `apt-mark hold nginx` — upgrade'da tegilmaydi.\n- Prod'da versiyani qotirish — kutilmagan yangilanishdan himoya."
+ },
+ "34034": {
+  "a": "```sh\nsudo install -m 0755 -d /etc/apt/keyrings\ncurl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc\necho \"deb [signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list\nsudo apt update\n```\n\n- GPG imzo — paket yo'lda o'zgartirilmaganini kafolatlaydi.\n- `signed-by` — kalit faqat shu repo uchun amal qiladi (eski `apt-key` deprecated)."
+ },
+ "34035": {
+  "a": "```sh\nsudo apt remove nginx      # /etc/nginx qoladi\nsudo apt purge nginx       # /etc/nginx ham o'chadi\nsudo apt autoremove        # endi kerak bo'lmagan dependency'lar\n```\n\n- Toza qayta o'rnatish kerak bo'lsa — `purge`.\n- `purge` dan oldin config backup qiling."
+ },
+ "34036": {
+  "a": "- **Metrics** — \"nima bo'lyapti?\" — arzon, agregatsiyalangan, alert/dashboard (Prometheus, Grafana).\n- **Logs** — \"nega bo'ldi?\" — har hodisa tafsiloti (Loki, ELK).\n- **Traces** — \"qayerda sekin?\" — so'rov xizmatlar orqali yo'li (Jaeger, Tempo).\n\nUchalasi birga — observability. Alert metrikadan, tahlil log/trace'dan."
+ },
+ "34037": {
+  "a": "| Tur | Xususiyat | Misol | Odatiy so'rov |\n|---|---|---|---|\n| Counter | faqat o'sadi, restart'da 0 | `http_requests_total` | `rate(x[5m])` |\n| Gauge | ixtiyoriy o'zgaradi | `node_memory_MemAvailable_bytes` | to'g'ridan-to'g'ri |\n| Histogram | bucket'lar | `http_request_duration_seconds` | `histogram_quantile(0.95, ...)` |\n\nCounter'ni xom ko'rsatish foydasiz — `rate()` bilan ishlating."
+ },
+ "34038": {
+  "a": "- **Actionable** — alert kelsa, kimdir biror ish qilishi kerak.\n- **Simptom bo'yicha** — \"xato 5% dan oshdi\", \"CPU 80%\" emas.\n- **`for:` davomiylik** — qisqa sakrashlarga uyg'otmasin.\n- **Severity**: page (hozir) vs ticket (ish vaqtida).\n- **Runbook link** — nima qilish yozilgan.\n\nKo'p shovqinli alert → alert fatigue → muhimini o'tkazib yuborish."
+ },
+ "34039": {
+  "a": "- **Latency** — so'rov qancha vaqt oladi (p50/p95/p99).\n- **Traffic** — yuklama (RPS).\n- **Errors** — xato ulushi (5xx).\n- **Saturation** — resurs qanchalik to'lgan (CPU, RAM, queue).\n\nO'xshash: RED (Rate, Errors, Duration) — xizmatlar uchun; USE (Utilization, Saturation, Errors) — resurslar uchun."
+ },
+ "34040": {
+  "a": "**Misol:** 99 so'rov 50ms, 1 so'rov 5s → o'rtacha ~100ms (yaxshi ko'rinadi), lekin p99 = 5s.\n\n- **p50** — median, odatiy foydalanuvchi.\n- **p95/p99** — \"dum\" (tail) latency.\n- Bir sahifa ko'p so'rov qilsa, p99'ga tushish ehtimoli katta.\n\nSLO odatda percentile bilan yoziladi: \"p95 < 300ms\"."
+ },
+ "34041": {
+  "a": "- Yuqorida: RPS, xato %, p95 latency — bir qarashda \"yaxshimi?\".\n- Pastda: CPU, RAM, disk, connection pool, queue uzunligi.\n- Deploy annotatsiyalari — o'zgarish bilan bog'lash uchun.\n- Bir xil vaqt oralig'i, tushunarli birliklar.\n\n50 ta panel — hech kim qaramaydi. Har dashboard bitta auditoriya uchun."
+ },
+ "34042": {
+  "a": "| # | Qatlam | Misol |\n|---|---|---|\n| 7 | Application | HTTP, DNS, SSH |\n| 6 | Presentation | TLS (shartli), kodlash |\n| 5 | Session | — |\n| 4 | Transport | TCP, UDP, port |\n| 3 | Network | IP, routing, ICMP |\n| 2 | Data link | Ethernet, MAC, ARP |\n| 1 | Physical | kabel, radio |\n\n- **L4 load balancer** — IP:port bo'yicha (AWS NLB).\n- **L7 load balancer** — URL/header bo'yicha (ALB, Nginx)."
+ },
+ "34044": {
+  "a": "- **200** OK, **201** Created, **204** No Content\n- **301** Moved Permanently, **302** Found, **304** Not Modified\n- **400** Bad Request, **401** Unauthorized (autentifikatsiya yo'q), **403** Forbidden (ruxsat yo'q), **404** Not Found, **429** Too Many Requests\n- **500** Internal Server Error, **502** Bad Gateway (proxy orqasidagi xizmat javob bermadi), **503** Service Unavailable, **504** Gateway Timeout\n\nDevOps uchun: 502/504 — odatda backend yiqilgan yoki sekin."
+ },
+ "34045": {
+  "a": "| Xizmat | Port |\n|---|---|\n| SSH | 22 |\n| SMTP | 25 / 587 |\n| DNS | 53 (UDP/TCP) |\n| HTTP | 80 |\n| HTTPS | 443 |\n| MySQL | 3306 |\n| PostgreSQL | 5432 |\n| Redis | 6379 |\n| MongoDB | 27017 |\n| K8s API | 6443 |\n\n1024 dan past portlarni ochish uchun root (yoki capability) kerak."
+ },
+ "34046": {
+  "a": "```\nClient                Server\n  | --- SYN ----------> |\n  | <-- SYN-ACK ------- |\n  | --- ACK ----------> |\n  | ==== data ========= |\n```\n\n- Har yangi ulanish 1 RTT oladi (TLS bilan yana qo'shimcha) — shuning uchun keep-alive va connection pool.\n- `SYN_SENT` da qotib qolsa — firewall/port yopiq.\n- Yopilish: FIN/ACK, keyin `TIME_WAIT`."
+ },
+ "34047": {
+  "a": "- **Confidentiality** — trafik shifrlangan.\n- **Integrity** — yo'lda o'zgartirilsa aniqlanadi.\n- **Authentication** — server sertifikati CA tomonidan imzolangan.\n\n```sh\ncurl -vI https://example.com\nopenssl s_client -connect example.com:443 -servername example.com\n```\n\n- Sertifikat muddati tugashi — eng ko'p uchraydigan avariya: monitoring qo'ying, Let's Encrypt + avtomatik yangilash."
+ },
+ "34048": {
+  "a": "| | Siz boshqarasiz | Provider boshqaradi | Misol |\n|---|---|---|---|\n| IaaS | OS, runtime, app | hardware, virtualizatsiya, tarmoq | EC2, Azure VM |\n| PaaS | app, data | OS, runtime, scaling | Elastic Beanstalk, App Engine |\n| SaaS | faqat foydalanish | hammasi | Gmail, Jira |\n\nYuqoriga chiqqan sari nazorat kamayadi, ops yuki kamayadi."
+ },
+ "34049": {
+  "a": "- **Region** — bir-biridan uzoq, mustaqil (latency, data residency qonuni).\n- **AZ** — bir region ichida, past latency bilan bog'langan, lekin alohida avariya chegarasi.\n\nAmaliyot:\n- High availability — kamida 2-3 AZ ga tarqatish.\n- Disaster recovery — boshqa region.\n- Narx: AZ'lar orasidagi trafik pullik."
+ },
+ "34050": {
+  "a": "- **Provider: \"security OF the cloud\"** — fizik DC, hardware, hypervisor, global tarmoq.\n- **Mijoz: \"security IN the cloud\"** — IAM, data shifrlash, security group, OS yangilash (IaaS'da), ilova.\n\nXizmat qanchalik managed bo'lsa, mijoz ulushi shuncha kam. Ochiq qolgan S3 bucket — mijoz aybi."
+ },
+ "34051": {
+  "a": "| | Vertical (up) | Horizontal (out) |\n|---|---|---|\n| Usul | CPU/RAM qo'shish | instance qo'shish |\n| Chegara | eng katta mashina | amalda cheksiz |\n| Downtime | ko'pincha restart | yo'q |\n| Talab | yo'q | stateless, load balancer |\n\nCloud'da odatiy: auto scaling group + load balancer."
+ },
+ "34052": {
+  "a": "- **Budget + alert** — oy oxirida syurpriz bo'lmasin.\n- **Tag** (`team`, `env`) — kim qancha sarflayotganini bilish.\n- Ishlatilmayotgan: to'xtatilgan VM disklari, eski snapshot'lar, bo'sh Elastic IP, unutilgan load balancer.\n- **Rightsizing** — 5% CPU ishlatayotgan katta VM'ni kichraytirish.\n- Dev muhitni tunda o'chirish.\n- Doimiy yuk — reserved/savings plan; uzilishga chidamli — spot."
+ },
+ "34053": {
+  "a": "- **Chart** — `Chart.yaml`, `values.yaml`, `templates/` (Go template'li YAML).\n- **Values** — default `values.yaml`, ustidan `-f prod.yaml` yoki `--set`.\n- **Release** — o'rnatilgan nusxa, nomi va revision tarixi bilan.\n\n```sh\nhelm install myapp ./chart -n prod -f values-prod.yaml\nhelm list -n prod\n```"
+ },
+ "34054": {
+  "a": "```sh\nhelm upgrade --install myapp ./chart -n prod -f values-prod.yaml\nhelm history myapp -n prod\nhelm rollback myapp 3 -n prod\n```\n\n- `--install` — yo'q bo'lsa o'rnatadi (CI uchun qulay).\n- `--atomic` — xato bo'lsa avtomatik rollback.\n- `--wait` — pod'lar ready bo'lguncha kutadi."
+ },
+ "34055": {
+  "a": "```sh\nhelm lint ./chart\nhelm template myapp ./chart -f values-prod.yaml > out.yaml\nhelm upgrade --install myapp ./chart --dry-run\nhelm diff upgrade myapp ./chart -f values-prod.yaml  # plugin\n```\n\n`helm template` chiqishini `kubectl apply --dry-run=server -f out.yaml` bilan ham tekshirish mumkin."
+ },
+ "34056": {
+  "a": "```sh\nhelm repo add bitnami https://charts.bitnami.com/bitnami\nhelm repo update\nhelm search repo redis\nhelm show values bitnami/redis > redis-values.yaml\nhelm install cache bitnami/redis -f redis-values.yaml --version 19.0.0\n```\n\n- `--version` ni qotiring — aks holda har o'rnatish yangi versiya olishi mumkin.\n- OCI registry: `helm install x oci://registry/charts/x`."
+ },
+ "34058": {
+  "a": "Sabablar:\n- Git'ga yangi commit tushdi, hali sync bo'lmagan.\n- Kimdir `kubectl edit` qildi (drift).\n- Controller qo'shgan maydonlar (masalan HPA `replicas` ni o'zgartirgan).\n\nYechim:\n- `argocd app diff myapp` — farqni ko'rish.\n- Auto-sync + `selfHeal` — driftni avtomatik qaytarish.\n- Kutilgan farqlar uchun `ignoreDifferences`."
+ },
+ "34059": {
+  "a": "- Har resurs aynan bitta Resource Group'da.\n- RBAC va policy RG darajasida berilishi mumkin.\n- RG o'chirilsa — ichidagi hamma resurs o'chadi.\n\nIerarxiya: **Management group → Subscription → Resource group → Resource**.\n\n```sh\naz group create -n rg-app-prod -l westeurope\naz resource list -g rg-app-prod -o table\n```"
+ },
+ "34060": {
+  "a": "| Azure | AWS |\n|---|---|\n| Virtual Machines | EC2 |\n| Blob Storage | S3 |\n| Virtual Network (VNet) | VPC |\n| NSG | Security Group |\n| Entra ID (Azure AD) | IAM / Identity Center |\n| AKS | EKS |\n| Azure SQL | RDS |\n| Functions | Lambda |\n| Monitor | CloudWatch |\n| Key Vault | Secrets Manager / KMS |"
+ },
+ "34061": {
+  "a": "```sh\naz login\naz account list -o table\naz account set --subscription \"Prod\"\naz account show\n```\n\n- CI'da: service principal yoki managed identity / OIDC (`az login --service-principal ...`).\n- Noto'g'ri subscription'da ishlash — klassik xato; prompt'da ko'rsatib qo'ying."
+ },
+ "34062": {
+  "a": "- **System-assigned** — resurs bilan birga yaratiladi/o'chadi.\n- **User-assigned** — alohida, bir nechta resursga berish mumkin.\n\nMisol: App Service → Managed Identity → Key Vault'dan secret o'qish, connection string kodda yo'q.\n\nAWS'dagi analog — IAM role for EC2 / IRSA."
+ },
+ "34063": {
+  "a": "- Har resurs aynan bitta project'ga tegishli.\n- Billing account project'ga bog'lanadi.\n- API'lar (masalan Compute Engine) project'da yoqiladi.\n- Project ID — global unikal, o'zgarmaydi.\n\n```sh\ngcloud projects list\ngcloud config set project my-proj-prod\n```"
+ },
+ "34064": {
+  "a": "| GCP | AWS |\n|---|---|\n| Compute Engine | EC2 |\n| Cloud Storage (GCS) | S3 |\n| VPC (global) | VPC (regional) |\n| GKE | EKS |\n| Cloud SQL | RDS |\n| Cloud Run | App Runner / Fargate |\n| Cloud Functions | Lambda |\n| Pub/Sub | SNS + SQS |\n| BigQuery | Redshift / Athena |\n| Cloud Monitoring/Logging | CloudWatch |\n\nFarq: GCP VPC global, subnet'lar regional."
+ },
+ "34065": {
+  "a": "```sh\ngcloud auth login\ngcloud config set project my-proj\ngcloud compute instances list\ngcloud compute ssh vm-1 --zone europe-west1-b\n```\n\n- Ilovalar uchun: `gcloud auth application-default login` (ADC).\n- CI'da: service account + Workload Identity Federation (JSON key saqlamasdan)."
+ },
+ "34066": {
+  "a": "- VM, Cloud Run, GKE pod'iga biriktiriladi — kod avtomatik token oladi.\n- Rol berish: `roles/storage.objectViewer` kabi — minimal huquq.\n- JSON key yuklab olish — xavfli (leak), imkon qadar Workload Identity ishlating.\n\n```sh\ngcloud iam service-accounts create app-sa\n```"
+ },
+ "34067": {
+  "a": "- Qo'lda SSH bilan sozlash → har server biroz farq qiladi (**configuration drift**, \"snowflake\" server).\n- Kod bilan: Git'da tarix, review, qayta ishlatish, test.\n- **Idempotent** — necha marta ishlatilsa ham natija bir xil.\n\nAsboblar: Ansible, Chef, Puppet, SaltStack."
+ },
+ "34068": {
+  "a": "| | Agent | Model | Til |\n|---|---|---|---|\n| Ansible | yo'q (SSH) | push | YAML |\n| Chef | bor | pull | Ruby DSL |\n| Puppet | bor | pull | Puppet DSL (declarative) |\n| SaltStack | bor (yoki salt-ssh) | push/pull, event bus | YAML + Jinja |\n\nYangi loyihada ko'pincha Ansible (kirish oson) yoki immutable image + Terraform."
+ },
+ "34069": {
+  "a": "- **Push**: tez, oddiy, agent kerak emas; lekin ishga tushirgan odam/CI kerak, drift o'z-o'zidan tuzalmaydi.\n- **Pull**: agent har N daqiqada tekshiradi → drift avtomatik tuzaladi, ming serverga yaxshi; lekin agent va master boshqaruvi kerak.\n\nGitOps (ArgoCD) ham pull modeli."
+ },
+ "34070": {
+  "a": "- **Declarative**: `package nginx: ensure installed` — asbob o'zi farqni topib tuzatadi; idempotent.\n- **Imperative**: `apt install nginx && systemctl start nginx` — tartib siz javobgarsiz, qayta ishlatganda xato berishi mumkin.\n\nAnsible — o'rtada: modullar declarative, playbook tartibi imperative."
+ },
+ "34071": {
+  "a": "```bash\n#!/usr/bin/env bash\nset -euo pipefail\n```\n\n- `-e` — buyruq non-zero qaytarsa skript to'xtaydi.\n- `-u` — `$UNDEFINED` ishlatilsa xato (`rm -rf \"$DIR/\"` falokatining oldini oladi).\n- `-o pipefail` — `cmd1 | cmd2` da `cmd1` xatosi yo'qolmaydi.\n\nDebug uchun: `set -x`."
+ },
+ "34072": {
+  "a": "```bash\ngrep -q nginx /etc/passwd\necho $?           # 0 topildi, 1 topilmadi\n\nif systemctl is-active --quiet nginx; then\n  echo \"ishlayapti\"\nfi\n\ncmd || { echo \"xato\" >&2; exit 1; }\n```\n\n- 127 — buyruq topilmadi, 126 — ruxsat yo'q, 130 — Ctrl+C, 137 — SIGKILL (OOM)."
+ },
+ "34073": {
+  "a": "```bash\nfile=\"my report.txt\"\nrm $file      # 'my' va 'report.txt' ni o'chirishga urinadi\nrm \"$file\"    # to'g'ri\n```\n\n- Qoida: har doim `\"$var\"`, `\"$@\"`.\n- `shellcheck script.sh` — bunday xatolarni avtomatik topadi."
+ },
+ "34074": {
+  "a": "```bash\nfor host in web1 web2 web3; do\n  if ping -c1 -W1 \"$host\" >/dev/null 2>&1; then\n    echo \"$host UP\"\n  else\n    echo \"$host DOWN\"\n  fi\ndone\n\n[[ -f /etc/nginx/nginx.conf ]] && echo \"bor\"\n[[ -d /data ]] || mkdir -p /data\n```\n\n- `-f` fayl, `-d` papka, `-z` bo'sh string, `-eq` son tengligi.\n- `[[ ]]` — bash'da `[ ]` dan xavfsizroq."
+ },
+ "34075": {
+  "a": "```bash\ncmd > out.log          # stdout faylga (ustidan yozadi)\ncmd >> out.log         # qo'shadi\ncmd 2> err.log         # faqat stderr\ncmd > all.log 2>&1     # ikkalasi bitta faylga\ncmd &> all.log         # bash qisqartmasi\ncmd > /dev/null 2>&1   # hammasini tashlash\n```\n\nTartib muhim: `2>&1 > file` — stderr baribir ekranga chiqadi."
+ },
+ "34076": {
+  "a": "```bash\n#!/usr/bin/env bash\nset -euo pipefail\nif [[ $# -lt 1 ]]; then\n  echo \"Usage: $0 <env>\" >&2\n  exit 1\nfi\nenv=\"$1\"\necho \"Deploy: $env\"\nfor a in \"$@\"; do echo \"arg: $a\"; done\n```\n\n- Default qiymat: `${2:-latest}`.\n- Ko'p flag uchun `getopts`."
+ },
+ "34077": {
+  "a": "**Qadamlar:**\n\n1. Shell qatorni o'qiydi, so'zlarga bo'ladi, `*` va `$VAR` ni ochadi.\n2. Alias/builtin emasmi tekshiradi, keyin `$PATH` bo'yicha `/usr/bin/ls` ni topadi.\n3. `fork()` — shell o'z nusxasini yaratadi (yangi PID).\n4. Bola jarayonda `execve(\"/usr/bin/ls\", ...)` — xotira `ls` dasturi bilan almashtiriladi.\n5. `ls` kernel'dan `getdents()` syscall orqali papka yozuvlarini o'qiydi, `write()` bilan stdout'ga yozadi.\n6. Ota shell `wait()` qiladi, exit code `$?` ga tushadi, prompt qaytadi.\n\n```\nbash --fork--> bash(bola) --execve--> ls --exit--> bash: $?=0\n```\n\nKo'rish: `strace -f -e trace=execve,clone bash -c ls`."
+ },
+ "34078": {
+  "a": "**User space** — oddiy dasturlar, cheklangan huquq. **Kernel space** — hardware'ga to'liq kirish.\n\n- Fayl o'qish: `open()` → `read()` → `close()`.\n- Syscall'da CPU kernel rejimiga o'tadi, kernel tekshiradi (ruxsat bormi?), bajaradi, natija qaytaradi.\n- Bu izolyatsiya: bitta dastur boshqasining xotirasini buzolmaydi.\n\n```sh\nstrace -c ls        # qaysi syscall'lar nechta marta\nstrace -p <PID>     # ishlab turgan jarayon nima qilyapti\n```"
+ },
+ "34079": {
+  "a": "- `kill` aslida `kill()` syscall — kernel jarayonga signal yetkazadi.\n- **SIGTERM** — ilova handler bilan ushlaydi: ulanishlarni yopadi, faylni saqlaydi, keyin chiqadi (graceful shutdown).\n- **SIGKILL** — handler yo'q, tozalash yo'q; yarim yozilgan fayl qolishi mumkin.\n- **SIGINT** (2) — Ctrl+C, **SIGHUP** (1) — ko'pincha config qayta o'qish.\n\nTo'g'ri tartib: avval `kill PID`, kut, keyin `kill -9 PID`. Docker/K8s ham shunday: SIGTERM → grace period → SIGKILL."
+ },
+ "34080": {
+  "a": "- `/proc/<PID>/` — har jarayon: `cmdline`, `environ`, `status`, `fd/` (ochiq fayllar), `limits`.\n- `/proc/cpuinfo`, `/proc/meminfo`, `/proc/loadavg` — tizim ma'lumoti.\n- `/proc/sys/` — kernel sozlamalari (`sysctl` shu yerga yozadi).\n\n```sh\ncat /proc/loadavg\nls -l /proc/$$/fd       # joriy shell ochgan fayllar\ncat /proc/sys/net/ipv4/ip_forward\n```\n\n`top`, `ps`, `free` ma'lumotni aynan `/proc` dan o'qiydi."
+ },
+ "34081": {
+  "a": "- `open()` fayl ochsa kernel eng kichik bo'sh raqamni qaytaradi (masalan 3).\n- Linux'da \"hamma narsa fayl\": socket, pipe, terminal ham fd.\n- Limit: `ulimit -n` (ko'pincha 1024) — oshsa \"Too many open files\".\n\n```sh\nls -l /proc/<PID>/fd\nlsof -p <PID>\n```\n\n`2>&1` aynan \"fd 2 ni fd 1 ga yo'naltir\" degani."
+ },
+ "34082": {
+  "a": "- **Zombie** (`STAT` = `Z`): resurs yemaydi, faqat PID band. Ko'p bo'lsa — ota dasturda bug (`wait()` yo'q). Yechim — otani tuzatish yoki restart.\n- **Orphan**: PID 1 ga o'tadi, u `wait()` qilib tozalaydi.\n\nKonteynerda PID 1 sizning ilovangiz bo'lsa, u zombie'larni yig'maydi — `tini` yoki `docker run --init` ishlatiladi."
+ },
+ "34083": {
+  "a": "1. `docker` CLI so'rovni `/var/run/docker.sock` orqali **dockerd** ga yuboradi.\n2. Image lokalda yo'q bo'lsa registry'dan layer'lar bo'yicha **pull**.\n3. Layer'lar ustiga yoziladigan qatlam qo'shiladi (overlayfs).\n4. dockerd → **containerd** → **runc**.\n5. runc **namespace**'lar (pid, net, mnt, uts, ipc) va **cgroup** (CPU/RAM limit) yaratadi, keyin `nginx` ni PID 1 sifatida ishga tushiradi.\n6. Tarmoq: `veth` juft `docker0` bridge'ga ulanadi, `-p` bo'lsa iptables NAT qoidasi.\n\n```\ndocker CLI -> dockerd -> containerd -> runc -> nginx (namespaces + cgroups)\n```"
+ },
+ "34084": {
+  "a": "| | Konteyner | VM |\n|---|---|---|\n| Kernel | host bilan umumiy | o'zining |\n| Ishga tushish | soniyadan kam | daqiqa/soniyalar |\n| Hajm | MB | GB |\n| Izolyatsiya | namespace, cgroup | hypervisor |\n\nHostda `ps aux | grep nginx` qilsangiz konteyner ichidagi nginx ko'rinadi — u oddiy jarayon.\n\nShuning uchun: Linux konteyner Windows kernel'ida to'g'ridan-to'g'ri ishlamaydi (Docker Desktop yashirin VM ishlatadi)."
+ },
+ "34085": {
+  "a": "**Namespace'lar (izolyatsiya):**\n- `pid` — konteyner ichida o'z PID 1.\n- `net` — o'z interfeys, IP, port.\n- `mnt` — o'z fayl tizimi.\n- `uts` — o'z hostname.\n- `user`, `ipc`.\n\n**Cgroup (cheklash):**\n- `--memory=512m` — oshsa OOM kill.\n- `--cpus=1.5`.\n\n```sh\ndocker run --memory=256m --cpus=0.5 nginx\nlsns   # hostdagi namespace'lar\n```"
+ },
+ "34086": {
+  "a": "```dockerfile\nFROM node:20          # base layer'lar\nWORKDIR /app\nCOPY package*.json ./ # layer\nRUN npm ci            # layer (og'ir)\nCOPY . .              # layer (tez-tez o'zgaradi)\n```\n\n- O'zgarmagan qadam cache'dan olinadi — shuning uchun kam o'zgaradiganini yuqoriga qo'ying.\n- overlayfs: pastki layer'lar read-only, konteyner yozsa — copy-on-write.\n- Konteyner o'chirilsa yozuvlar yo'qoladi — doimiy data uchun volume.\n\n```sh\ndocker history nginx\n```"
+ },
+ "34087": {
+  "a": "```\nclient -> host:8080 --iptables DNAT--> 172.17.0.2:80 (konteyner)\n```\n\n- Konteyner `docker0` bridge tarmog'ida private IP oladi.\n- `iptables -t nat -L DOCKER -n` — qoidalarni ko'rish.\n- Gotcha: Docker iptables qoidalari `ufw` dan oldin ishlaydi — `-p` bilan ochilgan port ufw bloklasa ham ochiq bo'lib qoladi. Faqat lokal kerak bo'lsa: `-p 127.0.0.1:8080:80`."
+ },
+ "34088": {
+  "a": "1. `kubectl` YAML'ni **API server** ga yuboradi (auth, validation).\n2. API server obyektni **etcd** ga yozadi.\n3. **Deployment controller** ReplicaSet yaratadi.\n4. **ReplicaSet controller** kerakli sondagi Pod obyektini yaratadi (`nodeName` bo'sh).\n5. **Scheduler** har pod uchun mos node tanlaydi (resurs, taint, affinity).\n6. O'sha node'dagi **kubelet** podni ko'radi → containerd orqali image pull, konteyner start.\n7. kubelet probe'larni tekshiradi, statusni API server'ga yozadi.\n8. Ready bo'lsa **Service** endpoint'lariga qo'shiladi.\n\nHamma komponent API server orqali gaplashadi; holat — etcd'da."
+ },
+ "34089": {
+  "a": "```\nloop:\n  desired = spec (replicas: 3)\n  actual  = hozirgi pod'lar (2)\n  if farq: tuzat (1 ta pod yarat)\n```\n\n- Pod o'chsa — ReplicaSet yangisini yaratadi.\n- Node o'lsa — pod'lar boshqa node'ga ko'chadi.\n- Shuning uchun podni qo'lda o'chirish ko'pincha \"restart\" bo'lib chiqadi.\n\nBu declarative model — siz \"nima\" deysiz, K8s \"qanday\" qiladi."
+ },
+ "34090": {
+  "a": "- Pod IP'lari o'zgaradi, Service IP — o'zgarmaydi.\n- Service `selector` bo'yicha pod'larni topadi → **EndpointSlice** (ready pod IP'lari).\n- **kube-proxy** shu ro'yxatdan iptables/IPVS qoidalari yozadi.\n- **CoreDNS**: `my-svc.my-ns.svc.cluster.local` → ClusterIP.\n\n```\npod -> my-svc (10.96.0.10) --iptables--> pod-a | pod-b | pod-c\n```\n\nPod ready bo'lmasa endpoint'dan chiqariladi — trafik kelmaydi."
+ },
+ "34091": {
+  "a": "```yaml\nreadinessProbe:\n  httpGet: { path: /ready, port: 8080 }\n  periodSeconds: 5\nlivenessProbe:\n  httpGet: { path: /health, port: 8080 }\n  failureThreshold: 3\n```\n\n- **Readiness** — \"trafik qabul qila olamanmi?\" (DB ulanmagan, warmup).\n- **Liveness** — \"tirikmanmi yoki qotib qoldimmi?\".\n- **Startup** — sekin ishga tushadigan ilova uchun, liveness'ni kechiktiradi.\n\nXato: liveness'da DB'ni tekshirish — DB tushsa hamma pod restart loop'ga tushadi."
+ },
+ "34092": {
+  "a": "- **blob** — fayl mazmuni (nomi emas).\n- **tree** — papka: nom → blob/tree xaritasi.\n- **commit** — root tree, parent commit(lar), author, xabar.\n- **branch** — `.git/refs/heads/main` faylida commit hash.\n- **HEAD** — hozirgi branch'ga ishora.\n\n```sh\ngit cat-file -p HEAD\ngit cat-file -p HEAD^{tree}\ncat .git/HEAD\n```\n\nGit diff saqlamaydi — har commit to'liq snapshot (o'zgarmagan fayllar bir xil blob'ni qayta ishlatadi)."
+ },
+ "34094": {
+  "a": "- **fetch** — remote'dan yangi obyektlarni yuklab, `origin/main` ni yangilaydi; sizning `main` ga tegmaydi.\n- **pull** — fetch + lokal branch'ga birlashtirish.\n- **push** — remote faqat fast-forward bo'lsa qabul qiladi; aks holda \"rejected\" — avval pull.\n\n```sh\ngit fetch && git log main..origin/main   # nima kelyapti\ngit pull --rebase\n```\n\n`--force` boshqalarning commit'larini o'chirishi mumkin — `--force-with-lease` xavfsizroq."
+ },
+ "34095": {
+  "a": "1. TCP ulanish, server o'z **host key**'ini ko'rsatadi → mijoz `known_hosts` bilan solishtiradi.\n2. Diffie-Hellman bilan umumiy sessiya kaliti → kanal shifrlanadi.\n3. Mijoz: \"shu public key bilan kirmoqchiman\".\n4. Server `~/.ssh/authorized_keys` da bor-yo'qligini tekshiradi.\n5. Mijoz private key bilan sessiya ma'lumotini **imzolaydi**, server public key bilan tekshiradi.\n\n```sh\nssh-keygen -t ed25519\nssh-copy-id user@host\nssh -v user@host   # qadamlarni ko'rish\n```\n\n\"Host key changed\" ogohlantirishi — MITM bo'lishi mumkin, ko'r-ko'rona o'chirmang."
+ },
+ "34096": {
+  "a": "1. `systemctl` → D-Bus → **systemd** (PID 1).\n2. systemd `/etc/systemd/system/` yoki `/lib/systemd/system/` dan `nginx.service` ni o'qiydi.\n3. `Requires=`/`After=` dependency'lar.\n4. `ExecStart=` ni alohida cgroup'da ishga tushiradi.\n5. `Type=` bo'yicha \"tayyor\"ligini aniqlaydi, `Restart=` bo'lsa yiqilganda qayta ko'taradi.\n6. stdout/stderr → **journald**.\n\n```sh\nsystemctl status nginx\nsystemctl cat nginx\njournalctl -u nginx -f\n```\n\n`enable` — boot'da ishga tushishi uchun symlink yaratadi; `start` — hozir ishga tushiradi."
+ },
+ "34097": {
+  "a": "1. **DNS**: cache → `/etc/hosts` → resolver → IP.\n2. **TCP**: 443-portga SYN / SYN-ACK / ACK.\n3. **TLS**: sertifikat tekshiruvi, kalit kelishuvi → shifrlangan kanal.\n4. **HTTP**: `GET / Host: example.com`.\n5. Server tomoni: load balancer → nginx → ilova → DB.\n6. Javob (200 + HTML), brauzer CSS/JS uchun yana so'rovlar qiladi.\n\n```sh\ncurl -v https://example.com\ncurl -w '%{time_namelookup} %{time_connect} %{time_appconnect} %{time_total}\\n' -o /dev/null -s https://example.com\n```\n\nSekinlikni shu bosqichlar bo'yicha ajratish mumkin."
+ },
+ "34098": {
+  "a": "- Host: \"10.0.0.1 kimda?\" (broadcast) → gateway: \"menda, MAC 52:54:...\".\n- Javob ARP cache'ga yoziladi.\n- Boshqa subnet'ga ketayotgan paket — gateway MAC'iga yuboriladi.\n\n```sh\nip neigh   # ARP jadvali\n```\n\nIP — \"qayerga\" (L3), MAC — \"keyingi qadamda kimga\" (L2)."
+ },
+ "34099": {
+  "a": "```yaml\non: push\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - run: npm ci && npm test\n```\n\n- **Event** trigger qiladi.\n- Har **job** — alohida runner, toza muhit (oldingi job fayllari yo'q; kerak bo'lsa artifact/cache).\n- Job'lar default parallel, `needs:` bilan ketma-ket.\n- **Step** — bitta runner'da, umumiy fayl tizimi.\n- `uses:` — tayyor action, `run:` — shell buyruq.\n- Secret'lar env sifatida beriladi, logda yashiriladi."
+ },
+ "34100": {
+  "a": "```sh\ngit init myproj        # yangi, bo'sh .git\ngit clone https://github.com/org/app.git\ngit clone --depth 1 URL   # faqat oxirgi commit (CI uchun tez)\n```\n\n- `init` dan keyin remote yo'q: `git remote add origin URL`.\n- `clone` default branch'ni checkout qiladi."
+ },
+ "34101": {
+  "a": "```sh\ngit config --global user.name \"Ali Valiyev\"\ngit config --global user.email ali@example.com\ngit config --list --show-origin\n```\n\n- `--global` — `~/.gitconfig`, `--local` — `.git/config` (ustun).\n- Ish va shaxsiy email'ni aralashtirmaslik uchun repo darajasida sozlang."
+ },
+ "34102": {
+  "a": "```sh\ngit add .        # hammasi\ngit add file.go  # bitta fayl\ngit add -p       # y/n bilan bo'lak-bo'lak\n```\n\n`-p` — bitta commit'da bitta mantiqiy o'zgarish bo'lishi uchun foydali, tasodifan debug kodni commit qilmaysiz."
+ },
+ "34103": {
+  "a": "```sh\ngit add forgotten.txt\ngit commit --amend              # xabarni ham tahrirlash\ngit commit --amend --no-edit    # xabar o'zgarmaydi\n```\n\n- Amend yangi commit (yangi hash) yaratadi.\n- Push qilingan bo'lsa — boshqalarda tarix buziladi; faqat o'z branch'ingizda `--force-with-lease`."
+ },
+ "34104": {
+  "a": "```sh\ngit remote -v\n# origin  git@github.com:org/app.git (fetch)\n# origin  git@github.com:org/app.git (push)\ngit remote add upstream https://github.com/orig/app.git\ngit remote set-url origin git@github.com:me/app.git\n```\n\nFork bilan ishlaganda: `origin` — sizning fork, `upstream` — asl repo."
+ },
+ "34105": {
+  "a": "- **SSH**: `git@github.com:org/app.git`, `ssh-keygen` + public key'ni GitHub'ga qo'shish.\n- **HTTPS**: `https://github.com/org/app.git`, parol o'rniga Personal Access Token.\n\n```sh\nssh -T git@github.com   # ulanishni tekshirish\n```\n\nCorporate firewall 22-portni bloklasa — HTTPS qulay."
+ },
+ "34106": {
+  "a": "```sh\ngit switch -c feature/login\n# ... commit'lar\ngit push -u origin feature/login\n```\n\n- `-u` (upstream) — keyingi safar oddiy `git push`/`git pull` yetadi.\n- `git branch -vv` — qaysi branch qaysi remote'ni kuzatayotgani."
+ },
+ "34107": {
+  "a": "```sh\ngit branch -d feature/x          # merge qilingan bo'lsa\ngit branch -D feature/x          # majburan\ngit push origin --delete feature/x\ngit fetch --prune                # o'chgan remote branch'larni tozalash\n```"
+ },
+ "34108": {
+  "a": "```\nmerge:   A-B-C---M      rebase:  A-B-C-D'-E'\n              \\   /\n               D-E\n```\n\n- Merge — tarix saqlanadi, xavfsiz.\n- Rebase — toza tarix, lekin commit hash'lari o'zgaradi.\n- Qoida: **umumiy (push qilingan) branch'ni rebase qilmang.**"
+ },
+ "34109": {
+  "a": "```sh\ngit stash push -m \"wip login\"\ngit switch main\n# ... ish\ngit switch feature\ngit stash list\ngit stash pop          # qaytarib, stash'dan o'chiradi\ngit stash apply stash@{1}\n```\n\n- Untracked fayllar uchun: `git stash -u`.\n- Stash uzoq qolmasin — unutiladi."
+ },
+ "34110": {
+  "a": "| Rejim | HEAD | Staging | Working dir |\n|---|---|---|---|\n| `--soft` | siljiydi | saqlanadi | saqlanadi |\n| `--mixed` | siljiydi | tozalanadi | saqlanadi |\n| `--hard` | siljiydi | tozalanadi | **o'chadi** |\n\n```sh\ngit reset --soft HEAD~1   # oxirgi commit'ni \"ochish\"\n```\n\n`--hard` dan oldin o'ylang; yo'qolsa `git reflog` yordam beradi."
+ },
+ "34111": {
+  "a": "```sh\ngit revert abc123   # push qilingan commit'ni xavfsiz bekor qilish\n```\n\n- Umumiy branch (main) da — **revert**.\n- Faqat lokal, push qilinmagan — reset mumkin.\n- Prod'dagi yomon deploy'ni qaytarish — revert + qayta deploy."
+ },
+ "34112": {
+  "a": "```sh\ngit reflog\n# a1b2c3d HEAD@{2}: commit: login form\ngit branch recover a1b2c3d\n# yoki\ngit reset --hard a1b2c3d\n```\n\n- reflog faqat lokal, ~90 kun saqlanadi.\n- `reset --hard` yoki o'chirilgan branch'dan keyin ham ishlaydi."
+ },
+ "34113": {
+  "a": "```sh\ngit switch release/1.2\ngit cherry-pick 4f9e2a1        # hotfix'ni olish\ngit cherry-pick A..B           # oraliq\n```\n\n- Conflict bo'lsa: hal qiling, `git cherry-pick --continue`.\n- Ko'p cherry-pick — branch strategiyasi muammosi belgisi."
+ },
+ "34114": {
+  "a": "```sh\ngit tag -a v1.2.0 -m \"Release 1.2.0\"   # annotated (tavsiya)\ngit tag v1.2.0-rc1                      # lightweight\ngit push origin v1.2.0\ngit push --tags\n```\n\nCI ko'pincha tag push'da release build qiladi."
+ },
+ "34115": {
+  "a": "- Kod review — xato va bilim almashish.\n- CI (test, lint) avtomatik ishlaydi.\n- Branch protection: review va yashil CI bo'lmasa merge yo'q.\n- Kichik PR — tez review, kam xato.\n\nMerge usullari: merge commit, squash, rebase."
+ },
+ "34116": {
+  "a": "- Afzallik: main tarixi toza, har PR = 1 commit, revert oson.\n- Kamchilik: PR ichidagi batafsil tarix yo'qoladi.\n- Lokal: `git merge --squash feature` yoki `git rebase -i` bilan `squash`."
+ },
+ "34117": {
+  "a": "```sh\ngit diff\ngit diff --staged\ngit diff main..feature\ngit diff HEAD~3 -- src/app.go\ngit diff --stat\n```"
+ },
+ "34118": {
+  "a": "```sh\ngit log --oneline --graph --all --decorate\ngit log -p -- file.go          # fayl tarixi o'zgarishlar bilan\ngit log --author=ali --since=\"2 weeks ago\"\ngit log -S \"password\"           # matn qo'shilgan/o'chirilgan commit'lar\n```"
+ },
+ "34119": {
+  "a": "1. **Kalitni rotate/revoke** — eng muhim.\n2. Tarixdan o'chirish: `git filter-repo` yoki BFG, keyin force push.\n3. Hamma qayta clone qilishi kerak.\n4. Oldini olish: `.gitignore`, pre-commit hook (gitleaks), GitHub secret scanning.\n\n`git rm` yetarli emas — fayl tarixda qoladi."
+ },
+ "34120": {
+  "a": "```sh\ngit checkout v1.0.0\n# You are in 'detached HEAD' state\n```\n\n- Ko'rish uchun xavfsiz.\n- Commit qilsangiz va boshqa branch'ga o'tsangiz — commit'lar \"yo'qoladi\".\n- Saqlash: `git switch -c fix-from-tag`."
+ },
+ "34121": {
+  "a": "```sh\nmkdir logs && touch logs/.gitkeep\n```\n\nBu Git funksiyasi emas — shunchaki bo'sh fayl. Alternativa: papka ichida `.gitignore` (`*` va `!.gitignore`)."
+ },
+ "34122": {
+  "a": "```\n<<<<<<< HEAD\nport: 8080\n=======\nport: 9090\n>>>>>>> feature/port\n```\n\n1. To'g'ri variantni qoldirib, belgilarni o'chiring.\n2. `git add file`\n3. `git merge --continue` (yoki `git commit`).\n\nBekor qilish: `git merge --abort`."
+ },
+ "34123": {
+  "a": "| | Git Flow | Trunk-based |\n|---|---|---|\n| Branch'lar | main, develop, feature, release, hotfix | main + qisqa feature |\n| Reliz | rejalashtirilgan | tez-tez, uzluksiz |\n| Merge conflict | ko'p | kam |\n| Mos | versiyalangan dastur | SaaS, CI/CD |\n\nTugallanmagan feature — feature flag ortida."
+ },
+ "34124": {
+  "a": "- Open source'ga hissa: fork → clone → branch → push (fork'ga) → PR (asl repo'ga).\n- Fork'ni yangilash: `git fetch upstream && git rebase upstream/main`."
+ },
+ "34125": {
+  "a": "```sh\ngit fetch --prune\ngit config --global fetch.prune true   # doim\n```\n\nAks holda `git branch -r` da allaqachon yo'q branch'lar ko'rinib turadi."
+ },
+ "34126": {
+  "a": "```sh\ngit rm --cached .env\necho .env >> .gitignore\ngit commit -m \"stop tracking .env\"\n```\n\nFayl tarixda qoladi — secret bo'lsa rotate qiling."
+ },
+ "34127": {
+  "a": "```sh\ngit show HEAD~1\ngit diff HEAD~3 HEAD\n```\n\n- `~n` — birinchi ota bo'yicha n qadam.\n- `^2` — merge commit'ning ikkinchi otasi."
+ },
+ "34128": {
+  "a": "```sh\ngit lfs install\ngit lfs track \"*.psd\"\ngit add .gitattributes\n```\n\nOddiy Git'da katta binarlar har versiyada to'liq saqlanadi — repo shishib ketadi."
+ },
+ "34129": {
+  "a": "Odatiy sozlamalar:\n- Require pull request + 1-2 approval.\n- Require status checks (CI) to pass.\n- Force push va o'chirishni taqiqlash.\n- CODEOWNERS — ma'lum papkalarga ma'lum review'er."
+ },
+ "34130": {
+  "a": "`.github/CODEOWNERS`:\n```\n*.tf        @org/platform\n/docs/      @ali\n/k8s/       @org/sre\n```\n\nBranch protection bilan birga — egasi tasdiqlamasa merge bo'lmaydi."
+ },
+ "34131": {
+  "a": "```sh\n# .git/hooks/pre-commit\n#!/bin/sh\nterraform fmt -check || exit 1\n```\n\n- `.git/hooks` repo bilan tarqalmaydi — jamoada `pre-commit` framework yoki husky ishlatiladi.\n- Hook'ni chetlab o'tish mumkin (`--no-verify`) — shuning uchun CI'da ham tekshirish kerak."
+ },
+ "34132": {
+  "a": "```sh\ngit blame -L 40,60 app.go\ngit blame -w -C file.go   # bo'shliq va ko'chirishni hisobga olmaslik\n```\n\nMaqsad — aybdor qidirish emas, commit xabari va PR'dan kontekst olish."
+ },
+ "34133": {
+  "a": "| | Monorepo | Polyrepo |\n|---|---|---|\n| Umumiy o'zgarish | bitta PR | ko'p PR |\n| CI | murakkab (faqat o'zgarganini build) | oddiy |\n| Ruxsat | qiyinroq | repo bo'yicha |\n| Versiyalar | bir xil | mustaqil |"
+ },
+ "34134": {
+  "a": "```sh\ngit bisect start\ngit bisect bad            # hozir buzuq\ngit bisect good v1.4.0    # bu yaxshi edi\n# har qadamda test qilib good/bad deysiz\ngit bisect reset\n```\n\n1000 commit — ~10 qadam. `git bisect run ./test.sh` — avtomatik."
+ },
+ "34135": {
+  "a": "```sh\ngit switch main           # branch\ngit switch -c new\ngit restore file.go       # o'zgarishni bekor\ngit restore --staged f    # unstage\n```"
+ },
+ "34136": {
+  "a": "```sh\ngit submodule add https://github.com/org/lib vendor/lib\ngit clone --recurse-submodules URL\ngit submodule update --init --recursive\n```\n\nKamchilik: unutilgan `update`, qo'shimcha murakkablik. Ko'pincha package manager yaxshiroq."
+ },
+ "34137": {
+  "a": "```sh\ngit shortlog -sn\ngit describe --tags\n# v1.2.0-5-g3a4b5c6  (tag'dan 5 commit keyin)\n```\n\nCI'da build versiyasi uchun `git describe` qulay."
+ },
+ "34138": {
+  "a": "```sh\ngit clone --depth 1 URL\ngit clone --filter=blob:none URL\ngit sparse-checkout set services/api\n```\n\nCI'da `--depth 1` vaqt va trafikni tejaydi (lekin `git describe` uchun tag'lar kerak bo'lishi mumkin)."
+ },
+ "34139": {
+  "a": "```dockerfile\nENTRYPOINT [\"python\", \"app.py\"]\nCMD [\"--port\", \"8080\"]\n```\n\n```sh\ndocker run img                 # python app.py --port 8080\ndocker run img --port 9090     # CMD almashadi\n```\n\nExec form (`[\"...\"]`) ishlating — shell form'da signal (SIGTERM) ilovaga yetmaydi."
+ },
+ "34140": {
+  "a": "```\n.git\nnode_modules\n*.log\n.env\nDockerfile\n```\n\nBuild context butunlay daemon'ga yuboriladi — katta papka build'ni sekinlashtiradi."
+ },
+ "34141": {
+  "a": "```sh\ndocker run -d --restart unless-stopped nginx\ndocker update --restart always myapp\n```\n\n| Policy | Qachon qayta ishga tushadi |\n|---|---|\n| `no` | hech qachon (default) |\n| `on-failure` | non-zero exit'da |\n| `always` | doim, daemon restart'da ham |\n| `unless-stopped` | doim, qo'lda to'xtatilganidan tashqari |"
+ },
+ "34142": {
+  "a": "```sh\ndocker exec -it web sh      # yoki bash\ndocker exec web cat /etc/nginx/nginx.conf\n```\n\n- `attach` dan Ctrl+C — asosiy jarayonni to'xtatishi mumkin.\n- Distroless image'da shell yo'q — `docker debug` yoki ephemeral container."
+ },
+ "34143": {
+  "a": "```sh\ndocker logs web\ndocker logs -f --tail 100 web\ndocker logs --since 10m web\n```\n\n- Ilova faylga yozsa, `docker logs` bo'sh bo'ladi — stdout'ga yozing.\n- Default `json-file` driver cheksiz o'sadi — `max-size` qo'ying."
+ },
+ "34144": {
+  "a": "```sh\ndocker network ls\ndocker run --network host nginx\ndocker network create appnet\ndocker run --network appnet --name db postgres\n```\n\n- Default `bridge` da konteynerlar bir-birini **nom bilan** topmaydi.\n- User-defined bridge'da — DNS bor: `db:5432`."
+ },
+ "34145": {
+  "a": "```sh\ndocker network create app\ndocker run -d --name db --network app -e POSTGRES_PASSWORD=x postgres\ndocker run -d --name api --network app -e DB_HOST=db myapi\n```\n\n`localhost` konteyner ichida — konteynerning o'zi, host emas."
+ },
+ "34146": {
+  "a": "```sh\ndocker pull nginx@sha256:abc...\ndocker images --digests\n```\n\n- Tag'ni boshqa image'ga ko'chirish mumkin, digest'ni — yo'q.\n- Prod'da qaytariladigan deploy uchun digest yoki o'zgarmas tag (`app:1.4.2`, `app:git-sha`)."
+ },
+ "34147": {
+  "a": "- Ikki server turli vaqtda pull qilsa — turli kod.\n- Prod'da: aniq versiya yoki git SHA tag.\n- K8s'da `latest` → `imagePullPolicy: Always`."
+ },
+ "34148": {
+  "a": "```dockerfile\nRUN apt-get update && apt-get install -y --no-install-recommends curl \\\n && rm -rf /var/lib/apt/lists/*\n```\n\n- Bitta `RUN` ichida o'rnatish va tozalash — aks holda layer'da qoladi.\n- `docker image ls`, `dive` — layer'larni tahlil."
+ },
+ "34149": {
+  "a": "```dockerfile\nRUN useradd -r -u 10001 app\nUSER 10001\n```\n\n```sh\ndocker run --user 10001 img\n```\n\n- Default root — konteyner root'i host kernel'ida ham UID 0.\n- 1024 dan past port kerak bo'lsa — 8080 ishlating."
+ },
+ "34150": {
+  "a": "```dockerfile\nHEALTHCHECK --interval=30s --timeout=3s --retries=3 \\\n  CMD curl -f http://localhost:8080/health || exit 1\n```\n\n```sh\ndocker ps   # STATUS: Up 2m (healthy)\n```\n\nCompose `depends_on: condition: service_healthy` va Swarm undan foydalanadi. K8s o'z probe'larini ishlatadi."
+ },
+ "34151": {
+  "a": "```sh\ndocker ps -a          # Exited (137)\ndocker inspect -f '{{.State.ExitCode}} {{.State.OOMKilled}}' web\n```\n\n- 125 — docker run xatosi, 126 — buyruq ishga tushmaydi, 127 — buyruq topilmadi.\n- 128+N = N-signal bilan o'ldirilgan."
+ },
+ "34152": {
+  "a": "```sh\ndocker system df\ndocker container prune\ndocker image prune -a        # ishlatilmayotgan barcha image\ndocker builder prune\ndocker system prune -a --volumes   # EHTIYOT: volume'lar ham\n```\n\n`--volumes` — ma'lumot yo'qolishi mumkin."
+ },
+ "34153": {
+  "a": "```sh\ndocker run -d --memory=512m --cpus=1 myapp\ndocker stats\n```\n\n- Memory limit oshsa — OOM kill (exit 137).\n- Limit yo'q bo'lsa bitta konteyner butun hostni yeb qo'yishi mumkin."
+ },
+ "34154": {
+  "a": "```sh\ndocker cp web:/etc/nginx/nginx.conf ./nginx.conf\ndocker cp ./index.html web:/usr/share/nginx/html/\n```\n\nDebug uchun qulay; doimiy o'zgarish uchun — image yoki volume."
+ },
+ "34155": {
+  "a": "```sh\ndocker run -e APP_ENV=prod -e DB_HOST=db myapp\ndocker run --env-file .env myapp\n```\n\n- Secret'larni `ENV` bilan image'ga yozmang — `docker history`da ko'rinadi.\n- `docker inspect` env'ni ko'rsatadi — real secret uchun secret store."
+ },
+ "34156": {
+  "a": "```sh\ndocker build -t myapp:1.0 .\ndocker build -f docker/Dockerfile.prod -t myapp:prod .\n```\n\n`COPY ../file` ishlamaydi — context'dan tashqarida."
+ },
+ "34157": {
+  "a": "- Socket: `/var/run/docker.sock`.\n- `docker` guruhidagi foydalanuvchi = amalda root huquqi.\n- Socket'ni konteynerga mount qilish xavfli.\n- `DOCKER_HOST=ssh://user@server` — masofaviy daemon."
+ },
+ "34158": {
+  "a": "- Xavfsizlik: konteyner escape bo'lsa ham host root emas.\n- `alias docker=podman` ko'p hollarda ishlaydi.\n- Cheklovlar: past portlar, ba'zi tarmoq rejimlari."
+ },
+ "34159": {
+  "a": "```sh\ndocker run --rm -v pgdata:/data -v $(pwd):/backup alpine \\\n  tar czf /backup/pgdata.tgz -C /data .\n```\n\nDB uchun — DB vositasi (`pg_dump`) afzal: ishlab turgan DB fayllari nusxasi nomuvofiq bo'lishi mumkin."
+ },
+ "34160": {
+  "a": "```dockerfile\nWORKDIR /app\nCOPY . .\nCMD [\"./server\"]\n```\n\n`RUN cd /app` keyingi qatorga ta'sir qilmaydi — har RUN alohida shell."
+ },
+ "34161": {
+  "a": "```dockerfile\nEXPOSE 8080\n```\n\n```sh\ndocker run -p 8080:8080 img   # haqiqiy ochish\ndocker run -P img             # EXPOSE'dagilarni tasodifiy portga\n```"
+ },
+ "34162": {
+  "a": "```dockerfile\nCOPY go.mod go.sum ./\nRUN go mod download   # faqat dependency o'zgarsa\nCOPY . .\nRUN go build ./...\n```\n\nTez-tez o'zgaradigan narsani oxiriga qo'ying."
+ },
+ "34163": {
+  "a": "- CI'da ko'p pull — `toomanyrequests` xatosi.\n- `docker login` bilan limit oshadi.\n- Registry mirror (Harbor, ECR pull-through cache)."
+ },
+ "34164": {
+  "a": "```sh\ntrivy image myapp:1.0\ndocker scout cves myapp:1.0\n```\n\n- Base image'ni muntazam yangilang.\n- Kichik image — kam paket, kam CVE."
+ },
+ "34165": {
+  "a": "```sh\ndocker stop -t 30 web\ndocker kill web\n```\n\nIlova SIGTERM'ni ushlab graceful shutdown qilishi kerak."
+ },
+ "34166": {
+  "a": "- Xizmat background (daemon) rejimida ishga tushgan: `nginx -g 'daemon off;'` kerak.\n- CMD shunchaki skript bo'lib, tugagan.\n- `docker logs` va `docker ps -a` bilan tekshiring."
+ },
+ "34167": {
+  "a": "```sh\ndocker run --rm alpine nslookup google.com\ndocker run --rm -v $(pwd):/src golang go test ./...\n```\n\nAks holda `docker ps -a` da to'xtagan konteynerlar yig'iladi."
+ },
+ "34168": {
+  "a": "- Bitta jarayon yiqilsa Docker bilmaydi.\n- Alohida konteynerlar + Compose/K8s pod.\n- Istisno: supervisord kabi init, lekin murakkablik qo'shadi."
+ },
+ "34169": {
+  "a": "`/etc/docker/daemon.json`:\n```json\n{\"log-driver\":\"json-file\",\"log-opts\":{\"max-size\":\"10m\",\"max-file\":\"3\"}}\n```\n\nRotate yo'q bo'lsa — `/var/lib/docker/containers` diskni to'ldiradi."
+ },
+ "34170": {
+  "a": "```sh\ndocker info | grep 'Docker Root Dir'\nls /var/lib/docker/volumes\n```\n\nDisk to'lsa ko'pincha aybdor shu papka. Qo'lda o'chirmang — `docker system prune`."
+ },
+ "34171": {
+  "a": "```yaml\nservices:\n  web:\n    build: .\n    ports: [\"8080:8080\"]\n    environment:\n      DB_HOST: db\n    depends_on: [db]\n  db:\n    image: postgres:16\n    environment:\n      POSTGRES_PASSWORD: secret\n    volumes: [pgdata:/var/lib/postgresql/data]\nvolumes:\n  pgdata:\n```"
+ },
+ "34172": {
+  "a": "```sh\ndocker compose up -d\ndocker compose up -d web       # faqat bittasi (+ dependency'lari)\ndocker compose up -d --build   # image'ni qayta build\n```\n\n- O'zgargan service'lar qayta yaratiladi, qolganlari tegilmaydi.\n- `-d` siz — loglar terminalga chiqadi, Ctrl+C to'xtatadi."
+ },
+ "34173": {
+  "a": "```yaml\nservices:\n  api:\n    depends_on:\n      db:\n        condition: service_healthy\n  db:\n    image: postgres:16\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U postgres\"]\n      interval: 5s\n      retries: 10\n```\n\nIlova baribir retry qilishi kerak — DB keyin ham qayta ishga tushishi mumkin."
+ },
+ "34174": {
+  "a": "```yaml\nservices:\n  api:\n    image: myapi:${TAG:-latest}\n    env_file: [.env.api]\n    environment:\n      LOG_LEVEL: info\n```\n\n- `.env` — compose faylidagi `${VAR}` ni to'ldiradi.\n- `env_file` — konteyner ichiga env beradi.\n- `docker compose config` — yakuniy natijani ko'rish."
+ },
+ "34175": {
+  "a": "```sh\ndocker compose config\ndocker compose -f compose.yaml -f compose.prod.yaml config\n```\n\nCI'da validatsiya uchun qulay."
+ },
+ "34176": {
+  "a": "```sh\ndocker compose -f compose.yaml -f compose.prod.yaml up -d\n```\n\n- Asosiy fayl — umumiy.\n- `override` — dev (bind mount, debug port).\n- `prod` — replicas, limitlar."
+ },
+ "34177": {
+  "a": "```sh\ndocker compose up -d --scale worker=4\n```\n\n- `ports: \"8080:80\"` bo'lsa ikkinchi replika ishga tushmaydi — port band.\n- Yechim: port bermaslik yoki oldiga reverse proxy."
+ },
+ "34178": {
+  "a": "```sh\ndocker compose -p shop up -d\n# konteyner: shop-web-1, network: shop_default\n```\n\nBir xil faylni ikki marta mustaqil ishga tushirish uchun turli `-p`."
+ },
+ "34179": {
+  "a": "```yaml\nservices:\n  api:\n    environment:\n      DB_URL: postgres://db:5432/app   # 'db' — service nomi\n  db:\n    image: postgres:16\n```\n\nKonteyner ichida `localhost` — o'zi; boshqa service — nomi bilan."
+ },
+ "34180": {
+  "a": "```yaml\nservices:\n  api:\n    restart: unless-stopped\n```\n\nServer reboot'dan keyin ham xizmat ko'tarilishi uchun — Docker daemon `enable` qilingan bo'lishi kerak."
+ },
+ "34181": {
+  "a": "```sh\ndocker compose logs -f\ndocker compose logs -f --tail 50 api\n```"
+ },
+ "34182": {
+  "a": "| Buyruq | Konteyner | Network | Volume |\n|---|---|---|---|\n| `stop` | to'xtaydi | qoladi | qoladi |\n| `down` | o'chadi | o'chadi | qoladi |\n| `down -v` | o'chadi | o'chadi | **o'chadi** |"
+ },
+ "34183": {
+  "a": "```sh\ndocker compose pull\ndocker compose up -d\ndocker image prune -f\n```\n\nO'z build'ingiz uchun: `docker compose build --pull`."
+ },
+ "34184": {
+  "a": "```yaml\nhealthcheck:\n  test: [\"CMD\", \"curl\", \"-f\", \"http://localhost:8080/health\"]\n  interval: 10s\n  timeout: 3s\n  retries: 3\n  start_period: 20s\n```\n\n`docker compose ps` — `(healthy)` ko'rsatadi."
+ },
+ "34185": {
+  "a": "```yaml\nservices:\n  api:\n    deploy:\n      resources:\n        limits:\n          cpus: \"1.0\"\n          memory: 512M\n```\n\nCompose v2 `deploy.resources` ni oddiy `up` da ham qo'llaydi."
+ },
+ "34186": {
+  "a": "```yaml\nservices:\n  web:\n    build: .\n    volumes:\n      - ./src:/app/src\n    command: npm run dev\n```\n\nYangi variant: `develop.watch` + `docker compose watch` — sync/rebuild avtomatik."
+ },
+ "34187": {
+  "a": "```yaml\nservices:\n  db:\n    image: postgres:16\n    environment:\n      POSTGRES_PASSWORD_FILE: /run/secrets/db_pass\n    secrets: [db_pass]\nsecrets:\n  db_pass:\n    file: ./db_pass.txt\n```\n\nEnv'dan yaxshiroq: `docker inspect` da ko'rinmaydi."
+ },
+ "34188": {
+  "a": "```sh\ndocker compose ps\ndocker compose ps -a     # to'xtaganlar ham\n```"
+ },
+ "34189": {
+  "a": "```yaml\nservices:\n  worker:\n    image: myapp\n    command: [\"python\", \"worker.py\", \"--queue\", \"emails\"]\n```\n\nBitta image'dan web va worker service'larini yasash uchun qulay."
+ },
+ "34190": {
+  "a": "```yaml\nservices:\n  adminer:\n    image: adminer\n    profiles: [debug]\n```\n\n```sh\ndocker compose --profile debug up -d\n```"
+ },
+ "34191": {
+  "a": "```sh\ndocker compose --env-file .env.prod up -d\n```\n\n`.env` ni Git'ga qo'shmang; `.env.example` qo'shing."
+ },
+ "34192": {
+  "a": "```yaml\nvolumes:\n  - pgdata:/var/lib/postgresql/data   # named\n  - ./nginx.conf:/etc/nginx/nginx.conf:ro  # bind, read-only\n```\n\nBind mount'da ruxsat (UID) muammolari ko'p uchraydi."
+ },
+ "34193": {
+  "a": "```sh\ndocker compose exec db psql -U postgres\ndocker compose exec -T db pg_dump -U postgres app > dump.sql\n```\n\n`-T` — TTY'siz, pipe/redirect uchun."
+ },
+ "34194": {
+  "a": "```yaml\nports:\n  - \"127.0.0.1:5432:5432\"\n```\n\n`\"5432:5432\"` — hamma interfeysga ochiq, DB internetga chiqib qolishi mumkin."
+ },
+ "34195": {
+  "a": "```yaml\nservices:\n  api:\n    build:\n      context: ./api\n      dockerfile: Dockerfile\n      target: dev\n      args:\n        GO_VERSION: \"1.23\"\n    image: myorg/api:dev\n```"
+ },
+ "34196": {
+  "a": "```sh\ndocker compose run --rm api ./migrate up\n```\n\n`--rm` — tugagach konteyner o'chadi. Dependency'lar ham ko'tariladi (`--no-deps` bilan o'chiriladi)."
+ },
+ "34197": {
+  "a": "- Compose: bitta server, oddiy, tez.\n- Server o'lsa — hammasi o'ladi.\n- Ko'p node, rolling update, scheduling — Swarm (oddiy) yoki K8s (kuchli)."
+ },
+ "34198": {
+  "a": "```sh\ndocker compose top\ndocker stats $(docker compose ps -q)\n```"
+ },
+ "34199": {
+  "a": "```yaml\nservices:\n  proxy: { networks: [front] }\n  api:   { networks: [front, back] }\n  db:    { networks: [back] }\nnetworks:\n  front: {}\n  back: {}\n```"
+ },
+ "34200": {
+  "a": "```yaml\nx-common: &common\n  restart: unless-stopped\n  logging:\n    options: { max-size: \"10m\" }\nservices:\n  api:\n    <<: *common\n    image: api\n```\n\n`x-` bilan boshlangan kalitlar Compose tomonidan e'tiborsiz qoldiriladi."
+ },
+ "34201": {
+  "a": "```yaml\nlogging:\n  driver: json-file\n  options:\n    max-size: \"10m\"\n    max-file: \"3\"\n```"
+ },
+ "34202": {
+  "a": "- Compose faylni o'zgartirdingizmi — `up -d` (o'zgarganini o'zi qayta yaratadi).\n- `restart` env/image o'zgarishini olmaydi."
+ },
+ "34203": {
+  "a": "Minimal checklist:\n- `image: app:1.4.2` (latest emas).\n- `restart: unless-stopped`.\n- healthcheck.\n- `logging` max-size.\n- DB port tashqariga ochiq emas.\n- Volume backup.\n- Oldida TLS'li reverse proxy."
+ },
+ "34204": {
+  "a": "```sh\ndocker compose exec api env | grep DB_\n```"
+ },
+ "34205": {
+  "a": "```yaml\nservices:\n  app:\n    init: true\n```"
+ },
+ "34206": {
+  "a": "```yaml\nservices:\n  worker:\n    stop_grace_period: 60s\n```\n\nUzun vazifalar tugashiga vaqt berish uchun."
+ },
+ "34207": {
+  "a": "```yaml\nservices:\n  app:\n    tmpfs:\n      - /tmp\n    read_only: true\n```\n\n`read_only` root FS bilan birga — xavfsizroq."
+ },
+ "34208": {
+  "a": "```sh\ndocker compose events --json\n```\n\nKonteyner nega qayta-qayta restart bo'layotganini kuzatish uchun."
+ },
+ "34209": {
+  "a": "```sh\ndocker compose build\ndocker compose push api\n```"
+ },
+ "34210": {
+  "a": "```yaml\nports:\n  - target: 80\n    published: \"8080\"\n    host_ip: 127.0.0.1\n    protocol: tcp\n```"
+ },
+ "34211": {
+  "a": "```sh\ndocker compose ls\n# NAME  STATUS      CONFIG FILES\n# shop  running(3)  /srv/shop/compose.yaml\n```"
+ },
+ "34212": {
+  "a": "Yangi fayllarda `version:` yozmang. Hamma maydonlar Compose Spec bo'yicha."
+ },
+ "34213": {
+  "a": "```sh\ndocker swarm init --advertise-addr 10.0.0.10\ndocker swarm join-token worker\ndocker swarm join-token manager\n```\n\nBir nechta IP bo'lsa `--advertise-addr` shart."
+ },
+ "34214": {
+  "a": "| Manager | Chidaydi |\n|---|---|\n| 1 | 0 |\n| 3 | 1 |\n| 5 | 2 |\n| 4 | 1 (3 bilan bir xil) |\n\nJuft son foyda bermaydi. 7 dan ko'p — sekinlashadi."
+ },
+ "34215": {
+  "a": "```sh\ndocker node ls\n# ID  HOSTNAME  STATUS  AVAILABILITY  MANAGER STATUS\n# abc *  m1     Ready   Active        Leader\n```\n\nFaqat manager'da ishlaydi."
+ },
+ "34216": {
+  "a": "```sh\ndocker node update --label-add disk=ssd node2\ndocker service create --constraint 'node.labels.disk==ssd' --name db postgres\n```\n\nBoshqa constraint'lar: `node.role==worker`, `node.hostname==n1`."
+ },
+ "34217": {
+  "a": "```sh\ndocker service update \\\n  --image myapp:1.5 \\\n  --update-parallelism 1 \\\n  --update-delay 10s \\\n  --update-failure-action rollback \\\n  web\n```\n\nHealthcheck bo'lsa Swarm yangi task sog'lom bo'lishini kutadi."
+ },
+ "34218": {
+  "a": "```sh\ndocker service create -p 8080:80 --replicas 2 nginx\n# 3 node'ning istalganiga :8080 — ishlaydi\n```\n\nIchki IPVS load balancing. Oldida tashqi LB node'larga tarqatadi."
+ },
+ "34219": {
+  "a": "```sh\nprintf 'S3cret' | docker secret create db_pass -\ndocker service create --secret db_pass \\\n  -e POSTGRES_PASSWORD_FILE=/run/secrets/db_pass postgres\n```\n\nSecret o'zgarmaydi — yangi nom bilan yaratib, service'ni update qilasiz."
+ },
+ "34220": {
+  "a": "```sh\ndocker config create nginx_conf ./nginx.conf\ndocker service create --config source=nginx_conf,target=/etc/nginx/nginx.conf nginx\n```"
+ },
+ "34221": {
+  "a": "```yaml\nservices:\n  web:\n    image: myapp:1.4\n    deploy:\n      replicas: 3\n      update_config: { parallelism: 1, delay: 10s }\n      restart_policy: { condition: on-failure }\n      placement:\n        constraints: [node.role == worker]\n```"
+ },
+ "34222": {
+  "a": "```sh\ndocker stack deploy -c stack.yml shop\ndocker stack ls\ndocker stack services shop\ndocker stack ps shop\ndocker stack rm shop\n```\n\nQayta `deploy` — yangilash (faqat o'zgarganlar)."
+ },
+ "34223": {
+  "a": "- CI: build → registry'ga push → `docker stack deploy`.\n- Private registry: `docker stack deploy --with-registry-auth`."
+ },
+ "34224": {
+  "a": "```sh\ndocker node update --availability drain node3\n# node3'da:\ndocker swarm leave\n# manager'da:\ndocker node rm node3\n```\n\nManager'ni chiqarishdan oldin `docker node demote`."
+ },
+ "34225": {
+  "a": "```sh\ndocker service ps --no-trunc web\n# ERROR: no suitable node (scheduling constraints not satisfied)\n```\n\nTekshirish: `docker node ls`, constraint'lar, `--reserve-memory`."
+ },
+ "34226": {
+  "a": "```sh\ndocker service logs -f --tail 100 web\n```"
+ },
+ "34227": {
+  "a": "```sh\ndocker service create --reserve-memory 256m --limit-memory 512m --limit-cpu 1 myapp\n```"
+ },
+ "34228": {
+  "a": "```sh\ndocker network create -d overlay --attachable backend\ndocker service create --network backend --name api myapi\n```\n\n`--attachable` — oddiy `docker run` konteynerlari ham ulana oladi. `--opt encrypted` — trafik shifrlanadi."
+ },
+ "34229": {
+  "a": "| Port | Vazifa |\n|---|---|\n| 2377/tcp | manager API, Raft |\n| 7946/tcp,udp | gossip, discovery |\n| 4789/udp | overlay trafik |\n\nFirewall yopsa — node qo'shiladi, lekin service'lar gaplasha olmaydi."
+ },
+ "34230": {
+  "a": "- Bu desired state reconciliation.\n- Node qaytsa, task'lar avtomatik qayta balanslanmaydi — `docker service update --force web`."
+ },
+ "34231": {
+  "a": "```sh\ndocker service create --mode global --name node-exporter prom/node-exporter\n```\n\nYangi node qo'shilsa — avtomatik unda ham task paydo bo'ladi."
+ },
+ "34232": {
+  "a": "```sh\ndocker swarm join-token --rotate worker\ndocker swarm join-token --rotate manager\n```\n\nManager token — eng xavfli, klasterni to'liq boshqaradi."
+ },
+ "34233": {
+  "a": "| | Swarm | Kubernetes |\n|---|---|---|\n| O'rnatish | `swarm init` | murakkab (yoki managed) |\n| Fayl | compose formati | ko'p YAML obyektlar |\n| Autoscaling | yo'q | HPA |\n| Ekotizim | kichik | juda katta |"
+ },
+ "34234": {
+  "a": "```sh\ndocker service inspect --pretty web\n```"
+ },
+ "34235": {
+  "a": "```sh\ndocker node update --availability drain manager1\n```\n\nManager og'ir yuk ostida qolsa Raft sekinlashadi — klaster beqaror."
+ },
+ "34236": {
+  "a": "```yaml\nhealthcheck:\n  test: [\"CMD\", \"wget\", \"-qO-\", \"http://localhost:8080/health\"]\n  interval: 10s\n  retries: 3\n```"
+ },
+ "34237": {
+  "a": "```sh\ndocker node promote node2\ndocker node demote node2\n```\n\nManager sonini toq saqlang."
+ },
+ "34238": {
+  "a": "```sh\ndocker service update --force web\n```"
+ },
+ "34239": {
+  "a": "```sh\nprintf 'New' | docker secret create db_pass_v2 -\ndocker service update \\\n  --secret-rm db_pass \\\n  --secret-add source=db_pass_v2,target=db_pass web\ndocker secret rm db_pass\n```"
+ },
+ "34240": {
+  "a": "```yaml\ndeploy:\n  restart_policy: { condition: on-failure, max_attempts: 3 }\n  update_config: { failure_action: rollback }\n```"
+ },
+ "34241": {
+  "a": "```sh\ndocker info | grep -A8 Swarm\ndocker service ls     # REPLICAS 3/3 ?\n```\n\n`2/3` — biror task ishga tushmayapti → `docker service ps`."
+ },
+ "34242": {
+  "a": "```sh\nsystemctl stop docker\ntar czf swarm-backup.tgz -C /var/lib/docker swarm\nsystemctl start docker\n```\n\nTiklash: `docker swarm init --force-new-cluster`."
+ },
+ "34243": {
+  "a": "- Tiklash: qolgan manager'da `docker swarm init --force-new-cluster --advertise-addr ...`.\n- Keyin yangi manager'lar qo'shish."
+ },
+ "34244": {
+  "a": "```sh\ndocker service rm web\n```\n\nVolume'lar o'chmaydi."
+ },
+ "34245": {
+  "a": "- Default `vip` — bitta virtual IP, ichki LB.\n- `dnsrr` — o'z load balancer'ingiz bo'lsa yoki VIP ishlamaydigan holat.\n- `dnsrr` bilan routing mesh (`ports` ingress) ishlamaydi."
+ },
+ "34246": {
+  "a": "```sh\ndocker service ls\ndocker service ps web\ncurl http://<istalgan-node>/\n```"
+ },
+ "34247": {
+  "a": "```sh\ndocker service create --placement-pref 'spread=node.labels.zone' --replicas 6 web\n```\n\nBitta zona yiqilsa ham boshqasida replikalar qoladi."
+ },
+ "34248": {
+  "a": "```sh\ndocker swarm update --autolock=true\ndocker swarm unlock      # restart'dan keyin\n```\n\nUnlock key'ni xavfsiz saqlang — yo'qolsa manager'ni tiklab bo'lmaydi."
+ },
+ "34249": {
+  "a": "```sh\ndocker service update --image myapp:1.5 --with-registry-auth web\ndocker service ps web\n```\n\nMuammo bo'lsa: `docker service rollback web`."
+ },
+ "34250": {
+  "a": "```yaml\nresources:\n  requests: { cpu: 250m, memory: 256Mi }\n  limits:   { memory: 512Mi }\n```\n\n- `250m` = 0.25 yadro.\n- requests yo'q — scheduler noto'g'ri joylaydi, node to'lib ketadi."
+ },
+ "34251": {
+  "a": "```sh\nkubectl autoscale deployment web --cpu-percent=70 --min=2 --max=10\nkubectl get hpa\n```\n\n- metrics-server kerak.\n- CPU % — `requests` ga nisbatan, requests bo'lmasa HPA ishlamaydi."
+ },
+ "34252": {
+  "a": "```yaml\napiVersion: v1\nkind: PersistentVolumeClaim\nmetadata: { name: data }\nspec:\n  accessModes: [ReadWriteOnce]\n  resources: { requests: { storage: 10Gi } }\n```\n\nPod o'chsa ham ma'lumot PV'da qoladi."
+ },
+ "34253": {
+  "a": "| | Deployment | StatefulSet |\n|---|---|---|\n| Pod nomi | tasodifiy | `db-0`, `db-1` |\n| Storage | umumiy yoki yo'q | har pod'ga o'z PVC |\n| Tartib | yo'q | ketma-ket |\n| Misol | web, API | DB, Kafka, Redis |"
+ },
+ "34254": {
+  "a": "```sh\nkubectl get ds -A\n```\n\nYangi node qo'shilsa — DaemonSet pod'i avtomatik unda ham ishga tushadi."
+ },
+ "34255": {
+  "a": "```yaml\napiVersion: batch/v1\nkind: CronJob\nmetadata: { name: backup }\nspec:\n  schedule: \"0 2 * * *\"\n  jobTemplate:\n    spec:\n      template:\n        spec:\n          restartPolicy: OnFailure\n          containers:\n          - name: b\n            image: backup:1.0\n```"
+ },
+ "34256": {
+  "a": "```hcl\nterraform {\n  required_providers {\n    aws = { source = \"hashicorp/aws\", version = \"~> 5.0\" }\n  }\n}\nprovider \"aws\" { region = \"eu-central-1\" }\n```\n\n`terraform init` provider'ni yuklab oladi."
+ },
+ "34257": {
+  "a": "```hcl\nresource \"aws_s3_bucket\" \"logs\" {\n  bucket = \"myco-logs-prod\"\n  tags   = { env = \"prod\" }\n}\n```\n\nMurojaat: `aws_s3_bucket.logs.arn`."
+ },
+ "34258": {
+  "a": "```hcl\nterraform {\n  backend \"s3\" {\n    bucket         = \"myco-tfstate\"\n    key            = \"prod/network.tfstate\"\n    region         = \"eu-central-1\"\n    dynamodb_table = \"tf-lock\"   # yoki use_lockfile = true\n    encrypt        = true\n  }\n}\n```"
+ },
+ "34259": {
+  "a": "- S3 + DynamoDB (yoki yangi S3 native lock), GCS, Terraform Cloud avtomatik lock qiladi.\n- Qotib qolgan lock: `terraform force-unlock <ID>` — faqat hech kim ishlamayotganiga ishonch bo'lsa."
+ },
+ "34260": {
+  "a": "```sh\nterraform plan -out=tfplan\nterraform show tfplan\nterraform apply tfplan\n```\n\nCI'da: PR'da plan, merge'dan keyin saqlangan plan'ni apply."
+ },
+ "34261": {
+  "a": "```hcl\nmodule \"vpc\" {\n  source = \"terraform-aws-modules/vpc/aws\"\n  version = \"5.8.0\"\n  cidr = \"10.0.0.0/16\"\n}\n```\n\nHar papka — module; root module — siz `terraform` ishga tushirgan papka."
+ },
+ "34262": {
+  "a": "```hcl\nresource \"aws_iam_user\" \"u\" {\n  for_each = toset([\"ali\", \"vali\"])\n  name     = each.key\n}\n```\n\ncount bilan ro'yxat o'rtasidan o'chirish — keyingilarini qayta yaratadi."
+ },
+ "34263": {
+  "a": "```sh\nterraform workspace new dev\nterraform workspace select prod\nterraform workspace list\n```\n\nKatta loyihalarda ko'pincha har muhit alohida papka/backend key afzal — xato muhitga apply qilish xavfi kam."
+ },
+ "34264": {
+  "a": "```hcl\nimport {\n  to = aws_s3_bucket.logs\n  id = \"myco-logs-prod\"\n}\n```\n\n```sh\nterraform plan -generate-config-out=gen.tf\n```\n\nImport'dan keyin plan'da o'zgarish bo'lmasligi kerak."
+ },
+ "34265": {
+  "a": "```sh\nterraform plan -refresh-only\n```\n\n- Yechim: kodni yangilash yoki `apply` bilan qaytarish.\n- Oldini olish: konsolda qo'lda o'zgartirishni cheklash, muntazam plan."
+ },
+ "34266": {
+  "a": "```hcl\nvariable \"db_password\" {\n  type      = string\n  sensitive = true\n}\n```\n\n- `.tfvars` ni Git'ga qo'shmang.\n- State'ga kirishni cheklang."
+ },
+ "34267": {
+  "a": "```hcl\nresource \"aws_db_instance\" \"main\" {\n  lifecycle { prevent_destroy = true }\n}\n```\n\nDB'da `deletion_protection = true` ham."
+ },
+ "34268": {
+  "a": "`.gitignore`:\n```\n.terraform/\n*.tfstate\n*.tfstate.*\n*.tfvars\ncrash.log\n```"
+ },
+ "34269": {
+  "a": "```hcl\nvariable \"env\" {\n  type = string\n  validation {\n    condition     = contains([\"dev\", \"prod\"], var.env)\n    error_message = \"env dev yoki prod bo'lishi kerak.\"\n  }\n}\n```"
+ },
+ "34270": {
+  "a": "| | Terraform | CloudFormation | Pulumi |\n|---|---|---|---|\n| Bulut | ko'p | AWS | ko'p |\n| Til | HCL | YAML/JSON | TS, Go, Python |\n| State | o'zingiz | AWS boshqaradi | Pulumi Cloud/o'zingiz |"
+ },
+ "34271": {
+  "a": "```yaml\n- hosts: web\n  become: true\n  tasks:\n    - name: nginx o'rnatish\n      ansible.builtin.apt:\n        name: nginx\n        state: present\n        update_cache: true\n    - name: nginx ishga tushsin\n      ansible.builtin.service:\n        name: nginx\n        state: started\n        enabled: true\n```\n\n```sh\nansible-playbook -i inventory.ini site.yml\n```"
+ },
+ "34272": {
+  "a": "```ini\n[web]\nweb1 ansible_host=10.0.0.11\nweb2 ansible_host=10.0.0.12\n\n[db]\ndb1 ansible_host=10.0.0.21\n\n[all:vars]\nansible_user=deploy\n```\n\n```sh\nansible-inventory -i inventory.ini --graph\n```"
+ },
+ "34273": {
+  "a": "```yaml\ntasks:\n  - template: { src: nginx.conf.j2, dest: /etc/nginx/nginx.conf }\n    notify: reload nginx\nhandlers:\n  - name: reload nginx\n    service: { name: nginx, state: reloaded }\n```\n\nHandler play oxirida bir marta ishlaydi."
+ },
+ "34274": {
+  "a": "```\ninventory/\n  group_vars/web.yml\n  host_vars/web1.yml\n```\n\n- Ustunlik: `-e` eng yuqori, role `defaults` eng past.\n- `ansible -m debug -a 'var=hostvars[inventory_hostname]' web1`."
+ },
+ "34275": {
+  "a": "```sh\nansible-vault create group_vars/prod/vault.yml\nansible-vault edit group_vars/prod/vault.yml\nansible-playbook site.yml --ask-vault-pass\n```\n\nCI'da `--vault-password-file` (secret'dan)."
+ },
+ "34276": {
+  "a": "`nginx.conf.j2`:\n```\nserver {\n  listen {{ http_port }};\n  server_name {{ inventory_hostname }};\n}\n```\n\n```yaml\n- template: { src: nginx.conf.j2, dest: /etc/nginx/conf.d/app.conf }\n```"
+ },
+ "34277": {
+  "a": "```yaml\n- file: { path: /opt/app, state: directory, owner: app, mode: \"0755\" }\n- lineinfile:\n    path: /etc/ssh/sshd_config\n    regexp: '^PermitRootLogin'\n    line: 'PermitRootLogin no'\n```"
+ },
+ "34278": {
+  "a": "```\nroles/nginx/\n  tasks/main.yml\n  handlers/main.yml\n  templates/\n  defaults/main.yml\n  files/\n```\n\n```sh\nansible-galaxy init roles/nginx\n```"
+ },
+ "34279": {
+  "a": "```yaml\n- command: /opt/app/migrate\n  args:\n    creates: /opt/app/.migrated   # idempotentlik\n```\n\nAvval tayyor modul qidiring (`apt`, `user`, `service`)."
+ },
+ "34280": {
+  "a": "```sh\nansible-playbook site.yml --limit web1\nansible-playbook site.yml --tags nginx\nansible-playbook site.yml --start-at-task \"nginx o'rnatish\"\n```"
+ },
+ "34281": {
+  "a": "```sh\nansible all -i inventory.ini -m ping\n# web1 | SUCCESS => {\"ping\": \"pong\"}\n```"
+ },
+ "34282": {
+  "a": "```yaml\n- command: uptime\n  register: up\n- debug:\n    var: up.stdout\n```"
+ },
+ "34283": {
+  "a": "```yaml\nscrape_configs:\n  - job_name: node\n    scrape_interval: 15s\n    static_configs:\n      - targets: [\"10.0.0.11:9100\", \"10.0.0.12:9100\"]\n```\n\nUI: `Status → Targets` — `UP`/`DOWN`."
+ },
+ "34284": {
+  "a": "```sh\ncurl -s localhost:9100/metrics | grep node_memory_MemAvailable\n```\n\nMashhur metrikalar: `node_cpu_seconds_total`, `node_filesystem_avail_bytes`, `node_load1`."
+ },
+ "34285": {
+  "a": "```promql\n100 - avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100\n```"
+ },
+ "34286": {
+  "a": "```yaml\ngroups:\n- name: disk\n  rules:\n  - alert: DiskAlmostFull\n    expr: node_filesystem_avail_bytes{fstype!~\"tmpfs\"} / node_filesystem_size_bytes < 0.10\n    for: 10m\n    labels: { severity: warning }\n    annotations:\n      summary: \"{{ $labels.instance }} disk 90% dan ko'p to'lgan\"\n```"
+ },
+ "34287": {
+  "a": "- **Grouping** — 50 ta bir xil alert → bitta xabar.\n- **Inhibition** — node down bo'lsa, undagi xizmat alert'larini bosish.\n- **Silence** — rejali ish vaqtida.\n- **Routing** — severity bo'yicha turli kanal."
+ },
+ "34288": {
+  "a": "- Tayyor dashboard'lar: grafana.com (Node Exporter Full — ID 1860).\n- Variable'lar (`$instance`) — bitta dashboard ko'p server uchun.\n- Dashboard'ni JSON sifatida Git'da saqlash (provisioning)."
+ },
+ "34289": {
+  "a": "```\nhttp_requests_total{method=\"GET\", status=\"200\", path=\"/api\"}\n```\n\n- Yaxshi label: method, status, service.\n- Yomon: user_id, request_id, to'liq URL."
+ },
+ "34290": {
+  "a": "```promql\nprobe_success{job=\"blackbox\"} == 0\n(probe_ssl_earliest_cert_expiry - time()) / 86400 < 14\n```"
+ },
+ "34291": {
+  "a": "```python\nfrom prometheus_client import Counter, start_http_server\nREQ = Counter('app_requests_total', 'Requests', ['status'])\nstart_http_server(8000)\nREQ.labels(status='200').inc()\n```"
+ },
+ "34292": {
+  "a": "```sh\nprometheus --storage.tsdb.retention.time=30d\n```\n\nPrometheus bitta node — HA va uzoq saqlash uchun yaratilmagan."
+ },
+ "34293": {
+  "a": "```sh\njournalctl -u nginx --since \"1 hour ago\"\njournalctl -p err -b        # joriy boot, faqat xatolar\njournalctl -f -u myapp\njournalctl --disk-usage\n```"
+ },
+ "34294": {
+  "a": "```sh\ntail -f /var/log/syslog\ngrep 'Failed password' /var/log/auth.log | tail\ntail -f /var/log/nginx/error.log\n```\n\nDebian: `syslog`, `auth.log`; RHEL: `messages`, `secure`."
+ },
+ "34295": {
+  "a": "```sh\ngrep -i error app.log | tail -20\nawk '{print $9}' access.log | sort | uniq -c | sort -rn   # status kodlar\ngrep -c ' 500 ' access.log\n```"
+ },
+ "34296": {
+  "a": "Oqim: agent (Fluent Bit, Promtail, Filebeat) → saqlash (Loki, Elasticsearch) → UI (Grafana, Kibana).\n\nKonteynerlar o'chganda loglari ham yo'qoladi — markazlashgan saqlash shart."
+ },
+ "34297": {
+  "a": "```json\n{\"level\":\"error\",\"request_id\":\"7f3a9\",\"msg\":\"db timeout\"}\n```\n\nHeader orqali uzatiladi (`X-Request-ID`, `traceparent`)."
+ },
+ "34298": {
+  "a": "| SLO | Oyiga downtime |\n|---|---|\n| 99% | ~7.2 soat |\n| 99.9% | ~43 daqiqa |\n| 99.99% | ~4.3 daqiqa |\n\nBudget tugasa — yangi feature'lar o'rniga barqarorlikka e'tibor."
+ },
+ "34299": {
+  "a": "- Loglar ko'p odamga ochiq va uzoq saqlanadi.\n- Masking: `card=****1234`.\n- Header'larni (`Authorization`) to'liq yozmang."
+ },
+ "34300": {
+  "a": "- Hot (tez qidiruv): 7-30 kun.\n- Cold (arxiv, S3): oylar/yillar.\n- Audit loglar — alohida, uzoqroq."
+ },
+ "34301": {
+  "a": "- Tashqi tekshiruv (UptimeRobot, Blackbox).\n- Incident vaqtida yangilanadi — support so'rovlari kamayadi."
+ },
+ "34302": {
+  "a": "- Alert → tasdiqlash (ack) → runbook bo'yicha harakat.\n- Bilmasangiz — tez eskalatsiya.\n- Nima qilganingizni kanalga yozib boring.\n- Keyin — blameless postmortem."
+ },
+ "34303": {
+  "a": "Tuzilma:\n- Timeline.\n- Ta'sir (kim, qancha vaqt).\n- Root cause.\n- Nima yaxshi ishladi / ishlamadi.\n- Action item'lar (egasi va muddati bilan)."
+ },
+ "34304": {
+  "a": "```\n## DiskAlmostFull\n1. df -h; du -xh / --max-depth=1 | sort -h\n2. journalctl --vacuum-size=500M\n3. docker system prune -f\n4. Yordam bermasa: #sre ga eskalatsiya\n```"
+ },
+ "34305": {
+  "a": "| Daraja | Misol | Javob |\n|---|---|---|\n| SEV1 | to'lov ishlamaydi | darhol, hamma |\n| SEV2 | bitta feature yiqilgan | tez |\n| SEV3 | sekinlik, workaround bor | ish vaqtida |"
+ },
+ "34306": {
+  "a": "- Foydalanuvchilar yo'q paytda (tunda) ham muammoni topadi.\n- Vositalar: Blackbox, Checkly, Datadog Synthetics."
+ },
+ "34307": {
+  "a": "Yechim:\n- Har alert actionable bo'lsin.\n- Simptom bo'yicha alert.\n- Grouping, `for:` davomiylik.\n- Haftalik alert review — shovqinlilarni o'chirish."
+ },
+ "34308": {
+  "a": "```json\nGET /ready\n{\"status\":\"ok\",\"db\":\"ok\",\"cache\":\"ok\"}\n```\n\nLiveness'ga tashqi dependency qo'shmang."
+ },
+ "34309": {
+  "a": "Vositalar: Datadog APM, New Relic, Elastic APM, OpenTelemetry + Grafana Tempo."
+ },
+ "34310": {
+  "a": "- IPv4: `192.168.1.10`\n- IPv6: `2001:db8::1` (`::` — nollar qisqartmasi)\n- IPv6 loopback: `::1`\n\n```sh\nip -6 a\ncurl -6 https://example.com\n```"
+ },
+ "34311": {
+  "a": "```sh\nip link\n# link/ether 52:54:00:ab:cd:ef\n```\n\nRouter'dan o'tganda MAC almashadi, IP — yo'q."
+ },
+ "34312": {
+  "a": "- Switch: ofisdagi kompyuterlarni bog'laydi.\n- Router: ofis tarmog'ini internetga chiqaradi, NAT qiladi.\n- Cloud'da: subnet ≈ switch, route table ≈ router."
+ },
+ "34313": {
+  "a": "- Server ma'lum portda tinglaydi (443).\n- Mijoz vaqtinchalik (ephemeral) portdan ulanadi (32768–60999).\n- Ulanish = (src IP, src port, dst IP, dst port, protokol)."
+ },
+ "34314": {
+  "a": "```sh\nss -tan   # barcha TCP socket'lar va holatlari\n```\n\nHolatlar: `LISTEN`, `ESTABLISHED`, `TIME_WAIT`, `CLOSE_WAIT`."
+ },
+ "34315": {
+  "a": "```sh\ncurl -I https://example.com              # faqat header\ncurl -X POST -H 'Content-Type: application/json' -d '{\"a\":1}' URL\nwget https://example.com/file.tar.gz\n```"
+ },
+ "34316": {
+  "a": "```sh\ntraceroute google.com\nmtr -rwc 50 google.com    # doimiy statistika, paket yo'qotish\n```\n\n`* * *` — o'sha hop javob bermaydi (ICMP bloklangan bo'lishi mumkin)."
+ },
+ "34317": {
+  "a": "- Yuk mashinasi o'xshatish: bandwidth — yuk hajmi, latency — yo'l vaqti.\n- Ko'p kichik so'rov — latency muhim; katta fayl — bandwidth.\n- `ping` — latency, `iperf3` — bandwidth."
+ },
+ "34318": {
+  "a": "- HTTP'da parol va cookie ochiq ketadi.\n- Brauzerlar HTTP'ni \"Not secure\" deb belgilaydi.\n- 80 → 443 redirect + HSTS."
+ },
+ "34319": {
+  "a": "| Method | Idempotent | Body |\n|---|---|---|\n| GET | ha | yo'q |\n| POST | yo'q | ha |\n| PUT | ha | ha |\n| PATCH | odatda yo'q | ha |\n| DELETE | ha | ixtiyoriy |\n\nIdempotent — necha marta yuborilsa ham natija bir xil."
+ },
+ "34320": {
+  "a": "```sh\ncurl -v https://example.com 2>&1 | grep -E '^[<>]'\n```\n\n- `Host` — qaysi sayt (bir IP'da ko'p sayt).\n- `Content-Type: application/json`.\n- `X-Forwarded-For` — proxy orqasidagi asl mijoz IP."
+ },
+ "34321": {
+  "a": "Vazifalari:\n- TLS termination.\n- Load balancing.\n- Caching, gzip.\n- Bir domen ostida ko'p servis (`/api` → api, `/` → web).\n\nForward proxy — mijoz tomonida (korporativ internet proxy)."
+ },
+ "34322": {
+  "a": "- **Round robin** — navbat bilan.\n- **Least connections** — eng kam band serverga.\n- **IP hash** — bir mijoz doim bitta serverga (sticky).\n\nHealth check bilan — o'lik server ro'yxatdan chiqariladi."
+ },
+ "34323": {
+  "a": "```\napi.example.com.   A      203.0.113.10\nwww.example.com.   CNAME  example.com.\n```\n\n- Domen ildizida (apex) CNAME qo'yib bo'lmaydi — ALIAS/ANAME (provider xususiyati).\n- CNAME bilan boshqa record'lar birga bo'lmaydi."
+ },
+ "34324": {
+  "a": "- IP'ni o'zgartirishdan 1-2 kun oldin TTL'ni 60-300s ga tushiring.\n- O'zgartirib, keyin qaytarib oshiring.\n\n```sh\ndig +noall +answer example.com   # 2-ustun — qolgan TTL\n```"
+ },
+ "34325": {
+  "a": "```sh\ndig MX gmail.com +short\ndig TXT example.com +short\ndig NS example.com +short\n```"
+ },
+ "34326": {
+  "a": "- Security Group (AWS) — stateful: inbound ochsangiz, javob avtomatik chiqadi.\n- NACL — stateless: ikki tomonni alohida ochish kerak.\n- Linux: iptables/nftables, ufw, firewalld."
+ },
+ "34327": {
+  "a": "- Site-to-site — ofis ↔ cloud VPC.\n- Remote access — xodim ↔ ofis.\n- Protokollar: WireGuard, IPsec, OpenVPN.\n\nZamonaviy alternativa — zero trust (Tailscale, Cloudflare Access)."
+ },
+ "34328": {
+  "a": "```sh\nssh -J user@bastion user@10.0.1.20\n```\n\n- Faqat bastion internetga ochiq.\n- Audit va kirish nazorati bir joyda.\n- Cloud alternativasi: AWS SSM Session Manager (port ochmasdan)."
+ },
+ "34329": {
+  "a": "```\nprivate server -> NAT GW (public IP) -> internet\ninternet -X-> private server\n```\n\nKirish kerak bo'lsa — load balancer yoki bastion."
+ },
+ "34330": {
+  "a": "```sh\nnc -zv db.internal 5432\n# Connection to db.internal 5432 port [tcp/postgresql] succeeded!\nnc -zvu 10.0.0.2 53   # UDP\n```\n\n`telnet host port` — eski alternativa."
+ },
+ "34331": {
+  "a": "- **Refused** → xizmat ishlamayapti yoki boshqa portda/`127.0.0.1` da tinglayapti.\n- **Timeout** → security group/firewall, noto'g'ri IP, route.\n\nBu farq debug yo'nalishini darhol aniqlaydi."
+ },
+ "34332": {
+  "a": "```nginx\nserver {\n  listen 80;\n  server_name app.example.com;\n  location / {\n    proxy_pass http://127.0.0.1:8080;\n    proxy_set_header Host $host;\n    proxy_set_header X-Real-IP $remote_addr;\n    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n  }\n}\n```\n\n```sh\nnginx -t && systemctl reload nginx\n```"
+ },
+ "34333": {
+  "a": "```sh\nsudo certbot --nginx -d app.example.com\nsudo certbot renew --dry-run\n```\n\nDomen DNS'i serverga ko'rsatishi va 80-port ochiq bo'lishi kerak (HTTP-01)."
+ },
+ "34334": {
+  "a": "```sh\necho | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null \\\n  | openssl x509 -noout -enddate -subject\n```"
+ },
+ "34335": {
+  "a": "- Misollar: Cloudflare, CloudFront, Akamai.\n- Cache header'lar (`Cache-Control`) bilan boshqariladi.\n- Qo'shimcha: DDoS himoya, TLS."
+ },
+ "34336": {
+  "a": "- `Upgrade: websocket` header bilan boshlanadi.\n- Proxy'da `Upgrade`/`Connection` header'larini o'tkazish va uzun timeout kerak."
+ },
+ "34337": {
+  "a": "```sh\nip link | grep mtu\nping -M do -s 1472 host   # fragmentatsiyasiz tekshirish\n```\n\nMTU mos kelmasa — kichik so'rovlar ishlaydi, katta javoblar \"qotadi\"."
+ },
+ "34338": {
+  "a": "- Har proxy XFF ga IP qo'shadi: `client, proxy1, proxy2`.\n- Faqat ishonchli proxy'dan kelgan header'ga ishoning — aks holda soxtalashtiriladi."
+ },
+ "34339": {
+  "a": "- DB'ni `127.0.0.1` da ushlash — tashqaridan kirib bo'lmaydi.\n- Konteyner ichida ilova `127.0.0.1` da tinglasa — `-p` bilan ham tashqaridan kirib bo'lmaydi; `0.0.0.0` kerak."
+ },
+ "34340": {
+  "a": "```sh\nss -s\nss -tan state time-wait | wc -l\n```\n\nYechim: keep-alive, connection pool — har so'rovga yangi ulanish ochmaslik."
+ },
+ "34341": {
+  "a": "```\ninternet -> [public: LB] -> [private: app] -> [private: DB]\n```\n\nDB faqat app subnet'idan ruxsat oladi."
+ },
+ "34342": {
+  "a": "```sh\ngrep -w 5432 /etc/services\n```\n\nFaqat ma'lumot — portni ochmaydi yoki yopmaydi."
+ },
+ "34343": {
+  "a": "```sh\nsudo tcpdump -i eth0 port 443 -nn\nsudo tcpdump -i any host 10.0.0.5 and port 5432 -w cap.pcap\n```\n\n`.pcap` ni Wireshark'da ochish mumkin."
+ },
+ "34344": {
+  "a": "```bash\n#!/usr/bin/env bash\n#!/usr/bin/env python3\n```\n\n- `env` — PATH'dan topadi, ko'chma.\n- Fayl bajariladigan bo'lishi kerak: `chmod +x script.sh`, keyin `./script.sh`."
+ },
+ "34345": {
+  "a": "```bash\nenv=prod\ncount=3\necho \"Muhit: $env, soni: ${count}\"\nreadonly VERSION=1.2\nexport DB_HOST=db   # bola jarayonlarga ham\n```\n\n`env = prod` — xato (bo'shliq)."
+ },
+ "34346": {
+  "a": "```bash\ntoday=$(date +%F)\nfiles=$(ls /var/log | wc -l)\necho \"Bugun $today, $files ta log\"\n```\n\nEski sintaksis — backtick `` `cmd` `` — ichma-ich ishlatish noqulay."
+ },
+ "34347": {
+  "a": "```bash\na=5; b=3\necho $((a + b))\n((count++))\nif (( a > b )); then echo katta; fi\n```\n\nKasr sonlar uchun `bc` yoki `awk`."
+ },
+ "34348": {
+  "a": "```bash\nwhile IFS= read -r host; do\n  echo \"Tekshiryapman: $host\"\ndone < hosts.txt\n```\n\n- `-r` — `\\` ni saqlaydi.\n- `IFS=` — boshidagi/oxiridagi bo'shliqlarni saqlaydi."
+ },
+ "34349": {
+  "a": "```bash\nlog() {\n  local level=$1; shift\n  echo \"$(date +%T) [$level] $*\" >&2\n}\nlog INFO \"Deploy boshlandi\"\n```\n\nFunksiya `return` faqat exit code (0-255) qaytaradi; qiymat — `echo` orqali."
+ },
+ "34350": {
+  "a": "```bash\nsleep 100 &\necho \"fon PID: $!\"\nfalse; echo \"exit: $?\"   # 1\necho \"shell PID: $$\"\n```"
+ },
+ "34351": {
+  "a": "```bash\nmkdir -p /data && cd /data\nping -c1 db || echo \"db javob bermayapti\"\ncd /app || exit 1\n```"
+ },
+ "34352": {
+  "a": "```bash\ncase \"$1\" in\n  start)   systemctl start app ;;\n  stop)    systemctl stop app ;;\n  restart) systemctl restart app ;;\n  *)       echo \"Usage: $0 {start|stop|restart}\"; exit 1 ;;\nesac\n```"
+ },
+ "34353": {
+  "a": "```bash\nservers=(web1 web2 db1)\nfor s in \"${servers[@]}\"; do echo \"$s\"; done\necho \"Soni: ${#servers[@]}\"\nservers+=(cache1)\n```"
+ },
+ "34354": {
+  "a": "```bash\ntmp=$(mktemp)\ntrap 'rm -f \"$tmp\"' EXIT\ntrap 'echo \"To\\'xtatildi\"; exit 130' INT\n```\n\nSkript xato bilan tugasa ham vaqtinchalik fayl o'chiriladi."
+ },
+ "34355": {
+  "a": "```bash\nf=\"/var/log/app.log\"\necho ${#f}          # uzunlik\necho ${f##*/}       # app.log\necho ${f%.*}        # /var/log/app\necho ${f/log/LOG}   # birinchisini almashtirish\n```"
+ },
+ "34356": {
+  "a": "```bash\ngrep -E 'ERROR|FATAL' app.log\nawk -F: '{print $1}' /etc/passwd\nsed -i 's/old_host/new_host/g' config.ini\ndf -h | awk 'NR>1 && $5+0 > 80 {print $6, $5}'\n```"
+ },
+ "34357": {
+  "a": "```bash\nbash -x deploy.sh\nset -x   # shu joydan boshlab har buyruq chiqadi\nset +x\nshellcheck deploy.sh\n```"
+ },
+ "34358": {
+  "a": "```bash\n#!/usr/bin/env bash\nset -euo pipefail\nlimit=80\ndf -P | awk -v l=$limit 'NR>1 {gsub(\"%\",\"\",$5); if ($5 > l) print $6\" \"$5\"%\"}' |\nwhile read -r mnt use; do\n  echo \"OGOHLANTIRISH: $mnt $use\" >&2\ndone\n```\n\nCron yoki systemd timer bilan ishga tushiriladi."
+ },
+ "34359": {
+  "a": "```bash\nfor h in web1 web2 web3; do\n  echo \"== $h\"\n  ssh -o ConnectTimeout=5 \"$h\" 'uptime; df -h /' || echo \"$h: xato\"\ndone\n```\n\nKo'p server uchun — Ansible yaxshiroq."
+ },
+ "34360": {
+  "a": "```bash\ncat > /etc/app.conf <<EOF\nhost=$DB_HOST\nport=5432\nEOF\n\ncat <<'EOF'   # tirnoqli — o'zgaruvchilar ochilmaydi\n$HOME qoladi\nEOF\n```"
+ },
+ "34361": {
+  "a": "```bash\nfind /tmp -name '*.log' -mtime +7 -print0 | xargs -0 rm -f\ncat hosts.txt | xargs -I{} -P4 ssh {} uptime   # 4 parallel\n```\n\n`-0` — bo'shliqli fayl nomlari uchun."
+ },
+ "34362": {
+  "a": "```bash\nread -rp \"Muhit (dev/prod): \" env\nread -rsp \"Parol: \" pass; echo\n[[ \"$env\" == prod ]] && read -rp \"Ishonchingiz komilmi? (y/n) \" ok\n```\n\nCI'da interaktiv input ishlamaydi — argument/env ishlating."
+ },
+ "34363": {
+  "a": "```bash\ntmp=$(mktemp)\ndir=$(mktemp -d)\ntrap 'rm -rf \"$tmp\" \"$dir\"' EXIT\n```\n\n`/tmp/myfile` kabi qattiq nom — to'qnashuv va xavfsizlik muammosi."
+ },
+ "34364": {
+  "a": "```python\nimport subprocess\nr = subprocess.run([\"df\", \"-h\", \"/\"], capture_output=True, text=True, check=True)\nprint(r.stdout)\n```\n\n- `shell=True` + foydalanuvchi input — injection xavfi.\n- `check=True` — xato bo'lsa exception."
+ },
+ "34365": {
+  "a": "```python\nwith open(\"/etc/hosts\") as f:\n    for line in f:\n        print(line.strip())\n\nwith open(\"out.txt\", \"w\") as f:\n    f.write(\"salom\\n\")\n```\n\nYo'llar uchun `pathlib.Path` qulay."
+ },
+ "34366": {
+  "a": "```python\nimport os\ndb_host = os.environ.get(\"DB_HOST\", \"localhost\")\ntoken = os.environ[\"API_TOKEN\"]   # yo'q bo'lsa KeyError — tez yiqiladi\n```"
+ },
+ "34367": {
+  "a": "```python\nimport json, yaml\ndata = json.loads('{\"replicas\": 3}')\nprint(json.dumps(data, indent=2))\nwith open(\"values.yaml\") as f:\n    cfg = yaml.safe_load(f)\n```\n\n`yaml.load` (safe'siz) — ixtiyoriy kod bajarilishi xavfi."
+ },
+ "34368": {
+  "a": "```python\nimport requests\nr = requests.get(\"https://api.github.com/repos/org/app\", timeout=5)\nr.raise_for_status()\nprint(r.json()[\"stargazers_count\"])\n```\n\nTimeout bermasangiz — skript abadiy qotishi mumkin."
+ },
+ "34369": {
+  "a": "```sh\npython3 -m venv .venv\nsource .venv/bin/activate\npip install -r requirements.txt\npip freeze > requirements.txt\n```"
+ },
+ "34370": {
+  "a": "```python\nimport sys\ntry:\n    with open(\"config.yaml\") as f:\n        data = f.read()\nexcept FileNotFoundError:\n    print(\"config.yaml topilmadi\", file=sys.stderr)\n    sys.exit(1)\n```\n\n`except:` (hammasini) yutib yubormang."
+ },
+ "34371": {
+  "a": "```python\nimport argparse\np = argparse.ArgumentParser()\np.add_argument(\"env\", choices=[\"dev\", \"prod\"])\np.add_argument(\"--dry-run\", action=\"store_true\")\nargs = p.parse_args()\nprint(args.env, args.dry_run)\n```"
+ },
+ "34372": {
+  "a": "```python\nimport logging\nlogging.basicConfig(level=logging.INFO, format=\"%(asctime)s %(levelname)s %(message)s\")\nlog = logging.getLogger(__name__)\nlog.info(\"Deploy boshlandi\")\nlog.error(\"DB ulanmadi\")\n```"
+ },
+ "34373": {
+  "a": "```python\nfrom pathlib import Path\nfor p in Path(\"/var/log\").rglob(\"*.log\"):\n    if p.stat().st_size > 100 * 1024 * 1024:\n        print(p, p.stat().st_size)\n```"
+ },
+ "34374": {
+  "a": "```python\nimport boto3\ns3 = boto3.client(\"s3\")\nfor b in s3.list_buckets()[\"Buckets\"]:\n    print(b[\"Name\"])\n```\n\nKalitni kodga yozmang — `AWS_PROFILE` yoki IAM role."
+ },
+ "34375": {
+  "a": "- ~50 qatordan oshdi, massiv/JSON ko'p — Python.\n- Bir nechta buyruqni ketma-ket ishga tushirish — Bash.\n- Go — bitta binar kerak bo'lgan CLI vositalar."
+ },
+ "34376": {
+  "a": "```bash\nmkdir -p /data                      # mkdir emas\nid app &>/dev/null || useradd app\ngrep -q '^vm.swappiness' /etc/sysctl.conf || echo 'vm.swappiness=10' >> /etc/sysctl.conf\n```\n\nAvtomatlashtirishda asosiy talab — qayta ishga tushirish xavfsiz bo'lsin."
+ },
+ "34377": {
+  "a": "```bash\n: \"${API_TOKEN:?API_TOKEN berilmagan}\"\ncurl -H \"Authorization: Bearer $API_TOKEN\" ...\n```\n\n- `set -x` secret'ni logga chiqaradi — ehtiyot.\n- Argument sifatida berilgan secret `ps` da ko'rinadi."
+ },
+ "34378": {
+  "a": "```bash\nport=${PORT:-8080}\n: \"${DB_HOST:?DB_HOST kerak}\"\n```"
+ },
+ "34379": {
+  "a": "```bash\n#!/usr/bin/env bash\nset -euo pipefail\nexec 9>/var/lock/backup.lock\nflock -n 9 || { echo \"allaqachon ishlayapti\"; exit 0; }\n/usr/local/bin/backup >> /var/log/backup.log 2>&1\n```"
+ },
+ "34380": {
+  "a": "```bash\n[[ \"$env\" == \"prod\" ]]\n[[ -z \"$var\" ]] && echo bo'sh\n[[ $n -gt 10 ]]\n[[ \"$file\" == *.log ]]   # glob shablon\n[[ \"$v\" =~ ^[0-9]+$ ]]  # regex\n```"
+ },
+ "34381": {
+  "a": "```bash\ncurl -s https://api.github.com/repos/org/app | jq -r '.stargazers_count'\nkubectl get pods -o json | jq -r '.items[].metadata.name'\n```"
+ },
+ "34382": {
+  "a": "```bash\nfor h in web1 web2 web3; do\n  ssh \"$h\" 'apt-get update -qq' &\ndone\nwait\necho \"Hammasi tugadi\"\n```"
+ },
+ "34383": {
+  "a": "```bash\nfind /var/backups -name '*.tar.gz' -mtime +14 -print -delete\n```\n\nAvval `-delete` siz ishlatib ro'yxatni tekshiring."
+ },
+ "34384": {
+  "a": "```bash\nusage() { echo \"Usage: $0 <env> [--dry-run]\" >&2; exit 1; }\n[[ $# -ge 1 ]] || usage\n[[ \"$1\" == \"-h\" || \"$1\" == \"--help\" ]] && usage\n```"
+ },
+ "34385": {
+  "a": "```bash\nDRY=${DRY_RUN:-0}\nrun() { if [[ $DRY == 1 ]]; then echo \"+ $*\"; else \"$@\"; fi; }\nrun rm -rf /var/cache/app/*\n```"
+ },
+ "34386": {
+  "a": "```makefile\n.PHONY: build test deploy\nbuild:\n\tdocker build -t app:$(TAG) .\ntest:\n\tgo test ./...\ndeploy: build\n\tkubectl apply -f k8s/\n```\n\nIndent — TAB bo'lishi shart."
+ },
+ "34387": {
+  "a": "```bash\nfor i in {1..5}; do\n  curl -fsS http://localhost:8080/health && break\n  echo \"urinish $i muvaffaqiyatsiz\"; sleep $((i * 2))\ndone\n```\n\nCheksiz retry qilmang — chegara qo'ying."
+ }
+}

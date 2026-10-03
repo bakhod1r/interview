@@ -269,6 +269,72 @@
       "section": "v13",
       "question": "Network namespace va veth: konteyner tarmog'i qanday ishlaydi (`ip netns` bilan)?",
       "explanation": "Network namespace — alohida tarmoq stek (interfeys, route, iptables). veth — ikki uchli virtual kabel: bir uchi namespace ichida, ikkinchisi host'da (yoki bridge'da). Docker/K8s CNI aynan shunday qiladi."
+    },
+    {
+      "id": 34008,
+      "code": "JR8",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "Serverda qaysi portlar ochiq va qaysi jarayon tinglayotganini qanday bilasiz?",
+      "explanation": "`ss -tulpn` (yoki eski `netstat -tulpn`)."
+    },
+    {
+      "id": 34009,
+      "code": "JR9",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`ufw` bilan faqat SSH, HTTP, HTTPS ni qanday ochasiz?",
+      "explanation": "Default deny incoming, keyin kerakli portlarga allow. SSH'ni enable'dan oldin ochish shart."
+    },
+    {
+      "id": 34010,
+      "code": "JR10",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`iptables` da INPUT, OUTPUT, FORWARD chain'lari nima?",
+      "explanation": "INPUT — serverga kiruvchi, OUTPUT — serverdan chiquvchi, FORWARD — server orqali o'tuvchi (router) paketlar."
+    },
+    {
+      "id": 34011,
+      "code": "JR11",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "`ping` ishlamasa, bu server o'chiq degani mi?",
+      "explanation": "Yo'q. ICMP firewall'da bloklangan bo'lishi mumkin. Portni `nc`/`curl` bilan tekshiring."
+    },
+    {
+      "id": 34012,
+      "code": "JR12",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "fail2ban nima uchun ishlatiladi?",
+      "explanation": "Loglarda ko'p muvaffaqiyatsiz login ko'rgan IP'ni vaqtincha firewall orqali bloklaydi (brute-force himoyasi)."
+    },
+    {
+      "id": 34013,
+      "code": "JR13",
+      "level": "J",
+      "type": "card",
+      "topic": "Networking & security",
+      "domain": "linux",
+      "section": "v13",
+      "question": "SSH serverni xavfsizlashtirishning eng oddiy 4 qadami?",
+      "explanation": "Key auth, parol login o'chirish, root login o'chirish, firewall/fail2ban."
     }
   ]
 }

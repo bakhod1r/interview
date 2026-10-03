@@ -115,6 +115,61 @@
       "section": "v16",
       "question": "Disk/storage performance'ni qanday o'lchaysan? `fio`, `dd` va ularning tuzoqlari.",
       "explanation": "`fio` — real yuklamaga o'xshash test (random/sequential, blok o'lchami, iodepth, direct=1). `dd` faqat taxminiy sequential va page cache tufayli aldaydi. IOPS, throughput, latency (p99) uchala metrika."
+    },
+    {
+      "id": 34020,
+      "code": "JR20",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "`lsblk` va `blkid` nima ko'rsatadi?",
+      "explanation": "`lsblk` — disk/partition daraxti, hajmi, mount point. `blkid` — UUID va filesystem turi."
+    },
+    {
+      "id": 34021,
+      "code": "JR21",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "Yangi diskni formatlab, doimiy mount qilish qadamlari?",
+      "explanation": "Partition (ixtiyoriy) → `mkfs` → `mkdir` → `mount` → `/etc/fstab` (UUID bilan) → `mount -a` bilan tekshirish."
+    },
+    {
+      "id": 34022,
+      "code": "JR22",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "MBR va GPT farqi?",
+      "explanation": "MBR — eski, 2 TB gacha va 4 primary partition. GPT — UEFI bilan, katta disklar, 128 partition, zaxira header."
+    },
+    {
+      "id": 34023,
+      "code": "JR23",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "RAID 0, 1, 5, 10 farqi?",
+      "explanation": "0 — tezlik, himoya yo'q; 1 — mirror; 5 — parity, 1 disk yo'qolishiga chidaydi; 10 — mirror+stripe, tez va ishonchli."
+    },
+    {
+      "id": 34024,
+      "code": "JR24",
+      "level": "J",
+      "type": "card",
+      "topic": "Disks & RAID",
+      "domain": "linux",
+      "section": "v16",
+      "question": "Disk sog'ligini qanday tekshirasiz?",
+      "explanation": "`smartctl` (SMART), `dmesg` dagi I/O xatolari, `iostat` bilan yuklama."
     }
   ]
 }

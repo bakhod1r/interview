@@ -253,6 +253,149 @@
       "section": "i3",
       "question": "Tashkilot bo'ylab backend servislar sifatini qanday oshirasiz (50+ jamoa)?",
       "explanation": "Principal javob — texnologiya emas, tizim: to'g'ri yo'lni eng oson yo'lga aylantirish va natijani o'lchash."
+    },
+    {
+      "id": 34036,
+      "code": "JR36",
+      "level": "J",
+      "type": "card",
+      "topic": "Metrics",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Monitoring va logging farqi nima?",
+      "explanation": "Monitoring — raqamli metrikalar vaqt bo'yicha (CPU, RPS, xato %), alert uchun. Logging — alohida hodisalar matni, sababini topish uchun."
+    },
+    {
+      "id": 34037,
+      "code": "JR37",
+      "level": "J",
+      "type": "card",
+      "topic": "Metrics",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Prometheus'da counter, gauge, histogram farqi?",
+      "explanation": "Counter — faqat o'sadi (so'rovlar soni). Gauge — tushib-ko'tariladi (RAM). Histogram — qiymatlar taqsimoti (latency)."
+    },
+    {
+      "id": 34038,
+      "code": "JR38",
+      "level": "J",
+      "type": "card",
+      "topic": "Metrics",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Yaxshi alert qanday bo'lishi kerak?",
+      "explanation": "Foydalanuvchiga ta'sir qiladigan simptomga, harakat qilish mumkin bo'lganda, aniq runbook bilan."
+    },
+    {
+      "id": 34039,
+      "code": "JR39",
+      "level": "J",
+      "type": "card",
+      "topic": "Metrics",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Golden signals (4 ta asosiy signal) qaysilar?",
+      "explanation": "Latency, Traffic, Errors, Saturation (Google SRE)."
+    },
+    {
+      "id": 34040,
+      "code": "JR40",
+      "level": "J",
+      "type": "card",
+      "topic": "Metrics",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Nega o'rtacha (average) latency yetarli emas, p95/p99 kerak?",
+      "explanation": "O'rtacha sekin so'rovlarni yashiradi. p99 — eng yomon 1% foydalanuvchi tajribasini ko'rsatadi."
+    },
+    {
+      "id": 34041,
+      "code": "JR41",
+      "level": "J",
+      "type": "card",
+      "topic": "Metrics",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Dashboard'da nimani ko'rsatish kerak?",
+      "explanation": "Avval xizmat sog'ligi (golden signals), keyin resurslar; har panel savolga javob bersin."
+    },
+    {
+      "id": 34303,
+      "code": "JR303",
+      "level": "J",
+      "type": "card",
+      "topic": "Alerting",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Postmortem (incident review) nima?",
+      "explanation": "Incident'dan keyin: nima bo'ldi, nega, qanday tuzatildi, takrorlanmasligi uchun nima qilinadi. Ayb qidirmasdan (blameless)."
+    },
+    {
+      "id": 34304,
+      "code": "JR304",
+      "level": "J",
+      "type": "card",
+      "topic": "Alerting",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Runbook nima?",
+      "explanation": "Aniq alert yoki vazifa uchun qadam-baqadam ko'rsatma — navbatchi o'ylamasdan bajara olsin."
+    },
+    {
+      "id": 34305,
+      "code": "JR305",
+      "level": "J",
+      "type": "card",
+      "topic": "Alerting",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Severity darajalari (SEV1, SEV2, ...) nima?",
+      "explanation": "Incident jiddiyligi: SEV1 — butun xizmat ishlamaydi, SEV3 — kichik ta'sir."
+    },
+    {
+      "id": 34306,
+      "code": "JR306",
+      "level": "J",
+      "type": "card",
+      "topic": "Alerting",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Synthetic monitoring nima?",
+      "explanation": "Skript foydalanuvchi harakatini (login, xarid) muntazam takrorlab tekshiradi."
+    },
+    {
+      "id": 34307,
+      "code": "JR307",
+      "level": "J",
+      "type": "card",
+      "topic": "Alerting",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Alert fatigue nima?",
+      "explanation": "Juda ko'p, foydasiz alert — odamlar ularni e'tiborsiz qoldira boshlaydi va muhimini o'tkazib yuboradi."
+    },
+    {
+      "id": 34308,
+      "code": "JR308",
+      "level": "J",
+      "type": "card",
+      "topic": "Alerting",
+      "domain": "obs",
+      "section": "i3",
+      "question": "Health check endpoint'da nimani qaytarish kerak?",
+      "explanation": "Oddiy `200 OK` (liveness) va dependency'larni tekshiradigan readiness; JSON tafsilot ixtiyoriy."
+    },
+    {
+      "id": 34309,
+      "code": "JR309",
+      "level": "J",
+      "type": "card",
+      "topic": "Alerting",
+      "domain": "obs",
+      "section": "i3",
+      "question": "APM nima?",
+      "explanation": "Application Performance Monitoring — ilova ichidan so'rov vaqti, sekin endpoint, DB so'rovlari, xatolarni kuzatish."
     }
   ]
 }

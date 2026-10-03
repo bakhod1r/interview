@@ -12,7 +12,7 @@ Uzbek-language interview question bank (Junior → Principal) with an Anki-style
 
 ## Build
 ```sh
-node build/build.js && node build/verify.js
+node build/build.js && node build/verify.js && node build/anki.js
 ```
 Run after any change to data or shell.
 

@@ -148,6 +148,116 @@
       "section": "w9",
       "question": "Observability xarajati daromaddan tez o'syapti (log, metrika, trace). Qanday optimallashtirasiz?",
       "explanation": "Har signalning qiymatini o'lchang: kim ishlatadi, qaysi alert/dashboard. Log: DEBUG o'chirish, sampling, qisqa retention + arxiv (S3), keraksiz maydonlar. Metrika: kardinallik, ishlatilmaydigan metrikalarni drop, recording rules. Trace: tail sampling. Tiered storage va vendor'dan open-source'ga (yoki aksincha) ko'chishni TCO bo'yicha baholash."
+    },
+    {
+      "id": 34293,
+      "code": "JR293",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "`journalctl` bilan loglarni filtrlash?",
+      "explanation": "Unit, vaqt, prioritet bo'yicha."
+    },
+    {
+      "id": 34294,
+      "code": "JR294",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "`/var/log` ichida qaysi fayllar muhim?",
+      "explanation": "`syslog`/`messages` — umumiy, `auth.log`/`secure` — login, `kern.log` — kernel, ilova papkalari (nginx)."
+    },
+    {
+      "id": 34295,
+      "code": "JR295",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Logdan xatolarni tez topish uchun buyruqlar?",
+      "explanation": "`grep`, `tail -f`, `less +F`, `awk`, `sort | uniq -c`."
+    },
+    {
+      "id": 34296,
+      "code": "JR296",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Centralized logging nima uchun kerak?",
+      "explanation": "Ko'p server/konteyner loglarini bir joyga yig'ib, qidirish va alert qilish — server o'lsa ham log qoladi."
+    },
+    {
+      "id": 34297,
+      "code": "JR297",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Correlation ID (request ID) nima?",
+      "explanation": "Har so'rovga noyob ID beriladi va barcha servis loglariga yoziladi — bitta so'rov izini topish uchun."
+    },
+    {
+      "id": 34298,
+      "code": "JR298",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Error budget nima?",
+      "explanation": "SLO'dan ruxsat etilgan xato miqdori. 99.9% SLO = oyda ~43 daqiqa ishlamaslik mumkin."
+    },
+    {
+      "id": 34299,
+      "code": "JR299",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Loglarga nima yozmaslik kerak?",
+      "explanation": "Parol, token, karta raqami, shaxsiy ma'lumot (PII)."
+    },
+    {
+      "id": 34300,
+      "code": "JR300",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Log retention nega muhim?",
+      "explanation": "Loglar qimmat va diskni to'ldiradi; qonuniy talablar ham bor. Qancha va qayerda saqlashni belgilash kerak."
+    },
+    {
+      "id": 34301,
+      "code": "JR301",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "Uptime/status page nima uchun?",
+      "explanation": "Foydalanuvchilarga xizmat holati va incident'lar haqida ochiq ma'lumot berish."
+    },
+    {
+      "id": 34302,
+      "code": "JR302",
+      "level": "J",
+      "type": "card",
+      "topic": "Logs, tracing & SLO",
+      "domain": "obs",
+      "section": "w9",
+      "question": "On-call nima va junior sifatida nimani bilish kerak?",
+      "explanation": "Navbatchilik: alert kelganda javob berish. Runbook, eskalatsiya va kommunikatsiyani bilish kerak."
     }
   ]
 }

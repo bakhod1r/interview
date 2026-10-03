@@ -236,6 +236,72 @@
       "section": "w7",
       "question": "Cluster API va vcluster nima? Ko'p klasterni qanday boshqarasiz?",
       "explanation": "Cluster API (CAPI) — Kubernetes klasterlarini o'zini CRD sifatida boshqarish: management klaster workload klasterlarni deklarativ yaratadi/upgrade qiladi. vcluster — bitta host klaster ichida virtual klasterlar (o'z API server'i, pod'lar host'da ishlaydi): arzon izolyatsiya, dev/test va multi-tenancy uchun."
+    },
+    {
+      "id": 34250,
+      "code": "JR250",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Pod uchun `requests` va `limits` farqi?",
+      "explanation": "requests — scheduler uchun kafolatlangan minimum. limits — yuqori chegara: CPU throttle qilinadi, memory oshsa OOMKill."
+    },
+    {
+      "id": 34251,
+      "code": "JR251",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "HPA (HorizontalPodAutoscaler) nima?",
+      "explanation": "Metrika (CPU, memory, custom) bo'yicha Deployment replikalari sonini avtomatik o'zgartiradi."
+    },
+    {
+      "id": 34252,
+      "code": "JR252",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "PVC (PersistentVolumeClaim) nima?",
+      "explanation": "Pod'ning \"menga 10Gi disk kerak\" degan so'rovi; StorageClass orqali PV avtomatik yaratiladi va bog'lanadi."
+    },
+    {
+      "id": 34253,
+      "code": "JR253",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "StatefulSet va Deployment farqi?",
+      "explanation": "StatefulSet — barqaror nom (db-0, db-1), har pod'ga alohida PVC, tartibli ishga tushish. Deployment — bir xil, almashtiriladigan pod'lar."
+    },
+    {
+      "id": 34254,
+      "code": "JR254",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "DaemonSet nima va qachon ishlatiladi?",
+      "explanation": "Har (yoki tanlangan) node'da bittadan pod ishlatadi — log agent, monitoring, CNI."
+    },
+    {
+      "id": 34255,
+      "code": "JR255",
+      "level": "J",
+      "type": "card",
+      "topic": "Scheduling & scaling",
+      "domain": "k8s",
+      "section": "w7",
+      "question": "Job va CronJob nima?",
+      "explanation": "Job — tugallanadigan vazifa (migratsiya). CronJob — Job'ni jadval bo'yicha ishga tushiradi."
     }
   ]
 }

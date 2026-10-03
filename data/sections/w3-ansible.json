@@ -258,6 +258,138 @@
       "section": "w3",
       "question": "Ansible'ni katta flot (yuzlab server) uchun qanday tezlashtirasiz va xavfsiz rollout qilasiz?",
       "explanation": "Tezlik: `forks` oshirish, SSH pipelining va ControlPersist, fact gathering'ni cheklash/caching. Xavfsiz rollout: `serial` (batch), `max_fail_percentage`, load balancer'dan chiqarish, `--check --diff`, `--limit` bilan canary."
+    },
+    {
+      "id": 34271,
+      "code": "JR271",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Oddiy Ansible playbook misoli?",
+      "explanation": "Hosts, become, tasks — har task bitta modul."
+    },
+    {
+      "id": 34272,
+      "code": "JR272",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Inventory fayl qanday yoziladi?",
+      "explanation": "INI yoki YAML: guruhlar va hostlar, host/guruh o'zgaruvchilari."
+    },
+    {
+      "id": 34273,
+      "code": "JR273",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Handler nima?",
+      "explanation": "Faqat biror task o'zgarish (`changed`) qilganda chaqiriladigan task — masalan config o'zgarsa nginx reload."
+    },
+    {
+      "id": 34274,
+      "code": "JR274",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible'da variable'lar qayerda yoziladi?",
+      "explanation": "Playbook `vars`, `group_vars/`, `host_vars/`, role `defaults/`, CLI `-e`."
+    },
+    {
+      "id": 34275,
+      "code": "JR275",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible Vault nima?",
+      "explanation": "Secret'larni (parol, kalit) shifrlangan holda Git'da saqlash."
+    },
+    {
+      "id": 34276,
+      "code": "JR276",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`template` moduli va Jinja2?",
+      "explanation": "Shablon faylga variable'larni qo'yib, serverga yozadi."
+    },
+    {
+      "id": 34277,
+      "code": "JR277",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`copy`, `template`, `file`, `lineinfile` modullari farqi?",
+      "explanation": "copy — faylni o'zgarishsiz ko'chiradi; template — Jinja bilan; file — papka/ruxsat/symlink; lineinfile — bitta qatorni boshqaradi."
+    },
+    {
+      "id": 34278,
+      "code": "JR278",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Ansible role nima va tuzilishi?",
+      "explanation": "Qayta ishlatiladigan task, handler, template, default'lar to'plami."
+    },
+    {
+      "id": 34279,
+      "code": "JR279",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`command` va `shell` modullari qachon ishlatiladi?",
+      "explanation": "Mos modul bo'lmaganda. `command` — shell'siz (pipe yo'q), `shell` — pipe, redirect bilan. Ikkalasi ham default idempotent emas."
+    },
+    {
+      "id": 34280,
+      "code": "JR280",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "Playbook'ni faqat ba'zi hostlarda yoki task'larda ishlatish?",
+      "explanation": "`--limit` hostlar uchun, `--tags` task'lar uchun."
+    },
+    {
+      "id": 34281,
+      "code": "JR281",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`ansible all -m ping` nima tekshiradi?",
+      "explanation": "ICMP emas — SSH ulanish va Python borligini tekshiradi."
+    },
+    {
+      "id": 34282,
+      "code": "JR282",
+      "level": "J",
+      "type": "card",
+      "topic": "Ansible",
+      "domain": "iac",
+      "section": "w3",
+      "question": "`register` va `debug` bilan natijani ko'rish?",
+      "explanation": "`register` task natijasini o'zgaruvchiga saqlaydi, `debug` uni chiqaradi."
     }
   ]
 }

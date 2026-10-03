@@ -192,6 +192,94 @@
       "section": "v17",
       "question": "Bonding/teaming va VLAN: server tarmoq redundancy'si qanday sozlanadi?",
       "explanation": "Bonding — bir nechta NIC'ni bitta mantiqiy interfeysga: `active-backup` (mode 1, switch sozlamasisiz, failover), `802.3ad` LACP (mode 4, switch'da LAG kerak, yuk taqsimoti + failover). VLAN — bitta fizik linkda bir nechta L2 tarmoq (802.1Q tag), `eth0.100`."
+    },
+    {
+      "id": 34014,
+      "code": "JR14",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "`ip a` chiqishida nimani ko'rasiz?",
+      "explanation": "Interfeyslar, holati (UP/DOWN), MAC, IPv4/IPv6 manzil va subnet mask (CIDR)."
+    },
+    {
+      "id": 34015,
+      "code": "JR15",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "`/24` subnet nimani bildiradi va unda nechta host bo'ladi?",
+      "explanation": "Birinchi 24 bit — tarmoq qismi. 256 manzil, 254 ta host (network va broadcast chiqariladi)."
+    },
+    {
+      "id": 34016,
+      "code": "JR16",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Private IP diapazonlari qaysilar?",
+      "explanation": "10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16 (RFC 1918). Internetda route qilinmaydi."
+    },
+    {
+      "id": 34017,
+      "code": "JR17",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "DNS so'rovi qanday ishlaydi va `dig` bilan qanday tekshirasiz?",
+      "explanation": "Resolver → cache → root → TLD → authoritative server. `dig example.com` javob va TTL'ni ko'rsatadi."
+    },
+    {
+      "id": 34018,
+      "code": "JR18",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "`/etc/hosts` va `/etc/resolv.conf` vazifasi?",
+      "explanation": "`/etc/hosts` — qo'lda nom→IP xaritasi (DNS'dan oldin tekshiriladi). `/etc/resolv.conf` — qaysi DNS serverlardan so'rash."
+    },
+    {
+      "id": 34019,
+      "code": "JR19",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Default gateway nima va uni qanday ko'rasiz?",
+      "explanation": "Lokal subnet'dan tashqaridagi barcha trafik yuboriladigan router. `ip r` da `default via ...`."
+    },
+    {
+      "id": 34097,
+      "code": "JR97",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "Brauzerga `https://example.com` yozganda nima bo'ladi?",
+      "explanation": "DNS → TCP handshake → TLS handshake → HTTP so'rov → server/proxy javobi → brauzer render."
+    },
+    {
+      "id": 34098,
+      "code": "JR98",
+      "level": "J",
+      "type": "card",
+      "topic": "TCP/IP",
+      "domain": "linux",
+      "section": "v17",
+      "question": "ARP nima uchun kerak?",
+      "explanation": "Bir lokal tarmoqda IP manzilni MAC manzilga aylantiradi — Ethernet freym MAC bo'yicha yuboriladi."
     }
   ]
 }

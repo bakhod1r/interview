@@ -63,6 +63,15 @@ button{font:inherit;color:inherit}
 .btn.sm{font-size:12.5px;padding:6px 11px;border-radius:9px}
 .btn[disabled]{opacity:.4;cursor:default;box-shadow:none}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
+.qlist{overflow:hidden;margin-bottom:24px}.ql-bar{display:flex;flex-direction:column;gap:10px;padding:14px;border-bottom:1px solid var(--line)}
+.ql-bar input{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:9px 14px;font:500 14px var(--sans);color:var(--ink);outline:none}
+.ql-row{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .15s}
+.ql-row:hover,.ql-row.open{background:var(--bg-2)}.ql-row .q{flex:1;min-width:0;line-height:1.45}.ql-row small{font:600 12px var(--mono);white-space:nowrap}
+.ql-row .dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--new)}.dot.d-learn{background:var(--learn)}.dot.d-rev{background:var(--rev)}
+.ql-ans{padding:4px 18px 16px 50px;border-bottom:1px solid var(--line);background:var(--bg-2);animation:qlIn .2s ease}
+@keyframes qlIn{from{opacity:0;transform:translateY(-4px)}}
+.ql-more{width:100%;justify-content:center;padding:14px}.qlist .empty{padding:28px;text-align:center;color:var(--muted)}
+@media (max-width:560px){.ql-row small{display:none}.ql-ans{padding-left:16px}}
 .chip{border:1px solid var(--line);background:var(--card);font-weight:700;font-size:13px;padding:6px 13px;border-radius:999px;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
 .muted{color:var(--muted)}
@@ -669,10 +678,14 @@ function startSession(title,ids,deck,mode){
 const study=id=>startSession(DECK[id].name,queue(DECK[id].qs),id,"std");
 // interview rejimi: tanlangan to'plamdan (yoki hammasidan) 20 ta tasodifiy savol, bo'limlar aralash
 const MOCK_N=20;
+// interview darajasi (S.mlv): "" = global filtr; Staff Principal'ni ham oladi
+const MLV={J:["Junior",["J"]],M:["Middle",["M"]],S:["Senior",["S"]],St:["Staff",["St","P"]]};
+const mockOk=q=>S.mlv&&MLV[S.mlv]?MLV[S.mlv][1].includes(q.l):lvlOk(q);
 function mock(id){
-  const qs=(id?DECK[id].qs:Q).filter(lvlOk).map(q=>q.id);
+  const qs=(id?DECK[id].qs:Q).filter(mockOk).map(q=>q.id);
+  if(!qs.length){toast("Bu darajada savol yo'q");return;}
   for(let i=qs.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[qs[i],qs[j]]=[qs[j],qs[i]];}
-  startSession("🎤 Interview · "+(id?DECK[id].name:"aralash"),qs.slice(0,MOCK_N),id||"","cram");
+  startSession("🎤 Interview"+(MLV[S.mlv]?" · "+MLV[S.mlv][0]:"")+" · "+(id?DECK[id].name:"aralash"),qs.slice(0,MOCK_N),id||"","cram");
 }
 // ---------- exam rejimi: vaqtli, javob yashirin, oxirida hisobot ----------
 const EXAM_SIZES=[10,20,30],EXAM_LV=["S","St","P"];
@@ -759,9 +772,10 @@ function examReport(){
   return h;
 }
 function mockMenu(){
-  sheet(`<h3>🎤 Interview rejimi</h3><p class="muted" style="margin:0 0 10px;font-size:13px">${MOCK_N} ta tasodifiy savol. Javobni ovoz chiqarib ayting, keyin kartani oching.${S.lvl.length?" Daraja filtri hisobga olinadi.":""}</p>
-    <button class="it" ${act(()=>mock(""))}>🎲 Hammasidan aralash <small>${Q.filter(lvlOk).length}</small></button>
-    ${Object.keys(DECK).filter(k=>DECK[k].lvl===0).map(k=>`<button class="it" ${act(()=>mock(k))}>${DECK[k].ic} ${esc(DECK[k].name)} <small>${DECK[k].qs.filter(lvlOk).length}</small></button>`).join("")}`);
+  sheet(`<h3>🎤 Interview rejimi</h3><p class="muted" style="margin:0 0 10px;font-size:13px">${MOCK_N} ta tasodifiy savol. Javobni ovoz chiqarib ayting, keyin kartani oching.</p>
+    <div class="chips" style="margin:0 0 12px">${[["","Hammasi"],...Object.entries(MLV).map(([k,v])=>[k,v[0]])].map(([k,n])=>`<button class="chip" aria-pressed="${(S.mlv||"")===k}" ${act(()=>{S.mlv=k;save();mockMenu();})}>${n}</button>`).join("")}</div>
+    <button class="it" ${act(()=>mock(""))}>🎲 Hammasidan aralash <small>${Q.filter(mockOk).length}</small></button>
+    ${Object.keys(DECK).filter(k=>DECK[k].lvl===0).map(k=>`<button class="it" ${act(()=>mock(k))}>${DECK[k].ic} ${esc(DECK[k].name)} <small>${DECK[k].qs.filter(mockOk).length}</small></button>`).join("")}`);
 }
 
 // ---------- sheet (bottom menu) ----------
@@ -844,7 +858,27 @@ function overview(){
       <div class="r"><span class="muted">Yetilgan (21+ kun)</span><b>${mature}</b></div>
       <div class="r"><span class="muted">To'g'ri javoblar</span><b>${res.length?Math.round(ok/res.length*100):0}%</b></div>
     </div></div>`;
-  return h;
+  return h+qList(id,qs);
+}
+// bo'lim ichidagi savollar ro'yxati: qidiruv + holat filtri, bosilsa javob ochiladi, ▶ — shu savoldan sessiya
+const LF=[["all","Hammasi"],["new","Yangi"],["learn","O'rganish"],["rev","Takrorlash"],["due","Muddati keldi"]];
+function qList(id,qs){
+  if(V.lk!==id)Object.assign(V,{lk:id,lq:"",lf:"all",lo:"",ln:100});
+  const s=V.lq.trim().toLowerCase();
+  const L=qs.filter(lvlOk).filter(q=>V.lf==="all"||(V.lf==="due"?isDue(q):cat(q)===V.lf))
+    .filter(q=>!s||(q.q+" "+(q.f||"")+" "+(q.b||"")+" "+q.tp).toLowerCase().includes(s));
+  let h=`<div class="h2">Savollar <small class="muted" style="letter-spacing:0">${L.length}</small><span class="sp"></span>${L.length?`<button class="btn sm" ${act(()=>startSession(DECK[id].name+" · ro'yxat",L.map(q=>q.id),id,"cram"))}>▶ Ro'yxatni ko'rib chiqish</button>`:""}</div>
+  <div class="card qlist"><div class="ql-bar"><input id="lq" type="search" placeholder="Bo'lim ichida qidirish…" value="${esc(V.lq)}" autocomplete="off">
+  <div class="chips">${LF.map(([k,n])=>`<button class="chip" aria-pressed="${V.lf===k}" ${act(()=>{V.lf=k;V.ln=100;render();})}>${n}</button>`).join("")}</div></div>`;
+  if(!L.length)return h+`<div class="empty">Filtrga mos savol yo'q.</div></div>`;
+  h+=L.slice(0,V.ln).map((q,i)=>{const c=cat(q),sr=S.srs[q.id],op=V.lo===q.id;
+    const due=c==="new"?"yangi":sr.due<=now()?"hozir":ivLabel(sr.due-now());
+    return`<div class="ql-row${op?" open":""}" ${act(()=>{V.lo=op?"":q.id;render();})} role="button" tabindex="0" aria-expanded="${op}">
+      <span class="dot d-${c}"></span><span class="tag lv">${q.l}</span><span class="q">${inline((q.f||q.q).replace(/<[^>]+>/g,""))}</span><small class="muted">${due}</small>
+      <button class="btn ghost sm" title="Shu savoldan boshlash" aria-label="Boshlash" ${act(()=>startSession(DECK[id].name+" · ro'yxat",L.slice(i).map(x=>x.id),id,"cram"))}>▶</button></div>
+      ${op?`<div class="ql-ans ans">${md(q.b)}</div>`:""}`;}).join("");
+  if(L.length>V.ln)h+=`<button class="btn ghost ql-more" ${act(()=>{V.ln+=100;render();})}>Yana ${Math.min(100,L.length-V.ln)} ta (jami ${L.length})</button>`;
+  return h+`</div>`;
 }
 // ---------- qo'llanmalar (docs/*.md) ----------
 const slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
@@ -1029,6 +1063,7 @@ function render(){
   if(S.rd.focus&&!app.querySelector(".focus-exit"))app.insertAdjacentHTML("afterbegin",`<button class="focus-exit" ${act(()=>{S.rd.focus=false;applyRead();render();})}>✕ Fokusdan chiqish</button>`);
   if(navAnim&&!RM()){app.querySelectorAll(".today .v,.ov-counts b,.tri b").forEach(countUp);if(app.querySelector(".done"))confetti();}
   const ta=$("#ta");if(ta)ta.oninput=()=>{if(S.sess)draft[S.sess.ids[S.sess.i]]=ta.value;};
+  const lq=$("#lq");if(lq)lq.oninput=e=>{V.lq=e.target.value;V.ln=100;const pos=e.target.selectionStart;render();const n=$("#lq");n.focus();n.setSelectionRange(pos,pos);};
   const sq=$("#sq");if(sq)sq.oninput=e=>{V.search=e.target.value;const pos=e.target.selectionStart;render();const n=$("#sq");n.focus();n.setSelectionRange(pos,pos);};
 }
 document.addEventListener("keydown",e=>{
@@ -1038,7 +1073,7 @@ document.addEventListener("keydown",e=>{
   if(tag==="TEXTAREA"){if(e.key==="Enter"&&(e.metaKey||e.ctrlKey)){e.preventDefault();$("#show")&&$("#show").click();}if(e.key==="Escape")e.target.blur();return;}
   if(tag==="INPUT"){if(e.key==="Escape"){V.search="";render();}return;}
   if(e.metaKey||e.ctrlKey||e.altKey)return;
-  if(V.view!=="study"){if(e.key==="/"){e.preventDefault();$("#sq")&&$("#sq").focus();}if(e.key==="Escape"&&V.view==="overview")go("decks");if(e.key==="Escape"&&V.view==="doc")location.hash="docs";return;}
+  if(V.view!=="study"){if(e.key==="/"){e.preventDefault();const si=$("#sq")||$("#lq");si&&si.focus();}if(e.key==="Escape"&&V.view==="overview")go("decks");if(e.key==="Escape"&&V.view==="doc")location.hash="docs";return;}
   if(e.key==="Escape"){const s=S.sess;s&&s.deck&&DECK[s.deck]?go("overview",{deck:s.deck}):go("decks");return;}
   if(e.key==="z"||e.key==="Z"){undo();return;}
   const en=$("#enext");

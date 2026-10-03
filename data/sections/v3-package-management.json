@@ -137,6 +137,61 @@
       "section": "v3",
       "question": "Supply chain hujumlaridan paketlarni qanday himoya qilasan?",
       "explanation": "Imzo tekshiruvi, lock/hash pin, SBOM, provenance (SLSA, Sigstore), internal mirror, minimal base image, skanerlash."
+    },
+    {
+      "id": 34031,
+      "code": "JR31",
+      "level": "J",
+      "type": "card",
+      "topic": "Package management",
+      "domain": "linux",
+      "section": "v3",
+      "question": "`apt update` va `apt upgrade` farqi?",
+      "explanation": "`update` — paket ro'yxatini (index) yangilaydi; `upgrade` — o'rnatilgan paketlarni yangi versiyaga ko'taradi."
+    },
+    {
+      "id": 34032,
+      "code": "JR32",
+      "level": "J",
+      "type": "card",
+      "topic": "Package management",
+      "domain": "linux",
+      "section": "v3",
+      "question": "Debian va RHEL oilasida paket buyruqlari qanday farq qiladi?",
+      "explanation": "Debian/Ubuntu: `apt`, `dpkg`, `.deb`. RHEL/Rocky/Fedora: `dnf` (eski `yum`), `rpm`, `.rpm`."
+    },
+    {
+      "id": 34033,
+      "code": "JR33",
+      "level": "J",
+      "type": "card",
+      "topic": "Package management",
+      "domain": "linux",
+      "section": "v3",
+      "question": "Paket qaysi versiyada o'rnatilganini va qaysi repo'dan kelishini qanday bilasiz?",
+      "explanation": "`apt policy <pkg>` (Debian) yoki `dnf info <pkg>` / `rpm -q <pkg>` (RHEL)."
+    },
+    {
+      "id": 34034,
+      "code": "JR34",
+      "level": "J",
+      "type": "card",
+      "topic": "Package management",
+      "domain": "linux",
+      "section": "v3",
+      "question": "Uchinchi tomon repo (masalan Docker) qanday qo'shiladi va nega GPG kalit kerak?",
+      "explanation": "Repo URL + GPG kalit qo'shiladi; kalit paketlarning haqiqiyligini (imzo) tekshiradi."
+    },
+    {
+      "id": 34035,
+      "code": "JR35",
+      "level": "J",
+      "type": "card",
+      "topic": "Package management",
+      "domain": "linux",
+      "section": "v3",
+      "question": "`apt remove` va `apt purge` farqi?",
+      "explanation": "`remove` — binarlarni o'chiradi, config qoladi; `purge` — config fayllar bilan birga."
     }
   ]
 }

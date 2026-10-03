@@ -314,6 +314,50 @@
       "section": "i1",
       "question": "Service trafikni podlarga qanday yetkazadi (kube-proxy)?",
       "explanation": "Amaliy oqibatlar: iptables rejimida minglab Service bo'lsa qoidalarni yangilash sekundlarga cho'ziladi (endpoint o'zgarishi kech yetadi — deploy paytida 5xx); IPVS/eBPF kattaroq klasterlarda barqarorroq. Balansirovka L4 darajasida — HTTP/2/gRPC uchun yetarli emas (ulanish darajasida taqsimlanadi), shuning uchun client-side LB yoki mesh kerak."
+    },
+    {
+      "id": 34088,
+      "code": "JR88",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "`kubectl apply -f deploy.yaml` dan keyin pod ishga tushguncha nima bo'ladi?",
+      "explanation": "API server qabul qilib etcd'ga yozadi → Deployment controller ReplicaSet → ReplicaSet controller Pod'lar → scheduler node tanlaydi → kubelet container runtime orqali ishga tushiradi."
+    },
+    {
+      "id": 34089,
+      "code": "JR89",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Kubernetes \"desired state\" va reconciliation loop nima?",
+      "explanation": "Siz qanday holat kerakligini yozasiz; controller'lar doim haqiqiy holatni kuzatib, farq bo'lsa tuzatadi."
+    },
+    {
+      "id": 34090,
+      "code": "JR90",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "K8s Service ostida qanday ishlaydi?",
+      "explanation": "Service barqaror virtual IP (ClusterIP) va DNS nom beradi; kube-proxy har node'da iptables/IPVS qoidalari bilan trafikni tayyor pod'larga taqsimlaydi."
+    },
+    {
+      "id": 34091,
+      "code": "JR91",
+      "level": "J",
+      "type": "card",
+      "topic": "Kubernetes",
+      "domain": "k8s",
+      "section": "i1",
+      "question": "Liveness va readiness probe ostida nima qiladi?",
+      "explanation": "kubelet ularni davriy tekshiradi. Liveness yiqilsa — konteyner restart. Readiness yiqilsa — pod Service'dan chiqariladi, lekin restart qilinmaydi."
     }
   ]
 }
