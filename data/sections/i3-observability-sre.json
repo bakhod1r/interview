@@ -354,17 +354,6 @@
       "explanation": "Incident jiddiyligi: SEV1 — butun xizmat ishlamaydi, SEV3 — kichik ta'sir."
     },
     {
-      "id": 34306,
-      "code": "JR306",
-      "level": "J",
-      "type": "card",
-      "topic": "Alerting",
-      "domain": "obs",
-      "section": "i3",
-      "question": "Synthetic monitoring nima?",
-      "explanation": "Skript foydalanuvchi harakatini (login, xarid) muntazam takrorlab tekshiradi."
-    },
-    {
       "id": 34307,
       "code": "JR307",
       "level": "J",

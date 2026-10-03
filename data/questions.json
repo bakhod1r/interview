@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-02T17:21:44.853Z",
-  "total": 5060,
+  "total": 5044,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -21890,18 +21890,6 @@
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
-          "id": 41539,
-          "code": "H2429",
-          "level": "S",
-          "type": "card",
-          "topic": "Kernel tuning & performance",
-          "domain": "linux",
-          "section": "h24",
-          "question": "Swap partition va swap file farqi.",
-          "explanation": "Partition — maxsus xom bo'lim; swap file — mavjud FS'dagi oldindan ajratilgan fayl (fallocate -l 4G /swapfile; chmod 600; mkswap; swapon). Zamonaviy kernel'larda unumdorlik deyarli bir xil, fayl moslashuvchanroq (Btrf...",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
           "id": 41540,
           "code": "H2430",
           "level": "S",
@@ -23705,17 +23693,6 @@
           "explanation": "Hammasi HEAD'ni siljitadi. soft — o'zgarishlar staged qoladi; mixed (default) — unstaged qoladi; hard — o'zgarishlar o'chadi."
         },
         {
-          "id": 34111,
-          "code": "JR111",
-          "level": "J",
-          "type": "card",
-          "topic": "Git",
-          "domain": "git",
-          "section": "w1",
-          "question": "`git revert` va `git reset` farqi?",
-          "explanation": "Revert — o'zgarishni bekor qiluvchi YANGI commit qo'shadi (tarix saqlanadi). Reset — tarixni orqaga suradi."
-        },
-        {
           "id": 34112,
           "code": "JR112",
           "level": "J",
@@ -23914,17 +23891,6 @@
           "explanation": "Main kabi muhim branch'ga to'g'ridan-to'g'ri push, force push va o'chirishni taqiqlash; PR, review, yashil CI talab qilish."
         },
         {
-          "id": 34130,
-          "code": "JR130",
-          "level": "J",
-          "type": "card",
-          "topic": "Git",
-          "domain": "git",
-          "section": "w1",
-          "question": "CODEOWNERS fayli nima?",
-          "explanation": "Qaysi fayl/papkaga kim mas'ul ekanini belgilaydi; PR ochilganda o'sha odamlar avtomatik review'er bo'ladi."
-        },
-        {
           "id": 34131,
           "code": "JR131",
           "level": "J",
@@ -23945,17 +23911,6 @@
           "section": "w1",
           "question": "`git blame` qachon foydali?",
           "explanation": "Har qatorni oxirgi kim, qaysi commit'da o'zgartirganini ko'rsatadi — o'zgarish sababini topish uchun."
-        },
-        {
-          "id": 34133,
-          "code": "JR133",
-          "level": "J",
-          "type": "card",
-          "topic": "Git",
-          "domain": "git",
-          "section": "w1",
-          "question": "Monorepo va polyrepo farqi?",
-          "explanation": "Monorepo — ko'p loyiha bitta repo'da. Polyrepo — har servis alohida repo."
         },
         {
           "id": 34134,
@@ -24092,18 +24047,6 @@
           "section": "h32",
           "question": "Git'da `HEAD` va \"detached HEAD\" nima?",
           "explanation": "HEAD: joriy branch'ga ishora qiluvchi simvolik ref (ref: refs/heads/main).",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
-          "id": 42057,
-          "code": "H3207",
-          "level": "M",
-          "type": "card",
-          "topic": "Git internals",
-          "domain": "git",
-          "section": "h32",
-          "question": "`git merge` va `git rebase` farqi.",
-          "explanation": "merge: ikki tarixni birlashtiruvchi merge commit yaratadi — tarix o'zgarmaydi, haqiqiy kontekst saqlanadi.",
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
@@ -35722,18 +35665,6 @@
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
-          "id": 40566,
-          "code": "H1116",
-          "level": "J",
-          "type": "card",
-          "topic": "CI/CD fundamentals",
-          "domain": "cicd",
-          "section": "h11",
-          "question": "Blue-green deployment nima?",
-          "explanation": "Ikkita bir xil prod muhit: trafik Blue'da, Green sinovdan o'tkaziladi va tasdiqlangach load balancer'da trafik bir zumda Green'ga o'tadi.",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
           "id": 40567,
           "code": "H1117",
           "level": "J",
@@ -35767,18 +35698,6 @@
           "section": "h11",
           "question": "Feature flag (toggle) nima?",
           "explanation": "Deploy'ni feature release'dan ajratuvchi shartli kod tarmog'i — API yoki UI orqali funksiyani bir zumda yoqish/o'chirish. Eski flag'larni tozalab turish kerak (texnik qarz).",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
-          "id": 40570,
-          "code": "H1120",
-          "level": "J",
-          "type": "card",
-          "topic": "CI/CD fundamentals",
-          "domain": "cicd",
-          "section": "h11",
-          "question": "Trunk-based development nima?",
-          "explanation": "Kichik, tez-tez commit'lar bitta umumiy branch'ga (main) merge qilinadi — uzluksiz integratsiya va tez yetkazish.",
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
@@ -36055,18 +35974,6 @@
           "section": "h11",
           "question": "Argo Rollouts nima?",
           "explanation": "Kubernetes controller: canary, blue-green va eksperimentlar, avtomatik metrika tekshiruvi (AnalysisTemplate) bilan.",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
-          "id": 40594,
-          "code": "H1144",
-          "level": "J",
-          "type": "card",
-          "topic": "CI/CD fundamentals",
-          "domain": "cicd",
-          "section": "h11",
-          "question": "GitOps nima?",
-          "explanation": "Git repo deklarativ infra va ilova deploy'lari uchun yagona haqiqat manbai; klasterdagi agent (pull model) holatni Git bilan doimiy moslaydi.",
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
@@ -39311,18 +39218,6 @@
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
-          "id": 41273,
-          "code": "H2023",
-          "level": "M",
-          "type": "card",
-          "topic": "Terraform & OpenTofu core",
-          "domain": "iac",
-          "section": "h20",
-          "question": "Terraform va Ansible farqi.",
-          "explanation": "Terraform — deklarativ state bilan infra provisioning (VPC, EKS, RDS); Ansible — ishlab turgan serverlarda configuration management (paket o'rnatish, OS fayllarini sozlash). Ko'pincha birga ishlatiladi.",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
           "id": 41274,
           "code": "H2024",
           "level": "M",
@@ -39584,18 +39479,6 @@
           "section": "h20",
           "question": "Ansible inventory (statik va dinamik) nima?",
           "explanation": "Statik: host va IP'lar ro'yxati INI/YAML faylda.",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
-          "id": 41296,
-          "code": "H2046",
-          "level": "M",
-          "type": "card",
-          "topic": "Terraform & OpenTofu core",
-          "domain": "iac",
-          "section": "h20",
-          "question": "Ansible Vault nima?",
-          "explanation": "Sezgir o'zgaruvchi, fayl yoki playbook'larni AES-256 bilan shifrlaydi (ansible-vault encrypt secrets.yml).",
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
@@ -41824,17 +41707,6 @@
           "explanation": "Incident jiddiyligi: SEV1 — butun xizmat ishlamaydi, SEV3 — kichik ta'sir."
         },
         {
-          "id": 34306,
-          "code": "JR306",
-          "level": "J",
-          "type": "card",
-          "topic": "Alerting",
-          "domain": "obs",
-          "section": "i3",
-          "question": "Synthetic monitoring nima?",
-          "explanation": "Skript foydalanuvchi harakatini (login, xarid) muntazam takrorlab tekshiradi."
-        },
-        {
           "id": 34307,
           "code": "JR307",
           "level": "J",
@@ -42008,17 +41880,6 @@
           "section": "w4",
           "question": "Kubernetes'da Prometheus target'larni qanday topadi? ServiceMonitor nima?",
           "explanation": "kubernetes_sd_configs — K8s API'dan pod/service/endpoint'larni topadi, relabel bilan filtrlaydi. Prometheus Operator'da ServiceMonitor/PodMonitor CRD — label selector bilan deklarativ scrape."
-        },
-        {
-          "id": 33450,
-          "code": "WP15",
-          "level": "M",
-          "type": "card",
-          "topic": "Prometheus & Grafana",
-          "domain": "obs",
-          "section": "w4",
-          "question": "`relabel_configs` va `metric_relabel_configs` farqi?",
-          "explanation": "relabel_configs — scrape'dan OLDIN target'lar ustida ishlaydi (qaysi target scrape qilinadi, label'lar qanday nomlanadi). metric_relabel_configs — scrape'dan KEYIN har bir sample ustida (keraksiz metrika/label'ni tashlash, saqlashdan oldin)."
         },
         {
           "id": 33451,
@@ -42860,18 +42721,6 @@
           "section": "h26",
           "question": "PromQL'da `predict_linear()` bilan diskni proaktiv alert qilish qanday?",
           "explanation": "predict_linear(node_filesystem_free_bytes[4h], 24  3600) < 0",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
-          "id": 41681,
-          "code": "H2631",
-          "level": "M",
-          "type": "card",
-          "topic": "Observability & Prometheus",
-          "domain": "obs",
-          "section": "h26",
-          "question": "Blackbox exporter nima?",
-          "explanation": "Tashqi endpoint'larni HTTP, HTTPS, DNS, TCP, ICMP orqali tekshiradi — mavjudlik, latency va SSL sertifikat muddati.",
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {
@@ -45209,17 +45058,6 @@
           "explanation": "TCP/IP 4 qatlam: Link (Ethernet, ARP), Internet (IP, ICMP), Transport (TCP, UDP), Application (HTTP, DNS, SSH, TLS). OSI 7 qatlam — nazariy model; amaliyotda 'L4' (TCP/port) va 'L7' (HTTP) atamalari ko'p ishlatiladi."
         },
         {
-          "id": 33343,
-          "code": "WB02",
-          "level": "J",
-          "type": "card",
-          "topic": "Networking basics",
-          "domain": "net",
-          "section": "w10",
-          "question": "TCP va UDP farqi? Qaysi protokollar qaysi birini ishlatadi?",
-          "explanation": "TCP — ulanishli (3-way handshake), tartib va yetkazishni kafolatlaydi, retransmit, flow/congestion control. UDP — ulanishsiz, kafolatsiz, kam overhead. TCP: HTTP/1.1-2, SSH, DB. UDP: DNS, video/ovoz, QUIC (HTTP/3), DHCP."
-        },
-        {
           "id": 33344,
           "code": "WB03",
           "level": "J",
@@ -45636,17 +45474,6 @@
           "section": "w10",
           "question": "Sertifikat muddati qachon tugashini qanday tekshirasiz?",
           "explanation": "`openssl s_client` bilan sertifikatni olib, `-enddate` ni o'qish."
-        },
-        {
-          "id": 34335,
-          "code": "JR335",
-          "level": "J",
-          "type": "card",
-          "topic": "Networking basics",
-          "domain": "net",
-          "section": "w10",
-          "question": "CDN nima?",
-          "explanation": "Statik kontentni (rasm, JS, video) foydalanuvchiga yaqin serverlardan beradigan tarmoq — tezroq va origin yuki kam."
         },
         {
           "id": 34336,
@@ -55899,18 +55726,6 @@
           "section": "h4",
           "question": "SLA (Service Level Agreement) nima?",
           "explanation": "Mijoz bilan yuridik shartnoma: kelishilgan darajaga erishilmasa jarima (kredit, qaytarish). SLA odatda SLO'dan yumshoqroq bo'ladi (bufer).",
-          "source": "NotHarshhaa/DevOps-Interview-Questions"
-        },
-        {
-          "id": 40254,
-          "code": "H404",
-          "level": "M",
-          "type": "card",
-          "topic": "SRE & reliability",
-          "domain": "sre",
-          "section": "h4",
-          "question": "Error budget nima?",
-          "explanation": "SLO'ning teskarisi: error budget = 100% − SLO. Servis foydalanuvchi ishonchini buzmasdan to'plashi mumkin bo'lgan ruxsat etilgan nosozlik \"zaxirasi\" (99.9% → oyiga ~43 daqiqa).",
           "source": "NotHarshhaa/DevOps-Interview-Questions"
         },
         {

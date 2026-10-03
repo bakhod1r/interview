@@ -139,17 +139,6 @@
       "explanation": "kubernetes_sd_configs — K8s API'dan pod/service/endpoint'larni topadi, relabel bilan filtrlaydi. Prometheus Operator'da ServiceMonitor/PodMonitor CRD — label selector bilan deklarativ scrape."
     },
     {
-      "id": 33450,
-      "code": "WP15",
-      "level": "M",
-      "type": "card",
-      "topic": "Prometheus & Grafana",
-      "domain": "obs",
-      "section": "w4",
-      "question": "`relabel_configs` va `metric_relabel_configs` farqi?",
-      "explanation": "relabel_configs — scrape'dan OLDIN target'lar ustida ishlaydi (qaysi target scrape qilinadi, label'lar qanday nomlanadi). metric_relabel_configs — scrape'dan KEYIN har bir sample ustida (keraksiz metrika/label'ni tashlash, saqlashdan oldin)."
-    },
-    {
       "id": 33451,
       "code": "WP16",
       "level": "M",

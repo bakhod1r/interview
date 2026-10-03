@@ -18,17 +18,6 @@
       "explanation": "TCP/IP 4 qatlam: Link (Ethernet, ARP), Internet (IP, ICMP), Transport (TCP, UDP), Application (HTTP, DNS, SSH, TLS). OSI 7 qatlam — nazariy model; amaliyotda 'L4' (TCP/port) va 'L7' (HTTP) atamalari ko'p ishlatiladi."
     },
     {
-      "id": 33343,
-      "code": "WB02",
-      "level": "J",
-      "type": "card",
-      "topic": "Networking basics",
-      "domain": "net",
-      "section": "w10",
-      "question": "TCP va UDP farqi? Qaysi protokollar qaysi birini ishlatadi?",
-      "explanation": "TCP — ulanishli (3-way handshake), tartib va yetkazishni kafolatlaydi, retransmit, flow/congestion control. UDP — ulanishsiz, kafolatsiz, kam overhead. TCP: HTTP/1.1-2, SSH, DB. UDP: DNS, video/ovoz, QUIC (HTTP/3), DHCP."
-    },
-    {
       "id": 33344,
       "code": "WB03",
       "level": "J",
@@ -445,17 +434,6 @@
       "section": "w10",
       "question": "Sertifikat muddati qachon tugashini qanday tekshirasiz?",
       "explanation": "`openssl s_client` bilan sertifikatni olib, `-enddate` ni o'qish."
-    },
-    {
-      "id": 34335,
-      "code": "JR335",
-      "level": "J",
-      "type": "card",
-      "topic": "Networking basics",
-      "domain": "net",
-      "section": "w10",
-      "question": "CDN nima?",
-      "explanation": "Statik kontentni (rasm, JS, video) foydalanuvchiga yaqin serverlardan beradigan tarmoq — tezroq va origin yuki kam."
     },
     {
       "id": 34336,

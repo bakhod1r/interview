@@ -458,17 +458,6 @@
       "explanation": "Hammasi HEAD'ni siljitadi. soft — o'zgarishlar staged qoladi; mixed (default) — unstaged qoladi; hard — o'zgarishlar o'chadi."
     },
     {
-      "id": 34111,
-      "code": "JR111",
-      "level": "J",
-      "type": "card",
-      "topic": "Git",
-      "domain": "git",
-      "section": "w1",
-      "question": "`git revert` va `git reset` farqi?",
-      "explanation": "Revert — o'zgarishni bekor qiluvchi YANGI commit qo'shadi (tarix saqlanadi). Reset — tarixni orqaga suradi."
-    },
-    {
       "id": 34112,
       "code": "JR112",
       "level": "J",
@@ -667,17 +656,6 @@
       "explanation": "Main kabi muhim branch'ga to'g'ridan-to'g'ri push, force push va o'chirishni taqiqlash; PR, review, yashil CI talab qilish."
     },
     {
-      "id": 34130,
-      "code": "JR130",
-      "level": "J",
-      "type": "card",
-      "topic": "Git",
-      "domain": "git",
-      "section": "w1",
-      "question": "CODEOWNERS fayli nima?",
-      "explanation": "Qaysi fayl/papkaga kim mas'ul ekanini belgilaydi; PR ochilganda o'sha odamlar avtomatik review'er bo'ladi."
-    },
-    {
       "id": 34131,
       "code": "JR131",
       "level": "J",
@@ -698,17 +676,6 @@
       "section": "w1",
       "question": "`git blame` qachon foydali?",
       "explanation": "Har qatorni oxirgi kim, qaysi commit'da o'zgartirganini ko'rsatadi — o'zgarish sababini topish uchun."
-    },
-    {
-      "id": 34133,
-      "code": "JR133",
-      "level": "J",
-      "type": "card",
-      "topic": "Git",
-      "domain": "git",
-      "section": "w1",
-      "question": "Monorepo va polyrepo farqi?",
-      "explanation": "Monorepo — ko'p loyiha bitta repo'da. Polyrepo — har servis alohida repo."
     },
     {
       "id": 34134,

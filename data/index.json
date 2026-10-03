@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-10-02T17:21:44.853Z",
-  "total": 5060,
+  "total": 5044,
   "levels": {
     "J": "Junior",
     "M": "Middle",
@@ -573,7 +573,7 @@
       "id": "h24",
       "name": "Kernel tuning & performance",
       "domain": "linux",
-      "count": 40,
+      "count": 39,
       "file": "sections/h24-kernel-tuning-performance.json"
     },
     {
@@ -587,14 +587,14 @@
       "id": "w1",
       "name": "Git",
       "domain": "git",
-      "count": 69,
+      "count": 66,
       "file": "sections/w1-git.json"
     },
     {
       "id": "h32",
       "name": "Git internals",
       "domain": "git",
-      "count": 50,
+      "count": 49,
       "file": "sections/h32-git-internals.json"
     },
     {
@@ -748,7 +748,7 @@
       "id": "h11",
       "name": "CI/CD fundamentals",
       "domain": "cicd",
-      "count": 50,
+      "count": 47,
       "file": "sections/h11-ci-cd-fundamentals.json"
     },
     {
@@ -790,7 +790,7 @@
       "id": "h20",
       "name": "Terraform & OpenTofu core",
       "domain": "iac",
-      "count": 60,
+      "count": 58,
       "file": "sections/h20-terraform-opentofu-core.json"
     },
     {
@@ -811,14 +811,14 @@
       "id": "i3",
       "name": "Observability & SRE",
       "domain": "obs",
-      "count": 35,
+      "count": 34,
       "file": "sections/i3-observability-sre.json"
     },
     {
       "id": "w4",
       "name": "Prometheus & Grafana",
       "domain": "obs",
-      "count": 32,
+      "count": 31,
       "file": "sections/w4-prometheus-grafana.json"
     },
     {
@@ -832,7 +832,7 @@
       "id": "h26",
       "name": "Observability & Prometheus",
       "domain": "obs",
-      "count": 60,
+      "count": 59,
       "file": "sections/h26-observability-prometheus.json"
     },
     {
@@ -860,7 +860,7 @@
       "id": "w10",
       "name": "Networking basics",
       "domain": "net",
-      "count": 49,
+      "count": 47,
       "file": "sections/w10-networking-basics.json"
     },
     {
@@ -965,7 +965,7 @@
       "id": "h4",
       "name": "SRE & reliability",
       "domain": "sre",
-      "count": 50,
+      "count": 49,
       "file": "sections/h4-sre-reliability.json"
     },
     {

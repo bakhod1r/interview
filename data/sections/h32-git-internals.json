@@ -79,18 +79,6 @@
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {
-   "id": 42057,
-   "code": "H3207",
-   "level": "M",
-   "type": "card",
-   "topic": "Git internals",
-   "domain": "git",
-   "section": "h32",
-   "question": "`git merge` va `git rebase` farqi.",
-   "explanation": "merge: ikki tarixni birlashtiruvchi merge commit yaratadi — tarix o'zgarmaydi, haqiqiy kontekst saqlanadi.",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
    "id": 42058,
    "code": "H3208",
    "level": "M",

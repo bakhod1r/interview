@@ -343,18 +343,6 @@
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {
-   "id": 41539,
-   "code": "H2429",
-   "level": "S",
-   "type": "card",
-   "topic": "Kernel tuning & performance",
-   "domain": "linux",
-   "section": "h24",
-   "question": "Swap partition va swap file farqi.",
-   "explanation": "Partition — maxsus xom bo'lim; swap file — mavjud FS'dagi oldindan ajratilgan fayl (fallocate -l 4G /swapfile; chmod 600; mkswap; swapon). Zamonaviy kernel'larda unumdorlik deyarli bir xil, fayl moslashuvchanroq (Btrf...",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
    "id": 41540,
    "code": "H2430",
    "level": "S",

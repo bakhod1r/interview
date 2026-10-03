@@ -187,18 +187,6 @@
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {
-   "id": 40566,
-   "code": "H1116",
-   "level": "J",
-   "type": "card",
-   "topic": "CI/CD fundamentals",
-   "domain": "cicd",
-   "section": "h11",
-   "question": "Blue-green deployment nima?",
-   "explanation": "Ikkita bir xil prod muhit: trafik Blue'da, Green sinovdan o'tkaziladi va tasdiqlangach load balancer'da trafik bir zumda Green'ga o'tadi.",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
    "id": 40567,
    "code": "H1117",
    "level": "J",
@@ -232,18 +220,6 @@
    "section": "h11",
    "question": "Feature flag (toggle) nima?",
    "explanation": "Deploy'ni feature release'dan ajratuvchi shartli kod tarmog'i — API yoki UI orqali funksiyani bir zumda yoqish/o'chirish. Eski flag'larni tozalab turish kerak (texnik qarz).",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
-   "id": 40570,
-   "code": "H1120",
-   "level": "J",
-   "type": "card",
-   "topic": "CI/CD fundamentals",
-   "domain": "cicd",
-   "section": "h11",
-   "question": "Trunk-based development nima?",
-   "explanation": "Kichik, tez-tez commit'lar bitta umumiy branch'ga (main) merge qilinadi — uzluksiz integratsiya va tez yetkazish.",
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {
@@ -520,18 +496,6 @@
    "section": "h11",
    "question": "Argo Rollouts nima?",
    "explanation": "Kubernetes controller: canary, blue-green va eksperimentlar, avtomatik metrika tekshiruvi (AnalysisTemplate) bilan.",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
-   "id": 40594,
-   "code": "H1144",
-   "level": "J",
-   "type": "card",
-   "topic": "CI/CD fundamentals",
-   "domain": "cicd",
-   "section": "h11",
-   "question": "GitOps nima?",
-   "explanation": "Git repo deklarativ infra va ilova deploy'lari uchun yagona haqiqat manbai; klasterdagi agent (pull model) holatni Git bilan doimiy moslaydi.",
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {

@@ -367,18 +367,6 @@
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {
-   "id": 41681,
-   "code": "H2631",
-   "level": "M",
-   "type": "card",
-   "topic": "Observability & Prometheus",
-   "domain": "obs",
-   "section": "h26",
-   "question": "Blackbox exporter nima?",
-   "explanation": "Tashqi endpoint'larni HTTP, HTTPS, DNS, TCP, ICMP orqali tekshiradi — mavjudlik, latency va SSL sertifikat muddati.",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
    "id": 41682,
    "code": "H2632",
    "level": "M",

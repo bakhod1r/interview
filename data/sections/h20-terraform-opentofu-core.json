@@ -271,18 +271,6 @@
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {
-   "id": 41273,
-   "code": "H2023",
-   "level": "M",
-   "type": "card",
-   "topic": "Terraform & OpenTofu core",
-   "domain": "iac",
-   "section": "h20",
-   "question": "Terraform va Ansible farqi.",
-   "explanation": "Terraform — deklarativ state bilan infra provisioning (VPC, EKS, RDS); Ansible — ishlab turgan serverlarda configuration management (paket o'rnatish, OS fayllarini sozlash). Ko'pincha birga ishlatiladi.",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
    "id": 41274,
    "code": "H2024",
    "level": "M",
@@ -544,18 +532,6 @@
    "section": "h20",
    "question": "Ansible inventory (statik va dinamik) nima?",
    "explanation": "Statik: host va IP'lar ro'yxati INI/YAML faylda.",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
-   "id": 41296,
-   "code": "H2046",
-   "level": "M",
-   "type": "card",
-   "topic": "Terraform & OpenTofu core",
-   "domain": "iac",
-   "section": "h20",
-   "question": "Ansible Vault nima?",
-   "explanation": "Sezgir o'zgaruvchi, fayl yoki playbook'larni AES-256 bilan shifrlaydi (ansible-vault encrypt secrets.yml).",
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {

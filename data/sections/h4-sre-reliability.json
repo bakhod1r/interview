@@ -43,18 +43,6 @@
    "source": "NotHarshhaa/DevOps-Interview-Questions"
   },
   {
-   "id": 40254,
-   "code": "H404",
-   "level": "M",
-   "type": "card",
-   "topic": "SRE & reliability",
-   "domain": "sre",
-   "section": "h4",
-   "question": "Error budget nima?",
-   "explanation": "SLO'ning teskarisi: error budget = 100% − SLO. Servis foydalanuvchi ishonchini buzmasdan to'plashi mumkin bo'lgan ruxsat etilgan nosozlik \"zaxirasi\" (99.9% → oyiga ~43 daqiqa).",
-   "source": "NotHarshhaa/DevOps-Interview-Questions"
-  },
-  {
    "id": 40255,
    "code": "H405",
    "level": "M",
